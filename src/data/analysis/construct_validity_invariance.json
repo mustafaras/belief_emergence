@@ -1,0 +1,856 @@
+{
+  "schemaVersion": "phase1.construct_validity_invariance.v1",
+  "generatedAtIso": "2026-03-26T06:44:18.262Z",
+  "source": {
+    "datasetPath": "C:\\Users\\m_ras\\Desktop\\BE_repo_rev\\BE_app\\public\\data\\panel_canonical_23_countries_v1.csv",
+    "datasetSha256": "2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF",
+    "nRows": 630,
+    "nCountries": 23,
+    "yearMin": 2000,
+    "yearMax": 2022,
+    "missingColumns": []
+  },
+  "thresholds": {
+    "minRowsPerSlice": 8,
+    "lowCorrThreshold": 0.6,
+    "severeLowCorrThreshold": 0.3,
+    "configuredMinItemCoverage": 0.5
+  },
+  "constructs": [
+    {
+      "construct": "Z",
+      "targetColumn": "Z_belief_outcome",
+      "components": [
+        "Z_religion_importance",
+        "Z_violence_justifiable"
+      ],
+      "sample": {
+        "nRows": 630,
+        "nCanonicalFinite": 630
+      },
+      "coverage": {
+        "fullCoverageRate": 1,
+        "partialCoverageRate": 0,
+        "zeroCoverageRate": 0,
+        "componentAvailability": {
+          "Z_religion_importance": 1,
+          "Z_violence_justifiable": 1
+        },
+        "minCoverageConfigured": 0.5,
+        "belowConfiguredCoverageRate": 0
+      },
+      "internalConsistencyProxy": {
+        "nComponents": 2,
+        "nCompleteRows": 630,
+        "cronbachAlpha": 0.7151703512678242,
+        "meanInterItemCorrelation": 0.5566265940185369,
+        "pairwiseCorrelations": [
+          {
+            "left": "Z_religion_importance",
+            "right": "Z_violence_justifiable",
+            "corr": 0.5566265940185369
+          }
+        ]
+      },
+      "alternativeAggregation": {
+        "orientationRule": "sign_aligned_to_canonical_correlation",
+        "orientedComponents": [
+          {
+            "column": "Z_religion_importance",
+            "sign": 1
+          },
+          {
+            "column": "Z_violence_justifiable",
+            "sign": 1
+          }
+        ],
+        "canonicalVsAltMean": {
+          "n": 630,
+          "corr": 0.8822206623114559,
+          "maeZ": 0.37772648074479864,
+          "rmseZ": 0.4704623463521704,
+          "biasZ": -1.435306899788018e-14
+        },
+        "canonicalVsAltMedian": {
+          "n": 630,
+          "corr": 0.8822206623114559,
+          "maeZ": 0.37772648074479864,
+          "rmseZ": 0.4704623463521704,
+          "biasZ": -1.435306899788018e-14
+        },
+        "meanVsMedianCorrDelta": 0,
+        "meanVsMedianMaeDelta": 0
+      },
+      "coverageSensitivity": {
+        "full": {
+          "n": 630,
+          "corr": 0.8822206623114559,
+          "maeZ": 0.37772648074479864,
+          "rmseZ": 0.4704623463521704,
+          "biasZ": -1.435306899788018e-14
+        },
+        "partial": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "none": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partialVsFullCorrDelta": null,
+        "partialVsFullMaeDelta": null
+      },
+      "invariance": {
+        "byCountry": {
+          "nSlicesTotal": 23,
+          "nSlicesEligible": 10,
+          "nLowVarianceExcluded": 13,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 0.9999999999999999,
+          "q75Corr": 1.0000000000000004,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 0.2848181010347886,
+          "worstSlices": [
+            {
+              "sliceId": "CAN",
+              "n": 81,
+              "corr": 0.8754987981702447,
+              "maeZ": 0.23074609994590123
+            },
+            {
+              "sliceId": "RUS",
+              "n": 18,
+              "corr": 0.9999999999999999,
+              "maeZ": 0.4774441598979265
+            },
+            {
+              "sliceId": "ROU",
+              "n": 18,
+              "corr": 0.9999999999999999,
+              "maeZ": 0.07419360693399168
+            },
+            {
+              "sliceId": "TUR",
+              "n": 45,
+              "corr": 1,
+              "maeZ": 0.6949113431047822
+            },
+            {
+              "sliceId": "ESP",
+              "n": 18,
+              "corr": 1,
+              "maeZ": 0.10122604859502975
+            }
+          ]
+        },
+        "byYear": {
+          "nSlicesTotal": 12,
+          "nSlicesEligible": 8,
+          "nLowVarianceExcluded": 4,
+          "minRowsPerSlice": 8,
+          "medianCorr": 0.9322138278626451,
+          "q25Corr": 0.8901322462669654,
+          "q75Corr": 0.9992187161081092,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 0.30401421974923803,
+          "worstSlices": [
+            {
+              "sliceId": "2006",
+              "n": 63,
+              "corr": 0.6993465000463196,
+              "maeZ": 0.27297251500474856
+            },
+            {
+              "sliceId": "2018",
+              "n": 63,
+              "corr": 0.8730092227783252,
+              "maeZ": 0.394597455795244
+            },
+            {
+              "sliceId": "2017",
+              "n": 27,
+              "corr": 0.8958399207631789,
+              "maeZ": 0.21691769512035605
+            },
+            {
+              "sliceId": "2005",
+              "n": 144,
+              "corr": 0.9022123949617793,
+              "maeZ": 0.3350559244937275
+            },
+            {
+              "sliceId": "2012",
+              "n": 144,
+              "corr": 0.9622152607635108,
+              "maeZ": 0.5220242780727801
+            }
+          ]
+        }
+      },
+      "fragility": {
+        "severity": "low",
+        "flags": []
+      }
+    },
+    {
+      "construct": "C",
+      "targetColumn": "C_cultural_intensity",
+      "components": [
+        "C_religiosity_index"
+      ],
+      "sample": {
+        "nRows": 630,
+        "nCanonicalFinite": 630
+      },
+      "coverage": {
+        "fullCoverageRate": 1,
+        "partialCoverageRate": 0,
+        "zeroCoverageRate": 0,
+        "componentAvailability": {
+          "C_religiosity_index": 1
+        },
+        "minCoverageConfigured": 0.5,
+        "belowConfiguredCoverageRate": 0
+      },
+      "internalConsistencyProxy": {
+        "nComponents": 1,
+        "nCompleteRows": 630,
+        "cronbachAlpha": null,
+        "meanInterItemCorrelation": null,
+        "pairwiseCorrelations": []
+      },
+      "alternativeAggregation": {
+        "orientationRule": "sign_aligned_to_canonical_correlation",
+        "orientedComponents": [
+          {
+            "column": "C_religiosity_index",
+            "sign": 1
+          }
+        ],
+        "canonicalVsAltMean": {
+          "n": 630,
+          "corr": 1,
+          "maeZ": 0,
+          "rmseZ": 0,
+          "biasZ": 0
+        },
+        "canonicalVsAltMedian": {
+          "n": 630,
+          "corr": 1,
+          "maeZ": 0,
+          "rmseZ": 0,
+          "biasZ": 0
+        },
+        "meanVsMedianCorrDelta": 0,
+        "meanVsMedianMaeDelta": 0
+      },
+      "coverageSensitivity": {
+        "full": {
+          "n": 630,
+          "corr": 1,
+          "maeZ": 0,
+          "rmseZ": 0,
+          "biasZ": 0
+        },
+        "partial": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "none": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partialVsFullCorrDelta": null,
+        "partialVsFullMaeDelta": null
+      },
+      "invariance": {
+        "byCountry": {
+          "nSlicesTotal": 23,
+          "nSlicesEligible": 10,
+          "nLowVarianceExcluded": 13,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 1,
+          "q75Corr": 1,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 0,
+          "worstSlices": [
+            {
+              "sliceId": "NLD",
+              "n": 90,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "CAN",
+              "n": 81,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "POL",
+              "n": 72,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "TUR",
+              "n": 45,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "MEX",
+              "n": 27,
+              "corr": 1,
+              "maeZ": 0
+            }
+          ]
+        },
+        "byYear": {
+          "nSlicesTotal": 12,
+          "nSlicesEligible": 8,
+          "nLowVarianceExcluded": 4,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 1,
+          "q75Corr": 1,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 0,
+          "worstSlices": [
+            {
+              "sliceId": "2005",
+              "n": 144,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "2012",
+              "n": 144,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "2011",
+              "n": 90,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "2006",
+              "n": 63,
+              "corr": 1,
+              "maeZ": 0
+            },
+            {
+              "sliceId": "2018",
+              "n": 63,
+              "corr": 1,
+              "maeZ": 0
+            }
+          ]
+        }
+      },
+      "fragility": {
+        "severity": "low",
+        "flags": []
+      }
+    },
+    {
+      "construct": "D",
+      "targetColumn": "D_social_atomization",
+      "components": [
+        "D_social_trust"
+      ],
+      "sample": {
+        "nRows": 630,
+        "nCanonicalFinite": 630
+      },
+      "coverage": {
+        "fullCoverageRate": 1,
+        "partialCoverageRate": 0,
+        "zeroCoverageRate": 0,
+        "componentAvailability": {
+          "D_social_trust": 1
+        },
+        "minCoverageConfigured": 0.5,
+        "belowConfiguredCoverageRate": 0
+      },
+      "internalConsistencyProxy": {
+        "nComponents": 1,
+        "nCompleteRows": 630,
+        "cronbachAlpha": null,
+        "meanInterItemCorrelation": null,
+        "pairwiseCorrelations": []
+      },
+      "alternativeAggregation": {
+        "orientationRule": "sign_aligned_to_canonical_correlation",
+        "orientedComponents": [
+          {
+            "column": "D_social_trust",
+            "sign": -1
+          }
+        ],
+        "canonicalVsAltMean": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": -3.546270420175444e-15
+        },
+        "canonicalVsAltMedian": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": -3.546270420175444e-15
+        },
+        "meanVsMedianCorrDelta": 0,
+        "meanVsMedianMaeDelta": 0
+      },
+      "coverageSensitivity": {
+        "full": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": -3.546270420175444e-15
+        },
+        "partial": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "none": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partialVsFullCorrDelta": null,
+        "partialVsFullMaeDelta": null
+      },
+      "invariance": {
+        "byCountry": {
+          "nSlicesTotal": 23,
+          "nSlicesEligible": 10,
+          "nLowVarianceExcluded": 13,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 0.9999999999999996,
+          "q75Corr": 1.0000000000000002,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 2.3037127760972e-15,
+          "worstSlices": [
+            {
+              "sliceId": "ROU",
+              "n": 18,
+              "corr": 0.9999999999999993,
+              "maeZ": 8.881784197001252e-16
+            },
+            {
+              "sliceId": "DEU",
+              "n": 18,
+              "corr": 0.9999999999999996,
+              "maeZ": 5.495603971894525e-15
+            },
+            {
+              "sliceId": "KOR",
+              "n": 18,
+              "corr": 0.9999999999999996,
+              "maeZ": 1.7763568394002505e-15
+            },
+            {
+              "sliceId": "CAN",
+              "n": 81,
+              "corr": 0.9999999999999998,
+              "maeZ": 4.317533984653386e-15
+            },
+            {
+              "sliceId": "ESP",
+              "n": 18,
+              "corr": 1,
+              "maeZ": 5.2735593669694936e-15
+            }
+          ]
+        },
+        "byYear": {
+          "nSlicesTotal": 12,
+          "nSlicesEligible": 8,
+          "nLowVarianceExcluded": 4,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 0.9999999999999998,
+          "q75Corr": 1.0000000000000002,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 3.839190869976099e-15,
+          "worstSlices": [
+            {
+              "sliceId": "2005",
+              "n": 144,
+              "corr": 0.9999999999999993,
+              "maeZ": 3.559652572704408e-15
+            },
+            {
+              "sliceId": "2018",
+              "n": 63,
+              "corr": 0.9999999999999996,
+              "maeZ": 2.73590673925485e-15
+            },
+            {
+              "sliceId": "2006",
+              "n": 63,
+              "corr": 0.9999999999999999,
+              "maeZ": 4.1187291672477904e-15
+            },
+            {
+              "sliceId": "2007",
+              "n": 18,
+              "corr": 1,
+              "maeZ": 5.2735593669694936e-15
+            },
+            {
+              "sliceId": "2012",
+              "n": 144,
+              "corr": 1.0000000000000002,
+              "maeZ": 4.5102810375396984e-15
+            }
+          ]
+        }
+      },
+      "fragility": {
+        "severity": "low",
+        "flags": []
+      }
+    },
+    {
+      "construct": "S",
+      "targetColumn": "S_social_support",
+      "components": [
+        "S_support_index"
+      ],
+      "sample": {
+        "nRows": 630,
+        "nCanonicalFinite": 630
+      },
+      "coverage": {
+        "fullCoverageRate": 1,
+        "partialCoverageRate": 0,
+        "zeroCoverageRate": 0,
+        "componentAvailability": {
+          "S_support_index": 1
+        },
+        "minCoverageConfigured": 0.5,
+        "belowConfiguredCoverageRate": 0
+      },
+      "internalConsistencyProxy": {
+        "nComponents": 1,
+        "nCompleteRows": 630,
+        "cronbachAlpha": null,
+        "meanInterItemCorrelation": null,
+        "pairwiseCorrelations": []
+      },
+      "alternativeAggregation": {
+        "orientationRule": "sign_aligned_to_canonical_correlation",
+        "orientedComponents": [
+          {
+            "column": "S_support_index",
+            "sign": 1
+          }
+        ],
+        "canonicalVsAltMean": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": 3.546270420175444e-15
+        },
+        "canonicalVsAltMedian": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": 3.546270420175444e-15
+        },
+        "meanVsMedianCorrDelta": 0,
+        "meanVsMedianMaeDelta": 0
+      },
+      "coverageSensitivity": {
+        "full": {
+          "n": 630,
+          "corr": 1.0000000000000022,
+          "maeZ": 3.546270420175444e-15,
+          "rmseZ": 4.0271111164163176e-15,
+          "biasZ": 3.546270420175444e-15
+        },
+        "partial": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "none": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partialVsFullCorrDelta": null,
+        "partialVsFullMaeDelta": null
+      },
+      "invariance": {
+        "byCountry": {
+          "nSlicesTotal": 23,
+          "nSlicesEligible": 10,
+          "nLowVarianceExcluded": 13,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 0.9999999999999996,
+          "q75Corr": 1.0000000000000002,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 2.3037127760972e-15,
+          "worstSlices": [
+            {
+              "sliceId": "ROU",
+              "n": 18,
+              "corr": 0.9999999999999993,
+              "maeZ": 8.881784197001252e-16
+            },
+            {
+              "sliceId": "DEU",
+              "n": 18,
+              "corr": 0.9999999999999996,
+              "maeZ": 5.495603971894525e-15
+            },
+            {
+              "sliceId": "KOR",
+              "n": 18,
+              "corr": 0.9999999999999996,
+              "maeZ": 1.7763568394002505e-15
+            },
+            {
+              "sliceId": "CAN",
+              "n": 81,
+              "corr": 0.9999999999999998,
+              "maeZ": 4.317533984653386e-15
+            },
+            {
+              "sliceId": "ESP",
+              "n": 18,
+              "corr": 1,
+              "maeZ": 5.2735593669694936e-15
+            }
+          ]
+        },
+        "byYear": {
+          "nSlicesTotal": 12,
+          "nSlicesEligible": 8,
+          "nLowVarianceExcluded": 4,
+          "minRowsPerSlice": 8,
+          "medianCorr": 1,
+          "q25Corr": 0.9999999999999998,
+          "q75Corr": 1.0000000000000002,
+          "lowCorrRate": 0,
+          "severeLowCorrRate": 0,
+          "signFlipRate": 0,
+          "medianMaeZ": 3.839190869976099e-15,
+          "worstSlices": [
+            {
+              "sliceId": "2005",
+              "n": 144,
+              "corr": 0.9999999999999993,
+              "maeZ": 3.559652572704408e-15
+            },
+            {
+              "sliceId": "2018",
+              "n": 63,
+              "corr": 0.9999999999999996,
+              "maeZ": 2.73590673925485e-15
+            },
+            {
+              "sliceId": "2006",
+              "n": 63,
+              "corr": 0.9999999999999999,
+              "maeZ": 4.1187291672477904e-15
+            },
+            {
+              "sliceId": "2007",
+              "n": 18,
+              "corr": 1,
+              "maeZ": 5.2735593669694936e-15
+            },
+            {
+              "sliceId": "2012",
+              "n": 144,
+              "corr": 1.0000000000000002,
+              "maeZ": 4.5102810375396984e-15
+            }
+          ]
+        }
+      },
+      "fragility": {
+        "severity": "low",
+        "flags": []
+      }
+    },
+    {
+      "construct": "M",
+      "targetColumn": "M_media_environment",
+      "components": [
+        "M_internet_daily"
+      ],
+      "sample": {
+        "nRows": 630,
+        "nCanonicalFinite": 630
+      },
+      "coverage": {
+        "fullCoverageRate": 0,
+        "partialCoverageRate": 0,
+        "zeroCoverageRate": 1,
+        "componentAvailability": {
+          "M_internet_daily": 0.014285714285714285
+        },
+        "minCoverageConfigured": 0.5,
+        "belowConfiguredCoverageRate": 1
+      },
+      "internalConsistencyProxy": {
+        "nComponents": 1,
+        "nCompleteRows": 0,
+        "cronbachAlpha": null,
+        "meanInterItemCorrelation": null,
+        "pairwiseCorrelations": []
+      },
+      "alternativeAggregation": {
+        "orientationRule": "sign_aligned_to_canonical_correlation",
+        "orientedComponents": [
+          {
+            "column": "M_internet_daily",
+            "sign": 1
+          }
+        ],
+        "canonicalVsAltMean": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "canonicalVsAltMedian": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "meanVsMedianCorrDelta": null,
+        "meanVsMedianMaeDelta": null
+      },
+      "coverageSensitivity": {
+        "full": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partial": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "none": {
+          "n": 0,
+          "corr": null,
+          "maeZ": null,
+          "rmseZ": null,
+          "biasZ": null
+        },
+        "partialVsFullCorrDelta": null,
+        "partialVsFullMaeDelta": null
+      },
+      "invariance": {
+        "byCountry": {
+          "nSlicesTotal": 0,
+          "nSlicesEligible": 0,
+          "nLowVarianceExcluded": 0,
+          "minRowsPerSlice": 8,
+          "medianCorr": null,
+          "q25Corr": null,
+          "q75Corr": null,
+          "lowCorrRate": null,
+          "severeLowCorrRate": null,
+          "signFlipRate": null,
+          "medianMaeZ": null,
+          "worstSlices": []
+        },
+        "byYear": {
+          "nSlicesTotal": 0,
+          "nSlicesEligible": 0,
+          "nLowVarianceExcluded": 0,
+          "minRowsPerSlice": 8,
+          "medianCorr": null,
+          "q25Corr": null,
+          "q75Corr": null,
+          "lowCorrRate": null,
+          "severeLowCorrRate": null,
+          "signFlipRate": null,
+          "medianMaeZ": null,
+          "worstSlices": []
+        }
+      },
+      "fragility": {
+        "severity": "moderate",
+        "flags": [
+          "majority_rows_below_configured_item_coverage",
+          "no_overlap_between_canonical_and_alternative_aggregate"
+        ]
+      }
+    }
+  ],
+  "instabilityRegions": {
+    "flaggedConstructs": [
+      "M"
+    ],
+    "flaggedCountrySlices": [],
+    "flaggedYearSlices": []
+  },
+  "limitations": [
+    "Diagnostics are based on country-year aggregates rather than respondent-level covariance matrices, so internal consistency is a proxy rather than a full psychometric estimate.",
+    "Single-indicator constructs (C, D, S, M in this panel) cannot support multi-item reliability estimation; invariance is assessed through slice stability against aligned alternatives.",
+    "Country/year slice invariance is support-conditioned: sparse slices can produce unstable correlations and should be interpreted with the reported n thresholds."
+  ]
+}

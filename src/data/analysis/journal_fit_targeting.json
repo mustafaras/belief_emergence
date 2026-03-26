@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "phase1.journal_fit_targeting.v1",
+  "generatedAtIso": "2026-03-05T12:30:00.000Z",
+  "source": {
+    "manuscriptPath": "BE_paper_latest/main/main.tex",
+    "scope": "Prompt 10 journal-fit targeting",
+    "tagScale": [
+      "fit",
+      "risky",
+      "out-of-scope"
+    ]
+  },
+  "targetJournals": [
+    {
+      "id": "nature_human_behaviour",
+      "name": "Nature Human Behaviour",
+      "q1Relevance": "high",
+      "focus": "Generalizable human behaviour insights with strong conceptual framing and transparent empirical limits.",
+      "audience": "Interdisciplinary behavioural science and computational social science editors/reviewers.",
+      "methodsExpectations": [
+        "Clear behavioural relevance beyond a purely technical model",
+        "Strong robustness and uncertainty reporting",
+        "Conservative claim language with explicit inferential boundaries"
+      ],
+      "deskRejectTriggers": [
+        "Method-heavy framing with weak behavioural interpretation",
+        "Overstated novelty or universal claims under sparse support",
+        "Insufficient separation between descriptive and inferential evidence"
+      ],
+      "framingAdjustments": {
+        "abstract": "Lead with bounded methodological contribution and explicit non-causal scope.",
+        "introduction": "Position the model as a transparency-first comparative inference tool under support constraints.",
+        "conclusion": "Prioritize inferential boundaries and reproducibility over broad behavioural generalization."
+      }
+    },
+    {
+      "id": "epj_data_science",
+      "name": "EPJ Data Science",
+      "q1Relevance": "high",
+      "focus": "Reproducible data-science methodology for complex social systems with auditable computation.",
+      "audience": "Computational social science, data science, and methodological reviewers.",
+      "methodsExpectations": [
+        "Transparent and reproducible pipeline",
+        "Methodological novelty grounded in diagnostic evidence",
+        "Protocol-level validation and uncertainty auditing"
+      ],
+      "deskRejectTriggers": [
+        "Missing reproducibility path from data to claims",
+        "Unclear validation protocol separation",
+        "Narrative claims not tightly linked to exported artifacts"
+      ],
+      "framingAdjustments": {
+        "abstract": "Emphasize auditable workflow, protocolized validation, and support-aware interpretation.",
+        "introduction": "Highlight contribution as computational methodology for sparse macro panels.",
+        "conclusion": "Stress reusable reproducibility infrastructure and evidence-traceable claims."
+      }
+    },
+    {
+      "id": "social_networks",
+      "name": "Social Networks",
+      "q1Relevance": "high",
+      "focus": "Network-theoretic mechanisms, relational structure, and network-specific empirical design.",
+      "audience": "Network science and computational sociology reviewers.",
+      "methodsExpectations": [
+        "Explicit network representation or relational mechanism",
+        "Network-native diagnostics and theory linkage",
+        "Claims centered on network formation/diffusion structure"
+      ],
+      "deskRejectTriggers": [
+        "No network data structure in modeling design",
+        "Macro panel claims without relational mechanism",
+        "General computational claims without network contribution"
+      ],
+      "framingAdjustments": {
+        "abstract": "Avoid positioning as a network-method contribution unless relational structure is modeled directly.",
+        "introduction": "If targeting this venue, add explicit network mechanism scope limits.",
+        "conclusion": "Present as adjacent methodology, not a direct network-method advance."
+      }
+    }
+  ],
+  "majorClaims": [
+    {
+      "id": "C1",
+      "section": "Abstract + Method",
+      "claim": "A bounded nonlinear map provides interpretable regime geometry for macro-urban belief outcomes.",
+      "tags": {
+        "nature_human_behaviour": "risky",
+        "epj_data_science": "fit",
+        "social_networks": "out-of-scope"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Methodologically strong, but behavioural mechanism linkage must stay explicit.",
+        "epj_data_science": "Core method-forward contribution with clear diagnostic interpretability.",
+        "social_networks": "No explicit relational network representation in the model contract."
+      }
+    },
+    {
+      "id": "C2",
+      "section": "Introduction + Reproducibility blocks",
+      "claim": "The pipeline is reproducible, auditable, and artifact-traceable from preprocessing to exported diagnostics.",
+      "tags": {
+        "nature_human_behaviour": "risky",
+        "epj_data_science": "fit",
+        "social_networks": "risky"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Necessary but not sufficient without stronger behavioural framing.",
+        "epj_data_science": "Directly aligned with journal expectations for computational reproducibility.",
+        "social_networks": "Valued as method hygiene, but not a network-specific contribution."
+      }
+    },
+    {
+      "id": "C3",
+      "section": "Validation + Prompt 9 lockbox",
+      "claim": "Primary inferential evidence is protocolized through refit OOS checks and a release-gated lockbox holdout.",
+      "tags": {
+        "nature_human_behaviour": "fit",
+        "epj_data_science": "fit",
+        "social_networks": "risky"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Strong robustness signal if linked to substantive interpretation limits.",
+        "epj_data_science": "Excellent alignment with rigorous validation and anti-overfitting standards.",
+        "social_networks": "Robust protocol quality helps, but domain focus remains non-network."
+      }
+    },
+    {
+      "id": "C4",
+      "section": "Conclusion empirical findings",
+      "claim": "In-sample agreement metrics are strong on the bounded scale for the canonical panel.",
+      "tags": {
+        "nature_human_behaviour": "risky",
+        "epj_data_science": "fit",
+        "social_networks": "out-of-scope"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Should remain secondary to interpretability and inferential restraint.",
+        "epj_data_science": "Acceptable as descriptive performance when tied to protocol diagnostics.",
+        "social_networks": "Performance metrics alone do not create network relevance."
+      }
+    },
+    {
+      "id": "C5",
+      "section": "Method + Discussion",
+      "claim": "Sensitivity is regime-dependent, peaking near the transition ridge and attenuating in saturated tails.",
+      "tags": {
+        "nature_human_behaviour": "risky",
+        "epj_data_science": "fit",
+        "social_networks": "out-of-scope"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Useful only if connected to behavioural interpretation constraints.",
+        "epj_data_science": "Strong model-geometry insight with clear diagnostic value.",
+        "social_networks": "Regime geometry is not framed through relational network mechanisms."
+      }
+    },
+    {
+      "id": "C6",
+      "section": "Introduction + Discussion",
+      "claim": "Interpretation is support-constrained by 34 unique country-years and uneven regime density.",
+      "tags": {
+        "nature_human_behaviour": "fit",
+        "epj_data_science": "fit",
+        "social_networks": "fit"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Editorially positive because inferential limits are explicit.",
+        "epj_data_science": "Aligned with transparent uncertainty and support auditing.",
+        "social_networks": "General scientific rigor is valuable even outside direct network scope."
+      }
+    },
+    {
+      "id": "C7",
+      "section": "Discussion + Conclusion",
+      "claim": "Claims are descriptive and non-causal; policy-optimal recommendations are explicitly out of scope.",
+      "tags": {
+        "nature_human_behaviour": "fit",
+        "epj_data_science": "fit",
+        "social_networks": "fit"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Reduces overclaiming risk at desk screen.",
+        "epj_data_science": "Strengthens claim-evidence discipline for method papers.",
+        "social_networks": "Supports conservative interpretation despite topical mismatch."
+      }
+    },
+    {
+      "id": "C8",
+      "section": "Conclusion closing synthesis",
+      "claim": "The main contribution is an auditable computational workflow for support-aware macro-comparative inference.",
+      "tags": {
+        "nature_human_behaviour": "fit",
+        "epj_data_science": "fit",
+        "social_networks": "risky"
+      },
+      "rationale": {
+        "nature_human_behaviour": "Acceptable if behavioural scope remains carefully bounded.",
+        "epj_data_science": "Direct match to journal-level methodological relevance.",
+        "social_networks": "Useful but peripheral unless network structure is introduced."
+      }
+    }
+  ],
+  "summaryByJournal": [
+    {
+      "journalId": "nature_human_behaviour",
+      "fit": 4,
+      "risky": 4,
+      "outOfScope": 0,
+      "recommendedPositioning": "Behaviour-relevant but method-forward framing with strict inferential boundaries."
+    },
+    {
+      "journalId": "epj_data_science",
+      "fit": 8,
+      "risky": 0,
+      "outOfScope": 0,
+      "recommendedPositioning": "Primary target: reproducible computational methodology with protocolized validation."
+    },
+    {
+      "journalId": "social_networks",
+      "fit": 2,
+      "risky": 3,
+      "outOfScope": 3,
+      "recommendedPositioning": "Secondary/conditional target unless explicit network-relational modeling is added."
+    }
+  ],
+  "recommendedPrimaryTargets": [
+    "epj_data_science",
+    "nature_human_behaviour"
+  ]
+}

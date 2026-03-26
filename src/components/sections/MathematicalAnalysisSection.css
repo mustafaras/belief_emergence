@@ -1,0 +1,275 @@
+/* MathematicalAnalysisSection: local styles to avoid inline JSX styles (ESLint rule).
+   Keep selectors narrow and design-aligned with the ModernSidebar / true-black theme. */
+
+.ma-h5-spaced {
+  margin-top: 0.9rem;
+}
+
+.ma-small-muted {
+  font-size: 0.85em;
+  color: #94a3b8;
+}
+
+.ma-small-error {
+  font-size: 0.85em;
+  color: #ef4444;
+}
+
+.ma-small-body {
+  font-size: 0.85em;
+  color: #cbd5e1;
+}
+
+.ma-mt-05 {
+  margin-top: 0.5rem;
+}
+
+.ma-mt-075 {
+  margin-top: 0.75rem;
+}
+
+.ma-mb-075 {
+  margin-bottom: 0.75rem;
+}
+
+.ma-svg-font {
+  font-family: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* --------------------------------------------------------------------------
+   Correlation matrix panel (Section 5 documentation only)
+   -------------------------------------------------------------------------- */
+
+.ma-corr-panel {
+  margin-top: 0.5rem;
+}
+
+.ma-corr-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.ma-corr-title {
+  font-size: 0.95em;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #e2e8f0;
+}
+
+.ma-corr-subtitle {
+  margin-top: 0.15rem;
+  font-size: 0.82em;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+.ma-corr-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.35);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.ma-corr-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ma-corr-control-label {
+  font-size: 0.82em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.ma-corr-radio,
+.ma-corr-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.86em;
+  color: #cbd5e1;
+}
+
+.ma-corr-radio input,
+.ma-corr-checkbox input {
+  width: 14px;
+  height: 14px;
+}
+
+.ma-corr-radio input,
+.ma-corr-checkbox input {
+  accent-color: #10b981;
+}
+
+.ma-corr-scroll {
+  margin-top: 0.6rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.6rem 0.6rem 0.35rem;
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.28);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.ma-corr-svg {
+  width: 100%;
+  height: auto;
+  min-width: 440px;
+}
+
+.ma-corr-axis {
+  fill: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ma-corr-cell-text {
+  font-size: 6px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ma-corr-legend {
+  fill: #94a3b8;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.ma-corr-var-legend {
+  margin-top: 0.65rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.75rem;
+  padding: 0.6rem 0.65rem;
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.ma-corr-var-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.ma-corr-var-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 7px;
+  font-size: 0.78em;
+  font-weight: 900;
+  color: #e2e8f0;
+  background: rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.ma-corr-var-label {
+  font-size: 0.82em;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ma-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.ma-status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.ma-status-chip-pass {
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #86efac;
+  background: rgba(6, 78, 59, 0.22);
+}
+
+.ma-status-chip-fail {
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fca5a5;
+  background: rgba(127, 29, 29, 0.22);
+}
+
+.ma-status-chip-pending {
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+  background: rgba(120, 53, 15, 0.24);
+}
+
+.ma-status-chip-neutral {
+  border-color: rgba(148, 163, 184, 0.32);
+  color: #cbd5e1;
+  background: rgba(2, 6, 23, 0.35);
+}
+
+.ma-method-delta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.ma-method-delta-item {
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(2, 6, 23, 0.28);
+  padding: 0.45rem 0.6rem;
+}
+
+.ma-method-delta-tier {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.ma-method-delta-value {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.ma-support-tier-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ma-support-row-exploratory th,
+.ma-support-row-exploratory td {
+  background: rgba(120, 53, 15, 0.12);
+}
+
+@media (max-width: 860px) {
+  .ma-method-delta-grid {
+    grid-template-columns: 1fr;
+  }
+}

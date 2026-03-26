@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "phase1.model_ladder.v1",
+  "generatedAtIso": "2026-03-26T06:44:18.128Z",
+  "nRows": 630,
+  "nUniqueCountryYears": 34,
+  "tiers": [
+    {
+      "tier": "A",
+      "label": "Tier A (baseline linear/FE-equivalent)",
+      "exploratory": false,
+      "inferentialRole": "primary",
+      "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
+      "nTrain": 630,
+      "parameterCount": 11,
+      "supportPerParameter": 3.090909090909091,
+      "converged": true,
+      "trainMetrics": {
+        "n": 630,
+        "r2": 0.9999999999906611,
+        "corr": 0.9999999999965946,
+        "mae": 7.36802241569263e-7,
+        "rmse": 9.44014835924536e-7,
+        "bias": -1.5463149312243186e-15
+      }
+    },
+    {
+      "tier": "B",
+      "label": "Tier B (parsimonious nonlinear core)",
+      "exploratory": false,
+      "inferentialRole": "primary",
+      "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
+      "nTrain": 630,
+      "parameterCount": 18,
+      "supportPerParameter": 1.8888888888888888,
+      "converged": true,
+      "trainMetrics": {
+        "n": 630,
+        "r2": 0.9999999999641243,
+        "corr": 0.9999999999835308,
+        "mae": 0.000001200441619611026,
+        "rmse": 0.0000018502623916864568,
+        "bias": 2.155462846689426e-8
+      }
+    },
+    {
+      "tier": "C",
+      "label": "Tier C (full nonlinear sensitivity)",
+      "exploratory": true,
+      "inferentialRole": "exploratory",
+      "interpretationBoundary": "Exploratory sensitivity tier; not used for headline inference under thin effective support.",
+      "nTrain": 630,
+      "parameterCount": 22,
+      "supportPerParameter": 1.5454545454545454,
+      "converged": true,
+      "trainMetrics": {
+        "n": 630,
+        "r2": 0.9999999999609234,
+        "corr": 0.9999999999820599,
+        "mae": 0.00000125481945922172,
+        "rmse": 0.000001931041351129923,
+        "bias": 3.481196733874159e-8
+      }
+    }
+  ],
+  "decisionContext": {
+    "primaryComparison": "A_vs_B",
+    "note": "Tier A/B are primary inferential candidates; Tier C remains exploratory unless stronger support and independent stability/OOS checks are adequate."
+  },
+  "interpretationGuardrails": {
+    "effectiveSupport": {
+      "nUniqueCountryYears": 34,
+      "supportDensityNote": "All tiered interpretations are conditioned on thin effective support and should not be read as unrestricted population generalization."
+    },
+    "tierDiscipline": {
+      "A": "primary",
+      "B": "primary",
+      "C": "exploratory"
+    },
+    "headlinePolicy": "Headline inferential claims are restricted to Tier A/B evidence families; Tier C is retained for exploratory sensitivity only."
+  }
+}

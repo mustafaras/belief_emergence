@@ -1,0 +1,1121 @@
+version: 2.0
+description: >
+  WVS item mapping for belief-emergence constructs Z, C, D, S.
+  Harmonized across waves 3–7 for Q1-journal–level reproducibility.
+  This configuration file is the canonical machine-readable specification
+  for ETL scripts in scripts/01_wvs_measurement/.
+  See docs/variable_definitions.md for conceptual definitions and
+  docs/wvs_item_mapping.md for detailed item-level documentation.
+
+metadata:
+  last_updated: "2025-12-02"
+  maintainer: "Belief Emergence Research Team"
+  related_documentation:
+    - "docs/variable_definitions.md"
+    - "docs/wvs_item_mapping.md"
+  waves_covered: [3, 4, 5, 6, 7]
+  wave_years:
+    3: "1995-1998"
+    4: "1999-2004"
+    5: "2005-2009"
+    6: "2010-2014"
+    7: "2017-2022"
+
+defaults:
+  normalisation: "zscore"
+  missing_codes: [-1, -2, -3, -4, -5, 98, 99, 999]
+  aggregation_method: "mean"  # country-wave means
+  min_observations: 30  # minimum individual obs per country-wave to compute mean
+  min_item_coverage: 0.5  # minimum fraction of items available to compute construct index
+
+constructs:
+  Z_belief_outcome:
+    label: "Belief outcome"
+    description: "Composite index of religious/metaphysical belief intensity capturing salience, behavior, and transcendent commitment."
+    desired_direction: "higher = more belief"
+    expected_alpha: 0.80  # Cronbach's alpha benchmark
+    theoretical_domain: "dependent_variable"
+    items:
+      # A006: Importance of religion (core indicator, all waves)
+      - wave: 3
+        item_code: "A006"
+        label: "Importance of religion in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "salience"
+      - wave: 4
+        item_code: "A006"
+        label: "Importance of religion in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "salience"
+      - wave: 5
+        item_code: "A006"
+        label: "Importance of religion in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "salience"
+      - wave: 6
+        item_code: "A006"
+        label: "Importance of religion in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "salience"
+      - wave: 7
+        item_code: "A006"
+        label: "Importance of religion in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "salience"
+      
+      # F028: Religious service attendance (behavioral indicator, all waves)
+      - wave: 3
+        item_code: "F028"
+        label: "How often do you attend religious services"
+        scale_min: 1
+        scale_max: 8
+        response_anchors: "1 = never/practically never, 8 = more than once a week"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "behavior"
+      - wave: 4
+        item_code: "F028"
+        label: "How often do you attend religious services"
+        scale_min: 1
+        scale_max: 8
+        response_anchors: "1 = never/practically never, 8 = more than once a week"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "behavior"
+      - wave: 5
+        item_code: "F028"
+        label: "How often do you attend religious services"
+        scale_min: 1
+        scale_max: 8
+        response_anchors: "1 = never/practically never, 8 = more than once a week"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "behavior"
+      - wave: 6
+        item_code: "F028"
+        label: "How often do you attend religious services"
+        scale_min: 1
+        scale_max: 8
+        response_anchors: "1 = never/practically never, 8 = more than once a week"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "behavior"
+      - wave: 7
+        item_code: "F028"
+        label: "How often do you attend religious services"
+        scale_min: 1
+        scale_max: 8
+        response_anchors: "1 = never/practically never, 8 = more than once a week"
+        reverse: false
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "behavior"
+      
+      # F050: Belief in God (transcendent belief, all waves; scale varies)
+      - wave: 3
+        item_code: "F050"
+        label: "Do you believe in God"
+        scale_min: 1
+        scale_max: 2  # or 3 in some waves; harmonize to binary
+        response_anchors: "1 = yes, 2 = no (3 = unsure if 3-level)"
+        reverse: true  # yes=1 needs to be high belief
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+        harmonization_note: "If 3-level scale, recode unsure/no to 0, yes to 1 before reverse-coding"
+      - wave: 4
+        item_code: "F050"
+        label: "Do you believe in God"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 5
+        item_code: "F050"
+        label: "Do you believe in God"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 6
+        item_code: "F050"
+        label: "Do you believe in God"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 7
+        item_code: "F050"
+        label: "Do you believe in God"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      
+      # F051: Belief in life after death (eschatological belief, all waves)
+      - wave: 3
+        item_code: "F051"
+        label: "Do you believe in life after death"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true  # yes=1 → recode to 2 (high belief)
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 4
+        item_code: "F051"
+        label: "Do you believe in life after death"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 5
+        item_code: "F051"
+        label: "Do you believe in life after death"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 6
+        item_code: "F051"
+        label: "Do you believe in life after death"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 7
+        item_code: "F051"
+        label: "Do you believe in life after death"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      
+      # F053: Belief in hell (eschatological belief, all waves)
+      - wave: 3
+        item_code: "F053"
+        label: "Do you believe in hell"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 4
+        item_code: "F053"
+        label: "Do you believe in hell"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 5
+        item_code: "F053"
+        label: "Do you believe in hell"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 6
+        item_code: "F053"
+        label: "Do you believe in hell"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      - wave: 7
+        item_code: "F053"
+        label: "Do you believe in hell"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = yes, 2 = no"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "transcendent"
+      
+      # F063: Religious person (identity measure, all waves)
+      - wave: 3
+        item_code: "F063"
+        label: "Are you a religious person"
+        scale_min: 1
+        scale_max: 3
+        response_anchors: "1 = religious, 2 = not religious, 3 = atheist"
+        reverse: true  # religious=1 → recode to 3 (high belief)
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "identity"
+      - wave: 4
+        item_code: "F063"
+        label: "Are you a religious person"
+        scale_min: 1
+        scale_max: 3
+        response_anchors: "1 = religious, 2 = not religious, 3 = atheist"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "identity"
+      - wave: 5
+        item_code: "F063"
+        label: "Are you a religious person"
+        scale_min: 1
+        scale_max: 3
+        response_anchors: "1 = religious, 2 = not religious, 3 = atheist"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "identity"
+      - wave: 6
+        item_code: "F063"
+        label: "Are you a religious person"
+        scale_min: 1
+        scale_max: 3
+        response_anchors: "1 = religious, 2 = not religious, 3 = atheist"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "identity"
+      - wave: 7
+        item_code: "F063"
+        label: "Are you a religious person"
+        scale_min: 1
+        scale_max: 3
+        response_anchors: "1 = religious, 2 = not religious, 3 = atheist"
+        reverse: true
+        desired_direction: "higher = more belief"
+        weight: 1.0
+        item_type: "identity"
+
+  C_cultural_intensity:
+    label: "Cultural intensity"
+    description: "Index of cultural embeddedness, traditionalism, and symbolic salience of inherited frameworks."
+    desired_direction: "higher = more traditional/embedded"
+    expected_alpha: 0.70
+    theoretical_domain: "amplifier"
+    items:
+      # A008: Importance of family (all waves)
+      - wave: 3
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 4
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 5
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      
+      # A009: Importance of friends (all waves)
+      - wave: 3
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 4
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 5
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      
+      # E018: National pride (all waves)
+      - wave: 3
+        item_code: "E018"
+        label: "How proud of nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all proud, 4 = very proud"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 4
+        item_code: "E018"
+        label: "How proud of nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all proud, 4 = very proud"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 5
+        item_code: "E018"
+        label: "How proud of nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all proud, 4 = very proud"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "E018"
+        label: "How proud of nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all proud, 4 = very proud"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "E018"
+        label: "How proud of nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all proud, 4 = very proud"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      
+      # E012: Obedience as child quality (all waves)
+      - wave: 3
+        item_code: "E012"
+        label: "Obedience as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 4
+        item_code: "E012"
+        label: "Obedience as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 5
+        item_code: "E012"
+        label: "Obedience as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "E012"
+        label: "Obedience as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "E012"
+        label: "Obedience as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      
+      # E015: Religious faith as child quality (all waves)
+      - wave: 3
+        item_code: "E015"
+        label: "Religious faith as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 4
+        item_code: "E015"
+        label: "Religious faith as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 5
+        item_code: "E015"
+        label: "Religious faith as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "E015"
+        label: "Religious faith as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "E015"
+        label: "Religious faith as important child quality"
+        scale_min: 0
+        scale_max: 1
+        response_anchors: "0 = not mentioned, 1 = mentioned"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      
+      # E035: Respect for authority (waves 5-7; scale changes)
+      - wave: 5
+        item_code: "E035"
+        label: "Respect for authority important"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = not at all important, 10 = absolutely important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 6
+        item_code: "E035"
+        label: "Respect for authority important"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = not at all important, 10 = absolutely important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+      - wave: 7
+        item_code: "E035"
+        label: "Respect for authority important"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = not at all important, 10 = absolutely important"
+        reverse: false
+        desired_direction: "higher = more intensity"
+        weight: 1.0
+
+  D_social_atomization:
+    label: "Social atomization"
+    description: "Index of interpersonal mistrust, perceived unfairness, and social isolation."
+    desired_direction: "higher = more atomization"
+    expected_alpha: 0.70
+    theoretical_domain: "amplifier"
+    items:
+      # A165: Generalized trust (all waves; NO reverse-coding needed)
+      - wave: 3
+        item_code: "A165"
+        label: "Most people can be trusted"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = can be trusted, 2 = can't be too careful"
+        reverse: false  # Corrected: can't be too careful=2 already = high atomization
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+        harmonization_note: "Original coding already aligned with atomization construct"
+      - wave: 4
+        item_code: "A165"
+        label: "Most people can be trusted"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = can be trusted, 2 = can't be too careful"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 5
+        item_code: "A165"
+        label: "Most people can be trusted"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = can be trusted, 2 = can't be too careful"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 6
+        item_code: "A165"
+        label: "Most people can be trusted"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = can be trusted, 2 = can't be too careful"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 7
+        item_code: "A165"
+        label: "Most people can be trusted"
+        scale_min: 1
+        scale_max: 2
+        response_anchors: "1 = can be trusted, 2 = can't be too careful"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      
+      # A168: Trust strangers (all waves; NO reverse-coding needed)
+      - wave: 3
+        item_code: "A168"
+        label: "Trust: People you meet for first time"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false  # do not trust=4 already = high atomization
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 4
+        item_code: "A168"
+        label: "Trust: People you meet for first time"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 5
+        item_code: "A168"
+        label: "Trust: People you meet for first time"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 6
+        item_code: "A168"
+        label: "Trust: People you meet for first time"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 7
+        item_code: "A168"
+        label: "Trust: People you meet for first time"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      
+      # A170: Fairness perception (all waves; REQUIRES reverse-coding)
+      - wave: 3
+        item_code: "A170"
+        label: "People try to take advantage vs try to be fair"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = take advantage, 10 = try to be fair"
+        reverse: true  # fair=10 needs to become low atomization=1
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 4
+        item_code: "A170"
+        label: "People try to take advantage vs try to be fair"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = take advantage, 10 = try to be fair"
+        reverse: true
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 5
+        item_code: "A170"
+        label: "People try to take advantage vs try to be fair"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = take advantage, 10 = try to be fair"
+        reverse: true
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 6
+        item_code: "A170"
+        label: "People try to take advantage vs try to be fair"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = take advantage, 10 = try to be fair"
+        reverse: true
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 7
+        item_code: "A170"
+        label: "People try to take advantage vs try to be fair"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = take advantage, 10 = try to be fair"
+        reverse: true
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      
+      # A173: Trust people of another religion (waves 5-7; NO reverse-coding needed)
+      - wave: 5
+        item_code: "A173"
+        label: "Trust: People of another religion"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 6
+        item_code: "A173"
+        label: "Trust: People of another religion"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 7
+        item_code: "A173"
+        label: "Trust: People of another religion"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      
+      # A174: Trust people of another nationality (waves 5-7; NO reverse-coding needed)
+      - wave: 5
+        item_code: "A174"
+        label: "Trust: People of another nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 6
+        item_code: "A174"
+        label: "Trust: People of another nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+      - wave: 7
+        item_code: "A174"
+        label: "Trust: People of another nationality"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = trust completely, 4 = do not trust at all"
+        reverse: false
+        desired_direction: "higher = more atomization"
+        weight: 1.0
+
+  S_social_support:
+    label: "Social support"
+    description: "Index of perceived availability of positive social support and connectedness."
+    desired_direction: "higher = more support"
+    expected_alpha: 0.75
+    theoretical_domain: "suppressor"
+    items:
+      # A101: Closeness to family (all waves)
+      - wave: 3
+        item_code: "A101"
+        label: "Feel close to family"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all close, 4 = very close"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 4
+        item_code: "A101"
+        label: "Feel close to family"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all close, 4 = very close"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 5
+        item_code: "A101"
+        label: "Feel close to family"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all close, 4 = very close"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 6
+        item_code: "A101"
+        label: "Feel close to family"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all close, 4 = very close"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 7
+        item_code: "A101"
+        label: "Feel close to family"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all close, 4 = very close"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      
+      # A106: Satisfaction with family life (all waves)
+      - wave: 3
+        item_code: "A106"
+        label: "Satisfaction with family life"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = dissatisfied, 10 = satisfied"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 4
+        item_code: "A106"
+        label: "Satisfaction with family life"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = dissatisfied, 10 = satisfied"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 5
+        item_code: "A106"
+        label: "Satisfaction with family life"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = dissatisfied, 10 = satisfied"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 6
+        item_code: "A106"
+        label: "Satisfaction with family life"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = dissatisfied, 10 = satisfied"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 7
+        item_code: "A106"
+        label: "Satisfaction with family life"
+        scale_min: 1
+        scale_max: 10
+        response_anchors: "1 = dissatisfied, 10 = satisfied"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+      
+      # A008: Importance of family (all waves; also in C_cultural_intensity)
+      - wave: 3
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity; conceptually justified"
+      - wave: 4
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 5
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 6
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 7
+        item_code: "A008"
+        label: "Importance of family in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      
+      # A009: Importance of friends (all waves; also in C_cultural_intensity)
+      - wave: 3
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 4
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 5
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 6
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      - wave: 7
+        item_code: "A009"
+        label: "Importance of friends in your life"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all important, 4 = very important"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.0
+        overlap_note: "Also used in C_cultural_intensity"
+      
+      # F185: Someone to count on (waves 5-7; GOLD STANDARD support item)
+      - wave: 5
+        item_code: "F185"
+        label: "Have someone to count on in times of trouble"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = always"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5  # Higher weight for direct support measure
+      - wave: 6
+        item_code: "F185"
+        label: "Have someone to count on in times of trouble"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = always"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5
+      - wave: 7
+        item_code: "F185"
+        label: "Have someone to count on in times of trouble"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = always"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5
+      
+      # F186: Feel supported (waves 5-7)
+      - wave: 5
+        item_code: "F186"
+        label: "Feel supported by family/friends"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all supported, 4 = very much supported"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5  # Higher weight for direct support measure
+      - wave: 6
+        item_code: "F186"
+        label: "Feel supported by family/friends"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all supported, 4 = very much supported"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5
+      - wave: 7
+        item_code: "F186"
+        label: "Feel supported by family/friends"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = not at all supported, 4 = very much supported"
+        reverse: false
+        desired_direction: "higher = more support"
+        weight: 1.5
+      
+      # G006: Loneliness (waves 5-7; REQUIRES reverse-coding)
+      - wave: 5
+        item_code: "G006"
+        label: "How often do you feel lonely"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = often"
+        reverse: true  # lonely=4 → recode to 1 (low support)
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 6
+        item_code: "G006"
+        label: "How often do you feel lonely"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = often"
+        reverse: true
+        desired_direction: "higher = more support"
+        weight: 1.0
+      - wave: 7
+        item_code: "G006"
+        label: "How often do you feel lonely"
+        scale_min: 1
+        scale_max: 4
+        response_anchors: "1 = never, 4 = often"
+        reverse: true
+        desired_direction: "higher = more support"
+        weight: 1.0
+

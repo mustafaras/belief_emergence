@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "phase1.lockbox_holdout.v1",
+  "generatedAtIso": "2026-03-05T08:24:19.623Z",
+  "source": {
+    "datasetPath": "C:\\Users\\m_ras\\Desktop\\BE_repo_rev\\BE_app\\public\\data\\panel_canonical_23_countries_v1.csv",
+    "datasetSha256": "2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF",
+    "nRows": 630,
+    "nCountries": 23,
+    "yearMin": 2000,
+    "yearMax": 2022
+  },
+  "release": {
+    "cycleId": "2026Q1-R1",
+    "rerunPolicy": "single_compute_per_cycle"
+  },
+  "splitPolicy": {
+    "policyVersion": "lockbox.country_year_hash.v1",
+    "hashSalt": "phase1_lockbox_split_seed_v1",
+    "lockboxCellFraction": 0.2,
+    "minLockboxCells": 6,
+    "nCellsTotal": 34,
+    "nDevCells": 27,
+    "nLockboxCells": 7,
+    "lockboxCellFingerprint": "fnv1a32:f9c9c677",
+    "devCellFingerprint": "fnv1a32:f488e771",
+    "lockboxCells": [
+      "DEU::2013",
+      "DEU::2018",
+      "CZE::2022",
+      "GRC::2017",
+      "ROU::2012",
+      "ROU::2018",
+      "MEX::2012"
+    ]
+  },
+  "developmentReference": {
+    "A": {
+      "countryOut": {
+        "rmseMedian": 0.0000012421433949189276,
+        "maeMedian": 0.0000011761689804200436,
+        "coverage95Median": 1,
+        "failureRate": 0
+      },
+      "rollingOrigin": {
+        "rmseMedian": 0.0000026113306291045246,
+        "maeMedian": 0.000002609187191030291,
+        "coverage95Median": 0.5625,
+        "failureRate": 0
+      },
+      "pooledRefitRmseMedian": 0.000001926737012011726,
+      "pooledRefitMaeMedian": 0.0000018926780857251673,
+      "pooledRefitCoverage95Median": 0.78125
+    },
+    "B": {
+      "countryOut": {
+        "rmseMedian": 0.0000028798348696417534,
+        "maeMedian": 0.000002879612393298493,
+        "coverage95Median": 1,
+        "failureRate": 0
+      },
+      "rollingOrigin": {
+        "rmseMedian": 0.00010356336773052066,
+        "maeMedian": 0.00010356230176793312,
+        "coverage95Median": 0.3333333333333333,
+        "failureRate": 0
+      },
+      "pooledRefitRmseMedian": 0.00005322160130008121,
+      "pooledRefitMaeMedian": 0.000053220957080615805,
+      "pooledRefitCoverage95Median": 0.6666666666666666
+    },
+    "C": {
+      "countryOut": {
+        "rmseMedian": 0.00000370030486530867,
+        "maeMedian": 0.0000036977677990947874,
+        "coverage95Median": 0.6666666666666666,
+        "failureRate": 0
+      },
+      "rollingOrigin": {
+        "rmseMedian": 0.00013073455297572847,
+        "maeMedian": 0.0001307345429060315,
+        "coverage95Median": 0,
+        "failureRate": 0
+      },
+      "pooledRefitRmseMedian": 0.00006721742892051857,
+      "pooledRefitMaeMedian": 0.00006721615535256314,
+      "pooledRefitCoverage95Median": 0.3333333333333333
+    }
+  },
+  "lockboxEvaluation": {
+    "byTier": {
+      "A": {
+        "tier": "A",
+        "converged": true,
+        "nTrainRows": 558,
+        "nTestRows": 72,
+        "nTestUniqueCountryYears": 7,
+        "lowVarianceObservedTest": false,
+        "testMetricsRefit": {
+          "n": 72,
+          "r2": 0.9999999999849077,
+          "corr": 0.9999999999971132,
+          "mae": 0.000001081707461080361,
+          "rmse": 0.0000014047865009707902,
+          "bias": 1.957150911629798e-7
+        },
+        "testMetricsSupportCollapsedRefit": {
+          "n": 7,
+          "r2": 0.9999999999832234,
+          "corr": 0.9999999999975984,
+          "mae": 0.000001231658321108841,
+          "rmse": 0.0000015013771395305862,
+          "bias": 2.21139668261179e-7
+        },
+        "predictionIntervalCoverage95": 0.75,
+        "predictionIntervalCoverage95Empirical": 0.75,
+        "predictionIntervalCoverage95Gaussian": 0.875,
+        "predictionIntervalMethod95": "empirical_quantile_shifted"
+      },
+      "B": {
+        "tier": "B",
+        "converged": true,
+        "nTrainRows": 558,
+        "nTestRows": 72,
+        "nTestUniqueCountryYears": 7,
+        "lowVarianceObservedTest": false,
+        "testMetricsRefit": {
+          "n": 72,
+          "r2": 0.9999999981086547,
+          "corr": 0.999999999465437,
+          "mae": 0.000011092748138501618,
+          "rmse": 0.000015726025819478535,
+          "bias": 0.000004827061819087076
+        },
+        "testMetricsSupportCollapsedRefit": {
+          "n": 7,
+          "r2": 0.9999999979100537,
+          "corr": 0.9999999994599352,
+          "mae": 0.000012168270584912596,
+          "rmse": 0.00001675737723049869,
+          "bias": 0.000005007486219877102
+        },
+        "predictionIntervalCoverage95": 0.5,
+        "predictionIntervalCoverage95Empirical": 0.5,
+        "predictionIntervalCoverage95Gaussian": 0.4722222222222222,
+        "predictionIntervalMethod95": "empirical_quantile_shifted"
+      },
+      "C": {
+        "tier": "C",
+        "converged": true,
+        "nTrainRows": 558,
+        "nTestRows": 72,
+        "nTestUniqueCountryYears": 7,
+        "lowVarianceObservedTest": false,
+        "testMetricsRefit": {
+          "n": 72,
+          "r2": 0.9999999985654698,
+          "corr": 0.9999999995298171,
+          "mae": 0.000010333249778653621,
+          "rmse": 0.000013695831871712325,
+          "bias": 7.494387299285384e-7
+        },
+        "testMetricsSupportCollapsedRefit": {
+          "n": 7,
+          "r2": 0.9999999984131738,
+          "corr": 0.999999999544356,
+          "mae": 0.000011464852009379687,
+          "rmse": 0.000014601691651859888,
+          "bias": 0.000001201077714837567
+        },
+        "predictionIntervalCoverage95": 0.5,
+        "predictionIntervalCoverage95Empirical": 0.5,
+        "predictionIntervalCoverage95Gaussian": 0.5,
+        "predictionIntervalMethod95": "empirical_quantile_shifted"
+      }
+    },
+    "comparisonVsDevelopmentByTier": {
+      "A": {
+        "rmseMinusCountryOutMedian": 1.6264310605186258e-7,
+        "rmseMinusRollingMedian": -0.0000012065441281337344,
+        "maeMinusCountryOutMedian": -9.446151933968262e-8,
+        "maeMinusRollingMedian": -0.00000152747972994993,
+        "coverage95MinusCountryOutMedian": -0.25,
+        "coverage95MinusRollingMedian": 0.1875
+      },
+      "B": {
+        "rmseMinusCountryOutMedian": 0.000012846190949836782,
+        "rmseMinusRollingMedian": -0.00008783734191104213,
+        "maeMinusCountryOutMedian": 0.000008213135745203124,
+        "maeMinusRollingMedian": -0.0000924695536294315,
+        "coverage95MinusCountryOutMedian": -0.5,
+        "coverage95MinusRollingMedian": 0.16666666666666669
+      },
+      "C": {
+        "rmseMinusCountryOutMedian": 0.000009995527006403654,
+        "rmseMinusRollingMedian": -0.00011703872110401614,
+        "maeMinusCountryOutMedian": 0.000006635481979558834,
+        "maeMinusRollingMedian": -0.00012040129312737787,
+        "coverage95MinusCountryOutMedian": -0.16666666666666663,
+        "coverage95MinusRollingMedian": 0.5
+      }
+    }
+  },
+  "checks": {
+    "overlapPass": true,
+    "lockboxSupportSummary": {
+      "minRowsPerHeldoutCell": 9,
+      "medianRowsPerHeldoutCell": 9,
+      "maxRowsPerHeldoutCell": 18
+    },
+    "minLockboxCellsRequired": 6,
+    "minLockboxRowsRequired": 24,
+    "lockboxSizePass": true,
+    "releaseCycleGuardPass": true,
+    "protocolViolationFlags": []
+  },
+  "limitations": [
+    "Lockbox evaluation is split at (iso3,year) cell level to prevent within-cell leakage, but coverage remains constrained by the same sparse support envelope.",
+    "Single lockbox partition per release cycle reduces metric peeking, but does not replace external-data validation.",
+    "Tier C lockbox metrics are reported for transparency and remain exploratory under the established tier contract."
+  ]
+}

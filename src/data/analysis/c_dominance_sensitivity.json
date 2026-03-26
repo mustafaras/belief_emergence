@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "phase1.c_dominance_sensitivity.v1",
+  "generatedAtIso": "2026-03-10T05:48:48.857Z",
+  "nRows": 630,
+  "nPermutations": 200,
+  "seed": 42,
+  "tierResults": [
+    {
+      "tier": "A",
+      "fullModel": {
+        "r2": 0.9999999999906611,
+        "rmse": 9.44014835924536e-7,
+        "mae": 7.36802241569263e-7
+      },
+      "cExcluded": {
+        "r2": 0.7298574119261956,
+        "rmse": 0.160557114909867,
+        "mae": 0.12529867439469694,
+        "deltaR2": 0.27014258806446556,
+        "deltaRmse": 0.16055617089503108,
+        "deltaMae": 0.12529793759245536
+      },
+      "cPermuted": {
+        "meanR2": 0.7303190196686241,
+        "q05R2": 0.7298587431935782,
+        "q95R2": 0.7318991479019177,
+        "pValue": 0
+      }
+    },
+    {
+      "tier": "B",
+      "fullModel": {
+        "r2": 0.9999999999641243,
+        "rmse": 0.0000018502623916864568,
+        "mae": 0.000001200441619611026
+      },
+      "cExcluded": {
+        "r2": 0.7893120580042983,
+        "rmse": 0.14179237206714795,
+        "mae": 0.1024695547829753,
+        "deltaR2": 0.210687941959826,
+        "deltaRmse": 0.14179052180475626,
+        "deltaMae": 0.10246835434135569
+      },
+      "cPermuted": {
+        "meanR2": 0.7901737423397488,
+        "q05R2": 0.7894137528093856,
+        "q95R2": 0.7918431899553139,
+        "pValue": 0
+      }
+    },
+    {
+      "tier": "C",
+      "fullModel": {
+        "r2": 0.9999999999609234,
+        "rmse": 0.000001931041351129923,
+        "mae": 0.00000125481945922172
+      },
+      "cExcluded": {
+        "r2": 0.81530114076443,
+        "rmse": 0.13275935508031672,
+        "mae": 0.08819642653545715,
+        "deltaR2": 0.18469885919649331,
+        "deltaRmse": 0.1327574240389656,
+        "deltaMae": 0.08819517171599793
+      },
+      "cPermuted": {
+        "meanR2": 0.8161091279002369,
+        "q05R2": 0.8153798713668431,
+        "q95R2": 0.8177539315200488,
+        "pValue": 0
+      }
+    }
+  ],
+  "partialR2Ranking": [
+    {
+      "predictor": "C",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.7298574119261956,
+      "partialR2": 0.27014258806446556,
+      "rank": 1
+    },
+    {
+      "predictor": "D",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999906612,
+      "partialR2": -1.1102230246251565e-16,
+      "rank": 2
+    },
+    {
+      "predictor": "S",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999906612,
+      "partialR2": -1.1102230246251565e-16,
+      "rank": 3
+    },
+    {
+      "predictor": "X",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999906671,
+      "partialR2": -5.995204332975845e-15,
+      "rank": 4
+    },
+    {
+      "predictor": "G",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999906839,
+      "partialR2": -2.275957200481571e-14,
+      "rank": 5
+    },
+    {
+      "predictor": "R",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.999999999990972,
+      "partialR2": -3.1086244689504383e-13,
+      "rank": 6
+    },
+    {
+      "predictor": "T",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999909953,
+      "partialR2": -3.341771304121721e-13,
+      "rank": 7
+    },
+    {
+      "predictor": "E",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999915946,
+      "partialR2": -9.334755191048316e-13,
+      "rank": 8
+    },
+    {
+      "predictor": "Y",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999917257,
+      "partialR2": -1.0645928583130626e-12,
+      "rank": 9
+    },
+    {
+      "predictor": "M",
+      "fullR2": 0.9999999999906611,
+      "excludedR2": 0.9999999999919591,
+      "partialR2": -1.2979617380892705e-12,
+      "rank": 10
+    }
+  ],
+  "signStabilityUnderCExclusion": [
+    {
+      "tier": "A",
+      "nCoeffs": 9,
+      "nSignRetained": 9,
+      "fractionRetained": 1
+    },
+    {
+      "tier": "B",
+      "nCoeffs": 14,
+      "nSignRetained": 11,
+      "fractionRetained": 0.7857142857142857
+    },
+    {
+      "tier": "C",
+      "nCoeffs": 18,
+      "nSignRetained": 11,
+      "fractionRetained": 0.6111111111111112
+    }
+  ],
+  "verdict": "C carries substantive predictive content beyond shared-source overlap; primary-tier sign structure retained under exclusion."
+}

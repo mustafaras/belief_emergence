@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "phase1.model_complexity_support.v1",
+  "generatedAtIso": "2026-03-26T06:44:18.249Z",
+  "complexityByTier": [
+    {
+      "tier": "A",
+      "parameterCount": 11,
+      "supportPerParameter": 3.090909090909091,
+      "supportRiskFlag": true,
+      "exploratory": false,
+      "inferentialRole": "primary"
+    },
+    {
+      "tier": "B",
+      "parameterCount": 18,
+      "supportPerParameter": 1.8888888888888888,
+      "supportRiskFlag": true,
+      "exploratory": false,
+      "inferentialRole": "primary"
+    },
+    {
+      "tier": "C",
+      "parameterCount": 22,
+      "supportPerParameter": 1.5454545454545454,
+      "supportRiskFlag": true,
+      "exploratory": true,
+      "inferentialRole": "exploratory"
+    }
+  ],
+  "supportMask": {
+    "schemaVersion": "phase1.support_mask.v1",
+    "generatedAtIso": "2026-03-26T06:44:18.249Z",
+    "nUniqueCountryYears": 34,
+    "grid": {
+      "xBins": 8,
+      "yBins": 8,
+      "occupiedCells": 22,
+      "occupancyRatio": 0.34375,
+      "lowSupportCells": 15
+    },
+    "supportThresholds": {
+      "lowCellCountThreshold": 2
+    }
+  },
+  "supportConstrainedInference": {
+    "effectiveSupportUnits": 34,
+    "supportDensityNote": "Inference is conditioned on 34 unique country-years with uneven regime occupancy; evidence is support-bounded rather than population-general.",
+    "highDimensionalTermsGuardrail": "Higher-dimensional interaction/curvature terms are interpreted as support-constrained diagnostics and are excluded from headline claims unless independently stabilized.",
+    "tierDiscipline": {
+      "primary": [
+        "A",
+        "B"
+      ],
+      "exploratory": [
+        "C"
+      ]
+    }
+  },
+  "interpretationBoundary": {
+    "tierCExploratory": true,
+    "note": "Tier C remains exploratory unless independent stability and OOS performance are adequate, and interpretation remains support-constrained even for Tier A/B.",
+    "guardrails": [
+      "Tier A/B provide the primary inferential pathway under refit OOS protocols.",
+      "Tier C is exploratory and should not be used for headline inferential claims.",
+      "All claims are bounded by thin effective support and uneven regime coverage.",
+      "All reported effects remain descriptive/model-implied and do not establish causal effects."
+    ]
+  }
+}

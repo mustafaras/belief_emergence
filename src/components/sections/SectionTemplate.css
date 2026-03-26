@@ -1,0 +1,1986 @@
+/* Section Template Styles - Technical Design System */
+.section-template {
+  padding-top: 80px;
+  max-width: 92%;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: #f4d03f;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', 'Courier New', monospace;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.98));
+  border: 1px solid rgba(244, 208, 63, 0.1);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(244, 208, 63, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-template::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(244, 208, 63, 0.8), 
+    rgba(255, 215, 0, 0.9),
+    rgba(244, 208, 63, 0.8), 
+    transparent
+  );
+  animation: techGlow 4s ease-in-out infinite;
+}
+
+@keyframes techGlow {
+  0%, 100% { opacity: 0.6; transform: scaleX(0.8); }
+  50% { opacity: 1; transform: scaleX(1.2); }
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 0;
+  position: relative;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: rgba(244, 208, 63, 0.6);
+}
+
+.section-icon {
+  width: 144px;
+  height: 144px;
+  margin-bottom: 1.25rem;
+  color: #f4d03f;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 8px rgba(244, 208, 63, 0.25));
+  background: rgba(244, 208, 63, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(244, 208, 63, 0.2);
+}
+
+.section-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.section-titles {
+  width: 100%;
+  max-width: 900px;
+}
+
+.section-index {
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: #f4d03f;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.75rem;
+  background: rgba(244, 208, 63, 0.06);
+  padding: 1.2rem 3rem;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 208, 63, 0.2);
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.section-title {
+  font-size: 5rem !important;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 16px rgba(244, 208, 63, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-family: 'JetBrains Mono', monospace;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-subtitle {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #f4d03f;
+  margin: 0 0 1rem 0;
+  opacity: 0.85;
+  font-style: italic;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.025em;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-description {
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 10px 0 0 0;
+  opacity: 0.8;
+  line-height: 1.4;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem 2.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(244, 208, 63, 0.1);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.section-content {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+/* ===============================================
+   Belief Equation scoped academic layout override
+   =============================================== */
+.belief-equation-section .academic-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  margin: 1rem 0;
+  align-items: start;
+}
+
+.belief-equation-section .coefficients-column,
+.belief-equation-section .models-column {
+  min-width: 0;
+}
+
+/* Model cards flow under 1.5 header in a 2-col grid to avoid large empty column gaps */
+.belief-equation-section .belief-models-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  margin: 0.75rem 0 1.25rem;
+  align-items: start;
+}
+
+.belief-equation-section .belief-models-grid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* KaTeX standardization inside model equation blocks */
+.belief-equation-section .equation-showcase {
+  overflow-x: auto;
+}
+
+.belief-equation-section .equation-showcase .katex-display {
+  margin: 0 !important;
+}
+
+.belief-equation-section .equation-showcase .katex,
+.belief-equation-section .equation-showcase .katex-display {
+  color: #f4d03f;
+}
+
+.belief-equation-section .phi-showcase .katex,
+.belief-equation-section .phi-showcase .katex-display {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+@media (max-width: 1400px) {
+  .belief-equation-section .academic-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .belief-equation-section .belief-models-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .belief-equation-section .belief-models-grid > :last-child:nth-child(odd) {
+    grid-column: 1;
+  }
+}
+
+/* ===============================================
+   1.6 Validation Summary (Belief Equation)
+   =============================================== */
+.belief-equation-section .belief-validation-section {
+  margin-top: 1.25rem;
+}
+
+.belief-equation-section .validation-summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(244, 208, 63, 0.18);
+  border-radius: 16px;
+  padding: 16px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.belief-equation-section .validation-summary-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.belief-equation-section .validation-metrics-list {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.belief-equation-section .validation-status {
+  color: rgba(244, 208, 63, 0.9);
+  font-size: 0.9rem;
+  background: rgba(244, 208, 63, 0.06);
+  border: 1px solid rgba(244, 208, 63, 0.18);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.belief-equation-section .validation-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  grid-auto-flow: dense;
+  align-items: start;
+}
+
+.belief-equation-section .validation-charts-grid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.belief-equation-section .validation-chart-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(244, 208, 63, 0.12);
+  border-radius: 14px;
+  padding: 12px;
+  min-height: 340px;
+}
+
+.belief-equation-section .validation-chart {
+  width: 100%;
+  height: 280px;
+  display: block;
+}
+
+@media (max-width: 1400px) {
+  .belief-equation-section .validation-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .belief-equation-section .validation-charts-grid > :last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+.section-placeholder {
+  background: linear-gradient(135deg, 
+    rgba(244, 208, 63, 0.1), 
+    rgba(244, 208, 63, 0.05)
+  );
+  border: 2px solid rgba(244, 208, 63, 0.3);
+  border-radius: 20px;
+  padding: 4rem 3rem;
+  text-align: center;
+  margin-top: 3rem;
+  position: relative;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    0 15px 35px rgba(244, 208, 63, 0.1),
+    inset 0 1px 0 rgba(244, 208, 63, 0.2);
+}
+
+.section-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(244, 208, 63, 0.1), 
+    transparent
+  );
+  animation: placeholderShimmer 3s infinite;
+}
+
+@keyframes placeholderShimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.section-placeholder p {
+  font-size: 1.3rem;
+  color: #f4d03f;
+  margin: 0;
+  opacity: 0.9;
+  font-style: italic;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design - Technical Approach */
+@media (max-width: 1200px) {
+  .section-template {
+    max-width: 90%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .section-index {
+    font-size: 1.9rem;
+    padding: 1.1rem 2.7rem;
+  }
+  
+  .section-title {
+    font-size: 12rem !important;
+  }
+  
+  .section-subtitle {
+    font-size: 1.8rem;
+  }
+  
+  .section-description {
+    font-size: 1.2rem;
+    padding: 0.9rem 2rem;
+    line-height: 1.3;
+  }
+  
+  .abstract-title {
+    font-size: 3.2rem;
+  }
+}
+
+/* ===============================================
+   Suppressors Section - Dense Two-Column Grid
+   Scoped to avoid affecting other sections
+   =============================================== */
+.suppressors-content .viz-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  /* Keep cards content-sized (avoid tall cards with internal empty space). */
+  align-items: start;
+  grid-auto-flow: dense;
+  margin: 1rem 0;
+}
+
+.suppressors-content .viz-grid > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* Suppressors: free-flow two-column packing (two independent stacks; no row coupling) */
+.suppressors-content .suppressors-two-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin: 1rem 0;
+}
+
+.suppressors-content .suppressors-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+@media (max-width: 1400px) {
+  .suppressors-content .viz-grid {
+    grid-template-columns: 1fr;
+  }
+  .suppressors-content .viz-grid > :last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .suppressors-content .suppressors-two-stack {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================================
+   Mathematical Analysis (Section 5) - Free-flow Two-Stack
+   Scoped to avoid affecting other sections
+   =============================================== */
+.mathematical-analysis-content .analysis-two-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin: 1rem 0;
+}
+
+.mathematical-analysis-content .analysis-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Section 5: keep SVG diagnostics compact like other pages */
+.mathematical-analysis-content .ridge-chart-container {
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* System dynamics: dense two-stack layout (Section 6) */
+.system-dynamics-content .system-dynamics-two-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.system-dynamics-content .system-dynamics-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.system-dynamics-content .sd-svg {
+  font-family: var(--font-mono) !important;
+  width: 100%;
+}
+
+/* Section 6: coder-font for prose + headings (KaTeX keeps its own font stack) */
+.system-dynamics-content.sd-mono {
+  font-family: var(--font-mono);
+}
+
+/* Section 6: KaTeX/equation blocks should behave like other sections */
+.system-dynamics-content .equation-showcase {
+  overflow-x: auto;
+}
+
+.system-dynamics-content .equation-showcase .katex-display {
+  margin: 0 !important;
+}
+
+.system-dynamics-content .equation-showcase .katex,
+.system-dynamics-content .equation-showcase .katex-display {
+  color: #f4d03f;
+}
+
+/* Section 6: if KaTeX fails, keep fallback in coder-font */
+.system-dynamics-content.sd-mono .formula {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+.system-dynamics-content .sd-svg--h230 {
+  max-height: 230px;
+}
+
+.system-dynamics-content .sd-svg--h240 {
+  max-height: 240px;
+}
+
+.system-dynamics-content .sd-svg--h290 {
+  max-height: 290px;
+}
+
+.system-dynamics-content .sd-svg--h320 {
+  max-height: 320px;
+}
+
+.system-dynamics-content .sd-svg--h380 {
+  max-height: 380px;
+}
+
+.system-dynamics-content .sd-svg--h460 {
+  max-height: 460px;
+}
+
+/* Section 6: Predicted vs Observed Z table */
+.system-dynamics-content .sd-ztable-card {
+  margin-top: 14px;
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px;
+}
+
+.system-dynamics-content .sd-ztable-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.system-dynamics-content .sd-ztable-title {
+  color: rgba(244, 208, 63, 0.95);
+  font-weight: 900;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+}
+
+.system-dynamics-content .sd-ztable-subtitle {
+  color: rgba(226, 232, 240, 0.85);
+  font-size: 0.82rem;
+  margin-top: 4px;
+  max-width: 72ch;
+}
+
+.system-dynamics-content .sd-ztable-meta {
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.system-dynamics-content .sd-ztable-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 10px;
+}
+
+.system-dynamics-content .sd-ztable-control {
+  display: grid;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.system-dynamics-content .sd-ztable-control > span {
+  color: rgba(148, 163, 184, 0.92);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.system-dynamics-content .sd-ztable-control select {
+  font-family: var(--font-mono);
+  border-radius: 10px;
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(241, 245, 249, 0.92);
+  padding: 8px 10px;
+  outline: none;
+}
+
+.system-dynamics-content .sd-ztable-scroll {
+  border-radius: 12px;
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  background: rgba(0, 0, 0, 0.35);
+  overflow: auto;
+  max-height: 360px;
+}
+
+.system-dynamics-content .sd-ztable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-mono);
+}
+
+.system-dynamics-content .sd-ztable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.88);
+  color: rgba(244, 208, 63, 0.92);
+  font-size: 0.78rem;
+  text-align: left;
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.85);
+}
+
+.system-dynamics-content .sd-ztable tbody td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.7);
+  color: rgba(226, 232, 240, 0.92);
+  font-size: 0.8rem;
+}
+
+.system-dynamics-content .sd-ztable tbody tr:hover td {
+  background: rgba(244, 208, 63, 0.06);
+}
+
+.system-dynamics-content .sd-ztable-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.system-dynamics-content .sd-ztable-pos {
+  color: rgba(239, 68, 68, 0.95);
+  font-weight: 800;
+}
+
+.system-dynamics-content .sd-ztable-neg {
+  color: rgba(16, 185, 129, 0.95);
+  font-weight: 800;
+}
+
+/* Section 6: KaTeX formula poster (graphic-like block) */
+.system-dynamics-content .sd-formula-poster {
+  width: 100%;
+  padding: 16px 16px 12px;
+  border: 1.5px solid #334155;
+  border-radius: 12px;
+  background: var(--typography-colors-background-primary);
+  font-size: var(--typography-sizes-base);
+}
+
+.system-dynamics-content .sd-formula-line {
+  margin: 0;
+}
+
+.system-dynamics-content .sd-formula-line .katex-display {
+  margin: 0.25rem 0;
+  overflow: hidden;
+}
+
+.system-dynamics-content .sd-formula-poster .katex {
+  font-size: 1.06em;
+}
+
+/* Section 6: coefficient table card */
+.system-dynamics-content .sd-coef-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.system-dynamics-content .sd-coef-block {
+  border: 1px solid rgba(51, 65, 85, 0.85);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.system-dynamics-content .sd-coef-block-title {
+  color: rgba(244, 208, 63, 0.9);
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.system-dynamics-content .sd-coef-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.system-dynamics-content .sd-coef-table th,
+.system-dynamics-content .sd-coef-table td {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.55);
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+.system-dynamics-content .sd-coef-table th {
+  color: rgba(226, 232, 240, 0.92);
+  font-weight: 800;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+.system-dynamics-content .sd-coef-mono {
+  font-family: var(--font-mono);
+  color: rgba(226, 232, 240, 0.9);
+  white-space: nowrap;
+}
+
+.system-dynamics-content .sd-coef-num {
+  font-family: var(--font-mono);
+  color: rgba(244, 208, 63, 0.92);
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .system-dynamics-content .sd-coef-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.system-dynamics-content .sd-formula-line--accent {
+  color: var(--typography-colors-accent);
+}
+
+.system-dynamics-content .sd-formula-line--muted {
+  color: var(--typography-colors-secondary);
+}
+
+.system-dynamics-content .sd-formula-poster .katex {
+  font-family: var(--font-mono);
+}
+
+/* Section 6: real 3D surface container (Three.js canvas) */
+.system-dynamics-content .sd-surface3d {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border: 1.5px solid #334155;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0b1220;
+}
+
+.system-dynamics-content .sd-surface3d-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.system-dynamics-content .sd-surface3d-overlay {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 8px 10px;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  background: rgba(11, 18, 32, 0.75);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.system-dynamics-content .sd-surface3d-title {
+  font-family: var(--font-mono);
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.system-dynamics-content .sd-surface3d-sub {
+  font-family: var(--font-mono);
+  color: #94a3b8;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+@media (max-width: 1400px) {
+  .mathematical-analysis-content .analysis-two-stack {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-template {
+    padding-top: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    max-width: 95%;
+  }
+  
+  .section-header {
+    margin-bottom: 2rem;
+  }
+  
+  .section-icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+  }
+  
+  .section-icon svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .section-index {
+    font-size: 1.6rem;
+    padding: 0.9rem 2.4rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-title {
+    font-size: 10.5rem !important;
+  }
+  
+  .section-subtitle {
+    font-size: 1.6rem;
+  }
+  
+  .section-description {
+    font-size: 1.1rem;
+    padding: 0.8rem 1.8rem;
+    line-height: 1.3;
+  }
+  
+  .abstract-title {
+    font-size: 2.8rem;
+  }
+  
+  .abstract-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-template {
+    padding-top: 40px;
+    border-radius: 16px;
+  }
+  
+  .section-icon {
+    width: 108px;
+    height: 108px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .section-icon svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .section-index {
+    font-size: 1.8rem;
+    padding: 0.75rem 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 9rem !important;
+  }
+  
+  .section-subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .section-description {
+    font-size: 1rem;
+    line-height: 1.2;
+    padding: 0.7rem 1.5rem;
+  }
+  
+  .academic-abstract {
+    padding: 1.25rem;
+  }
+  
+  .abstract-title {
+    font-size: 2.5rem;
+  }
+  
+  .definition-card,
+  .hypothesis-card,
+  .parameters-card,
+  .coefficients-card {
+    padding: 1rem;
+  }
+}
+
+/* Belief Equation Section - Academic Design */
+.belief-equation-content {
+  line-height: 1.6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Academic Abstract */
+.academic-abstract {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 2rem 0;
+  margin-bottom: 2.5rem;
+  margin-top: 10px;
+  text-align: center;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.abstract-title {
+  font-size: 2rem !important;
+  font-weight: 600;
+  color: #c4bbbb94 !important;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+.abstract-content {
+  max-width: 750px;
+  margin: -2rem auto;
+}
+
+.abstract-text {
+  font-size: 1rem;
+  color: #ffffff;
+  line-height: 1.7;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Two Column Academic Layout */
+.academic-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 1.25rem 0;
+}
+
+/* Left Column - Theory */
+.theory-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Right Column - Models */
+.models-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.models-header-card {
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.15), rgba(244, 208, 63, 0.08));
+  border: 2px solid rgba(244, 208, 63, 0.3);
+  border-radius: 16px;
+  padding: 1.75rem;
+  text-align: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(244, 208, 63, 0.1);
+}
+
+.models-header-card .card-title {
+  border-bottom: none;
+  text-align: center;
+}
+
+.models-subtitle {
+  color: #ffffff;
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.models-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f4d03f;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+/* Card Styles */
+.definition-card,
+.hypothesis-card,
+.parameters-card,
+.coefficients-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(244, 208, 63, 0.12);
+  border-radius: 12px;
+  padding: 1.5rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.definition-card:hover,
+.hypothesis-card:hover,
+.parameters-card:hover,
+.coefficients-card:hover {
+  border-color: rgba(244, 208, 63, 0.25);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f4d03f;
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid rgba(244, 208, 63, 0.15);
+  padding-bottom: 0.5rem;
+}
+
+/* Coefficients Card */
+.coefficients-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.coeff-group h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f4d03f;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(244, 208, 63, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(244, 208, 63, 0.2);
+}
+
+.coeff-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.coeff-symbol {
+  background: linear-gradient(135deg, #f4d03f, #e8c547);
+  color: #000;
+  font-weight: 700;
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Times New Roman', serif;
+}
+
+.coeff-value {
+  background: rgba(244, 208, 63, 0.2);
+  color: #f4d03f;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.coeff-desc {
+  color: #ffffff;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.coeff-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.coeff-mini {
+  background: rgba(244, 208, 63, 0.08);
+  color: #f4d03f;
+  padding: 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(244, 208, 63, 0.15);
+}
+
+/* Variable Definitions */
+.definition-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.variable-def {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.variable-symbol {
+  background: linear-gradient(135deg, #f4d03f, #e8c547);
+  color: #000;
+  font-weight: 700;
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(244, 208, 63, 0.3);
+}
+
+.variable-desc strong {
+  color: #ffffff;
+  font-size: 1.05rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.variable-desc p {
+  color: #ffffff;
+  opacity: 0.8;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Hypothesis Card */
+.hypothesis-content p {
+  color: #ffffff;
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.central-equation {
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.main-formula {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.8rem;
+  color: #f4d03f;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.hypothesis-note {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* Parameters Academic Grid */
+.parameters-academic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.param-group h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.param-group.amplifiers h4 {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.param-group.suppressors h4 {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.param-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.param-item span {
+  background: #f4d03f;
+  color: #000;
+  font-weight: 600;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* Model Cards */
+.model-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(244, 208, 63, 0.2);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.model-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f4d03f, #e8c547);
+  opacity: 0.6;
+}
+
+.model-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(244, 208, 63, 0.15);
+  border-color: rgba(244, 208, 63, 0.4);
+}
+
+.model-card.linear::before { background: linear-gradient(90deg, #3498db, #2980b9); }
+.model-card.saturation::before { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
+.model-card.threshold::before { background: linear-gradient(90deg, #e67e22, #d35400); }
+.model-card.dual::before { background: linear-gradient(90deg, #1abc9c, #16a085); }
+.model-card.extended::before { background: linear-gradient(90deg, #f4d03f, #e8c547); }
+
+.model-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.model-header svg {
+  color: #f4d03f;
+  flex-shrink: 0;
+}
+
+.model-info h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.model-type {
+  font-size: 0.85rem;
+  color: #f4d03f;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.equation-showcase {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.formula {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.2rem;
+  color: #f4d03f;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.final-equation .formula {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.phi-showcase {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.phi-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #f4d03f;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.phi-formula {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.model-description {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 1rem 0 0 0;
+  opacity: 0.9;
+}
+
+/* Plotly figure wrappers (used in documentation sections) */
+.figure-block {
+  margin-top: 1rem;
+}
+
+.figure-frame {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(244, 208, 63, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.figure-caption {
+  margin: 0.75rem 0 0 0;
+  color: #ffffff;
+  opacity: 0.85;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Section 3 (Amplifiers) spacing tighten-up */
+.amplifiers-content {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', 'Courier New', monospace;
+}
+
+.amplifiers-content .academic-abstract {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.amplifiers-content .abstract-content {
+  max-width: 1000px;
+  margin: 1rem auto 0;
+  padding: 0.3rem;
+  background: rgba(244, 208, 63, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #000000;
+}
+
+.amplifiers-content .abstract-text {
+  text-align: left;
+}
+
+.amplifiers-content .academic-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  margin: 0.75rem 0;
+  align-items: start;
+}
+
+/* If the last placed card would leave an empty column, span it full width */
+.amplifiers-content .academic-layout > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* Core Variables-like: two independent stacks (no masonry/"empty column" artifacts) */
+.amplifiers-content .theory-column,
+.amplifiers-content .models-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.amplifiers-content .academic-layout > * {
+  min-width: 0;
+}
+
+/* Header + model stacks for 3.7 */
+.amplifiers-content .models-header-card--full {
+  grid-column: 1 / -1;
+}
+
+.amplifiers-content .amplifiers-models-columns {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.amplifiers-content .amplifiers-models-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.amplifiers-content .definition-card,
+.amplifiers-content .hypothesis-card,
+.amplifiers-content .parameters-card,
+.amplifiers-content .coefficients-card {
+  padding: 1.15rem;
+}
+
+.amplifiers-content .hypothesis-content p {
+  margin: 0.6rem 0;
+  line-height: 1.6;
+}
+
+.amplifiers-content .equation-showcase {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+}
+
+.amplifiers-content .central-equation {
+  margin: 1rem 0;
+  padding: 1.1rem;
+}
+
+.amplifiers-content .figure-block {
+  margin-top: 0;
+}
+
+.amplifiers-content .figure-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.amplifiers-content .figure-frame {
+  padding: 0.6rem;
+}
+
+.amplifiers-content .figure-caption {
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+}
+
+/* Core Variables chart system (scoped) — used by Amplifiers Figures */
+.amplifiers-content .corevars-charts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .amplifiers-content .corevars-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.amplifiers-content .corevars-chart-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.amplifiers-content .corevars-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.amplifiers-content .corevars-note {
+  margin-top: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.amplifiers-content .figures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: start;
+  margin-top: 0.75rem;
+}
+
+/* If the final chart would be alone on the last row, span it full width */
+.amplifiers-content .figures-grid > :last-child:nth-child(3n + 1) {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .amplifiers-content .figures-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .amplifiers-content .amplifiers-models-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.amplifiers-content .academic-conclusion {
+  margin-top: 0.5rem;
+  padding: 1.1rem;
+}
+
+.amplifiers-content .conclusion-text {
+  font-style: normal;
+  max-width: 1000px;
+  text-align: left;
+}
+
+/* Full-width blocks within the grid for a clean, dense layout */
+.amplifiers-content .academic-conclusion,
+.amplifiers-content .section-end-indicator {
+  grid-column: 1 / -1;
+}
+
+.amplifiers-content .definition-card--full,
+.amplifiers-content .model-card--full {
+  grid-column: 1 / -1;
+}
+
+.amplifiers-content .conclusion-content h4 {
+  color: #f4d03f;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem 0;
+}
+
+.amplifiers-content .section-end-indicator {
+  margin: 2.25rem 0 1.5rem 0;
+  gap: 1.25rem;
+}
+
+/* Section 3: distribute coefficient groups left/right */
+.amplifiers-content .coefficients-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .amplifiers-content .coefficients-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Academic Conclusion */
+.academic-conclusion {
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.1), rgba(244, 208, 63, 0.05));
+  border: 1px solid rgba(244, 208, 63, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.conclusion-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f4d03f;
+  margin: 0 0 0.75rem 0;
+}
+
+.conclusion-text {
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0 0 1rem 0;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  font-style: italic;
+  text-align: justify;
+}
+
+/* Framework Details */
+.conclusion-content {
+  text-align: left;
+}
+
+.framework-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.framework-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(244, 208, 63, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.framework-item h4 {
+  color: #f4d03f;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  border-bottom: 1px solid rgba(244, 208, 63, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.framework-item p {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Model Features List */
+.model-features {
+  margin: 1rem 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.model-features li {
+  color: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.model-features li::before {
+  content: '▸';
+  color: #f4d03f;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.model-features strong {
+  color: #f4d03f;
+  font-weight: 600;
+}
+
+/* Enhanced Model Description */
+.model-description {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 1rem 0 0 0;
+  opacity: 0.9;
+}
+
+.model-description p {
+  margin: 0.75rem 0;
+}
+
+.model-description strong {
+  color: #f4d03f;
+  font-weight: 600;
+}
+
+.model-description em {
+  color: #f4d03f;
+  font-style: italic;
+}
+
+/* Section End Indicator */
+.section-end-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5rem 0 3rem 0;
+  gap: 2rem;
+}
+
+.end-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.5), transparent);
+}
+
+.end-badge {
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.15), rgba(244, 208, 63, 0.08));
+  border: 2px solid rgba(244, 208, 63, 0.3);
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  text-align: center;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(244, 208, 63, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.end-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.2), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.end-text {
+  color: #f4d03f;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.end-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.end-dots span {
+  width: 8px;
+  height: 8px;
+  background: #f4d03f;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.end-dots span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.end-dots span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .academic-layout {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .academic-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .parameters-academic-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .coeff-mini-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .section-end-indicator {
+    margin: 3rem 0 2rem 0;
+    gap: 1rem;
+  }
+  
+  .framework-details {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .academic-abstract {
+    padding: 2rem 1.5rem;
+  }
+  
+  .abstract-title {
+    font-size: 1.8rem;
+  }
+  
+  .definition-card,
+  .hypothesis-card,
+  .parameters-card,
+  .coefficients-card {
+    padding: 1.25rem;
+  }
+  
+  .models-header-card {
+    padding: 1.25rem;
+  }
+  
+  .model-card {
+    padding: 1rem;
+  }
+  
+  .formula {
+    font-size: 1rem;
+  }
+  
+  .main-formula {
+    font-size: 1.4rem;
+  }
+  
+  .coeff-mini-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .end-badge {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .framework-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .academic-abstract {
+    padding: 1.5rem 1rem;
+  }
+  
+  .variable-def {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .model-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .formula {
+    font-size: 0.9rem;
+  }
+  
+  .main-formula {
+    font-size: 1.1rem;
+  }
+  
+  .coeff-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .section-end-indicator {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .end-line {
+    width: 100%;
+    height: 1px;
+  }
+}
+
+/* ===============================================
+   Amplifiers Section Specific Styles
+   =============================================== */
+.amplifiers-content .amplifier-profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+@media (max-width: 1200px) {
+  .amplifiers-content .amplifier-profiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.amplifiers-content .mini-chart {
+  margin-top: 12px;
+}
+
+/* ===============================================
+   Suppressors Section - Dense Two-Column Grid (Scoped)
+   =============================================== */
+.suppressors-content {
+  font-family: var(--font-mono) !important;
+}
+
+/* Section 4 validation summary (match Section 1 card language) */
+.suppressors-content .validation-summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(244, 208, 63, 0.18);
+  border-radius: 16px;
+  padding: 16px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.suppressors-content .validation-summary-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.suppressors-content .validation-metrics-list {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.suppressors-content .validation-status {
+  color: rgba(244, 208, 63, 0.9);
+  font-size: 0.9rem;
+  background: rgba(244, 208, 63, 0.06);
+  border: 1px solid rgba(244, 208, 63, 0.18);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+/* KaTeX and equation blocks (Suppressors) */
+.suppressors-content .equation-showcase .katex-display {
+  margin: 0 !important;
+}
+
+.suppressors-content .equation-showcase {
+  font-size: 1.1em;
+  padding: 12px 0;
+}
+
+/* Section 4 chart sizing (prevent SVG label overlap) */
+.suppressors-content .validation-chart,
+.suppressors-content .country-slice-chart,
+.suppressors-content .coeff-chart,
+.suppressors-content .sensitivity-chart {
+  width: 100%;
+  height: 280px;
+  display: block;
+}
+
+/* Enforce coder font for chart text */
+.suppressors-content .validation-chart text,
+.suppressors-content .coeff-chart text,
+.suppressors-content .sensitivity-chart text {
+  font-family: var(--font-mono) !important;
+}
+
+/* Section 4: enforce coder font for all SVG <text> nodes (documentation overlay defaults can leak in). */
+.suppressors-content svg text {
+  font-family: var(--font-mono) !important;
+}
+
+/* Section 4: also apply at SVG root level (some browsers inherit differently for <text>). */
+.suppressors-content svg {
+  font-family: var(--font-mono) !important;
+}

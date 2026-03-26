@@ -1,0 +1,192 @@
+@import '../../styles/tokens.css';
+
+.surface3d-overlay-root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  /* Above TopBar content; TopBar toggle remains above this (see TopBar.css). */
+  z-index: 1004;
+  /* Pointer-events safety: overlay root is transparent to clicks; only the plot slot is interactive. */
+  pointer-events: none;
+  box-sizing: border-box;
+  padding: 0;
+  animation: surface3d-overlay-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  will-change: transform, opacity;
+}
+
+.surface3d-overlay-root.is-closing {
+  animation: surface3d-overlay-out 240ms cubic-bezier(0.4, 0, 1, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes surface3d-overlay-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes surface3d-overlay-out {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.99);
+  }
+}
+
+.surface3d-overlay-root .surface3d-panel {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  background: var(--primary-bg);
+  box-shadow: var(--shadow-xl);
+  padding: 16px 20px;
+  overflow: hidden;
+  /* Block accidental clicks on hidden TopBar controls beneath the overlay.
+     Interactivity remains scoped to .surface3d-slot/.surface3d-canvas. */
+  pointer-events: auto;
+}
+
+.surface3d-overlay-root .surface3d-panel.surface3d-panel--frameless {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.surface3d-overlay-root .surface3d-header {
+  display: none;
+}
+
+.surface3d-titles {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.surface3d-title {
+  font-family: var(--font-code);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surface3d-subtitle {
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surface3d-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.surface3d-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  font-family: var(--font-code);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+.surface3d-chip:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.surface3d-overlay-root .surface3d-slot {
+  pointer-events: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  background: var(--secondary-bg);
+}
+
+.surface3d-overlay-root .surface3d-canvas {
+  pointer-events: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  position: relative;
+}
+
+.surface3d-overlay-root .surface3d-canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 35%, var(--glass-bg), transparent 60%),
+    radial-gradient(110% 80% at 50% 30%, rgba(10, 160, 255, 0.22), transparent 58%);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  mix-blend-mode: screen;
+  opacity: 0;
+  clip-path: circle(0% at 50% 40%);
+}
+
+.surface3d-overlay-root .surface3d-canvas::after {
+  content: '';
+  position: absolute;
+  inset: -25% -30%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 247, 214, 0.08) 45%, transparent 75%);
+  transform: translateX(-35%) rotate(-8deg);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface3d-overlay-root {
+    animation: none !important;
+    will-change: auto;
+  }
+  .surface3d-overlay-root.is-closing {
+    animation: none !important;
+    opacity: 0;
+    transform: none;
+  }
+  .surface3d-panel,
+  .surface3d-canvas {
+    animation: none !important;
+  }
+}

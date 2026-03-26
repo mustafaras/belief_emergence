@@ -1,0 +1,57 @@
+/* AmplifiersSection: local utility classes to satisfy the no-inline-styles lint rule.
+   Keep changes minimal; existing global classes (viz-math, charts, etc.) remain the primary styling source. */
+
+.amp-viz-math-lg {
+  font-size: 1.3em;
+  padding: 20px 0;
+}
+
+.amp-viz-math-lg-tight {
+  font-size: 1.3em;
+  padding: 15px 0;
+}
+
+.amp-viz-math-md {
+  font-size: 1.2em;
+  padding: 15px 0;
+}
+
+.amp-viz-math-lg-125 {
+  font-size: 1.25em;
+  padding: 20px 0;
+}
+
+.amp-svg-maxh-420 {
+  max-height: 420px;
+}
+
+.amp-svg-maxh-400 {
+  max-height: 400px;
+}
+
+.amp-svg-maxh-240 {
+  max-height: 240px;
+}
+
+.amp-svg-maxh-330 {
+  max-height: 330px;
+}
+
+.amp-subhead {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #f1f5f9;
+}
+
+.amp-note-italic {
+  font-size: 0.95em;
+  font-style: italic;
+  color: #cbd5e1;
+  margin-top: 10px;
+}
+
+.amp-note {
+  font-size: 0.95em;
+  color: #cbd5e1;
+  margin-top: 10px;
+}

@@ -1,0 +1,111 @@
+# License
+
+This repository uses a **dual-license** structure to accommodate code, documentation,
+and third-party data with separate terms.
+
+---
+
+## 1 — Code (MIT License)
+
+All original source code in this repository — including TypeScript/JavaScript files
+in `scripts/`, `src/`, configuration files, and build tooling — is released under
+the MIT License.
+
+```
+MIT License
+
+Copyright (c) 2025 the authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 2 — Documentation & Generated Artifacts (CC BY 4.0)
+
+All documentation files (`.md`, `.tex`), generated analysis artifacts
+(`src/data/analysis/*.json`, `src/data/metrics/*.json`,
+`src/data/analysis/*.csv`), and visualisation outputs are released under the
+Creative Commons Attribution 4.0 International License.
+
+> You are free to share and adapt the material for any purpose, including
+> commercially, provided you give appropriate credit.
+
+Full text: <https://creativecommons.org/licenses/by/4.0/legalcode>
+
+---
+
+## 3 — Third-Party Data Restrictions
+
+The `rawdata/` directory contains data files obtained from third-party sources.
+**These files are NOT covered by the MIT or CC BY 4.0 licenses above.** Each
+file is governed by the license terms of its original provider. Key restrictions:
+
+### World Values Survey (WVS) & EVS/WVS Joint Dataset
+
+| File | Provider | Redistribution |
+|------|----------|---------------|
+| `WV1_Data_csv_v20200208.csv` | WVS Association | **Restricted** |
+| `WV2_Data_csv_v20180912.csv` | WVS Association | **Restricted** |
+| `WV3_Data_csv_v20180912.csv` | WVS Association | **Restricted** |
+| `WV4_Data_csv_v20201117.csv` | WVS Association | **Restricted** |
+| `WV5_Data_csv_v20180912.csv` | WVS Association | **Restricted** |
+| `WV6_Data_csv_v20201117.csv` | WVS Association | **Restricted** |
+| `WVS_Time_Series_1981-2022_csv_v5_0.csv` | WVS Association | **Restricted** |
+| `WVS_Cross-National_Wave_7_csv_v6_0.csv` | WVS Association | **Restricted** |
+| `EVS_WVS_Joint_Csv_v5_0.csv` | EVS/WVS | **Restricted** |
+| `wvs_combined.csv` | Derived from WVS | **Restricted** |
+
+Replicators must download these files directly from
+<https://www.worldvaluessurvey.org/> under the WVS Academic Data Use Agreement.
+See `REPLICATION_RUNBOOK.md § 9` for step-by-step download instructions.
+
+### EM-DAT
+
+| File | Provider | Redistribution |
+|------|----------|---------------|
+| `emdat_disasters.csv` | CRED / UCLouvain | **Conditional** (aggregated derivative) |
+| `public_emdat_custom_request_*.xlsx` | CRED / UCLouvain | **Conditional** (requires CRED permission) |
+
+Register at <https://www.emdat.be/> and request the data under CRED's academic
+license.
+
+### OECD
+
+OECD data files are included as analytical subsets with attribution under OECD's
+research-use terms. Bulk redistribution may require separate confirmation.
+
+### Freely Redistributable
+
+World Bank WDI (CC BY 4.0), UNDP HDR (CC BY 3.0 IGO), and UCDP (CC BY 4.0)
+data are freely redistributable with attribution.
+
+---
+
+## 4 — Canonical Analytical Panel
+
+The canonical analytical panel (`public/data/panel_canonical_23_countries_v1.csv`)
+contains only country-year aggregated values — no individual-level microdata.
+Country-level aggregation is above the WVS redistribution restriction threshold.
+This file is redistributable with attribution.
+
+---
+
+For full provenance details, see `src/data/analysis/data_code_provenance.json`
+and `REPLICATION_RUNBOOK.md`.

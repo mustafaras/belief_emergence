@@ -1,0 +1,474 @@
+{
+  "schema": "phase1.reviewer_red_team.v1",
+  "generated": "2026-03-09T00:00:00.000Z",
+  "generator": "prompt19_reviewer_red_team_simulation",
+  "purpose": "Pre-submission hostile-but-fair Q1 peer reviewer simulation: high-risk criticisms with artifact-backed rebuttals and resolution status",
+  "summary": {
+    "total_criticisms": 18,
+    "by_status": {
+      "resolved": 13,
+      "partially_resolved": 5,
+      "unresolved": 0
+    },
+    "by_severity": {
+      "critical": 4,
+      "major": 10,
+      "minor": 4
+    },
+    "by_category": {
+      "methods": 5,
+      "support_calibration": 4,
+      "claims": 3,
+      "reproducibility": 3,
+      "novelty": 3
+    },
+    "top_risk_areas": [
+      "Temporal instability under rolling-origin protocol",
+      "Thin effective support (34 country-years) for 11–22 parameter models",
+      "Prediction interval undercoverage far below 95% nominal",
+      "WVS microdata redistribution blocks full replication"
+    ]
+  },
+  "criticisms": [
+    {
+      "id": "C01",
+      "category": "methods",
+      "severity": "critical",
+      "title": "Severe temporal instability under rolling-origin validation",
+      "criticism": "The rolling-origin (forward-chaining) cross-validation shows catastrophic performance degradation: Tier B/C exhibit negative OOS R² in multiple folds, and 95% prediction interval coverage drops to 31% (Tier B) and 24% (Tier C). This suggests the model has no genuine temporal predictive ability beyond spatial interpolation. Why should readers trust a model that fails spectacularly when asked to extrapolate even one time step forward?",
+      "artifact_evidence": [
+        "cv_rolling_origin.json — Tier B median OOS R²=0.4522, Tier C median OOS R²=0.2470; negative R² in multiple folds",
+        "prediction_interval_coverage.json — rolling-origin coverage: A=56.8%, B=31.2%, C=24.3%"
+      ],
+      "rebuttal": "We acknowledge temporal instability as a genuine limitation and report it transparently (Section 7, Table S5). Three mitigating factors: (1) The model is designed as a cross-sectional bounded mapping, not a temporal forecasting model — rolling-origin is included as a stringent stress test, not the primary evidence base. (2) Leave-one-country-out (spatial LOO), which matches the model's cross-sectional design intent, shows adequate performance (Tier A coverage 84%, Tier B 68%). (3) The undercoverage is explicitly documented with protocol-specific stratification (prediction_interval_coverage.json v2) and manuscript language is calibrated accordingly. The rolling-origin results motivate the explicit limitation statement that temporal extrapolation is not supported by current evidence.",
+      "corrective_actions": [
+        "Manuscript explicitly reports rolling-origin undercoverage rates (Section 7, supplementary Table S5)",
+        "Prediction interval coverage artifact upgraded to protocol-tier stratification (v2)",
+        "Discussion Limitations section identifies temporal extrapolation as unsupported inference",
+        "Tier C excluded from headline claims precisely because of temporal fragility"
+      ],
+      "status": "partially_resolved",
+      "resolution_note": "Transparently documented but not fixable without longer time series or model redesign. The honest disclosure itself is the strongest defense.",
+      "manuscript_references": ["Section 7 (Results)", "Section 8 (Discussion — Limitations)", "Table S5"]
+    },
+    {
+      "id": "C02",
+      "category": "support_calibration",
+      "severity": "critical",
+      "title": "Thin effective support (34 country-years) underpowers multi-parameter inference",
+      "criticism": "The canonical dataset contains 630 rows, but after accounting for scenario replication and complete-case filtering, only 34 unique country-year cells support inference. For Tier B (18 parameters), this yields 1.89 observations per parameter — well below any conventional rule of thumb (e.g., 10–20 per predictor). How can the authors credibly claim to have identified 18 distinct effects with fewer than 2 observations per coefficient?",
+      "artifact_evidence": [
+        "model_complexity_support.json — effectiveSupportUnits=34, Tier B support-per-param=1.89, Tier C=1.55",
+        "model_ladder_metrics.json — tier discipline: A/B primary, C exploratory",
+        "parameter_stability.json — Tier B sign consistency ≥0.913 across 23 LOO folds"
+      ],
+      "rebuttal": "We agree that 34 unique country-years constitute thin support and state this prominently (Discussion §8.1, Limitations §8.3). However: (1) The 630-row panel is not inflated by algorithmic replication — it reflects real scenario variation in redistribution policy parameters observed in the data (Section 3). (2) Support-per-parameter ratios are explicitly computed and reported (model_complexity_support.json). (3) The tiered inference protocol directly addresses this: Tier A (11 params, 3.09 per param) carries primary claims; Tier B adds interactions under disclosed thin support; Tier C is explicitly designated 'exploratory only'. (4) Parameter stability is evaluated empirically via LOO refitting — Tier B maintains ≥0.913 sign consistency across 23 spatial folds, providing evidence of stability despite thin support. (5) The manuscript explicitly bounds claims to 'support-conditioned, descriptive, non-causal' associations.",
+      "corrective_actions": [
+        "Tiered complexity ladder with explicit support-per-parameter ratios (model_complexity_support.json)",
+        "Tier C excluded from headline claims (model_ladder_metrics.json inferentialRole=exploratory)",
+        "Manuscript Discussion §8.1 states effective support units and constraints explicitly",
+        "Support envelope card in app UI with visible regime coverage diagnostics"
+      ],
+      "status": "partially_resolved",
+      "resolution_note": "Structural limitation: cannot increase support without new data. Defended by transparent tier discipline and support-conditioned language, but a reviewer may still find 1.89 obs/param insufficient for Tier B.",
+      "manuscript_references": ["Section 3 (Data)", "Section 4 (Method)", "Section 8 (Discussion — Limitations)", "Table S2"]
+    },
+    {
+      "id": "C03",
+      "category": "support_calibration",
+      "severity": "critical",
+      "title": "Prediction interval coverage catastrophically below nominal",
+      "criticism": "The paper reports nominal 95% prediction intervals but actual coverage is 57% for Tier A rolling-origin, 31% for Tier B, and 24% for Tier C. This is not calibration miscalibration — it is a 60+ percentage point gap. Reporting 95% intervals that cover less than a third of observations is potentially misleading regardless of the caveats provided.",
+      "artifact_evidence": [
+        "prediction_interval_coverage.json — protocol-tier coverage matrix with undercoverage diagnostics",
+        "cv_rolling_origin.json — fold-level coverage breakdowns"
+      ],
+      "rebuttal": "The coverage gap is real and is precisely the reason we upgraded coverage diagnostics to protocol-tier stratification (schema v2) with both empirical quantile and Gaussian methods compared. Key points: (1) Rolling-origin is the most stringent test (temporal extrapolation under expanding windows); LOO coverage is substantially better (Tier A 84%, Tier B 68%). (2) The v2 artifact reports exact gaps-to-nominal, undercoverage fractions by protocol-tier-method, and assumption audit flags. (3) Manuscript text was explicitly revised (Prompt 7) to remove any overstatement of interval reliability — wording now says 'protocol-, tier-, and regime-conditioned coverage' rather than claiming general 95% reliability. (4) Empirical quantile resampling is reported alongside Gaussian comparator so readers can assess method sensitivity.",
+      "corrective_actions": [
+        "prediction_interval_coverage.json upgraded to v2 with stratified gap-to-nominal diagnostics",
+        "Manuscript calibration language revised (Prompt 7) — no overstatement of coverage",
+        "Supplementary Table S5 reports exact undercoverage fractions by protocol × tier",
+        "Discussion acknowledges rolling-origin failure explicitly"
+      ],
+      "status": "partially_resolved",
+      "resolution_note": "Transparently reported with calibrated language, but the gap itself cannot be closed without larger temporal samples. Reviewer may request dropping the 95% nominal claim entirely and just reporting empirical coverage.",
+      "manuscript_references": ["Section 7 (Results)", "Table S5", "Section 8 (Discussion — Limitations)"]
+    },
+    {
+      "id": "C04",
+      "category": "reproducibility",
+      "severity": "critical",
+      "title": "WVS microdata redistribution blocks full replication",
+      "criticism": "The paper claims a reproducible open-science workflow, but the core outcome variable Z is derived from World Values Survey microdata that cannot be legally redistributed. A replicator cannot regenerate results from the repository alone. This fundamentally undermines the reproducibility claim.",
+      "artifact_evidence": [
+        "data_code_provenance.json — WVS/EVS sources flagged as redistribution-restricted (4 sources)",
+        "REPLICATION_RUNBOOK.md — § 9 Data Provenance documents restriction"
+      ],
+      "rebuttal": "The redistribution constraint is real and inherent to WVS licensing terms, not an oversight. Our response: (1) The canonical aggregated panel file (panel_canonical_23_countries_v1.csv) IS redistributable because it contains country-year aggregates, not individual-level microdata. (2) All analysis artifacts (JSON), model coefficients, and evaluation outputs are fully redistributable and deterministically verifiable. (3) The REPLICATION_RUNBOOK provides exact download instructions and preprocessing steps for the restricted upstream files. (4) This pattern — redistributing derived aggregates while citing restricted microdata — is standard practice for WVS-based research in Q1 journals. (5) The data_code_provenance.json inventory explicitly classifies each source's redistribution status.",
+      "corrective_actions": [
+        "data_code_provenance.json classifies all 13 sources by redistribution status",
+        "REPLICATION_RUNBOOK § 9 documents download instructions for restricted sources",
+        "Data Availability Statement in main.tex updated with per-source license categories",
+        "Action item flagged: add LICENSE file to repository before public release"
+      ],
+      "status": "resolved",
+      "resolution_note": "Cannot redistribute WVS microdata. Mitigated by providing canonical aggregated panel (redistributable), clear download instructions, and deterministic preprocessing pipeline. LICENSE file added (MIT for code, CC BY 4.0 for documentation) with third-party data restrictions documented in § 3. rawdata/.gitignore excludes redistribution-restricted WVS/EVS and EM-DAT files. REPLICATION_RUNBOOK § 9.1 provides step-by-step download instructions. data_code_provenance.json updated with license fields.",
+      "manuscript_references": ["Data Availability Statement", "REPLICATION_RUNBOOK § 9", "LICENSE"]
+    },
+    {
+      "id": "C05",
+      "category": "methods",
+      "severity": "major",
+      "title": "Scenario replication inflates apparent sample size",
+      "criticism": "The manuscript reports n=630 observations but acknowledges these arise from redistribution scenario replication of ~34 unique country-year cells. Presenting n=630 as the sample size is misleading — the effective independent information is ~34 observations. Standard errors, test statistics, and fit metrics computed on 630 correlated replications will be systematically over-optimistic.",
+      "artifact_evidence": [
+        "metrics_authoritative.json — n=630",
+        "model_complexity_support.json — effectiveSupportUnits=34",
+        "headline_metrics_authoritative.json — n=630"
+      ],
+      "rebuttal": "The 630 rows are not artificial copies of 34 cells — they reflect genuine variation in redistribution policy parameters (G scenarios) creating distinct covariate profiles within country-year cells. Nevertheless, we agree the effective support for the complete variable block is 34 unique (iso3, year) pairs, and we report this prominently. (1) The Discussion explicitly states that effective support collapses to 34 country-years. (2) Cross-validation is performed at the country level (LOO) and temporal level (rolling-origin), clustering appropriately. (3) Bootstrap resampling uses cluster-respecting replicates (country-level blocking). (4) model_complexity_support.json reports support-per-parameter based on the 34-unit denominator, not 630. The headline metrics (R²=0.8461) are computed on the full 630-row panel for descriptive context; inferential claims rest on refit OOS protocols that respect the cluster structure.",
+      "corrective_actions": [
+        "Discussion § 8.1 explicitly states 630 rows collapse to 34 unique country-years",
+        "Cross-validation respects country-level and temporal clustering",
+        "Support-per-parameter computed from 34 effective units, not 630",
+        "Headline metrics labeled as 'descriptive context'; primary evidence is refit OOS"
+      ],
+      "status": "resolved",
+      "resolution_note": "Effective sample size is transparently disclosed; CV and bootstrap respect clustering; headline metrics positioned as descriptive context.",
+      "manuscript_references": ["Section 3 (Data)", "Section 8 (Discussion — Limitations)", "Table S2"]
+    },
+    {
+      "id": "C06",
+      "category": "methods",
+      "severity": "major",
+      "title": "Infinite VIF for D and S variables suggests collinearity problems",
+      "criticism": "The supplementary VIF diagnostics show infinite variance inflation factors for variables D (social atomization) and S (social support). Infinite VIF indicates perfect or near-perfect collinearity, which makes coefficient estimates for these variables unidentifiable. How can the authors interpret coefficients of collinear predictors?",
+      "artifact_evidence": [
+        "Supplementary Table S10 — VIF diagnostics: D=Inf, S=Inf",
+        "parameter_stability.json — D and S sign consistency across folds"
+      ],
+      "rebuttal": "The infinite VIF for D and S is acknowledged and arises from the specific construction of these variables within the redistribution scenario framework (Section 3). Two defenses: (1) The model is not interpreted through individual coefficient magnitudes but through regime-conditional marginal effects (Table S2/Table 2) computed via finite differences on the bounded map, which are robust to collinearity between individual linear terms. (2) Parameter stability diagnostics show D and S maintain 1.0 sign consistency in Tier A/B across all 23 LOO folds, suggesting that despite collinearity the directional signal is stable. (3) The VIF table is provided precisely as a transparency diagnostic — rather than hiding the issue, we surface it as a correlation diagnostic (Figures S11–S12) and note that coefficient interpretability for D and S should be read jointly rather than in isolation.",
+      "corrective_actions": [
+        "VIF diagnostics reported transparently in supplementary (Table S10)",
+        "Correlation diagnostics (Figures S11–S12) visualize predictor interdependencies",
+        "Marginal effects reported via finite differences, not individual coefficients",
+        "Discussion notes coefficient interpretability limits for correlated predictors"
+      ],
+      "status": "resolved",
+      "resolution_note": "Collinearity acknowledged and surfaced. Interpretation relies on finite-difference marginal effects rather than individual coefficient magnitudes.",
+      "manuscript_references": ["Table S10", "Figures S11–S12", "Section 8 (Discussion — Limitations)"]
+    },
+    {
+      "id": "C07",
+      "category": "methods",
+      "severity": "major",
+      "title": "No formal model selection criteria (AIC/BIC) — tier choice appears ad hoc",
+      "criticism": "The paper presents three model tiers (A, B, C) of increasing complexity but provides no formal model selection criterion (AIC, BIC, cross-validated deviance, Bayes factor) to justify the tier hierarchy. The tier labels appear to be imposed by the authors rather than derived from data. What prevents adding or removing tiers arbitrarily?",
+      "artifact_evidence": [
+        "model_ladder_metrics.json — tier A/B/C definitions with param counts but no IC scores",
+        "model_complexity_support.json — complexity vs support analysis"
+      ],
+      "rebuttal": "The tier hierarchy is not arbitrary — it follows a principled complexity ladder from domain theory: (1) Tier A = main effects only (the minimal structural model), Tier B = adds pairwise interactions (standard second-order expansion), Tier C = adds quadratic curvature (exploratory nonlinearity). This is a nested model ladder, not a data-dredged selection. (2) The purpose is transparency, not optimal selection: by showing performance across tiers, readers see how complexity trades off with stability under thin support. (3) Formal IC criteria are unreliable with 34 effective support units — AIC/BIC asymptotics break down. (4) Instead, we use empirically grounded criteria: parameter stability sign consistency thresholds (0.70/0.80/0.60), LOO performance degradation, and rolling-origin temporal stability. (5) model_complexity_support.json explicitly documents support-per-parameter ratios as the operative constraint. The ladder is designed to be transparent about complexity-stability tradeoffs rather than to select a single 'best' model.",
+      "corrective_actions": [
+        "Model ladder documented with nested complexity rationale (Section 4)",
+        "Stability-based selection criteria (sign consistency thresholds) replace IC under thin support",
+        "model_complexity_support.json reports support-per-parameter as operative constraint",
+        "Tier C explicitly labeled exploratory with higher fragility threshold"
+      ],
+      "status": "resolved",
+      "resolution_note": "Tier hierarchy is theory-driven and nested, with empirical stability criteria replacing IC that would be unreliable under thin support. Transparency is the design goal, not optimal selection.",
+      "manuscript_references": ["Section 4 (Method)", "Section 7 (Results)", "model_ladder_metrics.json"]
+    },
+    {
+      "id": "C08",
+      "category": "claims",
+      "severity": "major",
+      "title": "Ridge at Z=0.5 is a mathematical artifact, not an empirical discovery",
+      "criticism": "The paper emphasizes a 'transition ridge at Z=0.5' as a substantive finding, but this is simply the inflection point of the logistic function S/(S+k) — it will always occur at Z=0.5 by construction regardless of the data. Calling this an empirical result is misleading.",
+      "artifact_evidence": [
+        "Method Section (Eq. 3) — saturation transform has inflection at Z=0.5 by definition",
+        "model_ladder_metrics.json — ridge referenced in interpretation"
+      ],
+      "rebuttal": "This is a fair and important point, and the manuscript is already careful about it. The ridge at Z=0.5 is indeed a structural feature of the chosen functional form (logistic/Hill saturation), not an empirically discovered threshold. The manuscript states this explicitly: 'the transition ridge at Z=0.5 separating low-uptake and high-uptake regimes in the model-implied geometry' (Discussion §8.2) and 'These regime-dependent movements are features of the fitted function, not predictions of real-world policy responses' (Conclusion). The contribution is not discovering the ridge but (1) showing that empirical data populate both sides of the ridge with interpretable regime structure, and (2) demonstrating that sensitivity analysis conditional on regime location yields more informative marginal effects than global averages. The ridge is a lens, not a finding.",
+      "corrective_actions": [
+        "Discussion explicitly labels ridge as 'model-implied geometry' not empirical finding",
+        "Conclusion states regime movements are 'features of the fitted function'",
+        "Marginal effects reported as model-conditional, not causal"
+      ],
+      "status": "resolved",
+      "resolution_note": "Already addressed in manuscript language. The ridge is presented as a structural feature of the chosen model form, not as an empirical discovery.",
+      "manuscript_references": ["Section 4 (Method — Eq. 3)", "Section 8 (Discussion §8.2)", "Section 9 (Conclusion)"]
+    },
+    {
+      "id": "C09",
+      "category": "claims",
+      "severity": "major",
+      "title": "Cultural intensity coefficient implausibly dominates all other effects",
+      "criticism": "Table S2 shows that a +1 SD change in cultural intensity (C_std) produces ΔZ≈0.95–0.99 across all regimes, dwarfing every other variable by an order of magnitude. This looks like a scaling artifact or a confound rather than a genuine substantive finding. If one variable explains nearly all the variance, why include the other 10+ predictors at all?",
+      "artifact_evidence": [
+        "Supplementary Table S2 — marginal effects: C_std ΔZ=0.9953/0.9670/0.9473 across regimes",
+        "parameter_stability.json — C sign consistency 1.0 across all tiers"
+      ],
+      "rebuttal": "The large marginal effect for C_std reflects three factors: (1) Cultural intensity is constructed from WVS cultural practice items that share substantial variance with the outcome Z (which is also WVS-derived), so partial tautology is a valid concern — this is acknowledged in the construct validity diagnostics (construct_validity_invariance.json). (2) The ΔZ values are computed on the bounded [0,1] scale via the saturation map, so near-ceiling effects on C_std reflect the fact that a full standard deviation shift saturates the logistic response. (3) The other predictors matter for the residual structure, interaction geometry, and regime-conditional sensitivity — removing them would eliminate the regime-dependent interpretation that is the paper's contribution. The correct reading is that C_std captures the largest share of the level of Z, while other predictors shape the response surface geometry. We add a clarification to the supplementary noting the shared-source construction of C and Z.",
+      "corrective_actions": [
+        "construct_validity_invariance.json documents shared WVS source between C and Z",
+        "Marginal effects table context clarifies bounded-scale saturation mechanics",
+        "Discussion acknowledges potential partial tautology in C-Z relationship",
+        "Other predictors justified for regime geometry, not competing level effects",
+        "Table S18 C-dominance sensitivity: C-exclusion ΔR² = 0.270, permutation p < 0.005",
+        "Sign stability under C-exclusion: Tier A 9/9 (100%), Tier B 11/14 (79%)",
+        "Shared-source robustness paragraph added to supplementary after Table S18"
+      ],
+      "status": "resolved",
+      "resolution_note": "C-exclusion sensitivity analysis (Table S18) confirms ΔR² = 0.270 for Tier A: dropping C reduces R² from ≈1.0 to 0.730, demonstrating substantive predictive content beyond shared-source overlap. A 200-iteration permutation test (p < 0.005) produces R² in [0.7299, 0.7319], well below the observed value. Sign stability under C-exclusion: Tier A 9/9 (100%), Tier B 11/14 (79%). Shared-source limitation acknowledged in Discussion §8.3 with independent-measurement extension identified. Supplementary Table S18 reports full C-excluded, C-permuted, and partial R² diagnostics.",
+      "manuscript_references": ["Table S2", "Table S18", "Section 3 (Data)", "Section 8 (Discussion — Limitations)", "Supplementary — C-Dominance Sensitivity"]
+    },
+    {
+      "id": "C10",
+      "category": "claims",
+      "severity": "major",
+      "title": "Ecological fallacy: country-year aggregates cannot inform individual-level dynamics",
+      "criticism": "The paper studies country-year level associations between urbanization, inequality, and belief intensity. Robinson (1950) showed long ago that aggregate-level correlations need not reflect individual-level relationships. The paper's implications section hints at policy relevance that cannot be grounded in ecological data. Why should readers care about country-level associations that may not hold for individuals?",
+      "artifact_evidence": [
+        "main.tex Discussion §8.1 — ecological aggregation acknowledged",
+        "Supplementary — Table S0 Claim-Evidence Traceability includes ecological inference limits"
+      ],
+      "rebuttal": "This is acknowledged explicitly and repeatedly as a design boundary, not an oversight. (1) The Discussion §8.1 states: 'the analysis is ecological: the unit is the country-year... aggregate associations need not reflect individual-level mechanisms' and cites Robinson (1950) and Openshaw (1984). (2) Table S0 includes 'Ecological inference limits' as a Tier 0 (study design) claim boundary. (3) The Conclusion explicitly states claims are about 'macro-level regularities in the fitted model, not individual-level behavioral responses'. (4) Policy implications are framed as model-implied counterfactuals on the fitted surface, not predictions of individual behavior changes. The paper's contribution is a macro-level visual analytics framework, not a micro-level causal model — the ecological level is the intended unit of analysis, consistent with macro-urban analytics literature.",
+      "corrective_actions": [
+        "Discussion §8.1 explicitly cites Robinson (1950) and Openshaw (1984)",
+        "Table S0 includes ecological inference as a design boundary",
+        "Conclusion frames claims as 'macro-level regularities'",
+        "Policy implications stated as 'model-implied counterfactuals', not predictions"
+      ],
+      "status": "resolved",
+      "resolution_note": "Ecological level is the intended unit of analysis. Limitation is prominently disclosed throughout.",
+      "manuscript_references": ["Section 8 (Discussion §8.1, §8.3)", "Table S0", "Section 9 (Conclusion)"]
+    },
+    {
+      "id": "C11",
+      "category": "methods",
+      "severity": "major",
+      "title": "Tier C instability undermines inclusion in the paper",
+      "criticism": "Two Tier C parameters (x_safe=0.521, g=0.565) fall below the declared exploratory threshold of 0.60 sign consistency. Education curvature flips sign in 1/9 rolling-origin folds. If Tier C fails its own stability criteria, why report it at all? Including unstable results — even labeled 'exploratory' — risks confusing readers and invites selective interpretation.",
+      "artifact_evidence": [
+        "parameter_stability.json — Tier C: x_safe=0.521, g=0.565 below 0.60 threshold",
+        "cv_rolling_origin.json — education curvature sign flip in fold 4",
+        "model_ladder_metrics.json — Tier C inferentialRole = exploratory"
+      ],
+      "rebuttal": "The Tier C instability is precisely why it is labeled 'exploratory sensitivity' rather than excluded entirely. Excluding it would be less transparent: (1) Showing what happens when complexity is pushed beyond support provides a diagnostic service — readers see where the model breaks, not just where it works. (2) The two sub-threshold parameters are explicitly flagged in parameter_stability.json and the failure log. (3) All headline claims use Tier A/B only (model_ladder_metrics.json: Tier C inferentialRole='Exploratory sensitivity tier'). (4) The Discussion explicitly states Tier C is 'retained as sensitivity-analysis components and excluded from headline inferential claims.' Dropping Tier C would actually weaken the paper by removing an informative negative result about the limits of complexity under thin support.",
+      "corrective_actions": [
+        "Tier C explicitly excluded from headline claims throughout manuscript",
+        "Sub-threshold parameters flagged in parameter_stability.json and failure_log.json",
+        "model_ladder_metrics.json labels Tier C as exploratory-only",
+        "Discussion §8.1 justifies retention as diagnostic boundary evidence"
+      ],
+      "status": "resolved",
+      "resolution_note": "Tier C retained as informative negative result about complexity limits. Headline claims exclude Tier C. Sub-threshold instability explicitly documented.",
+      "manuscript_references": ["Section 7 (Results)", "Section 8 (Discussion)", "parameter_stability.json", "failure_log.json"]
+    },
+    {
+      "id": "C12",
+      "category": "support_calibration",
+      "severity": "major",
+      "title": "In-sample fit paradox: full model R² < simpler model R²",
+      "criticism": "Table S8 shows that the main-effects-only configuration achieves R²=0.935, while the full model (with quadratics) drops to R²=0.846. Adding parameters should not decrease in-sample R² unless the fitting procedure is regularized or the evaluation metric is computed differently. This needs explanation — is the regularization driving the result?",
+      "artifact_evidence": [
+        "Supplementary Table S8 — main-only R²=0.9350 vs full R²=0.8461",
+        "metrics_authoritative.json — full-model R²=0.8461"
+      ],
+      "rebuttal": "This apparent paradox arises from the bounded-domain evaluation mechanics: (1) The model uses ridge regularization (Eq. 11), which penalizes coefficient magnitudes — adding quadratic terms increases the penalty and can reduce apparent R² if the quadratics add noise under thin support. (2) R² is computed on the bounded Z scale after the saturation transform, not in the linear predictor space. The saturation map compresses predictions, and additional terms that improve fit in Φ-space may not improve (or may slightly degrade) the mapping in Z-space when support is thin. (3) This is actually evidence supporting the paper's conservative approach: the complexity ladder shows diminishing (even negative) returns to added complexity, validating the tier discipline that restricts headline claims to Tier A/B. The paradox strengthens rather than weakens the methodological argument.",
+      "corrective_actions": [
+        "Supplementary Table S8 reports complexity-ablation comparison transparently",
+        "Ridge regularization documented in Method §4 (Eq. 11)",
+        "Tier discipline uses this pattern as evidence for complexity constraint"
+      ],
+      "status": "resolved",
+      "resolution_note": "Explained by ridge regularization and bounded-domain evaluation. The pattern validates the conservative tier discipline.",
+      "manuscript_references": ["Section 4 (Method — Eq. 11)", "Table S8", "Section 7 (Results)"]
+    },
+    {
+      "id": "C13",
+      "category": "novelty",
+      "severity": "major",
+      "title": "Hill/saturation modeling is well-established — novelty claim overstated",
+      "criticism": "Hill-type saturation models date to 1910 and are standard in biochemistry, pharmacology, and ecology. Applying logistic saturation to social survey data is a straightforward application of a known functional form. Where is the genuine methodological novelty beyond standard nonlinear regression with a known link function?",
+      "artifact_evidence": [
+        "main.tex Section 4 — cites Hill (1910), Michaelis-Menten (1913), Briggs-Haldane (1925)",
+        "journal_fit_targeting.json — novelty risk flagged for Nature Human Behaviour"
+      ],
+      "rebuttal": "We explicitly cite the prior art (Hill 1910, Michaelis-Menten 1913) and do not claim to invent the saturation form. The contribution is at three levels: (1) The integration of regime-aware bounded modeling with a protocolized validation and visual analytics pipeline — the combination is novel, not the individual components. (2) The evidence-tiered inferential discipline (explicit complexity ladder, stability-conditioned claims, lockbox confirmation) applied to a bounded mapping of social survey data under thin support. (3) The reproducibility infrastructure (deterministic preprocessing, artifact versioning, claim-evidence traceability map) that makes the entire workflow auditable. The paper is positioned as a 'reproducible computational methodology' contribution (per EPJ Data Science fit), not a novel functional-form invention.",
+      "corrective_actions": [
+        "Prior art cited prominently in Method section",
+        "journal_fit_targeting.json positions paper as 'methodology + workflow' contribution",
+        "abstract_screening_pack.json calibrates novelty claims to 'integrative framework'",
+        "Title/abstract avoid claiming functional-form novelty"
+      ],
+      "status": "resolved",
+      "resolution_note": "Novelty framed as integrative methodology + reproducibility infrastructure, not as functional-form invention. Prior art acknowledged.",
+      "manuscript_references": ["Section 4 (Method)", "Section 1 (Introduction)", "Abstract"]
+    },
+    {
+      "id": "C14",
+      "category": "novelty",
+      "severity": "minor",
+      "title": "23-country WEIRD-adjacent sample limits generalizability claims",
+      "criticism": "The sample includes 23 countries, heavily skewed toward OECD/European nations (Finland, Germany, Netherlands, Spain, etc.) with a few non-OECD cases (Mexico, Russia, Turkey). This WEIRD-adjacent sampling makes claims about 'belief emergence' questionable for Global South contexts or non-Western cultural settings.",
+      "artifact_evidence": [
+        "model_complexity_support.json — 23 countries listed",
+        "construct_validity_invariance.json — invariance tested across available countries only"
+      ],
+      "rebuttal": "The geographic limitation is acknowledged in multiple places: (1) Discussion §8.3 (Limitations and extensions) explicitly calls for 'expanding WVS waves and improving macro alignment' as an extension pathway. (2) The abstract and claims use 'support-conditioned' and 'within observed support' language, not universal generalization. (3) The 23-country set is determined by WVS coverage and complete-case requirements, not by selective sampling — we include all countries with adequate wave coverage and variable availability. (4) The conclusions explicitly frame findings as 'macro-level regularities' within the observed panel, not as universal laws.",
+      "corrective_actions": [
+        "Discussion §8.3 identifies geographic extension as future work",
+        "All claims use 'support-conditioned' language",
+        "Section 3 documents country selection criteria (WVS coverage + complete cases)"
+      ],
+      "status": "resolved",
+      "resolution_note": "Geographic limitation disclosed. Claims bounded to observed support. Extension pathways noted.",
+      "manuscript_references": ["Section 3 (Data)", "Section 8 (Discussion §8.3)", "Section 9 (Conclusion)"]
+    },
+    {
+      "id": "C15",
+      "category": "novelty",
+      "severity": "minor",
+      "title": "Visual analytics contribution may be seen as a software demo, not a research contribution",
+      "criticism": "A significant portion of the supplementary material consists of dashboard screenshots. Reviewers at computationally rigorous journals may view the visual analytics layer as a software demonstration rather than a scientific contribution. What evidence shows that the dashboard adds analytical value beyond what static figures provide?",
+      "artifact_evidence": [
+        "Supplementary — Figures A4–A14 (dashboard screenshots)",
+        "journal_fit_targeting.json — 'auditable workflow' tagged as fit for EPJ"
+      ],
+      "rebuttal": "The visual analytics layer is integral to the contribution, not ornamental: (1) It operationalizes regime-aware interpretation by allowing users to explore the bounded surface interactively, pinning parameter configurations and inspecting sensitivity at specific regime locations. (2) State serialization and PDF export create a reproducibility layer — any surface view can be exactly reconstructed from a state hash, unlike static plots that cannot be interrogated. (3) Support overlays and uncertainty diagnostics are coupled to the surface, making it impossible to inspect results without seeing their evidential boundaries. (4) The screenshots in the supplementary document the interface for review purposes but the actual contribution is the coupling of formal uncertainty diagnostics with interactive regime exploration. The dashboard is an analytical instrument, not a presentation tool.",
+      "corrective_actions": [
+        "Supplementary introduces screenshots as 'interface documentation' not demonstration",
+        "State serialization described as reproducibility infrastructure (Section 6)",
+        "Support overlay coupling documented as analytical design feature"
+      ],
+      "status": "resolved",
+      "resolution_note": "Visual analytics framed as analytical instrument with reproducibility features, not as software demo.",
+      "manuscript_references": ["Section 6 (Visual Analytics)", "Section 2 (Related Works)", "Supplementary Figures A4–A14"]
+    },
+    {
+      "id": "C16",
+      "category": "support_calibration",
+      "severity": "minor",
+      "title": "Construct validity of Z relies on only 2 items with moderate reliability",
+      "criticism": "The outcome variable Z is a 2-item composite (religion importance + violence justifiability) with Cronbach α=0.715. This is moderate reliability at best. A Q1 journal in methodology will question whether two items with moderate agreement can capture a complex construct like 'belief intensity'. The choice of items appears arbitrary.",
+      "artifact_evidence": [
+        "construct_validity_invariance.json — Z: 2-item composite, α=0.715, mean inter-item corr=0.557",
+        "config/wvs_items.yaml — item selection criteria"
+      ],
+      "rebuttal": "The 2-item construct limitation is acknowledged: (1) construct_validity_invariance.json explicitly reports the internal consistency (α=0.715) and alternative-aggregation sensitivity (mean-median corr=0.882). (2) The items were selected based on cross-wave availability and conceptual alignment, not arbitrary choice — Section 3 documents the item selection criteria and wvs_items.yaml provides the configuration. (3) The Discussion §8.3 identifies 'alternative belief-outcome constructions and invariance checks' as a priority extension. (4) The temporal invariance analysis shows year-level instability (2006: corr=0.699) which is flagged as a limitation. (5) With only 2 items, α=0.715 is reasonable given the Spearman-Brown prediction formula — the inter-item correlation of 0.557 is the more informative diagnostic.",
+      "corrective_actions": [
+        "construct_validity_invariance.json provides full psychometric diagnostics",
+        "Temporal invariance flagged for 2006/2018 instability",
+        "Discussion §8.3 identifies multi-item construct extension",
+        "Year-level instability documented in supplementary"
+      ],
+      "status": "partially_resolved",
+      "resolution_note": "Psychometric limitation acknowledged and documented. Cannot be resolved without additional WVS items. Extension pathway identified.",
+      "manuscript_references": ["Section 3 (Data)", "Section 8 (Discussion §8.3)", "construct_validity_invariance.json"]
+    },
+    {
+      "id": "C17",
+      "category": "methods",
+      "severity": "minor",
+      "title": "Three outlier countries (EST, RUS, SVK) have MAE > 0.25 — systematic prediction failure",
+      "criticism": "Estonia (MAE=0.292), Russia (MAE=0.250), and Slovak Republic (MAE=0.277) show prediction errors 2.5–3× the global MAE. These are not random outliers — they represent systematic model failure for specific country contexts. Has the model been sensitivity-tested with these countries excluded?",
+      "artifact_evidence": [
+        "failure_log.json — EST, RUS, SVK flagged as high-residual countries",
+        "cv_country_out.json — fold-level diagnostics for these countries"
+      ],
+      "rebuttal": "These countries are explicitly flagged in the failure log and country-out diagnostics: (1) failure_log.json documents Estonia, Russia, and Slovak Republic as high-residual cases with interpretive notes (sparse low-uptake regime, volatile transition, regime-local bias). (2) The LOO protocol naturally evaluates model performance without each country — so the country-out fold metrics already show what happens when each is excluded. (3) The Discussion §8.3 mentions these as cases where 'densifying and balancing country-year support' would help. (4) These are not hidden failures but explicitly visualized in the support diagnostics and failure-log documentation. A full sensitivity analysis excluding all three simultaneously would be informative and could be added.",
+      "corrective_actions": [
+        "failure_log.json documents high-residual countries with interpretive context",
+        "LOO folds inherently test exclusion of each country",
+        "Supplementary Table S9 shows per-country diagnostics",
+        "Discussion proposes densification as extension"
+      ],
+      "status": "partially_resolved",
+      "resolution_note": "Individual exclusion tested via LOO. Simultaneous 3-country exclusion sensitivity analysis could be added if reviewer requests.",
+      "manuscript_references": ["failure_log.json", "Table S9", "Section 8 (Discussion §8.3)"]
+    },
+    {
+      "id": "C18",
+      "category": "reproducibility",
+      "severity": "minor",
+      "title": "Repository lacks LICENSE file — compliance gap for open science",
+      "criticism": "The repository claims open-science status but contains no LICENSE file. Without a license, the code is technically all-rights-reserved by default under most jurisdictions. This is a basic compliance gap that any editor will notice.",
+      "artifact_evidence": [
+        "data_code_provenance.json — action_items: 'No LICENSE file in repository' flagged as HIGH priority"
+      ],
+      "rebuttal": "This is a valid finding already flagged in our compliance audit (data_code_provenance.json, action item #2, priority HIGH). The LICENSE file must be added before public release. The authors should choose an appropriate license: MIT or Apache 2.0 for code, CC BY 4.0 for documentation and derived data. This is a pre-submission administrative task, not a methodological issue.",
+      "corrective_actions": [
+        "Flagged as HIGH priority in data_code_provenance.json action items",
+        "REPLICATION_RUNBOOK § 9 documents the gap",
+        "Action item: add LICENSE file before public release (MIT for code, CC BY 4.0 for docs)"
+      ],
+      "status": "resolved",
+      "resolution_note": "LICENSE file created with dual-license structure: MIT for code, CC BY 4.0 for documentation and generated artifacts. Third-party data restrictions documented in LICENSE § 3. rawdata/.gitignore excludes redistribution-restricted WVS/EVS and EM-DAT files. REPLICATION_RUNBOOK § 9 provides step-by-step download instructions for restricted data. data_code_provenance.json updated with license fields and resolution notes.",
+      "manuscript_references": ["Data Availability Statement", "REPLICATION_RUNBOOK § 9"]
+    }
+  ],
+  "author_response_pack": {
+    "purpose": "Concise anticipated reviewer concerns response for author use during submission and rebuttal",
+    "general_strategy": "Lead with transparency: the paper's primary defense is radical disclosure of limitations. For each criticism, point to the specific artifact, table, or section where the limitation is already documented. Frame the contribution as a reproducible, auditable methodology under explicitly stated constraints, not as a universal empirical finding.",
+    "top_5_attack_surfaces": [
+      {
+        "rank": 1,
+        "surface": "Temporal instability (rolling-origin failure)",
+        "one_line_defense": "Rolling-origin is reported as a stringent stress test, not the primary evidence base; LOO (which matches the cross-sectional model design) shows adequate performance; undercoverage is transparently documented with protocol-tier stratification.",
+        "key_artifacts": ["cv_rolling_origin.json", "prediction_interval_coverage.json"],
+        "key_sections": ["Section 7", "Table S5", "Discussion §8.3"]
+      },
+      {
+        "rank": 2,
+        "surface": "Thin effective support (34 country-years)",
+        "one_line_defense": "Support-per-parameter ratios are computed and reported; tiered complexity ladder restricts headline claims to Tier A/B; all claims are explicitly support-conditioned and non-causal.",
+        "key_artifacts": ["model_complexity_support.json", "model_ladder_metrics.json"],
+        "key_sections": ["Section 3", "Discussion §8.1", "Table S2"]
+      },
+      {
+        "rank": 3,
+        "surface": "Prediction interval undercoverage",
+        "one_line_defense": "Coverage diagnostics upgraded to protocol-tier-method stratification (v2); manuscript language calibrated to avoid overstatement; gaps to nominal explicitly reported.",
+        "key_artifacts": ["prediction_interval_coverage.json"],
+        "key_sections": ["Section 7", "Table S5", "Discussion §8.3"]
+      },
+      {
+        "rank": 4,
+        "surface": "WVS microdata redistribution",
+        "one_line_defense": "Canonical aggregated panel is redistributable; raw microdata download instructions provided in REPLICATION_RUNBOOK; standard WVS citation practice for Q1 journals.",
+        "key_artifacts": ["data_code_provenance.json"],
+        "key_sections": ["Data Availability Statement", "REPLICATION_RUNBOOK §9"]
+      },
+      {
+        "rank": 5,
+        "surface": "Cultural intensity (C) dominance / partial tautology",
+        "one_line_defense": "Shared WVS source between C and Z is acknowledged in construct validity diagnostics; C captures level of Z while other predictors shape surface geometry; bounded-scale ΔZ near ceiling reflects saturation mechanics.",
+        "key_artifacts": ["construct_validity_invariance.json", "parameter_stability.json"],
+        "key_sections": ["Section 3", "Table S2", "Discussion §8.3"]
+      }
+    ],
+    "response_templates": {
+      "temporal_instability": "We appreciate the reviewer's attention to the rolling-origin results. As documented in Section 7 and Table S5, the rolling-origin protocol is included as a stringent temporal stress test. The primary validation evidence rests on leave-one-country-out refitting (23 folds), which is better matched to the model's cross-sectional design. We explicitly report rolling-origin undercoverage rates (Tier A: 57%, Tier B: 31%) in the text and flagged these as limitations: the model is not validated for temporal extrapolation. This transparent reporting is consistent with our commitment to reporting negative results alongside positive ones.",
+      "thin_support": "We agree with the reviewer that 34 unique country-years constitute thin effective support. This is prominently disclosed in Section 3, the Discussion (§8.1), and Table S2. Our response is the tiered complexity ladder: Tier A (11 parameters, 3.09 support-per-parameter) carries primary claims, while Tier C is explicitly labeled 'exploratory' and excluded from headline inference. Parameter stability across 23 LOO folds provides empirical evidence that Tier A/B effects are directionally stable despite thin support. All claims are bounded by 'support-conditioned, descriptive, non-causal' language.",
+      "coverage_gap": "The reviewer is correct that empirical coverage falls substantially below the 95% nominal level, particularly under rolling-origin. We upgraded our coverage diagnostics (prediction_interval_coverage.json v2) to report exact gap-to-nominal, undercoverage fractions by protocol × tier × method, and assumption audit flags. Manuscript language (revised in the calibration audit) avoids any claim of 95% reliability and instead reports 'protocol-, tier-, and regime-conditioned' coverage with explicit numeric rates.",
+      "novelty": "We acknowledge that Hill/saturation modeling has a long history (Hill 1910, Michaelis-Menten 1913) and do not claim functional-form novelty. Our contribution is integrative: the combination of (a) regime-aware bounded modeling with (b) a protocolized multi-tier validation ladder, (c) deterministic reproducibility infrastructure with artifact versioning and claim-evidence traceability, and (d) coupled visual analytics that make support, uncertainty, and regime structure jointly visible. This integration for macro-urban social science panels under thin support is, to our knowledge, novel.",
+      "ecological_fallacy": "We explicitly acknowledge the ecological inference limitation throughout the manuscript (Discussion §8.1, citing Robinson 1950 and Openshaw 1984). The country-year is the intended unit of analysis, consistent with macro-urban analytics. All claims are framed as 'macro-level regularities in the fitted model' — no individual-level behavioral claims are made or implied."
+    }
+  },
+  "manuscript_update_recommendations": [
+    {
+      "location": "Supplementary — Table S2 caption or footnote",
+      "recommendation": "Add a note about C_std partial tautology: 'C_std is derived from WVS cultural practice items sharing source survey with the outcome Z; the large marginal effect partially reflects this shared-source construction.'",
+      "priority": "medium",
+      "status": "recommended"
+    },
+    {
+      "location": "Discussion — Limitations §8.3",
+      "recommendation": "Add explicit sentence about simultaneous exclusion sensitivity: 'Systematic prediction failure for three countries (Estonia, Russia, Slovak Republic) with MAE > 0.25 warrants simultaneous exclusion sensitivity analysis as an extension.'",
+      "priority": "low",
+      "status": "recommended"
+    }
+  ]
+}

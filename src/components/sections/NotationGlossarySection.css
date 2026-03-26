@@ -1,0 +1,155 @@
+/* NotationGlossarySection styles */
+
+.ng-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.ng-search-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-primary, #3a3f5c);
+  border-radius: 6px;
+  background: var(--surface-secondary, #1e2140);
+  color: var(--text-primary, #e0e0e0);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ng-search-input:focus {
+  border-color: var(--accent-primary, #6c63ff);
+}
+
+.ng-search-input::placeholder {
+  color: var(--text-tertiary, #888);
+}
+
+.ng-search-clear {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #aaa);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+/* collapsible */
+.ng-collapsible {
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-primary, #3a3f5c);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-secondary, #1e2140);
+}
+
+.ng-collapsible-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: none;
+  background: var(--surface-tertiary, #262a4a);
+  color: var(--text-primary, #e0e0e0);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ng-collapsible-header:hover {
+  background: var(--surface-hover, #2e3358);
+}
+
+.ng-chevron {
+  font-size: 0.85rem;
+  width: 1rem;
+  text-align: center;
+}
+
+.ng-collapsible-title {
+  flex: 1;
+}
+
+.ng-collapsible-body {
+  padding: 0.5rem;
+}
+
+/* tables */
+.ng-table-wrap {
+  overflow-x: auto;
+}
+
+.ng-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.ng-table th {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 2px solid var(--border-primary, #3a3f5c);
+  color: var(--text-secondary, #aaa);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ng-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border-primary, #2a2e4a);
+  color: var(--text-primary, #e0e0e0);
+  vertical-align: top;
+}
+
+.ng-table tbody tr:hover {
+  background: var(--surface-hover, #2e3358);
+}
+
+.ng-sym {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ng-sym .katex {
+  font-size: 1em;
+}
+
+.ng-table code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.82rem;
+  background: rgba(108, 99, 255, 0.08);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.ng-no-results {
+  text-align: center;
+  color: var(--text-tertiary, #888);
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+/* cross-link button (used in MathematicalAnalysisSection) */
+.ng-crosslink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-primary, #3a3f5c);
+  border-radius: 5px;
+  background: var(--surface-secondary, #1e2140);
+  color: var(--accent-primary, #6c63ff);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ng-crosslink:hover {
+  background: var(--surface-hover, #2e3358);
+}

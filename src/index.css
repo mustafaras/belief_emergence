@@ -1,0 +1,1394 @@
+/*
+Typography imports (single authority)
+- Keep all Google Fonts imports here so component CSS does not own font loading.
+- Components should reference tokens from `src/styles/tokens.css`.
+  (Guardrail: keep all Google Fonts imports here; component CSS should not own font loading.)
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=Source+Code+Pro:wght@300;400;500;600;700&display=swap');
+
+@import './styles/tokens.css';
+
+/* Glassmorphic Design System - Stage 4 */
+:root {
+  /* Base typography/rendering defaults (tokens defined in styles/tokens.css) */
+  font-family: var(--font-primary);
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-primary);
+  background: var(--primary-bg);
+  color: var(--text-color);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* World-standard motion accessibility.
+   - Disable non-essential animation/transition when the user requests reduced motion.
+   - Keep functional affordances intact.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* Typography Scales */
+h1 {
+  font-size: var(--type-h1);
+  font-weight: 650;
+  line-height: var(--leading-tight);
+  color: var(--text-color);
+  letter-spacing: var(--tracking-tight);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+
+h2 {
+  font-size: var(--type-h2);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  color: var(--text-color);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3 {
+  font-size: var(--type-h3);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  color: var(--text-color);
+  letter-spacing: var(--tracking-tight);
+}
+
+p {
+  font-size: var(--type-body);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Glass Button Component */
+button {
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  padding: 0.75rem 1.5rem;
+  font-size: var(--type-small);
+  font-weight: 500;
+  font-family: inherit;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  color: var(--text-color);
+  cursor: pointer;
+  transition-property: background-color, border-color, box-shadow, transform, filter;
+  transition-duration: 240ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    var(--shadow-medium),
+    0 0 0 1px rgba(10, 160, 255, 0.08) inset,
+    0 10px 28px rgba(10, 160, 255, 0.10);
+  transform: translateY(-1px);
+  filter: saturate(1.05);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-soft);
+  filter: none;
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-medium), 0 0 0 3px rgba(0, 168, 255, 0.3);
+}
+
+button:focus:not(:focus-visible) {
+  /* Avoid persistent focus rings on mouse click while preserving keyboard accessibility. */
+  box-shadow: var(--shadow-medium);
+}
+
+/* Glass Input Component */
+input, select {
+  border-radius: calc(var(--radius) - 4px);
+  border: 1px solid var(--glass-border);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  background: var(--frost);
+  -webkit-backdrop-filter: var(--blur-light);
+  backdrop-filter: var(--blur-light);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-soft), 0 0 0 3px rgba(0, 168, 255, 0.2);
+}
+
+/* Range Slider Invisible Track Styling - Enhanced */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent !important;
+  cursor: pointer;
+  width: 100%;
+  height: 1px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="range"]:hover {
+  cursor: grab;
+}
+
+input[type="range"]:active {
+  cursor: grabbing;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: transparent !important;
+  height: 1px !important;
+  border-radius: 0.5px;
+  border: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent !important;
+  height: 1px !important;
+  border-radius: 0.5px;
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-medium);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  margin-top: -4px;
+  will-change: transform, box-shadow;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow), 0 0 20px rgba(0, 168, 255, 0.3);
+  border-color: white;
+  cursor: grab;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: var(--shadow), 0 0 0 3px rgba(0, 168, 255, 0.3);
+}
+
+/* Firefox Range Slider Invisible Styling */
+input[type="range"]::-moz-range-track {
+  height: 1px;
+  background: transparent !important;
+  border: none;
+  border-radius: 0.5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid white;
+  cursor: pointer;
+  box-shadow: var(--shadow-medium);
+}
+
+input[type="range"]::-moz-range-progress {
+  height: 1px;
+  background: transparent !important;
+  border: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--frost);
+  border-radius: 4px;
+  -webkit-backdrop-filter: var(--blur-light);
+  backdrop-filter: var(--blur-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--frost-dark);
+}
+
+/* Glassmorphic Utility Classes */
+.glass-panel {
+  background: var(--glass-panel);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.glass-card {
+  background: var(--glass-card);
+  -webkit-backdrop-filter: var(--blur-light);
+  backdrop-filter: var(--blur-light);
+  border: 1px solid var(--border-light);
+  border-radius: calc(var(--radius) - 4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.glass-sidebar {
+  background: linear-gradient(145deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+}
+
+.glass-content {
+  background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  -webkit-backdrop-filter: var(--blur-light);
+  backdrop-filter: var(--blur-light);
+}
+
+/* Layout Classes */
+.full-screen {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ===== STAGE 5: COGNITIVE MODELING COCKPIT LAYOUT ===== */
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.left-panel {
+  background: var(--glass-bg-dark);
+  border-right: 1px solid var(--border-glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  overflow-y: auto;
+  padding: 20px;
+  box-shadow: inset -1px 0 0 var(--border-glass);
+}
+
+.right-panel {
+  background: var(--glass-bg-light);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cognitive Modeling Typography */
+.cognitive-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.cognitive-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 24px;
+  opacity: 0.8;
+}
+
+/* Enhanced Parameter Cards for Left Panel */
+.param-card-enhanced {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.param-card-enhanced:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(79, 172, 254, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Professional Visualization Area */
+.viz-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(79, 172, 254, 0.02) 0%,
+    rgba(168, 85, 247, 0.02) 100%
+  );
+}
+
+.viz-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.viz-content {
+  flex: 1;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Floating Z-Value Display for Right Panel */
+.floating-z-display {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-z-display:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Cognitive Modeling Scrollbar */
+.left-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.left-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.left-panel::-webkit-scrollbar-thumb {
+  background: rgba(79, 172, 254, 0.3);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.left-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 172, 254, 0.5);
+}
+
+/* Enhanced Group Headers */
+.group-header-enhanced {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.group-icon {
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-title-enhanced {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+/* Professional Surface Plot Styling */
+.surface-plot-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(79, 172, 254, 0.03) 0%,
+    transparent 70%
+  );
+}
+
+.surface-plot-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .main-grid {
+    grid-template-columns: 380px 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 360px 1fr;
+  }
+  
+  .left-panel {
+    padding: 16px;
+  }
+  
+  .param-card-enhanced {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  
+  .left-panel {
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--border-glass);
+  }
+  
+  .right-panel {
+    height: 60vh;
+  }
+  
+  .floating-z-display {
+    position: static;
+    margin: 16px;
+  }
+}
+
+.two-column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Typography Classes */
+.text-primary {
+  color: var(--text-color);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Spacing Classes */
+.p-4 { padding: 1rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-8 { padding-left: 2rem; padding-right: 2rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+
+.m-4 { margin: 1rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+/* Border Classes */
+.border-b {
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* Animation Classes */
+.motion-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.motion-scale:hover {
+  transform: translateY(-2px);
+}
+
+.motion-scale:active {
+  transform: translateY(0px);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glassmorphic specific animations */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Parameter Type Styling */
+.param-structural {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.param-amplifier {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.param-suppressor {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ZValueDisplay glassmorphic styling */
+.z-value-display {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 50;
+}
+
+.z-value-card {
+  background: var(--frost);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.z-value-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.z-value-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.z-value-number {
+  color: var(--accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.z-value-percentage {
+  background: rgba(0, 168, 255, 0.1);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 168, 255, 0.2);
+}
+
+.z-sparkline-container {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.z-sparkline-svg {
+  opacity: 0.7;
+}
+
+.z-trend-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.z-progress-container {
+  margin-top: 0.5rem;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.z-progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent), #0090d9);
+  border-radius: 2px;
+}
+
+/* Screen reader utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Additional glassmorphic form components */
+.glass-input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.glass-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.glass-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.glass-dropdown select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Flex utilities */
+.flex { display: flex; }
+.flex-1 { flex: 1 1 0%; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+
+/* Width utilities */
+.w-full { width: 100%; }
+.w-24 { width: 6rem; }
+
+/* Text utilities */
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-wide { letter-spacing: 0.025em; }
+.uppercase { text-transform: uppercase; }
+
+/* Position utilities */
+.relative { position: relative; }
+.absolute { position: absolute; }
+.top-6 { top: 1.5rem; }
+.right-6 { right: 1.5rem; }
+.z-10 { z-index: 10; }
+
+/* Height utilities */
+.h-full { height: 100%; }
+.min-h-0 { min-height: 0; }
+.max-h-plot { max-height: 45vh; }
+
+/* Overflow utilities */
+.overflow-scroll { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+
+/* ===== STAGE 6: PHI FORMULA STRIP & COLLAPSIBLE PARAMETERS ===== */
+
+/* Phi Formula Strip - Horizontal analysis bar below graph */
+.phi-formula-strip {
+  height: 160px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-top: 1px solid var(--glass-border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 16px 24px;
+  gap: 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Phi Breakdown Column */
+.phi-breakdown-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.symbolic-title {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.phi-net-value {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.phi-components {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.component-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.component-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.component-value.positive {
+  color: #10b981;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-weight: 600;
+}
+
+.component-value.negative {
+  color: #ef4444;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-weight: 600;
+}
+
+.contribution-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+.contrib-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.param-symbol {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.8;
+}
+
+.contrib-value {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Formula Column */
+.formula-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formula-header {
+  margin-bottom: 8px;
+}
+
+.math-formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.formula-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formula-z {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.formula-equals {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.formula-fraction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.numerator, .denominator {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+}
+
+.fraction-line {
+  width: 100%;
+  height: 1px;
+  background: var(--text-secondary);
+  margin: 2px 0;
+}
+
+.formula-base {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.formula-exponent {
+  font-size: 0.7rem;
+  vertical-align: super;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.amplifier-part {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.suppressor-part {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.minus {
+  color: var(--text-secondary);
+  margin: 0 2px;
+}
+
+.formula-k {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Collapsible Parameter Groups */
+.parameter-group {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.parameter-group:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(79, 172, 254, 0.4);
+}
+
+.parameter-group summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.parameter-group summary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.parameter-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.parameter-group summary::before {
+  content: '+';
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease, color 0.2s ease;
+  width: 16px;
+  text-align: center;
+}
+
+.parameter-group[open] summary::before {
+  content: '−';
+  transform: rotate(0deg);
+  color: var(--text-primary);
+}
+
+.parameter-group-content {
+  padding: 0 16px 16px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Group Icons */
+.group-emoji {
+  font-size: 1rem;
+  margin-right: 4px;
+}
+
+/* Right panel layout adjustments for Stage 6 */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--glass-bg-light);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+}
+
+.surface-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Responsive adjustments for Stage 6 */
+@media (max-width: 1024px) {
+  .phi-formula-strip {
+    height: 180px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  
+  .math-formula {
+    font-size: 0.8rem;
+  }
+  
+  .contribution-table {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .phi-formula-strip {
+    height: 200px;
+    padding: 12px;
+  }
+  
+  .formula-z {
+    font-size: 1.2rem;
+  }
+  
+  .parameter-group summary {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .parameter-group-content {
+    padding: 0 12px 12px 12px;
+  }
+}
+
+/* Phi Value Color Classes */
+.phi-net-value.positive {
+  color: #10b981;
+}
+
+.phi-net-value.negative {
+  color: #ef4444;
+}
+
+.phi-net-value.neutral {
+  color: #6b7280;
+}
+
+/* ===== STAGE 7: SCIENTIFIC ACCURACY & THEORETICAL PRECISION ===== */
+
+/* Scientific Parameter Controls */
+.scientific-info-btn {
+  background: rgba(79, 172, 254, 0.1);
+  border: 1px solid rgba(79, 172, 254, 0.2);
+  border-radius: 6px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scientific-info-btn:hover {
+  background: rgba(79, 172, 254, 0.2);
+  border-color: rgba(79, 172, 254, 0.4);
+}
+
+.scientific-value {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scientific-description {
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.scientific-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  margin-top: 8px;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(79, 172, 254, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.tooltip-content {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.tooltip-content strong {
+  color: #4fc0fe;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tooltip-content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Enhanced Z-Value Display */
+.z-value-enhanced {
+  text-align: center;
+  padding: 16px;
+}
+
+.z-main-value {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+  transition: all 0.3s ease;
+}
+
+.z-main-value.updating {
+  animation: z-glow 0.6s ease-in-out;
+}
+
+@keyframes z-glow {
+  0%, 100% { 
+    text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+    transform: scale(1);
+  }
+  50% { 
+    text-shadow: 0 0 30px rgba(79, 172, 254, 0.6);
+    transform: scale(1.05);
+  }
+}
+
+.z-percentage {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.emergence-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 4px;
+}
+
+/* Enhanced 3D Surface Plot */
+.surface-plot-enhanced {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.surface-plot-label {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  z-index: 50;
+}
+
+/* Color-coded formula elements */
+.formula-amplifier {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.formula-suppressor {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.formula-structural {
+  color: #4fc0fe;
+  font-weight: 600;
+}
+
+/* Enhanced Phi Strip with scientific styling */
+.phi-formula-strip {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  /* ...existing styles... */
+}
+
+.phi-scientific-mode {
+  border-top: 2px solid rgba(79, 172, 254, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(79, 172, 254, 0.05) 0%,
+    rgba(168, 85, 247, 0.05) 100%
+  );
+}
+
+/* Parameter group scientific mode */
+.parameter-group.scientific-mode summary {
+  background: rgba(79, 172, 254, 0.05);
+  border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+}
+
+.parameter-group.scientific-mode summary::before {
+  color: #4fc0fe;
+}
+
+/* Responsive scientific tooltips */
+@media (max-width: 768px) {
+  .scientific-tooltip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 300px;
+  }
+  
+  .scientific-info-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  .z-main-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Trend indicator color classes */
+.trend-indicator.trend-rising {
+  color: #059669;
+}
+
+.trend-indicator.trend-falling {
+  color: #dc2626;
+}
+
+.trend-indicator.trend-stable {
+  color: #6b7280;
+}
+
+/* Formula source citation */
+.formula-source {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  margin-top: 8px;
+  text-align: center;
+  font-style: italic;
+  font-family: 'SF Pro Display', sans-serif;
+}

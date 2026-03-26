@@ -1,0 +1,234 @@
+{
+  "schema": "phase1.q1_submission_gate.v1",
+  "generatedAtIso": "2026-03-25T05:44:29.073Z",
+  "verdict": "READY",
+  "summary": {
+    "totalChecks": 18,
+    "passed": 18,
+    "failed": 0,
+    "criticalFailed": 0,
+    "majorFailed": 0,
+    "minorFailed": 0
+  },
+  "automatedChecks": [
+    {
+      "id": "cq-tests",
+      "category": "Code Quality",
+      "label": "Test suite passes",
+      "pass": true,
+      "severity": "critical",
+      "detail": "All tests passed"
+    },
+    {
+      "id": "cq-lint",
+      "category": "Code Quality",
+      "label": "Lint passes (zero errors)",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Zero lint errors"
+    },
+    {
+      "id": "cq-build",
+      "category": "Code Quality",
+      "label": "Build succeeds",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Build succeeded"
+    },
+    {
+      "id": "doc-manu",
+      "category": "Docs Consistency",
+      "label": "Manuscript numeric consistency",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Manuscript claims match canonical artifacts"
+    },
+    {
+      "id": "doc-refs",
+      "category": "Docs Consistency",
+      "label": "Section references valid",
+      "pass": true,
+      "severity": "major",
+      "detail": "Section cross-references verified"
+    },
+    {
+      "id": "doc-nohard",
+      "category": "Docs Consistency",
+      "label": "No hardcoded headline metrics",
+      "pass": true,
+      "severity": "major",
+      "detail": "All headline metrics sourced from accessor"
+    },
+    {
+      "id": "art-presence",
+      "category": "Artifact Integrity",
+      "label": "All required artifacts present",
+      "pass": true,
+      "severity": "critical",
+      "detail": "14 artifacts verified"
+    },
+    {
+      "id": "art-schemas",
+      "category": "Artifact Integrity",
+      "label": "All schema versions match",
+      "pass": true,
+      "severity": "major",
+      "detail": "Schema versions consistent"
+    },
+    {
+      "id": "inf-contracts",
+      "category": "Inferential Compliance",
+      "label": "CV artifacts carry inferential contract metadata",
+      "pass": true,
+      "severity": "major",
+      "detail": "Refit=primary_inferential, canonical=diagnostic_only"
+    },
+    {
+      "id": "inf-tierC",
+      "category": "Inferential Compliance",
+      "label": "Tier C explicitly exploratory in ladder",
+      "pass": true,
+      "severity": "major",
+      "detail": "Tier discipline enforced"
+    },
+    {
+      "id": "inf-support",
+      "category": "Inferential Compliance",
+      "label": "Support-constrained inference metadata present",
+      "pass": true,
+      "severity": "major",
+      "detail": "Guardrails metadata present"
+    },
+    {
+      "id": "lock-proto",
+      "category": "Lockbox",
+      "label": "Lockbox protocol intact",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Cycle 2026Q1-R1, no violations"
+    },
+    {
+      "id": "lock-split",
+      "category": "Lockbox",
+      "label": "Lockbox has adequate cells",
+      "pass": true,
+      "severity": "major",
+      "detail": "7 lockbox cells (>=6 required)"
+    },
+    {
+      "id": "val-construct",
+      "category": "Validity",
+      "label": "Construct validity artifact present",
+      "pass": true,
+      "severity": "major",
+      "detail": "construct_validity_invariance.json present and schema-versioned"
+    },
+    {
+      "id": "comp-license",
+      "category": "Compliance",
+      "label": "Data license risk documented",
+      "pass": true,
+      "severity": "major",
+      "detail": "4 high-risk (restricted redistribution), 5 low/medium — all documented"
+    },
+    {
+      "id": "comp-code",
+      "category": "Compliance",
+      "label": "Code provenance inventory present",
+      "pass": true,
+      "severity": "minor",
+      "detail": "5 components documented"
+    },
+    {
+      "id": "rt-unresolved",
+      "category": "Compliance",
+      "label": "Red-team: unresolved criticisms (0)",
+      "pass": true,
+      "severity": "major",
+      "detail": "0 unresolved (4 critical total) — within acceptable threshold"
+    },
+    {
+      "id": "repro-ci",
+      "category": "Reproducibility",
+      "label": "CI reproducibility gate passes",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Full ci:gate passed (7 phases)"
+    }
+  ],
+  "blockers": [],
+  "humanChecklist": [
+    {
+      "id": "h-editor-fit",
+      "category": "Editor Fit",
+      "question": "Is the framing aligned to 3 target Q1 journals (see journal_fit_targeting.json)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-desk-reject",
+      "category": "Editor Fit",
+      "question": "Are common desk-reject triggers neutralized (over-claiming, scope mismatch, novelty inflation)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-abstract-screen",
+      "category": "Editor Fit",
+      "question": "Does the abstract pass first-pass screening (concise, evidence-calibrated, non-causal)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-claim-tier",
+      "category": "Claim Strength",
+      "question": "Are all strong claims tied to Tier A/B OOS evidence only (not Tier C or in-sample metrics)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-causal",
+      "category": "Claim Strength",
+      "question": "Does no sentence imply causal interpretation beyond the observational design?",
+      "signedOff": false
+    },
+    {
+      "id": "h-support",
+      "category": "Claim Strength",
+      "question": "Are support-density boundaries (n=34 country-years) explicitly acknowledged for high-dimensional terms?",
+      "signedOff": false
+    },
+    {
+      "id": "h-lockbox-disclose",
+      "category": "Claim Strength",
+      "question": "Is lockbox evidence clearly separated from development CV evidence in all claims?",
+      "signedOff": false
+    },
+    {
+      "id": "h-novelty-precise",
+      "category": "Novelty Precision",
+      "question": "Is the novelty claim precisely scoped (method + domain-specific contribution, no universal claims)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-review-ready",
+      "category": "Novelty Precision",
+      "question": "Are top 5 reviewer attack surfaces pre-addressed (see reviewer_red_team.json)?",
+      "signedOff": false
+    },
+    {
+      "id": "h-cover-letter",
+      "category": "Novelty Precision",
+      "question": "Does the cover letter have a clear novelty-fit-robustness arc for the primary target journal?",
+      "signedOff": false
+    },
+    {
+      "id": "h-captions",
+      "category": "Presentation",
+      "question": "Do all figure/table captions follow scope → method → interpretation boundary structure?",
+      "signedOff": false
+    },
+    {
+      "id": "h-highlights",
+      "category": "Presentation",
+      "question": "Are highlights artifact-consistent, non-redundant, and high-signal?",
+      "signedOff": false
+    }
+  ]
+}

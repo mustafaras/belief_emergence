@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "phase1.abstract_screening_pack.v1",
+  "generatedAtIso": "2026-03-06T09:30:00.000Z",
+  "source": {
+    "scope": "Prompt 14 abstract/title/keywords optimization",
+    "manuscriptPaths": [
+      "BE_paper_latest/main/main.tex",
+      "BE_paper_latest/highlights.tex",
+      "BE_paper_latest/titlepage.tex"
+    ]
+  },
+  "selectedVariantId": "balanced",
+  "selectedTitle": "Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework",
+  "selectedSubtitle": "Regime-Diagnostic Saturating Models for Country Panels",
+  "selectedRunningHead": "Regime-Diagnostic Saturating Models for Country Panels",
+  "selectedKeywords": [
+    "computational social science",
+    "macro-urban analytics",
+    "urbanization",
+    "inequality",
+    "bounded response modeling",
+    "comparative panel data",
+    "out-of-sample validation",
+    "reproducible visual analytics",
+    "support-aware inference"
+  ],
+  "recommendedJournals": [
+    "EPJ Data Science",
+    "Nature Human Behaviour"
+  ],
+  "selectionRationale": "The balanced variant was selected because it preserves explicit support limits, Tier A/B versus Tier C evidence discipline, and non-causal boundaries while remaining concise enough for first-pass editor screening. The title stack is method-forward for EPJ Data Science but still legible for interdisciplinary desk review.",
+  "abstractVariants": [
+    {
+      "id": "conservative",
+      "label": "Conservative",
+      "editorUse": "Maximum inferential restraint; strongest fit when support limits must dominate the first read.",
+      "text": "Comparative urban analysis often relies on sparse country-year indicators that make nonlinear claims difficult to audit. We present a support-aware workflow for bounded nonlinear modeling of belief emergence under urbanization and inequality. Using a canonical panel of 23 countries (630 scenario-replicated rows, 2000-2022; 34 unique country-years after collapsing support), we define exposure as S = X^alpha Y^beta exp(Phi) and map it to a bounded outcome Z = S/(S+k). The framework combines response-surface inspection, empirical-support overlays, uncertainty diagnostics, refit out-of-sample validation, and deterministic export of evidence artifacts. Primary claims are restricted to Tier A/B evidence from leave-one-country-out and rolling-origin refits, while Tier C higher-complexity terms are treated as exploratory sensitivity diagnostics only. The contribution is methodological rather than causal: the model makes transition geometry, saturation, and local sensitivity auditable under thin support, and findings should be read as support-conditioned comparative regularities within the observed panel rather than as universal behavioral laws or policy-effect estimates."
+    },
+    {
+      "id": "balanced",
+      "label": "Balanced",
+      "editorUse": "Selected variant; best blend of method visibility, readability, and evidence discipline for Q1 editor screening.",
+      "text": "Macro-urban decision support often depends on sparse country-year evidence, yet comparative pipelines rarely make support limits, uncertainty, and nonlinear response geometry visible within the same workflow. We introduce a support-aware bounded nonlinear modeling framework for belief emergence under urbanization and inequality and pair it with diagnostic visual analytics, refit out-of-sample validation, and deterministic evidence export. The analysis uses a canonical panel of 23 countries (630 scenario-replicated rows, 2000-2022) that collapses to 34 unique country-years of complete-case support. Effective exposure is defined as S = X^alpha Y^beta exp(Phi) and mapped to a bounded outcome through Z = S/(S+k), making transition-ridge sensitivity and saturation explicit. Primary claims are anchored to Tier A/B refit out-of-sample evidence from leave-one-country-out (23 folds) and rolling-origin (9 folds) validation, while Tier C higher-complexity terms are retained only as exploratory sensitivity diagnostics. The contribution is a reproducible comparative-inference workflow that makes model geometry, empirical support, and validation status auditable from preprocessing to exported figures. Interpretation remains descriptive, non-causal, and limited to the observed support."
+    },
+    {
+      "id": "high_impact_bounded",
+      "label": "High-impact but bounded",
+      "editorUse": "More assertive opener while preserving non-causal and support-conditioned limits.",
+      "text": "Reliable macro-urban inference requires more than accurate predictions: editors and reviewers need to see where a nonlinear model is supported, where it saturates, and how strongly conclusions survive refit validation. We present a support-aware bounded nonlinear framework for belief emergence under urbanization and inequality that integrates response-surface diagnostics, uncertainty auditing, and deterministic evidence export in one reproducible workflow. In a canonical panel of 23 countries (630 scenario-replicated rows; 34 unique country-years of effective support), exposure is modeled as S = X^alpha Y^beta exp(Phi) and transformed to Z = S/(S+k), yielding auditable regime geometry with maximal sensitivity near the transition ridge. Primary empirical statements are restricted to Tier A/B out-of-sample refit evidence under leave-one-country-out and rolling-origin protocols, whereas Tier C full-complexity structure is explicitly downgraded to exploratory sensitivity analysis. The paper's contribution is therefore not a universal behavioral law but a transparent computational method for support-conditioned macro-comparative inference under thin data and explicit non-causal boundaries."
+    }
+  ]
+}

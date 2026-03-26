@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "phase1.temporal_outlier_2006_sensitivity.v1",
+  "generatedAtIso": "2026-03-10T06:04:11.552Z",
+  "fullPanelNRows": 630,
+  "excluded2006NRows": 567,
+  "nRowsExcluded": 63,
+  "looComparisonRefit": [
+    {
+      "tier": "A",
+      "rmse": {
+        "fullPanel": 0.0000012421433949189276,
+        "excluded2006": 0.0000015021110079787984,
+        "delta": 2.599676130598708e-7
+      },
+      "mae": {
+        "fullPanel": 0.0000011761689804200436,
+        "excluded2006": 0.0000015001580551676774,
+        "delta": 3.239890747476338e-7
+      },
+      "r2": {
+        "fullPanel": 0.9999999970495309,
+        "excluded2006": 0.9999999943399523,
+        "delta": -2.7095785615216528e-9
+      }
+    },
+    {
+      "tier": "B",
+      "rmse": {
+        "fullPanel": 0.0000028798348696417534,
+        "excluded2006": 0.000004799159655349259,
+        "delta": 0.000001919324785707506
+      },
+      "mae": {
+        "fullPanel": 0.000002879612393298493,
+        "excluded2006": 0.0000043666854589668394,
+        "delta": 0.0000014870730656683464
+      },
+      "r2": {
+        "fullPanel": 0.9999999783817408,
+        "excluded2006": 0.9999998394510827,
+        "delta": -1.3893065808900928e-7
+      }
+    },
+    {
+      "tier": "C",
+      "rmse": {
+        "fullPanel": 0.00000370030486530867,
+        "excluded2006": 0.000008122162626656119,
+        "delta": 0.000004421857761347449
+      },
+      "mae": {
+        "fullPanel": 0.0000036977677990947874,
+        "excluded2006": 0.000007074623047495201,
+        "delta": 0.0000033768552484004137
+      },
+      "r2": {
+        "fullPanel": 0.9999999672932371,
+        "excluded2006": 0.9999997812344918,
+        "delta": -1.8605874529953326e-7
+      }
+    }
+  ],
+  "constructDiagnostics": {
+    "year2006": {
+      "nRows": 63,
+      "countries": [
+        "BGR",
+        "CAN",
+        "CHL",
+        "NLD"
+      ],
+      "meanZ": 0.2864660225394839,
+      "sdZ": 0.5100628635025337
+    },
+    "otherYears": {
+      "nRows": 567,
+      "meanZ": 0.12342318102771538,
+      "sdZ": 1.005793087611756
+    },
+    "constructCorrelation2006": 0.6993,
+    "constructCorrelationMedian": 0.9322
+  },
+  "signStability": [
+    {
+      "tier": "A",
+      "nCoeffs": 10,
+      "nSignRetained": 10,
+      "fractionRetained": 1,
+      "flippedFeatures": []
+    },
+    {
+      "tier": "B",
+      "nCoeffs": 17,
+      "nSignRetained": 15,
+      "fractionRetained": 0.8823529411764706,
+      "flippedFeatures": [
+        "g",
+        "e:s"
+      ]
+    },
+    {
+      "tier": "C",
+      "nCoeffs": 21,
+      "nSignRetained": 16,
+      "fractionRetained": 0.7619047619047619,
+      "flippedFeatures": [
+        "x_safe",
+        "g",
+        "e",
+        "e:s",
+        "g:r"
+      ]
+    }
+  ],
+  "verdict": "Excluding 2006 does not materially alter headline Tier A/B OOS metrics; year-level construct instability is not a driver of reported aggregate patterns."
+}
