@@ -167,6 +167,7 @@ export default defineConfig(({ mode }) => {
   const apiKey = env.OPENAI_API_KEY;
 
   return {
+    base: '/belief_emergence/',
     plugins: [
       react(),
       {
