@@ -323,6 +323,199 @@ function gateReproducibility(): void {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Gate 7 — Measurement Validity (kills tautological models)          */
+/* ------------------------------------------------------------------ */
+
+interface PanelRow {
+  [key: string]: string;
+}
+
+function readPanelCsv(): PanelRow[] {
+  const fp = path.join(ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+  if (!fs.existsSync(fp)) return [];
+  const text = fs.readFileSync(fp, 'utf-8').replace(/^\uFEFF/, '');
+  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  if (lines.length < 2) return [];
+  const header = lines[0].split(',');
+  return lines.slice(1).map((line) => {
+    const cells = line.split(',');
+    const row: PanelRow = {};
+    header.forEach((h, i) => { row[h] = cells[i] ?? ''; });
+    return row;
+  });
+}
+
+function numericColumn(rows: PanelRow[], name: string): number[] {
+  const out: number[] = [];
+  for (const r of rows) {
+    const v = Number.parseFloat(r[name]);
+    if (Number.isFinite(v)) out.push(v);
+  }
+  return out;
+}
+
+function pearson(a: number[], b: number[]): number {
+  const n = Math.min(a.length, b.length);
+  if (n < 3) return NaN;
+  let sa = 0; let sb = 0;
+  for (let i = 0; i < n; i += 1) { sa += a[i]; sb += b[i]; }
+  const ma = sa / n; const mb = sb / n;
+  let num = 0; let da = 0; let db = 0;
+  for (let i = 0; i < n; i += 1) {
+    const xa = a[i] - ma; const xb = b[i] - mb;
+    num += xa * xb; da += xa * xa; db += xb * xb;
+  }
+  const den = Math.sqrt(da * db);
+  return den === 0 ? NaN : num / den;
+}
+
+const PREDICTORS = [
+  'X_urbanization', 'Y_gini', 'C_cultural_intensity', 'M_media_environment',
+  'T_trauma_shock', 'D_social_atomization', 'G_redistribution_capacity',
+  'E_education_capacity', 'S_social_support', 'R_welfare_capacity',
+];
+
+const OUTCOME = 'Z_belief_outcome';
+
+/** Gaussian elimination with partial pivoting; returns rank of [X | 1]. */
+function designRank(columns: number[][]): number {
+  const nRows = columns[0]?.length ?? 0;
+  const m = columns.length + 1;
+  const a: number[][] = [];
+  for (let i = 0; i < nRows; i += 1) {
+    const row: number[] = [];
+    for (let j = 0; j < columns.length; j += 1) row.push(columns[j][i]);
+    row.push(1);
+    a.push(row);
+  }
+  let rank = 0;
+  for (let col = 0; col < m && rank < nRows; col += 1) {
+    let piv = rank;
+    for (let r = rank + 1; r < nRows; r += 1) {
+      if (Math.abs(a[r][col]) > Math.abs(a[piv][col])) piv = r;
+    }
+    if (Math.abs(a[piv][col]) < 1e-10) continue;
+    const tmp = a[rank]; a[rank] = a[piv]; a[piv] = tmp;
+    const pv = a[rank][col];
+    for (let j = col; j < m; j += 1) a[rank][j] /= pv;
+    for (let r = 0; r < nRows; r += 1) {
+      if (r === rank) continue;
+      const f = a[r][col];
+      if (f === 0) continue;
+      for (let j = col; j < m; j += 1) a[r][j] -= f * a[rank][j];
+    }
+    rank += 1;
+  }
+  return rank;
+}
+
+function gateMeasurementValidity(): void {
+  console.log('\n── Gate 7: Measurement Validity ──');
+
+  const rows = readPanelCsv();
+  if (rows.length === 0) {
+    record('val-panel', 'Measurement Validity', 'Canonical panel readable', false, 'critical',
+      'Could not read public/data/panel_canonical_23_countries_v1.csv');
+    return;
+  }
+
+  const outcome = numericColumn(rows, OUTCOME);
+
+  // 7.1 — no predictor may be an identity rescaling of the outcome
+  const identityHits: string[] = [];
+  for (const p of PREDICTORS) {
+    const r = pearson(numericColumn(rows, p), outcome);
+    if (Number.isFinite(r) && Math.abs(r) > 0.999) {
+      identityHits.push(`${p} (r=${r.toFixed(12)})`);
+    }
+  }
+  record('val-identity', 'Measurement Validity',
+    'No predictor is an identity rescaling of the outcome', identityHits.length === 0, 'critical',
+    identityHits.length === 0
+      ? `All ${PREDICTORS.length} predictors have |r| <= 0.999 with ${OUTCOME}`
+      : `TAUTOLOGICAL MODEL — predictor(s) indistinguishable from the outcome: ${identityHits.join(', ')}`);
+
+  // 7.2 — no two predictors may be duplicates
+  const dupHits: string[] = [];
+  for (let i = 0; i < PREDICTORS.length; i += 1) {
+    for (let j = i + 1; j < PREDICTORS.length; j += 1) {
+      const r = pearson(numericColumn(rows, PREDICTORS[i]), numericColumn(rows, PREDICTORS[j]));
+      if (Number.isFinite(r) && Math.abs(r) > 0.9999) {
+        dupHits.push(`${PREDICTORS[i]} ~ ${PREDICTORS[j]} (r=${r.toFixed(12)})`);
+      }
+    }
+  }
+  record('val-duplicate', 'Measurement Validity',
+    'No two predictors are duplicates', dupHits.length === 0, 'critical',
+    dupHits.length === 0
+      ? 'All predictor pairs are distinguishable'
+      : `COLLINEAR DESIGN — duplicate predictor(s): ${dupHits.join('; ')}`);
+
+  // 7.3 — design matrix must be full column rank
+  const cols = PREDICTORS.map((p) => numericColumn(rows, p));
+  const nUsable = Math.min(...cols.map((c) => c.length));
+  const trimmed = cols.map((c) => c.slice(0, nUsable));
+  const rank = designRank(trimmed);
+  const expectedRank = PREDICTORS.length + 1;
+  record('val-rank', 'Measurement Validity',
+    `Design matrix full rank (${expectedRank} columns)`, rank === expectedRank, 'critical',
+    rank === expectedRank
+      ? `rank=${rank}/${expectedRank} on ${nUsable} rows`
+      : `RANK DEFICIENT — rank=${rank}/${expectedRank}: coefficients are not separately identified`);
+
+  // 7.4 — no single predictor may explain the outcome on its own
+  const soloHits: string[] = [];
+  for (const p of PREDICTORS) {
+    const r = pearson(numericColumn(rows, p), outcome);
+    if (Number.isFinite(r) && r * r > 0.99) {
+      soloHits.push(`${p} (R2=${(r * r).toFixed(6)})`);
+    }
+  }
+  record('val-single-r2', 'Measurement Validity',
+    'No single predictor reaches R2 > 0.99', soloHits.length === 0, 'critical',
+    soloHits.length === 0
+      ? 'Every predictor leaves material variance unexplained'
+      : `SINGLE-PREDICTOR TAUTOLOGY: ${soloHits.join(', ')}`);
+
+  // 7.5 — out-of-sample performance must not be impossibly perfect
+  const cv = readJson('cv_country_out.json');
+  if (!cv) {
+    record('val-oos-plausible', 'Measurement Validity',
+      'OOS R2 is plausible (< 0.999)', false, 'critical',
+      'cv_country_out.json missing — cannot audit out-of-sample performance');
+  } else {
+    const agg = (cv as Record<string, Record<string, Record<string, Record<string, number>>>>)
+      .aggregatesRefit ?? {};
+    const perfect: string[] = [];
+    for (const tier of Object.keys(agg)) {
+      const med = agg[tier]?.r2?.median;
+      const rmse = agg[tier]?.rmse?.median;
+      if (typeof med === 'number' && med > 0.999) perfect.push(`Tier ${tier} R2=${med}`);
+      if (typeof rmse === 'number' && rmse < 1e-4) perfect.push(`Tier ${tier} RMSE=${rmse}`);
+    }
+    record('val-oos-plausible', 'Measurement Validity',
+      'OOS R2 is plausible (< 0.999)', perfect.length === 0, 'critical',
+      perfect.length === 0
+        ? 'Out-of-sample metrics are within empirically plausible bounds'
+        : `IMPLAUSIBLE OOS — a model that reproduces its outcome perfectly is a defect, not a result: ${perfect.join(', ')}`);
+  }
+
+  // 7.6 — the diagnostic metric family must be reported, not only the flattering one
+  if (cv) {
+    const canon = (cv as Record<string, Record<string, Record<string, Record<string, number>>>>)
+      .aggregatesCanonical ?? {};
+    const negatives = Object.keys(canon)
+      .filter((t) => (canon[t]?.r2?.median ?? 0) < 0)
+      .map((t) => `Tier ${t} R2=${canon[t].r2.median.toFixed(4)}`);
+    record('val-canonic-reported', 'Measurement Validity',
+      'Canonical (fixed-model) OOS R2 is non-negative', negatives.length === 0, 'major',
+      negatives.length === 0
+        ? 'Canonical family shows no negative R2'
+        : `NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: ${negatives.join(', ')}. Must be discussed in the manuscript, not filed as "descriptive only".`);
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /*  Human editorial checklist (informational, not hard gate)           */
 /* ------------------------------------------------------------------ */
 
@@ -478,6 +671,9 @@ function run(): void {
 
   // Gate 6: Deterministic reproducibility (full ci:gate)
   gateReproducibility();
+
+  // Gate 7: Measurement validity (tautology / collinearity / rank / OOS plausibility)
+  gateMeasurementValidity();
 
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n  Total gate time: ${elapsed}s`);
