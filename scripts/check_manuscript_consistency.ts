@@ -11,12 +11,18 @@ type CheckFailure = {
 
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
-// `paper/` is the versioned location; `BE_paper_latest/` is the local
-// development tree. Prefer whichever exists so the checkers run in CI, where
-// only paper/ is present.
-const PAPER_ROOT = fs.existsSync(path.join(REPO_ROOT, 'paper'))
-  ? path.join(REPO_ROOT, 'paper')
-  : path.join(REPO_ROOT, 'BE_paper_latest');
+// The manuscript lives in one of three places depending on where this runs:
+//   <repo>/paper                          versioned layout (CI and fresh clones)
+//   <repo>/BE_paper_latest                local development tree, app at root
+//   <repo>/../BE_paper_latest             local development tree, app in BE_app/
+// Resolve by existence rather than by assumption; assuming the third form is
+// what made the check pass locally and fail in CI.
+const PAPER_ROOT = [
+  path.join(REPO_ROOT, 'paper'),
+  path.join(REPO_ROOT, 'BE_paper_latest'),
+  path.join(APP_ROOT, 'paper'),
+  path.join(REPO_ROOT, '..', 'BE_paper_latest'),
+].find((candidate) => fs.existsSync(candidate)) ?? path.join(REPO_ROOT, 'BE_paper_latest');
 const ANALYSIS_DIR = path.join(APP_ROOT, 'src', 'data', 'analysis');
 
 const OPTIONAL_DOC_FILES = new Set([
