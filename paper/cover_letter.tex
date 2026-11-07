@@ -1,0 +1,140 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{type1cm}
+\usepackage[margin=1in]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\usepackage{mathptmx}
+\usepackage{helvet}
+\renewcommand{\bfdefault}{b}
+\renewcommand{\updefault}{n}
+
+\setlength{\emergencystretch}{4em}
+
+\newcommand{\SubmissionDate}{}
+
+\newcommand{\ManuscriptTitle}{Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}
+\newcommand{\ManuscriptSubtitle}{Regime-Diagnostic Saturating Models for Country Panels}
+
+\newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
+\newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
+\newcommand{\AuthorC}{Prof.\ Dr\ Emine YET\.{I}\c{S}KUL}
+\newcommand{\AffilOne}{Middle East Technical University, Faculty of Architecture, Department of City and Regional Planning, Ankara, T\"urkiye}
+
+\newcommand{\CorrName}{\AuthorA}
+\newcommand{\CorrEmail}{\href{mailto:mustafarasit@gmail.com}{mustafarasit@gmail.com}}
+\newcommand{\CorrPhone}{+905066020098}
+
+\newcommand{\EditorLine}{Editor-in-Chief}
+
+\newcommand{\Rule}{{\color{black!65}\rule{\linewidth}{0.6pt}}}
+\newcommand{\SubRule}{{\color{black!65}\rule{\linewidth}{0.4pt}}}
+\newcommand{\SmallHeading}[1]{\needspace{5\baselineskip}\vspace{0.85em}\noindent\textbf{#1}\\[-0.25em]\SubRule\\[0.45em]}
+
+\begin{document}
+\thispagestyle{empty}
+\begingroup
+\setstretch{0.98}
+\RaggedRight
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=*,itemsep=0.35em,topsep=0.25em,parsep=0pt}
+\setlist[itemize]{leftmargin=*,itemsep=0.25em,topsep=0.2em,parsep=0pt}
+
+{\small\textsc{Cover letter}}\\[-0.35em]
+{\color{black!65}\rule{\linewidth}{0.6pt}}\\[0.8em]
+
+\begin{center}
+	{\LARGE\bfseries \ManuscriptTitle\par}
+	\vspace{0.35em}
+	{\large \ManuscriptSubtitle\par}
+\end{center}
+
+\vspace{0.55em}
+
+\footnotesize
+
+\noindent \textbf{\EditorLine}\par
+\vspace{0.9em}
+
+\noindent \textbf{Manuscript submission:} \emph{\ManuscriptTitle: \ManuscriptSubtitle}\\[0.7em]
+
+\noindent Dear Editor,\\[0.35em]
+
+\noindent We submit the enclosed manuscript for your consideration. The paper addresses a recurring methodological gap in macro-urban analytics: bounded social indicators are routinely modeled with unbounded linear intuition, while support limits, preprocessing choices, and failure cases remain implicit. We introduce a support-aware bounded nonlinear framework grounded in refit out-of-sample validation and diagnostic visual analytics, so that empirical support, uncertainty, and instability are auditable from preprocessing to exported figures.
+
+\SmallHeading{What is new, why now, and why it matters}
+
+\noindent \textbf{What is new.} A bounded, regime-aware mapping ($Z = S/(S+k) \in (0,1)$, with $S = X^{\alpha}Y^{\beta}\exp(\Phi)$) that makes transition geometry, saturation, and local sensitivity analytically visible. Sensitivity is intrinsically regime-dependent ($\partial Z/\partial\Phi = Z(1-Z)$), concentrating interpretive leverage in mid-regime states. Eight standardized social modifiers enter the contextual field $\Phi$; their effects are interpreted through finite-difference scenarios and term-by-term decomposition in bounded units. The framework enforces a transparent preprocessing contract and documents failure cases alongside successes.
+
+\noindent \textbf{Why now.} Sparse, unbalanced country--year panels are increasingly used for policy-facing scenario exploration, yet published workflows rarely separate robust from exploratory findings, quantify support-per-parameter ratios, or make failure cases visible. The growing demand for evidence-based diagnostics under thin support makes a structured, auditable inference workflow timely.
+
+\noindent \textbf{Why it matters.} Reproducible data-science methodology for complex social systems demands auditable computation. The manuscript contributes a protocolized validation framework (tiered complexity ladder, refit out-of-sample protocols, release-gated lockbox), a reproducible artifact pipeline (deterministic preprocessing through exported diagnostics), and support-aware inference for sparse comparative panels. The reproducibility path from data to claims is fully auditable, validation protocols are explicitly separated by tier, and narrative claims are tightly linked to exported JSON artifacts via a claim-evidence traceability map (Table~S0). The manuscript positions visual analytics as a diagnostic instrument rather than a presentation layer, addressing the needs of computational social scientists and methodological reviewers working on complex social systems.
+
+\SmallHeading{Primary evidence (Tier A/B refit OOS) versus exploratory evidence (Tier C)}
+\noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
+\begin{itemize}
+\item \textbf{Leave-one-country-out} (23 folds): median OOS RMSE 0.000001 (Tier~A), 0.000003 (Tier~B), 0.000004 (Tier~C); parameter sign consistency $\ge 0.70$ (Tier~A) and $\ge 0.80$ (Tier~B).
+\item \textbf{Rolling-origin temporal validation} (9 forward-chaining folds): median OOS RMSE 0.000003 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
+\end{itemize}
+\noindent A separately gated lockbox holdout (frozen split, one-time evaluation per release cycle) confirms Tier~A/B stability without repeated peeking.
+
+\noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 0.9070) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
+
+\SmallHeading{Inferential boundaries}
+
+\noindent The manuscript states the following constraints, consistent across Abstract, Results, Discussion, and the supplementary claim-evidence traceability map (Table~S0):
+\begin{itemize}
+\item No causal identification (observational panel; no IV, DiD, or RDD design).
+\item Thin effective support: 34 unique country--years, with support-per-parameter ratios of 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
+\item Ecological aggregation: country--year unit, not individual-level inference.
+\item Scenario comparisons are analyst-exploratory perturbations of the fitted surface, not policy-optimality recommendations.
+\end{itemize}
+\noindent Failure cases are documented rather than hidden: Estonia (MAE 0.292, sparse low-uptake), Russia (MAE 0.250, volatile transition), Slovak Republic (MAE 0.277, sparse mid-regime). Regime-coverage analysis shows low-uptake 23.5\%, mid-transition 52.9\%, high-uptake 23.5\% of unique support.
+
+\SmallHeading{Fit, significance, and reproducibility}
+
+\noindent The submission addresses a gap where nonlinear models are applied to small, unbalanced macro panels without standardized practices for reporting support, separating robust from exploratory findings, documenting instability, and constraining extrapolation. The paper contributes both validated bounded-nonlinear methodology and a working evidence-proportionality framework that separates Tier~A/B OOS-confirmed patterns from Tier~C exploratory sensitivity. We expect it to be of interest to readers working on comparative urban indicators, macro-urban scenario design, and visual decision support under uncertainty.
+
+\noindent Reproducibility is designed into the workflow: deterministic artifacts (parameters, bounded predictions, decomposed contributions) are exportable, and the repository ships the canonical panel, upstream provenance tables, versioned construct definitions, and deterministic regeneration commands. The supplementary claim-evidence traceability map (Table~S0) links all 11 major claims to artifact sources, evidence tiers, and uncertainty caveats.
+
+\noindent This manuscript is original, not previously published, and not under consideration elsewhere.
+
+\par\vspace{0.9\baselineskip}
+
+\noindent\textbf{Declarations}\\[-0.2em]
+{\color{black!65}\rule{\linewidth}{0.4pt}}\\[0.4em]
+\noindent Full declaration statements---including funding, conflict of interest, data and code availability, deterministic replication instructions, author contributions, and ethics---are provided on the accompanying title page. The submission bundle includes the canonical analysis dataset, upstream raw extracts with a machine-readable provenance inventory, and all deterministic regeneration commands required for independent replication.
+
+\SmallHeading{Corresponding author} 
+\noindent\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
+Name & \CorrName\\
+Affiliation & \AffilOne\\
+Email & \CorrEmail\\
+Phone & \CorrPhone\\
+\end{tabularx}
+\\[0.6em]
+
+\noindent Thank you for considering this submission. The authors would be grateful for the opportunity to have the manuscript reviewed, and welcome any questions regarding the modeling contract, evaluation diagnostics, or reproducibility materials.
+
+\vspace{0.7em}
+\noindent Sincerely,\\[0.5em]
+\noindent \textbf{\AuthorA}\\
+\textbf{\AuthorB}\\
+\textbf{\AuthorC}\\
+\AffilOne
+
+\endgroup
+\end{document}
+

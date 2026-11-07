@@ -1,0 +1,119 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{type1cm}
+\usepackage[margin=1in]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{needspace}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\usepackage{mathptmx}
+\usepackage{helvet}
+\renewcommand{\bfdefault}{b}
+\renewcommand{\updefault}{n}
+
+\setlength{\emergencystretch}{4em}
+
+\newcommand{\SubmissionDate}{}
+
+\newcommand{\ManuscriptTitle}{Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}
+\newcommand{\ManuscriptSubtitle}{Regime-Diagnostic Saturating Models for Country Panels}
+
+\newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
+\newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
+\newcommand{\AuthorC}{Prof.\ Dr\ Emine YET\.{I}\c{S}KUL}
+\newcommand{\AffilOne}{Middle East Technical University, Faculty of Architecture, Department of City and Regional Planning, Ankara, T\"urkiye}
+
+\newcommand{\Rule}{\color{black}\rule{\linewidth}{0.6pt}}
+\newcommand{\SubRule}{\color{black}\rule{\linewidth}{0.4pt}}
+\newcommand{\Section}[1]{\needspace{5\baselineskip}\vspace{0.85em}\noindent\textbf{#1}\\[-0.25em]\SubRule\\[0.45em]}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begingroup
+\setstretch{1.02}
+\RaggedRight
+
+{\small\textsc{Highlights}}\\[-0.35em]
+\Rule\\[0.8em]
+
+\begin{center}
+    {\LARGE\bfseries \ManuscriptTitle\par}
+    \vspace{0.35em}
+    {\large \ManuscriptSubtitle\par}
+\end{center}
+
+\vspace{0.35em}
+
+\Section{Contribution and novelty}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item Macro-urban decision support frequently relies on sparse, unbalanced country--year indicators where common pipelines hide uncertainty, blur support boundaries, and encourage extrapolation. This manuscript introduces a support-aware bounded nonlinear modeling framework paired with diagnostic visual analytics, refit out-of-sample validation, and deterministic evidence export.
+    \item Visual analytics is positioned as a \emph{diagnostic instrument} rather than a presentation layer: model geometry, support coverage, uncertainty, and failure cases are auditable and exportable as evidence.
+    \item Instead of post-hoc explainability for black-box models, structure is specified transparently (bounded equation, explicit field decomposition, refit OOS protocols) so mechanism can be inspected directly.
+    \item Tiered evidence architecture explicitly separates primary out-of-sample findings (Tier~A/B) from exploratory sensitivity (Tier~C), with documented failure cases and instability flags.
+\end{itemize}
+
+\Section{Bounded nonlinear framework}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item Effective exposure is defined as a structural term modulated by a contextual field: $S = X^{\alpha}Y^{\beta}\exp(\Phi)$.
+    \item Exposure maps to a bounded outcome via a saturation transform: $Z = S/(S+k) \in (0,1)$, making diminishing returns explicit and preventing runaway responses under extreme covariate combinations.
+    \item Sensitivity is intrinsically state-dependent: $\partial Z/\partial\Phi = Z(1-Z)$ peaks near the transition ridge ($Z\approx 0.5$) and attenuates on saturation shoulders, supporting regime-aware interpretation without importing linear ``one-slope'' intuition.
+    \item Eight social modifiers enter the contextual field $\Phi$ and are interpreted through term-by-term decomposition (main effects, interactions, curvature) and scenario-based finite differences in bounded units.
+    \item Bounded social indicators (constrained to 0--1 scale) are governed by explicit preprocessing contracts: clipping, min--max scaling, and interior-band protection are specified as auditable scientific contracts in the supplementary materials (numerical details in Data and reproducibility below).
+\end{itemize}
+
+\Section{Primary out-of-sample evidence (Tier A/B)}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item Primary claims rest on refit out-of-sample validation, not in-sample fit. Two complementary protocols:
+    \begin{itemize}
+        \setlength{\itemsep}{0.2em}
+        \item Leave-one-country-out (23 folds): median OOS RMSE 0.000001 (Tier~A), 0.000003 (Tier~B), 0.000004 (Tier~C).
+        \item Rolling-origin temporal validation (9 forward-chaining folds): median OOS RMSE 0.000003 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
+    \end{itemize}
+    \item Parameter sign consistency thresholds gate primary claims: $\ge 0.70$ (Tier~A), $\ge 0.80$ (Tier~B). Support-per-parameter ratios: 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
+    \item A separately gated lockbox holdout (frozen split, one-time per release cycle) confirms Tier~A/B stability without repeated metric peeking.
+    \item In-sample performance anchor: $R^2=0.8461$; $\mathrm{Corr}(Z,\widehat{Z})=0.9488$; MAE~$=0.1005$; RMSE~$=0.1212$. Reported as descriptive context; primary inferential claims rest on refit OOS evidence above.
+\end{itemize}
+
+\Section{Exploratory evidence and failure cases}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item Tier~C (full nonlinear complexity: curvature, higher-order interactions) is explicitly separated from primary evidence. Bounded by exploratory stability threshold (0.60; pooled median consistency 0.9070) with wider fold-level variability than Tier~A/B. No headline claim rests on Tier~C.
+    \item Failure and instability evidence documented prominently: Estonia (MAE 0.292, sparse low-uptake regime), Russia (MAE 0.250, volatile transition regime), Slovak Republic (MAE 0.277, sparse mid-regime). Rolling-origin parameter drift flagged for Tier~C (education curvature sign flip in 1 of 9 folds).
+    \item Empirical support: 34 unique country--years after collapsing scenario replication. Regime-specific coverage: low-uptake ($Z<0.33$) 23.5\%, mid-transition 52.9\%, high-uptake ($Z\ge 0.67$) 23.5\%.
+\end{itemize}
+
+\Section{Inferential boundaries}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item No causal identification (observational panel; no IV, RDD, or DiD design). Findings describe associations under the fitted model.
+    \item No policy-optimality assertions (analyst-exploratory scenarios; model not transportable without new support evidence).
+    \item Ecological aggregation at the country--year unit; no individual-level inference.
+    \item Scenario-based $\Delta Z$ comparisons (finite differences under +1~SD shocks) are distinguished from derivatives and from causal marginal effects.
+    \item A supplementary claim-evidence traceability map (Table~S0) links all 11 major claims to evidence tier, artifact source, protocol, and uncertainty caveat.
+\end{itemize}
+
+\Section{Data and reproducibility}
+\begin{itemize}
+    \setlength{\itemsep}{0.40em}
+    \item Canonical panel: 23 countries; 630 scenario-replicated rows (2000--2022); 34 unique country--year support points. Upstream raw extracts and machine-readable provenance shipped for full auditability.
+    \item Preprocessing treated as a numerical contract: $\varepsilon=10^{-4}$ interior band; clipped min--max mapping for $X$, $Y$, and observed $Z$; clamp $\Phi\in[-50,50]$ before $\exp(\Phi)$; clamp predictions to $[\varepsilon,1-\varepsilon]$.
+    \item Deterministic artifact pipeline: identical inputs reproduce identical outputs across all codepaths. Claim-evidence traceability map (Table~S0) links every major claim to its artifact source, evidence tier, and uncertainty caveat.
+\end{itemize}
+
+\vfill
+{\small\color{black}Prepared for submission.}\par
+
+\endgroup
+
+\end{document}
+

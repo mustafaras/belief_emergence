@@ -1,0 +1,182 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{type1cm}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage{xr-hyper}
+\externaldocument{main/main}
+
+\usepackage{mathptmx}
+\usepackage{helvet}
+\renewcommand{\bfdefault}{b}
+\renewcommand{\updefault}{n}
+\setlength{\emergencystretch}{4em}
+
+\newcommand{\ManuscriptKind}{Research Article}
+\newcommand{\SubmissionDate}{}
+
+\newcommand{\ManuscriptTitle}{Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}
+\newcommand{\ManuscriptSubtitle}{Regime-Diagnostic Saturating Models for Country Panels}
+\newcommand{\RunningHead}{Regime-Diagnostic Saturating Models for Country Panels}
+
+\newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
+\newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
+\newcommand{\AuthorC}{Prof.\ Dr\ Emine YET\.{I}\c{S}KUL}
+
+\newcommand{\AffilOne}{Middle East Technical University, Faculty of Architecture, Department of City and Regional Planning, Ankara, T\"urkiye}
+
+\newcommand{\CorrPhone}{+905066020098}
+
+\newcommand{\DataSummaryLine}{23 countries; 630 scenario-replicated rows (2000--2022); 34 unique country--years of effective support}
+
+\newcommand{\EmailA}{\href{mailto:mustafarasit@gmail.com}{mustafarasit@gmail.com}}
+\newcommand{\EmailB}{\href{mailto:sila1299@gmail.com}{sila1299@gmail.com}}
+\newcommand{\EmailC}{\href{mailto:yetiskul@metu.edu.tr}{yetiskul@metu.edu.tr}}
+
+\newcommand{\OrcidA}{\href{https://orcid.org/0009-0001-4809-3950}{0009-0001-4809-3950}}
+\newcommand{\OrcidB}{\href{https://orcid.org/0000-0002-6382-1311}{0000-0002-6382-1311}}
+\newcommand{\OrcidC}{\href{https://orcid.org/0000-0003-0829-1562}{0000-0003-0829-1562}}
+
+\newcommand{\WordCount}{7340 (main text) + 170 (abstract) + 1750 (3 tables + 4 figures) = 9260 words}
+\newcommand{\FigureCount}{31 (4 main + 27 supplementary)}
+\newcommand{\TableCount}{26 (3 main + 23 supplementary)}
+
+\newcommand{\KeywordsLine}{computational social science, macro-urban analytics, urbanization, inequality, bounded response modeling, comparative panel data, out-of-sample validation, reproducible visual analytics, support-aware inference}
+
+\newcommand{\AppRepoDownloadUrl}{https://drive.google.com/file/d/1uxhnqM1jfDOiYA5fPBjrwI6pL8nOXCaf/view?usp=sharing}
+\newcommand{\RawDataDownloadUrl}{https://drive.google.com/file/d/1fjV_AVC1AgIzuuqM6w_Q_fendd6NgisU/view?usp=sharing}
+
+\newcommand{\FundingStmt}{The authors received no external funding for the work.}
+\newcommand{\ConflictStmt}{The authors declare no conflict of interest.}
+
+\newcommand{\ContribStmt}{Conceptualization: M.R.\ \c{S}ahin, S.\ \"Ozdemir, E.\ Yeti\c{s}kul; Methodology: M.R.\ \c{S}ahin, S.\ \"Ozdemir, E.\ Yeti\c{s}kul; Software: M.R.\ \c{S}ahin; Data curation: M.R.\ \c{S}ahin, S.\ \"Ozdemir; Formal analysis: M.R.\ \c{S}ahin, S.\ \"Ozdemir; Visualization: M.R.\ \c{S}ahin; Writing -- original draft: M.R.\ \c{S}ahin; Writing -- review \& editing: S.\ \"Ozdemir, E.\ Yeti\c{s}kul; Supervision: E.\ Yeti\c{s}kul.}
+\newcommand{\AckStmt}{None.}
+\newcommand{\EthicsStmt}{Not applicable (publicly available secondary data; no human participants were recruited for this study).}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+\definecolor{MetaLabel}{HTML}{6B7280}% calm gray
+\newlength{\metalabelwidth}
+\setlength{\metalabelwidth}{3.20cm}
+\newcommand{\metalabel}[1]{{\color{MetaLabel}\strut\textls[90]{\textsc{#1}}}}%
+\newcommand{\metaitem}[2]{%
+    \noindent
+    \hbox to\linewidth{%
+        \vtop{\hsize=\metalabelwidth\raggedright\strut\metalabel{#1}:\par}%
+        \hspace{0.6em}%
+        \vtop{\hsize=\dimexpr\linewidth-\metalabelwidth-0.6em\relax\RaggedRight\setlength{\parindent}{0pt}\parindent=0pt\emergencystretch=1.0em\strut #2\par}%
+    }\par
+}%
+\newcommand{\metasep}{%
+    \vspace{0.08em}%
+    {\color{black!10}\rule{\linewidth}{0.3pt}}\par
+    \vspace{0.15em}%
+}%
+\newenvironment{MetaBlock}[1][3.20cm]{%
+    \begingroup
+    \setlength{\parskip}{0.14em}
+    \setlength{\parindent}{0pt}
+    \setlength{\metalabelwidth}{#1}
+    \raggedright
+    \emergencystretch=1.2em
+    \Urlmuskip=0mu plus 2mu\relax
+}{%
+    \endgroup
+}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begingroup
+\setstretch{0.98}
+
+{\small\textsc{Title Page}}\\[-0.35em]
+{\color{black!65}\rule{\linewidth}{0.6pt}}\\[0.8em]
+
+\begin{center}
+    {\LARGE\bfseries \ManuscriptTitle\par}
+    \vspace{0.35em}
+    {\large \ManuscriptSubtitle\par}
+\end{center}
+
+\vspace{0.45em}
+
+\footnotesize
+
+\begin{MetaBlock}[3.20cm]
+{\color{black!14}\rule{\linewidth}{0.4pt}\par}
+\vspace{0.35em}
+\metaitem{Manuscript type}{\ManuscriptKind}
+\metasep
+
+\metaitem{Running head}{\RunningHead}
+\metasep
+\metaitem{Data}{\DataSummaryLine}
+\metasep
+\metaitem{Word count}{\WordCount}
+\metasep
+\metaitem{Figures / Tables}{\FigureCount\ / \TableCount}
+\metasep
+\metaitem{Authors}{\textbf{\AuthorA}$^{1}$\,---\,\EmailA\,\textbar\,ORCID: \OrcidA\\
+\textbf{\AuthorB}$^{2}$\,---\,\EmailB\,\textbar\,ORCID: \OrcidB\\
+\textbf{\AuthorC}$^{3}$\,---\,\EmailC\,\textbar\,ORCID: \OrcidC}
+\metasep
+\metaitem{Affiliation}{$^{1,2,3}$\ \AffilOne}
+\metasep
+\metaitem{Corresponding author}{\AuthorA\\Email: \EmailA\\Phone: \CorrPhone}
+\metasep
+\metaitem{Keywords}{\KeywordsLine}
+\end{MetaBlock}
+
+\vspace{0.45em}
+
+\noindent\textbf{Declarations}\\[-0.2em]
+{\color{black!65}\rule{\linewidth}{0.4pt}}\\[0.4em]
+
+\begin{MetaBlock}[3.55cm]
+{\color{black!14}\rule{\linewidth}{0.4pt}\par}
+\vspace{0.45em}
+\metaitem{Funding}{The authors received no external funding for the work.}
+\metasep
+\metaitem{Conflict of interest}{The authors declare no conflict of interest.}
+\metasep
+\metaitem{Data \& code availability}{Submission bundle (app repository): \href{\AppRepoDownloadUrl}{\nolinkurl{\AppRepoDownloadUrl}}\par
+Raw data archive: \href{\RawDataDownloadUrl}{\nolinkurl{\RawDataDownloadUrl}}\par\vspace{0.65\baselineskip}\noindent%
+All analysis code, deterministic replication artifacts, and the canonical country--year panel are available in the repository. The core dataset is shipped as \nolinkurl{public/data/panel_canonical_23_countries_v1.csv} (23 countries; 630 country--year rows; 2000--2022).\par\vspace{\baselineskip}\noindent%
+An upstream merged table and a machine-readable provenance summary are provided as \nolinkurl{rawdata/panel_model_data.csv} and \nolinkurl{rawdata/panel_model_data.json}. A structured provenance inventory documenting license terms, redistribution status, and attribution requirements for each source is at \nolinkurl{src/data/analysis/data_code_provenance.json}.\par\vspace{\baselineskip}\noindent%
+\textbf{Freely redistributable} (with attribution): World Bank WDI (CC~BY~4.0), UNDP HDR/HDI (CC~BY~3.0~IGO), UCDP conflict data (CC~BY~4.0).\par\vspace{0.5\baselineskip}\noindent%
+\textbf{Conditional redistribution} (research use with attribution): OECD IDD/SOCX analytical extracts (OECD terms), EM-DAT disaster data (CRED academic license).\par\vspace{0.5\baselineskip}\noindent%
+\textbf{Redistribution restricted}: WVS/EVS microdata files are included in the reviewer archive under the WVS academic data use agreement. Public redistribution requires separate WVS Association permission; replicators must download from \href{https://www.worldvaluessurvey.org}{www.worldvaluessurvey.org}.\par\vspace{\baselineskip}\noindent%
+WVS construct definitions and item selections are versioned in \nolinkurl{config/wvs_items.yaml}; a raw-file\,$\rightarrow$\,column audit map is reported in Table~S5 in the Supplementary Material.}
+\metasep
+\metaitem{Deterministic replication}{(analysis artifacts) From the repository root, run \texttt{npm ci}. Then run \texttt{npm run generate:analysis} to regenerate the authoritative fit artifacts used by the app and reported in the paper.\par\vspace{\baselineskip}\noindent%
+This writes \nolinkurl{src/data/analysis/metrics_authoritative.json} and \nolinkurl{src/data/analysis/observed_vs_predicted_authoritative.csv}.\par\vspace{\baselineskip}\noindent%
+Optionally run \texttt{npm run generate:headline-metrics} to regenerate \nolinkurl{src/data/metrics/headline_metrics_authoritative.json}. The workflow uses pinned preprocessing and coefficient contracts so that identical inputs reproduce identical outputs across codepaths.}
+\metasep
+\metaitem{Paper build}{\texttt{pwsh -File .vscode/compile-paper.ps1} (requires a LaTeX distribution such as MiK\TeX and \texttt{biber}).}
+\metasep
+\metaitem{Scope note}{The repository includes raw source extracts (subject to their respective licenses), the integrated country--year panel, and a machine-readable provenance inventory (\nolinkurl{src/data/analysis/data_code_provenance.json}) documenting license terms, redistribution status, and attribution requirements for every data source. End-to-end reconstruction of the integrated panel from all upstream raw files is documented in the Supplementary Material runbook rather than shipped as a single turnkey ETL pipeline. WVS/EVS microdata files are included in the reviewer archive under the WVS academic data use agreement; public redistribution of these files requires separate permission from the WVS Association (see provenance inventory for details).}
+\metasep
+\metaitem{Author contributions}{\ContribStmt}
+\metasep
+\metaitem{Acknowledgements}{\AckStmt}
+\metasep
+\metaitem{Ethics/consent}{\EthicsStmt}
+\metasep
+\metaitem{Submission note}{Prepared for submission.}
+\end{MetaBlock}
+
+\endgroup
+
+\end{document}
