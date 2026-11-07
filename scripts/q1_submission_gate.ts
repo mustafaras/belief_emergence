@@ -694,7 +694,9 @@ function run(): void {
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n  Total gate time: ${elapsed}s`);
 
-  const allPass = emitReport();
+  // The report is emitted for its side effect (console output plus the JSON
+  // artefact); the exit code is derived from critical-item state below.
+  emitReport();
   // Exit semantics:
   //   0  READY        every gate passes
   //   0  CONDITIONAL  all *critical* gates pass; only major/minor warnings remain
