@@ -9,7 +9,7 @@ import { computeLeaveOneCountryOutRefit } from '../src/utils/validation/computeL
 function loadCanonicalRows() {
   const thisFile = fileURLToPath(import.meta.url)
   const testDir = path.dirname(thisFile)
-  const datasetPath = path.resolve(testDir, '../public/data/panel_canonical_23_countries_v1.csv')
+  const datasetPath = path.resolve(testDir, '../public/data/panel_canonical_v2.csv')
   const csvText = fs.readFileSync(datasetPath, 'utf8')
   return parsePanelCsvText(csvText, datasetPath)
 }
@@ -49,7 +49,8 @@ describe('Country-Out Refit Validation - Leakage & Integrity', () => {
     // Test years may be earlier than or later than training years - that's expected.
     for (const fold of data.folds) {
       // Just verify that test years are valid
-      expect(fold.testYearMin).toBeGreaterThanOrEqual(2000)
+      // The v2 panel reaches back to 1981; the old 2000 floor was a v1 range.
+      expect(fold.testYearMin).toBeGreaterThanOrEqual(1981)
       expect(fold.testYearMax).toBeLessThanOrEqual(2022)
     }
   })

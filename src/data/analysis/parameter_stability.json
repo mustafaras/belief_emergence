@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.parameter_stability.v1",
-  "generatedAtIso": "2026-11-07T13:26:35.419Z",
+  "generatedAtIso": "2026-11-07T14:55:46.593Z",
   "thresholdSignConsistency": 0.7,
   "thresholdsByTier": {
     "A": 0.7,
@@ -10,33 +10,33 @@
   "byProtocol": {
     "country_out": {
       "A": {
-        "nConvergedFolds": 45,
+        "nConvergedFolds": 48,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.5457417420059383,
-            "q25": 0.5421934344441075,
-            "q75": 0.5512814039740074,
-            "nFolds": 45,
+            "median": 0.5976268847898654,
+            "q25": 0.5942230355152989,
+            "q75": 0.6006969959982025,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "x_safe",
             "signConsistency": 1,
-            "median": 0.15313314392193472,
-            "q25": 0.14100017265329515,
-            "q75": 0.15969114278069352,
-            "nFolds": 45,
+            "median": 0.23462358704479772,
+            "q25": 0.22547705405309004,
+            "q75": 0.24177850865834197,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "y_safe",
             "signConsistency": 1,
-            "median": -0.4449443042282334,
-            "q25": -0.4553368869870666,
-            "q75": -0.43671182371124495,
-            "nFolds": 45,
+            "median": -0.4474651154609921,
+            "q25": -0.45043238830768595,
+            "q75": -0.4424014248993219,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -45,25 +45,25 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "m",
-            "signConsistency": 0.9777777777777777,
-            "median": 0.06026360595922542,
-            "q25": 0.056371520294708516,
-            "q75": 0.06770273763307129,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.056624304476898694,
+            "q25": 0.05491746160752227,
+            "q75": 0.05994677821093594,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 0.9777777777777777,
-            "median": 0.014606242870654004,
-            "q25": 0.01367092394379816,
-            "q75": 0.01596135544050284,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.018093112872673803,
+            "q25": 0.016190243710501605,
+            "q75": 0.019314539367789305,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -72,7 +72,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -81,16 +81,16 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "e",
-            "signConsistency": 0.9555555555555556,
-            "median": 0.026347223668168256,
-            "q25": 0.02276687760848936,
-            "q75": 0.0315908331357021,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.04411313631459499,
+            "q25": 0.03990830129756141,
+            "q75": 0.04738529078587069,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -99,49 +99,49 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "r",
-            "signConsistency": 1,
-            "median": 0.20235545831303528,
-            "q25": 0.19847854847584784,
-            "q75": 0.2055482228486307,
-            "nFolds": 45,
+            "signConsistency": 0.9583333333333334,
+            "median": 0.021075144375626374,
+            "q25": 0.016548526394093474,
+            "q75": 0.025473250729054805,
+            "nFolds": 48,
             "unstable": false
           }
         ],
         "unstableCount": 0
       },
       "B": {
-        "nConvergedFolds": 45,
+        "nConvergedFolds": 48,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.25693322334867863,
-            "q25": 0.2478429391232151,
-            "q75": 0.2622723536166043,
-            "nFolds": 45,
+            "median": 0.5781962239028344,
+            "q25": 0.568824324489377,
+            "q75": 0.5878005631345535,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "x_safe",
-            "signConsistency": 1,
-            "median": 0.4422941370084025,
-            "q25": 0.4373374683166587,
-            "q75": 0.45726577216400144,
-            "nFolds": 45,
+            "signConsistency": 0.8333333333333334,
+            "median": 0.03212087105273653,
+            "q25": 0.02022271723656066,
+            "q75": 0.04710418000268357,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "y_safe",
-            "signConsistency": 0.9777777777777777,
-            "median": 0.37153619665354914,
-            "q25": 0.3625390732473567,
-            "q75": 0.3863900629097718,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": -0.39545722179958087,
+            "q25": -0.41434506253232883,
+            "q75": -0.3837327345127872,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -150,25 +150,25 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "m",
-            "signConsistency": 0.9555555555555556,
-            "median": -0.05753605182988197,
-            "q25": -0.06376651003853917,
-            "q75": -0.05101979256863723,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.09357567036525744,
+            "q25": 0.09166983605624565,
+            "q75": 0.09655909662658185,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 0.8888888888888888,
-            "median": -0.00588914348854256,
-            "q25": -0.007416925798437269,
-            "q75": -0.004530445775003781,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.01985701997270572,
+            "q25": 0.017970679888736497,
+            "q75": 0.021461503030731646,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -177,7 +177,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -186,16 +186,16 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "e",
             "signConsistency": 1,
-            "median": 0.07142892094968269,
-            "q25": 0.06898627686678482,
-            "q75": 0.07510329597298918,
-            "nFolds": 45,
+            "median": 0.08111488720883857,
+            "q25": 0.07841846905622255,
+            "q75": 0.08393862207491316,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -204,43 +204,43 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "r",
-            "signConsistency": 1,
-            "median": 0.32300790981326744,
-            "q25": 0.31561297827482604,
-            "q75": 0.32729398360679307,
-            "nFolds": 45,
+            "signConsistency": 0.9791666666666666,
+            "median": 0.03856325205715039,
+            "q25": 0.03296687984195204,
+            "q75": 0.04317917105268179,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "y_safe:r",
-            "signConsistency": 1,
-            "median": -0.38722872276452924,
-            "q25": -0.40195282043939584,
-            "q75": -0.36968878558700147,
-            "nFolds": 45,
+            "signConsistency": 0.9583333333333334,
+            "median": 0.06387239844114301,
+            "q25": 0.05362370006820427,
+            "q75": 0.07029280075689326,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t:r",
-            "signConsistency": 0.9333333333333333,
-            "median": 0.013379058232753455,
-            "q25": 0.011057546236540983,
-            "q75": 0.016082628921519723,
-            "nFolds": 45,
+            "signConsistency": 0.9791666666666666,
+            "median": -0.01989241690546309,
+            "q25": -0.020847175277759096,
+            "q75": -0.01788194633274324,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "x_safe:y_safe",
-            "signConsistency": 1,
-            "median": -1.0737132478916105,
-            "q25": -1.1044963205188139,
-            "q75": -1.0552871439042122,
-            "nFolds": 45,
+            "signConsistency": 0.9583333333333334,
+            "median": 0.1702381294924109,
+            "q25": 0.15596318203185722,
+            "q75": 0.19560365185078177,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -249,7 +249,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -258,7 +258,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -267,49 +267,49 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "m^2",
             "signConsistency": 1,
-            "median": 0.20645913638963348,
-            "q25": 0.2018589678360826,
-            "q75": 0.21299308323251542,
-            "nFolds": 45,
+            "median": 0.09060796957284868,
+            "q25": 0.0890831509497303,
+            "q75": 0.09315934799870514,
+            "nFolds": 48,
             "unstable": false
           }
         ],
         "unstableCount": 0
       },
       "C": {
-        "nConvergedFolds": 45,
+        "nConvergedFolds": 48,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.2871937941687177,
-            "q25": 0.2709978496153014,
-            "q75": 0.2933132329912563,
-            "nFolds": 45,
+            "median": 0.6714556631242358,
+            "q25": 0.6630743544472475,
+            "q75": 0.6784825658697877,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "x_safe",
             "signConsistency": 1,
-            "median": 0.43573986425900196,
-            "q25": 0.428522530206236,
-            "q75": 0.4500400739403806,
-            "nFolds": 45,
+            "median": -0.15542343844745865,
+            "q25": -0.1677784548259753,
+            "q75": -0.1360338453481571,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "y_safe",
-            "signConsistency": 0.9777777777777777,
-            "median": 0.355480411072886,
-            "q25": 0.3454831046872801,
-            "q75": 0.39864905213542334,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": -0.4677374414016877,
+            "q25": -0.4817819732509565,
+            "q75": -0.4556269238106868,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -318,25 +318,25 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "m",
-            "signConsistency": 0.9333333333333333,
-            "median": -0.04491287191326622,
-            "q25": -0.05498074369326879,
-            "q75": -0.03177190458633625,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.07153230259167945,
+            "q25": 0.06969502241868748,
+            "q75": 0.07436624150458715,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 0.6,
-            "median": -0.0009606172215041817,
-            "q25": -0.002508885217214575,
-            "q75": 0.0012779522107162593,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.04094428072526367,
+            "q25": 0.0392265623406466,
+            "q75": 0.042695566777563684,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -345,7 +345,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -354,16 +354,16 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "e",
             "signConsistency": 1,
-            "median": 0.09059969401139376,
-            "q25": 0.08792101831174332,
-            "q75": 0.09363184134526163,
-            "nFolds": 45,
+            "median": 0.1276512187048512,
+            "q25": 0.12399372059923403,
+            "q75": 0.13099470571538274,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -372,43 +372,43 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "r",
             "signConsistency": 1,
-            "median": 0.33916967667020737,
-            "q25": 0.3340838622527487,
-            "q75": 0.35099310153796526,
-            "nFolds": 45,
+            "median": 0.1325300268250416,
+            "q25": 0.12666639377821298,
+            "q75": 0.13815564100805866,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "y_safe:r",
-            "signConsistency": 1,
-            "median": -0.4377582671355871,
-            "q25": -0.45409248237369015,
-            "q75": -0.41982089564212577,
-            "nFolds": 45,
+            "signConsistency": 0.8333333333333334,
+            "median": -0.018896291633093587,
+            "q25": -0.029499393112708133,
+            "q75": -0.011143839743131267,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t:r",
-            "signConsistency": 0.9555555555555556,
-            "median": 0.018028564101486018,
-            "q25": 0.01420420934644651,
-            "q75": 0.02018314996983825,
-            "nFolds": 45,
+            "signConsistency": 0.9375,
+            "median": -0.006998880293457773,
+            "q25": -0.008833036903964035,
+            "q75": -0.005107537384709828,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "x_safe:y_safe",
             "signConsistency": 1,
-            "median": -1.107215964938484,
-            "q25": -1.1343677738859657,
-            "q75": -1.085721517549001,
-            "nFolds": 45,
+            "median": 0.34900847422648207,
+            "q25": 0.3271308058993596,
+            "q75": 0.3649964237438168,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -417,7 +417,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -426,7 +426,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -435,7 +435,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -444,7 +444,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
@@ -453,34 +453,34 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 45,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "m^2",
             "signConsistency": 1,
-            "median": 0.182136827097496,
-            "q25": 0.17128045867568858,
-            "q75": 0.19209644521748373,
-            "nFolds": 45,
+            "median": 0.08755989288611825,
+            "q25": 0.08574502898734714,
+            "q75": 0.08974922731850374,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "t^2",
-            "signConsistency": 0.9777777777777777,
-            "median": -0.01657278047639342,
-            "q25": -0.01738913833307168,
-            "q75": -0.014478426224147856,
-            "nFolds": 45,
+            "signConsistency": 0.9791666666666666,
+            "median": -0.027223536149880774,
+            "q25": -0.027773940109444124,
+            "q75": -0.025910508613781823,
+            "nFolds": 48,
             "unstable": false
           },
           {
             "name": "e^2",
-            "signConsistency": 0.9777777777777777,
-            "median": 0.025044741491691443,
-            "q25": 0.023858231781086953,
-            "q75": 0.028436777179388625,
-            "nFolds": 45,
+            "signConsistency": 1,
+            "median": 0.07534940783291426,
+            "q25": 0.07357239772186204,
+            "q75": 0.07719446921075666,
+            "nFolds": 48,
             "unstable": false
           }
         ],
@@ -489,33 +489,33 @@
     },
     "rolling_origin": {
       "A": {
-        "nConvergedFolds": 2,
+        "nConvergedFolds": 12,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.5276621327070485,
-            "q25": 0.5018172037775921,
-            "q75": 0.5535070616365049,
-            "nFolds": 2,
+            "median": 0.4999804417689008,
+            "q25": 0.3876685022588987,
+            "q75": 0.5580437393656468,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "x_safe",
             "signConsistency": 1,
-            "median": 0.1923578910366,
-            "q25": 0.10561922781651359,
-            "q75": 0.27909655425668645,
-            "nFolds": 2,
+            "median": 0.5156104769799593,
+            "q25": 0.3751425869400077,
+            "q75": 0.8530954105562416,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "y_safe",
             "signConsistency": 1,
-            "median": -0.49454254775948436,
-            "q25": -0.5238354454764604,
-            "q75": -0.4652496500425082,
-            "nFolds": 2,
+            "median": -0.628801353111697,
+            "q25": -0.8900244682439207,
+            "q75": -0.5474318761805579,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -524,26 +524,26 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "m",
-            "signConsistency": 1,
-            "median": 0.09208031066559745,
-            "q25": 0.0719429238403885,
-            "q75": 0.1122176974908064,
-            "nFolds": 2,
+            "signConsistency": 0.9166666666666666,
+            "median": 0.05401194968683805,
+            "q25": 0.007439713475587846,
+            "q75": 0.05941765064359987,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 1,
-            "median": 0.014092938584547198,
-            "q25": 0.008867674263248424,
-            "q75": 0.019318202905845974,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.6666666666666666,
+            "median": 0.008538585726395695,
+            "q25": -0.005049487507035965,
+            "q75": 0.014106146489285144,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "d",
@@ -551,7 +551,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -560,17 +560,17 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "e",
-            "signConsistency": 0.5,
-            "median": 0.008359336606560887,
-            "q25": -0.00567862058936747,
-            "q75": 0.022397293802489244,
-            "nFolds": 2,
-            "unstable": true
+            "signConsistency": 0.75,
+            "median": 0.03654271774519381,
+            "q25": 0.020433987745162856,
+            "q75": 0.047250250802865275,
+            "nFolds": 12,
+            "unstable": false
           },
           {
             "name": "s",
@@ -578,49 +578,49 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "r",
-            "signConsistency": 1,
-            "median": 0.17688910652241752,
-            "q25": 0.17323808442855262,
-            "q75": 0.1805401286162824,
-            "nFolds": 2,
+            "signConsistency": 0.9166666666666666,
+            "median": -0.08782353579104304,
+            "q25": -0.130628095327758,
+            "q75": -0.03653491842310286,
+            "nFolds": 12,
             "unstable": false
           }
         ],
         "unstableCount": 1
       },
       "B": {
-        "nConvergedFolds": 2,
+        "nConvergedFolds": 12,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.31568452565686195,
-            "q25": 0.30934463098350773,
-            "q75": 0.32202442033021617,
-            "nFolds": 2,
+            "median": 0.6112269523546694,
+            "q25": 0.5359463483528744,
+            "q75": 0.6465743472482676,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "x_safe",
-            "signConsistency": 1,
-            "median": 0.3736018444747722,
-            "q25": 0.3185851338752131,
-            "q75": 0.42861855507433133,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.75,
+            "median": 0.039541733764596465,
+            "q25": 0.014688947177507572,
+            "q75": 0.4065875665795706,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "y_safe",
             "signConsistency": 1,
-            "median": 0.16750736422144108,
-            "q25": 0.11785797672229142,
-            "q75": 0.21715675172059076,
-            "nFolds": 2,
+            "median": -0.8920129874974729,
+            "q25": -1.201997465863221,
+            "q75": -0.6565914148461094,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -629,26 +629,26 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "m",
             "signConsistency": 1,
-            "median": -0.08789185257812218,
-            "q25": -0.13178279638676937,
-            "q75": -0.044000908769475,
-            "nFolds": 2,
+            "median": 0.15253901292135452,
+            "q25": 0.11765098490425456,
+            "q75": 0.1668580872038429,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 0.5,
-            "median": -0.015577997573581918,
-            "q25": -0.023812546518730045,
-            "q75": -0.00734344862843379,
-            "nFolds": 2,
-            "unstable": true
+            "signConsistency": 0.8333333333333334,
+            "median": 0.014819257222319346,
+            "q25": 0.0031080404537495686,
+            "q75": 0.020374101099319822,
+            "nFolds": 12,
+            "unstable": false
           },
           {
             "name": "d",
@@ -656,7 +656,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -665,17 +665,17 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "e",
-            "signConsistency": 1,
-            "median": 0.0578418219288947,
-            "q25": 0.04434553797782537,
-            "q75": 0.07133810587996403,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.75,
+            "median": 0.08181861277140745,
+            "q25": 0.0010870229934267991,
+            "q75": 0.10934367889119895,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "s",
@@ -683,43 +683,43 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "r",
-            "signConsistency": 1,
-            "median": 0.33354581255030524,
-            "q25": 0.30795978101371757,
-            "q75": 0.3591318440868929,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.75,
+            "median": -0.039828557674368464,
+            "q25": -0.06841740029637366,
+            "q75": -0.01031137702196612,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "y_safe:r",
-            "signConsistency": 1,
-            "median": -0.4219519033965911,
-            "q25": -0.4439789443994498,
-            "q75": -0.39992486239373237,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.5833333333333334,
+            "median": 0.012701048776630586,
+            "q25": -0.1445658741541983,
+            "q75": 0.02936486680647088,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "t:r",
-            "signConsistency": 1,
-            "median": 0.033063054109857236,
-            "q25": 0.027332650299899067,
-            "q75": 0.03879345791981541,
-            "nFolds": 2,
-            "unstable": false
+            "signConsistency": 0.6666666666666666,
+            "median": -0.005249437262229206,
+            "q25": -0.008377099034141411,
+            "q75": 0.018508002489292703,
+            "nFolds": 12,
+            "unstable": true
           },
           {
             "name": "x_safe:y_safe",
             "signConsistency": 1,
-            "median": -0.8013260747808251,
-            "q25": -0.8548439981557912,
-            "q75": -0.7478081514058592,
-            "nFolds": 2,
+            "median": 0.6293668476226157,
+            "q25": 0.49477232696179385,
+            "q75": 0.7954979977656815,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -728,7 +728,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -737,7 +737,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -746,49 +746,49 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "m^2",
             "signConsistency": 1,
-            "median": 0.22530880669677905,
-            "q25": 0.21595942803743978,
-            "q75": 0.23465818535611832,
-            "nFolds": 2,
+            "median": 0.12824658222735824,
+            "q25": 0.11436575452176118,
+            "q75": 0.13793444678244876,
+            "nFolds": 12,
             "unstable": false
           }
         ],
-        "unstableCount": 1
+        "unstableCount": 5
       },
       "C": {
-        "nConvergedFolds": 2,
+        "nConvergedFolds": 12,
         "coefficients": [
           {
             "name": "intercept",
             "signConsistency": 1,
-            "median": 0.36363626983744574,
-            "q25": 0.3553428274452577,
-            "q75": 0.3719297122296338,
-            "nFolds": 2,
+            "median": 0.7369898053609515,
+            "q25": 0.6734142500125844,
+            "q75": 0.7812676973899149,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "x_safe",
-            "signConsistency": 1,
-            "median": 0.3894282318103228,
-            "q25": 0.33138016135417314,
-            "q75": 0.4474763022664725,
-            "nFolds": 2,
+            "signConsistency": 0.6666666666666666,
+            "median": -0.17491250118347001,
+            "q25": -0.3151235544161455,
+            "q75": 0.018005498619910187,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "y_safe",
             "signConsistency": 1,
-            "median": 0.15662870076245383,
-            "q25": 0.10443686703405244,
-            "q75": 0.20882053449085522,
-            "nFolds": 2,
+            "median": -1.1065197155641844,
+            "q25": -1.4146525616930252,
+            "q75": -0.8335947474775309,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -797,26 +797,26 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "m",
             "signConsistency": 1,
-            "median": -0.1028015475000059,
-            "q25": -0.1431731221897864,
-            "q75": -0.062429972810225415,
-            "nFolds": 2,
+            "median": 0.08750604837890247,
+            "q25": 0.03906294422706513,
+            "q75": 0.09775223929017635,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "t",
-            "signConsistency": 0.5,
-            "median": -0.01030538837622496,
-            "q25": -0.018364372966210383,
-            "q75": -0.0022464037862395345,
-            "nFolds": 2,
-            "unstable": true
+            "signConsistency": 0.9166666666666666,
+            "median": 0.034364962947153764,
+            "q25": 0.023444252849764834,
+            "q75": 0.03891942898420074,
+            "nFolds": 12,
+            "unstable": false
           },
           {
             "name": "d",
@@ -824,7 +824,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -833,16 +833,16 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "e",
             "signConsistency": 1,
-            "median": 0.08620051632424292,
-            "q25": 0.07220122873294083,
-            "q75": 0.10019980391554502,
-            "nFolds": 2,
+            "median": 0.13351818211584954,
+            "q25": 0.11462791333477589,
+            "q75": 0.15579134962019128,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -851,43 +851,43 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "r",
             "signConsistency": 1,
-            "median": 0.3240681750472429,
-            "q25": 0.3073377316809539,
-            "q75": 0.3407986184135319,
-            "nFolds": 2,
+            "median": 0.13523416627678497,
+            "q25": 0.12615070223409444,
+            "q75": 0.1809602499890683,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "y_safe:r",
             "signConsistency": 1,
-            "median": -0.4535853081943288,
-            "q25": -0.4620090010418054,
-            "q75": -0.44516161534685217,
-            "nFolds": 2,
+            "median": -0.09556850008240647,
+            "q25": -0.3845381944656108,
+            "q75": -0.07067206194791859,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "t:r",
-            "signConsistency": 1,
-            "median": 0.03259582442837227,
-            "q25": 0.028487613579018533,
-            "q75": 0.036704035277726005,
-            "nFolds": 2,
+            "signConsistency": 0.9166666666666666,
+            "median": 0.02823182892670162,
+            "q25": 0.011229480847393145,
+            "q75": 0.04080895391773082,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "x_safe:y_safe",
             "signConsistency": 1,
-            "median": -0.8854183367368365,
-            "q25": -0.9402747391606634,
-            "q75": -0.8305619343130095,
-            "nFolds": 2,
+            "median": 1.0256734407921901,
+            "q25": 0.8453187849667143,
+            "q75": 1.1925794923892616,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -896,7 +896,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -905,7 +905,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -914,7 +914,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -923,7 +923,7 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
@@ -932,38 +932,38 @@
             "median": 0,
             "q25": 0,
             "q75": 0,
-            "nFolds": 2,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "m^2",
             "signConsistency": 1,
-            "median": 0.22980863938390797,
-            "q25": 0.22032869057922813,
-            "q75": 0.23928858818858778,
-            "nFolds": 2,
+            "median": 0.10335317675339516,
+            "q25": 0.0966727980454129,
+            "q75": 0.1116231615971466,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "t^2",
             "signConsistency": 1,
-            "median": -0.024729567421651215,
-            "q25": -0.025308216079896896,
-            "q75": -0.024150918763405534,
-            "nFolds": 2,
+            "median": -0.029423596160869,
+            "q25": -0.037363782243771626,
+            "q75": -0.027225656293604232,
+            "nFolds": 12,
             "unstable": false
           },
           {
             "name": "e^2",
-            "signConsistency": 0.5,
-            "median": 0.0033844377000434426,
-            "q25": 0.0007209102183208462,
-            "q75": 0.0060479651817660395,
-            "nFolds": 2,
-            "unstable": true
+            "signConsistency": 1,
+            "median": 0.1622089388212931,
+            "q25": 0.12326802067383709,
+            "q75": 0.25197226626821784,
+            "nFolds": 12,
+            "unstable": false
           }
         ],
-        "unstableCount": 2
+        "unstableCount": 0
       }
     }
   },
@@ -975,17 +975,16 @@
     },
     "B": {
       "medianSignConsistency": 1,
-      "unstableCount": 1,
+      "unstableCount": 2,
       "unstableTerms": [
-        "t"
+        "x_safe",
+        "y_safe:r"
       ]
     },
     "C": {
       "medianSignConsistency": 1,
-      "unstableCount": 1,
-      "unstableTerms": [
-        "t"
-      ]
+      "unstableCount": 0,
+      "unstableTerms": []
     }
   }
 }

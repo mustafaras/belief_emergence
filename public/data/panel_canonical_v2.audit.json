@@ -1,14 +1,14 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-07T12:33:56.789Z",
+  "generatedAtIso": "2026-11-07T14:11:29.327Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
     "macro": "rawdata/panel_model_data.csv"
   },
-  "rows": 49,
-  "countries": 45,
+  "rows": 87,
+  "countries": 48,
   "yearRange": [
-    2017,
+    1990,
     2022
   ],
   "retainedPredictors": [
@@ -37,12 +37,12 @@
       "reason": "disposable-income Gini unavailable outside the OECD sample"
     }
   ],
-  "observationsPerParameter": 7,
+  "observationsPerParameter": 12.43,
   "attrition": {
-    "noIso": 3,
-    "noMacro": 0,
-    "missingCovariate": 47,
-    "missingOutcome": 0
+    "noIso": 11,
+    "noMacro": 8,
+    "missingCovariate": 181,
+    "missingOutcome": 18
   },
   "validityAuditPassed": true
 }

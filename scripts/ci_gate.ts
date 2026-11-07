@@ -58,12 +58,12 @@ interface MetricExpectation {
 // which the predictor C was an exact rescaling of the outcome; they are not a
 // target to return to. See docs/KNOWN_ISSUES.md KI-01 and KI-13.
 const CANONICAL_METRICS: MetricExpectation[] = [
-  { key: 'n',    expected: 49,      tolerance: 0 },
-  { key: 'r2',   expected: 0.6319,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.8010,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1266,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.1630,  tolerance: 0.0001 },
-  { key: 'bias', expected: 0.0249,  tolerance: 0.0001 },
+  { key: 'n',    expected: 87,      tolerance: 0 },
+  { key: 'r2',   expected: 0.3854,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6311,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1498,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.1893,  tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0243,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -89,7 +89,7 @@ const REQUIRED_ARTIFACTS = [
 /*  Canonical data fingerprint                                         */
 /* ------------------------------------------------------------------ */
 
-const CANONICAL_PANEL_SHA256 = 'CBFC3A1F9A669ECD7C7941F9EA3CFA95A24E5ECE051520DF287CCE9E5BDD53C3';
+const CANONICAL_PANEL_SHA256 = '1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839';
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                          */
@@ -145,7 +145,7 @@ function runCommand(label: string, command: string): boolean {
 
 function phaseCanonicalDataFingerprint(): void {
   const panelPath = path.join(ROOT, 'public', 'data', 'panel_model_data.csv');
-  const altPath   = path.join(ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+  const altPath   = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.csv');
   const resolved  = fs.existsSync(panelPath) ? panelPath : altPath;
 
   if (!fs.existsSync(resolved)) {

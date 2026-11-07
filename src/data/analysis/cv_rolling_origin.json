@@ -1,20 +1,20 @@
 {
   "schemaVersion": "phase1.cv_rolling_origin.v1",
-  "generatedAtIso": "2026-11-07T13:26:35.416Z",
+  "generatedAtIso": "2026-11-07T14:55:46.589Z",
   "protocol": "rolling_origin_refit",
   "folds": [
     {
-      "foldId": "rolling_origin:2019->2020",
-      "trainYearMax": 2019,
-      "testYear": 2020,
-      "nTrainRows": 41,
+      "foldId": "rolling_origin:2006->2007",
+      "trainYearMax": 2006,
+      "testYear": 2007,
+      "nTrainRows": 29,
       "nTestRows": 4,
       "leakagePass": true,
       "tierResults": {
         "A": {
           "tier": "A",
           "converged": true,
-          "nTrain": 41,
+          "nTrain": 29,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -28,93 +28,93 @@
             "s",
             "r"
           ],
-          "intercept": 0.4759722748481358,
+          "intercept": 0.31445293734308993,
           "coefficients": [
-            0.36583521747677283,
-            -0.5531283431934366,
+            1.0661154121032461,
+            -1.0136949153444725,
             0,
-            0.051805537015179565,
-            0.0036424099419496495,
+            0.00832637013816661,
+            -0.02162470481284407,
             0,
             0,
-            -0.019716577785295827,
+            0.03210903690883812,
             0,
-            0.18419115071014733
+            -0.26884117319733347
           ],
           "trainMetrics": {
-            "n": 41,
-            "r2": 0.7335152390096594,
-            "corr": 0.8566416403210996,
-            "mae": 0.11073495018926625,
-            "rmse": 0.13711271593774377,
-            "bias": -0.00164318527136602
+            "n": 29,
+            "r2": 0.34986375644009593,
+            "corr": 0.5914951757522761,
+            "mae": 0.2011735399140044,
+            "rmse": 0.22574017321850037,
+            "bias": 1.5313421029312504e-17
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": -0.5074264793701821,
-            "corr": 0.190428970234716,
-            "mae": 0.25039492065613644,
-            "rmse": 0.3190087136253001,
-            "bias": 0.03798017057078454
+            "r2": 0.2785359306093427,
+            "corr": 0.5889842402612249,
+            "mae": 0.21732492222866923,
+            "rmse": 0.2457712601009046,
+            "bias": 0.011472866454070196
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": -0.5074264793701821,
-            "corr": 0.190428970234716,
-            "mae": 0.25039492065613644,
-            "rmse": 0.3190087136253001,
-            "bias": 0.03798017057078454
+            "r2": 0.2785359306093427,
+            "corr": 0.5889842402612249,
+            "mae": 0.21732492222866923,
+            "rmse": 0.2457712601009046,
+            "bias": 0.011472866454070196
           },
           "testMetrics": {
             "n": 4,
-            "r2": -0.5074264793701821,
-            "corr": 0.190428970234716,
-            "mae": 0.25039492065613644,
-            "rmse": 0.3190087136253001,
-            "bias": 0.03798017057078454
+            "r2": 0.2785359306093427,
+            "corr": 0.5889842402612249,
+            "mae": 0.21732492222866923,
+            "rmse": 0.2457712601009046,
+            "bias": 0.011472866454070196
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": -0.5074264793701821,
-            "corr": 0.190428970234716,
-            "mae": 0.25039492065613644,
-            "rmse": 0.3190087136253001,
-            "bias": 0.03798017057078454
+            "r2": 0.2785359306093427,
+            "corr": 0.5889842402612249,
+            "mae": 0.21732492222866923,
+            "rmse": 0.2457712601009046,
+            "bias": 0.011472866454070196
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
-          "predictionIntervalCoverage95": 0.5,
-          "predictionIntervalCoverage95Empirical": 0.5,
-          "predictionIntervalCoverage95Gaussian": 0.5,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 1,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.13880607599935277,
+          "residualStdTrain": 0.2297358847161576,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.29917224372783524,
-            "q975": 0.2429829515379256,
-            "centerShift": -0.028094646094954823,
-            "width": 0.5421551952657608
+            "q025": -0.37770353762101017,
+            "q975": 0.36182880305748544,
+            "centerShift": -0.007937367281762364,
+            "width": 0.7395323406784956
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": -0.26684069629695517,
-            "corr": 0.5328379888853577,
-            "mae": 0.2215059451391202,
-            "rmse": 0.2924458609609169,
-            "bias": 0.14451398826057385
+            "r2": 0.23566681467722916,
+            "corr": 0.9452597808142584,
+            "mae": 0.22056170726338728,
+            "rmse": 0.25296771657098693,
+            "bias": -0.11271888950953216
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": -0.26684069629695517,
-            "corr": 0.5328379888853577,
-            "mae": 0.2215059451391202,
-            "rmse": 0.2924458609609169,
-            "bias": 0.14451398826057385
+            "r2": 0.23566681467722916,
+            "corr": 0.9452597808142584,
+            "mae": 0.22056170726338728,
+            "rmse": 0.25296771657098693,
+            "bias": -0.11271888950953216
           }
         },
         "B": {
           "tier": "B",
           "converged": true,
-          "nTrain": 41,
+          "nTrain": 29,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -135,100 +135,100 @@
             "c_std^2",
             "m^2"
           ],
-          "intercept": 0.30300473631015346,
+          "intercept": 0.5057836340499313,
           "coefficients": [
-            0.4836352656738905,
-            0.06820858922314174,
+            0.7476472954731568,
+            -1.8790662135667393,
             0,
-            -0.17567374019541654,
-            -0.03204709546387818,
-            0,
-            0,
-            0.03084925402675603,
-            0,
-            0.3847178756234806,
-            -0.46600598540230853,
-            0.04452386172977357,
-            -0.6942902280308932,
+            0.13080368452020563,
+            -0.010392378835691413,
             0,
             0,
+            -0.08310878419906736,
             0,
-            0.2440075640154576
+            -0.11136377398402403,
+            -0.3396473771927997,
+            0.05719234085748787,
+            1.0207221122906756,
+            0,
+            0,
+            0,
+            0.1318957562795841
           ],
           "trainMetrics": {
-            "n": 41,
-            "r2": 0.7790932611183011,
-            "corr": 0.8826627187138262,
-            "mae": 0.09315509398200064,
-            "rmse": 0.12483777692853461,
-            "bias": 1.3403912126572011e-16
+            "n": 29,
+            "r2": 0.4416127652488211,
+            "corr": 0.6645488904117447,
+            "mae": 0.17385654543397824,
+            "rmse": 0.20920613003969799,
+            "bias": 2.1438789441037507e-16
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": -0.4043017769379955,
-            "corr": 0.4640335341954136,
-            "mae": 0.23350364995144068,
-            "rmse": 0.3079035517489371,
-            "bias": 0.10445028741734642
+            "r2": 0.4231017847283647,
+            "corr": 0.699386817381467,
+            "mae": 0.20647210619569395,
+            "rmse": 0.21977249587443606,
+            "bias": 0.07434537934368252
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": -0.4043017769379955,
-            "corr": 0.4640335341954136,
-            "mae": 0.23350364995144068,
-            "rmse": 0.3079035517489371,
-            "bias": 0.10445028741734642
+            "r2": 0.4231017847283647,
+            "corr": 0.699386817381467,
+            "mae": 0.20647210619569395,
+            "rmse": 0.21977249587443606,
+            "bias": 0.07434537934368252
           },
           "testMetrics": {
             "n": 4,
-            "r2": -0.4043017769379955,
-            "corr": 0.4640335341954136,
-            "mae": 0.23350364995144068,
-            "rmse": 0.3079035517489371,
-            "bias": 0.10445028741734642
+            "r2": 0.4231017847283647,
+            "corr": 0.699386817381467,
+            "mae": 0.20647210619569395,
+            "rmse": 0.21977249587443606,
+            "bias": 0.07434537934368252
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": -0.4043017769379955,
-            "corr": 0.4640335341954136,
-            "mae": 0.23350364995144068,
-            "rmse": 0.3079035517489371,
-            "bias": 0.10445028741734642
+            "r2": 0.4231017847283647,
+            "corr": 0.699386817381467,
+            "mae": 0.20647210619569395,
+            "rmse": 0.21977249587443606,
+            "bias": 0.07434537934368252
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
-          "predictionIntervalCoverage95": 0.75,
-          "predictionIntervalCoverage95Empirical": 0.75,
-          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.12638861622855926,
+          "residualStdTrain": 0.21290918088466598,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.23212643589506682,
-            "q975": 0.21517266480279296,
-            "centerShift": -0.00847688554613693,
-            "width": 0.4472991006978598
+            "q025": -0.37179637639051066,
+            "q975": 0.41158425296375967,
+            "centerShift": 0.019893938286624502,
+            "width": 0.7833806293542703
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": -0.0011716935697003716,
-            "corr": 0.5474960158644446,
-            "mae": 0.2091352365634201,
-            "rmse": 0.2599792921910808,
-            "bias": 0.10634834674650574
+            "r2": 0.6613024420178988,
+            "corr": 0.9266518132095464,
+            "mae": 0.16265988234849446,
+            "rmse": 0.16839522608460167,
+            "bias": -0.09055321696585186
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": -0.0011716935697003716,
-            "corr": 0.5474960158644446,
-            "mae": 0.2091352365634201,
-            "rmse": 0.2599792921910808,
-            "bias": 0.10634834674650574
+            "r2": 0.6613024420178988,
+            "corr": 0.9266518132095464,
+            "mae": 0.16265988234849446,
+            "rmse": 0.16839522608460167,
+            "bias": -0.09055321696585186
           }
         },
         "C": {
           "tier": "C",
           "converged": true,
-          "nTrain": 41,
+          "nTrain": 29,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -253,69 +253,1563 @@
             "t^2",
             "e^2"
           ],
-          "intercept": 0.3470493850530696,
+          "intercept": 0.6635820864083346,
           "coefficients": [
-            0.5055243727226222,
-            0.05224503330565106,
+            0.25610927851672954,
+            -1.90131818526452,
             0,
-            -0.18354469687956687,
-            -0.026423357556195806,
-            0,
-            0,
-            0.058201941141638715,
-            0,
-            0.35752906177982086,
-            -0.4704326938892821,
-            0.040812246127079746,
-            -0.7757055318891826,
+            0.0063234046444263226,
+            0.011796348002679702,
             0,
             0,
+            0.13591415785947358,
+            0,
+            0.16057625314994342,
+            -0.5479446619564818,
+            0.06768789133183345,
+            1.3736780269952078,
             0,
             0,
             0,
-            0.24876853699326762,
-            -0.023572270105159856,
-            -0.00194261726340175
+            0,
+            0,
+            0.09738598365678336,
+            -0.04308067066014987,
+            0.2581394904779081
           ],
           "trainMetrics": {
-            "n": 41,
-            "r2": 0.7884409477446748,
-            "corr": 0.8879421200789741,
-            "mae": 0.09208361363353311,
-            "rmse": 0.1221679680170533,
-            "bias": 3.5337586515508033e-16
+            "n": 29,
+            "r2": 0.609941039898499,
+            "corr": 0.7813375238420397,
+            "mae": 0.14565884614667476,
+            "rmse": 0.17485247919391894,
+            "bias": 0.0016586955767206226
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": -0.3332849505767501,
-            "corr": 0.4536659406828895,
-            "mae": 0.2221673605487528,
-            "rmse": 0.30001706937416606,
-            "bias": 0.08680083723861325
+            "r2": 0.6624236451048142,
+            "corr": 0.8606668516465666,
+            "mae": 0.1363388560943535,
+            "rmse": 0.16811627255472264,
+            "bias": 0.0771067533480399
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": -0.3332849505767501,
-            "corr": 0.4536659406828895,
-            "mae": 0.2221673605487528,
-            "rmse": 0.30001706937416606,
-            "bias": 0.08680083723861325
+            "r2": 0.6624236451048142,
+            "corr": 0.8606668516465666,
+            "mae": 0.1363388560943535,
+            "rmse": 0.16811627255472264,
+            "bias": 0.0771067533480399
           },
           "testMetrics": {
             "n": 4,
-            "r2": -0.3332849505767501,
-            "corr": 0.4536659406828895,
-            "mae": 0.2221673605487528,
-            "rmse": 0.30001706937416606,
-            "bias": 0.08680083723861325
+            "r2": 0.6624236451048142,
+            "corr": 0.8606668516465666,
+            "mae": 0.1363388560943535,
+            "rmse": 0.16811627255472264,
+            "bias": 0.0771067533480399
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": -0.3332849505767501,
-            "corr": 0.4536659406828895,
-            "mae": 0.2221673605487528,
-            "rmse": 0.30001706937416606,
-            "bias": 0.08680083723861325
+            "r2": 0.6624236451048142,
+            "corr": 0.8606668516465666,
+            "mae": 0.1363388560943535,
+            "rmse": 0.16811627255472264,
+            "bias": 0.0771067533480399
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.17793944676972728,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.27388256057428223,
+            "q975": 0.3029177417152731,
+            "centerShift": 0.014517590570495426,
+            "width": 0.5768003022895554
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": 0.7257713348707145,
+            "corr": 0.9625259557408394,
+            "mae": 0.14344397705496037,
+            "rmse": 0.15152356071617096,
+            "bias": -0.0824969521926942
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": 0.7257713348707145,
+            "corr": 0.9625259557408394,
+            "mae": 0.14344397705496037,
+            "rmse": 0.15152356071617096,
+            "bias": -0.0824969521926942
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2007->2009",
+      "trainYearMax": 2007,
+      "testYear": 2009,
+      "nTrainRows": 33,
+      "nTestRows": 1,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 33,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.3954278089487418,
+          "coefficients": [
+            0.8391509600484337,
+            -0.8811963219240786,
+            0,
+            0.004779743487851554,
+            -0.01593819509478759,
+            0,
+            0,
+            -0.005107351217217865,
+            0,
+            -0.1504824226457379
+          ],
+          "trainMetrics": {
+            "n": 33,
+            "r2": 0.3571670847975982,
+            "corr": 0.5976353483233781,
+            "mae": 0.19983276477465206,
+            "rmse": 0.2259361962108852,
+            "bias": -6.223977562292544e-17
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19200368232279758,
+            "rmse": 0.19200368232279758,
+            "bias": -0.19200368232279758
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19200368232279758,
+            "rmse": 0.19200368232279758,
+            "bias": -0.19200368232279758
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19200368232279758,
+            "rmse": 0.19200368232279758,
+            "bias": -0.19200368232279758
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19200368232279758,
+            "rmse": 0.19200368232279758,
+            "bias": -0.19200368232279758
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.2294392918768246,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.38635940514034406,
+            "q975": 0.33866894024858296,
+            "centerShift": -0.02384523244588055,
+            "width": 0.725028345388927
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.3316227664735415,
+            "rmse": 0.3316227664735415,
+            "bias": -0.3316227664735415
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.3316227664735415,
+            "rmse": 0.3316227664735415,
+            "bias": -0.3316227664735415
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 33,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.5137640399200443,
+          "coefficients": [
+            0.4485454151820081,
+            -1.1740478482081,
+            0,
+            0.15394548474119255,
+            -0.007112794084122437,
+            0,
+            0,
+            0.003821636483356039,
+            0,
+            -0.058890191215276055,
+            -0.1362986324272355,
+            0.0274769924825696,
+            0.5928652629927189,
+            0,
+            0,
+            0,
+            0.1595052994149256
+          ],
+          "trainMetrics": {
+            "n": 33,
+            "r2": 0.44750622292337305,
+            "corr": 0.6689600384423653,
+            "mae": 0.17190290272353878,
+            "rmse": 0.2094596894153706,
+            "bias": 1.0252741416803528e-15
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.15306679980330862,
+            "rmse": 0.15306679980330862,
+            "bias": -0.15306679980330862
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.15306679980330862,
+            "rmse": 0.15306679980330862,
+            "bias": -0.15306679980330862
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.15306679980330862,
+            "rmse": 0.15306679980330862,
+            "bias": -0.15306679980330862
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.15306679980330862,
+            "rmse": 0.15306679980330862,
+            "bias": -0.15306679980330862
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.21270732012919885,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3525785470808416,
+            "q975": 0.38575483310409564,
+            "centerShift": 0.016588143011627032,
+            "width": 0.7383333801849372
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.20720580063063532,
+            "rmse": 0.20720580063063532,
+            "bias": -0.20720580063063532
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.20720580063063532,
+            "rmse": 0.20720580063063532,
+            "bias": -0.20720580063063532
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 33,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.6257090618684349,
+          "coefficients": [
+            0.03407201482876898,
+            -1.227434142265425,
+            0,
+            0.02807942149780518,
+            -0.00006380007474271476,
+            0,
+            0,
+            0.15927021666077534,
+            0,
+            0.24211224050644287,
+            -0.36712600044538846,
+            0.05078828347561179,
+            0.9269064900720121,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.1347942976036979,
+            -0.035458152771645546,
+            0.2655855472137017
+          ],
+          "trainMetrics": {
+            "n": 33,
+            "r2": 0.6341011299335879,
+            "corr": 0.7964939320743366,
+            "mae": 0.13914399357805637,
+            "rmse": 0.1704579629071468,
+            "bias": 0.001375675795742151
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19980711895932918,
+            "rmse": 0.19980711895932918,
+            "bias": -0.19980711895932918
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19980711895932918,
+            "rmse": 0.19980711895932918,
+            "bias": -0.19980711895932918
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19980711895932918,
+            "rmse": 0.19980711895932918,
+            "bias": -0.19980711895932918
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.19980711895932918,
+            "rmse": 0.19980711895932918,
+            "bias": -0.19980711895932918
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.1730952422927598,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.2605599918664724,
+            "q975": 0.32530135592040443,
+            "centerShift": 0.032370682026966024,
+            "width": 0.5858613477868768
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.16255098085060188,
+            "rmse": 0.16255098085060188,
+            "bias": -0.16255098085060188
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.16255098085060188,
+            "rmse": 0.16255098085060188,
+            "bias": -0.16255098085060188
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2009->2010",
+      "trainYearMax": 2009,
+      "testYear": 2010,
+      "nTrainRows": 34,
+      "nTestRows": 1,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 34,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.36439058218936937,
+          "coefficients": [
+            0.9032764115993643,
+            -0.9212964444341867,
+            0,
+            0.003925328185638677,
+            -0.004873893902773027,
+            0,
+            0,
+            -0.050752758446854375,
+            0,
+            -0.12400998622176465
+          ],
+          "trainMetrics": {
+            "n": 34,
+            "r2": 0.37709997378444216,
+            "corr": 0.6140854802569278,
+            "mae": 0.19999204280018615,
+            "rmse": 0.22405589736507353,
+            "bias": -7.673600317262111e-17
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.05113855232087039,
+            "rmse": 0.05113855232087039,
+            "bias": -0.05113855232087039
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.05113855232087039,
+            "rmse": 0.05113855232087039,
+            "bias": -0.05113855232087039
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.05113855232087039,
+            "rmse": 0.05113855232087039,
+            "bias": -0.05113855232087039
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.05113855232087039,
+            "rmse": 0.05113855232087039,
+            "bias": -0.05113855232087039
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.22742534805142733,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3914959849349644,
+            "q975": 0.3168633273622983,
+            "centerShift": -0.037316328786333064,
+            "width": 0.7083593122972627
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.042549226271651475,
+            "rmse": 0.042549226271651475,
+            "bias": 0.042549226271651475
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.042549226271651475,
+            "rmse": 0.042549226271651475,
+            "bias": 0.042549226271651475
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 34,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.5351733663688818,
+          "coefficients": [
+            0.4331069510491199,
+            -1.314327107181283,
+            0,
+            0.15729175809118617,
+            0.0038539198365674585,
+            0,
+            0,
+            -0.031370529803338654,
+            0,
+            -0.02972568108632384,
+            -0.16936759933508672,
+            0.02898770249733479,
+            0.7452406525562436,
+            0,
+            0,
+            0,
+            0.1564953931520364
+          ],
+          "trainMetrics": {
+            "n": 34,
+            "r2": 0.4695707345863219,
+            "corr": 0.6853239686792613,
+            "mae": 0.17094622278042018,
+            "rmse": 0.20675734351628458,
+            "bias": -0.000735562054569959
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.2288556771952519,
+            "rmse": 0.2288556771952519,
+            "bias": -0.2288556771952519
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.2288556771952519,
+            "rmse": 0.2288556771952519,
+            "bias": -0.2288556771952519
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.2288556771952519,
+            "rmse": 0.2288556771952519,
+            "bias": -0.2288556771952519
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.2288556771952519,
+            "rmse": 0.2288556771952519,
+            "bias": -0.2288556771952519
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.20986532287338408,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3606768502863735,
+            "q975": 0.373422513362184,
+            "centerShift": 0.006372831537905271,
+            "width": 0.7340993636485575
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.0021403438033169575,
+            "rmse": 0.0021403438033169575,
+            "bias": -0.0021403438033169575
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.0021403438033169575,
+            "rmse": 0.0021403438033169575,
+            "bias": -0.0021403438033169575
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 34,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.6738128163943635,
+          "coefficients": [
+            0.04200467193502355,
+            -1.4371195108265944,
+            0,
+            0.042724118470151784,
+            0.02425142097897781,
+            0,
+            0,
+            0.10914403645800669,
+            0,
+            0.281781878584611,
+            -0.437511429458318,
+            0.03825880537586865,
+            1.0831664800438734,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.1381689253815695,
+            -0.0509752865580254,
+            0.24991652486498775
+          ],
+          "trainMetrics": {
+            "n": 34,
+            "r2": 0.6455871562406503,
+            "corr": 0.8036274058794809,
+            "mae": 0.13764461687006851,
+            "rmse": 0.16900592522728075,
+            "bias": 0.0011797591282075401
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.10798054278756941,
+            "rmse": 0.10798054278756941,
+            "bias": -0.10798054278756941
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.10798054278756941,
+            "rmse": 0.10798054278756941,
+            "bias": -0.10798054278756941
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.10798054278756941,
+            "rmse": 0.10798054278756941,
+            "bias": -0.10798054278756941
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.10798054278756941,
+            "rmse": 0.10798054278756941,
+            "bias": -0.10798054278756941
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.17154333065395966,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.27877862302792716,
+            "q975": 0.3265719703759811,
+            "centerShift": 0.02389667367402698,
+            "width": 0.6053505934039083
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.007982944050633933,
+            "rmse": 0.007982944050633933,
+            "bias": 0.007982944050633933
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.007982944050633933,
+            "rmse": 0.007982944050633933,
+            "bias": 0.007982944050633933
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2010->2011",
+      "trainYearMax": 2010,
+      "testYear": 2011,
+      "nTrainRows": 35,
+      "nTestRows": 8,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 35,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.3634963326044557,
+          "coefficients": [
+            0.8949287620796651,
+            -0.9165089072034468,
+            0,
+            -0.0012472129081334514,
+            -0.00557626831982478,
+            0,
+            0,
+            -0.0477618096025031,
+            0,
+            -0.12165336447370248
+          ],
+          "trainMetrics": {
+            "n": 35,
+            "r2": 0.38641602815994025,
+            "corr": 0.6216244429247045,
+            "mae": 0.19540532794732896,
+            "rmse": 0.22097007002892813,
+            "bias": -2.616954272330726e-16
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": -0.7152902273189654,
+            "corr": 0.022167818241542098,
+            "mae": 0.18749403431007639,
+            "rmse": 0.22991033668109248,
+            "bias": 0.07840633715636884
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": -0.7152902273189654,
+            "corr": 0.022167818241542098,
+            "mae": 0.18749403431007639,
+            "rmse": 0.22991033668109248,
+            "bias": 0.07840633715636884
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": -0.7152902273189654,
+            "corr": 0.022167818241542098,
+            "mae": 0.18749403431007639,
+            "rmse": 0.22991033668109248,
+            "bias": 0.07840633715636884
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": -0.7152902273189654,
+            "corr": 0.022167818241542098,
+            "mae": 0.18749403431007639,
+            "rmse": 0.22991033668109248,
+            "bias": 0.07840633715636884
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.875,
+          "predictionIntervalCoverage95Empirical": 0.875,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.224196081110515,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.38858961973160233,
+            "q975": 0.31191955633876417,
+            "centerShift": -0.03833503169641908,
+            "width": 0.7005091760703666
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.19937872811317925,
+            "corr": 0.6100684101035113,
+            "mae": 0.1428027635728493,
+            "rmse": 0.1570736201269996,
+            "bias": 0.07250917310736824
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.19937872811317925,
+            "corr": 0.6100684101035113,
+            "mae": 0.1428027635728493,
+            "rmse": 0.1570736201269996,
+            "bias": 0.07250917310736824
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 35,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.5362040090142053,
+          "coefficients": [
+            0.39774777175638754,
+            -1.2858463188285842,
+            0,
+            0.11781646219193757,
+            0.000870402305295899,
+            0,
+            0,
+            -0.0071168174763609204,
+            0,
+            -0.015092933148998122,
+            -0.17036198103608413,
+            0.015518339158200403,
+            0.7409625446198627,
+            0,
+            0,
+            0,
+            0.1361447398010871
+          ],
+          "trainMetrics": {
+            "n": 35,
+            "r2": 0.4640248158676388,
+            "corr": 0.6812191367095852,
+            "mae": 0.1706759222634948,
+            "rmse": 0.20652317410688315,
+            "bias": -0.00039652827920574104
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": -0.23891405322544146,
+            "corr": 0.4321513260259532,
+            "mae": 0.15097933288433193,
+            "rmse": 0.19539357563756,
+            "bias": 0.1071272793996329
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": -0.23891405322544146,
+            "corr": 0.4321513260259532,
+            "mae": 0.15097933288433193,
+            "rmse": 0.19539357563756,
+            "bias": 0.1071272793996329
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": -0.23891405322544146,
+            "corr": 0.4321513260259532,
+            "mae": 0.15097933288433193,
+            "rmse": 0.19539357563756,
+            "bias": 0.1071272793996329
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": -0.23891405322544146,
+            "corr": 0.4321513260259532,
+            "mae": 0.15097933288433193,
+            "rmse": 0.19539357563756,
+            "bias": 0.1071272793996329
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.2095378842131433,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.35693716140050635,
+            "q975": 0.3690619319669007,
+            "centerShift": 0.006062385283197164,
+            "width": 0.725999093367407
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.21828395727504246,
+            "corr": 0.6752338575504501,
+            "mae": 0.14349188946203761,
+            "rmse": 0.15520803593182458,
+            "bias": 0.08027164791528969
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.21828395727504246,
+            "corr": 0.6752338575504501,
+            "mae": 0.14349188946203761,
+            "rmse": 0.15520803593182458,
+            "bias": 0.08027164791528969
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 35,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.6722185508672469,
+          "coefficients": [
+            0.012649993216957256,
+            -1.4211217030348813,
+            0,
+            0.02122839592382264,
+            0.0210227484621259,
+            0,
+            0,
+            0.12322380820768242,
+            0,
+            0.2937460272060012,
+            -0.43677477652627794,
+            0.036115009277434926,
+            1.0980112403631388,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.1274126806855052,
+            -0.04831753305996889,
+            0.25850466858596177
+          ],
+          "trainMetrics": {
+            "n": 35,
+            "r2": 0.6463519178632182,
+            "corr": 0.8039914569638688,
+            "mae": 0.1365681638206719,
+            "rmse": 0.1677575611439705,
+            "bias": 0.0004994575772921323
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": -0.6209972836117823,
+            "corr": 0.732242791181842,
+            "mae": 0.18650325568167256,
+            "rmse": 0.22350170180654957,
+            "bias": 0.13211328171821293
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": -0.6209972836117823,
+            "corr": 0.732242791181842,
+            "mae": 0.18650325568167256,
+            "rmse": 0.22350170180654957,
+            "bias": 0.13211328171821293
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": -0.6209972836117823,
+            "corr": 0.732242791181842,
+            "mae": 0.18650325568167256,
+            "rmse": 0.22350170180654957,
+            "bias": 0.13211328171821293
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": -0.6209972836117823,
+            "corr": 0.732242791181842,
+            "mae": 0.18650325568167256,
+            "rmse": 0.22350170180654957,
+            "bias": 0.13211328171821293
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.875,
+          "predictionIntervalCoverage95Empirical": 0.875,
+          "predictionIntervalCoverage95Gaussian": 0.875,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.17020595182174345,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.27272545822668276,
+            "q975": 0.32183153627300654,
+            "centerShift": 0.024553039023161888,
+            "width": 0.5945569944996894
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.18090675233940312,
+            "corr": 0.7194478710965703,
+            "mae": 0.14117038106246052,
+            "rmse": 0.15887529269708198,
+            "bias": 0.09268658498425059
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.18090675233940312,
+            "corr": 0.7194478710965703,
+            "mae": 0.14117038106246052,
+            "rmse": 0.15887529269708198,
+            "bias": 0.09268658498425059
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2011->2012",
+      "trainYearMax": 2011,
+      "testYear": 2012,
+      "nTrainRows": 43,
+      "nTestRows": 8,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 43,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.4621312256023468,
+          "coefficients": [
+            0.6368755165679576,
+            -0.6847210933488547,
+            0,
+            0.07941610682748597,
+            0.0061594381514008395,
+            0,
+            0,
+            0.057531065396620874,
+            0,
+            -0.1686310202515403
+          ],
+          "trainMetrics": {
+            "n": 43,
+            "r2": 0.3661180050233709,
+            "corr": 0.6050770487602123,
+            "mae": 0.18114520488928576,
+            "rmse": 0.21541350723842806,
+            "bias": -9.294890438722241e-17
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": 0.7069129123890512,
+            "corr": 0.9100976431233261,
+            "mae": 0.07947653542969754,
+            "rmse": 0.11358223560916646,
+            "bias": -0.07255773626044335
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": 0.7069129123890512,
+            "corr": 0.9100976431233261,
+            "mae": 0.07947653542969754,
+            "rmse": 0.11358223560916646,
+            "bias": -0.07255773626044335
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": 0.7069129123890512,
+            "corr": 0.9100976431233261,
+            "mae": 0.07947653542969754,
+            "rmse": 0.11358223560916646,
+            "bias": -0.07255773626044335
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": 0.7069129123890512,
+            "corr": 0.9100976431233261,
+            "mae": 0.07947653542969754,
+            "rmse": 0.11358223560916646,
+            "bias": -0.07255773626044335
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.217962868251665,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3763311494347992,
+            "q975": 0.30576300164442544,
+            "centerShift": -0.03528407389518687,
+            "width": 0.6820941510792247
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.0841808977771541,
+            "corr": 0.7932962553065646,
+            "mae": 0.1985029719388834,
+            "rmse": 0.2007783675197993,
+            "bias": -0.13552545146751754
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.0841808977771541,
+            "corr": 0.7932962553065646,
+            "mae": 0.1985029719388834,
+            "rmse": 0.2007783675197993,
+            "bias": -0.13552545146751754
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 43,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6632978266955263,
+          "coefficients": [
+            0.033418023985618106,
+            -1.12801746257783,
+            0,
+            0.20796708075431858,
+            0.02013001125570335,
+            0,
+            0,
+            0.10909561143904761,
+            0,
+            -0.09286813445213205,
+            -0.0020044358901909476,
+            -0.004331597954656444,
+            1.0112879675040993,
+            0,
+            0,
+            0,
+            0.14330356772653374
+          ],
+          "trainMetrics": {
+            "n": 43,
+            "r2": 0.473789400792865,
+            "corr": 0.6883244963247855,
+            "mae": 0.1584704066537437,
+            "rmse": 0.19626755825223266,
+            "bias": -6.951803473961009e-16
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": 0.8895334484117383,
+            "corr": 0.9687346604883819,
+            "mae": 0.059474643178449915,
+            "rmse": 0.06973125287364475,
+            "bias": -0.016704088780504396
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": 0.8895334484117383,
+            "corr": 0.9687346604883819,
+            "mae": 0.059474643178449915,
+            "rmse": 0.06973125287364475,
+            "bias": -0.016704088780504396
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": 0.8895334484117383,
+            "corr": 0.9687346604883819,
+            "mae": 0.059474643178449915,
+            "rmse": 0.06973125287364475,
+            "bias": -0.016704088780504396
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": 0.8895334484117383,
+            "corr": 0.9687346604883819,
+            "mae": 0.059474643178449915,
+            "rmse": 0.06973125287364475,
+            "bias": -0.016704088780504396
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.19859033210047444,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.2975643523537467,
+            "q975": 0.34971401499336224,
+            "centerShift": 0.026074831319807784,
+            "width": 0.647278367347109
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.6455279128420057,
+            "corr": 0.8162337754473042,
+            "mae": 0.0957242726447145,
+            "rmse": 0.1249116919708904,
+            "bias": -0.020565822347522127
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.6455279128420057,
+            "corr": 0.8162337754473042,
+            "mae": 0.0957242726447145,
+            "rmse": 0.1249116919708904,
+            "bias": -0.020565822347522127
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 43,
+          "nTest": 8,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7827964342014566,
+          "coefficients": [
+            -0.1666417995060982,
+            -1.4124961812457397,
+            0,
+            0.11181647565121645,
+            0.03257410813030853,
+            0,
+            0,
+            0.11535810895149845,
+            0,
+            0.13839107793367766,
+            -0.25567206408455134,
+            0.04845939954331732,
+            1.346182323872214,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.10635998856769371,
+            -0.03181312216448293,
+            0.20549447416763975
+          ],
+          "trainMetrics": {
+            "n": 43,
+            "r2": 0.6148516220406186,
+            "corr": 0.7844468781509117,
+            "mae": 0.1367839069077854,
+            "rmse": 0.16791239657894877,
+            "bias": 0.0016090769038421
+          },
+          "testMetricsRefit": {
+            "n": 8,
+            "r2": 0.3375949422941732,
+            "corr": 0.746387779203554,
+            "mae": 0.14381926843471257,
+            "rmse": 0.1707551809860978,
+            "bias": -0.051800355064761446
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 8,
+            "r2": 0.3375949422941732,
+            "corr": 0.746387779203554,
+            "mae": 0.14381926843471257,
+            "rmse": 0.1707551809860978,
+            "bias": -0.051800355064761446
+          },
+          "testMetrics": {
+            "n": 8,
+            "r2": 0.3375949422941732,
+            "corr": 0.746387779203554,
+            "mae": 0.14381926843471257,
+            "rmse": 0.1707551809860978,
+            "bias": -0.051800355064761446
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 8,
+            "r2": 0.3375949422941732,
+            "corr": 0.746387779203554,
+            "mae": 0.14381926843471257,
+            "rmse": 0.1707551809860978,
+            "bias": -0.051800355064761446
+          },
+          "nTestUniqueCountryYears": 8,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.875,
+          "predictionIntervalCoverage95Empirical": 0.875,
+          "predictionIntervalCoverage95Gaussian": 0.875,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16989179352117595,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.2765394918835097,
+            "q975": 0.3068916586069269,
+            "centerShift": 0.015176083361708614,
+            "width": 0.5834311504904366
+          },
+          "testMetricsCanonical": {
+            "n": 8,
+            "r2": 0.699396449668588,
+            "corr": 0.8432133415304477,
+            "mae": 0.09185710996232477,
+            "rmse": 0.11502947102500267,
+            "bias": -0.022248370902646617
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 8,
+            "r2": 0.699396449668588,
+            "corr": 0.8432133415304477,
+            "mae": 0.09185710996232477,
+            "rmse": 0.11502947102500267,
+            "bias": -0.022248370902646617
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2012->2013",
+      "trainYearMax": 2012,
+      "testYear": 2013,
+      "nTrainRows": 51,
+      "nTestRows": 4,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 51,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.4666449885615108,
+          "coefficients": [
+            0.5908095148609707,
+            -0.6631706654430796,
+            0,
+            0.04845199460810147,
+            0.0054351761973479955,
+            0,
+            0,
+            0.06578054000424964,
+            0,
+            -0.11359851064559091
+          ],
+          "trainMetrics": {
+            "n": 51,
+            "r2": 0.4229309341968016,
+            "corr": 0.6503314966735927,
+            "mae": 0.16005270134854047,
+            "rmse": 0.20099265535274372,
+            "bias": -1.0884539457109377e-16
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.3958988473949181,
+            "corr": 0.6409945002169987,
+            "mae": 0.17638987919566038,
+            "rmse": 0.2370229468275714,
+            "bias": 0.1673800692485686
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.3958988473949181,
+            "corr": 0.6409945002169987,
+            "mae": 0.17638987919566038,
+            "rmse": 0.2370229468275714,
+            "bias": 0.1673800692485686
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.3958988473949181,
+            "corr": 0.6409945002169987,
+            "mae": 0.17638987919566038,
+            "rmse": 0.2370229468275714,
+            "bias": 0.1673800692485686
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.3958988473949181,
+            "corr": 0.6409945002169987,
+            "mae": 0.17638987919566038,
+            "rmse": 0.2370229468275714,
+            "bias": 0.1673800692485686
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
@@ -323,28 +1817,1994 @@
           "predictionIntervalCoverage95Empirical": 0.75,
           "predictionIntervalCoverage95Gaussian": 0.75,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.12368564071730861,
+          "residualStdTrain": 0.20299263153095426,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.2547743057545471,
-            "q975": 0.19401029490195654,
-            "centerShift": -0.030382005426295294,
-            "width": 0.44878460065650366
+            "q025": -0.34925388149721576,
+            "q975": 0.29870865542234964,
+            "centerShift": -0.025272613037433056,
+            "width": 0.6479625369195654
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": -0.09098259286475541,
-            "corr": 0.5192164025544439,
-            "mae": 0.2131786866993468,
-            "rmse": 0.2713897160194546,
-            "bias": 0.1177569375043022
+            "r2": 0.14378283587022467,
+            "corr": 0.5066641862305081,
+            "mae": 0.16171198784064653,
+            "rmse": 0.18563308567306186,
+            "bias": 0.05266401299406917
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": -0.09098259286475541,
-            "corr": 0.5192164025544439,
-            "mae": 0.2131786866993468,
-            "rmse": 0.2713897160194546,
-            "bias": 0.1177569375043022
+            "r2": 0.14378283587022467,
+            "corr": 0.5066641862305081,
+            "mae": 0.16171198784064653,
+            "rmse": 0.18563308567306186,
+            "bias": 0.05266401299406917
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 51,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.64968854335542,
+          "coefficients": [
+            0.02336267194468533,
+            -1.0413615354165264,
+            0,
+            0.17916589743502076,
+            0.017773299359643002,
+            0,
+            0,
+            0.11008788124765295,
+            0,
+            -0.0908409140874551,
+            0.032762106908869715,
+            -0.004825264785290953,
+            0.9462700333939953,
+            0,
+            0,
+            0,
+            0.12731767824475773
+          ],
+          "trainMetrics": {
+            "n": 51,
+            "r2": 0.5233815820007481,
+            "corr": 0.7235190038665977,
+            "mae": 0.1417120026243745,
+            "rmse": 0.18266346894970356,
+            "bias": 0.0006733991117942442
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.5850086369417313,
+            "corr": 0.7249543342138345,
+            "mae": 0.17949849979830804,
+            "rmse": 0.25256852936945884,
+            "bias": 0.16701197777393348
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.5850086369417313,
+            "corr": 0.7249543342138345,
+            "mae": 0.17949849979830804,
+            "rmse": 0.25256852936945884,
+            "bias": 0.16701197777393348
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.5850086369417313,
+            "corr": 0.7249543342138345,
+            "mae": 0.17949849979830804,
+            "rmse": 0.25256852936945884,
+            "bias": 0.16701197777393348
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.5850086369417313,
+            "corr": 0.7249543342138345,
+            "mae": 0.17949849979830804,
+            "rmse": 0.25256852936945884,
+            "bias": 0.16701197777393348
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.18447980705438488,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3002124511797834,
+            "q975": 0.3340687245857763,
+            "centerShift": 0.01692813670299645,
+            "width": 0.6342811757655598
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": 0.4379883827680874,
+            "corr": 0.774212278582188,
+            "mae": 0.12036918657786742,
+            "rmse": 0.15039592369483662,
+            "bias": 0.08059768424299764
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": 0.4379883827680874,
+            "corr": 0.774212278582188,
+            "mae": 0.12036918657786742,
+            "rmse": 0.15039592369483662,
+            "bias": 0.08059768424299764
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 51,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7962132053429407,
+          "coefficients": [
+            -0.3150411956105543,
+            -1.314101976047195,
+            0,
+            0.1030050341559561,
+            0.03548814099693229,
+            0,
+            0,
+            0.1549672431325378,
+            0,
+            0.10965069840062869,
+            -0.09955146360133815,
+            0.03335484252845976,
+            1.4772746730679627,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.10213034210700192,
+            -0.023268855639995225,
+            0.16925870219646375
+          ],
+          "trainMetrics": {
+            "n": 51,
+            "r2": 0.6197796653305371,
+            "corr": 0.7872978853130095,
+            "mae": 0.13041558077392199,
+            "rmse": 0.1631488288283112,
+            "bias": 0.0004872738323486023
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.8762104838719849,
+            "corr": 0.7258298170149452,
+            "mae": 0.2008443314716908,
+            "rmse": 0.27479207158505553,
+            "bias": 0.1851348674086474
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.8762104838719849,
+            "corr": 0.7258298170149452,
+            "mae": 0.2008443314716908,
+            "rmse": 0.27479207158505553,
+            "bias": 0.1851348674086474
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.8762104838719849,
+            "corr": 0.7258298170149452,
+            "mae": 0.2008443314716908,
+            "rmse": 0.27479207158505553,
+            "bias": 0.1851348674086474
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.8762104838719849,
+            "corr": 0.7258298170149452,
+            "mae": 0.2008443314716908,
+            "rmse": 0.27479207158505553,
+            "bias": 0.1851348674086474
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16477150533544058,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.30655121789413403,
+            "q975": 0.35697906044438377,
+            "centerShift": 0.025213921275124868,
+            "width": 0.6635302783385177
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": 0.37915191055368647,
+            "corr": 0.7553265945294783,
+            "mae": 0.12338972241762675,
+            "rmse": 0.15807241682659606,
+            "bias": 0.08750517335766445
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": 0.37915191055368647,
+            "corr": 0.7553265945294783,
+            "mae": 0.12338972241762675,
+            "rmse": 0.15807241682659606,
+            "bias": 0.08750517335766445
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2013->2014",
+      "trainYearMax": 2013,
+      "testYear": 2014,
+      "nTrainRows": 55,
+      "nTestRows": 2,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 55,
+          "nTest": 2,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.5344038693789728,
+          "coefficients": [
+            0.43422931709169305,
+            -0.5784244730326573,
+            0,
+            0.05723941440977693,
+            0.013662723973040275,
+            0,
+            0,
+            0.053636415313954466,
+            0,
+            -0.06204856093649519
+          ],
+          "trainMetrics": {
+            "n": 55,
+            "r2": 0.4084288825043597,
+            "corr": 0.6390844472319817,
+            "mae": 0.15982361745485307,
+            "rmse": 0.2022430061382487,
+            "bias": -9.891077855751394e-17
+          },
+          "testMetricsRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": 1.0000000000000002,
+            "mae": 0.0769498630615073,
+            "rmse": 0.07807792423902869,
+            "bias": -0.0769498630615073
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": 1.0000000000000002,
+            "mae": 0.0769498630615073,
+            "rmse": 0.07807792423902869,
+            "bias": -0.0769498630615073
+          },
+          "testMetrics": {
+            "n": 2,
+            "r2": null,
+            "corr": 1.0000000000000002,
+            "mae": 0.0769498630615073,
+            "rmse": 0.07807792423902869,
+            "bias": -0.0769498630615073
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 2,
+            "r2": null,
+            "corr": 1.0000000000000002,
+            "mae": 0.0769498630615073,
+            "rmse": 0.07807792423902869,
+            "bias": -0.0769498630615073
+          },
+          "nTestUniqueCountryYears": 2,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.20410703638273658,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.37955694787652094,
+            "q975": 0.3275070964976288,
+            "centerShift": -0.02602492568944606,
+            "width": 0.7070640443741498
+          },
+          "testMetricsCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.22355667743821953,
+            "rmse": 0.22962631575613987,
+            "bias": -0.22355667743821953
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.22355667743821953,
+            "rmse": 0.22962631575613987,
+            "bias": -0.22355667743821953
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 55,
+          "nTest": 2,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6455362818792167,
+          "coefficients": [
+            -0.04203026680383459,
+            -0.7426644395784194,
+            0,
+            0.1762925840762466,
+            0.022142767578936073,
+            0,
+            0,
+            0.11614577064862797,
+            0,
+            -0.06094289569934652,
+            0.07783695269028801,
+            -0.008770995252529848,
+            0.6658684322525126,
+            0,
+            0,
+            0,
+            0.12745353398026835
+          ],
+          "trainMetrics": {
+            "n": 55,
+            "r2": 0.4974888394782281,
+            "corr": 0.7053342793773885,
+            "mae": 0.14008166184764906,
+            "rmse": 0.18639870328064362,
+            "bias": 0.00017927091932214625
+          },
+          "testMetricsRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.09507385443598285,
+            "rmse": 0.11683402564251782,
+            "bias": -0.09507385443598285
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.09507385443598285,
+            "rmse": 0.11683402564251782,
+            "bias": -0.09507385443598285
+          },
+          "testMetrics": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.09507385443598285,
+            "rmse": 0.11683402564251782,
+            "bias": -0.09507385443598285
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.09507385443598285,
+            "rmse": 0.11683402564251782,
+            "bias": -0.09507385443598285
+          },
+          "nTestUniqueCountryYears": 2,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.1881166129945564,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3321272987083161,
+            "q975": 0.3682292787894648,
+            "centerShift": 0.018050990040574366,
+            "width": 0.7003565774977809
+          },
+          "testMetricsCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": 1,
+            "mae": 0.11483715163943534,
+            "rmse": 0.11554052663299506,
+            "bias": -0.11483715163943534
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": 1,
+            "mae": 0.11483715163943534,
+            "rmse": 0.11554052663299506,
+            "bias": -0.11483715163943534
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 55,
+          "nTest": 2,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7972965745824105,
+          "coefficients": [
+            -0.37080733945470357,
+            -0.9856052888629439,
+            0,
+            0.10601400192697605,
+            0.04302638227079475,
+            0,
+            0,
+            0.16319649585329749,
+            0,
+            0.12507666974297582,
+            -0.046064704052927175,
+            0.020992264531927072,
+            1.1413785485616108,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.1045760113997884,
+            -0.029328530623604188,
+            0.15408137867571076
+          ],
+          "trainMetrics": {
+            "n": 55,
+            "r2": 0.5799144692663233,
+            "corr": 0.7615216472929689,
+            "mae": 0.1301964291439122,
+            "rmse": 0.1704271935651617,
+            "bias": -6.7370351721572e-16
+          },
+          "testMetricsRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.10083283348576252,
+            "rmse": 0.11911833677982259,
+            "bias": -0.06341859229298394
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.10083283348576252,
+            "rmse": 0.11911833677982259,
+            "bias": -0.06341859229298394
+          },
+          "testMetrics": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.10083283348576252,
+            "rmse": 0.11911833677982259,
+            "bias": -0.06341859229298394
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 2,
+            "r2": null,
+            "corr": -1,
+            "mae": 0.10083283348576252,
+            "rmse": 0.11911833677982259,
+            "bias": -0.06341859229298394
+          },
+          "nTestUniqueCountryYears": 2,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.17199798431513455,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.33205626874566097,
+            "q975": 0.3936482319690399,
+            "centerShift": 0.030795981611689477,
+            "width": 0.7257045007147009
+          },
+          "testMetricsCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": 1,
+            "mae": 0.08754451308341094,
+            "rmse": 0.0878726328027971,
+            "bias": -0.08754451308341094
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 2,
+            "r2": null,
+            "corr": 1,
+            "mae": 0.08754451308341094,
+            "rmse": 0.0878726328027971,
+            "bias": -0.08754451308341094
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2014->2017",
+      "trainYearMax": 2014,
+      "testYear": 2017,
+      "nTrainRows": 57,
+      "nTestRows": 5,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 57,
+          "nTest": 5,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.5333158949762907,
+          "coefficients": [
+            0.44041143909894803,
+            -0.5944320407803145,
+            0,
+            0.05078448496389916,
+            0.015436414038019748,
+            0,
+            0,
+            0.04311489561396695,
+            0,
+            -0.05028473897610148
+          ],
+          "trainMetrics": {
+            "n": 57,
+            "r2": 0.4134765630631676,
+            "corr": 0.6430214718134275,
+            "mae": 0.15696235873342304,
+            "rmse": 0.19909382300747125,
+            "bias": -2.2399236461735613e-17
+          },
+          "testMetricsRefit": {
+            "n": 5,
+            "r2": -2.4283117982738904,
+            "corr": -0.3987257035538821,
+            "mae": 0.106813603823722,
+            "rmse": 0.12653225517724162,
+            "bias": 0.0415135877758175
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 5,
+            "r2": -2.4283117982738904,
+            "corr": -0.3987257035538821,
+            "mae": 0.106813603823722,
+            "rmse": 0.12653225517724162,
+            "bias": 0.0415135877758175
+          },
+          "testMetrics": {
+            "n": 5,
+            "r2": -2.4283117982738904,
+            "corr": -0.3987257035538821,
+            "mae": 0.106813603823722,
+            "rmse": 0.12653225517724162,
+            "bias": 0.0415135877758175
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 5,
+            "r2": -2.4283117982738904,
+            "corr": -0.3987257035538821,
+            "mae": 0.106813603823722,
+            "rmse": 0.12653225517724162,
+            "bias": 0.0415135877758175
+          },
+          "nTestUniqueCountryYears": 5,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.20086358068282437,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.37965931420786914,
+            "q975": 0.32335767379013036,
+            "centerShift": -0.028150820208869387,
+            "width": 0.7030169879979995
+          },
+          "testMetricsCanonical": {
+            "n": 5,
+            "r2": -0.28417608035659714,
+            "corr": -0.0265616024886636,
+            "mae": 0.0671865536148909,
+            "rmse": 0.07744143287970798,
+            "bias": 0.0016903841520835127
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 5,
+            "r2": -0.28417608035659714,
+            "corr": -0.0265616024886636,
+            "mae": 0.0671865536148909,
+            "rmse": 0.07744143287970798,
+            "bias": 0.0016903841520835127
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 57,
+          "nTest": 5,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6125963926956435,
+          "coefficients": [
+            0.020961299990723603,
+            -0.6786746933993646,
+            0,
+            0.16371325491304167,
+            0.021106370630169236,
+            0,
+            0,
+            0.10118464971067015,
+            0,
+            -0.04993143426241309,
+            0.08902477900307648,
+            -0.006883544254140089,
+            0.5288353612780821,
+            0,
+            0,
+            0,
+            0.1290396304744481
+          ],
+          "trainMetrics": {
+            "n": 57,
+            "r2": 0.4987356992335511,
+            "corr": 0.706220804398076,
+            "mae": 0.1380840583860504,
+            "rmse": 0.1840553681570293,
+            "bias": 0.0002331270654084069
+          },
+          "testMetricsRefit": {
+            "n": 5,
+            "r2": -2.9054902282864106,
+            "corr": -0.020718033846775213,
+            "mae": 0.12330341425837026,
+            "rmse": 0.13505133127773836,
+            "bias": -0.0560852279205132
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 5,
+            "r2": -2.9054902282864106,
+            "corr": -0.020718033846775213,
+            "mae": 0.12330341425837026,
+            "rmse": 0.13505133127773836,
+            "bias": -0.0560852279205132
+          },
+          "testMetrics": {
+            "n": 5,
+            "r2": -2.9054902282864106,
+            "corr": -0.020718033846775213,
+            "mae": 0.12330341425837026,
+            "rmse": 0.13505133127773836,
+            "bias": -0.0560852279205132
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 5,
+            "r2": -2.9054902282864106,
+            "corr": -0.020718033846775213,
+            "mae": 0.12330341425837026,
+            "rmse": 0.13505133127773836,
+            "bias": -0.0560852279205132
+          },
+          "nTestUniqueCountryYears": 5,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.18569129909581336,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3331135198903429,
+            "q975": 0.35777851670377325,
+            "centerShift": 0.012332498406715187,
+            "width": 0.6908920365941161
+          },
+          "testMetricsCanonical": {
+            "n": 5,
+            "r2": -2.273913075400893,
+            "corr": -0.21820985515527716,
+            "mae": 0.11517960544158365,
+            "rmse": 0.12365015470959813,
+            "bias": -0.04123672533846821
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 5,
+            "r2": -2.273913075400893,
+            "corr": -0.21820985515527716,
+            "mae": 0.11517960544158365,
+            "rmse": 0.12365015470959813,
+            "bias": -0.04123672533846821
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 57,
+          "nTest": 5,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7545414624542759,
+          "coefficients": [
+            -0.2997707107211345,
+            -0.885098313792021,
+            0,
+            0.0929397169227873,
+            0.03834667255231973,
+            0,
+            0,
+            0.15231178486879327,
+            0,
+            0.1309454146864394,
+            -0.023152529638979846,
+            0.02310881532494348,
+            0.9681804015405069,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.10553325186733778,
+            -0.027356996767772913,
+            0.15515917544612248
+          ],
+          "trainMetrics": {
+            "n": 57,
+            "r2": 0.5796014846924035,
+            "corr": 0.7613159030932932,
+            "mae": 0.12982119030386738,
+            "rmse": 0.16855657088781284,
+            "bias": -3.939343977726981e-16
+          },
+          "testMetricsRefit": {
+            "n": 5,
+            "r2": -4.207077976642962,
+            "corr": -0.24033379369533728,
+            "mae": 0.150849159871318,
+            "rmse": 0.15594021639341862,
+            "bias": -0.027987922226145767
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 5,
+            "r2": -4.207077976642962,
+            "corr": -0.24033379369533728,
+            "mae": 0.150849159871318,
+            "rmse": 0.15594021639341862,
+            "bias": -0.027987922226145767
+          },
+          "testMetrics": {
+            "n": 5,
+            "r2": -4.207077976642962,
+            "corr": -0.24033379369533728,
+            "mae": 0.150849159871318,
+            "rmse": 0.15594021639341862,
+            "bias": -0.027987922226145767
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 5,
+            "r2": -4.207077976642962,
+            "corr": -0.24033379369533728,
+            "mae": 0.150849159871318,
+            "rmse": 0.15594021639341862,
+            "bias": -0.027987922226145767
+          },
+          "nTestUniqueCountryYears": 5,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.1700548809837956,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3325957257202502,
+            "q975": 0.382944120057159,
+            "centerShift": 0.0251741971684544,
+            "width": 0.7155398457774091
+          },
+          "testMetricsCanonical": {
+            "n": 5,
+            "r2": -2.057187673581567,
+            "corr": -0.29933818583404626,
+            "mae": 0.11295366305573507,
+            "rmse": 0.11948740843397283,
+            "bias": -0.030636564887891682
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 5,
+            "r2": -2.057187673581567,
+            "corr": -0.29933818583404626,
+            "mae": 0.11295366305573507,
+            "rmse": 0.11948740843397283,
+            "bias": -0.030636564887891682
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2017->2018",
+      "trainYearMax": 2017,
+      "testYear": 2018,
+      "nTrainRows": 62,
+      "nTestRows": 16,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 62,
+          "nTest": 16,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.5544183764755926,
+          "coefficients": [
+            0.38854706835902486,
+            -0.5593733540719484,
+            0,
+            0.0663593903563395,
+            0.015820945188019696,
+            0,
+            0,
+            0.0409763985815495,
+            0,
+            -0.04788661762493566
+          ],
+          "trainMetrics": {
+            "n": 62,
+            "r2": 0.4124093622273286,
+            "corr": 0.6421910904178864,
+            "mae": 0.15243786916423138,
+            "rmse": 0.19394494844830568,
+            "bias": -8.147604454910423e-17
+          },
+          "testMetricsRefit": {
+            "n": 16,
+            "r2": 0.6033434002324777,
+            "corr": 0.7825061358570023,
+            "mae": 0.09383196677166694,
+            "rmse": 0.11313636551703612,
+            "bias": -0.0020777513240121358
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 16,
+            "r2": 0.6033434002324777,
+            "corr": 0.7825061358570023,
+            "mae": 0.09383196677166694,
+            "rmse": 0.11313636551703612,
+            "bias": -0.0020777513240121358
+          },
+          "testMetrics": {
+            "n": 16,
+            "r2": 0.6033434002324777,
+            "corr": 0.7825061358570023,
+            "mae": 0.09383196677166694,
+            "rmse": 0.11313636551703612,
+            "bias": -0.0020777513240121358
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 16,
+            "r2": 0.6033434002324777,
+            "corr": 0.7825061358570023,
+            "mae": 0.09383196677166694,
+            "rmse": 0.11313636551703612,
+            "bias": -0.0020777513240121358
+          },
+          "nTestUniqueCountryYears": 16,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.19552819878699934,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3793003051040527,
+            "q975": 0.3101246392306988,
+            "centerShift": -0.03458783293667697,
+            "width": 0.6894249443347515
+          },
+          "testMetricsCanonical": {
+            "n": 16,
+            "r2": 0.22956844880635352,
+            "corr": 0.5886040679757638,
+            "mae": 0.14969828888365583,
+            "rmse": 0.15767466271253924,
+            "bias": -0.06061497008850989
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 16,
+            "r2": 0.22956844880635352,
+            "corr": 0.5886040679757638,
+            "mae": 0.14969828888365583,
+            "rmse": 0.15767466271253924,
+            "bias": -0.06061497008850989
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 62,
+          "nTest": 16,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6376876714552182,
+          "coefficients": [
+            -0.004128111262140521,
+            -0.7138028234598508,
+            0,
+            0.15113254110151653,
+            0.014574339780709877,
+            0,
+            0,
+            0.11280370956868646,
+            0,
+            -0.027055389573796162,
+            0.010683312037705228,
+            -0.0127394124633122,
+            0.5284021601754887,
+            0,
+            0,
+            0,
+            0.11937221651409778
+          ],
+          "trainMetrics": {
+            "n": 62,
+            "r2": 0.49449237363456466,
+            "corr": 0.7032015895226857,
+            "mae": 0.13542102127885344,
+            "rmse": 0.1798891188839045,
+            "bias": 0.0000013574014368490337
+          },
+          "testMetricsRefit": {
+            "n": 16,
+            "r2": 0.5093372823265374,
+            "corr": 0.830628039847704,
+            "mae": 0.09369134786638707,
+            "rmse": 0.12583064148595205,
+            "bias": -0.035737376401702034
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 16,
+            "r2": 0.5093372823265374,
+            "corr": 0.830628039847704,
+            "mae": 0.09369134786638707,
+            "rmse": 0.12583064148595205,
+            "bias": -0.035737376401702034
+          },
+          "testMetrics": {
+            "n": 16,
+            "r2": 0.5093372823265374,
+            "corr": 0.830628039847704,
+            "mae": 0.09369134786638707,
+            "rmse": 0.12583064148595205,
+            "bias": -0.035737376401702034
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 16,
+            "r2": 0.5093372823265374,
+            "corr": 0.830628039847704,
+            "mae": 0.09369134786638707,
+            "rmse": 0.12583064148595205,
+            "bias": -0.035737376401702034
+          },
+          "nTestUniqueCountryYears": 16,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.18135762584774945,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3305047698482081,
+            "q975": 0.3534193924207214,
+            "centerShift": 0.011457311286256655,
+            "width": 0.6839241622689295
+          },
+          "testMetricsCanonical": {
+            "n": 16,
+            "r2": 0.6621083816481688,
+            "corr": 0.8278842435643142,
+            "mae": 0.08697471905208001,
+            "rmse": 0.1044199762559353,
+            "bias": -0.02479940499147446
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 16,
+            "r2": 0.6621083816481688,
+            "corr": 0.8278842435643142,
+            "mae": 0.08697471905208001,
+            "rmse": 0.1044199762559353,
+            "bias": -0.02479940499147446
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 62,
+          "nTest": 16,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7807581184527344,
+          "coefficients": [
+            -0.31537063083291894,
+            -0.8953278580637862,
+            0,
+            0.09600130766824976,
+            0.03324178489737524,
+            0,
+            0,
+            0.15826366908315176,
+            0,
+            0.13207725461989228,
+            -0.0811174433468298,
+            0.014056259292903,
+            0.9307099773326506,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.10164195454466146,
+            -0.02951866169813381,
+            0.14028535865155023
+          ],
+          "trainMetrics": {
+            "n": 62,
+            "r2": 0.5655803686716933,
+            "corr": 0.7520510333056432,
+            "mae": 0.12968128167210066,
+            "rmse": 0.16676148734191482,
+            "bias": -2.301026752650526e-16
+          },
+          "testMetricsRefit": {
+            "n": 16,
+            "r2": 0.20182601430816405,
+            "corr": 0.7155007251852276,
+            "mae": 0.12440986252189239,
+            "rmse": 0.16048840659005065,
+            "bias": -0.04108761421861704
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 16,
+            "r2": 0.20182601430816405,
+            "corr": 0.7155007251852276,
+            "mae": 0.12440986252189239,
+            "rmse": 0.16048840659005065,
+            "bias": -0.04108761421861704
+          },
+          "testMetrics": {
+            "n": 16,
+            "r2": 0.20182601430816405,
+            "corr": 0.7155007251852276,
+            "mae": 0.12440986252189239,
+            "rmse": 0.16048840659005065,
+            "bias": -0.04108761421861704
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 16,
+            "r2": 0.20182601430816405,
+            "corr": 0.7155007251852276,
+            "mae": 0.12440986252189239,
+            "rmse": 0.16048840659005065,
+            "bias": -0.04108761421861704
+          },
+          "nTestUniqueCountryYears": 16,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.9375,
+          "predictionIntervalCoverage95Empirical": 0.9375,
+          "predictionIntervalCoverage95Gaussian": 0.9375,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16812282819367472,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.32653427933436474,
+            "q975": 0.37823486067112166,
+            "centerShift": 0.02585029066837846,
+            "width": 0.7047691400054864
+          },
+          "testMetricsCanonical": {
+            "n": 16,
+            "r2": 0.7484656425381915,
+            "corr": 0.8906164904478354,
+            "mae": 0.07293969802914255,
+            "rmse": 0.0900935163694079,
+            "bias": -0.03263237269394619
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 16,
+            "r2": 0.7484656425381915,
+            "corr": 0.8906164904478354,
+            "mae": 0.07293969802914255,
+            "rmse": 0.0900935163694079,
+            "bias": -0.03263237269394619
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2018->2019",
+      "trainYearMax": 2018,
+      "testYear": 2019,
+      "nTrainRows": 78,
+      "nTestRows": 1,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 78,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.5693341036703583,
+          "coefficients": [
+            0.33261110132036786,
+            -0.5100448456089254,
+            0,
+            0.05801060570653519,
+            0.01091773330139055,
+            0,
+            0,
+            0.02943632610681091,
+            0,
+            -0.0024026133323575083
+          ],
+          "trainMetrics": {
+            "n": 78,
+            "r2": 0.44002747398477504,
+            "corr": 0.6633456790230359,
+            "mae": 0.13671974271089296,
+            "rmse": 0.1794705250628303,
+            "bias": 3.565523944469253e-16
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.01898366128648954,
+            "rmse": 0.01898366128648954,
+            "bias": 0.01898366128648954
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.01898366128648954,
+            "rmse": 0.01898366128648954,
+            "bias": 0.01898366128648954
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.01898366128648954,
+            "rmse": 0.01898366128648954,
+            "bias": 0.01898366128648954
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.01898366128648954,
+            "rmse": 0.01898366128648954,
+            "bias": 0.01898366128648954
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.18063215871127677,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3693226793907866,
+            "q975": 0.2866392133102862,
+            "centerShift": -0.04134173304025021,
+            "width": 0.6559618927010729
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.1455257556556736,
+            "rmse": 0.1455257556556736,
+            "bias": 0.1455257556556736
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.1455257556556736,
+            "rmse": 0.1455257556556736,
+            "bias": 0.1455257556556736
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 78,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6044117013733414,
+          "coefficients": [
+            0.05901179060578521,
+            -0.5898124444692829,
+            0,
+            0.11583697891913947,
+            0.015064174663928814,
+            0,
+            0,
+            0.07039047951051869,
+            0,
+            0.004033291359129887,
+            0.02765948478029001,
+            -0.0056736097391674595,
+            0.3402201988874545,
+            0,
+            0,
+            0,
+            0.0979136241293417
+          ],
+          "trainMetrics": {
+            "n": 78,
+            "r2": 0.5085481008481199,
+            "corr": 0.7131256024727374,
+            "mae": 0.12398785614983883,
+            "rmse": 0.16813196255121635,
+            "bias": 1.4703338262022906e-15
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.07165317384718006,
+            "rmse": 0.07165317384718006,
+            "bias": -0.07165317384718006
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.07165317384718006,
+            "rmse": 0.07165317384718006,
+            "bias": -0.07165317384718006
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.07165317384718006,
+            "rmse": 0.07165317384718006,
+            "bias": -0.07165317384718006
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.07165317384718006,
+            "rmse": 0.07165317384718006,
+            "bias": -0.07165317384718006
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16922020667938428,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.34650826366955695,
+            "q975": 0.3017070202688966,
+            "centerShift": -0.022400621700330164,
+            "width": 0.6482152839384536
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.09790936116961713,
+            "rmse": 0.09790936116961713,
+            "bias": 0.09790936116961713
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.09790936116961713,
+            "rmse": 0.09790936116961713,
+            "bias": 0.09790936116961713
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 78,
+          "nTest": 1,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7165819702470235,
+          "coefficients": [
+            -0.17179697374795788,
+            -0.6783955223282527,
+            0,
+            0.08300073576918303,
+            0.039202616778165694,
+            0,
+            0,
+            0.11143685408288351,
+            0,
+            0.12500111265692437,
+            -0.07064946533857508,
+            0.002749145510863583,
+            0.5562666700038887,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.09051391166191826,
+            -0.026563549463783465,
+            0.07094251318796933
+          ],
+          "trainMetrics": {
+            "n": 78,
+            "r2": 0.5509652391985767,
+            "corr": 0.7422703719613761,
+            "mae": 0.11995070308895152,
+            "rmse": 0.1607125361351043,
+            "bias": -3.6865097868963533e-16
+          },
+          "testMetricsRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.02878847870396406,
+            "rmse": 0.02878847870396406,
+            "bias": -0.02878847870396406
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.02878847870396406,
+            "rmse": 0.02878847870396406,
+            "bias": -0.02878847870396406
+          },
+          "testMetrics": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.02878847870396406,
+            "rmse": 0.02878847870396406,
+            "bias": -0.02878847870396406
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.02878847870396406,
+            "rmse": 0.02878847870396406,
+            "bias": -0.02878847870396406
+          },
+          "nTestUniqueCountryYears": 1,
+          "lowVarianceObservedTest": true,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16175275758448354,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.33981179251807747,
+            "q975": 0.3238814927613164,
+            "centerShift": -0.00796514987838054,
+            "width": 0.6636932852793939
+          },
+          "testMetricsCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.13206233887978636,
+            "rmse": 0.13206233887978636,
+            "bias": 0.13206233887978636
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 1,
+            "r2": null,
+            "corr": null,
+            "mae": 0.13206233887978636,
+            "rmse": 0.13206233887978636,
+            "bias": 0.13206233887978636
+          }
+        }
+      }
+    },
+    {
+      "foldId": "rolling_origin:2019->2020",
+      "trainYearMax": 2019,
+      "testYear": 2020,
+      "nTrainRows": 79,
+      "nTestRows": 4,
+      "leakagePass": true,
+      "tierResults": {
+        "A": {
+          "tier": "A",
+          "converged": true,
+          "nTrain": 79,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r"
+          ],
+          "intercept": 0.5689198280358096,
+          "coefficients": [
+            0.33492914268295615,
+            -0.5116074425063866,
+            0,
+            0.058461624833229024,
+            0.011216939051653916,
+            0,
+            0,
+            0.02894776739928976,
+            0,
+            -0.002479820817604453
+          ],
+          "trainMetrics": {
+            "n": 79,
+            "r2": 0.45301093549522053,
+            "corr": 0.6730608816980792,
+            "mae": 0.135205579006203,
+            "rmse": 0.17834234857724518,
+            "bias": 3.6679520180653904e-16
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.7676843270060407,
+            "corr": 0.0007798760596312923,
+            "mae": 0.20582530120162068,
+            "rmse": 0.2340996886636416,
+            "bias": 0.009623464808944951
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.7676843270060407,
+            "corr": 0.0007798760596312923,
+            "mae": 0.20582530120162068,
+            "rmse": 0.2340996886636416,
+            "bias": 0.009623464808944951
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.7676843270060407,
+            "corr": 0.0007798760596312923,
+            "mae": 0.20582530120162068,
+            "rmse": 0.2340996886636416,
+            "bias": 0.009623464808944951
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.7676843270060407,
+            "corr": 0.0007798760596312923,
+            "mae": 0.20582530120162068,
+            "rmse": 0.2340996886636416,
+            "bias": 0.009623464808944951
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.1794819278948963,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3685805082395095,
+            "q975": 0.2854587903553597,
+            "centerShift": -0.041560858942074896,
+            "width": 0.6540392985948692
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": -0.0409972675441308,
+            "corr": 0.25591504447493774,
+            "mae": 0.1617034421275434,
+            "rmse": 0.17964836758235425,
+            "bias": 0.056064477429649553
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": -0.0409972675441308,
+            "corr": 0.25591504447493774,
+            "mae": 0.1617034421275434,
+            "rmse": 0.17964836758235425,
+            "bias": 0.056064477429649553
+          }
+        },
+        "B": {
+          "tier": "B",
+          "converged": true,
+          "nTrain": 79,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "c_std^2",
+            "m^2"
+          ],
+          "intercept": 0.6098575120136953,
+          "coefficients": [
+            0.045665443543574824,
+            -0.5903415791863438,
+            0,
+            0.11231214919474897,
+            0.013690136989201906,
+            0,
+            0,
+            0.07231609341045767,
+            0,
+            0.006978022731186417,
+            0.0282324534390046,
+            -0.008245800294678599,
+            0.3513536530010022,
+            0,
+            0,
+            0,
+            0.09509954830750926
+          ],
+          "trainMetrics": {
+            "n": 79,
+            "r2": 0.519098990665404,
+            "corr": 0.7204852626415115,
+            "mae": 0.12296508205905354,
+            "rmse": 0.167221842328455,
+            "bias": 1.149572701447314e-15
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.25466706924641835,
+            "corr": 0.3233759362054845,
+            "mae": 0.1660854039296915,
+            "rmse": 0.1972253475987545,
+            "bias": -0.00668865989792998
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.25466706924641835,
+            "corr": 0.3233759362054845,
+            "mae": 0.1660854039296915,
+            "rmse": 0.1972253475987545,
+            "bias": -0.00668865989792998
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.25466706924641835,
+            "corr": 0.3233759362054845,
+            "mae": 0.1660854039296915,
+            "rmse": 0.1972253475987545,
+            "bias": -0.00668865989792998
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.25466706924641835,
+            "corr": 0.3233759362054845,
+            "mae": 0.1660854039296915,
+            "rmse": 0.1972253475987545,
+            "bias": -0.00668865989792998
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 1,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16829036337517922,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3465798522012755,
+            "q975": 0.30164828571001373,
+            "centerShift": -0.022465783245630894,
+            "width": 0.6482281379112893
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": 0.11396743277605748,
+            "corr": 0.49562164330954644,
+            "mae": 0.14181544363788692,
+            "rmse": 0.16573846911877424,
+            "bias": 0.06356843920468752
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": 0.11396743277605748,
+            "corr": 0.49562164330954644,
+            "mae": 0.14181544363788692,
+            "rmse": 0.16573846911877424,
+            "bias": 0.06356843920468752
+          }
+        },
+        "C": {
+          "tier": "C",
+          "converged": true,
+          "nTrain": 79,
+          "nTest": 4,
+          "featureNames": [
+            "x_safe",
+            "y_safe",
+            "c_std",
+            "m",
+            "t",
+            "d",
+            "g",
+            "e",
+            "s",
+            "r",
+            "y_safe:r",
+            "t:r",
+            "x_safe:y_safe",
+            "c_std:m",
+            "e:s",
+            "d:t",
+            "g:r",
+            "c_std^2",
+            "m^2",
+            "t^2",
+            "e^2"
+          ],
+          "intercept": 0.7194381482676271,
+          "coefficients": [
+            -0.17802802861898215,
+            -0.6790840485340608,
+            0,
+            0.08149140775988709,
+            0.038825033052879085,
+            0,
+            0,
+            0.11243732648460819,
+            0,
+            0.12650871306446732,
+            -0.07067959415103309,
+            0.0016015137861487023,
+            0.5613814655213405,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.08939407165926351,
+            -0.026831634871098194,
+            0.07110379823045165
+          ],
+          "trainMetrics": {
+            "n": 79,
+            "r2": 0.5612895328627244,
+            "corr": 0.7491926293466622,
+            "mae": 0.11858681315337612,
+            "rmse": 0.15971810828126012,
+            "bias": 8.010469924510623e-16
+          },
+          "testMetricsRefit": {
+            "n": 4,
+            "r2": -0.015459158014828223,
+            "corr": 0.4529438210914203,
+            "mae": 0.12681104692276568,
+            "rmse": 0.17743108602533228,
+            "bias": 0.042640633808881015
+          },
+          "testMetricsSupportCollapsedRefit": {
+            "n": 4,
+            "r2": -0.015459158014828223,
+            "corr": 0.4529438210914203,
+            "mae": 0.12681104692276568,
+            "rmse": 0.17743108602533228,
+            "bias": 0.042640633808881015
+          },
+          "testMetrics": {
+            "n": 4,
+            "r2": -0.015459158014828223,
+            "corr": 0.4529438210914203,
+            "mae": 0.12681104692276568,
+            "rmse": 0.17743108602533228,
+            "bias": 0.042640633808881015
+          },
+          "testMetricsSupportCollapsed": {
+            "n": 4,
+            "r2": -0.015459158014828223,
+            "corr": 0.4529438210914203,
+            "mae": 0.12681104692276568,
+            "rmse": 0.17743108602533228,
+            "bias": 0.042640633808881015
+          },
+          "nTestUniqueCountryYears": 4,
+          "lowVarianceObservedTest": false,
+          "predictionIntervalCoverage95": 0.75,
+          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalMethod95": "empirical_quantile_shifted",
+          "residualStdTrain": 0.16073868165771113,
+          "residualQuantileIntervalTrain95": {
+            "q025": -0.3385630294768969,
+            "q975": 0.3244260543843349,
+            "centerShift": -0.007068487546281005,
+            "width": 0.6629890838612318
+          },
+          "testMetricsCanonical": {
+            "n": 4,
+            "r2": -0.09585795060140034,
+            "corr": 0.37044507291982853,
+            "mae": 0.15432089610235838,
+            "rmse": 0.1843213369634557,
+            "bias": 0.07928874146933836
+          },
+          "testMetricsSupportCollapsedCanonical": {
+            "n": 4,
+            "r2": -0.09585795060140034,
+            "corr": 0.37044507291982853,
+            "mae": 0.15432089610235838,
+            "rmse": 0.1843213369634557,
+            "bias": 0.07928874146933836
           }
         }
       }
@@ -353,14 +3813,14 @@
       "foldId": "rolling_origin:2020->2022",
       "trainYearMax": 2020,
       "testYear": 2022,
-      "nTrainRows": 45,
+      "nTrainRows": 83,
       "nTestRows": 4,
       "leakagePass": true,
       "tierResults": {
         "A": {
           "tier": "A",
           "converged": true,
-          "nTrain": 45,
+          "nTrain": 83,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -374,58 +3834,58 @@
             "s",
             "r"
           ],
-          "intercept": 0.5793519905659612,
+          "intercept": 0.6140553830077421,
           "coefficients": [
-            0.018880564596427174,
-            -0.43595675232553205,
+            0.19580242468592446,
+            -0.4345279462589824,
             0,
-            0.13235508431601534,
-            0.024543467227144747,
+            0.0622857280747124,
+            0.018600357942097967,
             0,
             0,
-            0.0364352509984176,
+            0.04512152929916888,
             0,
-            0.1695870623346877
+            0.022401999468413855
           ],
           "trainMetrics": {
-            "n": 45,
-            "r2": 0.6761923074452718,
-            "corr": 0.8234971692799778,
-            "mae": 0.12192189906201462,
-            "rmse": 0.15111183207061737,
-            "bias": -0.0035842799228638644
+            "n": 83,
+            "r2": 0.4381590189891176,
+            "corr": 0.6619358159360119,
+            "mae": 0.13698921955339044,
+            "rmse": 0.180185215517731,
+            "bias": 3.4778070650908517e-16
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": 0.40563971888910244,
-            "corr": 0.6489476888859831,
-            "mae": 0.21343891302773632,
-            "rmse": 0.21590406925157923,
-            "bias": -0.025878527535493967
+            "r2": 0.5397810005593953,
+            "corr": 0.8113655647831749,
+            "mae": 0.12516414555444824,
+            "rmse": 0.127735849230855,
+            "bias": -0.003878774793588252
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": 0.40563971888910244,
-            "corr": 0.6489476888859831,
-            "mae": 0.21343891302773632,
-            "rmse": 0.21590406925157923,
-            "bias": -0.025878527535493967
+            "r2": 0.5397810005593953,
+            "corr": 0.8113655647831749,
+            "mae": 0.12516414555444824,
+            "rmse": 0.127735849230855,
+            "bias": -0.003878774793588252
           },
           "testMetrics": {
             "n": 4,
-            "r2": 0.40563971888910244,
-            "corr": 0.6489476888859831,
-            "mae": 0.21343891302773632,
-            "rmse": 0.21590406925157923,
-            "bias": -0.025878527535493967
+            "r2": 0.5397810005593953,
+            "corr": 0.8113655647831749,
+            "mae": 0.12516414555444824,
+            "rmse": 0.127735849230855,
+            "bias": -0.003878774793588252
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": 0.40563971888910244,
-            "corr": 0.6489476888859831,
-            "mae": 0.21343891302773632,
-            "rmse": 0.21590406925157923,
-            "bias": -0.025878527535493967
+            "r2": 0.5397810005593953,
+            "corr": 0.8113655647831749,
+            "mae": 0.12516414555444824,
+            "rmse": 0.127735849230855,
+            "bias": -0.003878774793588252
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
@@ -433,34 +3893,34 @@
           "predictionIntervalCoverage95Empirical": 1,
           "predictionIntervalCoverage95Gaussian": 1,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.15277636975277314,
+          "residualStdTrain": 0.18128057646101842,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.2738449870503101,
-            "q975": 0.25493009206983164,
-            "centerShift": -0.009457447490239218,
-            "width": 0.5287750791201418
+            "q025": -0.3696285906955892,
+            "q975": 0.28518707127524257,
+            "centerShift": -0.042220759710173306,
+            "width": 0.6548156619708317
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": 0.8181527544906209,
-            "corr": 0.9277352251807484,
-            "mae": 0.09672151591604192,
-            "rmse": 0.11942336429234966,
-            "bias": 0.020234708312129347
+            "r2": 0.0988135014748297,
+            "corr": 0.9390906459989173,
+            "mae": 0.15506697810522718,
+            "rmse": 0.1787466314111697,
+            "bias": 0.07430254554954957
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": 0.8181527544906209,
-            "corr": 0.9277352251807484,
-            "mae": 0.09672151591604192,
-            "rmse": 0.11942336429234966,
-            "bias": 0.020234708312129347
+            "r2": 0.0988135014748297,
+            "corr": 0.9390906459989173,
+            "mae": 0.15506697810522718,
+            "rmse": 0.1787466314111697,
+            "bias": 0.07430254554954957
           }
         },
         "B": {
           "tier": "B",
           "converged": true,
-          "nTrain": 45,
+          "nTrain": 83,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -481,100 +3941,100 @@
             "c_std^2",
             "m^2"
           ],
-          "intercept": 0.32836431500357044,
+          "intercept": 0.6578992153038072,
           "coefficients": [
-            0.26356842327565394,
-            0.26680613921974045,
+            -0.1074508489939312,
+            -0.5420816327693636,
             0,
-            -0.00010996496082782414,
-            0.0008911003167143394,
-            0,
-            0,
-            0.08483438983103336,
-            0,
-            0.2823737494771299,
-            -0.3778978213908737,
-            0.0216022464899409,
-            -0.908361921530757,
+            0.11715455304120553,
+            0.021334789910122387,
             0,
             0,
+            0.09132113213235722,
             0,
-            0.2066100493781005
+            0.03915977447655017,
+            0.014718785515555943,
+            -0.014178898886309854,
+            0.39388282732070934,
+            0,
+            0,
+            0,
+            0.09934636854475139
           ],
           "trainMetrics": {
-            "n": 45,
-            "r2": 0.7282030922321812,
-            "corr": 0.8533482886146985,
-            "mae": 0.10615643982399509,
-            "rmse": 0.13844495859767553,
-            "bias": 1.4432899320127036e-16
+            "n": 83,
+            "r2": 0.5137124495339415,
+            "corr": 0.7167373788679501,
+            "mae": 0.12255762856679368,
+            "rmse": 0.16763280893822569,
+            "bias": 7.74146476508204e-16
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": 0.5395395004972469,
-            "corr": 0.7879138725510977,
-            "mae": 0.1841789462291862,
-            "rmse": 0.1900343580821854,
-            "bias": -0.03185708853457833
+            "r2": 0.11113562679123856,
+            "corr": 0.6711105660882395,
+            "mae": 0.1512269424712529,
+            "rmse": 0.1775204039527734,
+            "bias": -0.09882382772756315
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": 0.5395395004972469,
-            "corr": 0.7879138725510977,
-            "mae": 0.1841789462291862,
-            "rmse": 0.1900343580821854,
-            "bias": -0.03185708853457833
+            "r2": 0.11113562679123856,
+            "corr": 0.6711105660882395,
+            "mae": 0.1512269424712529,
+            "rmse": 0.1775204039527734,
+            "bias": -0.09882382772756315
           },
           "testMetrics": {
             "n": 4,
-            "r2": 0.5395395004972469,
-            "corr": 0.7879138725510977,
-            "mae": 0.1841789462291862,
-            "rmse": 0.1900343580821854,
-            "bias": -0.03185708853457833
+            "r2": 0.11113562679123856,
+            "corr": 0.6711105660882395,
+            "mae": 0.1512269424712529,
+            "rmse": 0.1775204039527734,
+            "bias": -0.09882382772756315
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": 0.5395395004972469,
-            "corr": 0.7879138725510977,
-            "mae": 0.1841789462291862,
-            "rmse": 0.1900343580821854,
-            "bias": -0.03185708853457833
+            "r2": 0.11113562679123856,
+            "corr": 0.6711105660882395,
+            "mae": 0.1512269424712529,
+            "rmse": 0.1775204039527734,
+            "bias": -0.09882382772756315
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
-          "predictionIntervalCoverage95": 0.75,
-          "predictionIntervalCoverage95Empirical": 0.75,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
           "predictionIntervalCoverage95Gaussian": 1,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.1400093580679231,
+          "residualStdTrain": 0.1686518627556928,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.24189102269781992,
-            "q975": 0.24552290970266927,
-            "centerShift": 0.0018159435024246717,
-            "width": 0.4874139324004892
+            "q025": -0.34307607145547764,
+            "q975": 0.30865369353132743,
+            "centerShift": -0.017211188962075102,
+            "width": 0.651729764986805
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": 0.7390403888403625,
-            "corr": 0.9220782817922398,
-            "mae": 0.11878615110342361,
-            "rmse": 0.14306143808313218,
-            "bias": 0.04068687453336962
+            "r2": 0.261190109746833,
+            "corr": 0.8118967449222044,
+            "mae": 0.12649167603128064,
+            "rmse": 0.16184410228637175,
+            "bias": 0.09072078652430687
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": 0.7390403888403625,
-            "corr": 0.9220782817922398,
-            "mae": 0.11878615110342361,
-            "rmse": 0.14306143808313218,
-            "bias": 0.04068687453336962
+            "r2": 0.261190109746833,
+            "corr": 0.8118967449222044,
+            "mae": 0.12649167603128064,
+            "rmse": 0.16184410228637175,
+            "bias": 0.09072078652430687
           }
         },
         "C": {
           "tier": "C",
           "converged": true,
-          "nTrain": 45,
+          "nTrain": 83,
           "nTest": 4,
           "featureNames": [
             "x_safe",
@@ -599,98 +4059,98 @@
             "t^2",
             "e^2"
           ],
-          "intercept": 0.3802231546218219,
+          "intercept": 0.770201712531191,
           "coefficients": [
-            0.27333209089802346,
-            0.2610123682192566,
+            -0.31596510354050666,
+            -0.647986908697753,
             0,
-            -0.022058398120444928,
-            0.005812580803745889,
-            0,
-            0,
-            0.11419909150684712,
-            0,
-            0.2906072883146649,
-            -0.4367379224993755,
-            0.024379402729664795,
-            -0.9951311415844905,
+            0.09201136098862192,
+            0.046787444963191094,
             0,
             0,
+            0.1311222063722255,
+            0,
+            0.15241466173318996,
+            -0.09158553656347479,
+            -0.0031887925244870573,
+            0.600555669650821,
             0,
             0,
             0,
-            0.21084874177454832,
-            -0.025886864738142577,
-            0.008711492663488635
+            0,
+            0,
+            0.09453324121130152,
+            -0.028466893847960202,
+            0.07221600674069767
           ],
           "trainMetrics": {
-            "n": 45,
-            "r2": 0.7398821737013694,
-            "corr": 0.8601642070945622,
-            "mae": 0.10357576306718559,
-            "rmse": 0.13543781791531387,
-            "bias": 1.554312234475219e-16
+            "n": 83,
+            "r2": 0.559513125245267,
+            "corr": 0.7480084112187161,
+            "mae": 0.11595661754892946,
+            "rmse": 0.15954343299623683,
+            "bias": 0.00010079228221969388
           },
           "testMetricsRefit": {
             "n": 4,
-            "r2": 0.45917868654520577,
-            "corr": 0.7015821130769815,
-            "mae": 0.1965340812975939,
-            "rmse": 0.2059504936836859,
-            "bias": -0.028016815380015908
+            "r2": 0.16990484815288598,
+            "corr": 0.614290074603657,
+            "mae": 0.14642351338892662,
+            "rmse": 0.17155147893005632,
+            "bias": -0.08560877903512926
           },
           "testMetricsSupportCollapsedRefit": {
             "n": 4,
-            "r2": 0.45917868654520577,
-            "corr": 0.7015821130769815,
-            "mae": 0.1965340812975939,
-            "rmse": 0.2059504936836859,
-            "bias": -0.028016815380015908
+            "r2": 0.16990484815288598,
+            "corr": 0.614290074603657,
+            "mae": 0.14642351338892662,
+            "rmse": 0.17155147893005632,
+            "bias": -0.08560877903512926
           },
           "testMetrics": {
             "n": 4,
-            "r2": 0.45917868654520577,
-            "corr": 0.7015821130769815,
-            "mae": 0.1965340812975939,
-            "rmse": 0.2059504936836859,
-            "bias": -0.028016815380015908
+            "r2": 0.16990484815288598,
+            "corr": 0.614290074603657,
+            "mae": 0.14642351338892662,
+            "rmse": 0.17155147893005632,
+            "bias": -0.08560877903512926
           },
           "testMetricsSupportCollapsed": {
             "n": 4,
-            "r2": 0.45917868654520577,
-            "corr": 0.7015821130769815,
-            "mae": 0.1965340812975939,
-            "rmse": 0.2059504936836859,
-            "bias": -0.028016815380015908
+            "r2": 0.16990484815288598,
+            "corr": 0.614290074603657,
+            "mae": 0.14642351338892662,
+            "rmse": 0.17155147893005632,
+            "bias": -0.08560877903512926
           },
           "nTestUniqueCountryYears": 4,
           "lowVarianceObservedTest": false,
-          "predictionIntervalCoverage95": 0.75,
-          "predictionIntervalCoverage95Empirical": 0.75,
-          "predictionIntervalCoverage95Gaussian": 0.75,
+          "predictionIntervalCoverage95": 1,
+          "predictionIntervalCoverage95Empirical": 1,
+          "predictionIntervalCoverage95Gaussian": 1,
           "predictionIntervalMethod95": "empirical_quantile_shifted",
-          "residualStdTrain": 0.13696823731623936,
+          "residualStdTrain": 0.16051327879157776,
           "residualQuantileIntervalTrain95": {
-            "q025": -0.21035723921451663,
-            "q975": 0.25960360861273085,
-            "centerShift": 0.024623184699107112,
-            "width": 0.46996084782724745
+            "q025": -0.3460798862493735,
+            "q975": 0.314093886135932,
+            "centerShift": -0.015993000056720774,
+            "width": 0.6601737723853055
           },
           "testMetricsCanonical": {
             "n": 4,
-            "r2": 0.7012879521597428,
-            "corr": 0.9329337498236577,
-            "mae": 0.11639935287142053,
-            "rmse": 0.15306021098843356,
-            "bias": 0.06620231936585294
+            "r2": 0.0407505895627891,
+            "corr": 0.7464755863596081,
+            "mae": 0.14740343987559257,
+            "rmse": 0.1844150234752617,
+            "bias": 0.11877093499174786
           },
           "testMetricsSupportCollapsedCanonical": {
             "n": 4,
-            "r2": 0.7012879521597428,
-            "corr": 0.9329337498236577,
-            "mae": 0.11639935287142053,
-            "rmse": 0.15306021098843356,
-            "bias": 0.06620231936585294
+            "r2": 0.0407505895627891,
+            "corr": 0.7464755863596081,
+            "mae": 0.14740343987559257,
+            "rmse": 0.1844150234752617,
+            "bias": 0.11877093499174786
           }
         }
       }
@@ -699,100 +4159,100 @@
   "aggregatesRefit": {
     "A": {
       "rmse": {
-        "median": 0.2674563914384397,
-        "q25": 0.24168023034500946,
-        "q75": 0.29323255253186986
+        "median": 0.1271340522040483,
+        "q25": 0.10437175519753428,
+        "q75": 0.23095767467672976
       },
       "mae": {
-        "median": 0.23191691684193638,
-        "q25": 0.22267791493483635,
-        "q75": 0.2411559187490364
+        "median": 0.11598887468908511,
+        "q25": 0.07884486733764998,
+        "q75": 0.18862144631325667
       },
       "r2": {
-        "median": -0.050893380240539854,
-        "q25": -0.279159929805361,
-        "q75": 0.17737316932428132
+        "median": -0.05868145839278771,
+        "q25": -0.7283887522407342,
+        "q75": 0.5556716004776658
       },
       "corr": {
-        "median": 0.4196883295603495,
-        "q25": 0.3050586498975328,
-        "q75": 0.5343180092231663
+        "median": 0.6409945002169987,
+        "q25": 0.022167818241542098,
+        "q75": 0.8113655647831749
       },
       "bias": {
-        "median": 0.006050821517645286,
-        "q25": -0.00991385300892434,
-        "q75": 0.022015496044214912
+        "median": 0.0037728567424664076,
+        "q25": -0.05649334830576363,
+        "q75": 0.02461614290882153
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.625,
-        "q75": 0.875
+        "median": 1,
+        "q25": 0.84375,
+        "q75": 1
       },
       "failureRate": 0
     },
     "B": {
       "rmse": {
-        "median": 0.24896895491556126,
-        "q25": 0.21950165649887332,
-        "q75": 0.2784362533322492
+        "median": 0.165293601878041,
+        "q25": 0.1235814875250935,
+        "q75": 0.2028621346676749
       },
       "mae": {
-        "median": 0.20884129809031343,
-        "q25": 0.19651012215974983,
-        "q75": 0.22117247402087706
+        "median": 0.15110313767779243,
+        "q25": 0.0947282277935839,
+        "q75": 0.16943867789684564
       },
       "r2": {
-        "median": 0.06761886177962567,
-        "q25": -0.16834145757918492,
-        "q75": 0.3035791811384363
+        "median": -0.06388921321710145,
+        "q25": -0.3372524611702466,
+        "q75": 0.44466065912790786
       },
       "corr": {
-        "median": 0.6259737033732556,
-        "q25": 0.5450036187843346,
-        "q75": 0.7069437879621767
+        "median": 0.6711105660882395,
+        "q25": 0.3233759362054845,
+        "q75": 0.7249543342138345
       },
       "bias": {
-        "median": 0.036296599441384046,
-        "q25": 0.0022197554534028573,
-        "q75": 0.07037344342936525
+        "median": -0.045911302161107614,
+        "q25": -0.09601134775887793,
+        "q75": 0.013569849912473144
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.75,
-        "q75": 0.75
+        "median": 1,
+        "q25": 1,
+        "q75": 1
       },
       "failureRate": 0
     },
     "C": {
       "rmse": {
-        "median": 0.252983781528926,
-        "q25": 0.22946713760630594,
-        "q75": 0.276500425451546
+        "median": 0.16943572677041022,
+        "q25": 0.1467347464900196,
+        "q75": 0.1830250942588315
       },
       "mae": {
-        "median": 0.20935072092317336,
-        "q25": 0.20294240111038364,
-        "q75": 0.21575904073596305
+        "median": 0.14007906226453304,
+        "q25": 0.12030253258831164,
+        "q75": 0.15976268382390665
       },
       "r2": {
-        "median": 0.06294686798422783,
-        "q25": -0.13516904129626114,
-        "q75": 0.2610627772647168
+        "median": 0.07722284506902888,
+        "q25": -0.6848005836768329,
+        "q75": 0.23576824630466633
       },
       "corr": {
-        "median": 0.5776240268799355,
-        "q25": 0.5156449837814125,
-        "q75": 0.6396030699784584
+        "median": 0.7155007251852276,
+        "q25": 0.4529438210914203,
+        "q75": 0.732242791181842
       },
       "bias": {
-        "median": 0.02939201092929867,
-        "q25": 0.0006875977746413804,
-        "q75": 0.058096424083955954
+        "median": -0.03493804646129055,
+        "q25": -0.06896613897852027,
+        "q75": 0.05125716369367074
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.75,
-        "q75": 0.75
+        "median": 1,
+        "q25": 0.875,
+        "q75": 1
       },
       "failureRate": 0
     }
@@ -800,349 +4260,349 @@
   "aggregatesRefitSupportCollapsed": {
     "A": {
       "rmse": {
-        "median": 0.2674563914384397,
-        "q25": 0.24168023034500946,
-        "q75": 0.29323255253186986
+        "median": 0.1271340522040483,
+        "q25": 0.10437175519753428,
+        "q75": 0.23095767467672976
       },
       "mae": {
-        "median": 0.23191691684193638,
-        "q25": 0.22267791493483635,
-        "q75": 0.2411559187490364
+        "median": 0.11598887468908511,
+        "q25": 0.07884486733764998,
+        "q75": 0.18862144631325667
       },
       "r2": {
-        "median": -0.050893380240539854,
-        "q25": -0.279159929805361,
-        "q75": 0.17737316932428132
+        "median": -0.05868145839278771,
+        "q25": -0.7283887522407342,
+        "q75": 0.5556716004776658
       },
       "corr": {
-        "median": 0.4196883295603495,
-        "q25": 0.3050586498975328,
-        "q75": 0.5343180092231663
+        "median": 0.6409945002169987,
+        "q25": 0.022167818241542098,
+        "q75": 0.8113655647831749
       },
       "bias": {
-        "median": 0.006050821517645286,
-        "q25": -0.00991385300892434,
-        "q75": 0.022015496044214912
+        "median": 0.0037728567424664076,
+        "q25": -0.05649334830576363,
+        "q75": 0.02461614290882153
       }
     },
     "B": {
       "rmse": {
-        "median": 0.24896895491556126,
-        "q25": 0.21950165649887332,
-        "q75": 0.2784362533322492
+        "median": 0.165293601878041,
+        "q25": 0.1235814875250935,
+        "q75": 0.2028621346676749
       },
       "mae": {
-        "median": 0.20884129809031343,
-        "q25": 0.19651012215974983,
-        "q75": 0.22117247402087706
+        "median": 0.15110313767779243,
+        "q25": 0.0947282277935839,
+        "q75": 0.16943867789684564
       },
       "r2": {
-        "median": 0.06761886177962567,
-        "q25": -0.16834145757918492,
-        "q75": 0.3035791811384363
+        "median": -0.06388921321710145,
+        "q25": -0.3372524611702466,
+        "q75": 0.44466065912790786
       },
       "corr": {
-        "median": 0.6259737033732556,
-        "q25": 0.5450036187843346,
-        "q75": 0.7069437879621767
+        "median": 0.6711105660882395,
+        "q25": 0.3233759362054845,
+        "q75": 0.7249543342138345
       },
       "bias": {
-        "median": 0.036296599441384046,
-        "q25": 0.0022197554534028573,
-        "q75": 0.07037344342936525
+        "median": -0.045911302161107614,
+        "q25": -0.09601134775887793,
+        "q75": 0.013569849912473144
       }
     },
     "C": {
       "rmse": {
-        "median": 0.252983781528926,
-        "q25": 0.22946713760630594,
-        "q75": 0.276500425451546
+        "median": 0.16943572677041022,
+        "q25": 0.1467347464900196,
+        "q75": 0.1830250942588315
       },
       "mae": {
-        "median": 0.20935072092317336,
-        "q25": 0.20294240111038364,
-        "q75": 0.21575904073596305
+        "median": 0.14007906226453304,
+        "q25": 0.12030253258831164,
+        "q75": 0.15976268382390665
       },
       "r2": {
-        "median": 0.06294686798422783,
-        "q25": -0.13516904129626114,
-        "q75": 0.2610627772647168
+        "median": 0.07722284506902888,
+        "q25": -0.6848005836768329,
+        "q75": 0.23576824630466633
       },
       "corr": {
-        "median": 0.5776240268799355,
-        "q25": 0.5156449837814125,
-        "q75": 0.6396030699784584
+        "median": 0.7155007251852276,
+        "q25": 0.4529438210914203,
+        "q75": 0.732242791181842
       },
       "bias": {
-        "median": 0.02939201092929867,
-        "q25": 0.0006875977746413804,
-        "q75": 0.058096424083955954
+        "median": -0.03493804646129055,
+        "q25": -0.06896613897852027,
+        "q75": 0.05125716369367074
       }
     }
   },
   "aggregatesCanonical": {
     "A": {
       "rmse": {
-        "median": 0.2059346126266333,
-        "q25": 0.16267898845949147,
-        "q75": 0.2491902367937751
+        "median": 0.17919749949676197,
+        "q25": 0.1541866540091681,
+        "q75": 0.20799035457888446
       },
       "mae": {
-        "median": 0.15911373052758104,
-        "q25": 0.1279176232218115,
-        "q75": 0.19030983783335065
+        "median": 0.1583852101163853,
+        "q25": 0.14484500763496752,
+        "q75": 0.20401765577000938
       },
       "r2": {
-        "median": 0.27565602909683284,
-        "q25": 0.004407666399938837,
-        "q75": 0.5469043917937269
+        "median": 0.12129816867252718,
+        "q25": 0.05288635644683287,
+        "q75": 0.20692615828647282
       },
       "corr": {
-        "median": 0.730286607033053,
-        "q25": 0.6315622979592054,
-        "q75": 0.8290109161069007
+        "median": 0.5886040679757638,
+        "q25": 0.25591504447493774,
+        "q75": 0.7932962553065646
       },
       "bias": {
-        "median": 0.0823743482863516,
-        "q25": 0.051304528299240475,
-        "q75": 0.11344416827346274
+        "median": 0.022119805211867495,
+        "q25": -0.11842052999902851,
+        "q75": 0.06017565134907923
       }
     },
     "B": {
       "rmse": {
-        "median": 0.20152036513710647,
-        "q25": 0.17229090161011934,
-        "q75": 0.23074982866409363
+        "median": 0.13765380783286352,
+        "q25": 0.11276038903873012,
+        "q75": 0.16281769399447238
       },
       "mae": {
-        "median": 0.16396069383342185,
-        "q25": 0.14137342246842272,
-        "q75": 0.18654796519842098
+        "median": 0.11777439600972553,
+        "q25": 0.09736308903839147,
+        "q75": 0.1422345550939246
       },
       "r2": {
-        "median": 0.36893434763533106,
-        "q25": 0.18388132703281534,
-        "q75": 0.5539873682378467
+        "median": 0.3495892462574602,
+        "q25": 0.19220482615029622,
+        "q75": 0.6494715451359789
       },
       "corr": {
-        "median": 0.7347871488283422,
-        "q25": 0.6411415823463934,
-        "q75": 0.8284327153102911
+        "median": 0.8118967449222044,
+        "q25": 0.6752338575504501,
+        "q75": 0.8278842435643142
       },
       "bias": {
-        "median": 0.07351761063993768,
-        "q25": 0.057102242586653654,
-        "q75": 0.08993297869322171
+        "median": -0.011353083075419542,
+        "q25": -0.05356584824531412,
+        "q75": 0.08035315699721668
       }
     },
     "C": {
       "rmse": {
-        "median": 0.2122249635039441,
-        "q25": 0.18264258724618881,
-        "q75": 0.24180733976169935
+        "median": 0.14179294979797866,
+        "q25": 0.10879548236110398,
+        "q75": 0.15979421473546196
       },
       "mae": {
-        "median": 0.16478901978538368,
-        "q25": 0.1405941863284021,
-        "q75": 0.18898385324236525
+        "median": 0.12772603064870655,
+        "q25": 0.09077896074259631,
+        "q75": 0.14443384276011842
       },
       "r2": {
-        "median": 0.3051526796474937,
-        "q25": 0.10708504339136915,
-        "q75": 0.5032203159036183
+        "median": 0.2800293314465448,
+        "q25": 0.006598454521741737,
+        "q75": 0.7059901709691198
       },
       "corr": {
-        "median": 0.7260750761890509,
-        "q25": 0.6226457393717474,
-        "q75": 0.8295044130063542
+        "median": 0.7553265945294783,
+        "q25": 0.7194478710965703,
+        "q75": 0.8906164904478354
       },
       "bias": {
-        "median": 0.09197962843507757,
-        "q25": 0.07909097390046525,
-        "q75": 0.10486828296968989
+        "median": -0.007132713426006342,
+        "q25": -0.045098517568633194,
+        "q75": 0.08880052626431098
       }
     }
   },
   "aggregatesCanonicalSupportCollapsed": {
     "A": {
       "rmse": {
-        "median": 0.2059346126266333,
-        "q25": 0.16267898845949147,
-        "q75": 0.2491902367937751
+        "median": 0.17919749949676197,
+        "q25": 0.1541866540091681,
+        "q75": 0.20799035457888446
       },
       "mae": {
-        "median": 0.15911373052758104,
-        "q25": 0.1279176232218115,
-        "q75": 0.19030983783335065
+        "median": 0.1583852101163853,
+        "q25": 0.14484500763496752,
+        "q75": 0.20401765577000938
       },
       "r2": {
-        "median": 0.27565602909683284,
-        "q25": 0.004407666399938837,
-        "q75": 0.5469043917937269
+        "median": 0.12129816867252718,
+        "q25": 0.05288635644683287,
+        "q75": 0.20692615828647282
       },
       "corr": {
-        "median": 0.730286607033053,
-        "q25": 0.6315622979592054,
-        "q75": 0.8290109161069007
+        "median": 0.5886040679757638,
+        "q25": 0.25591504447493774,
+        "q75": 0.7932962553065646
       },
       "bias": {
-        "median": 0.0823743482863516,
-        "q25": 0.051304528299240475,
-        "q75": 0.11344416827346274
+        "median": 0.022119805211867495,
+        "q25": -0.11842052999902851,
+        "q75": 0.06017565134907923
       }
     },
     "B": {
       "rmse": {
-        "median": 0.20152036513710647,
-        "q25": 0.17229090161011934,
-        "q75": 0.23074982866409363
+        "median": 0.13765380783286352,
+        "q25": 0.11276038903873012,
+        "q75": 0.16281769399447238
       },
       "mae": {
-        "median": 0.16396069383342185,
-        "q25": 0.14137342246842272,
-        "q75": 0.18654796519842098
+        "median": 0.11777439600972553,
+        "q25": 0.09736308903839147,
+        "q75": 0.1422345550939246
       },
       "r2": {
-        "median": 0.36893434763533106,
-        "q25": 0.18388132703281534,
-        "q75": 0.5539873682378467
+        "median": 0.3495892462574602,
+        "q25": 0.19220482615029622,
+        "q75": 0.6494715451359789
       },
       "corr": {
-        "median": 0.7347871488283422,
-        "q25": 0.6411415823463934,
-        "q75": 0.8284327153102911
+        "median": 0.8118967449222044,
+        "q25": 0.6752338575504501,
+        "q75": 0.8278842435643142
       },
       "bias": {
-        "median": 0.07351761063993768,
-        "q25": 0.057102242586653654,
-        "q75": 0.08993297869322171
+        "median": -0.011353083075419542,
+        "q25": -0.05356584824531412,
+        "q75": 0.08035315699721668
       }
     },
     "C": {
       "rmse": {
-        "median": 0.2122249635039441,
-        "q25": 0.18264258724618881,
-        "q75": 0.24180733976169935
+        "median": 0.14179294979797866,
+        "q25": 0.10879548236110398,
+        "q75": 0.15979421473546196
       },
       "mae": {
-        "median": 0.16478901978538368,
-        "q25": 0.1405941863284021,
-        "q75": 0.18898385324236525
+        "median": 0.12772603064870655,
+        "q25": 0.09077896074259631,
+        "q75": 0.14443384276011842
       },
       "r2": {
-        "median": 0.3051526796474937,
-        "q25": 0.10708504339136915,
-        "q75": 0.5032203159036183
+        "median": 0.2800293314465448,
+        "q25": 0.006598454521741737,
+        "q75": 0.7059901709691198
       },
       "corr": {
-        "median": 0.7260750761890509,
-        "q25": 0.6226457393717474,
-        "q75": 0.8295044130063542
+        "median": 0.7553265945294783,
+        "q25": 0.7194478710965703,
+        "q75": 0.8906164904478354
       },
       "bias": {
-        "median": 0.09197962843507757,
-        "q25": 0.07909097390046525,
-        "q75": 0.10486828296968989
+        "median": -0.007132713426006342,
+        "q25": -0.045098517568633194,
+        "q75": 0.08880052626431098
       }
     }
   },
   "aggregates": {
     "A": {
       "rmse": {
-        "median": 0.2674563914384397,
-        "q25": 0.24168023034500946,
-        "q75": 0.29323255253186986
+        "median": 0.1271340522040483,
+        "q25": 0.10437175519753428,
+        "q75": 0.23095767467672976
       },
       "mae": {
-        "median": 0.23191691684193638,
-        "q25": 0.22267791493483635,
-        "q75": 0.2411559187490364
+        "median": 0.11598887468908511,
+        "q25": 0.07884486733764998,
+        "q75": 0.18862144631325667
       },
       "r2": {
-        "median": -0.050893380240539854,
-        "q25": -0.279159929805361,
-        "q75": 0.17737316932428132
+        "median": -0.05868145839278771,
+        "q25": -0.7283887522407342,
+        "q75": 0.5556716004776658
       },
       "corr": {
-        "median": 0.4196883295603495,
-        "q25": 0.3050586498975328,
-        "q75": 0.5343180092231663
+        "median": 0.6409945002169987,
+        "q25": 0.022167818241542098,
+        "q75": 0.8113655647831749
       },
       "bias": {
-        "median": 0.006050821517645286,
-        "q25": -0.00991385300892434,
-        "q75": 0.022015496044214912
+        "median": 0.0037728567424664076,
+        "q25": -0.05649334830576363,
+        "q75": 0.02461614290882153
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.625,
-        "q75": 0.875
+        "median": 1,
+        "q25": 0.84375,
+        "q75": 1
       },
       "failureRate": 0
     },
     "B": {
       "rmse": {
-        "median": 0.24896895491556126,
-        "q25": 0.21950165649887332,
-        "q75": 0.2784362533322492
+        "median": 0.165293601878041,
+        "q25": 0.1235814875250935,
+        "q75": 0.2028621346676749
       },
       "mae": {
-        "median": 0.20884129809031343,
-        "q25": 0.19651012215974983,
-        "q75": 0.22117247402087706
+        "median": 0.15110313767779243,
+        "q25": 0.0947282277935839,
+        "q75": 0.16943867789684564
       },
       "r2": {
-        "median": 0.06761886177962567,
-        "q25": -0.16834145757918492,
-        "q75": 0.3035791811384363
+        "median": -0.06388921321710145,
+        "q25": -0.3372524611702466,
+        "q75": 0.44466065912790786
       },
       "corr": {
-        "median": 0.6259737033732556,
-        "q25": 0.5450036187843346,
-        "q75": 0.7069437879621767
+        "median": 0.6711105660882395,
+        "q25": 0.3233759362054845,
+        "q75": 0.7249543342138345
       },
       "bias": {
-        "median": 0.036296599441384046,
-        "q25": 0.0022197554534028573,
-        "q75": 0.07037344342936525
+        "median": -0.045911302161107614,
+        "q25": -0.09601134775887793,
+        "q75": 0.013569849912473144
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.75,
-        "q75": 0.75
+        "median": 1,
+        "q25": 1,
+        "q75": 1
       },
       "failureRate": 0
     },
     "C": {
       "rmse": {
-        "median": 0.252983781528926,
-        "q25": 0.22946713760630594,
-        "q75": 0.276500425451546
+        "median": 0.16943572677041022,
+        "q25": 0.1467347464900196,
+        "q75": 0.1830250942588315
       },
       "mae": {
-        "median": 0.20935072092317336,
-        "q25": 0.20294240111038364,
-        "q75": 0.21575904073596305
+        "median": 0.14007906226453304,
+        "q25": 0.12030253258831164,
+        "q75": 0.15976268382390665
       },
       "r2": {
-        "median": 0.06294686798422783,
-        "q25": -0.13516904129626114,
-        "q75": 0.2610627772647168
+        "median": 0.07722284506902888,
+        "q25": -0.6848005836768329,
+        "q75": 0.23576824630466633
       },
       "corr": {
-        "median": 0.5776240268799355,
-        "q25": 0.5156449837814125,
-        "q75": 0.6396030699784584
+        "median": 0.7155007251852276,
+        "q25": 0.4529438210914203,
+        "q75": 0.732242791181842
       },
       "bias": {
-        "median": 0.02939201092929867,
-        "q25": 0.0006875977746413804,
-        "q75": 0.058096424083955954
+        "median": -0.03493804646129055,
+        "q25": -0.06896613897852027,
+        "q75": 0.05125716369367074
       },
       "coverage95": {
-        "median": 0.75,
-        "q25": 0.75,
-        "q75": 0.75
+        "median": 1,
+        "q25": 0.875,
+        "q75": 1
       },
       "failureRate": 0
     }
@@ -1150,83 +4610,83 @@
   "aggregatesSupportCollapsed": {
     "A": {
       "rmse": {
-        "median": 0.2674563914384397,
-        "q25": 0.24168023034500946,
-        "q75": 0.29323255253186986
+        "median": 0.1271340522040483,
+        "q25": 0.10437175519753428,
+        "q75": 0.23095767467672976
       },
       "mae": {
-        "median": 0.23191691684193638,
-        "q25": 0.22267791493483635,
-        "q75": 0.2411559187490364
+        "median": 0.11598887468908511,
+        "q25": 0.07884486733764998,
+        "q75": 0.18862144631325667
       },
       "r2": {
-        "median": -0.050893380240539854,
-        "q25": -0.279159929805361,
-        "q75": 0.17737316932428132
+        "median": -0.05868145839278771,
+        "q25": -0.7283887522407342,
+        "q75": 0.5556716004776658
       },
       "corr": {
-        "median": 0.4196883295603495,
-        "q25": 0.3050586498975328,
-        "q75": 0.5343180092231663
+        "median": 0.6409945002169987,
+        "q25": 0.022167818241542098,
+        "q75": 0.8113655647831749
       },
       "bias": {
-        "median": 0.006050821517645286,
-        "q25": -0.00991385300892434,
-        "q75": 0.022015496044214912
+        "median": 0.0037728567424664076,
+        "q25": -0.05649334830576363,
+        "q75": 0.02461614290882153
       }
     },
     "B": {
       "rmse": {
-        "median": 0.24896895491556126,
-        "q25": 0.21950165649887332,
-        "q75": 0.2784362533322492
+        "median": 0.165293601878041,
+        "q25": 0.1235814875250935,
+        "q75": 0.2028621346676749
       },
       "mae": {
-        "median": 0.20884129809031343,
-        "q25": 0.19651012215974983,
-        "q75": 0.22117247402087706
+        "median": 0.15110313767779243,
+        "q25": 0.0947282277935839,
+        "q75": 0.16943867789684564
       },
       "r2": {
-        "median": 0.06761886177962567,
-        "q25": -0.16834145757918492,
-        "q75": 0.3035791811384363
+        "median": -0.06388921321710145,
+        "q25": -0.3372524611702466,
+        "q75": 0.44466065912790786
       },
       "corr": {
-        "median": 0.6259737033732556,
-        "q25": 0.5450036187843346,
-        "q75": 0.7069437879621767
+        "median": 0.6711105660882395,
+        "q25": 0.3233759362054845,
+        "q75": 0.7249543342138345
       },
       "bias": {
-        "median": 0.036296599441384046,
-        "q25": 0.0022197554534028573,
-        "q75": 0.07037344342936525
+        "median": -0.045911302161107614,
+        "q25": -0.09601134775887793,
+        "q75": 0.013569849912473144
       }
     },
     "C": {
       "rmse": {
-        "median": 0.252983781528926,
-        "q25": 0.22946713760630594,
-        "q75": 0.276500425451546
+        "median": 0.16943572677041022,
+        "q25": 0.1467347464900196,
+        "q75": 0.1830250942588315
       },
       "mae": {
-        "median": 0.20935072092317336,
-        "q25": 0.20294240111038364,
-        "q75": 0.21575904073596305
+        "median": 0.14007906226453304,
+        "q25": 0.12030253258831164,
+        "q75": 0.15976268382390665
       },
       "r2": {
-        "median": 0.06294686798422783,
-        "q25": -0.13516904129626114,
-        "q75": 0.2610627772647168
+        "median": 0.07722284506902888,
+        "q25": -0.6848005836768329,
+        "q75": 0.23576824630466633
       },
       "corr": {
-        "median": 0.5776240268799355,
-        "q25": 0.5156449837814125,
-        "q75": 0.6396030699784584
+        "median": 0.7155007251852276,
+        "q25": 0.4529438210914203,
+        "q75": 0.732242791181842
       },
       "bias": {
-        "median": 0.02939201092929867,
-        "q25": 0.0006875977746413804,
-        "q75": 0.058096424083955954
+        "median": -0.03493804646129055,
+        "q25": -0.06896613897852027,
+        "q75": 0.05125716369367074
       }
     }
   },
@@ -1247,7 +4707,7 @@
   "checks": {
     "leakagePass": true,
     "minTrainYears": 3,
-    "foldCount": 2,
+    "foldCount": 12,
     "modelSemantics": "canonical_structural",
     "supportOverlapPass": true,
     "effectiveSampleSizeByTier": {
@@ -1255,7 +4715,17 @@
       "B": 4,
       "C": 4
     },
-    "lowVarianceFoldFlags": [],
+    "lowVarianceFoldFlags": [
+      "rolling_origin:2007->2009:A",
+      "rolling_origin:2007->2009:B",
+      "rolling_origin:2007->2009:C",
+      "rolling_origin:2009->2010:A",
+      "rolling_origin:2009->2010:B",
+      "rolling_origin:2009->2010:C",
+      "rolling_origin:2018->2019:A",
+      "rolling_origin:2018->2019:B",
+      "rolling_origin:2018->2019:C"
+    ],
     "metricFamilies": {
       "primary": "refit",
       "refit": {

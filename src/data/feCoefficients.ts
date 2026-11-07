@@ -15,7 +15,7 @@
  *   The app/paper "headline" metrics are the canonical panel-fit computed on the 630-row panel
  *   using CANONICAL_PREPROCESSING + structural=fixed_map:
  *     scripts/generate_headline_metrics.ts (run via: npm run generate:headline-metrics)
- *     Data: public/data/panel_canonical_23_countries_v1.csv
+ *     Data: public/data/panel_canonical_v2.csv
  *     Output: src/data/metrics/headline_metrics_authoritative.json
  *   Those canonical headline metrics are stored below as PRODUCTION_MODEL_METADATA.headline.
  *
@@ -55,7 +55,7 @@
  *   incorrect artifacts. Use the canonical preprocessing parameters embedded below.
 /**
  * CANONICAL PREPROCESSING PARAMETERS
- *     1. Load public/data/panel_canonical_23_countries_v1.csv
+ *     1. Load public/data/panel_canonical_v2.csv
  *     2. Z-score only C: C_std = (C_cultural_intensity - mean_C) / std_C
  *     3. Use M, T, D, G, E, S, R directly (no transformation)
  *     4. Pass to calculateModel() with modifiersAreStandardized=true
@@ -118,7 +118,7 @@ export const PRODUCTION_MODEL_METADATA = {
   headline: {
     // Canonical global performance used as the repo-wide "headline" (paper/app).
     // Source of truth: scripts/generate_headline_metrics.ts (run via: npm run generate:headline-metrics)
-    // Dataset: public/data/panel_canonical_23_countries_v1.csv
+    // Dataset: public/data/panel_canonical_v2.csv
     // Output: src/data/metrics/headline_metrics_authoritative.json
     // Mode: CANONICAL_PREPROCESSING + structural=fixed_map
     metrics: {
@@ -176,14 +176,14 @@ export const PRODUCTION_MODEL_METADATA = {
  * identified. See docs/KNOWN_ISSUES.md KI-09..KI-11.
  */
 export const OPTIMIZED_SIGMOID_COEFFICIENTS: BeliefCoefficients = {
-  c1: 0,                        // Cultural Intensity — channel unavailable (KI-09)
-  c2: 1.1064213229524900,  // Media Environment
-  c3: -0.0120055906249050,  // Trauma/Shock
-  c4: 0,                        // Social Atomization — channel unavailable (KI-10)
-  c5: 0,                        // Redistribution Capacity — unavailable outside OECD
-  c6: 0.1167350493490904,  // Education Capacity
-  c7: 0,                        // Social Support — channel unavailable (KI-11)
-  c8: 1.8168285814367846,  // Welfare Capacity
+  c1: 0,                        // Culture — channel unavailable (KI-09)
+  c2: 0.2722859345370865,  // Media environment
+  c3: 0.0837228965129155,  // Trauma / shock
+  c4: 0,                        // Atomization — channel unavailable (KI-10)
+  c5: 0,                        // Redistribution — unavailable outside OECD
+  c6: 0.1560950296956942,  // Education capacity
+  c7: 0,                        // Social support — channel unavailable (KI-11)
+  c8: 0.0697339953010445,  // Welfare capacity
 };
 
 /**
@@ -197,10 +197,10 @@ export const OPTIMIZED_SIGMOID_COEFFICIENTS: BeliefCoefficients = {
  * See docs/KNOWN_ISSUES.md KI-15.
  */
 export const OPTIMIZED_STRUCTURAL_PARAMS: StructuralParameters = {
-  alpha: 0.0500000000,
-  beta: 0.0500000000,
-  k: 0.0037871847737521,
-  phi0: -6.3832542975606978,
+  alpha: 0.050000000013,
+  beta: 0.050000000014,
+  k: 0.0082395861202525,
+  phi0: -4.5091744979280346,
 };
 
 /**
@@ -218,8 +218,8 @@ export interface InteractionTerms {
 }
 
 export const INTERACTION_TERMS: InteractionTerms = {
-  c_yr: -1.5997263964961717,       // Y×R: Inequality × Welfare Capacity
-  c_tr: -0.2352682480232388,    // T×R: Trauma × Welfare Capacity
+  c_yr: 1.7673005644056849,       // Y×R: Inequality × Welfare Capacity
+  c_tr: -0.1805496395106426,    // T×R: Trauma × Welfare Capacity
   c_xy: -0.07407841500627856,    // X×Y: Urbanization × Inequality
   c_cm: 0.4224870328989847,      // C×M: Culture × Media
   c_es: 0.3597710473523405,      // E×S: Education × Social Support
@@ -275,12 +275,14 @@ export const MODIFIER_STANDARDIZATION: Record<string, ModifierStandardization> =
  * Used to normalize Z_belief_outcome to [0.0001, 0.9999] for logit-space training
  */
 export const Z_NORMALIZATION = {
-  // v2 panel bounds (public/data/panel_canonical_v2.csv, 49 complete cases).
-  // The previous bounds belonged to the superseded v1 panel, whose outcome was
-  // an exact rescaling of a predictor; clamping the new outcome to the old
-  // range would silently censor 6 of 49 observations.
-  min: -1.6094638811769215,
-  max: 1.5846349235822439,
+  // v2 panel, percentile-anchored (1st/99th) bounds. The panel spans 1981-2023
+  // with 87 complete cases; two cells (CHN 1990 z=+3.37, IDN 2006 z=-2.19) sit
+  // far outside the bulk and would compress every ordinary observation into
+  // roughly 0.22-0.78 under min-max scaling. Percentile anchoring keeps the
+  // extremes inside the band (clamped) while giving the sample its full
+  // dynamic range. See docs/KNOWN_ISSUES.md KI-17.
+  min: -1.8892873085509083,
+  max: 1.8541262393157416,
 };
 
 // Legacy FE coefficients (deprecated - use OPTIMIZED_SIGMOID_COEFFICIENTS)

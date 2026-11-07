@@ -100,6 +100,64 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 
 ---
 
+## KI-17 — On the full 1981–2023 panel the bounded model underperforms a linear baseline
+
+Acquiring the WVS Trend File (1981–2022, v4.1.0) raised the sample from 49 to
+87 complete cases across 48 countries. It also removed the possibility of
+attributing the weak fit to a small sample.
+
+Leave-one-out comparison on the same 87 rows, same six predictors:
+
+| Model | LOO R² | LOO RMSE |
+|---|---:|---:|
+| Plain linear regression | **+0.2020** | 0.8574 |
+| Fitted saturating model | **+0.1023** | 0.9094 |
+
+In-sample, the linear model reaches `R² = 0.3617` and the saturating model
+`R² = 0.2890`. **The nonlinear structure is costing accuracy, not adding it.**
+
+### Why
+
+`Z` pooled over 1981–2023 is close to normally distributed with SD 0.97. A
+sigmoid maps exposure into `(0,1)` with its steepest gradient near the midpoint
+and vanishing gradient in the tails. Regressing a roughly linear outcome on it
+forces the fit to spend its curvature where the data are densest and to
+flatten exactly where the extremes live — the opposite of what a linear
+relationship needs.
+
+Two cells make this concrete: CHN 1990 (`Z = +3.37`, the only pre-1995 row) and
+IDN 2006 (`Z = -2.19`). With min–max scaling they compress the other 85
+observations into roughly 0.22–0.78 and in-sample `R²` falls from 0.55 to 0.36.
+Percentile anchoring recovers part of it, but not the ordering between models.
+
+### What this means for the paper
+
+The bounded functional form was introduced because the outcome is a composite
+index on a closed scale. That argument is about the *measurement*, not about
+the *response shape*, and this sample does not support the shape:
+
+1. **The saturation claim has no empirical support here.** Nothing in 87
+   country-years indicates that effects flatten at high exposure. The
+   manuscript currently asserts ridge behaviour as a feature of the fitted
+   map; that is true of the map, not of the data.
+2. **A defensible paper must either justify the form on theoretical grounds and
+   report the linear comparison honestly, or drop the form.**
+3. Reporting only the saturating model's metrics, without the linear baseline,
+   would misrepresent the evidence. `docs/KNOWN_ISSUES.md` KI-15 already records
+   that the structural exponents sit at their lower bound; this finding is the
+   same fact seen from the predictive side.
+
+### Recommendation
+
+Add the linear baseline to the Results as a model comparison, state that the
+saturating form does not outperform it on this sample, and reframe the
+contribution as a **measurement and validation framework** whose functional
+form is a design choice under test — not an empirically established feature.
+That is a weaker claim than the title implies, and it is the one the data
+supports.
+
+---
+
 ## KI-16 — The lockbox protocol cannot be honoured on the v2 panel
 
 `npm run generate:lockbox-holdout` refuses to write:

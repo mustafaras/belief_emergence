@@ -224,7 +224,7 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_ABSTRACT_SUPPORT_AND_PROTOCOL_COUNTS',
       file: path.join('main', 'main.tex'),
-      regex: /canonical panel of ([0-9]+) countries \(([0-9]+) complete-case country--year observations, 2017--2022 survey wave\).*?leave-one-country-out cross-validation \(([0-9]+) folds\).*?rolling-origin temporal evaluation \(([0-9]+) folds\)/s,
+      regex: /canonical panel of ([0-9]+) countries \(([0-9]+) complete-case country--year observations, 1981--2023 survey waves\).*?leave-one-country-out cross-validation \(([0-9]+) folds\).*?rolling-origin temporal evaluation \(([0-9]+) folds\)/s,
       expected: [expectedCountryFoldCount, expectedSupportUnits, expectedCountryFoldCount, expectedRollingFoldCount],
       context: 'Main abstract support and protocol counts',
       tolerance: 0,

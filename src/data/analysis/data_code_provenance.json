@@ -268,7 +268,7 @@
     {
       "id": "canonical_panel",
       "name": "Canonical Analytical Panel (23 countries, 630 rows)",
-      "files": ["public/data/panel_canonical_23_countries_v1.csv"],
+      "files": ["public/data/panel_canonical_v2.csv"],
       "description": "Complete-case analytical sample (2000–2022). Contains only country-year aggregated values — no individual-level microdata.",
       "redistribution_note": "Country-year aggregates derived from survey data. Aggregation level is above individual respondent data, which reduces redistribution risk. However, underlying WVS terms should be reviewed for derived-aggregate policies."
     }

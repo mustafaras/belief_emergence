@@ -41,10 +41,45 @@ import * as yaml from 'js-yaml';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const RAW = path.join(ROOT, 'rawdata');
-const SOURCE = path.join(RAW, 'EVS_WVS_Joint_Csv_v5_0.csv');
+
+/**
+ * Item-level source.
+ *
+ * `EVS_WVS_Joint_Csv_v5_0.csv` covers only the 2017-2022 harmonised wave.
+ * `wvs_trend_all_items.csv` is extracted from the WVS Trend File 1981-2022
+ * (v4.1.0, SPSS distribution, downloaded 2026-11-07) and carries the same item
+ * codes across all seven waves: 442,473 respondents, 108 countries, 306
+ * country-years. It is preferred when present because it is the only source
+ * that can support more than one wave.
+ */
+const SOURCE_TREND = path.join(RAW, 'wvs_trend_all_items.csv');
+const SOURCE_JOINT = path.join(RAW, 'EVS_WVS_Joint_Csv_v5_0.csv');
+const SOURCE = fs.existsSync(SOURCE_TREND) ? SOURCE_TREND : SOURCE_JOINT;
+
+/** The trend extract stores S003 (ISO numeric) and S020 (year). */
+const IS_TREND = SOURCE === SOURCE_TREND;
+const ISO_NUMERIC_TO_ISO2 = JSON.parse(
+  fs.readFileSync(path.join(RAW, 'iso_numeric_to_alpha2.json'), 'utf-8'),
+) as Record<string, string>;
+
 const CONFIG = path.join(ROOT, 'config', 'wvs_items.yaml');
 const OUT_CSV = path.join(RAW, 'wvs_combined.csv');
 const OUT_AUDIT = path.join(RAW, 'wvs_construct_audit.json');
+
+const ISO2_TO_ISO3: Record<string, string> = {
+  AD:'AND',AL:'ALB',AM:'ARM',AR:'ARG',AT:'AUT',AU:'AUS',AZ:'AZE',BA:'BIH',BD:'BGD',BE:'BEL',
+  BG:'BGR',BO:'BOL',BR:'BRA',BY:'BLR',CA:'CAN',CH:'CHE',CL:'CHL',CN:'CHN',CO:'COL',CY:'CYP',
+  CZ:'CZE',DE:'DEU',DK:'DNK',EC:'ECU',EE:'EST',EG:'EGY',ES:'ESP',ET:'ETH',FI:'FIN',FR:'FRA',
+  GB:'GBR',GE:'GEO',GH:'GHA',GR:'GRC',GT:'GTM',HK:'HKG',HR:'HRV',HU:'HUN',ID:'IDN',IL:'ISR',
+  IN:'IND',IQ:'IRQ',IR:'IRN',IS:'ISL',IT:'ITA',JO:'JOR',JP:'JPN',KE:'KEN',KG:'KGZ',KR:'KOR',
+  KW:'KWT',KZ:'KAZ',LB:'LBN',LT:'LTU',LV:'LVA',LY:'LBY',MA:'MAR',ME:'MNE',MK:'MKD',ML:'MLI',
+  MM:'MMR',MN:'MNG',MO:'MAC',MT:'MLT',MW:'MWI',MX:'MEX',MY:'MYS',NG:'NGA',NI:'NIC',NL:'NLD',
+  NO:'NOR',NZ:'NZL',PE:'PER',PH:'PHL',PK:'PAK',PL:'POL',PR:'PRI',PS:'PSE',PT:'PRT',QA:'QAT',
+  RO:'ROU',RS:'SRB',RU:'RUS',RW:'RWA',SA:'SAU',SD:'SDN',SE:'SWE',SG:'SGP',SI:'SVN',SK:'SVK',
+  SN:'SEN',SO:'SOM',TH:'THA',TJ:'TJK',TN:'TUN',TR:'TUR',TW:'TWN',TZ:'TZA',UA:'UKR',UG:'UGA',
+  US:'USA',UY:'URY',UZ:'UZB',VE:'VEN',VN:'VNM',YE:'YEM',ZA:'ZAF',ZM:'ZMB',ZW:'ZWE',BG:'BGR',
+  NIR:'GBR',CMR:'CMR',BEN:'BJ',TGO:'TG',BFA:'BF',
+};
 
 const DRY_RUN = process.argv.includes('--dry-run');
 
@@ -254,15 +289,29 @@ function main(): void {
 
   const idxOf = new Map<string, number>();
   header.forEach((h, i) => idxOf.set(h, i));
-  const iCountry = idxOf.get('cntry_AN');
-  const iCountryAlt = idxOf.get('cntry');
-  const iYear = idxOf.get('year');
-  if (iYear === undefined || (iCountry === undefined && iCountryAlt === undefined)) {
-    throw new Error('Source is missing cntry_AN/cntry or year columns.');
-  }
-  const cIdx = iCountry ?? iCountryAlt!;
 
-  // Accumulate sums and counts per (country, year, item).
+  // The trend extract and the harmonised joint file use different identifiers:
+  //   joint : cntry_AN (ISO-2) + year
+  //   trend : S003 (ISO numeric) + S020 (year)
+  const iCountry = IS_TREND ? idxOf.get('S003') : idxOf.get('cntry_AN');
+  const iCountryAlt = IS_TREND ? undefined : idxOf.get('cntry');
+  const iYear = IS_TREND ? idxOf.get('S020') : idxOf.get('year');
+  if (iYear === undefined || (iCountry === undefined && iCountryAlt === undefined)) {
+    throw new Error(
+      IS_TREND
+        ? 'Trend source is missing S003 or S020 columns.'
+        : 'Source is missing cntry_AN/cntry or year columns.',
+    );
+  }
+  const cIdx = (iCountry ?? iCountryAlt)!;
+
+  /** Normalise the raw country cell to the ISO-2 code the macro join uses. */
+  const toIso2 = (raw: string): string => {
+    if (!IS_TREND) return raw;
+    const num = String(Math.trunc(Number.parseFloat(raw)));
+    return ISO_NUMERIC_TO_ISO2[num] ?? '';
+  };
+
   const cells = new Map<string, CellAccumulator>();
   const missingSet = new Set(missingCodes);
   const text = fs.readFileSync(SOURCE, 'utf-8');
@@ -273,7 +322,7 @@ function main(): void {
     const line = lines[li];
     if (!line || line.length < 5) continue;
     const f = parseCsvLine(line);
-    const country = (f[cIdx] ?? '').trim();
+    const country = toIso2((f[cIdx] ?? '').trim());
     const year = (f[iYear] ?? '').trim();
     if (!country || !year) continue;
     scanned += 1;
@@ -489,7 +538,11 @@ function main(): void {
     };
     const outRows = rows.map((r) => {
       const o: Record<string, string | number | null> = {
-        iso3: r.cntry as string, country_name: r.cntry as string, year: r.year as string,
+        // The construct builder works in ISO-2 (its key space); write the
+        // ISO-3 the panel join expects. Unknown codes fall back to the raw key.
+        iso3: ISO2_TO_ISO3[r.cntry as string] ?? (r.cntry as string),
+        country_name: r.cntry as string,
+        year: r.year as string,
       };
       for (const [k, col] of Object.entries(nameMap)) o[col] = r[k] ?? null;
       o['Z_violence_justifiable'] = null;

@@ -208,13 +208,26 @@ export function computeRollingOriginRefit(
   rows: PanelRowCanonical[],
   options?: { minTrainYears?: number; lambda?: number; minRows?: number }
 ): RollingOriginRefitSummary {
+  // The first origin must carry enough training rows to fit the model. Counting
+  // years is not enough: on the v2 panel the first three years hold 6 rows in
+  // total, so every early fold fails with insufficient_rows. Advance the origin
+  // until the cumulative row count reaches the floor that fitModelTier enforces.
   const minTrainYears = options?.minTrainYears ?? 3;
+  // When the caller passes an explicit minRows (as the unit tests do), honour
+  // it; only apply the production floor otherwise.
+  const requiredTrainRows = options?.minRows ?? 24;
   const years = Array.from(new Set(rows.map((row) => row.year).filter(Number.isFinite))).sort((a, b) => a - b);
+  let firstOrigin = minTrainYears;
+  while (firstOrigin < years.length) {
+    const cum = rows.filter((row) => row.year <= years[firstOrigin - 1]).length;
+    if (cum >= requiredTrainRows) break;
+    firstOrigin += 1;
+  }
   const folds: RollingOriginFold[] = [];
   const lowVarianceFoldFlags: string[] = [];
   let supportOverlapPass = true;
 
-  for (let i = minTrainYears; i < years.length; i += 1) {
+  for (let i = firstOrigin; i < years.length; i += 1) {
     const testYear = years[i];
     const trainYears = years.slice(0, i);
     const trainYearMax = trainYears[trainYears.length - 1];

@@ -12,7 +12,7 @@ import { buildPaperExports } from '../src/utils/validation/paperExports'
 function loadCanonicalRows() {
   const thisFile = fileURLToPath(import.meta.url)
   const testDir = path.dirname(thisFile)
-  const datasetPath = path.resolve(testDir, '../public/data/panel_canonical_23_countries_v1.csv')
+  const datasetPath = path.resolve(testDir, '../public/data/panel_canonical_v2.csv')
   const csvText = fs.readFileSync(datasetPath, 'utf8')
   return parsePanelCsvText(csvText, datasetPath)
 }

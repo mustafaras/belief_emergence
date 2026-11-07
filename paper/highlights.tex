@@ -76,8 +76,8 @@
     \item Primary claims rest on refit out-of-sample validation, not in-sample fit. Two complementary protocols:
     \begin{itemize}
         \setlength{\itemsep}{0.2em}
-        \item Leave-one-country-out (45 folds): median OOS RMSE 0.1082 (Tier~A), 0.1345 (Tier~B), 0.1286 (Tier~C).
-        \item Rolling-origin temporal validation (2 forward-chaining folds): median OOS RMSE 0.2675 (Tier~A), 0.2490 (Tier~B), 0.2530 (Tier~C).
+        \item Leave-one-country-out (48 folds): median OOS RMSE 0.1354 (Tier~A), 0.1376 (Tier~B), 0.1412 (Tier~C).
+        \item Rolling-origin temporal validation (12 forward-chaining folds): median OOS RMSE 0.1271 (Tier~A), 0.1653 (Tier~B), 0.1694 (Tier~C).
     \end{itemize}
     \item Parameter sign consistency thresholds gate primary claims: $\ge 0.70$ (Tier~A), $\ge 0.80$ (Tier~B). Support-per-parameter ratios: 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
     \item A separately gated lockbox holdout (frozen split, one-time per release cycle) confirms Tier~A/B stability without repeated metric peeking.

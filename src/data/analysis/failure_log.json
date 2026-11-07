@@ -1,13 +1,13 @@
 {
   "schemaVersion": "phase1.failure_log.v1",
-  "generatedAtIso": "2026-11-07T13:26:35.419Z",
+  "generatedAtIso": "2026-11-07T14:55:46.594Z",
   "entries": [
     {
       "protocol": "country_out",
       "foldId": "country_out:ALB",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -15,7 +15,7 @@
       "foldId": "country_out:ALB",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -23,7 +23,7 @@
       "foldId": "country_out:ALB",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -31,55 +31,31 @@
       "foldId": "country_out:ARG",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ARG",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ARG",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:ARM",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:ARM",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:ARM",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:AUS",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -87,7 +63,7 @@
       "foldId": "country_out:AUS",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -95,7 +71,7 @@
       "foldId": "country_out:AUS",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -103,7 +79,7 @@
       "foldId": "country_out:BGR",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -111,7 +87,7 @@
       "foldId": "country_out:BGR",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -119,31 +95,7 @@
       "foldId": "country_out:BGR",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:BLR",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:BLR",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:BLR",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -151,55 +103,55 @@
       "foldId": "country_out:BRA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BRA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BRA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CHE",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -207,7 +159,7 @@
       "foldId": "country_out:CHE",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -215,7 +167,55 @@
       "foldId": "country_out:CHE",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHL",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHL",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHL",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHN",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHN",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CHN",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -223,23 +223,47 @@
       "foldId": "country_out:COL",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:COL",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:COL",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CYP",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CYP",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:CYP",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -247,103 +271,103 @@
       "foldId": "country_out:CZE",
       "tier": "A",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CZE",
       "tier": "B",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CZE",
       "tier": "C",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "A",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "B",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "C",
       "converged": true,
-      "nTrain": 47,
+      "nTrain": 84,
+      "nTest": 3
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ECU",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 85,
       "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ECU",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:ECU",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ECU",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:EST",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -351,7 +375,7 @@
       "foldId": "country_out:EST",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -359,7 +383,31 @@
       "foldId": "country_out:EST",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:FIN",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:FIN",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:FIN",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -367,7 +415,7 @@
       "foldId": "country_out:FRA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -375,7 +423,7 @@
       "foldId": "country_out:FRA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -383,7 +431,7 @@
       "foldId": "country_out:FRA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -391,7 +439,7 @@
       "foldId": "country_out:GBR",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -399,7 +447,7 @@
       "foldId": "country_out:GBR",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -407,7 +455,7 @@
       "foldId": "country_out:GBR",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -415,23 +463,47 @@
       "foldId": "country_out:GEO",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GEO",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GEO",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GHA",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GHA",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GHA",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -439,7 +511,7 @@
       "foldId": "country_out:GRC",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -447,7 +519,7 @@
       "foldId": "country_out:GRC",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -455,31 +527,7 @@
       "foldId": "country_out:GRC",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:HRV",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:HRV",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:HRV",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -487,31 +535,31 @@
       "foldId": "country_out:IDN",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:IDN",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:IDN",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:IRN",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -519,7 +567,7 @@
       "foldId": "country_out:IRN",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -527,7 +575,7 @@
       "foldId": "country_out:IRN",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -535,7 +583,7 @@
       "foldId": "country_out:ITA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -543,7 +591,7 @@
       "foldId": "country_out:ITA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -551,7 +599,7 @@
       "foldId": "country_out:ITA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -559,7 +607,7 @@
       "foldId": "country_out:JPN",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -567,7 +615,7 @@
       "foldId": "country_out:JPN",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -575,7 +623,7 @@
       "foldId": "country_out:JPN",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -583,175 +631,175 @@
       "foldId": "country_out:KAZ",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KAZ",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KAZ",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KGZ",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KGZ",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KGZ",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:LTU",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:LTU",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:LTU",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:MKD",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:MKD",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
-    },
-    {
-      "protocol": "country_out",
-      "foldId": "country_out:MKD",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MYS",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MYS",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MYS",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:NGA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:NGA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:NGA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NLD",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NLD",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NLD",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:PAK",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -759,7 +807,7 @@
       "foldId": "country_out:PAK",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -767,7 +815,7 @@
       "foldId": "country_out:PAK",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -775,223 +823,247 @@
       "foldId": "country_out:PER",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:PER",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:PER",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 83,
+      "nTest": 4
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 85,
+      "nTest": 2
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SRB",
       "tier": "A",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SRB",
       "tier": "B",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SRB",
       "tier": "C",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "A",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "B",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "C",
       "converged": true,
-      "nTrain": 47,
-      "nTest": 2
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SVN",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SVN",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SVN",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 86,
+      "nTest": 1
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:THA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:THA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:THA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:UKR",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:UKR",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:UKR",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
-      "nTest": 1
+      "nTrain": 84,
+      "nTest": 3
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:URY",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -999,7 +1071,7 @@
       "foldId": "country_out:URY",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1007,7 +1079,7 @@
       "foldId": "country_out:URY",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1015,7 +1087,7 @@
       "foldId": "country_out:USA",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1023,7 +1095,7 @@
       "foldId": "country_out:USA",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1031,7 +1103,7 @@
       "foldId": "country_out:USA",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1039,7 +1111,7 @@
       "foldId": "country_out:UZB",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1047,7 +1119,7 @@
       "foldId": "country_out:UZB",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1055,7 +1127,7 @@
       "foldId": "country_out:UZB",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1063,7 +1135,7 @@
       "foldId": "country_out:VNM",
       "tier": "A",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1071,7 +1143,7 @@
       "foldId": "country_out:VNM",
       "tier": "B",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
       "nTest": 1
     },
     {
@@ -1079,7 +1151,247 @@
       "foldId": "country_out:VNM",
       "tier": "C",
       "converged": true,
-      "nTrain": 48,
+      "nTrain": 86,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2006->2007",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 29,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2006->2007",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 29,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2006->2007",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 29,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2007->2009",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 33,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2007->2009",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 33,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2007->2009",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 33,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2009->2010",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 34,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2009->2010",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 34,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2009->2010",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 34,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2010->2011",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 35,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2010->2011",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 35,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2010->2011",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 35,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2011->2012",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 43,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2011->2012",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 43,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2011->2012",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 43,
+      "nTest": 8
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2012->2013",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 51,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2012->2013",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 51,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2012->2013",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 51,
+      "nTest": 4
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2013->2014",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 55,
+      "nTest": 2
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2013->2014",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 55,
+      "nTest": 2
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2013->2014",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 55,
+      "nTest": 2
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2014->2017",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 57,
+      "nTest": 5
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2014->2017",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 57,
+      "nTest": 5
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2014->2017",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 57,
+      "nTest": 5
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2017->2018",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 62,
+      "nTest": 16
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2017->2018",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 62,
+      "nTest": 16
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2017->2018",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 62,
+      "nTest": 16
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2018->2019",
+      "tier": "A",
+      "converged": true,
+      "nTrain": 78,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2018->2019",
+      "tier": "B",
+      "converged": true,
+      "nTrain": 78,
+      "nTest": 1
+    },
+    {
+      "protocol": "rolling_origin",
+      "foldId": "rolling_origin:2018->2019",
+      "tier": "C",
+      "converged": true,
+      "nTrain": 78,
       "nTest": 1
     },
     {
@@ -1087,7 +1399,7 @@
       "foldId": "rolling_origin:2019->2020",
       "tier": "A",
       "converged": true,
-      "nTrain": 41,
+      "nTrain": 79,
       "nTest": 4
     },
     {
@@ -1095,7 +1407,7 @@
       "foldId": "rolling_origin:2019->2020",
       "tier": "B",
       "converged": true,
-      "nTrain": 41,
+      "nTrain": 79,
       "nTest": 4
     },
     {
@@ -1103,7 +1415,7 @@
       "foldId": "rolling_origin:2019->2020",
       "tier": "C",
       "converged": true,
-      "nTrain": 41,
+      "nTrain": 79,
       "nTest": 4
     },
     {
@@ -1111,7 +1423,7 @@
       "foldId": "rolling_origin:2020->2022",
       "tier": "A",
       "converged": true,
-      "nTrain": 45,
+      "nTrain": 83,
       "nTest": 4
     },
     {
@@ -1119,7 +1431,7 @@
       "foldId": "rolling_origin:2020->2022",
       "tier": "B",
       "converged": true,
-      "nTrain": 45,
+      "nTrain": 83,
       "nTest": 4
     },
     {
@@ -1127,25 +1439,25 @@
       "foldId": "rolling_origin:2020->2022",
       "tier": "C",
       "converged": true,
-      "nTrain": 45,
+      "nTrain": 83,
       "nTest": 4
     }
   ],
   "byTier": {
     "A": {
-      "totalFolds": 47,
+      "totalFolds": 60,
       "failedFolds": 0,
       "failureRate": 0,
       "reasons": []
     },
     "B": {
-      "totalFolds": 47,
+      "totalFolds": 60,
       "failedFolds": 0,
       "failureRate": 0,
       "reasons": []
     },
     "C": {
-      "totalFolds": 47,
+      "totalFolds": 60,
       "failedFolds": 0,
       "failureRate": 0,
       "reasons": []

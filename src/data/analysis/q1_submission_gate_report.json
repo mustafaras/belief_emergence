@@ -1,13 +1,13 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-07T13:27:15.210Z",
-  "verdict": "NOT_READY",
+  "generatedAtIso": "2026-11-07T14:56:35.440Z",
+  "verdict": "CONDITIONAL",
   "summary": {
     "totalChecks": 24,
-    "passed": 22,
-    "failed": 2,
-    "criticalFailed": 2,
-    "majorFailed": 0,
+    "passed": 23,
+    "failed": 1,
+    "criticalFailed": 0,
+    "majorFailed": 1,
     "minorFailed": 0
   },
   "automatedChecks": [
@@ -39,9 +39,9 @@
       "id": "doc-manu",
       "category": "Docs Consistency",
       "label": "Manuscript numeric consistency",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "Manuscript numbers drift from artifacts — resync required"
+      "detail": "Manuscript claims match canonical artifacts"
     },
     {
       "id": "doc-refs",
@@ -105,7 +105,7 @@
       "label": "Lockbox protocol intact",
       "pass": true,
       "severity": "critical",
-      "detail": "Cycle 2026Q1-R1, no violations"
+      "detail": "Cycle 2026Q4-R4, no violations"
     },
     {
       "id": "lock-split",
@@ -113,7 +113,7 @@
       "label": "Lockbox has adequate cells",
       "pass": true,
       "severity": "major",
-      "detail": "7 lockbox cells (>=6 required)"
+      "detail": "17 lockbox cells (>=6 required)"
     },
     {
       "id": "val-construct",
@@ -151,9 +151,9 @@
       "id": "repro-ci",
       "category": "Reproducibility",
       "label": "CI reproducibility gate passes",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+      "detail": "Full ci:gate passed (7 phases)"
     },
     {
       "id": "val-identity",
@@ -177,7 +177,7 @@
       "label": "Design matrix full rank (7 columns)",
       "pass": true,
       "severity": "critical",
-      "detail": "rank=7/7 on 49 complete rows"
+      "detail": "rank=7/7 on 87 complete rows"
     },
     {
       "id": "val-single-r2",
@@ -199,23 +199,17 @@
       "id": "val-canonic-reported",
       "category": "Measurement Validity",
       "label": "Canonical (fixed-model) OOS R2 is non-negative or explicitly undefined",
-      "pass": true,
+      "pass": false,
       "severity": "major",
-      "detail": "R2 undefined for tier(s) A, B, C because folds hold out fewer than three pairs; RMSE is reported instead and the limitation is documented as KI-14"
+      "detail": "NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: Tier A R2=-2.0066, Tier B R2=-0.9663, Tier C R2=-0.8968. Must be discussed in the manuscript, not filed as \"descriptive only\"."
     }
   ],
   "blockers": [
     {
-      "id": "doc-manu",
-      "severity": "critical",
-      "label": "Manuscript numeric consistency",
-      "detail": "Manuscript numbers drift from artifacts — resync required"
-    },
-    {
-      "id": "repro-ci",
-      "severity": "critical",
-      "label": "CI reproducibility gate passes",
-      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+      "id": "val-canonic-reported",
+      "severity": "major",
+      "label": "Canonical (fixed-model) OOS R2 is non-negative or explicitly undefined",
+      "detail": "NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: Tier A R2=-2.0066, Tier B R2=-0.9663, Tier C R2=-0.8968. Must be discussed in the manuscript, not filed as \"descriptive only\"."
     }
   ],
   "humanChecklist": [

@@ -138,9 +138,13 @@ function main(): void {
   const missingByCovariate = new Map<string, number>();
 
   for (const c of constructs) {
-    const code2 = (c.iso3 ?? '').trim();
-    const year = (c.year ?? '').trim();
-    const iso3 = ISO2_TO_ISO3[code2];
+    const raw = (c.iso3 ?? '').trim();
+    const year = String(Number.parseFloat(c.year ?? ''));
+    // build_wvs_constructs.ts now emits ISO-3 directly; the table is kept for
+    // older construct files that still carry ISO-2.
+    const iso3 = raw.length === 3 && /^[A-Z]{3}$/.test(raw)
+      ? raw
+      : ISO2_TO_ISO3[raw];
     if (!iso3) { dropped.noIso += 1; continue; }
 
     const zRaw = c.Z_religion_importance;

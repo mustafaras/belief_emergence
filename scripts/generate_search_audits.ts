@@ -167,7 +167,7 @@ const AUDITS: Audit[] = [
       { label: 'B2: panel_model_data_v2', pattern: 'panel_model_data_v2', kind: 'literal' },
       { label: 'B3: panel_data_production', pattern: 'panel_data_production', kind: 'literal' },
       { label: 'B4: /data/ path strings', pattern: '/data/', kind: 'literal' },
-      { label: 'B5: canonical dataset filename', pattern: 'panel_canonical_23_countries_v1', kind: 'literal' },
+      { label: 'B5: canonical dataset filename', pattern: 'panel_canonical_v2', kind: 'literal' },
     ],
   },
   {
