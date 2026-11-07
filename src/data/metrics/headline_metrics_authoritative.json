@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-03-26T06:44:15.888Z",
+  "generated_at_utc": "2026-11-07T13:26:33.231Z",
   "dataset": {
     "path": "/data/panel_canonical_23_countries_v1.csv",
-    "checksum_sha256": "2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF",
-    "n_rows": 630,
+    "checksum_sha256": "CBFC3A1F9A669ECD7C7941F9EA3CFA95A24E5ECE051520DF287CCE9E5BDD53C3",
+    "n_rows": 49,
     "year_range": [
-      2000,
+      2017,
       2022
     ],
-    "countries_count": 23
+    "countries_count": 45
   },
   "model": {
     "id": "production_model_v1",
@@ -26,10 +26,10 @@
     "bias": "bias = mean(obs - pred)"
   },
   "values": {
-    "r2": 0.8460616663260042,
-    "corr": 0.94884751771913,
-    "mae": 0.10047671975433929,
-    "rmse": 0.12120105998908424,
-    "bias": -0.06992290335103843
+    "r2": 0.6319104475115369,
+    "corr": 0.8010137314887916,
+    "mae": 0.12663364599076804,
+    "rmse": 0.16304880149579903,
+    "bias": 0.024904293637923455
   }
 }

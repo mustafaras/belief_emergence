@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.model_complexity_support.v1",
-  "generatedAtIso": "2026-11-07T13:03:37.041Z",
+  "generatedAtIso": "2026-11-07T13:26:35.419Z",
   "complexityByTier": [
     {
       "tier": "A",
@@ -29,14 +29,14 @@
   ],
   "supportMask": {
     "schemaVersion": "phase1.support_mask.v1",
-    "generatedAtIso": "2026-11-07T13:03:37.041Z",
+    "generatedAtIso": "2026-11-07T13:26:35.419Z",
     "nUniqueCountryYears": 49,
     "grid": {
       "xBins": 8,
       "yBins": 8,
-      "occupiedCells": 28,
-      "occupancyRatio": 0.4375,
-      "lowSupportCells": 16
+      "occupiedCells": 26,
+      "occupancyRatio": 0.40625,
+      "lowSupportCells": 13
     },
     "supportThresholds": {
       "lowCellCountThreshold": 2

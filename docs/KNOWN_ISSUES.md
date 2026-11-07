@@ -100,6 +100,93 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 
 ---
 
+## KI-16 — The lockbox protocol cannot be honoured on the v2 panel
+
+`npm run generate:lockbox-holdout` refuses to write:
+
+```text
+Error: Lockbox protocol violations detected:
+       lockbox_rows_below_minimum_threshold. Artifact was not written.
+```
+
+The protocol reserves 7 of 34 unique country-years (72 of 630 rows). The v2
+panel has 49 complete cases across 45 countries, 41 of which contribute a
+single row. A 7-cell holdout would remove every observation for seven
+countries and leave 42 rows for a model with seven parameters.
+
+**The generator is correct to refuse.** A lockbox is a credibility device: it
+works only when the held-out block is large enough to be informative and small
+enough to leave an estimable training set. At n = 49 neither condition holds.
+
+Consequences:
+
+1. The "release-gated lockbox confirmation" claim must be withdrawn from the
+   manuscript. It cannot be delivered on this sample.
+2. The existing `lockbox_holdout.json` still contains v1 evaluation numbers
+   (RMSE around 1e-6). Those numbers belong to the tautological model and must
+   not be cited.
+3. If a lockbox is required for the target venue, the only honest route is to
+   enlarge the sample — which returns to the WVS wave 3–6 data-use application.
+
+The roadmap records this as a scope reduction, not a bug.
+
+---
+
+## KI-15 — `alpha` and `beta` collapse to their lower bound: X and Y carry no structural power
+
+Re-estimating the model on the v2 panel (`scripts/fit_coefficients_v2.py`,
+differential evolution + L-BFGS-B with box constraints), the elasticities in
+
+```text
+Z = X_s^alpha * Y_s^beta * exp(Phi) / (that + k)
+```
+
+both converge to the lowest permitted value, `alpha = beta = 0.050`, and stay
+there when the bound is widened and the optimiser is restarted. Raising either
+exponent above that floor lowers the fit.
+
+Meaning: the sublinear-power structural term contributes no explanatory power
+on this sample. `X^0.05` and `Y^0.05` are near-constant across the observed
+range, so `Z` is effectively driven by `exp(Phi)` alone. `Y` still matters, but
+through the interaction term `c_yr * Y_s * R` (fitted at -1.60), not through the
+elasticity `beta`.
+
+### Why this is expected here, and what it costs
+
+The v2 panel spans only 49 observations across 45 countries, 41 of which
+contribute a single row. There is not enough within-country variation for an
+elasticity to be identified separately from the level term. The v1 panel could
+report `alpha` near 1 only because `C` was restating `Z`.
+
+**Cost:** the paper's title and framing — "Bounded Nonlinear Response Surfaces
+for Macro-Urban Belief Emergence" driven by urbanization and inequality — no
+longer describes the fitted model. The fitted model is a cross-sectional
+saturating map of *contextual channels* (welfare capacity, media environment,
+education) with urbanization and inequality present but inert as elasticities.
+
+Two defensible responses:
+
+1. **Reframe.** Present the model as a bounded contextual-channel map and move
+   urbanization/inequality to the discussion as boundary conditions. Honest,
+   cheap, and matches what the data supports.
+2. **Change the estimand.** Drop the multiplicative structural term entirely
+   and estimate a bounded additive model on the channels. Cleaner
+   statistically, but a different paper.
+
+The roadmap now assumes (1).
+
+### A separate defect this exposed
+
+The structural mapping window in `src/utils/modelContract.ts` was
+`X in [0.4, 0.9]`, `Y in [-1.5, 3.5]` — the v1 ranges. The v2 panel spans
+`X in [0.3304, 0.9544]` and `Y in [-1.6077, 3.4280]`, so six observations fell
+outside and were clipped to the floor of the interior band. That pinning is
+what first drove `alpha` into its bound; with the window corrected the bound
+result persists, which is how we know it is real rather than a clipping
+artefact.
+
+---
+
 ## KI-14 — Leave-one-country-out refit is not viable at n = 49
 
 The v2 panel has 49 complete cases across 23 countries, so a country-out fold

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "coefficients.v2",
+  "fittedOn": "public/data/panel_canonical_v2.csv",
+  "nRows": 49,
+  "nCountries": 45,
+  "parameters": {
+    "phi0": -6.383254297560698,
+    "alpha": 0.05000000001953905,
+    "beta": 0.050000000023667716,
+    "k": 0.0037871847737521087,
+    "c_M": 1.10642132295249,
+    "c_T": -0.012005590624905027,
+    "c_E": 0.1167350493490904,
+    "c_R": 1.8168285814367846,
+    "c_tr": -0.23526824802323876,
+    "c_yr": -1.5997263964961717
+  },
+  "retractedChannels": {
+    "C": "coefficient not estimated: channel unavailable in v2",
+    "D": "coefficient not estimated: channel unavailable in v2",
+    "G": "coefficient not estimated: channel unavailable in v2",
+    "S": "coefficient not estimated: channel unavailable in v2"
+  },
+  "zScale": {
+    "min": -1.6094638811769215,
+    "max": 1.584634923582244
+  },
+  "fit": {
+    "r2": 0.6574932376838846,
+    "corr": 0.8115439589800041,
+    "rmse": 0.5024705982982423,
+    "mae": 0.3924573890936233,
+    "bias": 0.023346545552324294
+  }
+}

@@ -177,17 +177,21 @@ export async function generateAuthoritativeAnalysis(): Promise<Metrics> {
       alpha: OPTIMIZED_STRUCTURAL_PARAMS.alpha,
       beta: OPTIMIZED_STRUCTURAL_PARAMS.beta,
       k: OPTIMIZED_STRUCTURAL_PARAMS.k,
-      C: row.C,
+      // C, D, G and S are structurally unavailable in the v2 panel. The model
+      // requires concrete numbers, so they are neutralized to 0 (the mean of a
+      // standardized channel) at this boundary rather than being coerced from
+      // null, which would inject a fabricated value.
+      C: row.C ?? 0,
       M: row.M,
       T: row.T,
-      D: row.D,
-      G: row.G,
+      D: row.D ?? 0,
+      G: row.G ?? 0,
       E: row.E,
-      S: row.S,
+      S: row.S ?? 0,
       R: row.R,
     };
 
-    const predicted = calculateModel(params, { inputsAreStandardized: false, modifiersAreStandardized: false }).Z;
+    const predicted = calculateModel(params, { inputsAreStandardized: false, modifiersAreStandardized: true }).Z;
     const observed = normalizeObservedToStructuralBand(row.Z, Z_NORMALIZATION.min, Z_NORMALIZATION.max);
 
     return {

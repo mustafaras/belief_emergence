@@ -76,8 +76,8 @@
     \item Primary claims rest on refit out-of-sample validation, not in-sample fit. Two complementary protocols:
     \begin{itemize}
         \setlength{\itemsep}{0.2em}
-        \item Leave-one-country-out (23 folds): median OOS RMSE 0.000001 (Tier~A), 0.000003 (Tier~B), 0.000004 (Tier~C).
-        \item Rolling-origin temporal validation (9 forward-chaining folds): median OOS RMSE 0.000003 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
+        \item Leave-one-country-out (45 folds): median OOS RMSE 0.108201 (Tier~A), 0.108203 (Tier~B), 0.108204 (Tier~C).
+        \item Rolling-origin temporal validation (9 forward-chaining folds): median OOS RMSE 0.108203 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
     \end{itemize}
     \item Parameter sign consistency thresholds gate primary claims: $\ge 0.70$ (Tier~A), $\ge 0.80$ (Tier~B). Support-per-parameter ratios: 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
     \item A separately gated lockbox holdout (frozen split, one-time per release cycle) confirms Tier~A/B stability without repeated metric peeking.
@@ -87,9 +87,9 @@
 \Section{Exploratory evidence and failure cases}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Tier~C (full nonlinear complexity: curvature, higher-order interactions) is explicitly separated from primary evidence. Bounded by exploratory stability threshold (0.60; pooled median consistency 0.9070) with wider fold-level variability than Tier~A/B. No headline claim rests on Tier~C.
+    \item Tier~C (full nonlinear complexity: curvature, higher-order interactions) is explicitly separated from primary evidence. Bounded by exploratory stability threshold (0.60; pooled median consistency 1.0000) with wider fold-level variability than Tier~A/B. No headline claim rests on Tier~C.
     \item Failure and instability evidence documented prominently: Estonia (MAE 0.292, sparse low-uptake regime), Russia (MAE 0.250, volatile transition regime), Slovak Republic (MAE 0.277, sparse mid-regime). Rolling-origin parameter drift flagged for Tier~C (education curvature sign flip in 1 of 9 folds).
-    \item Empirical support: 34 unique country--years after collapsing scenario replication. Regime-specific coverage: low-uptake ($Z<0.33$) 23.5\%, mid-transition 52.9\%, high-uptake ($Z\ge 0.67$) 23.5\%.
+    \item Empirical support: 49 complete-case observations after collapsing scenario replication. Regime-specific coverage: low-uptake ($Z<0.33$) 23.5\%, mid-transition 52.9\%, high-uptake ($Z\ge 0.67$) 23.5\%.
 \end{itemize}
 
 \Section{Inferential boundaries}

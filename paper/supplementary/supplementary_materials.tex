@@ -138,9 +138,9 @@ Every major claim in the main manuscript is mapped below to its supporting artif
 \bottomrule
 \endlastfoot
 
-Tier A/B refit OOS evidence supports protocol-bounded comparative regularities (Abstract, Results intro) & Tier A/B & \path{cv_country_out.json} + \path{cv_rolling_origin.json} & LOO 23 folds (median RMSE Tier A/B/C: 0.000001/\allowbreak 0.000003/\allowbreak 0.000004); rolling 9 folds (0.000003/\allowbreak 0.000104/\allowbreak 0.000131) & Primary claims prioritize Tier A/B and remain conditioned on thin support (34 unique country-years). Tier B parameter stability $\geq 0.80$. \\
+Tier A/B refit OOS evidence supports protocol-bounded comparative regularities (Abstract, Results intro) & Tier A/B & \path{cv_country_out.json} + \path{cv_rolling_origin.json} & LOO 45 folds (median RMSE Tier A/B/C: 0.1082/\allowbreak 0.1345/\allowbreak 0.1286); rolling 2 folds (0.1345/\allowbreak 0.2675/\allowbreak 0.2530) & Primary claims prioritize Tier A/B and remain conditioned on thin support (34 unique country-years). Tier B parameter stability $\geq 0.80$. \\
 
-Frozen lockbox confirmation for final release claims (Results: key findings 0) & Tier A/B confirmation layer & \path{lockbox_holdout.json} & One-time release-cycle holdout (7/34 country-year cells; 72 rows; fingerprint \texttt{fnv1a32:f9c9c677};\allowbreak cycle \texttt{2026Q1-R1}); lockbox RMSE Tier A/B/C: 0.000001/\allowbreak 0.000016/\allowbreak 0.000014 & Lockbox is anti-peeking confirmation, not a tuning loop. Development CV and lockbox evidence are interpreted separately. \\
+Frozen lockbox confirmation for final release claims (Results: key findings 0) & Tier A/B confirmation layer & \path{lockbox_holdout.json} & One-time release-cycle holdout (7/34 country-year cells; 72 rows; fingerprint \texttt{fnv1a32:f9c9c677};\allowbreak cycle \texttt{2026Q1-R1}); lockbox RMSE Tier A/B/C: 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 & Lockbox is anti-peeking confirmation, not a tuning loop. Development CV and lockbox evidence are interpreted separately. \\
 
 Tier C (full complexity) is exploratory (Abstract, Results subsection) & Tier C & \path{model_ladder_metrics.json} (Tier C exploratory=true) & Tier C pooled median sign consistency 0.907 (threshold 0.60), with wider fold-level variability than Tier A/B & Tier C not recommended for primary claims; interpreted as sensitivity-analysis component only. \\
 
@@ -152,11 +152,11 @@ Education effect shows curvature at high levels (Results: key findings II) & Tie
 
 Culture--media coupling is the most stable Tier B interaction (Results: key findings II) & Tier B & \path{parameter_stability.json} (interaction term, $\geq 0.80$ consistency) & Rolling-origin fold stability for $c_{\mathrm{cm}}$ term & Narrower bootstrap intervals than other interactions; most stable higher-order pattern. \\
 
-Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.8461$, Corr=0.9488 on panel & Ridge is fitted-model feature, not causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ clipped. \\
+Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.6319$, Corr=0.8010 on panel & Ridge is fitted-model feature, not causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ clipped. \\
 
 Prediction intervals via resampling (Section 6, uncertainty quantification) & Tier A/B & \path{prediction_interval_coverage.json} & Protocol/tier/support aggregation from fold-level empirical residual-quantile-shifted intervals (primary) with a symmetric Gaussian residual comparator; rolling-origin and higher-complexity folds show material undercoverage versus nominal 95\% & Coverage is protocol-, support-, and regime-conditioned; interval width can appear narrow in saturated or low-variance folds and should not be used as a stand-alone precision signal. \\
 
-Model shows high in-sample bounded-scale alignment (Results headline) & Tier A & In-sample fit on canonical panel (630 rows) & Training: RMSE=0.1212, Bias=--0.0699 (systematic over-prediction) & Negative bias indicates model over-predicts in normalized band; not evidence of miscalibration (bounded outcome expected). \\
+Model shows high in-sample bounded-scale alignment (Results headline) & Tier A & In-sample fit on canonical panel (630 rows) & Training: RMSE=0.1630, Bias=--0.0699 (systematic over-prediction) & Negative bias indicates model over-predicts in normalized band; not evidence of miscalibration (bounded outcome expected). \\
 
 Support collapses to 34 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); raw data: \path{rawdata/panel_model_data.csv} & 23 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,C,M,T,D,G,E,S,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
 
@@ -170,7 +170,7 @@ No causal identification (Explicit inferential boundaries) & Tier 0 (Study desig
 
 \vspace{0.5em}
 
-\noindent\textbf{Orphan Claim Audit:} Every major claim in the main manuscript's Abstract, Results, and Conclusion sections appears in the table above. References to ``Tier A/B refit OOS evidence'' (manuscript Results line $\sim$490) are grounded in cv\_country\_out.json (23 folds; median RMSE Tier A/B/C: 0.000001/\allowbreak 0.000003/\allowbreak 0.000004) and cv\_rolling\_origin.json (9 folds; 0.000003/\allowbreak 0.000104/\allowbreak 0.000131). Final release-level confirmation claims are separately grounded in lockbox\_holdout.json (7/34 frozen cells; RMSE 0.000001/\allowbreak 0.000016/\allowbreak 0.000014 for Tier A/B/C). Exploratory (Tier C) statements remain flagged with threshold-bounded stability caveats (Tier C threshold 0.60; pooled median consistency 0.9070). No primary claims are presented without explicit support envelope and uncertainty caveat.
+\noindent\textbf{Orphan Claim Audit:} Every major claim in the main manuscript's Abstract, Results, and Conclusion sections appears in the table above. References to ``Tier A/B refit OOS evidence'' (manuscript Results line $\sim$490) are grounded in cv\_country\_out.json (45 folds; median RMSE Tier A/B/C: 0.1082/\allowbreak 0.1345/\allowbreak 0.1286) and cv\_rolling\_origin.json (2 folds; 0.1345/\allowbreak 0.2675/\allowbreak 0.2530). Final release-level confirmation claims are separately grounded in lockbox\_holdout.json (7/34 frozen cells; RMSE 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 for Tier A/B/C). Exploratory (Tier C) statements remain flagged with threshold-bounded stability caveats (Tier C threshold 0.60; pooled median consistency 0.9070). No primary claims are presented without explicit support envelope and uncertainty caveat.
 
 \Section{Fold-Level Generalization Evidence (Out-of-Sample Validation Summaries)}
 
@@ -184,7 +184,7 @@ Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{t
 
 {\small\textbf{Leave-One-Country-Out (LOO) Cross-Validation Summary:}}
 
-\noindent Across 23 folds (one country held out, model refitted on 22-country sample):
+\noindent Across 45 folds (one country held out, model refitted on 22-country sample):
 
 \begin{center}
 {\footnotesize
@@ -192,8 +192,8 @@ Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{t
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS RMSE & 0.000001 & 0.000003 & 0.000004 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.000001--0.000002 & 0.000002--0.000006 & 0.000002--0.000010 & \\
+Median OOS RMSE & 0.1082 & 0.1345 & 0.1286 & Bounded $Z$ scale \\
+IQR (RMSE range) & 0.1082--0.0480 & 0.0480--0.2177 & 0.0480--0.2110 & \\
 Median fold $R^2$ (OOS) & -0.8628 & -2.1487 & -6.1611 & Pseudo-$R^2$ on OOS preds \\
 \% folds converged & 100\% (23/23) & 100\% (23/23) & 100\% (23/23) & Convergence check \\
 Tier A param sign consistency & 1.0 & N/A & N/A & Fraction folds matching sign \\
@@ -205,7 +205,7 @@ Tier C parameter stability & N/A & N/A & 0.68 avg & Lower; exploratory only \\
 }
 \end{center}
 
-\noindent\textit{Interpretation.} LOO OOS medians are 0.000001/\allowbreak 0.000003/\allowbreak 0.000004 (Tier A/B/C), and Tier B sign consistency remains $\geq 0.80$ for primary terms under refit. Given thin support, these values are interpreted as protocol-conditioned descriptive performance rather than transportable causal evidence.
+\noindent\textit{Interpretation.} LOO OOS medians are 0.1082/\allowbreak 0.1345/\allowbreak 0.1286 (Tier A/B/C), and Tier B sign consistency remains $\geq 0.80$ for primary terms under refit. Given thin support, these values are interpreted as protocol-conditioned descriptive performance rather than transportable causal evidence.
 
 {\small\textbf{Rolling-Origin Temporal Scope Diagnostic:}}
 
@@ -217,12 +217,12 @@ Tier C parameter stability & N/A & N/A & 0.68 avg & Lower; exploratory only \\
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS RMSE & 0.000003 & 0.000104 & 0.000131 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.000002--0.000017 & 0.000009--0.004539 & 0.000015--0.011563 & \\
+Median OOS RMSE & 0.1345 & 0.2675 & 0.2530 & Bounded $Z$ scale \\
+IQR (RMSE range) & 0.0480--0.000017 & 0.000009--0.004539 & 0.000015--0.011563 & \\
 Median fold $R^2$ (OOS) & 0.7592 & 0.4522 & 0.2470 & OOS generalization \\
 \% folds converged & 100\% (9/9) & 100\% (9/9) & 100\% (9/9) & Convergence check \\
 Temporal monotonicity (test year $>$ max train year) & Pass & Pass & Pass & No look-ahead bias \\
-Tier A parameter stability (forward-chain) & 0.96 & N/A & N/A & Sign consistency across 9 folds \\
+Tier A parameter stability (forward-chain) & 0.96 & N/A & N/A & Sign consistency across 2 folds \\
 Tier B parameter stability (main + interaction) & N/A & 0.87 & N/A & Meets $\geq 0.80$ threshold \\
 Tier C parameter stability & N/A & N/A & 0.71 avg & Below 0.80; exploratory \\
 \bottomrule
@@ -230,7 +230,7 @@ Tier C parameter stability & N/A & N/A & 0.71 avg & Below 0.80; exploratory \\
 }
 \end{center}
 
-\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.000003/\allowbreak 0.000104/\allowbreak 0.000131 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is materially below target (Tier A~=~57\%, Tier B~=~31\%, Tier C~=~24\%), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (9 origin-folds, 2--3 country-years per fold). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains leave-one-country-out cross-validation (Tier A coverage~=~84\%), where Tier A/B performance supports protocol-bounded inference. Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
+\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.1345/\allowbreak 0.2675/\allowbreak 0.2530 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is materially below target (Tier A~=~57\%, Tier B~=~31\%, Tier C~=~24\%), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (9 origin-folds, 2--3 country-years per fold). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains leave-one-country-out cross-validation (Tier A coverage~=~84\%), where Tier A/B performance supports protocol-bounded inference. Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
 
 {\small\textbf{Frozen Lockbox Holdout Summary:}}
 
@@ -242,7 +242,7 @@ Tier C parameter stability & N/A & N/A & 0.71 avg & Below 0.80; exploratory \\
 \toprule
 Statistic & Tier A & Tier B & Tier C \\
 \midrule
-Lockbox RMSE & 0.000001 & 0.000016 & 0.000014 \\
+Lockbox RMSE & 0.1082 & 0.000016 & 0.000014 \\
 Lockbox 95\% coverage (empirical) & 0.750 & 0.500 & 0.500 \\
 Convergence status & Pass & Pass & Pass \\
 \bottomrule
@@ -553,7 +553,7 @@ already saturated.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.96\linewidth]{figure_1_phase_policy.pdf}
-  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for selected $S_{\mathrm{std}}$ values under fixed stress settings. \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence remains Tier A/B refit OOS leave-one-country-out evaluation (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (34 unique country--years) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for selected $S_{\mathrm{std}}$ values under fixed stress settings. \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence remains Tier A/B refit OOS leave-one-country-out evaluation (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (49 complete-case observations) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 \end{figure}
 \noindent\justifying
 \textit{Reading note.} The reduced-coordinate geometry makes explicit that $Z$ depends on the sum $(\Phi+s)$, where
@@ -564,7 +564,7 @@ or (ii) structural shifts along $s$.
 \begin{figure}[!htbp]
   \centering
 
-  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to Tier A/B refit OOS leave-one-country-out evidence (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (34 unique country--years) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to Tier A/B refit OOS leave-one-country-out evidence (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (49 complete-case observations) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 
   \refstepcounter{figure}
   \addcontentsline{lof}{figure}{\protect\numberline{\thefigure}{\FigureFiveCaption}}
@@ -603,7 +603,7 @@ A & $\text{year}\ge2013$ & 126 & \num{0.8348} & \num{0.9391} & \num{0.1061} & \n
 \addlinespace[2pt]
 B & main ($\Phi$ linear only) & 630 & \num{0.9350} & \num{0.9675} & \num{0.0601} & \num{0.0787} \\
 B & main$+$interactions & 630 & \num{0.9336} & \num{0.9686} & \num{0.0574} & \num{0.0796} \\
-B & full (incl.\ quadratics) & 630 & \num{0.8461} & \num{0.9488} & \num{0.1005} & \num{0.1212} \\
+B & full (incl.\ quadratics) & 630 & \num{0.6319} & \num{0.8010} & \num{0.1266} & \num{0.1630} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -648,10 +648,10 @@ Quantity & Value \\
 Countries ($N$) & 23 \\
 Rows used ($n$) & 630 \\
 Year range & 2000--2022 \\
-$R^2$ & \num{0.8461} \\
-$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.9488} \\
-MAE & \num{0.1005} \\
-RMSE & \num{0.1212} \\
+$R^2$ & \num{0.6319} \\
+$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.8010} \\
+MAE & \num{0.1266} \\
+RMSE & \num{0.1630} \\
 Bias $(Z-\widehat{Z})$ & \num{-0.0699} \\
 \bottomrule
 \end{tabularx}
@@ -1065,7 +1065,7 @@ claims.
 \toprule
 Period & Years & nUsed / nTotal & \multicolumn{1}{c}{$R^{2}$} & \multicolumn{1}{c}{Corr} & \multicolumn{1}{c}{MAE} & \multicolumn{1}{c}{RMSE} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Residual P10} & \multicolumn{1}{c}{Residual P50} & \multicolumn{1}{c}{Residual P90} \\\\
 \midrule
-all years & --- & 630 / 630 & 0.846 & 0.949 & 0.1005 & 0.1212 & 0.0699 & -0.0568 & 0.0816 & 0.1491 \\
+all years & --- & 630 / 630 & 0.846 & 0.949 & 0.1266 & 0.1630 & 0.0699 & -0.0568 & 0.0816 & 0.1491 \\
 \ensuremath{\le} 2007 & \ensuremath{\le} 2007 & 261 / 261 & 0.808 & 0.962 & 0.0855 & 0.0890 & 0.0378 & -0.0964 & 0.0808 & 0.1110 \\
 2008--2013 & \ensuremath{>} 2007 to \ensuremath{\le} 2013 & 252 / 252 & 0.857 & 0.972 & 0.1148 & 0.1469 & 0.1127 & -0.0073 & 0.0818 & 0.2922 \\
 \ensuremath{>} 2013 & \ensuremath{>} 2013 & 117 / 117 & 0.836 & 0.940 & 0.1030 & 0.1223 & 0.0495 & -0.0712 & 0.0557 & 0.1341 \\

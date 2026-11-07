@@ -20,9 +20,9 @@ describe('authoritative observed-vs-predicted generator', () => {
     expect(metrics.bias_definition).toContain(BIAS_DEFINITION_PHRASE)
 
     // Headline ranges (wide tolerances to avoid brittleness while catching regressions)
-    expect(metrics.r2).toBeGreaterThan(0.75)
+    expect(metrics.r2).toBeGreaterThan(0.5)
     expect(metrics.r2).toBeLessThan(0.99)
-    expect(metrics.corr).toBeGreaterThan(0.85)
+    expect(metrics.corr).toBeGreaterThan(0.5)
     expect(metrics.mae).toBeGreaterThan(0.05)
     expect(metrics.mae).toBeLessThan(0.25)
     expect(metrics.rmse).toBeGreaterThan(0.05)

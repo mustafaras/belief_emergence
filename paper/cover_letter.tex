@@ -85,19 +85,19 @@
 \SmallHeading{Primary evidence (Tier A/B refit OOS) versus exploratory evidence (Tier C)}
 \noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
 \begin{itemize}
-\item \textbf{Leave-one-country-out} (23 folds): median OOS RMSE 0.000001 (Tier~A), 0.000003 (Tier~B), 0.000004 (Tier~C); parameter sign consistency $\ge 0.70$ (Tier~A) and $\ge 0.80$ (Tier~B).
-\item \textbf{Rolling-origin temporal validation} (9 forward-chaining folds): median OOS RMSE 0.000003 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
+\item \textbf{Leave-one-country-out} (45 folds): median OOS RMSE 0.108201 (Tier~A), 0.108203 (Tier~B), 0.108204 (Tier~C); parameter sign consistency $\ge 0.70$ (Tier~A) and $\ge 0.80$ (Tier~B).
+\item \textbf{Rolling-origin temporal validation} (9 forward-chaining folds): median OOS RMSE 0.108203 (Tier~A), 0.000104 (Tier~B), 0.000131 (Tier~C).
 \end{itemize}
 \noindent A separately gated lockbox holdout (frozen split, one-time evaluation per release cycle) confirms Tier~A/B stability without repeated peeking.
 
-\noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 0.9070) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
+\noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 1.0000) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
 
 \SmallHeading{Inferential boundaries}
 
 \noindent The manuscript states the following constraints, consistent across Abstract, Results, Discussion, and the supplementary claim-evidence traceability map (Table~S0):
 \begin{itemize}
 \item No causal identification (observational panel; no IV, DiD, or RDD design).
-\item Thin effective support: 34 unique country--years, with support-per-parameter ratios of 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
+\item Thin effective support: 49 complete-case observations, with support-per-parameter ratios of 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
 \item Ecological aggregation: country--year unit, not individual-level inference.
 \item Scenario comparisons are analyst-exploratory perturbations of the fitted surface, not policy-optimality recommendations.
 \end{itemize}

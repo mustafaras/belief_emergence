@@ -67,7 +67,14 @@ export function computeR2(observed: number[], predicted: number[]): number {
     if (!Number.isFinite(obs) || !Number.isFinite(pred)) continue;
     paired.push({ obs, pred });
   }
-  if (!paired.length) return NaN;
+  // R2 is not meaningful for fewer than three pairs. With one observation the
+  // total sum of squares is exactly zero and the ratio is a division artefact;
+  // with two observations the residual degrees of freedom are zero, so the
+  // value is dominated by whichever point happens to sit closer to the mean and
+  // can reach -3135 (observed on the country_out:CZE fold). Reporting NaN keeps
+  // the aggregate median honest instead of letting four degenerate folds define
+  // it.
+  if (paired.length < 3) return NaN;
   const meanObs = paired.reduce((acc, v) => acc + v.obs, 0) / paired.length;
   let ssTot = 0;
   let ssRes = 0;

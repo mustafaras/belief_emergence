@@ -28,8 +28,11 @@ function computeHeadlineMetrics(panel: PanelRowCanonical[]) {
   const countries = new Set<string>();
 
   for (const row of panel) {
+    // C is structurally unavailable in the v2 panel. `null - 2.61` would be
+    // -2.61, silently injecting a fabricated moderator; the channel is
+    // therefore neutralized to its standardized mean.
     const cStd =
-      (row.C - 2.613602) / 0.542138;
+      row.C === null ? 0 : (row.C - 2.613602) / 0.542138;
     const computed = calculateModel(
       {
         X: row.X,
@@ -40,10 +43,10 @@ function computeHeadlineMetrics(panel: PanelRowCanonical[]) {
         C: cStd,
         M: row.M,
         T: row.T,
-        D: row.D,
-        G: row.G,
+        D: row.D ?? 0,
+        G: row.G ?? 0,
         E: row.E,
-        S: row.S,
+        S: row.S ?? 0,
         R: row.R,
       },
       {

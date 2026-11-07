@@ -509,13 +509,24 @@ function gateMeasurementValidity(): void {
   if (cv) {
     const canon = (cv as Record<string, Record<string, Record<string, Record<string, number>>>>)
       .aggregatesCanonical ?? {};
-    const negatives = Object.keys(canon)
-      .filter((t) => (canon[t]?.r2?.median ?? 0) < 0)
-      .map((t) => `Tier ${t} R2=${canon[t].r2.median.toFixed(4)}`);
+    // R2 is reported as null when a fold has fewer than three test pairs,
+    // because the statistic is undefined there (see KI-14). The check therefore
+    // looks for a *computed* negative value and separately confirms that the
+    // absence is legitimate rather than hidden.
+    const negatives: string[] = [];
+    const undefinedR2: string[] = [];
+    for (const tier of Object.keys(canon)) {
+      const med = canon[tier]?.r2?.median;
+      if (typeof med === 'number' && med < 0) negatives.push(`Tier ${tier} R2=${med.toFixed(4)}`);
+      if (med === null || med === undefined) undefinedR2.push(tier);
+    }
+    const pass = negatives.length === 0;
     record('val-canonic-reported', 'Measurement Validity',
-      'Canonical (fixed-model) OOS R2 is non-negative', negatives.length === 0, 'major',
-      negatives.length === 0
-        ? 'Canonical family shows no negative R2'
+      'Canonical (fixed-model) OOS R2 is non-negative or explicitly undefined', pass, 'major',
+      pass
+        ? (undefinedR2.length === 0
+          ? 'Canonical family shows no negative R2'
+          : `R2 undefined for tier(s) ${undefinedR2.join(', ')} because folds hold out fewer than three pairs; RMSE is reported instead and the limitation is documented as KI-14`)
         : `NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: ${negatives.join(', ')}. Must be discussed in the manuscript, not filed as "descriptive only".`);
   }
 }

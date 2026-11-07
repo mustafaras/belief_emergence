@@ -11,10 +11,10 @@ export const STRUCTURAL_MAX = 1 - STRUCTURAL_MIN;
 
 // Panel-space bounds used by the training pipeline.
 // Keep these aligned with any runtime warnings/UX ranges.
-export const PANEL_X_MIN = 0.4;
-export const PANEL_X_MAX = 0.9;
-export const PANEL_Y_MIN = -1.5;
-export const PANEL_Y_MAX = 3.5;
+export const PANEL_X_MIN = 0.3304;
+export const PANEL_X_MAX = 0.9544;
+export const PANEL_Y_MIN = -1.6078;
+export const PANEL_Y_MAX = 3.4280;
 
 export function clamp01(value: number): number {
   if (!Number.isFinite(value)) return 0;
