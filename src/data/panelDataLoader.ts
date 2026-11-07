@@ -2,12 +2,20 @@
  * Canonical panel dataset loader (single source of truth).
  *
  * Canonical runtime CSV path (served from public/):
- *   /data/panel_canonical_23_countries_v1.csv
+ *   /data/panel_canonical_v2.csv
+ *
+ * v2 replaces the shipped v1 panel, which was unsubmittable: in v1 the
+ * predictor C_cultural_intensity was an exact rescaling of the outcome
+ * Z_belief_outcome (corr = 1.0). See docs/KNOWN_ISSUES.md.
  *
  * The loader enforces:
  * - required columns are present (long or short aliases)
  * - numeric fields are finite
  * - SHA-256 checksum matches the expected canonical file
+ *
+ * Structurally unavailable covariates (C, D, S) are present as columns but
+ * carry `NA`. They are parsed as `null`, never as zero, so downstream code
+ * can report them as unavailable rather than silently absent.
  */
 
 import Papa from 'papaparse';
@@ -15,12 +23,11 @@ import Papa from 'papaparse';
 import type { PanelRowCanonical } from '../types/panel';
 export type { PanelRowCanonical } from '../types/panel';
 
-/**
- * Represents a single row in the panel dataset.
- * Each row is a country-year observation.
- */
-export const CANONICAL_PANEL_CSV_PATH = '/data/panel_canonical_23_countries_v1.csv';
-export const CANONICAL_PANEL_SHA256 = '2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF';
+export const CANONICAL_PANEL_CSV_PATH = '/data/panel_canonical_v2.csv';
+export const CANONICAL_PANEL_SHA256 = 'CBFC3A1F9A669ECD7C7941F9EA3CFA95A24E5ECE051520DF287CCE9E5BDD53C3';
+
+/** Columns that the v2 panel declares but cannot populate. */
+export const STRUCTURALLY_UNAVAILABLE = ['C', 'D', 'S'] as const;
 
 export const PANEL_COLUMN_ALIASES: Record<keyof PanelRowCanonical, string[]> = {
   iso3: ['iso3'],
@@ -100,46 +107,60 @@ export function parsePanelCsvText(csvText: string, sourceLabel: string = CANONIC
   }
 
   const getNumber = (row: Record<string, string>, key: keyof PanelRowCanonical, line: number): number => {
-    const aliases = PANEL_COLUMN_ALIASES[key];
-    for (const alias of aliases) {
-      const raw = row[alias];
-      if (raw === undefined || raw === null || raw === '') continue;
-      const v = Number.parseFloat(String(raw));
-      if (Number.isFinite(v)) return v;
-    }
-    throw new Error(`Non-numeric or missing value for ${String(key)} on row ${line} in ${sourceLabel}`);
-  };
-
-  const rows: PanelRowCanonical[] = [];
-
-  parsed.data.forEach((raw, idx) => {
-    const iso3 = String(raw.iso3 || '').trim();
-    const country = String(raw.country_name || '').trim();
-    const year = Number.parseInt(String(raw.year ?? ''), 10);
-
-    if (!iso3 || iso3.length !== 3 || !country || !Number.isFinite(year)) {
-      throw new Error(`Invalid identifiers on row ${idx + 2} in ${sourceLabel}`);
-    }
-
-    const row: PanelRowCanonical = {
-      iso3,
-      country_name: country,
-      year,
-      Z: getNumber(raw, 'Z', idx + 2),
-      X: getNumber(raw, 'X', idx + 2),
-      Y: getNumber(raw, 'Y', idx + 2),
-      C: getNumber(raw, 'C', idx + 2),
-      M: getNumber(raw, 'M', idx + 2),
-      T: getNumber(raw, 'T', idx + 2),
-      D: getNumber(raw, 'D', idx + 2),
-      G: getNumber(raw, 'G', idx + 2),
-      E: getNumber(raw, 'E', idx + 2),
-      S: getNumber(raw, 'S', idx + 2),
-      R: getNumber(raw, 'R', idx + 2),
+      const value = getNullableNumber(row, key);
+      if (value === null) {
+        throw new Error(`Non-numeric or missing value for ${String(key)} on row ${line} in ${sourceLabel}`);
+      }
+      return value;
     };
 
-    rows.push(row);
-  });
+    /** Returns null for an unavailable value, including the literal "NA". */
+    const getNullableNumber = (
+      row: Record<string, string>,
+      key: keyof PanelRowCanonical,
+    ): number | null => {
+      const aliases = PANEL_COLUMN_ALIASES[key];
+      for (const alias of aliases) {
+        const raw = row[alias];
+        if (raw === undefined || raw === null) continue;
+        const text = String(raw).trim();
+        if (text === '' || text.toUpperCase() === 'NA') continue;
+        const v = Number.parseFloat(text);
+        if (Number.isFinite(v)) return v;
+      }
+      return null;
+    };
+
+    const rows: PanelRowCanonical[] = [];
+
+    parsed.data.forEach((raw, idx) => {
+      const iso3 = String(raw.iso3 || '').trim();
+      const country = String(raw.country_name || '').trim();
+      const year = Number.parseInt(String(raw.year ?? ''), 10);
+
+      if (!iso3 || iso3.length !== 3 || !country || !Number.isFinite(year)) {
+        throw new Error(`Invalid identifiers on row ${idx + 2} in ${sourceLabel}`);
+      }
+
+      const row: PanelRowCanonical = {
+        iso3,
+        country_name: country,
+        year,
+        Z: getNumber(raw, 'Z', idx + 2),
+        X: getNumber(raw, 'X', idx + 2),
+        Y: getNumber(raw, 'Y', idx + 2),
+        C: getNullableNumber(raw, 'C'),
+        M: getNumber(raw, 'M', idx + 2),
+        T: getNumber(raw, 'T', idx + 2),
+        D: getNullableNumber(raw, 'D'),
+        G: getNullableNumber(raw, 'G'),
+        E: getNumber(raw, 'E', idx + 2),
+        S: getNullableNumber(raw, 'S'),
+        R: getNumber(raw, 'R', idx + 2),
+      };
+
+      rows.push(row);
+    });
 
   const isDev = (typeof import.meta !== 'undefined') && (((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) === true);
   if (isDev) {

@@ -1,794 +1,1310 @@
 {
   "schemaVersion": "phase1.failure_log.v1",
-  "generatedAtIso": "2026-03-26T06:44:18.249Z",
+  "generatedAtIso": "2026-11-07T12:41:26.313Z",
   "entries": [
     {
       "protocol": "country_out",
+      "foldId": "country_out:ALB",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ALB",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ALB",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARG",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARG",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARG",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARM",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARM",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ARM",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
       "foldId": "country_out:AUS",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:AUS",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:AUS",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BGR",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BGR",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BGR",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:BLR",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:BLR",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:BLR",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BRA",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BRA",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:BRA",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "A",
-      "converged": true,
-      "nTrain": 549,
-      "nTest": 81
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "B",
-      "converged": true,
-      "nTrain": 549,
-      "nTest": 81
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CAN",
       "tier": "C",
-      "converged": true,
-      "nTrain": 549,
-      "nTest": 81
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CHE",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CHE",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CHE",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:CHL",
+      "foldId": "country_out:COL",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:CHL",
+      "foldId": "country_out:COL",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:CHL",
+      "foldId": "country_out:COL",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CZE",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CZE",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:CZE",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:DEU",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ECU",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ECU",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ECU",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ESP",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:EST",
       "tier": "A",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:EST",
       "tier": "B",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:EST",
       "tier": "C",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:FIN",
+      "foldId": "country_out:FRA",
       "tier": "A",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:FIN",
+      "foldId": "country_out:FRA",
       "tier": "B",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:FIN",
+      "foldId": "country_out:FRA",
       "tier": "C",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GBR",
       "tier": "A",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GBR",
       "tier": "B",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GBR",
       "tier": "C",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GEO",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GEO",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:GEO",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GRC",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GRC",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:GRC",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:HRV",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:HRV",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:HRV",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IDN",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IDN",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IDN",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IRN",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IRN",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:IRN",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ITA",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ITA",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:ITA",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:JPN",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:JPN",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:JPN",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KAZ",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KAZ",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:KAZ",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:KOR",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:LTU",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:LTU",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:LTU",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "A",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 27
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "B",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 27
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:MEX",
       "tier": "C",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 27
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:NLD",
+      "foldId": "country_out:MKD",
       "tier": "A",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 90
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:NLD",
+      "foldId": "country_out:MKD",
       "tier": "B",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 90
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:NLD",
+      "foldId": "country_out:MKD",
       "tier": "C",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 90
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:MYS",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:MYS",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:MYS",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NGA",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NGA",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:NGA",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PAK",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PAK",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PAK",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PER",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PER",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:PER",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "A",
-      "converged": true,
-      "nTrain": 558,
-      "nTest": 72
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "B",
-      "converged": true,
-      "nTrain": 558,
-      "nTest": 72
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:POL",
       "tier": "C",
-      "converged": true,
-      "nTrain": 558,
-      "nTest": 72
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:ROU",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:RUS",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SRB",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SRB",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:SRB",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:SVK",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:SVN",
+      "foldId": "country_out:THA",
       "tier": "A",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:SVN",
+      "foldId": "country_out:THA",
       "tier": "B",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
-      "foldId": "country_out:SVN",
+      "foldId": "country_out:THA",
       "tier": "C",
-      "converged": true,
-      "nTrain": 594,
-      "nTest": 36
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "A",
-      "converged": true,
-      "nTrain": 585,
-      "nTest": 45
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "B",
-      "converged": true,
-      "nTrain": 585,
-      "nTest": 45
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:TUR",
       "tier": "C",
-      "converged": true,
-      "nTrain": 585,
-      "nTest": 45
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:UKR",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:UKR",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:UKR",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:URY",
+      "tier": "A",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:URY",
+      "tier": "B",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
+    },
+    {
+      "protocol": "country_out",
+      "foldId": "country_out:URY",
+      "tier": "C",
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:USA",
       "tier": "A",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:USA",
       "tier": "B",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "country_out",
       "foldId": "country_out:USA",
       "tier": "C",
-      "converged": true,
-      "nTrain": 621,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2006->2007",
+      "protocol": "country_out",
+      "foldId": "country_out:UZB",
       "tier": "A",
-      "converged": true,
-      "nTrain": 243,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2006->2007",
+      "protocol": "country_out",
+      "foldId": "country_out:UZB",
       "tier": "B",
-      "converged": true,
-      "nTrain": 243,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2006->2007",
+      "protocol": "country_out",
+      "foldId": "country_out:UZB",
       "tier": "C",
-      "converged": true,
-      "nTrain": 243,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2007->2010",
+      "protocol": "country_out",
+      "foldId": "country_out:VNM",
       "tier": "A",
-      "converged": true,
-      "nTrain": 261,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2007->2010",
+      "protocol": "country_out",
+      "foldId": "country_out:VNM",
       "tier": "B",
-      "converged": true,
-      "nTrain": 261,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2007->2010",
+      "protocol": "country_out",
+      "foldId": "country_out:VNM",
       "tier": "C",
-      "converged": true,
-      "nTrain": 261,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2010->2011",
+      "foldId": "rolling_origin:2019->2020",
       "tier": "A",
-      "converged": true,
-      "nTrain": 270,
-      "nTest": 90
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2010->2011",
+      "foldId": "rolling_origin:2019->2020",
       "tier": "B",
-      "converged": true,
-      "nTrain": 270,
-      "nTest": 90
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2010->2011",
+      "foldId": "rolling_origin:2019->2020",
       "tier": "C",
-      "converged": true,
-      "nTrain": 270,
-      "nTest": 90
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2011->2012",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 360,
-      "nTest": 144
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2011->2012",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 360,
-      "nTest": 144
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2011->2012",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 360,
-      "nTest": 144
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2012->2013",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 504,
-      "nTest": 9
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2012->2013",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 504,
-      "nTest": 9
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2012->2013",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 504,
-      "nTest": 9
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2013->2017",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 513,
-      "nTest": 27
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2013->2017",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 513,
-      "nTest": 27
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2013->2017",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 513,
-      "nTest": 27
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2017->2018",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 63
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2017->2018",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 63
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2017->2018",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 540,
-      "nTest": 63
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2018->2020",
-      "tier": "A",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 9
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2018->2020",
-      "tier": "B",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 9
-    },
-    {
-      "protocol": "rolling_origin",
-      "foldId": "rolling_origin:2018->2020",
-      "tier": "C",
-      "converged": true,
-      "nTrain": 603,
-      "nTest": 9
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
       "foldId": "rolling_origin:2020->2022",
       "tier": "A",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
       "foldId": "rolling_origin:2020->2022",
       "tier": "B",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     },
     {
       "protocol": "rolling_origin",
       "foldId": "rolling_origin:2020->2022",
       "tier": "C",
-      "converged": true,
-      "nTrain": 612,
-      "nTest": 18
+      "converged": false,
+      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "nTrain": 0,
+      "nTest": 0
     }
   ],
   "byTier": {
     "A": {
-      "totalFolds": 32,
-      "failedFolds": 0,
-      "failureRate": 0,
-      "reasons": []
+      "totalFolds": 47,
+      "failedFolds": 47,
+      "failureRate": 1,
+      "reasons": [
+        {
+          "reason": "insufficient_rows(n=0, required>=24)",
+          "count": 47
+        }
+      ]
     },
     "B": {
-      "totalFolds": 32,
-      "failedFolds": 0,
-      "failureRate": 0,
-      "reasons": []
+      "totalFolds": 47,
+      "failedFolds": 47,
+      "failureRate": 1,
+      "reasons": [
+        {
+          "reason": "insufficient_rows(n=0, required>=24)",
+          "count": 47
+        }
+      ]
     },
     "C": {
-      "totalFolds": 32,
-      "failedFolds": 0,
-      "failureRate": 0,
-      "reasons": []
+      "totalFolds": 47,
+      "failedFolds": 47,
+      "failureRate": 1,
+      "reasons": [
+        {
+          "reason": "insufficient_rows(n=0, required>=24)",
+          "count": 47
+        }
+      ]
     }
   }
 }

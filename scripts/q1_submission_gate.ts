@@ -369,13 +369,17 @@ function pearson(a: number[], b: number[]): number {
   return den === 0 ? NaN : num / den;
 }
 
+/**
+ * Predictors as they actually enter the model in the v2 panel. C, D, S and G
+ * are structurally unavailable (see docs/KNOWN_ISSUES.md KI-09..KI-11 and the
+ * panel audit), so they are excluded here: including them would test columns
+ * that are uniformly NA rather than testing the design.
+ */
 const PREDICTORS = [
-  'X_urbanization', 'Y_gini', 'C_cultural_intensity', 'M_media_environment',
-  'T_trauma_shock', 'D_social_atomization', 'G_redistribution_capacity',
-  'E_education_capacity', 'S_social_support', 'R_welfare_capacity',
+  'X', 'Y', 'M', 'T', 'E', 'R',
 ];
 
-const OUTCOME = 'Z_belief_outcome';
+const OUTCOME = 'Z';
 
 /** Gaussian elimination with partial pivoting; returns rank of [X | 1]. */
 function designRank(columns: number[][]): number {
@@ -451,17 +455,18 @@ function gateMeasurementValidity(): void {
       ? 'All predictor pairs are distinguishable'
       : `COLLINEAR DESIGN — duplicate predictor(s): ${dupHits.join('; ')}`);
 
-  // 7.3 — design matrix must be full column rank
-  const cols = PREDICTORS.map((p) => numericColumn(rows, p));
-  const nUsable = Math.min(...cols.map((c) => c.length));
-  const trimmed = cols.map((c) => c.slice(0, nUsable));
-  const rank = designRank(trimmed);
+  // 7.3 — design matrix must be full column rank, tested on complete rows only
+  const completeRows = rows.filter((r) =>
+    [OUTCOME, ...PREDICTORS].every((k) => Number.isFinite(Number.parseFloat(r[k]))));
+  const cols = PREDICTORS.map((p) =>
+    completeRows.map((r) => Number.parseFloat(r[p])));
+  const rank = completeRows.length === 0 ? 0 : designRank(cols);
   const expectedRank = PREDICTORS.length + 1;
   record('val-rank', 'Measurement Validity',
     `Design matrix full rank (${expectedRank} columns)`, rank === expectedRank, 'critical',
     rank === expectedRank
-      ? `rank=${rank}/${expectedRank} on ${nUsable} rows`
-      : `RANK DEFICIENT — rank=${rank}/${expectedRank}: coefficients are not separately identified`);
+      ? `rank=${rank}/${expectedRank} on ${completeRows.length} complete rows`
+      : `RANK DEFICIENT — rank=${rank}/${expectedRank} on ${completeRows.length} complete rows: coefficients are not separately identified`);
 
   // 7.4 — no single predictor may explain the outcome on its own
   const soloHits: string[] = [];

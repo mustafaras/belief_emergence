@@ -100,6 +100,36 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 
 ---
 
+## KI-13 — Production coefficients are fitted to the defective panel
+
+`src/data/feCoefficients.ts` holds hard-coded coefficients trained on the v1
+panel (630 rows, header comment dated 2025-12-07). Every one of those
+coefficients was estimated on data where `C` was `Z`.
+
+Evidence that they do not transfer: refitted against the v2 panel
+(49 complete cases, six retained predictors), the fixed-coefficient model
+yields
+
+```text
+canonical OOS R2  Tier A = -23380.91   Tier B = -23553.26   Tier C = -1833.84
+```
+
+A negative R2 of that magnitude means the predictions are not merely
+miscalibrated, they are unrelated to the outcome. The coefficients encode the
+`Z = a*C + b` relationship, which no longer exists once `C` is removed.
+
+**This is expected and is not a new defect.** It is the arithmetic signature
+of removing the tautology: the model that was fitted to exploit `C` has
+nothing to exploit.
+
+**Consequence:** Phase 3 cannot be skipped. The coefficients must be
+re-estimated on `panel_canonical_v2.csv`, and every downstream artefact
+(headline metrics, CV summaries, figures, manuscript numbers) must be
+regenerated from that fit. Until then `val-canonic-reported` legitimately
+fails.
+
+---
+
 ## KI-00 — The ingestion pipeline is not in the repository
 
 This is the reason every other finding survived to submission.

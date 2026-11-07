@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "canonical.panel.v2",
+  "generatedAtIso": "2026-11-07T12:33:56.789Z",
+  "sources": {
+    "constructs": "rawdata/wvs_combined.csv",
+    "macro": "rawdata/panel_model_data.csv"
+  },
+  "rows": 49,
+  "countries": 45,
+  "yearRange": [
+    2017,
+    2022
+  ],
+  "retainedPredictors": [
+    "X",
+    "Y",
+    "T",
+    "E",
+    "R",
+    "M"
+  ],
+  "droppedConstructs": [
+    {
+      "out": "C",
+      "reason": "alpha 0.33 — not a unidimensional construct (KI-09)"
+    },
+    {
+      "out": "D",
+      "reason": "alpha -0.42 — items disagree (KI-10)"
+    },
+    {
+      "out": "S",
+      "reason": "3 of 7 configured items available; below min_item_coverage (KI-11)"
+    },
+    {
+      "out": "G",
+      "reason": "disposable-income Gini unavailable outside the OECD sample"
+    }
+  ],
+  "observationsPerParameter": 7,
+  "attrition": {
+    "noIso": 3,
+    "noMacro": 0,
+    "missingCovariate": 47,
+    "missingOutcome": 0
+  },
+  "validityAuditPassed": true
+}

@@ -1,13 +1,13 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-03-25T05:44:29.073Z",
-  "verdict": "READY",
+  "generatedAtIso": "2026-11-07T12:41:31.992Z",
+  "verdict": "NOT_READY",
   "summary": {
-    "totalChecks": 18,
+    "totalChecks": 24,
     "passed": 18,
-    "failed": 0,
-    "criticalFailed": 0,
-    "majorFailed": 0,
+    "failed": 6,
+    "criticalFailed": 5,
+    "majorFailed": 1,
     "minorFailed": 0
   },
   "automatedChecks": [
@@ -15,33 +15,33 @@
       "id": "cq-tests",
       "category": "Code Quality",
       "label": "Test suite passes",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "All tests passed"
+      "detail": "Test suite failed — fix before submission"
     },
     {
       "id": "cq-lint",
       "category": "Code Quality",
       "label": "Lint passes (zero errors)",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Zero lint errors"
+      "detail": "Lint errors detected — fix before submission"
     },
     {
       "id": "cq-build",
       "category": "Code Quality",
       "label": "Build succeeds",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Build succeeded"
+      "detail": "Build failed — fix before submission"
     },
     {
       "id": "doc-manu",
       "category": "Docs Consistency",
       "label": "Manuscript numeric consistency",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Manuscript claims match canonical artifacts"
+      "detail": "Manuscript numbers drift from artifacts — resync required"
     },
     {
       "id": "doc-refs",
@@ -151,12 +151,97 @@
       "id": "repro-ci",
       "category": "Reproducibility",
       "label": "CI reproducibility gate passes",
+      "pass": false,
+      "severity": "critical",
+      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+    },
+    {
+      "id": "val-identity",
+      "category": "Measurement Validity",
+      "label": "No predictor is an identity rescaling of the outcome",
       "pass": true,
       "severity": "critical",
-      "detail": "Full ci:gate passed (7 phases)"
+      "detail": "All 6 predictors have |r| <= 0.999 with Z"
+    },
+    {
+      "id": "val-duplicate",
+      "category": "Measurement Validity",
+      "label": "No two predictors are duplicates",
+      "pass": true,
+      "severity": "critical",
+      "detail": "All predictor pairs are distinguishable"
+    },
+    {
+      "id": "val-rank",
+      "category": "Measurement Validity",
+      "label": "Design matrix full rank (7 columns)",
+      "pass": true,
+      "severity": "critical",
+      "detail": "rank=7/7 on 49 complete rows"
+    },
+    {
+      "id": "val-single-r2",
+      "category": "Measurement Validity",
+      "label": "No single predictor reaches R2 > 0.99",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Every predictor leaves material variance unexplained"
+    },
+    {
+      "id": "val-oos-plausible",
+      "category": "Measurement Validity",
+      "label": "OOS R2 is plausible (< 0.999)",
+      "pass": true,
+      "severity": "critical",
+      "detail": "Out-of-sample metrics are within empirically plausible bounds"
+    },
+    {
+      "id": "val-canonic-reported",
+      "category": "Measurement Validity",
+      "label": "Canonical (fixed-model) OOS R2 is non-negative",
+      "pass": false,
+      "severity": "major",
+      "detail": "NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: Tier A R2=-23380.9083, Tier B R2=-23553.2582, Tier C R2=-1833.8407. Must be discussed in the manuscript, not filed as \"descriptive only\"."
     }
   ],
-  "blockers": [],
+  "blockers": [
+    {
+      "id": "cq-tests",
+      "severity": "critical",
+      "label": "Test suite passes",
+      "detail": "Test suite failed — fix before submission"
+    },
+    {
+      "id": "cq-lint",
+      "severity": "critical",
+      "label": "Lint passes (zero errors)",
+      "detail": "Lint errors detected — fix before submission"
+    },
+    {
+      "id": "cq-build",
+      "severity": "critical",
+      "label": "Build succeeds",
+      "detail": "Build failed — fix before submission"
+    },
+    {
+      "id": "doc-manu",
+      "severity": "critical",
+      "label": "Manuscript numeric consistency",
+      "detail": "Manuscript numbers drift from artifacts — resync required"
+    },
+    {
+      "id": "repro-ci",
+      "severity": "critical",
+      "label": "CI reproducibility gate passes",
+      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+    },
+    {
+      "id": "val-canonic-reported",
+      "severity": "major",
+      "label": "Canonical (fixed-model) OOS R2 is non-negative",
+      "detail": "NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: Tier A R2=-23380.9083, Tier B R2=-23553.2582, Tier C R2=-1833.8407. Must be discussed in the manuscript, not filed as \"descriptive only\"."
+    }
+  ],
   "humanChecklist": [
     {
       "id": "h-editor-fit",
