@@ -12,6 +12,94 @@ Reproduction commands are included and were run against
 
 ---
 
+## KI-09 — `C_cultural_intensity` is not a unidimensional construct
+
+`config/wvs_items.yaml` defines `C` over six items: A008 (importance of
+family), A009 (importance of friends), E012 (obedience as a child quality),
+E015 (religious faith as a child quality), E018 (national pride), E035
+(respect for authority). These do not form one latent dimension.
+
+Measured on wave-7 microdata, after declared reverse-coding and min-max
+scaling to [0,1], then z-scoring:
+
+| Quantity | Value |
+|---|---:|
+| Cronbach's alpha, six items | **0.2964** |
+| best alpha after flipping E012/E015/E035 | 0.4871 |
+| best alpha on a 4-item subset (A008, A009, E015, E018) | 0.3792 |
+| alpha on A008 + A009 alone | 0.6644 |
+
+Inter-item correlations range from -0.204 to +0.497 with no consistent sign
+pattern. A conventional floor is alpha >= 0.70; the construct reaches that
+only by discarding four of its six items, at which point it measures
+"importance of family and friends" — not cultural intensity.
+
+`config/wvs_items.yaml` declares `expected_alpha: 0.80` for `Z`. It declares
+no `expected_alpha` for `C`. The 0.30 measured here is why.
+
+**Consequence:** `C` cannot be repaired by choosing a better aggregation.
+Either its item set is redesigned with items that genuinely co-vary, or `C`
+leaves the model. The roadmap assumes the latter as the default.
+
+---
+
+## KI-10 — `D_social_atomization` is not a unidimensional construct either
+
+`D` is defined over A165 (generalised trust), A170 (people take advantage),
+A173 (trust in another religion). Measured on wave-7 microdata:
+
+```text
+Cronbach's alpha, 3 available items = -0.6274
+```
+
+A negative alpha is worse than no composite: the items actively disagree.
+Two of `D`'s five configured items (A168, A174) are absent from the
+harmonised source, so only three were available, and those three do not
+measure a common factor.
+
+---
+
+## KI-11 — `S_social_support` is not computable from the available data
+
+`S` is configured over seven items. In the harmonised wave-7 source
+(`EVS_WVS_Joint_Csv_v5_0.csv`) only three exist: A008, A009, G006. The other
+four (A101, A106, F185, F186) are absent from the file header entirely.
+
+The build applies `min_item_coverage = 0.5` from `defaults`, so a cell needs
+at least `ceil(0.5 * 7) = 4` items. Three is below the floor:
+
+```text
+S_social_support: cells emitted = 0
+verdict: UNCOMPUTABLE (below min_item_coverage)
+```
+
+The previously shipped panel nevertheless carried an `S_support_index`
+column with 1,127 non-null values — identical to `D_social_trust`, which is
+KI-03. `S` was never computed; it was copied from `D`.
+
+---
+
+## KI-12 — The correct `Z`/`C` correlation is negative, not +0.50
+
+An earlier draft of this document reported `corr(Z_6item, C_5item) = 0.496`
+and used it as evidence that the rebuild would separate the constructs
+cleanly. That number was produced by sign-aligning every item to `A006`
+automatically — which is leakage, because `A006` is an item of `Z`.
+
+Computed honestly from the declared codings, with no alignment:
+
+| Method | corr(Z, C) |
+|---|---:|
+| min-max to declared bounds, then average | **-0.3793** |
+| min-max, per-item z-score, then average | **-0.1937** |
+| shipped `wvs_combined.csv` (identical columns) | 1.0 |
+
+So a correct rebuild does not produce two mildly correlated constructs. It
+produces two constructs that are *negatively* related, and one of them (`C`)
+has alpha 0.30. The +0.496 figure must not be cited anywhere.
+
+---
+
 ## KI-00 — The ingestion pipeline is not in the repository
 
 This is the reason every other finding survived to submission.
@@ -100,9 +188,10 @@ corr(C_religiosity_index, A006)               = -1.0000   <- the defect
 corr(C_religiosity_index, configured C items) = +0.1447   <- what it should be
 ```
 
-`C` was built from `A006`, the first item of `Z`. Recomputed with the
-configured item sets, the two constructs separate as intended:
-`corr(Z_6item, C_5item) = 0.496`.
+`C` was built from `A006`, the first item of `Z`. Recomputing the two
+constructs from their configured item sets makes them distinguishable, but
+see KI-09 and KI-12: the resulting correlation is **negative**, and `C` has
+alpha 0.30. Separating them is necessary but not sufficient.
 
 ### Impact
 

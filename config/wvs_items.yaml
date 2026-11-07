@@ -366,6 +366,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 4
         item_code: "A008"
         label: "Importance of family in your life"
@@ -375,6 +376,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 5
         item_code: "A008"
         label: "Importance of family in your life"
@@ -384,6 +386,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 6
         item_code: "A008"
         label: "Importance of family in your life"
@@ -393,6 +396,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 7
         item_code: "A008"
         label: "Importance of family in your life"
@@ -402,6 +406,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       
       # A009: Importance of friends (all waves)
       - wave: 3
@@ -413,6 +418,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 4
         item_code: "A009"
         label: "Importance of friends in your life"
@@ -422,6 +428,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 5
         item_code: "A009"
         label: "Importance of friends in your life"
@@ -431,6 +438,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 6
         item_code: "A009"
         label: "Importance of friends in your life"
@@ -440,6 +448,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       - wave: 7
         item_code: "A009"
         label: "Importance of friends in your life"
@@ -449,6 +458,7 @@ constructs:
         reverse: false
         desired_direction: "higher = more intensity"
         weight: 1.0
+        overlap_note: "Also used in S_social_support; declared cross-construct item"
       
       # E018: National pride (all waves)
       - wave: 3

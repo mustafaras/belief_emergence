@@ -13,8 +13,6 @@
     "test:ui": "vitest --ui",
     "qa:modern-sidebar": "npm run test:run && npm run lint",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "generate:analysis": "tsx scripts/generate_authoritative_analysis.ts",
     "generate:headline-metrics": "tsx scripts/generate_headline_metrics.ts",
     "generate:phase1-validation": "tsx scripts/generate_phase1_validation.ts",
@@ -33,7 +31,9 @@
     "replicate": "tsx scripts/replicate.ts",
     "ci:gate": "tsx scripts/ci_gate.ts",
     "q1:gate": "tsx scripts/q1_submission_gate.ts",
-    "verify:all": "npm run audit:search && npm run test:run && npm run lint && npm run build"
+    "verify:all": "npm run audit:search && npm run test:run && npm run lint && npm run build",
+    "build:wvs-constructs": "tsx scripts/build_wvs_constructs.ts",
+    "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",
@@ -56,6 +56,7 @@
   "devDependencies": {
     "@eslint/js": "^9.30.1",
     "@tailwindcss/postcss": "^4.1.11",
+    "@types/js-yaml": "^4.0.9",
     "@types/katex": "^0.16.7",
     "@types/node": "^25.0.1",
     "@types/papaparse": "^5.5.1",
@@ -70,8 +71,8 @@
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
+    "js-yaml": "^5.5.0",
     "papaparse": "^5.5.3",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",

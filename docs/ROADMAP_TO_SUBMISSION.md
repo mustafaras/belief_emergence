@@ -92,18 +92,31 @@ blockers, and passes only after 1.1–1.2.
 
 ### 2.1 Recompute constructs from item level
 
-From `rawdata/EVS_WVS_Joint_Csv_v5_0.csv` (wave 7, 11 items, n≥30 per
-country-year), 94 country-years are computable. Verified prototype:
+From `rawdata/EVS_WVS_Joint_Csv_v5_0.csv` (wave 7, 11 items, n>=30 per
+country-year), 94 country-years are computable. Implemented in
+`scripts/build_wvs_constructs.ts`; measured outcome:
 
 ```text
-corr(Z_6item, C_5item) = 0.496    # was 1.000
+Z_belief_outcome     cells=98  items used 6/6  alpha = 0.9653
+C_cultural_intensity cells=99  items used 6/6  alpha = 0.2964   <-- not one dimension
+D_social_atomization cells=99  items used 3/5  alpha = -0.6274  <-- items disagree
+S_social_support     cells=0   items used 0/7  UNCOMPUTABLE (needs 4 of 7, has 3)
+corr(Z, C) = -0.1937 (declared codings, min-max + item z-score)
 ```
 
-- [ ] Implement per-construct aggregation exactly per `wvs_items.yaml`
+The `C` and `D` constructs cannot be salvaged by better aggregation; their
+item sets do not measure a single latent dimension. See KI-09, KI-10, KI-11
+and KI-12.
+
+- [x] Implement per-construct aggregation exactly per `wvs_items.yaml`
       (reverse-coding, missing codes, min_item_coverage 0.5).
-- [ ] Emit Cronbach's α per construct on the 94-cell set; report it. Current
-      supplementary claims α=0.80 for `Z`; the realized two-item proxy was
-      0.715. Recompute honestly.
+- [ ] **Decide the construct set.** The default recommendation is to drop
+      `C` and `S` from the model and keep `D` only if its item set is
+      redesigned. This is a substantive redesign, not a bug fix, and it
+      changes the paper's story.
+- [ ] Report realized alpha per construct in the supplement. `Z` at 0.9653
+      exceeds the 0.80 benchmark; `C` at 0.2964 is not publishable as a
+      composite.
 
 ### 2.2 Decide the sample honestly
 
