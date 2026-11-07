@@ -1,12 +1,12 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-07T15:08:26.772Z",
-  "verdict": "CONDITIONAL",
+  "generatedAtIso": "2026-11-07T15:38:40.595Z",
+  "verdict": "NOT_READY",
   "summary": {
     "totalChecks": 24,
-    "passed": 23,
-    "failed": 1,
-    "criticalFailed": 0,
+    "passed": 19,
+    "failed": 5,
+    "criticalFailed": 4,
     "majorFailed": 1,
     "minorFailed": 0
   },
@@ -15,25 +15,25 @@
       "id": "cq-tests",
       "category": "Code Quality",
       "label": "Test suite passes",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "All tests passed"
+      "detail": "Test suite failed — fix before submission"
     },
     {
       "id": "cq-lint",
       "category": "Code Quality",
       "label": "Lint passes (zero errors)",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Zero lint errors"
+      "detail": "Lint errors detected — fix before submission"
     },
     {
       "id": "cq-build",
       "category": "Code Quality",
       "label": "Build succeeds",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Build succeeded"
+      "detail": "Build failed — fix before submission"
     },
     {
       "id": "doc-manu",
@@ -151,9 +151,9 @@
       "id": "repro-ci",
       "category": "Reproducibility",
       "label": "CI reproducibility gate passes",
-      "pass": true,
+      "pass": false,
       "severity": "critical",
-      "detail": "Full ci:gate passed (7 phases)"
+      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
     },
     {
       "id": "val-identity",
@@ -205,6 +205,30 @@
     }
   ],
   "blockers": [
+    {
+      "id": "cq-tests",
+      "severity": "critical",
+      "label": "Test suite passes",
+      "detail": "Test suite failed — fix before submission"
+    },
+    {
+      "id": "cq-lint",
+      "severity": "critical",
+      "label": "Lint passes (zero errors)",
+      "detail": "Lint errors detected — fix before submission"
+    },
+    {
+      "id": "cq-build",
+      "severity": "critical",
+      "label": "Build succeeds",
+      "detail": "Build failed — fix before submission"
+    },
+    {
+      "id": "repro-ci",
+      "severity": "critical",
+      "label": "CI reproducibility gate passes",
+      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+    },
     {
       "id": "val-canonic-reported",
       "severity": "major",
