@@ -219,37 +219,41 @@ This file documents license terms, redistribution status, attribution requiremen
 
 The following files are **excluded from the public repository** due to redistribution restrictions. Replicators must download them manually and place them in the `rawdata/` directory before running the replication pipeline.
 
-#### World Values Survey (WVS) — Individual Waves 1–6
+#### World Values Survey (WVS)
 
-1. Navigate to <https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp>
-2. Register for / log in to a free WVS academic account
-3. Accept the WVS Academic Data Use Agreement
-4. Download each wave file in **CSV format**:
-   - Wave 1 → `WV1_Data_csv_v20200208.csv`
-   - Wave 2 → `WV2_Data_csv_v20180912.csv`
-   - Wave 3 → `WV3_Data_csv_v20180912.csv`
-   - Wave 4 → `WV4_Data_csv_v20201117.csv`
-   - Wave 5 → `WV5_Data_csv_v20180912.csv`
-   - Wave 6 → `WV6_Data_csv_v20201117.csv`
-5. Place all files in `rawdata/`
+**Access is free and requires no registration.** The WVSA states this
+explicitly on the download pages: *"Access to the data, similar to the
+previous rounds, is free, with no registration or payments required."*
+Conditions of use are: non-profit use, no redistribution of the data files, and
+citation of the source in any publication.
 
-#### WVS Time Series (1981–2022)
+Single entry point:
+<https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp>
 
-1. Navigate to <https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp>
-2. Download the **Time Series CSV** (v5.0) → `WVS_Time_Series_1981-2022_csv_v5_0.csv`
-3. Place in `rawdata/`
+From there, "Data Download" in the left navigation opens every release. The
+files this project needs, and where each one lives:
 
-#### WVS Wave 7
+| File used by the pipeline | Section on the download page |
+|---|---|
+| `EVS_WVS_Joint_Csv_v5_0.csv` | WVS/EVS Trend 1981–2022 → Joint EVS/WVS CSV (v5.0) |
+| `WVS_Cross-National_Wave_7_csv_v6_0.csv` | Wave 7 (2017–2022) → CSV |
+| `WVS_Time_Series_1981-2022_csv_v5_0.csv` | Timeseries (1981–2022) → CSV |
+| Waves 1–6 CSV files | Wave 1 … Wave 6 → CSV |
 
-1. Navigate to <https://www.worldvaluessurvey.org/WVSDocumentationWV7.jsp>
-2. Download the **Wave 7 CSV** (v6.0) → `WVS_Cross-National_Wave_7_csv_v6_0.csv`
-3. Place in `rawdata/`
+Download the CSV variant for each; the site also offers SPSS, Stata, SAS and R
+bundles, which the pipeline does not read.
 
-#### EVS/WVS Joint Dataset (v5.0)
+Place the files in `rawdata/`. They are excluded from version control
+(`.gitignore`) because the licence forbids redistribution, not because access
+is restricted.
 
-1. Navigate to <https://www.worldvaluessurvey.org/WVSEVStrend.jsp>
-2. Download the **Joint EVS/WVS CSV** (v5.0) → `EVS_WVS_Joint_Csv_v5_0.csv`
-3. Place in `rawdata/`
+> **Correction (2026-11-07).** Earlier versions of this section instructed
+> replicators to "register for a free WVS academic account" and to "accept the
+> WVS Academic Data Use Agreement". No such registration step exists on the
+> current WVS site, and the data are downloadable without an account. The
+> instruction has been removed. If a download page asks for an email address in
+> future, record what it asked for here rather than reintroducing a step that
+> was never verified.
 
 #### EM-DAT — International Disaster Database
 
