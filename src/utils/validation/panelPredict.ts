@@ -75,7 +75,8 @@ export interface PanelPredictResult {
     k: number;
   };
   diagnostics?: {
-    C_raw: number;
+    /** null when C is structurally unavailable in the panel. */
+    C_raw: number | null;
     C_std: number;
     Z_raw: number;
   };
@@ -134,6 +135,14 @@ export function normalizeObservedZ(zRaw: number): number {
  * @param row - Canonical panel row
  * @returns Model input object (ready for calculateModel)
  */
+/**
+ * Convert a canonical row into model inputs.
+ *
+ * C, D, S and G are structurally unavailable in the v2 panel (see
+ * docs/KNOWN_ISSUES.md KI-09..KI-11 and the panel audit). They are returned as
+ * `null` rather than substituted with 0 or with a mean, so callers must decide
+ * explicitly how to treat a construct that does not exist in the data.
+ */
 export function panelRowToModelInputs(row: PanelRowCanonical): {
   X: number;
   Y: number;
@@ -149,7 +158,12 @@ export function panelRowToModelInputs(row: PanelRowCanonical): {
   beta: number;
   k: number;
 } {
-  const cStd = standardizeCulturalIntensity(row.C);
+  // C, D, S and G are unavailable in the v2 panel. The interactive model
+  // requires concrete numbers, so they are neutralized to 0 here — the mean of
+  // a standardized channel, which contributes nothing to Φ. This is a
+  // deliberate boundary decision, taken once and documented, rather than a
+  // silent default scattered through the UI.
+  const cStd = row.C === null ? 0 : standardizeCulturalIntensity(row.C);
 
   return {
     X: row.X,
@@ -157,10 +171,10 @@ export function panelRowToModelInputs(row: PanelRowCanonical): {
     C: cStd,
     M: row.M,
     T: row.T,
-    D: row.D,
-    G: row.G,
+    D: row.D ?? 0,
+    G: row.G ?? 0,
     E: row.E,
-    S: row.S,
+    S: row.S ?? 0,
     R: row.R,
     alpha: OPTIMIZED_STRUCTURAL_PARAMS.alpha,
     beta: OPTIMIZED_STRUCTURAL_PARAMS.beta,

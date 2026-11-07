@@ -123,7 +123,7 @@ const SuppressorsSection: React.FC = () => {
       const dZdPhi = z * (1 - z);
 
       // dΦ/dE = c6 + c_es*S + 2*c_e2*E
-      const dPhi_dE = OPTIMIZED_SIGMOID_COEFFICIENTS.c6 + INTERACTION_TERMS.c_es * r.S + 2 * QUADRATIC_TERMS.c_e2 * r.E;
+      const dPhi_dE = OPTIMIZED_SIGMOID_COEFFICIENTS.c6 + INTERACTION_TERMS.c_es * (r.S ?? 0) + 2 * QUADRATIC_TERMS.c_e2 * r.E;
       // dΦ/dS = c7 + c_es*E
       const dPhi_dS = OPTIMIZED_SIGMOID_COEFFICIENTS.c7 + INTERACTION_TERMS.c_es * r.E;
       // dΦ/dR = c8 + c_yr*Y_safe + c_tr*T + c_gr*G
@@ -132,7 +132,7 @@ const SuppressorsSection: React.FC = () => {
         OPTIMIZED_SIGMOID_COEFFICIENTS.c8 +
         INTERACTION_TERMS.c_yr * normalizePanelYToStructural(r.Y) +
         INTERACTION_TERMS.c_tr * r.T +
-        INTERACTION_TERMS.c_gr * r.G;
+        INTERACTION_TERMS.c_gr * (r.G ?? 0);
 
       dZdE.push(dZdPhi * dPhi_dE);
       dZdS.push(dZdPhi * dPhi_dS);

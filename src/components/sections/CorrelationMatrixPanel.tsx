@@ -106,7 +106,7 @@ const buildWithinMeans = (rows: PanelRow[], vars: VarDef[]) => {
     const bucket = sums.get(iso3)!;
     for (let i = 0; i < vars.length; i += 1) {
       const v = row[vars[i].key];
-      if (!Number.isFinite(v)) continue;
+      if (v === null || !Number.isFinite(v)) continue;
       bucket.sum[i] += v;
       bucket.count[i] += 1;
     }
@@ -145,7 +145,7 @@ const computeCorr = (
   for (const row of rows) {
     let x = row[a];
     let y = row[b];
-    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (x === null || y === null || !Number.isFinite(x) || !Number.isFinite(y)) continue;
 
     if (withinMeans) {
       const mu = withinMeans.get(row.iso3);

@@ -1,14 +1,14 @@
 {
   "n": 49,
-  "r2": -4.247060300076786,
-  "corr": -0.10975332113824512,
-  "mae": 0.554212756470602,
-  "rmse": 0.6160221855144546,
-  "bias": -0.554212756470602,
+  "r2": -3.113826606279015,
+  "corr": -0.11060209546091779,
+  "mae": 0.47422050395828463,
+  "rmse": 0.5450845301685513,
+  "bias": -0.47421992348225767,
   "bias_definition": "mean(observed - predicted)",
-  "observed_scale": "Observed Z normalized to [0.0001, 0.9999] via Z_NORMALIZATION {min=-1.3175756317751055, max=1.8150944343746167}",
+  "observed_scale": "Observed Z normalized to [0.0001, 0.9999] via Z_NORMALIZATION {min=-1.6094638811769215, max=1.584634923582244}",
   "predicted_scale": "Predicted Z from calculateModel() clamped to [0.0001, 0.9999]",
   "dataset_id": "public/data/panel_canonical_23_countries_v1.csv (sha256=CBFC3A1F9A669ECD7C7941F9EA3CFA95A24E5ECE051520DF287CCE9E5BDD53C3)",
   "model_id": "calculateModel@OPTIMIZED_STRUCTURAL_PARAMS(alpha=0.3, beta=0.3, k=1.3067922403554164, phi0=0.9211981898850654)",
-  "timestamp": "2026-11-07T12:41:30.355Z"
+  "timestamp": "2026-11-07T13:04:07.533Z"
 }

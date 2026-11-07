@@ -19,19 +19,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PANEL = path.join(ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
 const ANALYSIS = path.join(ROOT, 'src', 'data', 'analysis');
 
-const PREDICTORS = [
-  'X_urbanization',
-  'Y_gini',
-  'C_cultural_intensity',
-  'M_media_environment',
-  'T_trauma_shock',
-  'D_social_atomization',
-  'G_redistribution_capacity',
-  'E_education_capacity',
-  'S_social_support',
-  'R_welfare_capacity',
-];
-const OUTCOME = 'Z_belief_outcome';
+// v2 panel columns. C, D, S and G are structurally unavailable and therefore
+// not part of the design; see docs/KNOWN_ISSUES.md KI-09..KI-11.
+const PREDICTORS = ['X', 'Y', 'M', 'T', 'E', 'R'];
+const OUTCOME = 'Z';
 
 function readPanel(): Record<string, string>[] {
   const text = fs.readFileSync(PANEL, 'utf-8').replace(/^\uFEFF/, '');
@@ -46,7 +37,11 @@ function readPanel(): Record<string, string>[] {
 }
 
 function col(rows: Record<string, string>[], name: string): number[] {
-  return rows.map((r) => Number.parseFloat(r[name])).filter(Number.isFinite);
+  return rows
+    .map((r) => r[name])
+    .filter((v) => v !== undefined && v !== '' && v.toUpperCase() !== 'NA')
+    .map((v) => Number.parseFloat(v))
+    .filter(Number.isFinite);
 }
 
 function pearson(a: number[], b: number[]): number {

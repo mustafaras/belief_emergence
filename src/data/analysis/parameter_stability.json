@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.parameter_stability.v1",
-  "generatedAtIso": "2026-11-07T12:41:26.312Z",
+  "generatedAtIso": "2026-11-07T13:03:37.040Z",
   "thresholdSignConsistency": 0.7,
   "thresholdsByTier": {
     "A": 0.7,
@@ -10,54 +10,983 @@
   "byProtocol": {
     "country_out": {
       "A": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
+        "nConvergedFolds": 45,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.5407514417317263,
+            "q25": 0.5367864537539723,
+            "q75": 0.5453549391286797,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.16349086064058543,
+            "q25": 0.14963624038329015,
+            "q75": 0.16927052667208167,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 1,
+            "median": -0.4626403297106194,
+            "q25": -0.47297812820098,
+            "q75": -0.4548459724365117,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 0.9777777777777777,
+            "median": 0.0577054625001846,
+            "q25": 0.05479882526815805,
+            "q75": 0.06502053015662426,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t",
+            "signConsistency": 0.9777777777777777,
+            "median": 0.01268012801467724,
+            "q25": 0.011781527785576068,
+            "q75": 0.013868497648573095,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 0.9555555555555556,
+            "median": 0.02521916195758502,
+            "q25": 0.021655043248847913,
+            "q75": 0.030156447428093314,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.1955687699630705,
+            "q25": 0.19237034346093107,
+            "q75": 0.1985873345108664,
+            "nFolds": 45,
+            "unstable": false
+          }
+        ],
         "unstableCount": 0
       },
       "B": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
+        "nConvergedFolds": 45,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.29320619927735386,
+            "q25": 0.28386900792756375,
+            "q75": 0.29743499192298245,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.38263699151773584,
+            "q25": 0.3789410227959074,
+            "q75": 0.39741647259733304,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 0.9777777777777777,
+            "median": 0.26429270355428897,
+            "q25": 0.256690261230938,
+            "q75": 0.27672782648816335,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 0.9555555555555556,
+            "median": -0.04883478118779544,
+            "q25": -0.05493466687983156,
+            "q75": -0.045315809066369866,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t",
+            "signConsistency": 0.8888888888888888,
+            "median": -0.005169283338487027,
+            "q25": -0.006879039432730976,
+            "q75": -0.0038126904224076476,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 1,
+            "median": 0.0676643254672655,
+            "q25": 0.0654837220444074,
+            "q75": 0.07173644063320771,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.3132501501822286,
+            "q25": 0.3057943568420736,
+            "q75": 0.3166470636170454,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "y_safe:r",
+            "signConsistency": 1,
+            "median": -0.39856916790856045,
+            "q25": -0.4118991583737538,
+            "q75": -0.38076066173706147,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t:r",
+            "signConsistency": 0.9333333333333333,
+            "median": 0.012888896272455902,
+            "q25": 0.010338429480711064,
+            "q75": 0.015707301812367958,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "x_safe:y_safe",
+            "signConsistency": 1,
+            "median": -0.9102098799967165,
+            "q25": -0.9395533013494218,
+            "q75": -0.8936850599016507,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std:m",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e:s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std^2",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "m^2",
+            "signConsistency": 1,
+            "median": 0.1953821189417688,
+            "q25": 0.19006374548141977,
+            "q75": 0.2022956969399917,
+            "nFolds": 45,
+            "unstable": false
+          }
+        ],
         "unstableCount": 0
       },
       "C": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
-        "unstableCount": 0
+        "nConvergedFolds": 45,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.31998395362628435,
+            "q25": 0.30609952204364405,
+            "q75": 0.32761416995703035,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.37335501060171616,
+            "q25": 0.3677133577909946,
+            "q75": 0.3892333423778273,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 0.9777777777777777,
+            "median": 0.25058540660006856,
+            "q25": 0.2425509366792338,
+            "q75": 0.2729747741434875,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 0.8888888888888888,
+            "median": -0.03693322609093634,
+            "q25": -0.04906889126583816,
+            "q75": -0.026058239853795434,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t",
+            "signConsistency": 0.5777777777777777,
+            "median": -0.00028897201089129847,
+            "q25": -0.0017173791460692867,
+            "q75": 0.0020527315506182406,
+            "nFolds": 45,
+            "unstable": true
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 1,
+            "median": 0.08680797806676682,
+            "q25": 0.0843073344712417,
+            "q75": 0.09005947966244315,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.32835983379607536,
+            "q25": 0.32287964470365643,
+            "q75": 0.34077160524510125,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "y_safe:r",
+            "signConsistency": 1,
+            "median": -0.4469568832970458,
+            "q25": -0.46548633170651194,
+            "q75": -0.42925222901518717,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t:r",
+            "signConsistency": 0.9555555555555556,
+            "median": 0.0172673203054569,
+            "q25": 0.01363853093604268,
+            "q75": 0.019634367387094245,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "x_safe:y_safe",
+            "signConsistency": 1,
+            "median": -0.940207840828463,
+            "q25": -0.9652425514581142,
+            "q75": -0.9195711613430967,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std:m",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e:s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "d:t",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "g:r",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "c_std^2",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "m^2",
+            "signConsistency": 1,
+            "median": 0.17301360337445454,
+            "q25": 0.16292377785029594,
+            "q75": 0.1836033714965581,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "t^2",
+            "signConsistency": 0.9777777777777777,
+            "median": -0.016131347181870787,
+            "q25": -0.016774137720174914,
+            "q75": -0.014134696279258953,
+            "nFolds": 45,
+            "unstable": false
+          },
+          {
+            "name": "e^2",
+            "signConsistency": 0.9777777777777777,
+            "median": 0.02409281461818483,
+            "q25": 0.022867264847338226,
+            "q75": 0.02762060996767382,
+            "nFolds": 45,
+            "unstable": false
+          }
+        ],
+        "unstableCount": 1
       }
     },
     "rolling_origin": {
       "A": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
-        "unstableCount": 0
+        "nConvergedFolds": 2,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.5284034444455327,
+            "q25": 0.5119757895478527,
+            "q75": 0.5448310993432125,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.1840661124686044,
+            "q25": 0.12202247664781962,
+            "q75": 0.24610974828938917,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 1,
+            "median": -0.5043921636995771,
+            "q25": -0.5287174063001935,
+            "q75": -0.48006692109896076,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 1,
+            "median": 0.08975707870990196,
+            "q25": 0.07273157279536817,
+            "q75": 0.10678258462443574,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "t",
+            "signConsistency": 1,
+            "median": 0.012437152137941694,
+            "q25": 0.007489248290408031,
+            "q75": 0.017385055985475354,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 0.5,
+            "median": 0.007694639452146362,
+            "q25": -0.005245718291765568,
+            "q75": 0.020634997196058293,
+            "nFolds": 2,
+            "unstable": true
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.17316316460232356,
+            "q25": 0.16901121093293614,
+            "q75": 0.177315118271711,
+            "nFolds": 2,
+            "unstable": false
+          }
+        ],
+        "unstableCount": 1
       },
       "B": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
-        "unstableCount": 0
+        "nConvergedFolds": 2,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.3456860960968885,
+            "q25": 0.3447569251957812,
+            "q75": 0.3466152669979957,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.31763135203220216,
+            "q25": 0.2780832941712197,
+            "q75": 0.35717940989318464,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 1,
+            "median": 0.08534548963360665,
+            "q25": 0.04647976913657598,
+            "q75": 0.12421121013063731,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 0.5,
+            "median": -0.07640423376571488,
+            "q25": -0.1172468630592497,
+            "q75": -0.035561604472180076,
+            "nFolds": 2,
+            "unstable": true
+          },
+          {
+            "name": "t",
+            "signConsistency": 0.5,
+            "median": -0.014605852133894603,
+            "q25": -0.022427590995015217,
+            "q75": -0.006784113272773989,
+            "nFolds": 2,
+            "unstable": true
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 1,
+            "median": 0.05557081310104302,
+            "q25": 0.04273848008062493,
+            "q75": 0.06840314612146112,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.3221171191093681,
+            "q25": 0.2954673661329962,
+            "q75": 0.34876687208574,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "y_safe:r",
+            "signConsistency": 1,
+            "median": -0.42692635800787504,
+            "q25": -0.4527968903632631,
+            "q75": -0.401055825652487,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "t:r",
+            "signConsistency": 1,
+            "median": 0.03102293817093841,
+            "q25": 0.025306543642558393,
+            "q75": 0.03673933269931842,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "x_safe:y_safe",
+            "signConsistency": 1,
+            "median": -0.6717368772414072,
+            "q25": -0.7117974331752155,
+            "q75": -0.631676321307599,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std:m",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e:s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std^2",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "m^2",
+            "signConsistency": 1,
+            "median": 0.21427508391273098,
+            "q25": 0.20528268185792453,
+            "q75": 0.22326748596753737,
+            "nFolds": 2,
+            "unstable": false
+          }
+        ],
+        "unstableCount": 2
       },
       "C": {
-        "nConvergedFolds": 0,
-        "coefficients": [],
-        "unstableCount": 0
+        "nConvergedFolds": 2,
+        "coefficients": [
+          {
+            "name": "intercept",
+            "signConsistency": 1,
+            "median": 0.3951697694496564,
+            "q25": 0.392469980529584,
+            "q75": 0.3978695583697289,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "x_safe",
+            "signConsistency": 1,
+            "median": 0.32163955650732295,
+            "q25": 0.2797464538581651,
+            "q75": 0.36353265915648075,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "y_safe",
+            "signConsistency": 0.5,
+            "median": 0.06579038916153374,
+            "q25": 0.02438939548036102,
+            "q75": 0.10719138284270645,
+            "nFolds": 2,
+            "unstable": true
+          },
+          {
+            "name": "c_std",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "m",
+            "signConsistency": 1,
+            "median": -0.09006957104812446,
+            "q25": -0.12698008426079366,
+            "q75": -0.05315905783545526,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "t",
+            "signConsistency": 0.5,
+            "median": -0.009348395757804662,
+            "q25": -0.01692272634717369,
+            "q75": -0.00177406516843563,
+            "nFolds": 2,
+            "unstable": true
+          },
+          {
+            "name": "d",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "g",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e",
+            "signConsistency": 1,
+            "median": 0.08347369575257275,
+            "q25": 0.06992117893619398,
+            "q75": 0.09702621256895153,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "r",
+            "signConsistency": 1,
+            "median": 0.31306124932519797,
+            "q25": 0.29357150292007494,
+            "q75": 0.332550995730321,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "y_safe:r",
+            "signConsistency": 1,
+            "median": -0.4578482903118556,
+            "q25": -0.4721787417142781,
+            "q75": -0.4435178389094331,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "t:r",
+            "signConsistency": 1,
+            "median": 0.030585488437942374,
+            "q25": 0.02620901128546007,
+            "q75": 0.03496196559042468,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "x_safe:y_safe",
+            "signConsistency": 1,
+            "median": -0.731558180960361,
+            "q25": -0.77297949864623,
+            "q75": -0.690136863274492,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std:m",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e:s",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "d:t",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "g:r",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "c_std^2",
+            "signConsistency": 1,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "m^2",
+            "signConsistency": 1,
+            "median": 0.21919392333065219,
+            "q25": 0.21103321508849127,
+            "q75": 0.22735463157281308,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "t^2",
+            "signConsistency": 1,
+            "median": -0.023889558124346094,
+            "q25": -0.02455637908860009,
+            "q75": -0.023222737160092103,
+            "nFolds": 2,
+            "unstable": false
+          },
+          {
+            "name": "e^2",
+            "signConsistency": 0.5,
+            "median": 0.003439932795550736,
+            "q25": 0.0015072447185611251,
+            "q75": 0.005372620872540347,
+            "nFolds": 2,
+            "unstable": true
+          }
+        ],
+        "unstableCount": 3
       }
     }
   },
   "pooledByTier": {
     "A": {
-      "medianSignConsistency": null,
+      "medianSignConsistency": 1,
       "unstableCount": 0,
       "unstableTerms": []
     },
     "B": {
-      "medianSignConsistency": null,
-      "unstableCount": 0,
-      "unstableTerms": []
+      "medianSignConsistency": 1,
+      "unstableCount": 2,
+      "unstableTerms": [
+        "m",
+        "t"
+      ]
     },
     "C": {
-      "medianSignConsistency": null,
-      "unstableCount": 0,
-      "unstableTerms": []
+      "medianSignConsistency": 1,
+      "unstableCount": 1,
+      "unstableTerms": [
+        "t"
+      ]
     }
   }
 }

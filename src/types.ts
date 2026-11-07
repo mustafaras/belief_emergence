@@ -4,6 +4,12 @@ export interface BeliefParameters {
   alpha: number; // Exponent for Settlement (X)
   beta: number; // Exponent for Inequality (Y)
   k: number; // Normalization constant (φ0 baseline is fixed elsewhere)
+  // C, D, S and G are structurally unavailable in the v2 panel
+  // (docs/KNOWN_ISSUES.md KI-09..KI-11). The interactive model needs concrete
+  // numbers, so the boundary conversion in
+  // src/utils/validation/panelPredict.ts neutralizes them to 0 — the mean of a
+  // standardized channel — and says so explicitly. PanelRowCanonical keeps
+  // them as `number | null` so the missingness is not lost upstream.
   C: number;
   M: number;
   T: number;

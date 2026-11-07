@@ -100,7 +100,7 @@ function App() {
 
       for (const row of panelData) {
         const value = row[key]
-        if (!Number.isFinite(value)) continue
+        if (value === null || !Number.isFinite(value)) continue
         if (value < min) min = value
         if (value > max) max = value
       }

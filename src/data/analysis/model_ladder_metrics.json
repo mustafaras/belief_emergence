@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.model_ladder.v1",
-  "generatedAtIso": "2026-11-07T12:41:26.275Z",
+  "generatedAtIso": "2026-11-07T13:03:36.986Z",
   "nRows": 49,
   "nUniqueCountryYears": 49,
   "tiers": [
@@ -10,18 +10,17 @@
       "exploratory": false,
       "inferentialRole": "primary",
       "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
-      "nTrain": 0,
+      "nTrain": 49,
       "parameterCount": 11,
       "supportPerParameter": 4.454545454545454,
-      "converged": false,
-      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "converged": true,
       "trainMetrics": {
-        "n": 0,
-        "r2": null,
-        "corr": null,
-        "mae": null,
-        "rmse": null,
-        "bias": null
+        "n": 49,
+        "r2": 0.6738073613355007,
+        "corr": 0.8217596478999716,
+        "mae": 0.12248114504212654,
+        "rmse": 0.15348924268052164,
+        "bias": -0.0031879815597732884
       }
     },
     {
@@ -30,18 +29,17 @@
       "exploratory": false,
       "inferentialRole": "primary",
       "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
-      "nTrain": 0,
+      "nTrain": 49,
       "parameterCount": 18,
       "supportPerParameter": 2.7222222222222223,
-      "converged": false,
-      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "converged": true,
       "trainMetrics": {
-        "n": 0,
-        "r2": null,
-        "corr": null,
-        "mae": null,
-        "rmse": null,
-        "bias": null
+        "n": 49,
+        "r2": 0.7293338762008518,
+        "corr": 0.8540108113459487,
+        "mae": 0.10896513195678173,
+        "rmse": 0.13981630385759425,
+        "bias": -0.000031201382423221184
       }
     },
     {
@@ -50,18 +48,17 @@
       "exploratory": true,
       "inferentialRole": "exploratory",
       "interpretationBoundary": "Exploratory sensitivity tier; not used for headline inference under thin effective support.",
-      "nTrain": 0,
+      "nTrain": 49,
       "parameterCount": 22,
       "supportPerParameter": 2.227272727272727,
-      "converged": false,
-      "failureReason": "insufficient_rows(n=0, required>=24)",
+      "converged": true,
       "trainMetrics": {
-        "n": 0,
-        "r2": null,
-        "corr": null,
-        "mae": null,
-        "rmse": null,
-        "bias": null
+        "n": 49,
+        "r2": 0.735395834532273,
+        "corr": 0.8575523610614907,
+        "mae": 0.10807917985752662,
+        "rmse": 0.13824174388020793,
+        "bias": 2.1524732110079565e-16
       }
     }
   ],

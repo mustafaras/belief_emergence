@@ -178,16 +178,20 @@ function buildFeatureMap(row: PanelRowCanonical): Record<TierFeatureName, number
   const cStd = standardized.C;
   const m = standardized.M;
   const t = standardized.T;
-  const d = standardized.D;
-  const g = standardized.G;
   const e = standardized.E;
-  const s = standardized.S;
   const r = standardized.R;
+  // C, D, S and G are structurally unavailable in the v2 panel. They are
+  // neutralized to 0 (the mean of a standardized channel) so that legacy
+  // full-feature code paths still run; tiers that include them are reported as
+  // not assessable rather than silently estimated. See docs/KNOWN_ISSUES.md.
+  const d = standardized.D ?? 0;
+  const g = standardized.G ?? 0;
+  const s = standardized.S ?? 0;
 
   return {
     x_safe: xSafe,
     y_safe: ySafe,
-    c_std: cStd,
+    c_std: cStd ?? 0,
     m,
     t,
     d,
@@ -198,11 +202,11 @@ function buildFeatureMap(row: PanelRowCanonical): Record<TierFeatureName, number
     'y_safe:r': ySafe * r,
     't:r': t * r,
     'x_safe:y_safe': xSafe * ySafe,
-    'c_std:m': cStd * m,
+    'c_std:m': (cStd ?? 0) * m,
     'e:s': e * s,
     'd:t': d * t,
     'g:r': g * r,
-    'c_std^2': cStd * cStd,
+    'c_std^2': (cStd ?? 0) * (cStd ?? 0),
     'm^2': m * m,
     't^2': t * t,
     'e^2': e * e,

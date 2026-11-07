@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.prediction_interval_coverage.v2",
-  "generatedAtIso": "2026-11-07T12:41:26.312Z",
+  "generatedAtIso": "2026-11-07T13:03:37.039Z",
   "nominalCoverage": 0.95,
   "severeUnderCoverageThreshold": 0.8,
   "intervalMethods": {
@@ -11,388 +11,388 @@
   "byProtocol": {
     "country_out": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.8777777777777778,
+        "stdCoverage95": 0.32255294765418624,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.07222222222222219,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.13333333333333333,
+        "severeUnderCoverageRate": 0.13333333333333333,
+        "nFolds": 45
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.8333333333333334,
+        "stdCoverage95": 0.3692744729379981,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.11666666666666659,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.17777777777777778,
+        "severeUnderCoverageRate": 0.17777777777777778,
+        "nFolds": 45
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.7888888888888889,
+        "stdCoverage95": 0.4057665149398906,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.1611111111111111,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.2222222222222222,
+        "severeUnderCoverageRate": 0.2222222222222222,
+        "nFolds": 45
       }
     },
     "rolling_origin": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.625,
+        "q75Coverage95": 0.875,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0.3535533905932738,
+        "iqrWidthCoverage95": 0.25,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 0.5,
+        "severeUnderCoverageRate": 0.5,
+        "nFolds": 2
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.75,
+        "q75Coverage95": 0.75,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 1,
+        "severeUnderCoverageRate": 1,
+        "nFolds": 2
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.75,
+        "q75Coverage95": 0.75,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 1,
+        "severeUnderCoverageRate": 1,
+        "nFolds": 2
       }
     }
   },
   "byProtocolEmpirical": {
     "country_out": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.8777777777777778,
+        "stdCoverage95": 0.32255294765418624,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.07222222222222219,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.13333333333333333,
+        "severeUnderCoverageRate": 0.13333333333333333,
+        "nFolds": 45
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.8333333333333334,
+        "stdCoverage95": 0.3692744729379981,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.11666666666666659,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.17777777777777778,
+        "severeUnderCoverageRate": 0.17777777777777778,
+        "nFolds": 45
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.7888888888888889,
+        "stdCoverage95": 0.4057665149398906,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.1611111111111111,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.2222222222222222,
+        "severeUnderCoverageRate": 0.2222222222222222,
+        "nFolds": 45
       }
     },
     "rolling_origin": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.625,
+        "q75Coverage95": 0.875,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0.3535533905932738,
+        "iqrWidthCoverage95": 0.25,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 0.5,
+        "severeUnderCoverageRate": 0.5,
+        "nFolds": 2
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.75,
+        "q75Coverage95": 0.75,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 1,
+        "severeUnderCoverageRate": 1,
+        "nFolds": 2
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.75,
+        "q75Coverage95": 0.75,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 1,
+        "severeUnderCoverageRate": 1,
+        "nFolds": 2
       }
     }
   },
   "byProtocolGaussian": {
     "country_out": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.9111111111111111,
+        "stdCoverage95": 0.2877990320141516,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.03888888888888886,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.08888888888888889,
+        "severeUnderCoverageRate": 0.08888888888888889,
+        "nFolds": 45
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.9,
+        "stdCoverage95": 0.293876906822629,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.04999999999999993,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.1111111111111111,
+        "severeUnderCoverageRate": 0.1111111111111111,
+        "nFolds": 45
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.8555555555555555,
+        "stdCoverage95": 0.3474292312213677,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.09444444444444444,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.15555555555555556,
+        "severeUnderCoverageRate": 0.15555555555555556,
+        "nFolds": 45
       }
     },
     "rolling_origin": {
       "A": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.625,
+        "q75Coverage95": 0.875,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0.3535533905932738,
+        "iqrWidthCoverage95": 0.25,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 0.5,
+        "severeUnderCoverageRate": 0.5,
+        "nFolds": 2
       },
       "B": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.875,
+        "q25Coverage95": 0.8125,
+        "q75Coverage95": 0.9375,
+        "meanCoverage95": 0.875,
+        "stdCoverage95": 0.1767766952966369,
+        "iqrWidthCoverage95": 0.125,
+        "meanGapToNominal": -0.07499999999999996,
+        "medianGapToNominal": -0.07499999999999996,
+        "underCoverageRate": 0.5,
+        "severeUnderCoverageRate": 0.5,
+        "nFolds": 2
       },
       "C": {
-        "medianCoverage95": null,
-        "q25Coverage95": null,
-        "q75Coverage95": null,
-        "meanCoverage95": null,
-        "stdCoverage95": null,
-        "iqrWidthCoverage95": null,
-        "meanGapToNominal": null,
-        "medianGapToNominal": null,
-        "underCoverageRate": null,
-        "severeUnderCoverageRate": null,
-        "nFolds": 0
+        "medianCoverage95": 0.75,
+        "q25Coverage95": 0.75,
+        "q75Coverage95": 0.75,
+        "meanCoverage95": 0.75,
+        "stdCoverage95": 0,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.19999999999999996,
+        "medianGapToNominal": -0.19999999999999996,
+        "underCoverageRate": 1,
+        "severeUnderCoverageRate": 1,
+        "nFolds": 2
       }
     }
   },
   "pooledByTier": {
     "A": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.8723404255319149,
+      "nFolds": 47,
+      "meanGapToNominal": -0.07765957446808502,
+      "underCoverageRate": 0.14893617021276595,
+      "severeUnderCoverageRate": 0.14893617021276595
     },
     "B": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.8297872340425532,
+      "nFolds": 47,
+      "meanGapToNominal": -0.12021276595744679,
+      "underCoverageRate": 0.2127659574468085,
+      "severeUnderCoverageRate": 0.2127659574468085
     },
     "C": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.7872340425531915,
+      "nFolds": 47,
+      "meanGapToNominal": -0.16276595744680844,
+      "underCoverageRate": 0.2553191489361702,
+      "severeUnderCoverageRate": 0.2553191489361702
     }
   },
   "pooledByTierGaussian": {
     "A": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.9042553191489362,
+      "nFolds": 47,
+      "meanGapToNominal": -0.04574468085106376,
+      "underCoverageRate": 0.10638297872340426,
+      "severeUnderCoverageRate": 0.10638297872340426
     },
     "B": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.898936170212766,
+      "nFolds": 47,
+      "meanGapToNominal": -0.051063829787234005,
+      "underCoverageRate": 0.1276595744680851,
+      "severeUnderCoverageRate": 0.1276595744680851
     },
     "C": {
-      "meanCoverage95": null,
-      "nFolds": 0,
-      "meanGapToNominal": null,
-      "underCoverageRate": null,
-      "severeUnderCoverageRate": null
+      "meanCoverage95": 0.851063829787234,
+      "nFolds": 47,
+      "meanGapToNominal": -0.0989361702127659,
+      "underCoverageRate": 0.19148936170212766,
+      "severeUnderCoverageRate": 0.19148936170212766
     }
   },
   "methodComparisonByTier": {
     "A": {
-      "primaryMeanCoverage95": null,
-      "gaussianMeanCoverage95": null,
-      "deltaMeanCoverage95": null,
-      "primaryAbsGapToNominal": null,
-      "gaussianAbsGapToNominal": null
+      "primaryMeanCoverage95": 0.8723404255319149,
+      "gaussianMeanCoverage95": 0.9042553191489362,
+      "deltaMeanCoverage95": -0.03191489361702127,
+      "primaryAbsGapToNominal": 0.07765957446808502,
+      "gaussianAbsGapToNominal": 0.04574468085106376
     },
     "B": {
-      "primaryMeanCoverage95": null,
-      "gaussianMeanCoverage95": null,
-      "deltaMeanCoverage95": null,
-      "primaryAbsGapToNominal": null,
-      "gaussianAbsGapToNominal": null
+      "primaryMeanCoverage95": 0.8297872340425532,
+      "gaussianMeanCoverage95": 0.898936170212766,
+      "deltaMeanCoverage95": -0.06914893617021278,
+      "primaryAbsGapToNominal": 0.12021276595744679,
+      "gaussianAbsGapToNominal": 0.051063829787234005
     },
     "C": {
-      "primaryMeanCoverage95": null,
-      "gaussianMeanCoverage95": null,
-      "deltaMeanCoverage95": null,
-      "primaryAbsGapToNominal": null,
-      "gaussianAbsGapToNominal": null
+      "primaryMeanCoverage95": 0.7872340425531915,
+      "gaussianMeanCoverage95": 0.851063829787234,
+      "deltaMeanCoverage95": -0.06382978723404253,
+      "primaryAbsGapToNominal": 0.16276595744680844,
+      "gaussianAbsGapToNominal": 0.0989361702127659
     }
   },
   "assumptionAudit": {
     "byProtocol": {
       "country_out": {
         "A": {
-          "lowVarianceFoldRate": 1,
+          "lowVarianceFoldRate": 0.9111111111111111,
           "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "medianResidualStdTrain": 0.15568830348545287,
+          "residualStdCv": 0.020713300428580324,
+          "medianResidualCenterShift": -0.026304460266186977,
+          "empiricalVsGaussianMeanDelta": -0.03333333333333333,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 45
         },
         "B": {
-          "lowVarianceFoldRate": 1,
+          "lowVarianceFoldRate": 0.9111111111111111,
           "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "medianResidualStdTrain": 0.14203286466124437,
+          "residualStdCv": 0.024117807471923186,
+          "medianResidualCenterShift": 0.003537332308467811,
+          "empiricalVsGaussianMeanDelta": -0.06666666666666667,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 45
         },
         "C": {
-          "lowVarianceFoldRate": 1,
+          "lowVarianceFoldRate": 0.9111111111111111,
           "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "medianResidualStdTrain": 0.14018547420170707,
+          "residualStdCv": 0.026044731945320237,
+          "medianResidualCenterShift": 0.001160791073783557,
+          "empiricalVsGaussianMeanDelta": -0.06666666666666667,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 45
         }
       },
       "rolling_origin": {
         "A": {
-          "lowVarianceFoldRate": 1,
-          "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "lowVarianceFoldRate": 0,
+          "thinSupportFoldRate": 0,
+          "medianResidualStdTrain": 0.14534459213010084,
+          "residualStdCv": 0.07042172891310819,
+          "medianResidualCenterShift": -0.022930176286941488,
+          "empiricalVsGaussianMeanDelta": 0,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 2
         },
         "B": {
-          "lowVarianceFoldRate": 1,
-          "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "lowVarianceFoldRate": 0,
+          "thinSupportFoldRate": 0,
+          "medianResidualStdTrain": 0.1331442708552425,
+          "residualStdCv": 0.07620100254259544,
+          "medianResidualCenterShift": -0.0033776506056650557,
+          "empiricalVsGaussianMeanDelta": -0.125,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 2
         },
         "C": {
-          "lowVarianceFoldRate": 1,
-          "thinSupportFoldRate": 1,
-          "medianResidualStdTrain": null,
-          "residualStdCv": null,
-          "medianResidualCenterShift": null,
-          "empiricalVsGaussianMeanDelta": null,
+          "lowVarianceFoldRate": 0,
+          "thinSupportFoldRate": 0,
+          "medianResidualStdTrain": 0.13047271999537088,
+          "residualStdCv": 0.07598603861388668,
+          "medianResidualCenterShift": -0.005291549816296745,
+          "empiricalVsGaussianMeanDelta": 0,
           "fallbackToGaussianRate": 0,
-          "nComparableFolds": 0
+          "nComparableFolds": 2
         }
       }
     },
@@ -400,17 +400,17 @@
       "country_out": {
         "A": {
           "thin_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.8777777777777778,
+            "stdCoverage95": 0.32255294765418624,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.07222222222222219,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.13333333333333333,
+            "severeUnderCoverageRate": 0.13333333333333333,
+            "nFolds": 45
           },
           "moderate_support": {
             "medianCoverage95": null,
@@ -441,17 +441,17 @@
         },
         "B": {
           "thin_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.8333333333333334,
+            "stdCoverage95": 0.3692744729379981,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.11666666666666659,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.17777777777777778,
+            "severeUnderCoverageRate": 0.17777777777777778,
+            "nFolds": 45
           },
           "moderate_support": {
             "medianCoverage95": null,
@@ -482,17 +482,17 @@
         },
         "C": {
           "thin_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.7888888888888889,
+            "stdCoverage95": 0.4057665149398906,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.1611111111111111,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.2222222222222222,
+            "severeUnderCoverageRate": 0.2222222222222222,
+            "nFolds": 45
           },
           "moderate_support": {
             "medianCoverage95": null,
@@ -538,17 +538,17 @@
             "nFolds": 0
           },
           "moderate_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 0.75,
+            "q25Coverage95": 0.625,
+            "q75Coverage95": 0.875,
+            "meanCoverage95": 0.75,
+            "stdCoverage95": 0.3535533905932738,
+            "iqrWidthCoverage95": 0.25,
+            "meanGapToNominal": -0.19999999999999996,
+            "medianGapToNominal": -0.19999999999999996,
+            "underCoverageRate": 0.5,
+            "severeUnderCoverageRate": 0.5,
+            "nFolds": 2
           },
           "broader_support": {
             "medianCoverage95": null,
@@ -579,17 +579,17 @@
             "nFolds": 0
           },
           "moderate_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 0.75,
+            "q25Coverage95": 0.75,
+            "q75Coverage95": 0.75,
+            "meanCoverage95": 0.75,
+            "stdCoverage95": 0,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.19999999999999996,
+            "medianGapToNominal": -0.19999999999999996,
+            "underCoverageRate": 1,
+            "severeUnderCoverageRate": 1,
+            "nFolds": 2
           },
           "broader_support": {
             "medianCoverage95": null,
@@ -620,17 +620,17 @@
             "nFolds": 0
           },
           "moderate_support": {
-            "medianCoverage95": null,
-            "q25Coverage95": null,
-            "q75Coverage95": null,
-            "meanCoverage95": null,
-            "stdCoverage95": null,
-            "iqrWidthCoverage95": null,
-            "meanGapToNominal": null,
-            "medianGapToNominal": null,
-            "underCoverageRate": null,
-            "severeUnderCoverageRate": null,
-            "nFolds": 0
+            "medianCoverage95": 0.75,
+            "q25Coverage95": 0.75,
+            "q75Coverage95": 0.75,
+            "meanCoverage95": 0.75,
+            "stdCoverage95": 0,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.19999999999999996,
+            "medianGapToNominal": -0.19999999999999996,
+            "underCoverageRate": 1,
+            "severeUnderCoverageRate": 1,
+            "nFolds": 2
           },
           "broader_support": {
             "medianCoverage95": null,

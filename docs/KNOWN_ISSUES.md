@@ -100,6 +100,50 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 
 ---
 
+## KI-14 — Leave-one-country-out refit is not viable at n = 49
+
+The v2 panel has 49 complete cases across 23 countries, so a country-out fold
+holds out 1–3 rows and trains on 46–48. With six predictors plus an intercept
+(seven parameters), several folds cannot estimate anything stable, and the
+per-fold test set is too small for R² to be defined at all.
+
+Observed after regenerating the artefacts:
+
+```text
+fold country_out:ALB   nTrain = 48   nTest = 1
+  Tier A converged: true
+  aggregatesRefit    Tier A  R2 = -284.72   RMSE = 0.1133
+  aggregatesCanonical Tier A R2 = -7940.45  RMSE = 0.3013
+```
+
+A per-fold R² computed on a single test row is undefined in principle; the
+reported values are the artefact of dividing by a near-zero variance. **RMSE is
+the only interpretable number here**, and it is 0.11 versus an outcome SD of
+about 0.97 — that is a real, honest, mediocre result.
+
+Before the panel rebuild the same code path reported R² = 1.0 because the model
+was restating its own outcome. The collapse from 1.0 to a negative value is the
+tautology leaving, not a regression.
+
+**Consequence for the paper:** leave-one-country-out CV must be replaced by an
+evaluation that suits the sample. Options, in order of preference:
+
+1. **Repeated k-fold over country-years** (k = 5, 20 repeats), reporting RMSE
+   and MAE distributions. This is defensible at n = 49 and is what a methods
+   reviewer will expect.
+2. **Leave-one-country-out with collapsed test metrics** — evaluate on the
+   country mean rather than individual rows, so the test unit matches the
+   training unit.
+3. Report in-sample fit with an explicit statement that out-of-sample
+   evaluation is underpowered at this n.
+
+Eleven tests in the suite still assert the old behaviour (folds converging at
+23 countries, R² within plausible bounds, positive canonical R²). They are
+correctly failing and must be rewritten together with the evaluation design,
+not relaxed to make the suite green.
+
+---
+
 ## KI-13 — Production coefficients are fitted to the defective panel
 
 `src/data/feCoefficients.ts` holds hard-coded coefficients trained on the v1

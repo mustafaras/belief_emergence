@@ -37,19 +37,29 @@ function normalizeCountryName(value: string): string {
   return value.trim().toLowerCase();
 }
 
+const PRESET_KEYS = ['X', 'Y', 'C', 'M', 'T', 'D', 'G', 'E', 'S', 'R'] as const;
+
+/**
+ * Mean covariate values for a preset country.
+ *
+ * C, D, S and G are structurally unavailable in the v2 panel. Each variable is
+ * averaged over the rows where it is actually observed, so an unavailable
+ * channel yields 0 (its neutral value once standardized) instead of dragging
+ * the mean toward zero through fabricated observations.
+ */
 function computePresetMeansFromPanel(
   panelData: Array<{
     country_name: string;
     year: number;
     X: number;
     Y: number;
-    C: number;
+    C: number | null;
     M: number;
     T: number;
-    D: number;
-    G: number;
+    D: number | null;
+    G: number | null;
     E: number;
-    S: number;
+    S: number | null;
     R: number;
   }>,
   presetCountryName: string,
@@ -69,65 +79,52 @@ function computePresetMeansFromPanel(
   const filtered = panelData.filter((r) => normalizeCountryName(r.country_name) === target);
   if (filtered.length === 0) return null;
 
-  const byYear = new Map<number, { n: number; X: number; Y: number; C: number; M: number; T: number; D: number; G: number; E: number; S: number; R: number }>();
+  // Per-variable sums and counts: a cell where a channel is NA must not
+  // contribute a fabricated zero to that channel's mean.
+  type Acc = { sum: Record<string, number>; n: Record<string, number> };
+  const byYear = new Map<number, Acc>();
 
   for (const r of filtered) {
     if (!Number.isFinite(r.year)) continue;
-    const cur = byYear.get(r.year) ?? { n: 0, X: 0, Y: 0, C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0 };
-    cur.n += 1;
-    cur.X += r.X;
-    cur.Y += r.Y;
-    cur.C += r.C;
-    cur.M += r.M;
-    cur.T += r.T;
-    cur.D += r.D;
-    cur.G += r.G;
-    cur.E += r.E;
-    cur.S += r.S;
-    cur.R += r.R;
+    const cur: Acc = byYear.get(r.year) ?? {
+      sum: Object.fromEntries(PRESET_KEYS.map((k) => [k, 0])),
+      n: Object.fromEntries(PRESET_KEYS.map((k) => [k, 0])),
+    };
+    for (const k of PRESET_KEYS) {
+      const v = (r as Record<string, number | null | string>)[k];
+      if (typeof v !== 'number' || !Number.isFinite(v)) continue;
+      cur.sum[k] += v;
+      cur.n[k] += 1;
+    }
     byYear.set(r.year, cur);
   }
 
   const years = Array.from(byYear.values());
   if (years.length === 0) return null;
 
-  let X = 0;
-  let Y = 0;
-  let C = 0;
-  let M = 0;
-  let T = 0;
-  let D = 0;
-  let G = 0;
-  let E = 0;
-  let S = 0;
-  let R = 0;
-
+  const totals: Record<string, number> = Object.fromEntries(PRESET_KEYS.map((k) => [k, 0]));
   for (const y of years) {
-    X += y.X / y.n;
-    Y += y.Y / y.n;
-    C += y.C / y.n;
-    M += y.M / y.n;
-    T += y.T / y.n;
-    D += y.D / y.n;
-    G += y.G / y.n;
-    E += y.E / y.n;
-    S += y.S / y.n;
-    R += y.R / y.n;
+    for (const k of PRESET_KEYS) {
+      if (y.n[k] > 0) totals[k] += y.sum[k] / y.n[k];
+    }
   }
 
   const denom = years.length;
+  const mean = (k: string) => totals[k] / denom;
 
   return {
-    X: X / denom,
-    Y: Y / denom,
-    C: standardizeCulturalIntensity(C / denom),
-    M: M / denom,
-    T: T / denom,
-    D: D / denom,
-    G: G / denom,
-    E: E / denom,
-    S: S / denom,
-    R: R / denom,
+    X: mean('X'),
+    Y: mean('Y'),
+    // C is standardized on its raw scale; when absent it stays at the
+    // standardized mean (0) rather than being standardized from a fake value.
+    C: mean('C') === 0 ? 0 : standardizeCulturalIntensity(mean('C')),
+    M: mean('M'),
+    T: mean('T'),
+    D: mean('D'),
+    G: mean('G'),
+    E: mean('E'),
+    S: mean('S'),
+    R: mean('R'),
   };
 }
 

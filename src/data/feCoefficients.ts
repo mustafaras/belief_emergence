@@ -257,8 +257,12 @@ export const MODIFIER_STANDARDIZATION: Record<string, ModifierStandardization> =
  * Used to normalize Z_belief_outcome to [0.0001, 0.9999] for logit-space training
  */
 export const Z_NORMALIZATION = {
-  min: -1.3175756317751055,
-  max: 1.8150944343746167,
+  // v2 panel bounds (public/data/panel_canonical_v2.csv, 49 complete cases).
+  // The previous bounds belonged to the superseded v1 panel, whose outcome was
+  // an exact rescaling of a predictor; clamping the new outcome to the old
+  // range would silently censor 6 of 49 observations.
+  min: -1.6094638811769215,
+  max: 1.5846349235822439,
 };
 
 // Legacy FE coefficients (deprecated - use OPTIMIZED_SIGMOID_COEFFICIENTS)
