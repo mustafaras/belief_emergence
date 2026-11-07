@@ -12,14 +12,27 @@ name: Verify
 on:
   push:
     paths:
-      - 'BE_app/**'
+      - 'src/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'config/**'
+      - 'public/data/**'
       - 'paper/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/verify.yml'
   pull_request:
     paths:
-      - 'BE_app/**'
+      - 'src/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'config/**'
+      - 'public/data/**'
       - 'paper/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/verify.yml'
+  workflow_dispatch:
 
 jobs:
   verify-app:
