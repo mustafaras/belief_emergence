@@ -21,8 +21,8 @@
 
 \newcommand{\SubmissionDate}{}
 
-\newcommand{\ManuscriptTitle}{Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}
-\newcommand{\ManuscriptSubtitle}{Regime-Diagnostic Saturating Models for Country Panels}
+\newcommand{\ManuscriptTitle}{Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models}
+\newcommand{\ManuscriptSubtitle}{Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels}
 
 \newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
 \newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
@@ -60,36 +60,30 @@
     \item Tiered evidence architecture explicitly separates primary out-of-sample findings (Tier~A/B) from exploratory sensitivity (Tier~C), with documented failure cases and instability flags.
 \end{itemize}
 
-\Section{Bounded nonlinear framework}
+\Section{Measurement audit before model geometry}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Effective exposure is defined as a structural term modulated by a contextual field: $S = X^{\alpha}Y^{\beta}\exp(\Phi)$.
-    \item Exposure maps to a bounded outcome via a saturation transform: $Z = S/(S+k) \in (0,1)$, making diminishing returns explicit and preventing runaway responses under extreme covariate combinations.
-    \item Sensitivity is intrinsically state-dependent: $\partial Z/\partial\Phi = Z(1-Z)$ peaks near the transition ridge ($Z\approx 0.5$) and attenuates on saturation shoulders, supporting regime-aware interpretation without importing linear ``one-slope'' intuition.
-    \item Eight social modifiers enter the contextual field $\Phi$ and are interpreted through term-by-term decomposition (main effects, interactions, curvature) and scenario-based finite differences in bounded units.
-    \item Bounded social indicators (constrained to 0--1 scale) are governed by explicit preprocessing contracts: clipping, min--max scaling, and interior-band protection are specified as auditable scientific contracts in the supplementary materials (numerical details in Data and reproducibility below).
+    \item Three of eight composite constructs fail a reliability audit on item-level World Values Survey data: cultural intensity (Cronbach's $\alpha=0.35$, 303 country-years), social atomization ($\alpha=-1.23$, 296), and social support (not computable from the four of its seven items that exist in the harmonised source).
+    \item In the published panel the outcome was an exact rescaling of its principal predictor ($r=1.000000000000$). Every reported out-of-sample metric was therefore algebraically guaranteed; the defect is traceable to one wrong item code in a shared pool.
+    \item Four checks are enforced as hard gates and fail on the published panel: no predictor may restate the outcome, no two predictors may be duplicates, the design matrix must be full rank, and no single predictor may explain more than 99\% of the outcome.
+    \item The rebuild is deterministic end to end: item build, construct build, panel build, coefficient fit, and every reported artefact are separately verifiable, with World Values Survey data accessed under its standard terms without registration.
 \end{itemize}
 
-\Section{Primary out-of-sample evidence (Tier A/B)}
+\Section{Functional form is tested, not assumed}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Primary claims rest on refit out-of-sample validation, not in-sample fit. Two complementary protocols:
-    \begin{itemize}
-        \setlength{\itemsep}{0.2em}
-        \item Leave-one-country-out (48 folds): median OOS RMSE 0.1354 (Tier~A), 0.1376 (Tier~B), 0.1412 (Tier~C).
-        \item Rolling-origin temporal validation (12 forward-chaining folds): median OOS RMSE 0.1271 (Tier~A), 0.1653 (Tier~B), 0.1694 (Tier~C).
-    \end{itemize}
-    \item Parameter sign consistency thresholds gate primary claims: $\ge 0.70$ (Tier~A), $\ge 0.80$ (Tier~B). Support-per-parameter ratios: 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
-    \item A separately gated lockbox holdout (frozen split, one-time per release cycle) confirms Tier~A/B stability without repeated metric peeking.
-    \item In-sample performance anchor: $R^2=0.8461$; $\mathrm{Corr}(Z,\widehat{Z})=0.9488$; MAE~$=0.1005$; RMSE~$=0.1212$. Reported as descriptive context; primary inferential claims rest on refit OOS evidence above.
+    \item On the rebuilt panel (48 countries, 87 complete-case observations, 1981--2023) the saturating model reaches leave-one-country-out $R^2=0.10$, below the $0.20$ of an ordinary linear regression on identical rows and identical covariates.
+    \item The bounded form was adopted because the outcome lies on a closed scale. That is a property of the measurement, not evidence that the response saturates; on this sample the shape is not supported and the claim is withdrawn.
+    \item Primary evidence remains refit out-of-sample: leave-one-country-out (48 folds) and forward-chaining rolling origin (12 folds, all converging) with median OOS RMSE 0.1354 and 0.1271 for Tier~A.
+    \item Fixed-coefficient transfer is reported rather than suppressed: the production coefficients yield negative $R^2$ on held-out countries ($-2.01$ Tier~A), meaning population-level associations do not transport to unseen countries at this sample size.
 \end{itemize}
 
-\Section{Exploratory evidence and failure cases}
+\Section{Practical consequence}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Tier~C (full nonlinear complexity: curvature, higher-order interactions) is explicitly separated from primary evidence. Bounded by exploratory stability threshold (0.60; pooled median consistency 1.0000) with wider fold-level variability than Tier~A/B. No headline claim rests on Tier~C.
-    \item Failure and instability evidence documented prominently: Estonia (MAE 0.292, sparse low-uptake regime), Russia (MAE 0.250, volatile transition regime), Slovak Republic (MAE 0.277, sparse mid-regime). Rolling-origin parameter drift flagged for Tier~C (education curvature sign flip in 1 of 2 folds).
-    \item Empirical support: 49 complete-case observations after collapsing scenario replication. Regime-specific coverage: low-uptake ($Z<0.33$) 23.5\%, mid-transition 52.9\%, high-uptake ($Z\ge 0.67$) 23.5\%.
+    \item Model sophistication is cheap to add and expensive to retract; construct validity is cheap to check and catastrophic to defer. The audit protocol here is the paper's reusable contribution.
+    \item Item sets for cultural intensity and social atomization need redesign around constructs that actually co-vary, rather than inheritance from an older conceptual scheme.
+    \item The linear-versus-sigmoid comparison is the cheapest available check on whether a bounded link earns its parameters, and should be routine in papers that adopt one.
 \end{itemize}
 
 \Section{Inferential boundaries}

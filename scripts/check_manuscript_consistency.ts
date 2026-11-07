@@ -224,9 +224,9 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_ABSTRACT_SUPPORT_AND_PROTOCOL_COUNTS',
       file: path.join('main', 'main.tex'),
-      regex: /canonical panel of ([0-9]+) countries \(([0-9]+) complete-case country--year observations, 1981--2023 survey waves\).*?leave-one-country-out cross-validation \(([0-9]+) folds\).*?rolling-origin temporal evaluation \(([0-9]+) folds\)/s,
-      expected: [expectedCountryFoldCount, expectedSupportUnits, expectedCountryFoldCount, expectedRollingFoldCount],
-      context: 'Main abstract support and protocol counts',
+      regex: /rebuilt panel comprises ([0-9]+) countries and ([0-9]+) complete-case country--year observations spanning [0-9]{4}--[0-9]{4}/s,
+      expected: [expectedCountryFoldCount, expectedSupportUnits],
+      context: 'Main abstract panel counts',
       tolerance: 0,
     });
 
@@ -310,8 +310,9 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'HIGHLIGHTS_OOS_TRIPLETS',
       file: 'highlights.tex',
-      regex: /Leave-one-country-out[^:]*:\s*median OOS RMSE ([0-9.]+)\s*\(Tier.A\),\s*([0-9.]+)\s*\(Tier.B\),\s*([0-9.]+)\s*\(Tier.C\)[\s\S]*?Rolling-origin[^:]*:\s*median OOS RMSE ([0-9.]+)\s*\(Tier.A\),\s*([0-9.]+)\s*\(Tier.B\),\s*([0-9.]+)\s*\(Tier.C\)/s,
-      expected: [...expectedCountryMedians, ...expectedRollingMedians],
+      regex: /leave-one-country-out \(([0-9]+) folds\) and forward-chaining rolling origin \(([0-9]+) folds[^)]*\) with median OOS RMSE ([0-9.]+) and ([0-9.]+) for Tier.A/s,
+      expected: [expectedCountryFoldCount, expectedRollingFoldCount, expectedCountryMedians[0], expectedRollingMedians[0]],
+      tolerance: 0.0005,
       context: 'Highlights OOS medians',
     });
 
@@ -320,8 +321,9 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'COVERLETTER_OOS_TRIPLETS',
       file: 'cover_letter.tex',
-      regex: /Leave-one-country-out[^:]*:\s*median OOS RMSE ([0-9.]+)\s*\(Tier.A\),\s*([0-9.]+)\s*\(Tier.B\),\s*([0-9.]+)\s*\(Tier.C\)[\s\S]*?Rolling-origin[^:]*:\s*median OOS RMSE ([0-9.]+)\s*\(Tier.A\),\s*([0-9.]+)\s*\(Tier.B\),\s*([0-9.]+)\s*\(Tier.C\)/s,
-      expected: [...expectedCountryMedians, ...expectedRollingMedians],
+      regex: /Leave-one-country-out\} \(([0-9]+) folds\): median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)[\s\S]*?Rolling-origin temporal validation\} \(([0-9]+) forward-chaining folds\): median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)/s,
+      expected: [expectedCountryFoldCount, ...expectedCountryMedians, expectedRollingFoldCount, ...expectedRollingMedians],
+      tolerance: 0.0005,
       context: 'Cover letter OOS medians',
     });
 

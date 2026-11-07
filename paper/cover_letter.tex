@@ -25,8 +25,8 @@
 
 \newcommand{\SubmissionDate}{}
 
-\newcommand{\ManuscriptTitle}{Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}
-\newcommand{\ManuscriptSubtitle}{Regime-Diagnostic Saturating Models for Country Panels}
+\newcommand{\ManuscriptTitle}{Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models}
+\newcommand{\ManuscriptSubtitle}{Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels}
 
 \newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
 \newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
@@ -72,15 +72,17 @@
 
 \noindent Dear Editor,\\[0.35em]
 
-\noindent We submit the enclosed manuscript for your consideration. The paper addresses a recurring methodological gap in macro-urban analytics: bounded social indicators are routinely modeled with unbounded linear intuition, while support limits, preprocessing choices, and failure cases remain implicit. We introduce a support-aware bounded nonlinear framework grounded in refit out-of-sample validation and diagnostic visual analytics, so that empirical support, uncertainty, and instability are auditable from preprocessing to exported figures.
+\noindent We submit the enclosed manuscript for your consideration. It reports a measurement audit of a bounded nonlinear framework for country-panel belief intensity, and what the audit changed.
+
+\noindent The framework had been developed and prepared for submission. Applying four routine validity checks before, rather than after, model evaluation returned failures on all four. Three of eight composite constructs did not measure a single dimension: cultural intensity reached Cronbach's $\alpha=0.35$ across 303 country-years, social atomization $\alpha=-1.23$ across 296, and social support could not be computed at all. More seriously, the published panel's outcome was an exact rescaling of its principal predictor ($r=1.000000000000$), which made every reported out-of-sample metric algebraically guaranteed rather than estimated.
 
 \SmallHeading{What is new, why now, and why it matters}
 
-\noindent \textbf{What is new.} A bounded, regime-aware mapping ($Z = S/(S+k) \in (0,1)$, with $S = X^{\alpha}Y^{\beta}\exp(\Phi)$) that makes transition geometry, saturation, and local sensitivity analytically visible. Sensitivity is intrinsically regime-dependent ($\partial Z/\partial\Phi = Z(1-Z)$), concentrating interpretive leverage in mid-regime states. Eight standardized social modifiers enter the contextual field $\Phi$; their effects are interpreted through finite-difference scenarios and term-by-term decomposition in bounded units. The framework enforces a transparent preprocessing contract and documents failure cases alongside successes.
+\noindent \textbf{What is new.} An audit protocol that checks construct reliability, item overlap between constructs, design-matrix rank, and performance against a linear baseline---and enforces each as a hard gate. Every check fails on the published panel and passes on the rebuilt one. The protocol is implemented, deterministic, and reproducible from item-level World Values Survey data accessed under the survey's standard terms without registration.
 
-\noindent \textbf{Why now.} Sparse, unbalanced country--year panels are increasingly used for policy-facing scenario exploration, yet published workflows rarely separate robust from exploratory findings, quantify support-per-parameter ratios, or make failure cases visible. The growing demand for evidence-based diagnostics under thin support makes a structured, auditable inference workflow timely.
+\noindent \textbf{Why now.} Composite indicators assembled from shared survey item pools are increasingly common, and the failure mode documented here is generic: one wrong item code in a shared pool silently converts a predictor into a rescaling of the outcome. The checks that catch it are inexpensive. Deferring them is expensive.
 
-\noindent \textbf{Why it matters.} Reproducible data-science methodology for complex social systems demands auditable computation. The manuscript contributes a protocolized validation framework (tiered complexity ladder, refit out-of-sample protocols, release-gated lockbox), a reproducible artifact pipeline (deterministic preprocessing through exported diagnostics), and support-aware inference for sparse comparative panels. The reproducibility path from data to claims is fully auditable, validation protocols are explicitly separated by tier, and narrative claims are tightly linked to exported JSON artifacts via a claim-evidence traceability map (Table~S0). The manuscript positions visual analytics as a diagnostic instrument rather than a presentation layer, addressing the needs of computational social scientists and methodological reviewers working on complex social systems.
+\noindent \textbf{Why it matters.} The paper reports a negative result that we believe reviewers will find more useful than a positive one. After the constructs were rebuilt and the panel re-derived (48 countries, 87 complete-case observations, 1981--2023), the saturating model reached a leave-one-country-out $R^2$ of $0.10$, below the $0.20$ of an ordinary linear regression on identical rows. The bounded form was chosen because the outcome is bounded, which is a fact about the measurement scale and not about the response shape; in this sample the shape is not supported. We report the comparison rather than the model in isolation, and we withdraw the saturation claim the original title asserted.
 
 \SmallHeading{Primary evidence (Tier A/B refit OOS) versus exploratory evidence (Tier C)}
 \noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
