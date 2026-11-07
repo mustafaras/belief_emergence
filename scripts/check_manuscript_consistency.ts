@@ -192,7 +192,6 @@ export function runConsistencyChecks(): void {
     const expectedCountryMedians = ['A', 'B', 'C'].map((tier) => cvCountry.aggregates[tier].rmse.median);
     const expectedRollingMedians = ['A', 'B', 'C'].map((tier) => cvRolling.aggregates[tier].rmse.median);
     const expectedCountryFoldCount = cvCountry.folds.length;
-    const expectedScenarioRows = cvCountry.folds.reduce((sum, fold) => sum + fold.nTestRows, 0);
     const expectedRollingFoldCount = cvRolling.folds.length;
     const expectedSupportUnits = modelComplexitySupport.supportConstrainedInference?.effectiveSupportUnits ?? Number.NaN;
     const expectedCountryIqr = ['A', 'B', 'C'].flatMap((tier) => [
@@ -225,8 +224,8 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_ABSTRACT_SUPPORT_AND_PROTOCOL_COUNTS',
       file: path.join('main', 'main.tex'),
-      regex: /canonical panel of ([0-9]+) countries \(([0-9]+) scenario-replicated rows, 2000--2022\) that collapses to ([0-9]+) unique country--years of complete-case support\..*?leave-one-country-out cross-validation \(([0-9]+) folds\).*?rolling-origin temporal evaluation \(([0-9]+) folds\)/s,
-      expected: [expectedCountryFoldCount, expectedScenarioRows, expectedSupportUnits, expectedCountryFoldCount, expectedRollingFoldCount],
+      regex: /canonical panel of ([0-9]+) countries \(([0-9]+) complete-case country--year observations, 2017--2022 survey wave\).*?leave-one-country-out cross-validation \(([0-9]+) folds\).*?rolling-origin temporal evaluation \(([0-9]+) folds\)/s,
+      expected: [expectedCountryFoldCount, expectedSupportUnits, expectedCountryFoldCount, expectedRollingFoldCount],
       context: 'Main abstract support and protocol counts',
       tolerance: 0,
     });
@@ -246,7 +245,7 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_RESULTS_ROLLING_MEDIANS',
       file: path.join('main', 'main.tex'),
-      regex: /Median out-of-sample RMSE across the 9 rolling folds is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\} for Tier A\/B\/C/s,
+      regex: /Median out-of-sample RMSE across the [0-9]+ rolling folds is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\} for Tier A\/B\/C/s,
       expected: expectedRollingMedians,
       context: 'Main results rolling medians',
     });

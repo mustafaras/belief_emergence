@@ -54,13 +54,16 @@ interface MetricExpectation {
   tolerance: number; // absolute
 }
 
+// v2 panel. The previous values (n=630, r2=0.8461) belonged to the model in
+// which the predictor C was an exact rescaling of the outcome; they are not a
+// target to return to. See docs/KNOWN_ISSUES.md KI-01 and KI-13.
 const CANONICAL_METRICS: MetricExpectation[] = [
-  { key: 'n',    expected: 630,     tolerance: 0 },
-  { key: 'r2',   expected: 0.8461,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.9488,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1005,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.1212,  tolerance: 0.0001 },
-  { key: 'bias', expected: -0.0699, tolerance: 0.0001 },
+  { key: 'n',    expected: 49,      tolerance: 0 },
+  { key: 'r2',   expected: 0.6319,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.8010,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1266,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.1630,  tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0249,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -86,7 +89,7 @@ const REQUIRED_ARTIFACTS = [
 /*  Canonical data fingerprint                                         */
 /* ------------------------------------------------------------------ */
 
-const CANONICAL_PANEL_SHA256 = '2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF';
+const CANONICAL_PANEL_SHA256 = 'CBFC3A1F9A669ECD7C7941F9EA3CFA95A24E5ECE051520DF287CCE9E5BDD53C3';
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                          */
