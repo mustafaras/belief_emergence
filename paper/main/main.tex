@@ -370,7 +370,7 @@ For compactness, \eqref{eq:phi} is occasionally referenced in symbolic grouped f
 + \sum_{j=1}^{7} I_j
 + \sum_{k=1}^{4} Q_k,
 \end{equation}
-where $\{M_{i,\mathrm{std}}\}$ enumerates the eight standardized contextual channels $(C,M,T,D,G,E,S,R)$, $\{I_j\}$ denotes the seven interaction terms included in \eqref{eq:phi}, and $\{Q_k\}$ denotes the four selected quadratic terms.
+where $\{M_{i,\mathrm{std}}\}$ enumerates the standardized contextual channels. Equation~\eqref{eq:phi} states the full candidate set $(C,M,T,D,G,E,S,R)$ as originally specified; on the v2 panel only $M$, $T$, $E$ and $R$ are estimable, and the terms involving $C$, $D$, $G$ and $S$ are set to zero because those channels are unmeasurable rather than because they were estimated to be unimportant (Section~\ref{sec:measurement-validity}). $\{I_j\}$ denotes the interaction terms retained in the fitted model, $c_{\mathrm{tr}}TR$ and $c_{\mathrm{yr}}Y_{\mathrm{s}}R$, and $\{Q_k\}$ denotes selected quadratic terms, none of which survives estimation at $n=49$.
 
 Channels were selected at the intersection of (a) theoretical relevance from diffusion, social capital, and welfare-state literatures and (b) cross-national data availability at the country--year level across the WVS/macro join. \emph{Propagation accelerators}---$C$ (cultural intensity; \textcite{TajfelTurner1979}), $M$ (media environment; \textcite{Prior2007}), $T$ (trauma/collective shock; \textcite{McAdam1996}), $D$ (social atomization; \textcite{Putnam2000})---capture diffusion-enhancing mechanisms, while \emph{buffering capacities}---$G$ (redistribution; \textcite{MeltzerRichard1981}), $E$ (education; \textcite{Coleman1988}), $S$ (social support), $R$ (welfare capacity)---represent dampening forces. Alternative candidates (e.g., political trust, internet penetration, religious fractionalization) were considered but excluded due to insufficient cross-national coverage under the complete-case requirement; internet penetration showed weaker conceptual alignment with the diffusion channel than the media-exposure proxy~$M$.
 
@@ -580,14 +580,14 @@ Tier C (full exploratory complexity) is included in both protocols for comparati
 \csname toprule\endcsname
 Quantity & Value \\
 \midrule
-Countries ($N$) & 23 \\
+Countries ($N$) & 45 \\
 Rows used ($n$) & 49 \\
-Year range & 2000--2022 \\
-$R^2$ & \num{0.8461} \\
-$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.9488} \\
-MAE & \num{0.1005} \\
-RMSE & \num{0.1212} \\
-Bias $(Z-\widehat{Z})$ & \num{-0.0699} \\
+Year range & 2017--2022 \\
+$R^2$ & \num{0.6319} \\
+$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.8010} \\
+MAE & \num{0.1266} \\
+RMSE & \num{0.1630} \\
+Bias $(Z-\widehat{Z})$ & \num{0.0249} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -715,7 +715,7 @@ The objective is to make macro-urban inference scientifically defensible and aud
 
 \subsection*{Empirical findings and robustness}
 
-Empirically, the fitted model shows high in-sample agreement with observed outcomes on the bounded scale (Table~\ref{tab:panel_fit_headline}). Across 49 panel observations spanning 23 countries and 2000--2022, the headline in-sample diagnostics are $R^2 = \num{0.8461}$, $\mathrm{Corr}(Z, \widehat{Z}) = \num{0.9488}$, MAE = \num{0.1005}, and RMSE = \num{0.1212} (Figure~\ref{fig:eval-pair}). These metrics are reported as descriptive context; primary inferential claims are anchored to Tier A/B refit out-of-sample evidence and separately reported lockbox confirmation (Section~7). Within that support-conditioned contract, the stable qualitative patterns are consistent with the regime interpretation of the fitted mapping: higher cultural intensity and welfare capacity are associated with higher predicted belief intensity, the culture--media interaction is the most stable Tier B coupling with relatively narrow bootstrap confidence intervals, and the ridge transition at $Z=0.5$ separates response regimes as predicted by saturation theory (Figure~\ref{fig:main-function-views}). Robustness checks extend beyond in-sample fit: bootstrap resampling (200 cluster-respecting replicates) yields narrower intervals for main effects and broader intervals for higher-order terms under thin support, forward-chaining temporal evaluation (Section~7) serves as a temporal scope diagnostic revealing the boundary of forward extrapolation under current temporal sample depth, and leave-one-country-out refits identify influential clusters (Table~S2).
+Empirically, the fitted model reaches an in-sample $R^2$ of \num{0.6319} ($\mathrm{Corr}=\num{0.8010}$, RMSE $=\num{0.1630}$) on the bounded scale (Table~\ref{tab:panel_fit_headline}). This is a moderate fit, and it is the honest one: the previous version reported \num{0.8461} because its principal predictor was a rescaling of the outcome. The reduction is the tautology leaving the model, not a loss of signal. Within the support-conditioned contract the stable qualitative pattern is narrow and specific: welfare capacity and media environment are the channels that carry the fitted map, the two are correlated at $r=+0.80$ so they describe one broad capacity dimension rather than two independent mechanisms, and the ridge at $Z=0.5$ separates response regimes as saturation theory predicts (Figure~\ref{fig:main-function-views}). No claim is made for cultural intensity, social atomization, redistribution capacity or social support: those coefficients are zero because the channels are unmeasurable, not because they were estimated to be unimportant. Robustness evidence consists of leave-one-country-out refits (45 folds; RMSE quartiles in Table~S2) and forward-chaining temporal evaluation (2 folds), the latter reported strictly as a scope diagnostic.
 
 Table~S19 (Supplementary Materials) provides a systematic comparison of the current workflow against representative modeling approaches in computational social science, highlighting specific advances in scale-aware validation, support transparency, and release-gated holdout design. The core methodological contribution is to make regime dependence explicit and operational rather than an implicit nuisance. Working on a bounded scale highlights the transition ridge at $Z=0.5$ and makes the interaction structure interpretable (Figure~\ref{fig:main-function-views}). Instead of reporting global linear marginal effects (which are ill-posed on a bounded map), coefficients are translated into scenario-based finite differences evaluated at interior structural baselines (Table~\ref{tab:marginal-effects-regimes}, Figure~S5), aligning with Hill-type saturation equations \parencite{Hill1910,MichaelisMenten1913,BriggsHaldane1925}. Local sensitivity peaks at the ridge ($\partial Z/\partial \Phi = Z(1-Z)$ is maximized at $Z=0.5$) and attenuates in saturated tails, so the same perturbation can be meaningful near the transition yet negligible on the shoulders \parencite{Hastie2009ESL}. This framing ties interpretation to model geometry and keeps statements conditional on baseline regime.
 
