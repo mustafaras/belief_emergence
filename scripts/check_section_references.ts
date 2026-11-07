@@ -11,7 +11,12 @@ type Issue = {
 
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
-const PAPER_ROOT = path.join(REPO_ROOT, 'BE_paper_latest');
+// `paper/` is the versioned location; `BE_paper_latest/` is the local
+// development tree. Prefer whichever exists so the checkers run in CI, where
+// only paper/ is present.
+const PAPER_ROOT = fs.existsSync(path.join(REPO_ROOT, 'paper'))
+  ? path.join(REPO_ROOT, 'paper')
+  : path.join(REPO_ROOT, 'BE_paper_latest');
 
 const MAIN_TEX = path.join(PAPER_ROOT, 'main', 'main.tex');
 const SUPP_TEX = path.join(PAPER_ROOT, 'supplementary', 'supplementary_materials.tex');
@@ -89,7 +94,7 @@ export function runSectionReferenceCheck(): void {
       file: path.join('main', 'main.tex'),
       sectionRef: 0,
       message: 'Required manuscript file is missing.',
-      remediation: 'Restore `BE_paper_latest/main/main.tex` before running docs verification.',
+      remediation: 'Restore `paper/main/main.tex` before running docs verification.',
     });
   }
 
@@ -98,7 +103,7 @@ export function runSectionReferenceCheck(): void {
       file: path.join('supplementary', 'supplementary_materials.tex'),
       sectionRef: 0,
       message: 'Required supplementary file is missing.',
-      remediation: 'Restore `BE_paper_latest/supplementary/supplementary_materials.tex` before running docs verification.',
+      remediation: 'Restore `paper/supplementary/supplementary_materials.tex` before running docs verification.',
     });
   }
 

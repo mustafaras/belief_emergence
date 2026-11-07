@@ -25,19 +25,16 @@ jobs:
   verify-app:
     name: Analysis pipeline and manuscript checkers
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: BE_app
+    # The repository root is the application; there is no BE_app/ subdirectory
+    # in version control (that name only exists in the local development tree).
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          # Cache disabled: setup-node resolves cache-dependency-path against
-          # the repository root while run steps execute under defaults.run,
-          # so the two disagree and the action errors out. Restoring the cache
-          # is a one-line change once the paths are unified.
           node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci

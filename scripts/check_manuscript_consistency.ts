@@ -11,7 +11,12 @@ type CheckFailure = {
 
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
-const PAPER_ROOT = path.join(REPO_ROOT, 'BE_paper_latest');
+// `paper/` is the versioned location; `BE_paper_latest/` is the local
+// development tree. Prefer whichever exists so the checkers run in CI, where
+// only paper/ is present.
+const PAPER_ROOT = fs.existsSync(path.join(REPO_ROOT, 'paper'))
+  ? path.join(REPO_ROOT, 'paper')
+  : path.join(REPO_ROOT, 'BE_paper_latest');
 const ANALYSIS_DIR = path.join(APP_ROOT, 'src', 'data', 'analysis');
 
 const OPTIONAL_DOC_FILES = new Set([
