@@ -1,0 +1,20 @@
+# Normalize line endings: LF in the repository, LF in the working tree.
+* text=auto eol=lf
+
+# Binary assets must never be normalized.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.xlsx binary
+*.zip binary
+
+# Generated artefacts that must stay byte-stable for hash-based checks.
+# The canonical panel is CRLF and its SHA-256 is pinned in
+# src/data/metrics/headline_metrics_authoritative.json; normalizing it
+# would break the integrity gate. Keep it as a binary blob.
+public/data/*.csv binary
+src/data/analysis/*.json text eol=lf
+src/data/metrics/*.json text eol=lf
