@@ -1,0 +1,101 @@
+name: Verify
+
+# Two independent jobs:
+#   verify-app      exercises the analysis pipeline and the manuscript checkers
+#   build-paper     compiles the manuscript and the supplement with a full TeX
+#                   installation, which the development machine does not have
+#
+# The second job exists because the local TeX tree is missing biblatex,
+# csquotes, placeins and xurl. Without this workflow the manuscript is never
+# proven to compile, and a source that does not build is not a source.
+
+on:
+  push:
+    paths:
+      - 'BE_app/**'
+      - 'paper/**'
+      - '.github/workflows/verify.yml'
+  pull_request:
+    paths:
+      - 'BE_app/**'
+      - 'paper/**'
+      - '.github/workflows/verify.yml'
+
+jobs:
+  verify-app:
+    name: Analysis pipeline and manuscript checkers
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: BE_app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: BE_app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test suite
+        run: npm run test:run
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Generate canonical analysis artefacts
+        run: npm run generate:analysis
+
+      - name: Generate headline metrics
+        run: npm run generate:headline-metrics
+
+      - name: Generate phase-1 validation artefacts
+        run: npm run generate:phase1-validation
+
+      - name: Check manuscript numeric consistency
+        run: npm run check:manuscript-consistency
+
+      - name: Check section references
+        run: npm run check:section-references
+
+      - name: Deterministic reproducibility gate
+        run: npm run ci:gate
+
+      - name: Q1 submission gate
+        run: npm run q1:gate
+
+  build-paper:
+    name: Compile manuscript and supplement
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile main manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper/main
+          # main.tex uses biblatex with the biber backend.
+          latexmk_use_lualatex: false
+
+      - name: Compile supplementary materials
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: supplementary_materials.tex
+          working_directory: paper/supplementary
+
+      - name: Upload compiled PDFs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdfs
+          path: |
+            paper/main/main.pdf
+            paper/supplementary/supplementary_materials.pdf
+          if-no-files-found: warn
