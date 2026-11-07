@@ -45,7 +45,6 @@ data/raw/
 
 # Ignore all CSVs except the canonical panel data used by the app
 *.csv
-!public/data/panel_canonical_23_countries_v1.csv
 !public/data/panel_canonical_v2.csv
 
 # Generated reports & debug outputs

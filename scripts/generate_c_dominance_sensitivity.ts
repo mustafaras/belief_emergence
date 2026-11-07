@@ -15,7 +15,7 @@ import { CANONICAL_PANEL_SHA256, parsePanelCsvText } from '../src/data/panelData
 import { computeCDominanceSensitivity } from '../src/utils/validation/computeCDominanceSensitivity.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis');
 
 function computeSha256(text: string): string {

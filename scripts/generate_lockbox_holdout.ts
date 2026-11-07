@@ -12,7 +12,7 @@ import {
 } from '../src/utils/validation/computeLockboxHoldoutSummary.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis');
 const LOCKBOX_ARTIFACT_PATH = path.join(ANALYSIS_DIR, 'lockbox_holdout.json');
 

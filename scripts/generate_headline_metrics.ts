@@ -11,7 +11,7 @@ import { OPTIMIZED_STRUCTURAL_PARAMS, Z_NORMALIZATION } from '../src/data/feCoef
 import { normalizeObservedToStructuralBand, STRUCTURAL_MIN } from '../src/utils/modelContract';
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 const OUTPUT_PATH = path.join(REPO_ROOT, 'src', 'data', 'metrics', 'headline_metrics_authoritative.json');
 
 function computeSha256(text: string): string {
@@ -96,7 +96,7 @@ export async function generateHeadlineMetrics(): Promise<void> {
     schema_version: 1,
     generated_at_utc: new Date().toISOString(),
     dataset: {
-      path: '/data/panel_canonical_23_countries_v1.csv',
+      path: '/data/panel_canonical_v2.csv',
       checksum_sha256: CANONICAL_PANEL_SHA256,
       n_rows: panel.length,
       year_range: [minYear, maxYear],

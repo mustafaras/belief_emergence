@@ -58,7 +58,7 @@ function computeCountrySeries(
   const filtered = rows.filter((r) => normalizeCountryName(r.country_name) === target);
 
   // Aggregate multiple observations per year into a single year-average.
-  // NOTE: panel_canonical_23_countries_v1.csv includes repeated rows per country-year (different redistribution scenarios).
+  // NOTE: panel_canonical_v2.csv includes repeated rows per country-year (different redistribution scenarios).
   const byYear = new Map<number, { measuredSum: number; predictedSum: number; n: number }>();
 
   for (const r of filtered) {

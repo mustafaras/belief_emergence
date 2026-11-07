@@ -3,7 +3,7 @@
  *
  * This is the ONLY sanctioned pipeline for producing observed-vs-predicted artifacts.
  * It uses:
- *  - The canonical panel dataset served from public/data/panel_canonical_23_countries_v1.csv
+ *  - The canonical panel dataset served from public/data/panel_canonical_v2.csv
  *  - The production calculateModel() implementation (same as the app runtime)
  *
  * Outputs:
@@ -31,7 +31,7 @@ import { OPTIMIZED_STRUCTURAL_PARAMS, Z_NORMALIZATION } from '../src/data/feCoef
 import { BIAS_DEFINITION_PHRASE } from '../src/utils/metrics';
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 export const AUTHORITATIVE_CSV_PATH = path.join(
   REPO_ROOT,
   'src',

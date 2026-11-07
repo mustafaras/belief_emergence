@@ -308,7 +308,7 @@ const AmplifiersSection: React.FC = () => {
           </p>
           <p className="amp-note-italic">
             <strong>Reproducibility note:</strong> The production <em>headline</em> fit metrics shown in this app are the canonical panel-fit values
-            (source of truth: <span className="formula">scripts/generate_headline_metrics.ts</span> via <span className="formula">npm run generate:headline-metrics</span>; data: <span className="formula">public/data/panel_canonical_23_countries_v1.csv</span>; output: <span className="formula">src/data/metrics/headline_metrics_authoritative.json</span>).
+            (source of truth: <span className="formula">scripts/generate_headline_metrics.ts</span> via <span className="formula">npm run generate:headline-metrics</span>; data: <span className="formula">public/data/panel_canonical_v2.csv</span>; output: <span className="formula">src/data/metrics/headline_metrics_authoritative.json</span>).
             The coefficient JSON also contains an optimizer/training summary ({training.date}), which we treat as metadata (not the headline).
             The runtime charts in Sections 3.5–3.6 recompute fit on the canonical country-year panel loaded in the browser; small differences can occur due to
             filtering, numeric rounding, and strict banding.

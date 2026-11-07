@@ -2,7 +2,7 @@
  * DataContext.tsx
  *
  * Provides a robust, type-safe, and production-grade data context for panel data.
- * Loads and caches the canonical panel CSV (`public/data/panel_canonical_23_countries_v1.csv`),
+ * Loads and caches the canonical panel CSV (`public/data/panel_canonical_v2.csv`),
  * computes statistics, and exposes helper query functions.
  *
  * Usage:
@@ -464,7 +464,7 @@ function computePanelStatistics(data: PanelRow[]): PanelStatistics {
       meanY: yStats.mean,
       stdY: yStats.std,
       n: totalRows,
-      source: 'canonical panel dataset (panel_canonical_23_countries_v1.csv)',
+      source: 'canonical panel dataset (panel_canonical_v2.csv)',
       method: 'sample',
     },
     coverageByCountry,

@@ -18,7 +18,7 @@ import {
 } from '../src/utils/validation/computeConstructValidityInvarianceSummary.ts';
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+const CANONICAL_DATASET_PATH = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 const WVS_CONFIG_PATH = path.join(REPO_ROOT, 'config', 'wvs_items.yaml');
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis');
 

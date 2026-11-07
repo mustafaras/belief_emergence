@@ -480,7 +480,7 @@ const CoreVariablesSection: React.FC = () => {
 
               <p>
                 The application loads the canonical country-year CSV at runtime from{' '}
-                <span className="formula">/data/panel_canonical_23_countries_v1.csv</span>.
+                <span className="formula">/data/panel_canonical_v2.csv</span>.
               </p>
 
               <div className="operationalization">
@@ -583,7 +583,7 @@ const CoreVariablesSection: React.FC = () => {
                 <h4>Workflow (no commands implied)</h4>
                 <ul>
                   <li>
-                    <strong>Data:</strong> <span className="formula">public/data/panel_canonical_23_countries_v1.csv</span> (canonical 23-country panel).
+                    <strong>Data:</strong> <span className="formula">public/data/panel_canonical_v2.csv</span> (canonical 23-country panel).
                   </li>
                   <li>
                     <strong>Loader:</strong> <span className="formula">src/contexts/DataContext.tsx</span> + <span className="formula">src/data/panelDataLoader.ts</span>{' '}

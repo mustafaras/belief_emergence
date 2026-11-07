@@ -331,7 +331,7 @@ interface PanelRow {
 }
 
 function readPanelCsv(): PanelRow[] {
-  const fp = path.join(ROOT, 'public', 'data', 'panel_canonical_23_countries_v1.csv');
+  const fp = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.csv');
   if (!fs.existsSync(fp)) return [];
   const text = fs.readFileSync(fp, 'utf-8').replace(/^\uFEFF/, '');
   const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
@@ -419,7 +419,7 @@ function gateMeasurementValidity(): void {
   const rows = readPanelCsv();
   if (rows.length === 0) {
     record('val-panel', 'Measurement Validity', 'Canonical panel readable', false, 'critical',
-      'Could not read public/data/panel_canonical_23_countries_v1.csv');
+      'Could not read public/data/panel_canonical_v2.csv');
     return;
   }
 
