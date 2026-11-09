@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.construct_prevalence.v1",
-  "generatedAtIso": "2026-11-09T15:21:23.544Z",
+  "generatedAtIso": "2026-11-09T15:25:48.632Z",
   "purpose": "Quantify how widely the measurement failure extends: how many configured constructs fail a routine reliability check, and how much of the available frame survives it.",
   "reliabilityFloor": 0.7,
   "frame": {

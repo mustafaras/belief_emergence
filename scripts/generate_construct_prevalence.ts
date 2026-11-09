@@ -48,8 +48,14 @@ function disposition(c: AuditConstruct): 'retained' | 'withdrawn' | 'uncomputabl
 
 function main(): void {
   if (!fs.existsSync(AUDIT)) {
-    console.error(`missing ${path.relative(ROOT, AUDIT)} — run npm run build:wvs-constructs first`);
-    process.exitCode = 1;
+    // The audit is derived from licence-restricted microdata and is therefore
+    // gitignored, so a clean clone never has it. The artifact itself IS
+    // committed, and ci_gate verifies its schema, so absence here is not a
+    // failure — regenerating it requires data CI cannot hold. Mirror the
+    // behaviour of `verify:constructs`: say what happened, exit 0.
+    console.log(`SKIP: ${path.relative(ROOT, AUDIT)} is absent (licence-restricted source).`);
+    console.log('      The committed construct_prevalence.json remains the evidence of record;');
+    console.log('      run `npm run build:wvs-constructs` locally to regenerate it.');
     return;
   }
   const audit = JSON.parse(fs.readFileSync(AUDIT, 'utf-8')) as Audit;
