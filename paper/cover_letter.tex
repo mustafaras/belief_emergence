@@ -37,7 +37,7 @@
 \newcommand{\CorrEmail}{\href{mailto:mustafarasit@gmail.com}{mustafarasit@gmail.com}}
 \newcommand{\CorrPhone}{+905066020098}
 
-\newcommand{\EditorLine}{Editor-in-Chief}
+\newcommand{\EditorLine}{The Editors, \emph{Social Indicators Research}}
 
 \newcommand{\Rule}{{\color{black!65}\rule{\linewidth}{0.6pt}}}
 \newcommand{\SubRule}{{\color{black!65}\rule{\linewidth}{0.4pt}}}
@@ -111,6 +111,14 @@
 \noindent The submission addresses a gap where nonlinear models are applied to small, unbalanced macro panels without standardized practices for reporting support, separating robust from exploratory findings, documenting instability, and constraining extrapolation. The paper contributes both validated bounded-nonlinear methodology and a working evidence-proportionality framework that separates Tier~A/B OOS-confirmed patterns from Tier~C exploratory sensitivity. We expect it to be of interest to readers working on comparative urban indicators, macro-urban scenario design, and visual decision support under uncertainty.
 
 \noindent Reproducibility is designed into the workflow: deterministic artifacts (parameters, bounded predictions, decomposed contributions) are exportable, and the repository ships the canonical panel, upstream provenance tables, versioned construct definitions, and deterministic regeneration commands. The supplementary claim-evidence traceability map (Table~S0) links all 11 major claims to artifact sources, evidence tiers, and uncertainty caveats.
+
+\SmallHeading{Why \emph{Social Indicators Research}}
+
+\noindent The paper is a composite-indicator study before it is a modelling study. Its central object is the reliability of WVS-derived constructs, and its central method is the decision to withdraw three of four candidates rather than report them with caveats. That is the review culture this journal has built: indicators are judged on measurement grounds first, and thin-support macro panels are expected rather than disqualifying.
+
+\noindent The findings are stated at the level the evidence supports. Construct reliability is reported with Cronbach's alpha per construct and per country-year coverage. The bounded form is compared against an ordinary linear regression on identical rows and folds and found statistically indistinguishable out of sample; we report the tie instead of a winner. Sample limits are stated in the abstract, the title page and the supplement, and every number traces to a committed artifact that a reviewer can regenerate with one command.
+
+\noindent Two further details matter for editorial assessment. First, the paper includes a correction note describing an earlier version's defect---an outcome that was an exact rescaling of a predictor---because a methods paper that silently changes its numbers is worse than one that explains why. Second, the reproduction path is complete: the canonical panel rebuilds byte-for-byte from hash-pinned inputs, and an independent verifier re-derives every construct from the raw microdata without importing the producer.
 
 \noindent This manuscript is original, not previously published, and not under consideration elsewhere.
 
