@@ -126,11 +126,11 @@ This supplement documents a rebuild. The earlier version of this work reported a
 \noindent\justifying
 \textbf{What changed.} The construct layer was rebuilt from raw microdata under \texttt{config/wvs\_items.yaml} and the result is machine-checkable: 442{,}026 respondents across 305 country-years yield $Z$ at $\alpha = 0.819$ over 287 cells, which passes; $C$ at $0.348$ over 303 cells, $D$ at $-1.228$ over 296 cells, and $S$ in 0 cells, which do not. Four of the eight originally proposed channels ($C$, $D$, $G$, $S$) are therefore declared but not estimated, and the model runs on seven columns.
 
-The canonical panel is rebuilt and re-pinned: \textbf{87 complete-case country-years across 48 countries, 1990--2022}, one row per country-year, with no scenario replication. Its SHA-256 is
+The canonical panel is rebuilt and re-pinned: \textbf{126 complete-case country-years across 66 countries, 1990--2022}, one row per country-year, with no scenario replication. Its SHA-256 is
 \begin{center}
 \texttt{40DB5B83BC12E997A086556E4C988C4C3BDAFFABDC17B97FB3224FC4A232B24C}
 \end{center}
-and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.3854$ on 87 rows, not $0.85$; fixed-coefficient country-out validation is negative in every tier (Tier~A $-2.01$, Tier~B $-0.97$, Tier~C $-0.90$); and, on identical rows and folds, the saturating form and an ordinary linear regression are statistically indistinguishable ($R^2$ \num{0.2707} against \num{0.2682} under grouped $k$-fold; the linear baseline is ahead in sample, \num{0.4462} against \num{0.3854}). An earlier draft reported a decisive linear win (0.10 against 0.20); that comparison could not be regenerated and is withdrawn.
+and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.3588$ on 126 rows, not $0.85$; pooled fixed-coefficient country-out validation is positive in every tier (Tier~A \num{0.2825}, Tier~B \num{0.3731}, Tier~C \num{0.3588}) while the degenerate per-fold median remains negative ($-2.46$/$-1.39$/$-1.41$) because 47 of 66 folds hold fewer than three rows; and, on identical rows and folds, the saturating form and an ordinary linear regression are statistically indistinguishable ($R^2$ \num{0.4209} against \num{0.4177} under grouped $k$-fold; the linear baseline is ahead in sample, \num{0.4842} against \num{0.3588}). An earlier draft reported a decisive linear win (0.10 against 0.20); that comparison could not be regenerated and is withdrawn.
 
 \noindent\justifying
 \textbf{What did not change, and is not claimed to have changed.} The design is still observational and no causal claim is made. Support is still thin: 87 country-years carries an 11-parameter Tier~A model at 7.91 observations per parameter, and Tier~C at 3.95 is designated exploratory and excluded from headline inference. The WVS microdata remain redistribution-restricted, so a replicator must download them; what this supplement provides is the manifest, the construct rules, and an independent verification script that re-derives every audit number from the raw files.
@@ -170,7 +170,7 @@ Every major claim in the main manuscript is mapped below to its supporting artif
 \bottomrule
 \endlastfoot
 
-Tier A/B refit OOS evidence supports protocol-bounded comparative regularities (Abstract, Results intro) & Tier A/B & \path{cv_kfold.json} (primary) + \path{cv_country_out.json} (stress test) + \path{cv_rolling_origin.json} & Grouped $k$-fold: 100 evaluations, median OOS $R^2$ Tier A/B/C 0.2707/\allowbreak 0.2790/\allowbreak 0.2617; LOO 48 folds (pooled $R^2$ 0.3026/\allowbreak 0.2579/\allowbreak 0.2724); rolling 12 folds (RMSE 0.1271/\allowbreak 0.1653/\allowbreak 0.1694) & Primary claims prioritize Tier A/B and remain conditioned on thin support (87 unique country-years). Tier B parameter stability $\geq 0.80$. \\
+Tier A/B refit OOS evidence supports protocol-bounded comparative regularities (Abstract, Results intro) & Tier A/B & \path{cv_kfold.json} (primary) + \path{cv_country_out.json} (stress test) + \path{cv_rolling_origin.json} & Grouped $k$-fold: 100 evaluations, median OOS $R^2$ Tier A/B/C 0.4209/\allowbreak 0.4403/\allowbreak 0.4223; LOO 66 folds (pooled $R^2$ 0.4076/\allowbreak 0.4452/\allowbreak 0.4216); rolling 15 folds (RMSE 0.1457/\allowbreak 0.1608/\allowbreak 0.1543) & Primary claims prioritize Tier A/B and remain conditioned on thin support (87 unique country-years). Tier B parameter stability $\geq 0.80$. \\
 
 Frozen lockbox confirmation for final release claims (Results: key findings 0) & Tier A/B confirmation layer & \path{lockbox_holdout.json} & One-time release-cycle holdout (7/34 country-year cells; 72 rows; fingerprint \texttt{fnv1a32:f9c9c677};\allowbreak cycle \texttt{2026Q1-R1}); lockbox RMSE Tier A/B/C: 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 & Lockbox is anti-peeking confirmation, not a tuning loop. Development CV and lockbox evidence are interpreted separately. \\
 
@@ -184,13 +184,13 @@ Education effect shows curvature at high levels (Results: key findings II) & Tie
 
 Culture--media coupling is the most stable Tier B interaction (Results: key findings II) & Tier B & \path{parameter_stability.json} (interaction term, $\geq 0.80$ consistency) & Rolling-origin fold stability for $c_{\mathrm{cm}}$ term & Narrower bootstrap intervals than other interactions; most stable higher-order pattern. \\
 
-Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.3854$, Corr=0.6311 on the 87-row panel & Ridge is a fitted-model feature, not a causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ is clipped. \\
+Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.3588$, Corr=0.6392 on the 126-row panel & Ridge is a fitted-model feature, not a causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ is clipped. \\
 
 Prediction intervals via resampling (Section 6, uncertainty quantification) & Tier A/B & \path{prediction_interval_coverage.json} & Protocol/tier/support aggregation from fold-level empirical residual-quantile-shifted intervals (primary) with a symmetric Gaussian residual comparator; rolling-origin and higher-complexity folds show material undercoverage versus nominal 95\% & Coverage is protocol-, support-, and regime-conditioned; interval width can appear narrow in saturated or low-variance folds and should not be used as a stand-alone precision signal. \\
 
-In-sample fit on the canonical panel is modest, not high (Results headline) & Tier A & In-sample fit on canonical panel (87 rows) & Training: $R^2=0.3854$, RMSE=0.1893, Bias=+0.0243 & Positive bias means the model under-predicts on average; with $R^2$ well below unity this is descriptive context only, not evidence about the belief mechanism. \\
+In-sample fit on the canonical panel is modest, not high (Results headline) & Tier A & In-sample fit on canonical panel (126 rows) & Training: $R^2=0.3588$, RMSE=0.2101, Bias=+0.0461 & Positive bias means the model under-predicts on average; with $R^2$ well below unity this is descriptive context only, not evidence about the belief mechanism. \\
 
-Support is 87 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); panel: \path{public/data/panel_canonical_v2.csv} & 48 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,M,T,E,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
+Support is 126 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); panel: \path{public/data/panel_canonical_v2.csv} & 66 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,M,T,E,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
 
 Ecological inference limits: no individual-level claims & Tier 0 (Study design) & Limitations section (manuscript, Discussion) & Country--year unit; WVS-aggregated outcomes & Claims describe macro-level fitted-model geometry; gap between aggregate associations and individual mechanisms unresolved. \\
 
@@ -202,7 +202,7 @@ No causal identification (Explicit inferential boundaries) & Tier 0 (Study desig
 
 \vspace{0.5em}
 
-\noindent\textbf{Orphan Claim Audit:} Every major claim in the main manuscript's Abstract, Results, and Conclusion sections appears in the table above. References to ``Tier A/B refit OOS evidence'' (manuscript Results line $\sim$490) are grounded in cv\_kfold.json (100 grouped folds; median OOS $R^2$ Tier A/B/C: 0.2707/\allowbreak 0.2790/\allowbreak 0.2617), cv\_country\_out.json (48 folds, pooled $R^2$ 0.3026/\allowbreak 0.2579/\allowbreak 0.2724) and cv\_rolling\_origin.json (12 folds; RMSE 0.1271/\allowbreak 0.1653/\allowbreak 0.1694). Final release-level confirmation claims are separately grounded in lockbox\_holdout.json (7/34 frozen cells; RMSE 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 for Tier A/B/C). Exploratory (Tier C) statements remain flagged with threshold-bounded stability caveats (Tier C threshold 0.60; pooled median consistency 0.9070). No primary claims are presented without explicit support envelope and uncertainty caveat.
+\noindent\textbf{Orphan Claim Audit:} Every major claim in the main manuscript's Abstract, Results, and Conclusion sections appears in the table above. References to ``Tier A/B refit OOS evidence'' (manuscript Results line $\sim$490) are grounded in cv\_kfold.json (100 grouped folds; median OOS $R^2$ Tier A/B/C: 0.4209/\allowbreak 0.4403/\allowbreak 0.4223), cv\_country\_out.json (66 folds, pooled $R^2$ 0.4076/\allowbreak 0.4452/\allowbreak 0.4216) and cv\_rolling\_origin.json (15 folds; RMSE 0.1457/\allowbreak 0.1608/\allowbreak 0.1543). Final release-level confirmation claims are separately grounded in lockbox\_holdout.json (7/34 frozen cells; RMSE 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 for Tier A/B/C). Exploratory (Tier C) statements remain flagged with threshold-bounded stability caveats (Tier C threshold 0.60; pooled median consistency 0.9070). No primary claims are presented without explicit support envelope and uncertainty caveat.
 
 \Section{Fold-Level Generalization Evidence (Out-of-Sample Validation Summaries)}
 
@@ -210,7 +210,7 @@ No causal identification (Explicit inferential boundaries) & Tier 0 (Study desig
 
 \medskip
 
-This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 87 rows across 48 countries a country-out fold holds out one to four rows, and $R^2$ is undefined below three pairs, so 36 of the 48 country-out folds carry no $R^2$ and the per-fold median describes twelve degenerate folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out cross-validation serves as the primary spatial validation pathway for Tier A/B inferential claims in the main text, while rolling-origin temporal evaluation serves as a temporal scope diagnostic that reveals the boundary of forward extrapolation under current temporal sample depth.
+This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 126 rows across 66 countries a country-out fold holds out one to five rows, and $R^2$ is undefined below three pairs, so 36 of the 48 country-out folds carry no $R^2$ and the per-fold median describes twelve degenerate folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out cross-validation serves as the primary spatial validation pathway for Tier A/B inferential claims in the main text, while rolling-origin temporal evaluation serves as a temporal scope diagnostic that reveals the boundary of forward extrapolation under current temporal sample depth.
 Artifact ownership for this section is fixed as follows. Fold metrics are stored in \path{cv_country_out.json} and \path{cv_rolling_origin.json}. Term-stability summaries are stored in \path{parameter_stability.json}, coverage diagnostics in \path{prediction_interval_coverage.json}, construct-validity and slice-invariance diagnostics in \path{construct_validity_invariance.json}, and release-gated holdout confirmation in \path{lockbox_holdout.json}. These files are treated as the authoritative Gate-3 evidence objects for reproducibility checks.
 Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{testMetricsRefit} and \texttt{aggregatesRefit}, plus their support-collapsed counterparts) are primary inferential evidence. Canonical fixed-model outputs (\texttt{testMetricsCanonical} and \texttt{aggregatesCanonical}, plus their support-collapsed counterparts) are diagnostic contrasts only. Lockbox outputs (\texttt{lockboxEvaluation.byTier.*.}\allowbreak\texttt{testMetricsRefit}) are release-time anti-peeking confirmation metrics.
 
@@ -224,12 +224,12 @@ Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{t
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS $R^2$ (refit) & 0.2707 & 0.2790 & 0.2617 & Held-out \\
-IQR ($R^2$) & 0.054--0.407 & $-0.067$--0.410 & $-0.022$--0.439 & \\
-Median OOS $R^2$ (canonical) & 0.1587 & 0.3696 & 0.3689 & Fixed coefficients \\
-IQR ($R^2$, canonical) & $-0.057$--0.282 & 0.132--0.484 & 0.155--0.456 & \\
-Median OOS RMSE & 0.1921 & 0.1957 & 0.2001 & Bounded $Z$ scale \\
-IQR (RMSE) & 0.1687--0.2220 & 0.1649--0.2500 & 0.1675--0.2379 & \\
+Median OOS $R^2$ (refit) & 0.4209 & 0.4403 & 0.4223 & Held-out \\
+IQR ($R^2$) & 0.216--0.542 & 0.300--0.580 & 0.254--0.578 & \\
+Median OOS $R^2$ (canonical) & 0.2520 & 0.3865 & 0.3599 & Fixed coefficients \\
+IQR ($R^2$, canonical) & 0.123--0.365 & 0.132--0.503 & 0.138--0.479 & \\
+Median OOS RMSE & 0.1835 & 0.1781 & 0.1780 & Bounded $Z$ scale \\
+IQR (RMSE) & 0.1679--0.2283 & 0.1638--0.2118 & 0.1627--0.2228 & \\
 In-sample $R^2$ for comparison & 0.4569 & 0.5213 & 0.5678 & Full sample \\
 $R^2$ defined in & 100\% & 100\% & 100\% & of 100 folds \\
 Minimum test rows per fold & 12 & 12 & 12 & \\
@@ -238,13 +238,13 @@ Minimum test rows per fold & 12 & 12 & 12 & \\
 }
 \end{center}
 
-\noindent\textit{Interpretation.} About 70\% of in-sample explanatory power transports to unseen countries, with wide fold-to-fold dispersion. The tier ordering does not survive: Tier C exceeds Tier A in sample (0.5678 against 0.4569) but not out of sample (0.2617 against 0.2707), so added complexity buys no transfer. The canonical family behaves differently from the refit family---weakest at Tier A (0.1587, lower quartile slightly negative), stronger at Tiers B and C---which means the production coefficients are not the fold-refit optimum, and the gap is largest where the model is simplest.
+\noindent\textit{Interpretation.} Held-out performance now matches or exceeds in-sample fit, and the fold-to-fold dispersion is markedly narrower than on the 87-cell panel. The tier ordering does not survive: Tier C exceeds Tier A in sample (0.5678 against 0.4569) but not out of sample (0.4223 against 0.4209), so added complexity buys no transfer. The canonical family behaves differently from the refit family---weakest at Tier A (0.2520, lower quartile now positive at 0.123), stronger at Tiers B and C---which means the production coefficients are not the fold-refit optimum, and the gap is largest where the model is simplest.
 
 \medskip
 
 {\small\textbf{Leave-One-Country-Out Cross-Validation (spatial stress test, not primary evidence):}}
 
-\noindent Across 48 folds (one country held out per fold). Because 24 of 48 countries contribute a single observation, 36 of the 48 folds hold out fewer than three rows and therefore carry no $R^2$. The per-fold median is reported for completeness only; the pooled held-out series is the interpretable statistic.
+\noindent Across 66 folds (one country held out per fold). Because 30 of 66 countries contribute a single observation, 47 of the 66 folds hold out fewer than three rows and therefore carry no $R^2$. The per-fold median is reported for completeness only; the pooled held-out series is the interpretable statistic.
 
 \begin{center}
 {\footnotesize
@@ -377,7 +377,7 @@ Ridge-adjacent ($0.45 \le Z \le 0.55$) & 6 & 17.6\% \\
 Funnel stage & Quantified scope and interpretive role \\
 \midrule
 Upstream integrated breadth & \path{rawdata/panel_model_data.json} reports 22,096 rows across 288 countries (1990--2023). This stage documents source coverage, not inferential claim strength. \\
-Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 87 rows for 48 countries (1990--2022), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
+Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 126 rows for 66 countries (1990--2022), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
 Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 87, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
 Construct validity / invariance envelope & \path{src/data/analysis/construct_validity_invariance.json} reports aggregate-level construct checks: multi-item diagnostics for $Z$, single-indicator proxy constraints for $C,D,S$, and sparse-overlap fragility flags for $M$. These diagnostics bound cross-slice transport claims. \\
 Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 7.91), Tier B 18 (4.83), Tier C 22 (3.95). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
@@ -391,7 +391,7 @@ Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}:
 \noindent\textbf{Instability/Failure Log:}
 
 \begin{itemize}
-\item {\small\textbf{Estonia (EST):} highest residual error among the 48 countries, in a sparse low-uptake cell. Located in the low-support regime where the fitted map has little leverage; prediction less reliable.}
+\item {\small\textbf{Estonia (EST):} highest residual error among the 66 countries, in a sparse low-uptake cell. Located in the low-support regime where the fitted map has little leverage; prediction less reliable.}
 \item {\small\textbf{Russia (RUS):} MAE = 0.250. Prediction error largest in volatile transition regime. Parameter values sensitive to this fold; recommend caution on Tier C claims involving RUS.}
 \item {\small\textbf{Slovak Republic (SVK):} MAE = 0.277. Observed high uptake (0.423) vs predicted low (0.146). Located in sparse mid-regime. Suggests regime-local bias.}
 \item {\small\textbf{Tier C stability across folds:} Tier C parameter signs drift across rolling-origin folds; the pooled sign-consistency is the weakest of the three tiers and its held-out $R^2$ is indistinguishable from Tier A. Not a failure per se, but reason to label Tier C exploratory.}
@@ -663,7 +663,7 @@ A & $\text{year}\ge2013$ & 36 & \num{0.5431} & \num{0.7417} & \num{0.1039} & \nu
 \addlinespace[2pt]
 B & main ($\Phi$ linear only) & 87 & \num{0.1955} & \num{0.4592} & \num{0.1814} & \num{0.2166} \\
 B & main$+$interactions & 87 & \num{0.3625} & \num{0.6122} & \num{0.1511} & \num{0.1928} \\
-B & full (incl.\ quadratics) & 87 & \num{0.3854} & \num{0.6311} & \num{0.1498} & \num{0.1893} \\
+B & full (incl.\ quadratics) & 126 & \num{0.3588} & \num{0.6392} & \num{0.1631} & \num{0.2101} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -708,7 +708,7 @@ Quantity & Value \\
 Countries ($N$) & 48 \\
 Rows used ($n$) & 87 \\
 Year range & 1990--2022 \\
-$R^2$ & \num{0.3854} \\
+$R^2$ & \num{0.3588} \\
 $\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6311} \\
 MAE & \num{0.1498} \\
 RMSE & \num{0.1893} \\
