@@ -1,9 +1,16 @@
 {
   "schemaVersion": "phase1.journal_fit_targeting.v1",
-  "generatedAtIso": "2026-03-05T12:30:00.000Z",
+  "generatedAtIso": "2026-11-09T11:25:00.000Z",
   "source": {
-    "manuscriptPath": "BE_paper_latest/main/main.tex",
-    "scope": "Prompt 10 journal-fit targeting",
+    "manuscriptPath": "paper/main/main.tex",
+    "companionPaths": [
+      "paper/titlepage.tex",
+      "paper/highlights.tex",
+      "TARGET_JOURNALS.md"
+    ],
+    "scope": "Journal-fit targeting reconciled with TARGET_JOURNALS.md strategic priority ranking (2026-11-09)",
+    "manuscriptTitle": "Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models",
+    "sampleScope": "87 complete-case country-years, 48 countries, 1990-2022",
     "tagScale": [
       "fit",
       "risky",
@@ -12,69 +19,113 @@
   },
   "targetJournals": [
     {
-      "id": "nature_human_behaviour",
-      "name": "Nature Human Behaviour",
+      "id": "social_indicators_research",
+      "name": "Social Indicators Research",
       "q1Relevance": "high",
-      "focus": "Generalizable human behaviour insights with strong conceptual framing and transparent empirical limits.",
-      "audience": "Interdisciplinary behavioural science and computational social science editors/reviewers.",
+      "focus": "Composite social indicators, cross-national measurement and quality-of-life methodology.",
+      "audience": "Social-indicator researchers, comparative sociologists and welfare-state methodologists.",
       "methodsExpectations": [
-        "Clear behavioural relevance beyond a purely technical model",
-        "Strong robustness and uncertainty reporting",
-        "Conservative claim language with explicit inferential boundaries"
+        "Composite indicators defended on measurement grounds, not assertion",
+        "Explicit treatment of reliability, dimensionality and construct withdrawal",
+        "Transparent statement of sample and support limits"
       ],
       "deskRejectTriggers": [
-        "Method-heavy framing with weak behavioural interpretation",
-        "Overstated novelty or universal claims under sparse support",
-        "Insufficient separation between descriptive and inferential evidence"
+        "Composite constructs reported without reliability evidence",
+        "Claims scaled beyond the observed country-year support",
+        "Fit statistics presented without a baseline comparison"
       ],
       "framingAdjustments": {
-        "abstract": "Lead with bounded methodological contribution and explicit non-causal scope.",
-        "introduction": "Position the model as a transparency-first comparative inference tool under support constraints.",
-        "conclusion": "Prioritize inferential boundaries and reproducibility over broad behavioural generalization."
+        "abstract": "Lead with the measurement audit and the construct withdrawals; report the linear-baseline comparison as a finding.",
+        "introduction": "Position the paper as a reproducibility protocol for composite-indicator panels.",
+        "conclusion": "Close on auditability and disclosed limits, not on model performance."
       }
     },
     {
-      "id": "epj_data_science",
-      "name": "EPJ Data Science",
+      "id": "technological_forecasting_social_change",
+      "name": "Technological Forecasting and Social Change",
       "q1Relevance": "high",
-      "focus": "Reproducible data-science methodology for complex social systems with auditable computation.",
-      "audience": "Computational social science, data science, and methodological reviewers.",
+      "focus": "Societal change under technological and structural transition, with computational methods.",
+      "audience": "Interdisciplinary social-change researchers comfortable with quantitative pipelines.",
       "methodsExpectations": [
-        "Transparent and reproducible pipeline",
-        "Methodological novelty grounded in diagnostic evidence",
-        "Protocol-level validation and uncertainty auditing"
+        "Relevance of the structural drivers (urbanization, inequality, media, education) to societal change",
+        "Computational pipeline described well enough to re-execute",
+        "Explicit boundary between descriptive mapping and forecasting"
       ],
       "deskRejectTriggers": [
-        "Missing reproducibility path from data to claims",
-        "Unclear validation protocol separation",
-        "Narrative claims not tightly linked to exported artifacts"
+        "Methods presented with no societal-change argument",
+        "Forecast language applied to a non-forecasting design",
+        "No reproducible artifact trail"
       ],
       "framingAdjustments": {
-        "abstract": "Emphasize auditable workflow, protocolized validation, and support-aware interpretation.",
-        "introduction": "Highlight contribution as computational methodology for sparse macro panels.",
-        "conclusion": "Stress reusable reproducibility infrastructure and evidence-traceable claims."
+        "abstract": "Foreground the urbanization-inequality-belief question, then the audit that constrains what can be said.",
+        "introduction": "Frame the country panel as a societal-transition panel.",
+        "conclusion": "State which transition claims survive the audit and which do not."
       }
     },
     {
-      "id": "social_networks",
-      "name": "Social Networks",
+      "id": "big_data_society",
+      "name": "Big Data & Society",
       "q1Relevance": "high",
-      "focus": "Network-theoretic mechanisms, relational structure, and network-specific empirical design.",
-      "audience": "Network science and computational sociology reviewers.",
+      "focus": "Critical and methodological inquiry into data-driven social research and its infrastructure.",
+      "audience": "Computational social scientists and critical data-studies scholars.",
       "methodsExpectations": [
-        "Explicit network representation or relational mechanism",
-        "Network-native diagnostics and theory linkage",
-        "Claims centered on network formation/diffusion structure"
+        "Reflexive treatment of what the data infrastructure can and cannot measure",
+        "Reproducible pipeline with versioned artifacts",
+        "Avoidance of algorithmic-realism framing"
       ],
       "deskRejectTriggers": [
-        "No network data structure in modeling design",
-        "Macro panel claims without relational mechanism",
-        "General computational claims without network contribution"
+        "Unreflexive use of survey aggregates as ground truth",
+        "Technical report without critical framing",
+        "No discussion of data-access and redistribution limits"
       ],
       "framingAdjustments": {
-        "abstract": "Avoid positioning as a network-method contribution unless relational structure is modeled directly.",
-        "introduction": "If targeting this venue, add explicit network mechanism scope limits.",
-        "conclusion": "Present as adjacent methodology, not a direct network-method advance."
+        "abstract": "Emphasise that the audit shows what the measurement infrastructure cannot support.",
+        "introduction": "Situate the paper in critical data studies as well as in social-indicator methodology.",
+        "conclusion": "Frame construct withdrawal as an infrastructure finding, not a modelling failure."
+      }
+    },
+    {
+      "id": "plos_one",
+      "name": "PLOS ONE",
+      "q1Relevance": "medium",
+      "focus": "Methodologically sound research judged on rigour rather than perceived impact.",
+      "audience": "Broad multidisciplinary readership and methods reviewers.",
+      "methodsExpectations": [
+        "Complete reporting of the analysis pipeline",
+        "Data availability statement consistent with the WVS licence",
+        "Reproducibility artifacts and a correction note for revised results"
+      ],
+      "deskRejectTriggers": [
+        "Missing data-availability path",
+        "Claims unsupported by the reported evidence",
+        "Undisclosed changes between manuscript versions"
+      ],
+      "framingAdjustments": {
+        "abstract": "Plain statement of the audit, the withdrawals, and the baseline comparison.",
+        "introduction": "Keep the contribution narrow and checkable.",
+        "conclusion": "Point to the replication runbook and the correction note."
+      }
+    },
+    {
+      "id": "scientific_reports",
+      "name": "Scientific Reports",
+      "q1Relevance": "medium",
+      "focus": "Technically valid research across the natural and social sciences.",
+      "audience": "Interdisciplinary reviewers with quantitative backgrounds.",
+      "methodsExpectations": [
+        "Statistical claims proportionate to the design",
+        "Validation protocol separated from exploratory analysis",
+        "Reproducible artifact chain"
+      ],
+      "deskRejectTriggers": [
+        "Overclaimed novelty",
+        "Validation protocol not separated from headline claims",
+        "Insufficient methodological detail"
+      ],
+      "framingAdjustments": {
+        "abstract": "Lead with the audit protocol and its four hard gates.",
+        "introduction": "Present the bounded model as an object under test, not as a result.",
+        "conclusion": "Emphasise the reusable gate set over the specific fit."
       }
     }
   ],
@@ -82,149 +133,216 @@
     {
       "id": "C1",
       "section": "Abstract + Method",
-      "claim": "A bounded nonlinear map provides interpretable regime geometry for macro-urban belief outcomes.",
+      "claim": "A reproducible audit protocol enforces construct reliability, item-overlap, design rank and baseline comparison as hard release gates.",
       "tags": {
-        "nature_human_behaviour": "risky",
-        "epj_data_science": "fit",
-        "social_networks": "out-of-scope"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "fit",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Methodologically strong, but behavioural mechanism linkage must stay explicit.",
-        "epj_data_science": "Core method-forward contribution with clear diagnostic interpretability.",
-        "social_networks": "No explicit relational network representation in the model contract."
+        "social_indicators_research": "Directly a composite-indicator methodology contribution.",
+        "technological_forecasting_social_change": "Methodology is a means; the gate set is still a transferable tool.",
+        "big_data_society": "The gate set is an infrastructure critique in executable form.",
+        "plos_one": "Rigour-first contribution with no impact claim required.",
+        "scientific_reports": "Protocol-level contribution with checkable evidence."
       }
     },
     {
       "id": "C2",
-      "section": "Introduction + Reproducibility blocks",
-      "claim": "The pipeline is reproducible, auditable, and artifact-traceable from preprocessing to exported diagnostics.",
+      "section": "Construct audit",
+      "claim": "Three of four candidate composites fail internal consistency on the WVS Trend File and are withdrawn rather than reported with a caveat.",
       "tags": {
-        "nature_human_behaviour": "risky",
-        "epj_data_science": "fit",
-        "social_networks": "risky"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Necessary but not sufficient without stronger behavioural framing.",
-        "epj_data_science": "Directly aligned with journal expectations for computational reproducibility.",
-        "social_networks": "Valued as method hygiene, but not a network-specific contribution."
+        "social_indicators_research": "Construct withdrawal is the journal's own methodological standard.",
+        "technological_forecasting_social_change": "A negative measurement result may read as scope-narrowing to this audience.",
+        "big_data_society": "Negative results about survey infrastructure are on-scope.",
+        "plos_one": "Negative and methods results are acceptable.",
+        "scientific_reports": "Validity-first framing is legible to technical reviewers."
       }
     },
     {
       "id": "C3",
-      "section": "Validation + Prompt 9 lockbox",
-      "claim": "Primary inferential evidence is protocolized through refit OOS checks and a release-gated lockbox holdout.",
+      "section": "Data and correction",
+      "claim": "In the previous panel the outcome was an exact rescaling of a predictor (corr = 1.0); the rebuilt panel contains 87 complete-case country-years across 48 countries, 1990-2022.",
       "tags": {
-        "nature_human_behaviour": "fit",
-        "epj_data_science": "fit",
-        "social_networks": "risky"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "fit",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Strong robustness signal if linked to substantive interpretation limits.",
-        "epj_data_science": "Excellent alignment with rigorous validation and anti-overfitting standards.",
-        "social_networks": "Robust protocol quality helps, but domain focus remains non-network."
+        "social_indicators_research": "Sample and defect disclosure are expected.",
+        "technological_forecasting_social_change": "Shows the panel is a real comparative dataset.",
+        "big_data_society": "Defect and correction are the paper's evidential core.",
+        "plos_one": "Disclosure of changed results is required practice.",
+        "scientific_reports": "Sample provenance must be checkable."
       }
     },
     {
       "id": "C4",
-      "section": "Conclusion empirical findings",
-      "claim": "In-sample agreement metrics are strong on the bounded scale for the canonical panel.",
+      "section": "Results - functional form",
+      "claim": "On the surviving constructs the saturating map does not beat an ordinary linear regression on identical rows and folds.",
       "tags": {
-        "nature_human_behaviour": "risky",
-        "epj_data_science": "fit",
-        "social_networks": "out-of-scope"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Should remain secondary to interpretability and inferential restraint.",
-        "epj_data_science": "Acceptable as descriptive performance when tied to protocol diagnostics.",
-        "social_networks": "Performance metrics alone do not create network relevance."
+        "social_indicators_research": "A stated model comparison is a strength for indicator work.",
+        "technological_forecasting_social_change": "A null functional-form result weakens the transition story for this venue.",
+        "big_data_society": "Contesting the modelling claim is on-scope.",
+        "plos_one": "Honest null comparison is acceptable.",
+        "scientific_reports": "Baseline comparisons are standard."
       }
     },
     {
       "id": "C5",
-      "section": "Method + Discussion",
-      "claim": "Sensitivity is regime-dependent, peaking near the transition ridge and attenuating in saturated tails.",
+      "section": "Results - out-of-sample",
+      "claim": "Fixed-coefficient country-out validation is negative in every tier (Tier A -2.01, B -0.97, C -0.90) and is reported as such.",
       "tags": {
-        "nature_human_behaviour": "risky",
-        "epj_data_science": "fit",
-        "social_networks": "out-of-scope"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "risky"
       },
       "rationale": {
-        "nature_human_behaviour": "Useful only if connected to behavioural interpretation constraints.",
-        "epj_data_science": "Strong model-geometry insight with clear diagnostic value.",
-        "social_networks": "Regime geometry is not framed through relational network mechanisms."
+        "social_indicators_research": "Disclosed negative OOS is preferable to suppressed OOS.",
+        "technological_forecasting_social_change": "Predictive failure undercuts applied relevance here.",
+        "big_data_society": "Failure disclosure fits the venue's critical stance.",
+        "plos_one": "Full reporting is rewarded.",
+        "scientific_reports": "Reviewers may read negative OOS as a validity problem rather than a finding."
       }
     },
     {
       "id": "C6",
-      "section": "Introduction + Discussion",
-      "claim": "Interpretation is support-constrained by 34 unique country-years and uneven regime density.",
+      "section": "Discussion - support",
+      "claim": "Inference is conditioned on 87 unique country-years; Tier C (22 parameters, 3.95 obs/param) is exploratory and excluded from headline claims.",
       "tags": {
-        "nature_human_behaviour": "fit",
-        "epj_data_science": "fit",
-        "social_networks": "fit"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Editorially positive because inferential limits are explicit.",
-        "epj_data_science": "Aligned with transparent uncertainty and support auditing.",
-        "social_networks": "General scientific rigor is valuable even outside direct network scope."
+        "social_indicators_research": "Thin-support macro panels are routine in this venue.",
+        "technological_forecasting_social_change": "Thin support limits applied claims for a forecasting-oriented audience.",
+        "big_data_society": "Support limits are a data-infrastructure argument.",
+        "plos_one": "Disclosed limitation, not a defect.",
+        "scientific_reports": "Support-per-parameter reporting is legible."
       }
     },
     {
       "id": "C7",
-      "section": "Discussion + Conclusion",
-      "claim": "Claims are descriptive and non-causal; policy-optimal recommendations are explicitly out of scope.",
+      "section": "Discussion - scope",
+      "claim": "Interpretation is descriptive and non-causal; no policy-optimal recommendation is made.",
       "tags": {
-        "nature_human_behaviour": "fit",
-        "epj_data_science": "fit",
-        "social_networks": "fit"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Reduces overclaiming risk at desk screen.",
-        "epj_data_science": "Strengthens claim-evidence discipline for method papers.",
-        "social_networks": "Supports conservative interpretation despite topical mismatch."
+        "social_indicators_research": "Descriptive indicator work is standard.",
+        "technological_forecasting_social_change": "Policy adjacency usually implies causal language at this venue.",
+        "big_data_society": "Non-causal restraint matches the venue's epistemology.",
+        "plos_one": "Appropriate to an observational design.",
+        "scientific_reports": "Design limits stated."
       }
     },
     {
       "id": "C8",
-      "section": "Conclusion closing synthesis",
-      "claim": "The main contribution is an auditable computational workflow for support-aware macro-comparative inference.",
+      "section": "Conclusion",
+      "claim": "The contribution is an executable audit workflow plus a disclosed correction, not an empirically validated response surface.",
       "tags": {
-        "nature_human_behaviour": "fit",
-        "epj_data_science": "fit",
-        "social_networks": "risky"
+        "social_indicators_research": "fit",
+        "technological_forecasting_social_change": "risky",
+        "big_data_society": "fit",
+        "plos_one": "fit",
+        "scientific_reports": "fit"
       },
       "rationale": {
-        "nature_human_behaviour": "Acceptable if behavioural scope remains carefully bounded.",
-        "epj_data_science": "Direct match to journal-level methodological relevance.",
-        "social_networks": "Useful but peripheral unless network structure is introduced."
+        "social_indicators_research": "Methodological contribution with composite indicators is on-scope.",
+        "technological_forecasting_social_change": "A workflow-only contribution may be judged insufficiently applied here.",
+        "big_data_society": "Workflow-as-critique is central to the venue.",
+        "plos_one": "Narrow, checkable contribution.",
+        "scientific_reports": "Reusable protocol is a legitimate contribution."
       }
     }
   ],
   "summaryByJournal": [
     {
-      "journalId": "nature_human_behaviour",
-      "fit": 4,
-      "risky": 4,
-      "outOfScope": 0,
-      "recommendedPositioning": "Behaviour-relevant but method-forward framing with strict inferential boundaries."
-    },
-    {
-      "journalId": "epj_data_science",
+      "journalId": "social_indicators_research",
       "fit": 8,
       "risky": 0,
       "outOfScope": 0,
-      "recommendedPositioning": "Primary target: reproducible computational methodology with protocolized validation."
+      "recommendedPositioning": "Primary target: composite-indicator methodology with construct withdrawals and a disclosed correction."
     },
     {
-      "journalId": "social_networks",
+      "journalId": "technological_forecasting_social_change",
       "fit": 2,
-      "risky": 3,
-      "outOfScope": 3,
-      "recommendedPositioning": "Secondary/conditional target unless explicit network-relational modeling is added."
+      "risky": 6,
+      "outOfScope": 0,
+      "recommendedPositioning": "Secondary: reframe around societal transition and keep the model claim weak."
+    },
+    {
+      "journalId": "big_data_society",
+      "fit": 8,
+      "risky": 0,
+      "outOfScope": 0,
+      "recommendedPositioning": "Secondary: lead with the infrastructure critique rather than the fit."
+    },
+    {
+      "journalId": "plos_one",
+      "fit": 8,
+      "risky": 0,
+      "outOfScope": 0,
+      "recommendedPositioning": "Fallback with high acceptance odds: rigour-first, correction disclosed."
+    },
+    {
+      "journalId": "scientific_reports",
+      "fit": 7,
+      "risky": 1,
+      "outOfScope": 0,
+      "recommendedPositioning": "Fallback: similar to PLOS ONE, stricter on predictive claims."
     }
   ],
   "recommendedPrimaryTargets": [
-    "epj_data_science",
-    "nature_human_behaviour"
+    "social_indicators_research"
+  ],
+  "previouslySubmitted": [
+    {
+      "journal": "Social Science Computer Review",
+      "outcome": "Rejected (April 2026)"
+    },
+    {
+      "journal": "EPJ Data Science",
+      "outcome": "Previously tried"
+    },
+    {
+      "journal": "Computers, Environment and Urban Systems",
+      "outcome": "Previously tried"
+    },
+    {
+      "journal": "Environment and Planning B: Urban Analytics",
+      "outcome": "Previously tried"
+    },
+    {
+      "journal": "Journal of Computational Social Science",
+      "outcome": "Previously tried"
+    }
   ]
 }

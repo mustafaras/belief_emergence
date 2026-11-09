@@ -99,12 +99,40 @@
 \Rule\\[0.3em]
 \begin{center}
     {\LARGE\bfseries Supplementary Materials}\par
-{\large Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework}\par
-{\normalsize Regime-Diagnostic Saturating Models for Country Panels}\par
+{\large Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models}\par
+{\normalsize Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels}\par
 \end{center}
 \noindent{\footnotesize This standalone file reuses the figure wrapper sources under \texttt{figures/fig\_wrappers/} and reproduces direct figure inclusions from the manuscript, preserving original sizing by matching the manuscript geometry and \texttt{\string\includegraphics} options.}\par
 
 \vspace{0.5em}
+
+\Section{Correction Note: What Changed From the Earlier Version}
+
+\noindent\justifying
+This supplement documents a rebuild. The earlier version of this work reported a bounded nonlinear model whose fit appeared strong; that model is not the model reported here, and the difference is not a matter of presentation. This note records what the previous version claimed, what was wrong with it, and what the rebuilt analysis says. It is placed first because a methods paper that silently changes its numbers is worse than one that explains why they changed.
+
+\noindent\justifying
+\textbf{What the previous version reported.} A saturating model of country-panel belief intensity with near-unity in-sample $R^2$, a ``C-dominance'' result in which dropping cultural intensity reduced Tier~A $R^2$ by 0.270, a permutation test placing $R^2$ far below the observed value, and out-of-sample metrics that looked favourable. The panel was described as 23 countries with 630 scenario-replicated rows collapsing to 34 unique country-years.
+
+\noindent\justifying
+\textbf{What was wrong.} Three defects, each independently fatal.
+
+\emph{First, the outcome was a rescaling of a predictor.} $\mathrm{corr}(Z, C) = 1.0$ by construction: the cultural-intensity index was built from item \texttt{A006}, which is the first item of the outcome. Every reported $R^2$ was therefore an algebraic identity dressed as an empirical result, and every ``C-dominance'' finding was the model rediscovering its own input. This is the defect the construct audit exists to catch, and it is why the audit aborts when any two constructs correlate above $|r| = 0.999$ or share an item without a declared justification.
+
+\emph{Second, two constructs were never one dimension.} Re-derived from item-level World Values Survey data against their configured item sets, cultural intensity reaches $\alpha = 0.348$ and social atomization $\alpha = -1.228$. A negative alpha is worse than no composite: the items actively disagree. Social support cannot be computed in a single country-year, because four of its seven configured items are absent from the harmonised source. No aggregation rule repairs this; the item sets do not measure single latent dimensions.
+
+\emph{Third, the sample was inflated.} The 630 rows were redistribution-scenario replications of a much smaller set of unique country-year cells, so standard errors and fit statistics computed on them were systematically optimistic. The row count and the independent-information count were not the same number, and the manuscript reported the larger one.
+
+\noindent\justifying
+\textbf{What changed.} The construct layer was rebuilt from raw microdata under \texttt{config/wvs\_items.yaml} and the result is machine-checkable: 442{,}026 respondents across 305 country-years yield $Z$ at $\alpha = 0.819$ over 287 cells, which passes; $C$ at $0.348$ over 303 cells, $D$ at $-1.228$ over 296 cells, and $S$ in 0 cells, which do not. Four of the eight originally proposed channels ($C$, $D$, $G$, $S$) are therefore declared but not estimated, and the model runs on seven columns.
+
+The canonical panel is rebuilt and re-pinned: \textbf{87 complete-case country-years across 48 countries, 1990--2022}, one row per country-year, with no scenario replication. Its SHA-256 is \texttt{1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839}, and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.3854$ on 87 rows, not $0.85$; fixed-coefficient country-out validation is negative in every tier (Tier~A $-2.01$, Tier~B $-0.97$, Tier~C $-0.90$); and the saturating form does not beat an ordinary linear regression on identical rows and folds ($0.10$ against $0.20$).
+
+\noindent\justifying
+\textbf{What did not change, and is not claimed to have changed.} The design is still observational and no causal claim is made. Support is still thin: 87 country-years carries an 11-parameter Tier~A model at 7.91 observations per parameter, and Tier~C at 3.95 is designated exploratory and excluded from headline inference. The WVS microdata remain redistribution-restricted, so a replicator must download them; what this supplement provides is the manifest, the construct rules, and an independent verification script that re-derives every audit number from the raw files.
+
+\noindent\justifying
+\textbf{Why this note is included rather than omitted.} A reviewer who reconstructs the earlier numbers will find the discrepancy regardless. Stating it first converts the largest liability in the project into evidence that the audit works: the same gates that now pass on the rebuilt panel each fail on the original one, which is precisely what a validity gate is for.
 
 \Section{CRITICAL: Claim-Evidence Traceability Map (audit-ready reference)}
 
@@ -152,13 +180,13 @@ Education effect shows curvature at high levels (Results: key findings II) & Tie
 
 Culture--media coupling is the most stable Tier B interaction (Results: key findings II) & Tier B & \path{parameter_stability.json} (interaction term, $\geq 0.80$ consistency) & Rolling-origin fold stability for $c_{\mathrm{cm}}$ term & Narrower bootstrap intervals than other interactions; most stable higher-order pattern. \\
 
-Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.6319$, Corr=0.8010 on panel & Ridge is fitted-model feature, not causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ clipped. \\
+Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.3854$, Corr=0.6311 on the 87-row panel & Ridge is a fitted-model feature, not a causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ is clipped. \\
 
 Prediction intervals via resampling (Section 6, uncertainty quantification) & Tier A/B & \path{prediction_interval_coverage.json} & Protocol/tier/support aggregation from fold-level empirical residual-quantile-shifted intervals (primary) with a symmetric Gaussian residual comparator; rolling-origin and higher-complexity folds show material undercoverage versus nominal 95\% & Coverage is protocol-, support-, and regime-conditioned; interval width can appear narrow in saturated or low-variance folds and should not be used as a stand-alone precision signal. \\
 
-Model shows high in-sample bounded-scale alignment (Results headline) & Tier A & In-sample fit on canonical panel (630 rows) & Training: RMSE=0.1630, Bias=--0.0699 (systematic over-prediction) & Negative bias indicates model over-predicts in normalized band; not evidence of miscalibration (bounded outcome expected). \\
+In-sample fit on the canonical panel is modest, not high (Results headline) & Tier A & In-sample fit on canonical panel (87 rows) & Training: $R^2=0.3854$, RMSE=0.1893, Bias=+0.0243 & Positive bias means the model under-predicts on average; with $R^2$ well below unity this is descriptive context only, not evidence about the belief mechanism. \\
 
-Support collapses to 34 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); raw data: \path{rawdata/panel_model_data.csv} & 23 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,C,M,T,D,G,E,S,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
+Support is 87 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); panel: \path{public/data/panel_canonical_v2.csv} & 48 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,M,T,E,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
 
 Ecological inference limits: no individual-level claims & Tier 0 (Study design) & Limitations section (manuscript, Discussion) & Country--year unit; WVS-aggregated outcomes & Claims describe macro-level fitted-model geometry; gap between aggregate associations and individual mechanisms unresolved. \\
 
@@ -317,10 +345,10 @@ Ridge-adjacent ($0.45 \le Z \le 0.55$) & 6 & 17.6\% \\
 Funnel stage & Quantified scope and interpretive role \\
 \midrule
 Upstream integrated breadth & \path{rawdata/panel_model_data.json} reports 22,096 rows across 288 countries (1990--2023). This stage documents source coverage, not inferential claim strength. \\
-Canonical estimation rows & \path{public/data/panel_canonical_23_countries_v1.csv} contains 630 rows for 23 countries (2000--2022), including redistribution-related scenario replication. \\
-Effective complete-case support & After collapsing to unique $(\mathrm{iso3},\mathrm{year})$ and enforcing non-missingness on $X,Y,Z,C,M,T,D,G,E,S,R$, support is 34 country--years. This is the inferential support envelope. \\
+Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 87 rows for 48 countries (1990--2022), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
+Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 87, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
 Construct validity / invariance envelope & \path{src/data/analysis/construct_validity_invariance.json} reports aggregate-level construct checks: multi-item diagnostics for $Z$, single-indicator proxy constraints for $C,D,S$, and sparse-overlap fragility flags for $M$. These diagnostics bound cross-slice transport claims. \\
-Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 3.09), Tier B 18 (1.89), Tier C 22 (1.55). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
+Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 7.91), Tier B 18 (4.83), Tier C 22 (3.95). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
 \bottomrule
 \end{tabularx}
 }
@@ -597,13 +625,13 @@ headline fit and regime geometry remain stable across temporal blocks and specif
 \toprule
 Panel & Slice / Ablation & $n$ & $R^2$ & Corr & MAE & RMSE \\
 \midrule
-A & $\text{year}\le2006$ & 243 & \num{0.8069} & \num{0.9648} & \num{0.0862} & \num{0.0893} \\
-A & $2007\le\text{year}\le2012$ & 261 & \num{0.8574} & \num{0.9712} & \num{0.1110} & \num{0.1435} \\
-A & $\text{year}\ge2013$ & 126 & \num{0.8348} & \num{0.9391} & \num{0.1061} & \num{0.1242} \\
+A & $\text{year}\le2005$ & 17 & \num{-0.2838} & \num{0.1808} & \num{0.2365} & \num{0.2851} \\
+A & $2006\le\text{year}\le2012$ & 34 & \num{0.5468} & \num{0.7519} & \num{0.1552} & \num{0.1823} \\
+A & $\text{year}\ge2013$ & 36 & \num{0.5431} & \num{0.7417} & \num{0.1039} & \num{0.1297} \\
 \addlinespace[2pt]
-B & main ($\Phi$ linear only) & 630 & \num{0.9350} & \num{0.9675} & \num{0.0601} & \num{0.0787} \\
-B & main$+$interactions & 630 & \num{0.9336} & \num{0.9686} & \num{0.0574} & \num{0.0796} \\
-B & full (incl.\ quadratics) & 630 & \num{0.6319} & \num{0.8010} & \num{0.1266} & \num{0.1630} \\
+B & main ($\Phi$ linear only) & 87 & \num{0.1955} & \num{0.4592} & \num{0.1814} & \num{0.2166} \\
+B & main$+$interactions & 87 & \num{0.3625} & \num{0.6122} & \num{0.1511} & \num{0.1928} \\
+B & full (incl.\ quadratics) & 87 & \num{0.3854} & \num{0.6311} & \num{0.1498} & \num{0.1893} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -638,21 +666,21 @@ this file (observed-vs-predicted, calibration-by-decile, and residual structure)
 \centering
 \TableStyle
 \captionsetup{justification=RaggedRight,singlelinecheck=false}
-\caption{\textbf{Data scope:} bounded-scale in-sample evaluation on the canonical panel. Observed $Z$ is mapped into $\mathcal{I}_\varepsilon$ using the bounded-scale mapping with $(z_{\min},z_{\max})=(\num{-1.3175756317751055},\,\num{1.8150944343746167})$ and $\varepsilon=10^{-4}$; predictions are clamped to the same band, and bias is the mean residual $(Z-\widehat{Z})$. \textbf{Method context:} the evidence tier for this table is descriptive context only; primary inferential claims rest on Tier A/B out-of-sample refit validation detailed in the Fold-Level Generalization Evidence section. \textbf{Interpretation boundary:} the 630 rows include scenario replication, unique country-year support collapses to 34 (Table~S2), and the table does not by itself support causal or policy-intervention claims.}
+\caption{\textbf{Data scope:} bounded-scale in-sample evaluation on the canonical panel. Observed $Z$ is mapped into $\mathcal{I}_\varepsilon$ using the bounded-scale mapping with $(z_{\min},z_{\max})=(\num{-1.8892873085},\,\num{1.8541262393})$ and $\varepsilon=10^{-4}$; predictions are clamped to the same band, and bias is the mean residual $(Z-\widehat{Z})$. \textbf{Method context:} the evidence tier for this table is descriptive context only; primary inferential claims rest on Tier A/B out-of-sample refit validation detailed in the Fold-Level Generalization Evidence section. \textbf{Interpretation boundary:} the panel is 87 complete-case country-years across 48 countries with no scenario replication, so the row count is the support count, and the table does not by itself support causal or policy-intervention claims.}
 \label{tab:panel_fit_headline}
 \begin{tabularx}{0.86\linewidth}{@{}l >{\raggedleft\arraybackslash}X@{}}
 
 \csname toprule\endcsname
 Quantity & Value \\
 \midrule
-Countries ($N$) & 23 \\
-Rows used ($n$) & 630 \\
-Year range & 2000--2022 \\
-$R^2$ & \num{0.6319} \\
-$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.8010} \\
-MAE & \num{0.1266} \\
-RMSE & \num{0.1630} \\
-Bias $(Z-\widehat{Z})$ & \num{-0.0699} \\
+Countries ($N$) & 48 \\
+Rows used ($n$) & 87 \\
+Year range & 1990--2022 \\
+$R^2$ & \num{0.3854} \\
+$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6311} \\
+MAE & \num{0.1498} \\
+RMSE & \num{0.1893} \\
+Bias $(Z-\widehat{Z})$ & \num{0.0243} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -1065,10 +1093,10 @@ claims.
 \toprule
 Period & Years & nUsed / nTotal & \multicolumn{1}{c}{$R^{2}$} & \multicolumn{1}{c}{Corr} & \multicolumn{1}{c}{MAE} & \multicolumn{1}{c}{RMSE} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Residual P10} & \multicolumn{1}{c}{Residual P50} & \multicolumn{1}{c}{Residual P90} \\\\
 \midrule
-all years & --- & 630 / 630 & 0.846 & 0.949 & 0.1266 & 0.1630 & 0.0699 & -0.0568 & 0.0816 & 0.1491 \\
-\ensuremath{\le} 2007 & \ensuremath{\le} 2007 & 261 / 261 & 0.808 & 0.962 & 0.0855 & 0.0890 & 0.0378 & -0.0964 & 0.0808 & 0.1110 \\
-2008--2013 & \ensuremath{>} 2007 to \ensuremath{\le} 2013 & 252 / 252 & 0.857 & 0.972 & 0.1148 & 0.1469 & 0.1127 & -0.0073 & 0.0818 & 0.2922 \\
-\ensuremath{>} 2013 & \ensuremath{>} 2013 & 117 / 117 & 0.836 & 0.940 & 0.1030 & 0.1223 & 0.0495 & -0.0712 & 0.0557 & 0.1341 \\
+all years & --- & 87 / 87 & 0.385 & 0.631 & 0.1498 & 0.1893 & 0.0243 & -0.1844 & -0.0093 & 0.2517 \\
+\ensuremath{\le} 2005 & \ensuremath{\le} 2005 & 17 / 17 & -0.284 & 0.181 & 0.2365 & 0.2851 & 0.0743 & -0.3053 & 0.1761 & 0.3236 \\
+2006--2012 & \ensuremath{>} 2005 to \ensuremath{\le} 2012 & 34 / 34 & 0.547 & 0.752 & 0.1552 & 0.1823 & 0.0126 & -0.1910 & -0.0007 & 0.2367 \\
+\ensuremath{>} 2012 & \ensuremath{>} 2012 & 36 / 36 & 0.543 & 0.742 & 0.1039 & 0.1297 & 0.0118 & -0.1244 & -0.0257 & 0.1469 \\
 \bottomrule
 \end{tabularx}
 }
@@ -1090,30 +1118,55 @@ Country & nUsed / nTotal & \multicolumn{1}{c}{$R^{2}$} & \multicolumn{1}{c}{$r$}
 \endhead
 \bottomrule
 \endfoot
-ALL & 630 / 630 & 0.338 & 0.949 & 0.6711 & 0.7873 & 0.3954 & -0.4867 & 0.4393 & 1.2518\\
-NLD & 90 / 90 & -209.260 & -1.000 & 1.2158 & 1.2205 & 1.2158 & 1.2153 & 1.2512 & 1.2518\\
-CAN & 81 / 81 & 0.300 & 0.999 & 0.2124 & 0.3420 & 0.2124 & 0.0794 & 0.1547 & 0.9634\\
-POL & 72 / 72 & -9.125 & 0.999 & 0.3486 & 0.3598 & -0.3486 & -0.4388 & -0.3486 & -0.2580\\
-TUR & 45 / 45 & -224.847 & 0.957 & 0.7962 & 0.7979 & -0.7962 & -0.8227 & -0.8225 & -0.6909\\
-EST & 36 / 36 & \ensuremath{-9.798\times 10^{30}} & 0.000 & 1.3901 & 1.3901 & 1.3901 & 1.3860 & 1.3899 & 1.3943\\
-FIN & 36 / 36 & \ensuremath{-1.105\times 10^{32}} & 0.000 & 0.4376 & 0.4376 & 0.4376 & 0.4359 & 0.4368 & 0.4396\\
-GBR & 36 / 36 & \ensuremath{-1.807\times 10^{32}} & 0.000 & 0.7461 & 0.7461 & 0.7461 & 0.7441 & 0.7461 & 0.7480\\
-SVN & 36 / 36 & \ensuremath{-1.100\times 10^{32}} & 0.000 & 0.5821 & 0.5822 & 0.5821 & 0.5804 & 0.5815 & 0.5846\\
-MEX & 27 / 27 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-DEU & 18 / 18 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-ESP & 18 / 18 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-KOR & 18 / 18 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-ROU & 18 / 18 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-RUS & 18 / 18 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-AUS & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-BGR & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-BRA & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-CHE & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-CHL & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-CZE & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-GRC & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-SVK & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
-USA & 9 / 9 & \textemdash{} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}} & \multicolumn{1}{c}{\textemdash{}}\\
+ALL & 87 / 87 & 0.385 & 0.631 & 0.1498 & 0.1893 & 0.0243 & -0.1844 & -0.0093 & 0.2517\\
+ARG & 4 / 4 & -0.251 & 0.620 & 0.0919 & 0.1124 & 0.0059 & -0.0811 & -0.0416 & 0.1309\\
+MEX & 4 / 4 & 0.143 & 0.520 & 0.1113 & 0.1324 & -0.0208 & -0.1432 & -0.0399 & 0.1169\\
+PER & 4 / 4 & -0.090 & 0.557 & 0.0944 & 0.1243 & 0.0339 & -0.0612 & -0.0171 & 0.1699\\
+CAN & 3 / 3 & 0.086 & 0.607 & 0.1419 & 0.1579 & -0.0540 & -0.1974 & -0.0628 & 0.0930\\
+DEU & 3 / 3 & -32.744 & -0.685 & 0.1481 & 0.1567 & 0.1481 & 0.0979 & 0.1480 & 0.1983\\
+ESP & 3 / 3 & -5.766 & 0.998 & 0.1263 & 0.1333 & 0.1263 & 0.0856 & 0.1219 & 0.1687\\
+IDN & 3 / 3 & -0.945 & 0.916 & 0.1423 & 0.1855 & -0.1423 & -0.2632 & -0.0823 & -0.0454\\
+ROU & 3 / 3 & -1.135 & 0.999 & 0.1860 & 0.2062 & -0.1860 & -0.2767 & -0.1526 & -0.1086\\
+RUS & 3 / 3 & -351.272 & -0.435 & 0.1768 & 0.2023 & 0.1768 & 0.0935 & 0.1344 & 0.2770\\
+THA & 3 / 3 & 0.323 & 0.787 & 0.2013 & 0.2084 & 0.0785 & -0.1183 & 0.1459 & 0.2482\\
+TUR & 3 / 3 & -0.849 & 0.843 & 0.1514 & 0.1679 & -0.1514 & -0.2076 & -0.1938 & -0.0782\\
+UKR & 3 / 3 & -4.251 & 1.000 & 0.0756 & 0.0852 & 0.0756 & 0.0368 & 0.0773 & 0.1137\\
+BRA & 2 / 2 & \textemdash{} & 1.000 & 0.0623 & 0.0704 & -0.0623 & -0.0886 & -0.0623 & -0.0360\\
+CHL & 2 / 2 & \textemdash{} & -1.000 & 0.1639 & 0.1643 & 0.0122 & -0.1189 & 0.0122 & 0.1433\\
+COL & 2 / 2 & \textemdash{} & 1.000 & 0.0156 & 0.0169 & -0.0156 & -0.0207 & -0.0156 & -0.0106\\
+ECU & 2 / 2 & \textemdash{} & 1.000 & 0.0327 & 0.0378 & -0.0327 & -0.0479 & -0.0327 & -0.0176\\
+GEO & 2 / 2 & \textemdash{} & 1.000 & 0.1213 & 0.1281 & -0.1213 & -0.1543 & -0.1213 & -0.0882\\
+KAZ & 2 / 2 & \textemdash{} & -1.000 & 0.0975 & 0.1097 & 0.0503 & -0.0277 & 0.0503 & 0.1283\\
+KGZ & 2 / 2 & \textemdash{} & 1.000 & 0.2963 & 0.2966 & 0.2963 & 0.2852 & 0.2963 & 0.3073\\
+KOR & 2 / 2 & \textemdash{} & 1.000 & 0.0496 & 0.0647 & 0.0496 & 0.0163 & 0.0496 & 0.0828\\
+MYS & 2 / 2 & \textemdash{} & 1.000 & 0.2232 & 0.2420 & -0.2232 & -0.2979 & -0.2232 & -0.1484\\
+NGA & 2 / 2 & \textemdash{} & 1.000 & 0.0845 & 0.0845 & -0.0845 & -0.0864 & -0.0845 & -0.0826\\
+NLD & 2 / 2 & \textemdash{} & 1.000 & 0.2162 & 0.2171 & 0.2162 & 0.2002 & 0.2162 & 0.2321\\
+POL & 2 / 2 & \textemdash{} & 1.000 & 0.3085 & 0.3343 & -0.3085 & -0.4117 & -0.3085 & -0.2053\\
+ALB & 1 / 1 & \textemdash{} & \textemdash{} & 0.3439 & 0.3439 & 0.3439 & 0.3439 & 0.3439 & 0.3439\\
+AUS & 1 / 1 & \textemdash{} & \textemdash{} & 0.0036 & 0.0036 & -0.0036 & -0.0036 & -0.0036 & -0.0036\\
+BGR & 1 / 1 & \textemdash{} & \textemdash{} & 0.2369 & 0.2369 & 0.2369 & 0.2369 & 0.2369 & 0.2369\\
+CHE & 1 / 1 & \textemdash{} & \textemdash{} & 0.0737 & 0.0737 & -0.0737 & -0.0737 & -0.0737 & -0.0737\\
+CHN & 1 / 1 & \textemdash{} & \textemdash{} & 0.7084 & 0.7084 & 0.7084 & 0.7084 & 0.7084 & 0.7084\\
+CYP & 1 / 1 & \textemdash{} & \textemdash{} & 0.1446 & 0.1446 & -0.1446 & -0.1446 & -0.1446 & -0.1446\\
+CZE & 1 / 1 & \textemdash{} & \textemdash{} & 0.3367 & 0.3367 & 0.3367 & 0.3367 & 0.3367 & 0.3367\\
+EST & 1 / 1 & \textemdash{} & \textemdash{} & 0.2169 & 0.2169 & 0.2169 & 0.2169 & 0.2169 & 0.2169\\
+FIN & 1 / 1 & \textemdash{} & \textemdash{} & 0.0452 & 0.0452 & 0.0452 & 0.0452 & 0.0452 & 0.0452\\
+FRA & 1 / 1 & \textemdash{} & \textemdash{} & 0.3889 & 0.3889 & 0.3889 & 0.3889 & 0.3889 & 0.3889\\
+GBR & 1 / 1 & \textemdash{} & \textemdash{} & 0.0448 & 0.0448 & 0.0448 & 0.0448 & 0.0448 & 0.0448\\
+GHA & 1 / 1 & \textemdash{} & \textemdash{} & 0.0578 & 0.0578 & 0.0578 & 0.0578 & 0.0578 & 0.0578\\
+GRC & 1 / 1 & \textemdash{} & \textemdash{} & 0.1769 & 0.1769 & -0.1769 & -0.1769 & -0.1769 & -0.1769\\
+IRN & 1 / 1 & \textemdash{} & \textemdash{} & 0.1501 & 0.1501 & -0.1501 & -0.1501 & -0.1501 & -0.1501\\
+ITA & 1 / 1 & \textemdash{} & \textemdash{} & 0.3037 & 0.3037 & -0.3037 & -0.3037 & -0.3037 & -0.3037\\
+JPN & 1 / 1 & \textemdash{} & \textemdash{} & 0.1321 & 0.1321 & 0.1321 & 0.1321 & 0.1321 & 0.1321\\
+PAK & 1 / 1 & \textemdash{} & \textemdash{} & 0.0618 & 0.0618 & -0.0618 & -0.0618 & -0.0618 & -0.0618\\
+SRB & 1 / 1 & \textemdash{} & \textemdash{} & 0.1225 & 0.1225 & 0.1225 & 0.1225 & 0.1225 & 0.1225\\
+SVK & 1 / 1 & \textemdash{} & \textemdash{} & 0.1088 & 0.1088 & 0.1088 & 0.1088 & 0.1088 & 0.1088\\
+SVN & 1 / 1 & \textemdash{} & \textemdash{} & 0.2245 & 0.2245 & 0.2245 & 0.2245 & 0.2245 & 0.2245\\
+URY & 1 / 1 & \textemdash{} & \textemdash{} & 0.0868 & 0.0868 & 0.0868 & 0.0868 & 0.0868 & 0.0868\\
+USA & 1 / 1 & \textemdash{} & \textemdash{} & 0.1191 & 0.1191 & -0.1191 & -0.1191 & -0.1191 & -0.1191\\
+UZB & 1 / 1 & \textemdash{} & \textemdash{} & 0.0573 & 0.0573 & -0.0573 & -0.0573 & -0.0573 & -0.0573\\
+VNM & 1 / 1 & \textemdash{} & \textemdash{} & 0.3087 & 0.3087 & 0.3087 & 0.3087 & 0.3087 & 0.3087\\
 \end{longtable}
 \par\vspace{0.25em}
 {\TableNoteStyle Computed per country on rows with finite observed and predicted Z; no refit (fixed coefficients unless an estimated set is active). Countries with fewer than 30 valid observations may display \enquote{\textemdash{}} due to insufficient sample size. nUsed counts rows with finite observed and predicted Z. Values are shown as \enquote{\textemdash{}} when metrics are undefined or when the minimum per-country sample-size rule applies (e.g., nUsed $<$ 30).}
@@ -1139,7 +1192,7 @@ $E$ & 1.99 \\
 $T$ & 1.72 \\
 $G$ & 1.61 \\
 \midrule
-\multicolumn{2}{@{}l@{}}{\footnotesize Notes: computed on complete-case rows (N=630); inputs are $\log X$, $\log Y$, and $C,M,T,D,G,E,S,R$ (z-scored).} \\
+\multicolumn{2}{@{}l@{}}{\footnotesize Notes: computed on complete-case rows (N=87); inputs are $\log X$, $\log Y$, and $C,M,T,D,G,E,S,R$ (z-scored; $C,D,G,S$ enter as constant zero columns).} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1360,21 +1413,21 @@ Even a perfectly reproducible regime pattern can be sample-specific; therefore, 
 \section*{Table S14 --- 2006 Temporal Outlier Sensitivity: LOO Metrics With and Without 2006 Observations}
 
 \noindent\justifying
-Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across 12 year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 63 rows across 4 countries (BGR, CAN, CHL, NLD). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 630-row canonical panel versus the 567-row panel excluding all 2006 observations.
+Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 12 rows across 12 countries (ARG, BGR, CAN, CHL, DEU, FRA, IDN, MYS, NLD, PER, RUS, UKR). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 87-row canonical panel versus the 75-row panel excluding all 2006 observations. Source artifact: \nolinkurl{src/data/analysis/temporal_outlier_2006_sensitivity.json}.
 
 \setcounter{table}{13}%--- force Table S14
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Panel A: LOO Refit Aggregate Comparison (Full Panel vs.\ 2006-Excluded).} Median OOS metrics from country-out cross-validation. $\Delta$ = 2006-excluded minus full panel; negative $\Delta R^2$ means the reduced panel has slightly lower OOS $R^2$.}
+\caption{\textbf{Panel A: LOO Refit Aggregate Comparison (Full Panel vs.\ 2006-Excluded).} Median OOS metrics from country-out cross-validation. $\Delta$ = 2006-excluded minus full panel; negative $\Delta R^2$ means the reduced panel has lower OOS $R^2$.}
 \label{tab:2006-loo-comparison}
 \begin{tabular}{l r r r r r r r r r}
 \hline
 \textbf{Tier} & \textbf{$R^2_{\text{full}}$} & \textbf{$R^2_{\text{excl}}$} & \textbf{$\Delta R^2$} & \textbf{MAE$_{\text{full}}$} & \textbf{MAE$_{\text{excl}}$} & \textbf{$\Delta$MAE} & \textbf{RMSE$_{\text{full}}$} & \textbf{RMSE$_{\text{excl}}$} & \textbf{$\Delta$RMSE} \\
 \hline
-A & 1.0000 & 1.0000 & $<10^{-8}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ \\
-B & 1.0000 & 1.0000 & $<10^{-7}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ \\
-C & 1.0000 & 1.0000 & $<10^{-7}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ \\
+A & $-1.8183$ & $-1.9333$ & $-0.1150$ & 0.1354 & 0.1281 & $-0.0073$ & 0.1354 & 0.1397 & $+0.0043$ \\
+B & $-1.1607$ & $-1.3594$ & $-0.1987$ & 0.1312 & 0.1214 & $-0.0099$ & 0.1376 & 0.1321 & $-0.0055$ \\
+C & $-0.6620$ & $-1.5969$ & $-0.9349$ & 0.1344 & 0.1363 & $+0.0018$ & 0.1412 & 0.1579 & $+0.0167$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1388,8 +1441,8 @@ C & 1.0000 & 1.0000 & $<10^{-7}$ & $<10^{-5}$ & $<10^{-5}$ & $<10^{-6}$ & $<10^{
 \textbf{Tier} & \textbf{$n_{\text{coeffs}}$} & \textbf{$n_{\text{retained}}$} & \textbf{Fraction} & \textbf{Flipped features} \\
 \hline
 A & 10 & 10 & 1.000 & --- \\
-B & 17 & 15 & 0.882 & g, e:s \\
-C & 21 & 16 & 0.762 & x\_safe, g, e, e:s, g:r \\
+B & 17 & 16 & 0.941 & $x_{\text{safe}}$ \\
+C & 21 & 20 & 0.952 & $y_{\text{safe}}{:}r$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1402,33 +1455,36 @@ C & 21 & 16 & 0.762 & x\_safe, g, e, e:s, g:r \\
 \hline
 \textbf{Slice} & \textbf{$n$} & \textbf{Mean $Z$} & \textbf{SD $Z$} & \textbf{Inter-item $r$} \\
 \hline
-2006 & 63 & 0.287 & 0.510 & 0.699 \\
-Other years & 567 & 0.123 & 1.006 & 0.932 (median) \\
+2006 & 12 & $-0.104$ & 1.277 & 0.699 \\
+Other years & 75 & 0.076 & 0.915 & 0.932 (median) \\
 \hline
 \end{tabular}
 \end{table}
 
 \noindent\justifying
-\textbf{Interpretation.} Excluding 2006 produces negligible changes in all three tiers' OOS metrics (all $|\Delta R^2| < 10^{-7}$). Tier~A retains all 10 coefficient signs (100\%). Tier~B retains 15 of 17 (88\%); two flipped features ($g$ and $e\!:\!s$) are higher-order terms with thin empirical support. The primary inferential tiers (A/B) maintain $\geq$\,88\% sign stability, confirming that the 2006 construct-invariance anomaly does not drive reported aggregate patterns. The 2006 slice's higher mean $Z$ (0.287 vs.\ 0.123) and lower inter-item coherence reflect measurement-wave variability rather than a systematic bias propagated into model conclusions.
+\textbf{Interpretation.} Excluding 2006 changes OOS $R^2$ materially in every tier ($\Delta R^2$: A $-0.1150$, B $-0.1987$, C $-0.9349$), and the artifact verdict is correspondingly negative: this year-level instability may be a driver of reported aggregate patterns. Sign structure, by contrast, is nearly unaffected: Tier~A retains all 10 coefficient signs (100\%), Tier~B retains 16 of 17 (94\%, flipped: $x_{\text{safe}}$), and Tier~C retains 20 of 21 (95\%, flipped: $y_{\text{safe}}{:}r$). The honest reading is that the sign of the model is robust to the 2006 slice while its out-of-sample fit is not, and the out-of-sample fit is already negative in every tier. The 2006 slice also carries a lower mean $Z$ ($-0.104$ vs.\ $0.076$) and higher variance ($1.277$ vs.\ $0.915$) than the rest of the panel, consistent with the weaker inter-item coherence.
 
-\section*{Table S18 --- C-Dominance Sensitivity: Full Model vs.\ C-Excluded and C-Permuted Variants}
+\section*{Table S18 --- C-Dominance Sensitivity: Can C Be Separated From Z?}
 
 \noindent\justifying
-Table~S18 quantifies how much of cultural intensity ($C$)'s predictive contribution reflects substantive signal versus mechanical shared-source correlation with outcome $Z$ (both derived from WVS survey items). Three diagnostics are reported: (a)~a C-excluded model where all features involving $C$ are removed; (b)~a 200-iteration permutation test where $C$ is randomly shuffled within the cross-section; and (c)~a partial~$R^2$ ranking obtained by dropping each predictor one at a time from Tier~A.
+Table~S18 asks how much of cultural intensity ($C$)'s predictive contribution reflects substantive signal versus mechanical shared-source correlation with outcome $Z$ (both derived from WVS survey items). Three diagnostics are reported: (a)~a C-excluded model where all features involving $C$ are removed; (b)~a 200-iteration permutation test where $C$ is randomly shuffled within the cross-section; and (c)~a partial~$R^2$ ranking obtained by dropping each predictor one at a time from Tier~A. The source artifact is \nolinkurl{src/data/analysis/c_dominance_sensitivity.json} ($n=87$, seed~42).
+
+\noindent\justifying
+\textbf{Why every $\Delta R^2$ is exactly zero.} On the v2 panel, $C$ carries no observations: the construct is declared but not estimated (Section~\ref{sec:construct-audit}), and the model matrix neutralises the channel to its standardised mean. Removing a constant-zero column cannot change a fit, and permuting it cannot change a permutation distribution, so Panels~A and~B collapse to the identity by construction. \emph{This is a non-result, and it is the honest one}: the shared-source question cannot be answered on a panel where the construct in question is unidentified. The earlier version of this table reported $\Delta R^2_A=0.2701$ and a permutation interval of $[0.7299, 0.7319]$; those numbers came from the defective 630-row panel in which $C$ was built from an item of $Z$, which is precisely the defect this paper reports.
 
 \setcounter{table}{17}%--- force Table S18
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 630-row panel. $\Delta R^2$ is Full minus C-Excluded. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
+\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 87-row panel. $\Delta R^2$ is Full minus C-Excluded. $C$ is neutralised to zero in the design matrix, so the two columns are identical by construction; see the note above. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
 \label{tab:c-dominance-excluded}
 \begin{tabular}{l r r r r r r}
 \toprule
 Tier & Full $R^2$ & Excl.\ $R^2$ & $\Delta R^2$ & Full RMSE & Excl.\ RMSE & $\Delta$RMSE \\
 \midrule
-A & 1.0000 & 0.7299 & 0.2701 & $<$0.001 & 0.1606 & +0.1606 \\
-B & 1.0000 & 0.7893 & 0.2107 & $<$0.001 & 0.1418 & +0.1418 \\
-C & 1.0000 & 0.8153 & 0.1847 & $<$0.001 & 0.1328 & +0.1328 \\
+A & 0.4569 & 0.4569 & 0.0000 & 0.1780 & 0.1780 & 0.0000 \\
+B & 0.5213 & 0.5213 & 0.0000 & 0.1671 & 0.1671 & 0.0000 \\
+C & 0.5678 & 0.5678 & 0.0000 & 0.1588 & 0.1588 & 0.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1436,14 +1492,14 @@ C & 1.0000 & 0.8153 & 0.1847 & $<$0.001 & 0.1328 & +0.1328 \\
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption*{\textbf{Panel B: C-Permuted Model (200 iterations).} $C$ is randomly shuffled within the cross-section; the model is refit each time. The distribution of permutation $R^2$ is compared against the observed full-model $R^2$. $p$-value is the fraction of permutation runs achieving $R^2 \geq$ observed.}
+\caption*{\textbf{Panel B: C-Permuted Model (200 iterations).} $C$ is randomly shuffled within the cross-section; the model is refit each time. The distribution of permutation $R^2$ is compared against the observed full-model $R^2$. $p$-value is the fraction of permutation runs achieving $R^2 \geq$ observed. Because the $C$ column is constant, every permutation reproduces the same design matrix.}
 \begin{tabular}{l r r r r}
 \toprule
 Tier & Observed $R^2$ & Perm.\ Mean $R^2$ & Perm.\ [q05, q95] & $p$-value \\
 \midrule
-A & 1.0000 & 0.7303 & [0.7299, 0.7319] & $<$0.005 \\
-B & 1.0000 & 0.7902 & [0.7894, 0.7918] & $<$0.005 \\
-C & 1.0000 & 0.8161 & [0.8154, 0.8178] & $<$0.005 \\
+A & 0.4569 & 0.4569 & [0.4569, 0.4569] & 1.000 \\
+B & 0.5213 & 0.5213 & [0.5213, 0.5213] & 1.000 \\
+C & 0.5678 & 0.5678 & [0.5678, 0.5678] & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1451,36 +1507,34 @@ C & 1.0000 & 0.8161 & [0.8154, 0.8178] & $<$0.005 \\
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption*{\textbf{Panel C: Partial $R^2$ Ranking (Tier A).} Each predictor is dropped one at a time (along with its interactions/quadratic); $\Delta R^2 = R^2_{\text{full}} - R^2_{\text{excluded}}$. Only $C$ produces a material drop; other predictors show $\Delta R^2 \approx 0$ under in-sample conditions.}
+\caption*{\textbf{Panel C: Partial $R^2$ Ranking (Tier A).} Each predictor is dropped one at a time (along with its interactions/quadratic); $\Delta R^2 = R^2_{\text{full}} - R^2_{\text{excluded}}$. Inequality ($Y$) dominates, not cultural intensity ($C$). The four withdrawn channels ($C$, $D$, $G$, $S$) contribute exactly zero because they are not estimated.}
 \begin{tabular}{c l r}
 \toprule
 Rank & Predictor & Partial $R^2$ \\
 \midrule
-1 & $C$ (Cultural intensity) & 0.2701 \\
-2 & $D$ (Social atomization) & $\approx$0.0000 \\
-3 & $S$ (Social support) & $\approx$0.0000 \\
-4 & $X$ (Urbanization) & $\approx$0.0000 \\
-5 & $G$ (Redistribution) & $\approx$0.0000 \\
+1 & $Y$ (Inequality) & 0.1096 \\
+2 & $X$ (Urbanization) & 0.0209 \\
+3 & $M$ (Internet access) & 0.0184 \\
+4 & $T$ (Technology) & 0.0044 \\
+5 & $E$ (Education) & 0.0043 \\
 \midrule
-6--10 & $R, T, E, Y, M$ & $\approx$0.0000 \\
+6 & $R$ (Redistribution) & 0.0008 \\
+7--10 & $C, D, G, S$ (withdrawn) & 0.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \noindent\justifying
-\textbf{Sign stability under C-exclusion.} Under C-exclusion, Tier~A retains sign consistency for all 9 remaining coefficients (100\%), Tier~B retains 11 of 14 (79\%), and Tier~C retains 11 of 18 (61\%). The primary inferential tiers (A/B) maintain sign structure, while the exploratory Tier~C shows expected instability for higher-order interaction terms under thin support.
+\textbf{Sign stability under C-exclusion.} Under C-exclusion, Tier~A retains sign consistency for all 9 coefficients (100\%), Tier~B for all 14 (100\%), and Tier~C for all 18 (100\%). Because the exclusion removes only a constant column, this is expected rather than informative; it is reported for completeness, not as evidence.
 
 \noindent\justifying
-\textbf{Shared-source robustness.}
-Because $C$ and $Z$ both derive from WVS survey items, mechanical correlation may inflate $C$'s coefficient. Table~S18 reports that dropping $C$ reduces Tier~A $R^2$ by 0.270, confirming substantive predictive content beyond shared-source overlap. A 200-iteration permutation test produces $R^2$ in [0.7299, 0.7319], well below the observed value ($\approx$1.0; $p < 0.005$). Remaining predictors retain sign structure under $C$ exclusion (Tier~A: 9/9, 100\%; Tier~B: 11/14, 79\%). Definitive resolution requires independent outcome measurement (\S\,8.3).
-
-\noindent\justifying
-\textbf{Interpretation.} Dropping $C$ reduces Tier~A $R^2$ by 0.27, confirming that $C$ carries substantive predictive content beyond mechanical shared-source overlap. The 200-iteration permutation test produces $R^2$ values in [0.7299, 0.7319] for Tier~A, well below the observed value ($\approx$1.0), confirming that real $C$ produces predictive power significantly above the null distribution. The dominance of $C$ in the partial $R^2$ ranking reflects the in-sample training regime; out-of-sample cross-validation (reported elsewhere) distributes predictive contribution more evenly. Nevertheless, definitive resolution of shared-source concern requires an independent outcome measurement, identified as a priority extension (\S\,8.3 of the main text).
+\textbf{What the earlier version claimed, and why it no longer holds.}
+The previous draft reported that dropping $C$ reduced Tier~A $R^2$ by 0.270 and that a permutation test produced $R^2 \in [0.7299, 0.7319]$ against an observed value near 1.0. Both figures were artifacts of a panel in which $C$ was constructed from item A006, the first item of $Z$, so that ``excluding $C$'' was really ``excluding a rescaling of the outcome''. On the rebuilt panel the observed fits are $R^2_A=0.4569$, $R^2_B=0.5213$, $R^2_C=0.5678$, none of them near unity, and the partial ranking is led by inequality ($Y$, $\Delta R^2=0.1096$) rather than by cultural intensity. Definitive resolution of the shared-source concern still requires an independent outcome measurement not derived from WVS (\S\,8.3 of the main text) — the removal of $C$ from estimation sidesteps the confound rather than resolving it.
 
 \section*{Table S17 --- Tier~B Sign-Consistency Threshold Sweep Across LOO Country-Out Refits}
 
 \noindent\justifying
-Sweeping the sign-consistency threshold from 0.75 to 0.95 across 23 leave-one-country-out refits, 18 of 18 Tier~B parameters maintain $\geq$\,0.80 sign consistency. One parameter ($g$, government spending) falls below 0.85 with sign-consistency~=~0.826, and two parameters ($g$ and $e{:}s$) fall below 0.95. The minimum sign-consistency across Tier~B is 0.826 ($g$). No parameter exhibits sign-consistency below 0.80, supporting Tier~B's classification as primary inferential under the disclosed thin-support constraint (1.89~obs/param).
+Sweeping the sign-consistency threshold from 0.75 to 0.95 across 48 leave-one-country-out refits, 18 of 18 Tier~B parameters maintain $\geq$\,0.80 sign consistency. One parameter ($x_{\text{safe}}$) falls below 0.85 with sign-consistency~=~0.833, and no second parameter falls below 0.95. The minimum sign-consistency across Tier~B is 0.833 ($x_{\text{safe}}$). No parameter exhibits sign-consistency below 0.80, supporting Tier~B's classification as primary inferential under the disclosed thin-support constraint (4.83~obs/param). Source artifact: \nolinkurl{src/data/analysis/tier_b_stability_sweep.json}.
 
 \begin{table}[!htbp]
 \centering
@@ -1492,9 +1546,9 @@ Threshold & Pass / Total & Failing Parameters \\
 \midrule
 $\geq$\,0.75 & 18 / 18 & --- \\
 $\geq$\,0.80 & 18 / 18 & --- \\
-$\geq$\,0.85 & 17 / 18 & $g$ \\
-$\geq$\,0.90 & 17 / 18 & $g$ \\
-$\geq$\,0.95 & 16 / 18 & $g$, $e{:}s$ \\
+$\geq$\,0.85 & 17 / 18 & $x_{\text{safe}}$ \\
+$\geq$\,0.90 & 17 / 18 & $x_{\text{safe}}$ \\
+$\geq$\,0.95 & 17 / 18 & $x_{\text{safe}}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1502,27 +1556,27 @@ $\geq$\,0.95 & 16 / 18 & $g$, $e{:}s$ \\
 \begin{table}[!htbp]
 \centering
 \small
-\caption*{\textbf{Panel~B: Individual Parameter Sign-Consistency (Country-Out LOO, 23~folds)}}
+\caption*{\textbf{Panel~B: Individual Parameter Sign-Consistency (Country-Out LOO, 48~folds)}}
 \begin{tabular}{lcc}
 \toprule
 Parameter & Sign Consistency & Passes $\geq$\,0.85? \\
 \midrule
 intercept       & 1.000 & \checkmark \\
-$x_{\text{safe}}$        & 0.957 & \checkmark \\
+$x_{\text{safe}}$        & 0.833 & $\times$ \\
 $y_{\text{safe}}$        & 1.000 & \checkmark \\
 $c_{\text{std}}$         & 1.000 & \checkmark \\
 $m$              & 1.000 & \checkmark \\
 $t$              & 1.000 & \checkmark \\
 $d$              & 1.000 & \checkmark \\
-$g$              & 0.826 & $\times$ \\
-$e$              & 0.957 & \checkmark \\
+$g$              & 1.000 & \checkmark \\
+$e$              & 1.000 & \checkmark \\
 $s$              & 1.000 & \checkmark \\
-$r$              & 1.000 & \checkmark \\
-$y_{\text{safe}}{:}r$    & 1.000 & \checkmark \\
-$t{:}r$          & 1.000 & \checkmark \\
-$x_{\text{safe}}{:}y_{\text{safe}}$ & 1.000 & \checkmark \\
+$r$              & 0.979 & \checkmark \\
+$y_{\text{safe}}{:}r$    & 0.958 & \checkmark \\
+$t{:}r$          & 0.979 & \checkmark \\
+$x_{\text{safe}}{:}y_{\text{safe}}$ & 0.958 & \checkmark \\
 $c_{\text{std}}{:}m$     & 1.000 & \checkmark \\
-$e{:}s$          & 0.913 & \checkmark \\
+$e{:}s$          & 1.000 & \checkmark \\
 $c_{\text{std}}^2$       & 1.000 & \checkmark \\
 $m^2$            & 1.000 & \checkmark \\
 \bottomrule
@@ -1530,7 +1584,7 @@ $m^2$            & 1.000 & \checkmark \\
 \end{table}
 
 \noindent\justifying
-\textbf{Verdict.} All 18 Tier~B parameters maintain $\geq$\,0.80 sign-consistency across LOO refits. The weakest parameter ($g$, 0.826) remains above the 0.80 demotion threshold. No reclassification to exploratory (Tier~C) is warranted. The two parameters falling below 0.95 ($g$ at 0.826 and $e{:}s$ at 0.913) reflect expected variability under thin support (1.89~obs/param) rather than systematic instability.
+\textbf{Verdict.} All 18 Tier~B parameters maintain $\geq$\,0.80 sign-consistency across LOO refits. The weakest parameter ($x_{\text{safe}}$, 0.833) remains above the 0.80 demotion threshold. No reclassification to exploratory (Tier~C) is warranted. Four of the six zero-variance channels ($c_{\text{std}}$, $d$, $g$, $s$) and their interactions return exactly 1.000 because they are constant columns, not because they are stable estimates; only the estimated structural terms carry information, and among those the weakest is $x_{\text{safe}}$ at 0.833, which reflects expected variability under thin support (4.83~obs/param) rather than systematic instability.
 
 \section*{Table S19 --- Methodological Comparison: Current Workflow vs.\ Representative Approaches in Computational Social Science}
 

@@ -1,8 +1,7 @@
 {
   "schema_version": "phase1.data_code_provenance.v1",
-  "generated_at": "2026-03-06T00:00:00.000Z",
+  "generated_at": "2026-11-09T11:30:00.000Z",
   "purpose": "Machine-readable provenance inventory for all data sources and code artifacts used in the Bounded-Belief Analytics study. Documents license terms, redistribution status, attribution requirements, and compliance risk flags.",
-
   "data_sources": [
     {
       "id": "worldbank_wdi",
@@ -23,7 +22,12 @@
       "redistribution_allowed": true,
       "attribution_required": true,
       "attribution_text": "Source: World Development Indicators, The World Bank (CC BY 4.0).",
-      "variables_used": ["urban_pop_pct", "gdp_ppp", "internet_users_pct", "population"],
+      "variables_used": [
+        "urban_pop_pct",
+        "gdp_ppp",
+        "internet_users_pct",
+        "population"
+      ],
       "risk_flag": "none"
     },
     {
@@ -42,7 +46,9 @@
       "redistribution_allowed": true,
       "attribution_required": true,
       "attribution_text": "Source: World Development Indicators, The World Bank (CC BY 4.0).",
-      "variables_used": ["internet_users_pct"],
+      "variables_used": [
+        "internet_users_pct"
+      ],
       "risk_flag": "none"
     },
     {
@@ -62,7 +68,10 @@
       "redistribution_note": "OECD permits inclusion of limited extracts in research repositories with proper citation. Bulk redistribution may require explicit permission. The files included are analytical extracts, not full database dumps.",
       "attribution_required": true,
       "attribution_text": "Source: OECD Income Distribution Database (IDD), https://stats.oecd.org.",
-      "variables_used": ["gini_disposable", "gini_market"],
+      "variables_used": [
+        "gini_disposable",
+        "gini_market"
+      ],
       "risk_flag": "low",
       "risk_detail": "Included files are analytical extracts with attribution. Bulk redistribution rights should be confirmed with OECD if challenge arises."
     },
@@ -81,7 +90,9 @@
       "redistribution_note": "Same terms as OECD IDD. Analytical extracts included with citation.",
       "attribution_required": true,
       "attribution_text": "Source: OECD Social Expenditure Database (SOCX), https://www.oecd.org/social/expenditure.htm.",
-      "variables_used": ["social_spending_pct_gdp"],
+      "variables_used": [
+        "social_spending_pct_gdp"
+      ],
       "risk_flag": "low",
       "risk_detail": "Same conditional redistribution terms as OECD IDD."
     },
@@ -100,7 +111,9 @@
       "redistribution_note": "Derived redistribution metrics from OECD IDD with attribution.",
       "attribution_required": true,
       "attribution_text": "Derived from OECD Income Distribution Database (IDD).",
-      "variables_used": ["redistribution_effectiveness"],
+      "variables_used": [
+        "redistribution_effectiveness"
+      ],
       "risk_flag": "low"
     },
     {
@@ -135,7 +148,9 @@
       "redistribution_note": "WVS raw microdata redistribution is restricted. The included file was obtained under the standard academic download agreement. Reviewers and replicators must obtain their own copy from the WVS website. The repository should document the exact version and download path.",
       "attribution_required": true,
       "attribution_text": "Inglehart, R. et al. (eds.). World Values Survey: All Rounds – Country-Pooled Datafile. Madrid, Spain & Vienna, Austria: JD Systems Institute & WVSA Secretariat.",
-      "variables_used": ["WVS-derived cultural/belief constructs"],
+      "variables_used": [
+        "WVS-derived cultural/belief constructs"
+      ],
       "risk_flag": "high",
       "risk_detail": "REDISTRIBUTION RESTRICTED. WVS microdata files should not be redistributed in a public repository. Authors must either (a) exclude raw WVS CSVs from the public repository and provide download instructions, or (b) obtain explicit redistribution permission from WVS Association."
     },
@@ -154,7 +169,9 @@
       "redistribution_note": "Same redistribution restriction as WVS Time Series. Raw microdata must not be publicly redistributed without permission.",
       "attribution_required": true,
       "attribution_text": "Haerpfer, C. et al. (eds.). World Values Survey: Round Seven – Country-Pooled Datafile Version 6.0. Madrid, Spain & Vienna, Austria: JD Systems Institute & WVSA Secretariat.",
-      "variables_used": ["WVS Wave 7 cultural/belief items"],
+      "variables_used": [
+        "WVS Wave 7 cultural/belief items"
+      ],
       "risk_flag": "high",
       "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS Time Series."
     },
@@ -178,7 +195,9 @@
       "redistribution_note": "Individual wave microdata files carry the same redistribution restriction. Raw files should be excluded from public repositories or permission obtained.",
       "attribution_required": true,
       "attribution_text": "World Values Survey Association. World Values Survey, Waves 1–6.",
-      "variables_used": ["Cultural/belief items for longitudinal construct aggregation"],
+      "variables_used": [
+        "Cultural/belief items for longitudinal construct aggregation"
+      ],
       "risk_flag": "high",
       "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS Time Series."
     },
@@ -196,7 +215,9 @@
       "redistribution_note": "Joint EVS/WVS microdata is subject to the same redistribution restrictions as standalone WVS data. Replicators must download from the official portal.",
       "attribution_required": true,
       "attribution_text": "EVS/WVS (2020). European Values Study and World Values Survey: Joint EVS/WVS 2017-2022 Dataset (Joint EVS/WVS). GESIS Data Archive.",
-      "variables_used": ["Joint cultural/belief items"],
+      "variables_used": [
+        "Joint cultural/belief items"
+      ],
       "risk_flag": "high",
       "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS data."
     },
@@ -215,7 +236,9 @@
       "redistribution_allowed": true,
       "attribution_required": true,
       "attribution_text": "Source: UNDP Human Development Report Office, Human Development Index (HDI) data.",
-      "variables_used": ["hdi"],
+      "variables_used": [
+        "hdi"
+      ],
       "risk_flag": "none"
     },
     {
@@ -232,7 +255,10 @@
       "redistribution_allowed": true,
       "attribution_required": true,
       "attribution_text": "Sundberg, Ralph, and Erik Melander. 'Introducing the UCDP Georeferenced Event Dataset.' Journal of Peace Research 50(4). Pettersson, Therese (2023). UCDP/PRIO Armed Conflict Dataset Codebook.",
-      "variables_used": ["conflict_deaths", "conflict_events"],
+      "variables_used": [
+        "conflict_deaths",
+        "conflict_events"
+      ],
       "risk_flag": "none"
     },
     {
@@ -251,29 +277,34 @@
       "redistribution_note": "EM-DAT data extracts are provided under a custom academic license. The processed summary (emdat_disasters.csv) is an aggregated derivative. Raw custom-request extracts may require CRED permission for public redistribution.",
       "attribution_required": true,
       "attribution_text": "EM-DAT, CRED / UCLouvain, Brussels, Belgium – www.emdat.be (D. Guha-Sapir).",
-      "variables_used": ["disaster_count", "disaster_deaths"],
+      "variables_used": [
+        "disaster_count",
+        "disaster_deaths"
+      ],
       "risk_flag": "medium",
       "risk_detail": "Processed aggregates are lower risk. Raw custom-request XLSX files may require separate redistribution permission from CRED."
     }
   ],
-
   "derived_data": [
     {
       "id": "panel_model_data",
-      "name": "Upstream Integrated Country–Year Panel",
-      "files": ["rawdata/panel_model_data.csv", "rawdata/panel_model_data.json"],
-      "description": "22,096-row merged panel (288 countries, 1990–2023) constructed from all upstream sources. Machine-readable provenance metadata in JSON companion.",
+      "name": "Upstream Integrated Country-Year Panel (retired)",
+      "files": [
+        "rawdata/panel_model_data.csv"
+      ],
+      "description": "Historical 22,096-row merged panel (288 countries, 1990-2023) built from all upstream sources. No longer the analysis input; retained only for provenance of the retired pipeline.",
       "redistribution_note": "Contains columns derived from WVS microdata aggregation. Public redistribution should be reviewed against WVS terms since country-year aggregates (not individual microdata) may be permissible."
     },
     {
       "id": "canonical_panel",
-      "name": "Canonical Analytical Panel (23 countries, 630 rows)",
-      "files": ["public/data/panel_canonical_v2.csv"],
-      "description": "Complete-case analytical sample (2000–2022). Contains only country-year aggregated values — no individual-level microdata.",
+      "name": "Canonical Analytical Panel (48 countries, 87 complete-case country-years)",
+      "files": [
+        "public/data/panel_canonical_v2.csv"
+      ],
+      "description": "Complete-case analytical sample: 87 country-year observations across 48 countries, 1990-2022. One row per country-year; no scenario replication. Contains only country-year aggregated values, no individual-level microdata.",
       "redistribution_note": "Country-year aggregates derived from survey data. Aggregation level is above individual respondent data, which reduces redistribution risk. However, underlying WVS terms should be reviewed for derived-aggregate policies."
     }
   ],
-
   "code_artifacts": {
     "license": "MIT",
     "documentation_license": "CC BY 4.0",
@@ -308,7 +339,6 @@
       }
     ]
   },
-
   "compliance_summary": {
     "total_sources": 13,
     "freely_redistributable": 5,

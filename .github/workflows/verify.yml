@@ -76,6 +76,9 @@ jobs:
       - name: Check section references
         run: npm run check:section-references
 
+      - name: Verify construct audit against item-level data (skips when absent)
+        run: npm run verify:constructs
+
       - name: Deterministic reproducibility gate
         run: npm run ci:gate
 

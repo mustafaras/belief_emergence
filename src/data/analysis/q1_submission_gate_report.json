@@ -1,12 +1,12 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-07T15:38:40.595Z",
-  "verdict": "NOT_READY",
+  "generatedAtIso": "2026-11-09T11:29:47.119Z",
+  "verdict": "CONDITIONAL",
   "summary": {
     "totalChecks": 24,
-    "passed": 19,
-    "failed": 5,
-    "criticalFailed": 4,
+    "passed": 23,
+    "failed": 1,
+    "criticalFailed": 0,
     "majorFailed": 1,
     "minorFailed": 0
   },
@@ -15,25 +15,25 @@
       "id": "cq-tests",
       "category": "Code Quality",
       "label": "Test suite passes",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "Test suite failed — fix before submission"
+      "detail": "All tests passed"
     },
     {
       "id": "cq-lint",
       "category": "Code Quality",
       "label": "Lint passes (zero errors)",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "Lint errors detected — fix before submission"
+      "detail": "Zero lint errors"
     },
     {
       "id": "cq-build",
       "category": "Code Quality",
       "label": "Build succeeds",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "Build failed — fix before submission"
+      "detail": "Build succeeded"
     },
     {
       "id": "doc-manu",
@@ -151,9 +151,9 @@
       "id": "repro-ci",
       "category": "Reproducibility",
       "label": "CI reproducibility gate passes",
-      "pass": false,
+      "pass": true,
       "severity": "critical",
-      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
+      "detail": "Full ci:gate passed (7 phases)"
     },
     {
       "id": "val-identity",
@@ -206,30 +206,6 @@
   ],
   "blockers": [
     {
-      "id": "cq-tests",
-      "severity": "critical",
-      "label": "Test suite passes",
-      "detail": "Test suite failed — fix before submission"
-    },
-    {
-      "id": "cq-lint",
-      "severity": "critical",
-      "label": "Lint passes (zero errors)",
-      "detail": "Lint errors detected — fix before submission"
-    },
-    {
-      "id": "cq-build",
-      "severity": "critical",
-      "label": "Build succeeds",
-      "detail": "Build failed — fix before submission"
-    },
-    {
-      "id": "repro-ci",
-      "severity": "critical",
-      "label": "CI reproducibility gate passes",
-      "detail": "ci:gate detected drift or failure — run npm run ci:gate for details"
-    },
-    {
       "id": "val-canonic-reported",
       "severity": "major",
       "label": "Canonical (fixed-model) OOS R2 is non-negative or explicitly undefined",
@@ -270,7 +246,7 @@
     {
       "id": "h-support",
       "category": "Claim Strength",
-      "question": "Are support-density boundaries (n=34 country-years) explicitly acknowledged for high-dimensional terms?",
+      "question": "Are support-density boundaries (n=87 country-years) explicitly acknowledged for high-dimensional terms?",
       "signedOff": false
     },
     {

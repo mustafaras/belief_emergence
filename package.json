@@ -33,7 +33,8 @@
     "q1:gate": "tsx scripts/q1_submission_gate.ts",
     "verify:all": "npm run audit:search && npm run test:run && npm run lint && npm run build",
     "build:wvs-constructs": "tsx scripts/build_wvs_constructs.ts",
-    "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run"
+    "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run",
+    "verify:constructs": "tsx scripts/verify_constructs.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

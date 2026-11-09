@@ -1,52 +1,55 @@
 {
   "schemaVersion": "phase1.abstract_screening_pack.v1",
-  "generatedAtIso": "2026-03-06T09:30:00.000Z",
+  "generatedAtIso": "2026-11-09T11:32:00.000Z",
   "source": {
-    "scope": "Prompt 14 abstract/title/keywords optimization",
+    "scope": "Abstract/title/keywords variants reconciled with the current manuscript (measurement-audit framing)",
     "manuscriptPaths": [
-      "BE_paper_latest/main/main.tex",
-      "BE_paper_latest/highlights.tex",
-      "BE_paper_latest/titlepage.tex"
-    ]
+      "paper/main/main.tex",
+      "paper/titlepage.tex",
+      "paper/highlights.tex"
+    ],
+    "sampleScope": "87 complete-case country-years, 48 countries, 1990-2022",
+    "evidenceScope": "WVS Trend File 1981-2022: 442,026 respondents, 305 country-years scanned; constructs Z (alpha 0.8187), C (0.3482), D (-1.2285), S (uncomputable)"
   },
   "selectedVariantId": "balanced",
-  "selectedTitle": "Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence: A Support-Aware Visual Analytics Framework",
-  "selectedSubtitle": "Regime-Diagnostic Saturating Models for Country Panels",
-  "selectedRunningHead": "Regime-Diagnostic Saturating Models for Country Panels",
+  "selectedTitle": "Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models",
+  "selectedSubtitle": "Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels",
+  "selectedRunningHead": "Measurement Validity Before Model Geometry",
   "selectedKeywords": [
-    "computational social science",
-    "macro-urban analytics",
-    "urbanization",
-    "inequality",
-    "bounded response modeling",
-    "comparative panel data",
+    "measurement validity",
+    "composite indicators",
+    "construct reliability",
+    "Cronbach alpha",
+    "support-constrained inference",
     "out-of-sample validation",
-    "reproducible visual analytics",
-    "support-aware inference"
+    "reproducible research",
+    "country panel",
+    "World Values Survey"
   ],
   "recommendedJournals": [
-    "EPJ Data Science",
-    "Nature Human Behaviour"
+    "Social Indicators Research",
+    "Big Data & Society",
+    "PLOS ONE"
   ],
-  "selectionRationale": "The balanced variant was selected because it preserves explicit support limits, Tier A/B versus Tier C evidence discipline, and non-causal boundaries while remaining concise enough for first-pass editor screening. The title stack is method-forward for EPJ Data Science but still legible for interdisciplinary desk review.",
+  "selectionRationale": "The balanced variant is selected because it leads with the protocol contribution, states the construct failures and the baseline loss without burying them, and names the sample precisely. It stays legible for an indicator-methodology desk while carrying the evidence a data-society editor expects.",
   "abstractVariants": [
     {
       "id": "conservative",
       "label": "Conservative",
-      "editorUse": "Maximum inferential restraint; strongest fit when support limits must dominate the first read.",
-      "text": "Comparative urban analysis often relies on sparse country-year indicators that make nonlinear claims difficult to audit. We present a support-aware workflow for bounded nonlinear modeling of belief emergence under urbanization and inequality. Using a canonical panel of 23 countries (630 scenario-replicated rows, 2000-2022; 34 unique country-years after collapsing support), we define exposure as S = X^alpha Y^beta exp(Phi) and map it to a bounded outcome Z = S/(S+k). The framework combines response-surface inspection, empirical-support overlays, uncertainty diagnostics, refit out-of-sample validation, and deterministic export of evidence artifacts. Primary claims are restricted to Tier A/B evidence from leave-one-country-out and rolling-origin refits, while Tier C higher-complexity terms are treated as exploratory sensitivity diagnostics only. The contribution is methodological rather than causal: the model makes transition geometry, saturation, and local sensitivity auditable under thin support, and findings should be read as support-conditioned comparative regularities within the observed panel rather than as universal behavioral laws or policy-effect estimates."
+      "editorUse": "Use when the editor values a narrow, fully checkable methods claim and low desk-reject risk.",
+      "text": "Applied work on bounded social indicators routinely reports model fit before establishing that the constructs being modelled are measurable. This paper reverses that order and reports what the reversal cost. Three composite constructs underpinning a published bounded nonlinear model of country-panel belief intensity were re-derived from item-level World Values Survey data: cultural intensity reached Cronbach alpha = 0.35 and social atomization alpha = -1.23, so neither measures a single dimension, and social support could not be computed in any country-year. In the published panel the outcome was also an exact rescaling of the cultural-intensity predictor (corr = 1.0), which made every reported out-of-sample metric algebraically guaranteed. On the rebuilt panel of 87 complete-case country-years across 48 countries (1990-2022), a saturating model reaches leave-one-country-out R2 = 0.10, below the 0.20 of an ordinary linear regression on identical rows and folds. Interpretation is descriptive and non-causal."
     },
     {
       "id": "balanced",
       "label": "Balanced",
-      "editorUse": "Selected variant; best blend of method visibility, readability, and evidence discipline for Q1 editor screening.",
-      "text": "Macro-urban decision support often depends on sparse country-year evidence, yet comparative pipelines rarely make support limits, uncertainty, and nonlinear response geometry visible within the same workflow. We introduce a support-aware bounded nonlinear modeling framework for belief emergence under urbanization and inequality and pair it with diagnostic visual analytics, refit out-of-sample validation, and deterministic evidence export. The analysis uses a canonical panel of 23 countries (630 scenario-replicated rows, 2000-2022) that collapses to 34 unique country-years of complete-case support. Effective exposure is defined as S = X^alpha Y^beta exp(Phi) and mapped to a bounded outcome through Z = S/(S+k), making transition-ridge sensitivity and saturation explicit. Primary claims are anchored to Tier A/B refit out-of-sample evidence from leave-one-country-out (23 folds) and rolling-origin (9 folds) validation, while Tier C higher-complexity terms are retained only as exploratory sensitivity diagnostics. The contribution is a reproducible comparative-inference workflow that makes model geometry, empirical support, and validation status auditable from preprocessing to exported figures. Interpretation remains descriptive, non-causal, and limited to the observed support."
+      "editorUse": "Default. Leads with the protocol contribution, keeps the negative results visible, and states the sample precisely.",
+      "text": "Measurement precedes modelling: a coefficient on a composite construct is interpretable only if that construct measures something. We turn that principle into an executable audit protocol with four hard gates - construct reliability, item overlap, design-matrix rank and a baseline comparison - and apply it to a published bounded nonlinear framework for country-panel belief intensity. Three of four candidate composites fail. Cultural intensity (alpha = 0.35) and social atomization (alpha = -1.23) are not unidimensional; social support is uncomputable from the harmonised source. In the original panel the outcome was additionally an exact rescaling of a predictor (corr = 1.0). The rebuilt panel contains 87 complete-case country-years across 48 countries (1990-2022). With the surviving constructs, the saturating map reaches leave-one-country-out R2 = 0.10 against 0.20 for a linear regression on the same rows, and fixed-coefficient country-out validation is negative in every tier. The contribution is the reproducible audit, not the response surface: every gate fails on the original panel and each failure is regenerable from committed artifacts. Interpretation remains descriptive and non-causal."
     },
     {
       "id": "high_impact_bounded",
       "label": "High-impact but bounded",
-      "editorUse": "More assertive opener while preserving non-causal and support-conditioned limits.",
-      "text": "Reliable macro-urban inference requires more than accurate predictions: editors and reviewers need to see where a nonlinear model is supported, where it saturates, and how strongly conclusions survive refit validation. We present a support-aware bounded nonlinear framework for belief emergence under urbanization and inequality that integrates response-surface diagnostics, uncertainty auditing, and deterministic evidence export in one reproducible workflow. In a canonical panel of 23 countries (630 scenario-replicated rows; 34 unique country-years of effective support), exposure is modeled as S = X^alpha Y^beta exp(Phi) and transformed to Z = S/(S+k), yielding auditable regime geometry with maximal sensitivity near the transition ridge. Primary empirical statements are restricted to Tier A/B out-of-sample refit evidence under leave-one-country-out and rolling-origin protocols, whereas Tier C full-complexity structure is explicitly downgraded to exploratory sensitivity analysis. The paper's contribution is therefore not a universal behavioral law but a transparent computational method for support-conditioned macro-comparative inference under thin data and explicit non-causal boundaries."
+      "editorUse": "Use only where a methodological correction is itself the news; strongest for indicator and data-society venues.",
+      "text": "A published class of bounded response-surface models for country-panel belief intensity rests on composite constructs that were never tested for measurability. Auditing them on item-level World Values Survey data withdraws three of four: cultural intensity (alpha = 0.35) and social atomization (alpha = -1.23) fail unidimensionality, and social support cannot be computed at all. Worse, the original panel's outcome was an exact rescaling of the cultural-intensity predictor (corr = 1.0), so its near-unity R2 was arithmetic rather than empirical. Rebuilding the panel to 87 complete-case country-years across 48 countries (1990-2022) leaves a saturating model that does not beat a linear baseline (leave-one-country-out R2 = 0.10 versus 0.20) and whose fixed-coefficient predictions are worse than the held-out country means. We report this as the finding. The reusable contribution is a four-gate audit protocol - reliability, item overlap, design rank, baseline comparison - that any composite-indicator pipeline can adopt, and that would have blocked the original model at release."
     }
   ]
 }

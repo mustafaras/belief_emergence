@@ -21,7 +21,7 @@
 Install JS dependencies once:
 
 ```bash
-cd BE_app
+# from the repository root — the app lives at the root, not in a subdirectory
 npm ci            # clean install from lockfile
 ```
 
@@ -29,23 +29,29 @@ npm ci            # clean install from lockfile
 
 ## 2 Canonical Data Fingerprint
 
-All scripts load `public/data/panel_model_data.csv` via a SHA-256 integrity
+All scripts load `public/data/panel_canonical_v2.csv` via a SHA-256 integrity
 gate. If the hash does not match, every script aborts before writing output.
 
 | Property | Value |
 |----------|-------|
-| File     | `public/data/panel_model_data.csv` |
-| SHA-256  | `2E5B4B0A56601A6EB4C4AAC38D9762DC2A390EF2F9135CE14E8FDB3FA6473AFF` |
-| Rows     | 630 country-year observations |
+| File     | `public/data/panel_canonical_v2.csv` |
+| SHA-256  | `1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839` |
+| Rows     | 87 complete-case country-year observations |
+| Countries| 48 |
+| Years    | 1990–2022 |
+
+The row count equals the number of unique `(iso3, year)` pairs — there is no
+scenario replication. One row per country-year is the invariant this gate
+protects.
 
 To verify manually:
 
 ```bash
 # PowerShell
-(Get-FileHash -Algorithm SHA256 public/data/panel_model_data.csv).Hash
+(Get-FileHash -Algorithm SHA256 public/data/panel_canonical_v2.csv).Hash
 
 # Bash / macOS
-shasum -a 256 public/data/panel_model_data.csv
+shasum -a 256 public/data/panel_canonical_v2.csv
 ```
 
 ---
@@ -129,20 +135,22 @@ drift was detected.
 
 ## 6 Expected Canonical Metrics
 
-After a successful run of Phase 1, the following values must appear in
-`src/data/analysis/metrics_authoritative.json`:
+After a successful run of `npm run generate:analysis`, the following values
+must appear in `src/data/analysis/metrics_authoritative.json`:
 
 | Metric          | Expected value |
 |-----------------|----------------|
-| n               | 630            |
-| R²              | 0.8461         |
-| Correlation     | 0.9488         |
-| MAE             | 0.1005         |
-| RMSE            | 0.1212         |
-| Bias            | −0.0699        |
+| n               | 87             |
+| R²              | 0.3854         |
+| Correlation     | 0.6311         |
+| MAE             | 0.1498         |
+| RMSE            | 0.1893         |
+| Bias            | 0.0243         |
 
 Any deviation indicates a data-integrity or code-path change and must be
-investigated before proceeding.
+investigated before proceeding. These are in-sample descriptive metrics on the
+87 complete-case country-years; the inferential evidence lives in
+`cv_country_out.json` and `cv_rolling_origin.json`.
 
 ---
 
@@ -152,7 +160,7 @@ After all artifacts are regenerated and validated, the manuscript can be
 recompiled:
 
 ```bash
-cd ../BE_paper_latest/main
+cd paper/main
 pdflatex -interaction=nonstopmode main.tex
 biber main
 pdflatex -interaction=nonstopmode main.tex
@@ -165,8 +173,11 @@ pdflatex -interaction=nonstopmode supplementary_materials.tex
 pdflatex -interaction=nonstopmode supplementary_materials.tex
 ```
 
-Expected output: `main.pdf` (≈ 24 pages), `supplementary_materials.pdf`
-(≈ 30 pages).
+Expected output: `paper/main/main.pdf` and
+`paper/supplementary/supplementary_materials.pdf`. These are the two files the
+CI `build-paper` job compiles; the copies at `paper/main.tex` and
+`paper/supplementary_materials.tex` are stale by design and are not the source
+of record.
 
 ---
 
@@ -186,6 +197,7 @@ Expected output: `main.pdf` (≈ 24 pages), `supplementary_materials.pdf`
 | `generate:phase1-validation` | `failure_log.json` | Section 5 failure documentation |
 | `generate:phase1-validation` | `construct_validity_invariance.json` | Supplementary construct validity |
 | `generate:lockbox-holdout` | `lockbox_holdout.json` | Section 4.4 holdout evaluation |
+| `verify:constructs` | — (verifies `rawdata/wvs_construct_audit.json`) | Re-derives every construct from raw microdata and fails on drift |
 
 ---
 
@@ -277,10 +289,10 @@ npm run replicate
 
 | Symptom | Likely cause | Fix |
 |---------|-------------|-----|
-| "SHA-256 mismatch" on any script | `panel_model_data.csv` was modified or corrupted | Restore from version control |
+| "SHA-256 mismatch" on any script | `panel_canonical_v2.csv` was modified or corrupted | Restore from version control |
 | `generate:phase1-validation` timeout | Large cross-validation matrix | Increase Node.js heap: `NODE_OPTIONS=--max-old-space-size=8192` |
-| `check:manuscript-consistency` failure | Manuscript text edited without regenerating artifacts | Re-run Phase 1 first, then Phase 2 |
-| Metric drift (e.g. R² ≠ 0.8461) | Code-path change in production mapping | Diff against last known-good commit |
+| `check:manuscript-consistency` failure | Manuscript text edited without regenerating artifacts | Re-run `npm run generate:analysis` then `npm run generate:phase1-validation` |
+| Metric drift (e.g. R² ≠ 0.3854) | Code-path change in production mapping | Diff against last known-good commit |
 | `npm run replicate` exits at lint | New linting rule or unresolved warning | Run `npm run lint` standalone to inspect |
 
 ---
@@ -288,17 +300,24 @@ npm run replicate
 ## 11 File Manifest
 
 ```
-BE_app/
+.
 ├── scripts/
 │   ├── replicate.ts                          # Single-command entrypoint (§ 4)
 │   ├── ci_gate.ts                            # Deterministic CI gate (§ 5)
+│   ├── build_wvs_constructs.ts               # Construct builder (config-driven)
+│   ├── verify_constructs.ts                  # Independent construct verification
 │   ├── generate_authoritative_analysis.ts    # Phase 1a
 │   ├── generate_headline_metrics.ts          # Phase 1b
 │   ├── generate_phase1_validation.ts         # Phase 1c
+│   ├── generate_c_dominance_sensitivity.ts   # Table S18
+│   ├── generate_2006_outlier_sensitivity.ts  # Table S14
+│   ├── generate_tier_b_stability_sweep.ts    # Table S17
 │   ├── generate_lockbox_holdout.ts           # Phase 3
 │   ├── check_manuscript_consistency.ts       # Phase 2c
 │   ├── check_section_references.ts           # Phase 2a
 │   └── check_no_hardcoded_headline_metrics.ts # Phase 2b
+├── config/
+│   └── wvs_items.yaml                        # Construct definitions (source of truth)
 ├── src/data/
 │   ├── analysis/
 │   │   ├── metrics_authoritative.json
@@ -316,7 +335,7 @@ BE_app/
 │   └── metrics/
 │       └── headline_metrics_authoritative.json
 ├── public/data/
-│   └── panel_model_data.csv                  # Canonical input (SHA-256 gated)
+│   └── panel_canonical_v2.csv                # Canonical input (SHA-256 gated)
 ├── REPLICATION_RUNBOOK.md                    # This file
 └── package.json                              # All npm scripts
 ```
