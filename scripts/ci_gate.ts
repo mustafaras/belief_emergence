@@ -34,6 +34,7 @@ const EXPECTED_SCHEMAS: Record<string, { field: string; value: string | number }
   'cv_country_out.json':                { field: 'schemaVersion', value: 'phase1.cv_country_out.v1' },
   'cv_kfold.json':                      { field: 'schemaVersion', value: 'phase1.cv_kfold.v1' },
   'functional_form_comparison.json':    { field: 'schemaVersion', value: 'phase1.functional_form_comparison.v1' },
+  'construct_prevalence.json':          { field: 'schemaVersion', value: 'phase1.construct_prevalence.v1' },
   'cv_rolling_origin.json':             { field: 'schemaVersion', value: 'phase1.cv_rolling_origin.v1' },
   'prediction_interval_coverage.json':  { field: 'schemaVersion', value: 'phase1.prediction_interval_coverage.v2' },
   'model_ladder_metrics.json':          { field: 'schemaVersion', value: 'phase1.model_ladder.v1' },
@@ -59,13 +60,24 @@ interface MetricExpectation {
 // v2 panel. The previous values (n=630, r2=0.8461) belonged to the model in
 // which the predictor C was an exact rescaling of the outcome; they are not a
 // target to return to. See docs/KNOWN_ISSUES.md KI-01 and KI-13.
+/**
+ * Expected canonical metrics.
+ *
+ * These are a regression guard, not a target: they pin whatever the committed
+ * panel currently produces so that an accidental change to the data path is
+ * caught. When the panel itself changes deliberately (here: the WDI Gini
+ * backfill took the sample from 87 to 126 cells, which legitimately moves every
+ * number), update this block in the same commit that changes the panel and say
+ * so in the message. The one thing that must never happen is editing this list
+ * to make a failing build green without a corresponding data change.
+ */
 const CANONICAL_METRICS: MetricExpectation[] = [
-  { key: 'n',    expected: 87,      tolerance: 0 },
-  { key: 'r2',   expected: 0.3854,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.6311,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1498,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.1893,  tolerance: 0.0001 },
-  { key: 'bias', expected: 0.0243,  tolerance: 0.0001 },
+  { key: 'n',    expected: 126,     tolerance: 0 },
+  { key: 'r2',   expected: 0.3588,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6392,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1631,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.2101,  tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0461,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -78,6 +90,7 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'cv_country_out.json'),
   path.join(ANALYSIS, 'cv_kfold.json'),
   path.join(ANALYSIS, 'functional_form_comparison.json'),
+  path.join(ANALYSIS, 'construct_prevalence.json'),
   path.join(ANALYSIS, 'cv_rolling_origin.json'),
   path.join(ANALYSIS, 'prediction_interval_coverage.json'),
   path.join(ANALYSIS, 'model_ladder_metrics.json'),
@@ -93,7 +106,7 @@ const REQUIRED_ARTIFACTS = [
 /*  Canonical data fingerprint                                         */
 /* ------------------------------------------------------------------ */
 
-const CANONICAL_PANEL_SHA256 = '1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839';
+const CANONICAL_PANEL_SHA256 = '40DB5B83BC12E997A086556E4C988C4C3BDAFFABDC17B97FB3224FC4A232B24C';
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                          */

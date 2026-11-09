@@ -1,12 +1,13 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-09T12:31:30.476Z",
+  "generatedAtIso": "2026-11-09T14:53:37.926Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
-    "macro": "rawdata/panel_model_data.csv"
+    "macro": "rawdata/panel_model_data.csv",
+    "giniBackfill": "rawdata/WDICSV.csv (SI.POV.GINI)"
   },
-  "rows": 87,
-  "countries": 48,
+  "rows": 126,
+  "countries": 66,
   "yearRange": [
     1990,
     2022
@@ -22,11 +23,11 @@
   "droppedConstructs": [
     {
       "out": "C",
-      "reason": "alpha 0.33 — not a unidimensional construct (KI-09)"
+      "reason": "alpha 0.33 \u2014 not a unidimensional construct (KI-09)"
     },
     {
       "out": "D",
-      "reason": "alpha -0.42 — items disagree (KI-10)"
+      "reason": "alpha -0.42 \u2014 items disagree (KI-10)"
     },
     {
       "out": "S",
@@ -37,12 +38,24 @@
       "reason": "disposable-income Gini unavailable outside the OECD sample"
     }
   ],
-  "observationsPerParameter": 12.43,
+  "observationsPerParameter": 18,
   "attrition": {
     "noIso": 11,
     "noMacro": 8,
-    "missingCovariate": 181,
+    "missingCovariate": 142,
     "missingOutcome": 18
   },
-  "validityAuditPassed": true
+  "validityAuditPassed": true,
+  "giniBackfill": {
+    "indicator": "SI.POV.GINI",
+    "window_years": 2,
+    "cellsRecovered": 79,
+    "exactYearRecoveries": 0,
+    "affineToMacro": {
+      "slope": 0.164028,
+      "intercept": -5.413122,
+      "maxResidual": 0.0
+    },
+    "sensitivityArtifact": "src/data/analysis/gini_window_sensitivity.json"
+  }
 }

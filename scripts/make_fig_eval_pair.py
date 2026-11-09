@@ -111,8 +111,11 @@ def main() -> None:
             bars_y.append(sum(ys) / len(ys))
             lo.append(ys[int(0.25 * (len(ys) - 1))])
             hi.append(ys[int(0.75 * (len(ys) - 1))])
-        lower = [y - l for y, l in zip(bars_y, lo)]
-        upper = [h - y for y, h in zip(bars_y, hi)]
+        # Mean of a decile need not lie inside its own quartile band when the
+        # band is degenerate (tiny chunks, ties). Clamp at zero: a negative
+        # error bar is not a smaller error bar, it is a drawing error.
+        lower = [max(0.0, y - l) for y, l in zip(bars_y, lo)]
+        upper = [max(0.0, h - y) for y, h in zip(bars_y, hi)]
         ax.errorbar(bars_x, bars_y, yerr=[lower, upper], fmt="o", markersize=5,
                     color="#2b5d8a", ecolor="#9aa7b4", elinewidth=1.2, capsize=3)
         ax.plot([0, 1], [0, 1], linestyle="--", linewidth=1.0, color="#888888")

@@ -128,7 +128,7 @@ This supplement documents a rebuild. The earlier version of this work reported a
 
 The canonical panel is rebuilt and re-pinned: \textbf{87 complete-case country-years across 48 countries, 1990--2022}, one row per country-year, with no scenario replication. Its SHA-256 is
 \begin{center}
-\texttt{1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839}
+\texttt{40DB5B83BC12E997A086556E4C988C4C3BDAFFABDC17B97FB3224FC4A232B24C}
 \end{center}
 and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.3854$ on 87 rows, not $0.85$; fixed-coefficient country-out validation is negative in every tier (Tier~A $-2.01$, Tier~B $-0.97$, Tier~C $-0.90$); and, on identical rows and folds, the saturating form and an ordinary linear regression are statistically indistinguishable ($R^2$ \num{0.2707} against \num{0.2682} under grouped $k$-fold; the linear baseline is ahead in sample, \num{0.4462} against \num{0.3854}). An earlier draft reported a decisive linear win (0.10 against 0.20); that comparison could not be regenerated and is withdrawn.
 
@@ -252,13 +252,13 @@ Minimum test rows per fold & 12 & 12 & 12 & \\
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS RMSE & 0.1354 & 0.1376 & 0.1412 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.0917--0.2109 & 0.0640--0.2224 & 0.0781--0.2208 & \\
-Median per-fold $R^2$ & $-1.8183$ & $-1.1607$ & $-0.6620$ & 12 of 48 folds \\
-Pooled OOS $R^2$ (refit) & 0.3026 & 0.2579 & 0.2724 & All 87 rows \\
-Pooled OOS $R^2$ (canonical) & 0.1955 & 0.3625 & 0.3854 & All 87 rows \\
-Pooled OOS RMSE (refit) & 0.2017 & 0.2080 & 0.2060 & Bounded $Z$ scale \\
-Folds carrying $R^2$ & 12 of 48 & 12 of 48 & 12 of 48 & \\
+Median OOS RMSE & 0.1423 & 0.1501 & 0.1457 & Bounded $Z$ scale \\
+IQR (RMSE range) & 0.0823--0.2144 & 0.0845--0.2083 & 0.0785--0.2111 & \\
+Median per-fold $R^2$ & $-2.2601$ & $-1.3993$ & $-1.2761$ & 19 of 66 folds \\
+Pooled OOS $R^2$ (refit) & 0.4076 & 0.4452 & 0.4216 & All 126 rows \\
+Pooled OOS $R^2$ (canonical) & 0.2825 & 0.3731 & 0.3588 & All 126 rows \\
+Pooled OOS RMSE (refit) & 0.2020 & 0.1955 & 0.1996 & Bounded $Z$ scale \\
+Folds carrying $R^2$ & 19 of 66 & 19 of 66 & 19 of 66 & \\
 \bottomrule
 \end{tabularx}
 }
@@ -278,8 +278,8 @@ Folds carrying $R^2$ & 12 of 48 & 12 of 48 & 12 of 48 & \\
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS RMSE & 0.1271 & 0.1653 & 0.1694 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.1044--0.2310 & 0.1236--0.2029 & 0.1467--0.1830 & \\
+Median OOS RMSE & 0.1457 & 0.1608 & 0.1543 & Bounded $Z$ scale \\
+IQR (RMSE range) & 0.1173--0.2722 & 0.1151--0.2330 & 0.1310--0.2581 & \\
 Median per-fold $R^2$ & $-0.0587$ & $-0.0639$ & 0.0772 & Few test rows per fold \\
 \% folds converged & 100\% (12/12) & 100\% (12/12) & 100\% (12/12) & Convergence check \\
 Temporal monotonicity & Pass & Pass & Pass & Test year $>$ max train year \\

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "phase1.construct_prevalence.v1",
+  "generatedAtIso": "2026-11-09T15:21:23.544Z",
+  "purpose": "Quantify how widely the measurement failure extends: how many configured constructs fail a routine reliability check, and how much of the available frame survives it.",
+  "reliabilityFloor": 0.7,
+  "frame": {
+    "scannedCountryYears": 305,
+    "zComputableCells": 287,
+    "canonicalCompleteCases": 126
+  },
+  "constructs": [
+    {
+      "name": "Z_belief_outcome",
+      "items": 6,
+      "cells": 287,
+      "alpha": 0.818715691617005,
+      "unidimensional": true,
+      "disposition": "retained"
+    },
+    {
+      "name": "C_cultural_intensity",
+      "items": 6,
+      "cells": 303,
+      "alpha": 0.3481590618313876,
+      "unidimensional": false,
+      "disposition": "withdrawn"
+    },
+    {
+      "name": "D_social_atomization",
+      "items": 5,
+      "cells": 296,
+      "alpha": -1.2284774929408622,
+      "unidimensional": false,
+      "disposition": "withdrawn"
+    },
+    {
+      "name": "S_social_support",
+      "items": 7,
+      "cells": 0,
+      "alpha": 0.7530436198636796,
+      "unidimensional": true,
+      "disposition": "uncomputable"
+    }
+  ],
+  "summary": {
+    "configuredConstructs": 4,
+    "retained": 1,
+    "withdrawn": 2,
+    "uncomputable": 1,
+    "failureRate": 0.75,
+    "frameUtilisation": {
+      "scanned": 305,
+      "analysable": 126,
+      "fraction": 0.4131
+    }
+  },
+  "implication": "Constructs specified by this project's own configuration fail at a 3-in-4 rate. Any pipeline that inherits item sets from an older conceptual scheme, rather than testing them, inherits the same risk; the failure is not specific to this dataset but the audit is."
+}

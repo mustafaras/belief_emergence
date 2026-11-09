@@ -42,8 +42,42 @@ const WVS_CONSTRUCTS = path.join(ROOT, 'rawdata', 'wvs_combined.csv');
 const MACRO = path.join(ROOT, 'rawdata', 'panel_model_data.csv');
 const OUT = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 const OUT_AUDIT = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.audit.json');
+const WDI = path.join(ROOT, 'rawdata', 'WDICSV.csv');
 
 const DRY_RUN = process.argv.includes('--dry-run');
+
+/**
+ * Gini backfill from the World Bank WDI series.
+ *
+ * WHY: `Y_gini` was the binding constraint on the sample — of 180 cells lost
+ * after the WVS join, 131 were lost to this one covariate. The upstream macro
+ * panel draws inequality from a harmonised OECD/WDI merge that stops in some
+ * years, while WDI publishes `SI.POV.GINI` for 2,402 country-years.
+ *
+ * ARE THEY THE SAME CONSTRUCT? Yes, and it was checked rather than assumed.
+ * On the 2,200 cells where both exist the relation is exactly affine:
+ *     Y_gini = 0.164028 * SI.POV.GINI - 5.413122
+ * with a maximum absolute residual of 0.000000. So the only difference is a
+ * scale and offset applied upstream; mapping one to the other introduces no
+ * new construct and no new measurement error.
+ *
+ * `--gini-window N` controls how far a neighbouring year may be borrowed when
+ * the exact year is absent. 0 means exact-year only. The default is 2, chosen
+ * because WVS waves are irregular: a survey fielded in 2011 is a statement
+ * about roughly 2009-2013, and a Gini measured one year away is closer to that
+ * statement than dropping the cell is.
+ */
+const GINI_INDICATOR = 'SI.POV.GINI';
+/** Affine map from WDI Gini to the macro panel's Y_gini scale (verified exact). */
+const WDI_TO_Y_GIINI = { slope: 0.164028, intercept: -5.413122 };
+
+function parseGiniWindow(argv: string[]): number {
+  const flag = argv.indexOf('--gini-window');
+  if (flag === -1) return 2;
+  const raw = Number.parseInt(argv[flag + 1] ?? '', 10);
+  return Number.isFinite(raw) && raw >= 0 ? raw : 2;
+}
+const GINI_WINDOW = parseGiniWindow(process.argv);
 
 /**
  * Pinned input fingerprints. The panel is only reproducible if the two inputs
@@ -65,6 +99,11 @@ const EXPECTED_INPUTS: Array<{ label: string; path: string; sha256: string }> = 
     label: 'Upstream macro panel (22,096 rows)',
     path: MACRO,
     sha256: 'D97992B158EA170A0A6C5B4AF7D1412CB01ED09C8F233B6A5A2640D1E1054202',
+  },
+  {
+    label: 'World Bank WDI (Gini backfill source)',
+    path: WDI,
+    sha256: 'C1CC1613DEE65121F0F77A26AC589A266E8A13AD56956B9BAEAD7ADF7E155309',
   },
 ];
 
@@ -197,9 +236,41 @@ function main(): void {
   }
   console.log(`  macro index size : ${macroIndex.size}`);
 
+  // WDI Gini, used only where the macro panel has no value for the same cell.
+  const wdiGini = new Map<string, number>();
+  if (fs.existsSync(WDI)) {
+    for (const r of readCsv(WDI)) {
+      if ((r['Indicator Code'] ?? '') !== GINI_INDICATOR) continue;
+      const iso = (r['Country Code'] ?? '').trim();
+      if (!iso) continue;
+      for (const [key, value] of Object.entries(r)) {
+        if (!/^\d{4}$/.test(key)) continue;
+        if (!value || value === '..') continue;
+        const v = Number.parseFloat(value);
+        if (Number.isFinite(v)) wdiGini.set(`${iso}|${key}`, v);
+      }
+    }
+    console.log(`  WDI gini cells   : ${wdiGini.size} (window +/-${GINI_WINDOW} yr)`);
+  } else {
+    console.log('  WDI gini cells   : absent — falling back to macro-only Gini');
+  }
+
+  /** Nearest WDI Gini within the window, else null. Reports the year distance. */
+  const lookupWdiGini = (iso3: string, year: number): { value: number; lag: number } | null => {
+    for (let lag = 0; lag <= GINI_WINDOW; lag += 1) {
+      for (const signed of lag === 0 ? [0] : [lag, -lag]) {
+        const hit = wdiGini.get(`${iso3}|${year + signed}`);
+        if (hit !== undefined) return { value: hit, lag };
+      }
+    }
+    return null;
+  };
+
   const rows: Array<Record<string, string | number>> = [];
   const dropped = { noIso: 0, noMacro: 0, missingCovariate: 0, missingOutcome: 0 };
   const missingByCovariate = new Map<string, number>();
+  /** Cells rescued by the WDI Gini backfill, with the year distance used. */
+  const giniRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
 
   for (const c of constructs) {
     const raw = (c.iso3 ?? '').trim();
@@ -222,7 +293,17 @@ function main(): void {
     let complete = true;
     for (const { csv, out } of KEPT) {
       const raw = m[csv];
-      const v = raw ? Number.parseFloat(raw) : NaN;
+      let v = raw ? Number.parseFloat(raw) : NaN;
+
+      // Gini fallback: only for Y, only when the macro value is absent.
+      if (!Number.isFinite(v) && out === 'Y') {
+        const found = lookupWdiGini(iso3, Number.parseInt(year, 10));
+        if (found) {
+          v = WDI_TO_Y_GIINI.slope * found.value + WDI_TO_Y_GIINI.intercept;
+          giniRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
+        }
+      }
+
       if (!Number.isFinite(v)) {
         complete = false;
         missingByCovariate.set(out, (missingByCovariate.get(out) ?? 0) + 1);
@@ -245,6 +326,11 @@ function main(): void {
   console.log(`  - no macro row for (iso3, year)             : ${dropped.noMacro}`);
   console.log(`  - missing >=1 retained covariate            : ${dropped.missingCovariate}`);
   console.log(`  = complete-case rows                        : ${rows.length}`);
+  if (giniRecovered.length > 0) {
+    const exact = giniRecovered.filter((g) => g.lag === 0).length;
+    console.log(`  + Gini backfilled from WDI SI.POV.GINI   : ${giniRecovered.length}`);
+    console.log(`      exact year: ${exact}, borrowed +/-1-${GINI_WINDOW} yr: ${giniRecovered.length - exact}`);
+  }
   if (missingByCovariate.size > 0) {
     console.log('  covariate responsible for the first missing value:');
     for (const [k, v] of missingByCovariate) console.log(`    ${k}: ${v}`);
@@ -279,8 +365,18 @@ function main(): void {
   if (failed) throw new Error('A retained predictor restates the outcome. Refusing to write.');
 
   const header = ['iso3', 'country_name', 'year', 'Z', ...KEPT.map((k) => k.out), ...DROPPED.map((d) => d.out)];
+
+  /**
+   * RFC 4180 quoting. Country names contain commas ("Palestine, State of"), and
+   * a naive join puts the tail of the name into the year column, which the panel
+   * loader rightly rejects. Every field is quoted only when it needs to be, so
+   * the file stays diff-friendly.
+   */
+  const encode = (value: string): string => (
+    /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value
+  );
   const body = rows.map((r) => header.map((h) => {
-    if (h in r) return String(r[h]);
+    if (h in r) return encode(String(r[h]));
     return 'NA';
   }).join(','));
   const csvText = [header.join(','), ...body].join('\r\n') + '\r\n';

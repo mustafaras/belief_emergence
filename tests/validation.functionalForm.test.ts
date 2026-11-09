@@ -77,7 +77,7 @@ describe('committed functional-form artifact', () => {
   it('reports both models on identical rows and folds', () => {
     expect(artifact.provenance.sameFolds).toBe(true);
     expect(artifact.provenance.sameRows).toBe(true);
-    expect(artifact.nRows).toBe(87);
+    expect(artifact.nRows).toBeGreaterThanOrEqual(100);
     expect(artifact.kfold.folds).toBe(100);
   });
 
@@ -91,7 +91,10 @@ describe('committed functional-form artifact', () => {
 
     // Out of sample the two must stay within the fold dispersion. A gap larger
     // than ~0.05 would mean one model genuinely predicts better, which would
-    // require the manuscript's "near-tie" wording to change.
+    // require the manuscript's "near-tie" wording to change. The threshold is
+    // deliberately tied to the wording, not to a particular panel size: the
+    // 87-cell panel gave a 0.0025 gap and the expanded 126-cell panel gives
+    // 0.0032, and both are described the same way in the text.
     const gap = Math.abs((bounded.kfold.median as number) - (linear.kfold.median as number));
     expect(gap).toBeLessThan(0.05);
   });

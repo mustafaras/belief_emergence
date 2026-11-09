@@ -35,9 +35,9 @@ gate. If the hash does not match, every script aborts before writing output.
 | Property | Value |
 |----------|-------|
 | File     | `public/data/panel_canonical_v2.csv` |
-| SHA-256  | `1CB00CB3C2942B6980DFE77470E5034C6867AA1F6DBF8A49FD8031E3CEED1839` |
-| Rows     | 87 complete-case country-year observations |
-| Countries| 48 |
+| SHA-256  | `40DB5B83BC12E997A086556E4C988C4C3BDAFFABDC17B97FB3224FC4A232B24C` |
+| Rows     | 126 complete-case country-year observations |
+| Countries| 66 |
 | Years    | 1990–2022 |
 
 The row count equals the number of unique `(iso3, year)` pairs — there is no
@@ -140,12 +140,12 @@ must appear in `src/data/analysis/metrics_authoritative.json`:
 
 | Metric          | Expected value |
 |-----------------|----------------|
-| n               | 87             |
-| R²              | 0.3854         |
-| Correlation     | 0.6311         |
-| MAE             | 0.1498         |
-| RMSE            | 0.1893         |
-| Bias            | 0.0243         |
+| n               | 126            |
+| R²              | 0.3588         |
+| Correlation     | 0.6392         |
+| MAE             | 0.1631         |
+| RMSE            | 0.2101         |
+| Bias            | 0.0461         |
 
 Any deviation indicates a data-integrity or code-path change and must be
 investigated before proceeding. These are in-sample descriptive metrics on the
@@ -199,7 +199,7 @@ of record.
 | `generate:lockbox-holdout` | `lockbox_holdout.json` | Section 4.4 holdout evaluation |
 | `generate:kfold` | `cv_kfold.json` | **Primary** OOS evidence: repeated grouped k-fold (5 folds x 20 repeats) |
 | `generate:functional-form` | `functional_form_comparison.json` | Results Table: bounded map vs ordinary linear regression on identical rows and folds |
-| `build:panel` | `public/data/panel_canonical_v2.csv` | Rebuilds the canonical panel from hash-pinned inputs |
+| `build:panel` | `public/data/panel_canonical_v2.csv` | Rebuilds the canonical panel from hash-pinned inputs; `--gini-window N` controls how far a neighbouring year's World Bank Gini may be borrowed (default 2) |
 | `verify:constructs` | — (verifies `rawdata/wvs_construct_audit.json`) | Re-derives every construct from raw microdata and fails on drift |
 
 ---
