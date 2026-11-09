@@ -126,7 +126,7 @@ This supplement documents a rebuild. The earlier version of this work reported a
 \noindent\justifying
 \textbf{What changed.} The construct layer was rebuilt from raw microdata under \texttt{config/wvs\_items.yaml} and the result is machine-checkable: 442{,}026 respondents across 305 country-years yield $Z$ at $\alpha = 0.819$ over 287 cells, which passes; $C$ at $0.348$ over 303 cells, $D$ at $-1.228$ over 296 cells, and $S$ in 0 cells, which do not. Four of the eight originally proposed channels ($C$, $D$, $G$, $S$) are therefore declared but not estimated, and the model runs on seven columns.
 
-The canonical panel is rebuilt and re-pinned: \textbf{146 complete-case country-years across 70 countries, 1990--2022}, one row per country-year, with no scenario replication. Its SHA-256 is
+The canonical panel is rebuilt and re-pinned: \textbf{146 complete-case country-years across 70 countries, 1990--2023}, one row per country-year, with no scenario replication. Its SHA-256 is
 \begin{center}
 \texttt{0BEB00623687EC3E1F59959CDB4EEC9DC316CE41B9CDFEC7E99429130395D18E}
 \end{center}
@@ -377,7 +377,7 @@ Ridge-adjacent ($0.45 \le Z \le 0.55$) & 6 & 17.6\% \\
 Funnel stage & Quantified scope and interpretive role \\
 \midrule
 Upstream integrated breadth & \path{rawdata/panel_model_data.json} reports 22,096 rows across 288 countries (1990--2023). This stage documents source coverage, not inferential claim strength. \\
-Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 146 rows for 70 countries (1990--2022), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
+Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 146 rows for 70 countries (1990--2023), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
 Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 87, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
 Construct validity / invariance envelope & \path{src/data/analysis/construct_validity_invariance.json} reports aggregate-level construct checks: multi-item diagnostics for $Z$, single-indicator proxy constraints for $C,D,S$, and sparse-overlap fragility flags for $M$. These diagnostics bound cross-slice transport claims. \\
 Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 7.91), Tier B 18 (4.83), Tier C 22 (3.95). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
@@ -707,7 +707,7 @@ Quantity & Value \\
 \midrule
 Countries ($N$) & 48 \\
 Rows used ($n$) & 87 \\
-Year range & 1990--2022 \\
+Year range & 1990--2023 \\
 $R^2$ & \num{0.2745} \\
 $\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6311} \\
 MAE & \num{0.1498} \\

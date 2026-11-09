@@ -9,7 +9,7 @@
 Every finding below is independently reproducible from the committed tree.
 Unless an entry says otherwise, its reproduction commands now run against
 `public/data/panel_canonical_v2.csv` (146 complete-case country-years, 70
-countries, 1990--2022) and `rawdata/wvs_construct_audit.json`. Where an entry
+countries, 1990--2023) and `rawdata/wvs_construct_audit.json`. Where an entry
 still cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
 kept only to describe what the defect was.
