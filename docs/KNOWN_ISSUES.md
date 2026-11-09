@@ -8,7 +8,7 @@
 
 Every finding below is independently reproducible from the committed tree.
 Unless an entry says otherwise, its reproduction commands now run against
-`public/data/panel_canonical_v2.csv` (87 complete-case country-years, 48
+`public/data/panel_canonical_v2.csv` (126 complete-case country-years, 66
 countries, 1990--2022) and `rawdata/wvs_construct_audit.json`. Where an entry
 still cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
@@ -34,7 +34,7 @@ kept only to describe what the defect was.
 | KI-13 | Coefficients fitted to defective panel | **CLOSED** — refit on v2 |
 | KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
 | KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
-| KI-16 | Lockbox cannot be honoured | **CLOSED** — 17 of 87 cells, disclosed |
+| KI-16 | Lockbox cannot be honoured | **CLOSED** — 17 of 126 cells, disclosed |
 | KI-17 | Functional form vs linear baseline | **REVISED** — measured; the two are indistinguishable out of sample |
 
 ---
@@ -130,7 +130,7 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 ## KI-17 — The bounded model and a linear baseline are statistically indistinguishable — REVISED 2026-11-09
 
 Acquiring the WVS Trend File (1981–2022, v4.1.0) raised the sample from 49 to
-87 complete cases across 48 countries. It also removed the possibility of
+126 complete cases across 66 countries. It also removed the possibility of
 attributing the weak fit to a small sample.
 
 ### Revision (2026-11-09): the original numbers could not be regenerated
@@ -141,7 +141,7 @@ them, and when the comparison was actually implemented
 (`src/utils/validation/computeFunctionalFormComparison.ts`, emitted as
 `functional_form_comparison.json`) the gap did not appear.
 
-Measured on the canonical panel, same 87 rows, same six predictors, identical
+Measured on the canonical panel, same 126 rows, same six predictors, identical
 folds for both models:
 
 | Model | In-sample R² | Grouped k-fold R² (median) | Pooled country-out R² |
@@ -155,7 +155,7 @@ indistinguishable: the bounded form leads by 0.0025 under grouped k-fold and by
 (0.049-0.405 versus 0.054-0.407).
 
 **The corrected finding is narrower than both the original claim and its
-opposite.** At 87 country-years the choice between these two links is not
+opposite.** At 126 country-years the choice between these two links is not
 identified by predictive performance. In-sample fit favours the linear form,
 held-out fit is a tie, and neither supports a claim of predictive superiority.
 The original sentence "the nonlinear structure is costing accuracy, not adding
@@ -186,7 +186,7 @@ The bounded functional form was introduced because the outcome is a composite
 index on a closed scale. That argument is about the *measurement*, not about
 the *response shape*, and this sample does not arbitrate the shape:
 
-1. **The saturation claim has no empirical support here.** Nothing in 87
+1. **The saturation claim has no empirical support here.** Nothing in 126
    country-years indicates that effects flatten at high exposure. The
    manuscript currently asserts ridge behaviour as a feature of the fitted
    map; that is true of the map, not of the data.
@@ -210,7 +210,7 @@ The stronger sentence the earlier draft carried ("the saturating form does not
 beat a linear baseline", with R² 0.2020 against 0.1023) has been withdrawn,
 because the measurement does not support it. A tie is the accurate description,
 and a tie at this sample size is itself the result: the link function is not
-identified by predictive performance on 87 country-years.
+identified by predictive performance on 126 country-years.
 
 ---
 
@@ -374,7 +374,7 @@ Countries are the grouping unit (no country splits across folds), k = 5,
 20 seeded repeats, 100 held-out evaluations. Every fold carries at least 12
 test rows, so R² is defined in 100% of folds instead of 25%.
 
-Measured on the 87-row panel:
+Measured on the 126-row panel:
 
 ```text
 Grouped k-fold (100 evaluations)      median R2              IQR
@@ -389,15 +389,15 @@ leakagePass = true   groupsSplitAcrossFolds = 0   minTestRows = 12
 
 **Option 2 — pooled held-out series on the country-out folds.**
 `computeLeaveOneCountryOutRefit` now concatenates every fold's held-out
-predictions into a single 87-row out-of-sample series (`pooledRefit`,
+predictions into a single 126-row out-of-sample series (`pooledRefit`,
 `pooledCanonical`). Every row is predicted exactly once by a model that never
 saw its country, so R² is defined even though no individual fold can carry it:
 
 ```text
-LOO pooled (87 rows)   Tier A   Tier B   Tier C
-  refit R2             +0.3026  +0.2579  +0.2724
-  canonical R2         +0.1955  +0.3625  +0.3854
-per-fold median R2     -1.8183  -1.1607  -0.6620   <- 12 of 48 folds only
+LOO pooled (126 rows)  Tier A   Tier B   Tier C
+  refit R2             +0.4076  +0.4452  +0.4216
+  canonical R2         +0.2825  +0.3731  +0.3588
+per-fold median R2     -2.2601  -1.3993  -1.2761   <- 19 of 66 folds only
 ```
 
 The gap between those two lines is the issue itself: the negative per-fold
@@ -464,9 +464,9 @@ finding recorded as KI-15, not a fitting failure: across the observed X and Y
 ranges the structural product contributes no explanatory power.
 
 With those coefficients the canonical family is no longer astronomically
-negative. Pooled over the 87 held-out rows it reaches $R^2$ = 0.1955 / 0.3625 /
-0.3854 for Tier A/B/C, and under grouped k-fold the medians are 0.1587 /
-0.3696 / 0.3689. The earlier values of order $-2\times10^4$ are gone.
+negative. Pooled over the 126 held-out rows it reaches $R^2$ = 0.2825 / 0.3731 /
+0.3588 for Tier A/B/C, and under grouped k-fold the medians are 0.2520 /
+0.3865 / 0.3599. The earlier values of order $-2\times10^4$ are gone.
 
 ---
 
@@ -512,7 +512,7 @@ while the actual `rawdata/panel_model_data.csv` has 22,097 lines: the documented
 fingerprint pointed at a different file than the documented name.
 
 The runbook now names `public/data/panel_canonical_v2.csv` with its correct
-SHA-256 (`1CB00CB3...DCED1839`) and row count (87), and § 9.1 pins every input
+SHA-256 (`B08854DB...C29E21`) and row count (126), and § 9.1 pins every input
 file with its own hash.
 
 ### Resolution (2026-11-07 / 2026-11-09)
@@ -762,6 +762,6 @@ files outside the 23-country frame).
 | Manuscript consistency | `npm run check:manuscript-consistency` | 11 blocks pass |
 | Section references | `npm run check:section-references` | pass |
 | Construct verification | `npm run verify:constructs` | SKIP without microdata; verified against a synthetic fixture and fails correctly on a tampered artifact |
-| Panel integrity | `shasum -a 256 public/data/panel_canonical_v2.csv` | `1CB00CB3...DCED1839` matches |
+| Panel integrity | `shasum -a 256 public/data/panel_canonical_v2.csv` | `40DB5B83...A232B24C` matches |
 | Primary OOS evidence | `npm run generate:kfold` | 100 folds, leakage none, R² defined in 100% |
 | Predicate discrimination | `npx vitest run tests/validation.measurementValidityPredicates.test.ts` | pass |

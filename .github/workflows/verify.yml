@@ -120,6 +120,37 @@ jobs:
           root_file: supplementary_materials.tex
           working_directory: paper/supplementary
 
+      # The submission bundle. These three files had never been compiled: the
+      # workflow only built the manuscript and the supplement, so a broken
+      # cover letter or title page would have reached the portal unseen.
+      - name: Compile cover letter
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: cover_letter.tex
+          working_directory: paper
+
+      - name: Compile highlights
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: highlights.tex
+          working_directory: paper
+
+      - name: Compile title page
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: titlepage.tex
+          working_directory: paper
+
+      - name: Assemble submission bundle
+        run: |
+          mkdir -p submission
+          cp paper/main/main.pdf                       submission/01_manuscript.pdf
+          cp paper/supplementary/supplementary_materials.pdf submission/02_supplementary.pdf
+          cp paper/titlepage.pdf                       submission/03_title_page.pdf
+          cp paper/cover_letter.pdf                    submission/04_cover_letter.pdf
+          cp paper/highlights.pdf                      submission/05_highlights.pdf
+          ls -lh submission
+
       - name: Upload compiled PDFs
         if: always()
         uses: actions/upload-artifact@v4
@@ -128,4 +159,8 @@ jobs:
           path: |
             paper/main/main.pdf
             paper/supplementary/supplementary_materials.pdf
+            paper/titlepage.pdf
+            paper/cover_letter.pdf
+            paper/highlights.pdf
+            submission/
           if-no-files-found: warn

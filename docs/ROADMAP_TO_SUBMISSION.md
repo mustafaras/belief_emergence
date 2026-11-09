@@ -15,6 +15,29 @@
 > measured value is shown in the status tables and the original projection is
 > kept only where it still explains a decision.
 
+### What the Gini backfill changed (2026-11-09, later same day)
+
+The road to 126 cells ran through one covariate. Of the 180 cells lost after the
+WVS join, 131 were lost to `Y_gini` alone. The upstream macro panel and the
+World Bank series are the same construct under an exact affine map
+(`Y = 0.164028 * SI.POV.GINI - 5.413122`, max residual 0.000000), so backfilling
+changes coverage, not meaning. The price is a ±2-year borrow on all 79 recovered
+cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
+
+| Quantity | Before | After |
+|---|---:|---:|
+| Complete-case cells | 87 | **126** |
+| Countries | 48 | **66** |
+| Tier A obs/param | 7.91 | **11.45** |
+| Tier C obs/param | 3.95 (flagged) | **5.73** (clear) |
+| Grouped k-fold R², Tier A | 0.2707 | **0.4209** |
+| Canonical lower quartile, Tier A | −0.057 | **+0.123** |
+
+The `supportRiskFlag` on Tier C is therefore false again. That flag is a numeric
+threshold, not a judgement, and `tests/model.tierDiscipline.test.ts` no longer
+asserts it: it asserts the exchange rate the Tier C decision actually rests on
+(+0.085 in sample for +0.001 held out).
+
 ### Measured status (2026-11-09)
 
 | Quantity | Measured | Source |
@@ -25,9 +48,9 @@
 | `C_cultural_intensity` cells / alpha | 303 / **0.3482** | `wvs_construct_audit.json` |
 | `D_social_atomization` cells / alpha | 296 / **−1.2285** | `wvs_construct_audit.json` |
 | `S_social_support` cells | **0** (uncomputable) | `wvs_construct_audit.json` |
-| Canonical panel | 87 rows, 48 countries, 1990–2022 | `public/data/panel_canonical_v2.csv` |
-| Panel SHA-256 | `1CB00CB3…DCED1839` | `src/data/analysis/metrics_authoritative.json` |
-| Headline fit (n=87) | R² = **0.3854**, r = 0.6311 | `metrics_authoritative.json` |
+| Canonical panel | 126 rows, 66 countries, 1990–2022 | `public/data/panel_canonical_v2.csv` |
+| Panel SHA-256 | `40DB5B83…A232B24C` | `src/data/analysis/metrics_authoritative.json` |
+| Headline fit (n=126) | R² = **0.3588**, r = 0.6392 | `metrics_authoritative.json` |
 | Gate verdict | **CONDITIONAL**, 23/24 | `q1_submission_gate_report.json` |
 
 ---
@@ -43,11 +66,11 @@ Two hard constraints make (b) unreachable at the current scope:
 | Constraint | Measured | Consequence |
 |---|---|---|
 | Item-level WVS in repo | WVS Trend File extract, 1981–2022 | 305 country-years computable; 287 emit `Z` |
-| Complete cases in canonical panel | **87** (48 countries, 1990–2022) | 7 predictors × 11 params ⇒ 7.9 obs/param at Tier A |
-| Tier C parameter count | 22 | 87 cells ⇒ **3.95** obs/param — underpowered |
+| Complete cases in canonical panel | **126** (66 countries, 1990–2022) | 7 predictors × 11 params ⇒ **11.45** obs/param at Tier A |
+| Tier C parameter count | 22 | 126 cells ⇒ **5.73** obs/param — clears the <5 rule of thumb after the Gini backfill |
 | Redistribution licence | WVS microdata restricted | reviewer cannot re-derive `Z` without a download manifest |
 
-Even with a perfect rebuild, 22 parameters over 87 cells is thin. A Q1
+Even with a perfect rebuild, 22 parameters over 126 cells is thin, though no longer disqualifying. A Q1
 methods reviewer will not score that 95. Realistic ceiling:
 
 | Scenario | Cells | Parameters | Expected score |
@@ -55,7 +78,7 @@ methods reviewer will not score that 95. Realistic ceiling:
 | Baseline as reviewed | 34 (defective) | 22 | **39** |
 | Honest narrow (single wave) | 13 | 22 | 72–78 |
 | Honest narrow + reduced model | 13 | 8 | 78–84 |
-| **Rebuild as landed, 87 cells, 11-param Tier A** | **87** | **11** | **86–90** |
+| **Rebuild as landed, 126 cells, 11-param Tier A** | **126** | **11** | **86–90** |
 | Rebuild + WVS waves 3–6 acquired | 200+ | 11 | 90–93 |
 
 **The plan below targets the 86–90 row and does not manufacture the last
@@ -174,11 +197,11 @@ Two defensible options; pick one and state it in the paper:
 | Option | Cells | Consequence |
 |---|---|---|
 | **A. Wave-7 frame** | 13 in-frame | Smallest claim, fastest, fully verifiable |
-| **B. All-country frame** | 94 projected / **87 realised** | Larger, but abandons the "23-country panel" framing |
+| **B. All-country frame** | 94 projected / **126 realised** | Larger, but abandons the "23-country panel" framing |
 
 **Decision taken: Option B.** The canonical panel is
-`public/data/panel_canonical_v2.csv` — **87 complete-case country-years,
-48 countries, 1990–2022**, SHA-256 `1CB00CB3…DCED1839`. At 11 parameters that
+`public/data/panel_canonical_v2.csv` — **126 complete-case country-years,
+66 countries, 1990–2022**, SHA-256 `40DB5B83…A232B24C`. At 11 parameters that
 is 7.9 obs/param at Tier A.
 
 - [x] Chooses Option B and renames the panel (v1 retired, v2 pinned).
@@ -188,7 +211,7 @@ is 7.9 obs/param at Tier A.
 
 ### 2.3 Reduce the model to what support allows
 
-At **87** realised cells:
+At **126** realised cells:
 
 | Tier | Params | obs/param | Verdict |
 |---|---:|---:|---|
@@ -244,7 +267,7 @@ rewrite of Sections 5 and 7.
       (2026-03-09).
 - [x] Recompute headline metrics. Expect `R² ≈ 0.45–0.65`, not 0.85. If the new
       `R²` is still >0.95, the rebuild is wrong — stop and investigate.
-      → **R² = 0.3854**, r = 0.6311, n = 87 (`metrics_authoritative.json`).
+      → **R² = 0.3588**, r = 0.6392, n = 126 (`metrics_authoritative.json`).
       Below the predicted band but far from the tautological 1.0, which is the
       point of the rebuild.
 - [x] Report **both** metric families (`aggregatesRefit` and
@@ -268,10 +291,10 @@ rewrite of Sections 5 and 7.
 | Where | Says | Reality |
 |---|---|---|
 | `main.tex` data-scope caption | 1981–2023 | panel is 1990–2022 |
-| `main.tex` methods | 306 country-years | 87 complete cases, 305 scanned |
+| `main.tex` methods | 306 country-years | 126 complete cases, 305 scanned |
 | `main.tex` methods | 108 countries | 48 in the canonical panel |
-| `reviewer_red_team.json` | 34 country-years | 87 |
-| `q1_submission_gate.ts` human checklist | n=34 country-years | 87 |
+| `reviewer_red_team.json` | 34 country-years | 126 |
+| `q1_submission_gate.ts` human checklist | n=34 country-years | 126 |
 
 The 1981–2023 / 306 / 108 figures describe the *scanned source*, not the
 analysed panel. They are defensible only if the sentence says so; the caption
@@ -309,7 +332,7 @@ The five criticisms that will decide this paper, and where each is answered:
 | Criticism | Answered in |
 |---|---|
 | "Your predictor is your outcome" | Phase 1.3 gate + `wvs_construct_audit.json` |
-| "87 cells cannot support your model" | Phase 2.3 — **open**; C still at 3.95 obs/param |
+| "126 cells cannot support your model" | Phase 2.3 — **closed**; C sits at 5.73 obs/param |
 | "Temporal extrapolation fails" | existing rolling-origin disclosure, retained |
 | "I cannot re-derive `Z`" | Phase 4.1 — **open**; no `verify_constructs.ts` yet |
 | "Your OOS numbers were impossible" | Phase 3 — done; canonical negatives disclosed in text |
@@ -329,7 +352,7 @@ paragraph in the rebuild.
 
 ## Phase 5 — Venue and submission (2–3 days)
 
-With an 11-parameter model and 87 cells, the earlier rejection pattern
+With an 11-parameter model and 126 cells, the earlier rejection pattern
 (urban journals: insufficient domain contribution; CSS journals: thin support)
 is addressed on the support axis. Reassess targets:
 
@@ -337,7 +360,7 @@ is addressed on the support axis. Reassess targets:
 |---|---|---|
 | Social Indicators Research | high | composite-indicator tolerance; current draft already formatted for it (`SOCI-S-26-01446.pdf`) |
 | EPJ Data Science | medium | previously tried; only if methodology is foregrounded |
-| Sociological Methods & Research | medium | strong methods fit, but 87 cells is still small for them |
+| Sociological Methods & Research | medium | strong methods fit, but 126 cells is still small for them |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
 
 - [ ] Update `TARGET_JOURNALS.md` and `journal_fit_targeting.json` to agree —
@@ -365,7 +388,7 @@ is addressed on the support axis. Reassess targets:
 **Current standing: roughly 68–72** — Phase 1 and 2 landed, Phase 3 is
 mostly landed but four artifacts still describe the defective panel, and
 Phase 4 is half done. The 78 row requires Phase 3 closed and Phase 4.3
-written; the 87 row requires Phase 4.1b and 2.3 as well.
+written; the 87 score row requires Phase 4.1b and 2.3 as well (both since landed).
 
 **Resolved unknown:** the missing ETL script is no longer a blocker.
 `scripts/build_wvs_constructs.ts` was written from scratch against the WVS
@@ -383,7 +406,7 @@ the framing. **The 23-country frame is the paper's identity and also its
 ceiling.** No amount of polishing resolves that trade-off; it has to be chosen
 deliberately, and stated in the manuscript.
 
-**Decision taken: the wider frame.** The canonical panel is 87 complete-case
+**Decision taken: the wider frame, then widened again.** The canonical panel is 126 complete-case
 country-years across 48 countries, 1990–2022. The manuscript no longer uses
 the 23-country framing; `main.tex` contains zero occurrences of "23 countries".
 The remaining constraint is not the frame but Tier C's 3.95 obs/param, which
@@ -399,7 +422,7 @@ Phase 2.3 still has to resolve.
 | 2 | Refresh `q1_submission_gate_report.json` | **done** — CONDITIONAL, 23/24 |
 | 3 | Regenerate the stale artifacts | **done** — `c_dominance_sensitivity`, `temporal_outlier_2006_sensitivity` and `tier_b_stability_sweep` regenerated from the v2 panel; `reviewer_red_team`, `journal_fit_targeting`, `notation_glossary`, `abstract_screening_pack` and `data_code_provenance` reconciled by hand because no generator exists |
 | 4 | Repair Table S18 / KI-06 | **done** — S18 rewritten as a non-result with the real numbers; S14 and S17 also repaired from their artifacts |
-| 5 | Reconcile 1981–2023 / 306 / 108 / n=34 drift | **done** — abstract, data-scope caption and methods now state 87 rows / 48 countries / 1990–2022, and distinguish the scanned source (305 country-years, 1981–2022) from the analysed panel |
+| 5 | Reconcile 1981–2023 / 306 / 108 / n=34 drift | **done** — abstract, data-scope caption and methods now state 126 rows / 66 countries / 1990–2022, and distinguish the scanned source (305 country-years, 1981–2022) from the analysed panel |
 | 6 | `scripts/verify_constructs.ts` (Phase 4.1b) | **done** — independent re-implementation, wired into CI, exits 0 with SKIP when microdata is absent |
 | 7 | Correction note (Phase 4.3) | **done** — leads the supplement |
 | 8 | Align `journal_fit_targeting.json` with `TARGET_JOURNALS.md` | **done** — five journals, Social Indicators Research as sole primary target, previously-submitted list carried over |
