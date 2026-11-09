@@ -164,7 +164,7 @@ WVS construct definitions and item selections are versioned in \nolinkurl{config
 This writes \nolinkurl{src/data/analysis/metrics_authoritative.json} and \nolinkurl{src/data/analysis/observed_vs_predicted_authoritative.csv}.\par\vspace{\baselineskip}\noindent%
 Optionally run \texttt{npm run generate:headline-metrics} to regenerate \nolinkurl{src/data/metrics/headline_metrics_authoritative.json}. The workflow uses pinned preprocessing and coefficient contracts so that identical inputs reproduce identical outputs across codepaths.}
 \metasep
-\metaitem{Paper build}{\texttt{pwsh -File .vscode/compile-paper.ps1} (requires a LaTeX distribution such as MiK\TeX and \texttt{biber}).}
+\metaitem{Paper build}{The GitHub Actions workflow \texttt{.github/workflows/verify.yml} compiles all five submission files on \texttt{ubuntu-latest} and uploads them as the \texttt{paper-pdfs} artifact. A local build needs a TeX distribution with \texttt{biber}.}
 \metasep
 \metaitem{Scope note}{The repository includes raw source extracts (subject to their respective licenses), the integrated country--year panel, and a machine-readable provenance inventory (\nolinkurl{src/data/analysis/data_code_provenance.json}) documenting license terms, redistribution status, and attribution requirements for every data source. End-to-end reconstruction of the integrated panel from all upstream raw files is documented in the Supplementary Material runbook rather than shipped as a single turnkey ETL pipeline. WVS/EVS microdata files are included in the reviewer archive under the WVS academic data use agreement; public redistribution of these files requires separate permission from the WVS Association (see provenance inventory for details).}
 \metasep
@@ -174,6 +174,7 @@ Optionally run \texttt{npm run generate:headline-metrics} to regenerate \nolinku
 \metasep
 \metaitem{Ethics/consent}{\EthicsStmt}
 \metasep
+\metaitem{Author approval}{All authors have read and approved the submitted version of the manuscript, and agree to its submission to \emph{Social Indicators Research}. This approval covers the present version, whose title, framing and reported results differ substantially from the earlier draft: the contribution is now a measurement audit rather than a bounded model, and every empirical number has been regenerated.}
 \metaitem{Submission note}{Prepared for submission.}
 \end{MetaBlock}
 
