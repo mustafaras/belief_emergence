@@ -88,7 +88,7 @@
 \noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
 \begin{itemize}
 \item \textbf{Repeated grouped $k$-fold} (100 held-out evaluations, $k=5$ folds $\times$ 20 seeded repeats, countries intact, no leakage): median held-out $R^2$ 0.4209 (Tier~A), 0.4403 (Tier~B), 0.4223 (Tier~C); $R^2$ is defined in every fold, which the country-out protocol cannot achieve.
-\item \textbf{Leave-one-country-out} (66 folds, retained as a spatial stress test): median OOS RMSE 0.1423 (Tier~A), 0.1501 (Tier~B), 0.1457 (Tier~C); pooled held-out $R^2$ 0.4076 / 0.4452 / 0.4216 across all 87 rows. Parameter sign consistency is reported per coefficient and sub-threshold terms are flagged as unstable rather than claimed stable.
+\item \textbf{Leave-one-country-out} (66 folds, retained as a spatial stress test): median OOS RMSE 0.1423 (Tier~A), 0.1501 (Tier~B), 0.1457 (Tier~C); pooled held-out $R^2$ 0.4076 / 0.4452 / 0.4216 across all 126 rows. Parameter sign consistency is reported per coefficient and sub-threshold terms are flagged as unstable rather than claimed stable.
 \item \textbf{Rolling-origin temporal validation} (15 forward-chaining folds): median OOS RMSE 0.1457 (Tier~A), 0.1608 (Tier~B), 0.1543 (Tier~C).
 \end{itemize}
 \noindent A separately gated lockbox holdout (frozen split, one-time evaluation per release cycle) confirms Tier~A/B stability without repeated peeking.
