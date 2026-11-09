@@ -1,6 +1,6 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-09T17:13:52.100Z",
+  "generatedAtIso": "2026-11-09T18:10:36.767Z",
   "verdict": "READY",
   "summary": {
     "totalChecks": 25,
@@ -177,7 +177,7 @@
       "label": "Design matrix full rank (7 columns)",
       "pass": true,
       "severity": "critical",
-      "detail": "rank=7/7 on 142 complete rows"
+      "detail": "rank=7/7 on 146 complete rows"
     },
     {
       "id": "val-single-r2",
@@ -209,7 +209,7 @@
       "label": "Functional-form comparison is generated, not asserted",
       "pass": true,
       "severity": "major",
-      "detail": "Linear 0.4590 in-sample / 0.3823 k-fold vs bounded 0.2869 / 0.3989; identical rows and folds"
+      "detail": "Linear 0.4556 in-sample / 0.3684 k-fold vs bounded 0.2745 / 0.3926; identical rows and folds"
     }
   ],
   "blockers": [],
@@ -247,7 +247,7 @@
     {
       "id": "h-support",
       "category": "Claim Strength",
-      "question": "Are support-density boundaries (n=87 country-years) explicitly acknowledged for high-dimensional terms?",
+      "question": "Are support-density boundaries (n=146 country-years) explicitly acknowledged for high-dimensional terms?",
       "signedOff": false
     },
     {

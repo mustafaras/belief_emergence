@@ -35,7 +35,7 @@ gate. If the hash does not match, every script aborts before writing output.
 | Property | Value |
 |----------|-------|
 | File     | `public/data/panel_canonical_v2.csv` |
-| SHA-256  | `B03C84971DD0BB0DE04C48CF146860AB87779BF02D6C781E313C419C1C31694D` |
+| SHA-256  | `0BEB00623687EC3E1F59959CDB4EEC9DC316CE41B9CDFEC7E99429130395D18E` |
 | Rows     | 126 complete-case country-year observations |
 | Countries| 66 |
 | Years    | 1990–2022 |
@@ -141,7 +141,7 @@ must appear in `src/data/analysis/metrics_authoritative.json`:
 | Metric          | Expected value |
 |-----------------|----------------|
 | n               | 126            |
-| R²              | 0.3588         |
+| R²              | 0.2745         |
 | Correlation     | 0.6392         |
 | MAE             | 0.1631         |
 | RMSE            | 0.2101         |

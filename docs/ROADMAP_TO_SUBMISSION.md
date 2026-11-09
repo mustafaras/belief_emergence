@@ -35,8 +35,15 @@ cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
 
 The `supportRiskFlag` on Tier C is therefore false again. That flag is a numeric
 threshold, not a judgement, and `tests/model.tierDiscipline.test.ts` no longer
-asserts it: it asserts the exchange rate the Tier C decision actually rests on
-(+0.085 in sample for +0.001 held out).
+asserts it.
+
+The test also no longer asserts an exchange rate between in-sample and held-out
+gain. That ratio was 59x at 87 cells and fell to 1.9x at 146, so pinning it would
+have meant lowering a threshold every time the sample grew. What the test asserts
+instead is an **ordering reversal**, which is both stronger and stable: in sample
+fit rises monotonically A < B < C (0.4633 / 0.5399 / 0.5470), but under repeated
+grouped k-fold C lands *below* B (0.4358 vs 0.4665). Eleven extra parameters
+reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ### Measured status (2026-11-09)
 
@@ -50,7 +57,7 @@ asserts it: it asserts the exchange rate the Tier C decision actually rests on
 | `S_social_support` cells | **0** (uncomputable) | `wvs_construct_audit.json` |
 | Canonical panel | 126 rows, 66 countries, 1990–2022 | `public/data/panel_canonical_v2.csv` |
 | Panel SHA-256 | `40DB5B83…A232B24C` | `src/data/analysis/metrics_authoritative.json` |
-| Headline fit (n=126) | R² = **0.3588**, r = 0.6392 | `metrics_authoritative.json` |
+| Headline fit (n=146) | R² = **0.2745**, r = 0.5851 | `metrics_authoritative.json` |
 | Gate verdict | **CONDITIONAL**, 23/24 | `q1_submission_gate_report.json` |
 
 ---
@@ -267,7 +274,7 @@ rewrite of Sections 5 and 7.
       (2026-03-09).
 - [x] Recompute headline metrics. Expect `R² ≈ 0.45–0.65`, not 0.85. If the new
       `R²` is still >0.95, the rebuild is wrong — stop and investigate.
-      → **R² = 0.3588**, r = 0.6392, n = 126 (`metrics_authoritative.json`).
+      → **R² = 0.2745**, r = 0.5851, n = 146 (`metrics_authoritative.json`).
       Below the predicted band but far from the tautological 1.0, which is the
       point of the rebuild.
 - [x] Report **both** metric families (`aggregatesRefit` and

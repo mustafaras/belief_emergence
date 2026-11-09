@@ -1,8 +1,8 @@
 {
   "schemaVersion": "phase1.model_ladder.v1",
-  "generatedAtIso": "2026-11-09T17:13:30.350Z",
-  "nRows": 142,
-  "nUniqueCountryYears": 142,
+  "generatedAtIso": "2026-11-09T18:10:08.955Z",
+  "nRows": 146,
+  "nUniqueCountryYears": 146,
   "tiers": [
     {
       "tier": "A",
@@ -10,17 +10,17 @@
       "exploratory": false,
       "inferentialRole": "primary",
       "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
-      "nTrain": 142,
+      "nTrain": 146,
       "parameterCount": 11,
-      "supportPerParameter": 12.909090909090908,
+      "supportPerParameter": 13.272727272727273,
       "converged": true,
       "trainMetrics": {
-        "n": 142,
-        "r2": 0.46581529248783904,
-        "corr": 0.6825590876400384,
-        "mae": 0.14597712889527212,
-        "rmse": 0.192828775469206,
-        "bias": -0.000678351528873411
+        "n": 146,
+        "r2": 0.46328399632950035,
+        "corr": 0.6806901471113017,
+        "mae": 0.1439609768974569,
+        "rmse": 0.19115217831983933,
+        "bias": -0.0005933800823480761
       }
     },
     {
@@ -29,17 +29,17 @@
       "exploratory": false,
       "inferentialRole": "primary",
       "interpretationBoundary": "Primary refit OOS evidence tier; interpretation remains support-conditioned under thin effective support.",
-      "nTrain": 142,
+      "nTrain": 146,
       "parameterCount": 18,
-      "supportPerParameter": 7.888888888888889,
+      "supportPerParameter": 8.11111111111111,
       "converged": true,
       "trainMetrics": {
-        "n": 142,
-        "r2": 0.5412709298311529,
-        "corr": 0.7357549190029364,
-        "mae": 0.13178894866361401,
-        "rmse": 0.17869164595368678,
-        "bias": 0.0005310475626145049
+        "n": 146,
+        "r2": 0.5399282787692163,
+        "corr": 0.7348323346513689,
+        "mae": 0.12947322790896784,
+        "rmse": 0.17697818984610203,
+        "bias": 0.0005058269542639207
       }
     },
     {
@@ -48,17 +48,17 @@
       "exploratory": true,
       "inferentialRole": "exploratory",
       "interpretationBoundary": "Exploratory sensitivity tier; not used for headline inference under thin effective support.",
-      "nTrain": 142,
+      "nTrain": 146,
       "parameterCount": 22,
-      "supportPerParameter": 6.454545454545454,
+      "supportPerParameter": 6.636363636363637,
       "converged": true,
       "trainMetrics": {
-        "n": 142,
-        "r2": 0.5489034285846801,
-        "corr": 0.7411013891706268,
-        "mae": 0.12885797014745254,
-        "rmse": 0.17719884261955776,
-        "bias": 0.0012014097002377789
+        "n": 146,
+        "r2": 0.5469788206627975,
+        "corr": 0.7397672219888574,
+        "mae": 0.12754286512337923,
+        "rmse": 0.17561686982334065,
+        "bias": 0.0010897082198521198
       }
     }
   ],
@@ -68,7 +68,7 @@
   },
   "interpretationGuardrails": {
     "effectiveSupport": {
-      "nUniqueCountryYears": 142,
+      "nUniqueCountryYears": 146,
       "supportDensityNote": "All tiered interpretations are conditioned on thin effective support and should not be read as unrestricted population generalization."
     },
     "tierDiscipline": {

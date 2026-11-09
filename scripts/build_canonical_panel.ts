@@ -85,6 +85,24 @@ const WDI_TO_Y_GIINI = { slope: 0.164028, intercept: -5.413122 };
 const EDUCATION_INDICATOR = 'SE.SEC.ENRR';
 const WDI_TO_E = { slope: 0.03773538, intercept: -3.65549220 };
 
+/**
+ * Two more covariates are the same construct under an affine map, verified the
+ * same way. Their coverage in the macro panel was already near complete, so the
+ * yield is small — but the same rule applies: test, then use.
+ *
+ *   X = 0.010573 * SP.URB.TOTL.IN.ZS - 0.0573   max |residual| = 0.000000  (n=8,942)
+ *   M = 0.03122824 * IT.NET.USER.ZS  - 1.6810   max |residual| = 0.000000  (n=6,029)
+ *
+ * NOT used, because the test failed:
+ *   R_welfare_capacity vs HD.HCI.OVRL        max |residual| = 1.327  (not affine)
+ *   R_welfare_capacity vs NY.GDP.PCAP.PP.KD  max |residual| = 3.661  (not affine)
+ *   T_trauma_shock vs UCDP battle deaths     corr = -0.029            (not the same measure)
+ */
+const URBAN_INDICATOR = 'SP.URB.TOTL.IN.ZS';
+const WDI_TO_X = { slope: 0.010573, intercept: -0.0573 };
+const MEDIA_INDICATOR = 'IT.NET.USER.ZS';
+const WDI_TO_M = { slope: 0.03122824, intercept: -1.68101806 };
+
 function parseGiniWindow(argv: string[]): number {
   const flag = argv.indexOf('--gini-window');
   if (flag === -1) return 2;
@@ -271,9 +289,11 @@ function main(): void {
 
   const wdiGini = buildWdiIndex(GINI_INDICATOR);
   const wdiEducation = buildWdiIndex(EDUCATION_INDICATOR);
+  const wdiUrban = buildWdiIndex(URBAN_INDICATOR);
+  const wdiMedia = buildWdiIndex(MEDIA_INDICATOR);
   if (fs.existsSync(WDI)) {
-    console.log(`  WDI gini cells   : ${wdiGini.size} (window +/-${GINI_WINDOW} yr)`);
-    console.log(`  WDI educ cells   : ${wdiEducation.size} (window +/-${GINI_WINDOW} yr)`);
+    console.log(`  WDI indices      : gini ${wdiGini.size}, educ ${wdiEducation.size}, `
+      + `urban ${wdiUrban.size}, media ${wdiMedia.size} (window +/-${GINI_WINDOW} yr)`);
   } else {
     console.log('  WDI series       : absent — falling back to macro-only covariates');
   }
@@ -296,6 +316,9 @@ function main(): void {
   const giniRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
   /** Cells rescued by the WDI education backfill, same bookkeeping. */
   const eduRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
+  /** X and M recoveries; both covariates were nearly complete already. */
+  const urbanRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
+  const mediaRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
 
   for (const c of constructs) {
     const raw = (c.iso3 ?? '').trim();
@@ -336,6 +359,20 @@ function main(): void {
           eduRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
         }
       }
+      if (!Number.isFinite(v) && out === 'X') {
+        const found = lookupWdi(wdiUrban, iso3, Number.parseInt(year, 10));
+        if (found) {
+          v = WDI_TO_X.slope * found.value + WDI_TO_X.intercept;
+          urbanRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
+        }
+      }
+      if (!Number.isFinite(v) && out === 'M') {
+        const found = lookupWdi(wdiMedia, iso3, Number.parseInt(year, 10));
+        if (found) {
+          v = WDI_TO_M.slope * found.value + WDI_TO_M.intercept;
+          mediaRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
+        }
+      }
 
       if (!Number.isFinite(v)) {
         complete = false;
@@ -367,6 +404,8 @@ function main(): void {
   };
   reportBackfill('Y backfilled from WDI', giniRecovered, GINI_INDICATOR);
   reportBackfill('E backfilled from WDI', eduRecovered, EDUCATION_INDICATOR);
+  reportBackfill('X backfilled from WDI', urbanRecovered, URBAN_INDICATOR);
+  reportBackfill('M backfilled from WDI', mediaRecovered, MEDIA_INDICATOR);
   if (missingByCovariate.size > 0) {
     console.log('  covariate responsible for the first missing value:');
     for (const [k, v] of missingByCovariate) console.log(`    ${k}: ${v}`);

@@ -47,11 +47,21 @@ describe('Country-Out Refit Validation - Leakage & Integrity', () => {
     // In country-out design, test data is from the holdout country across years
     // Training data is from all other countries. This is spatial cross-validation, not purely temporal.
     // Test years may be earlier than or later than training years - that's expected.
+    // Bounds come from the panel itself rather than a hard-coded range: the
+    // panel has moved twice (87 -> 142 -> 146 cells) and each move reached a
+    // year the test did not know about. A test that has to be edited every time
+    // the data legitimately grows is testing the constant, not the code.
+    const panel = parsePanelCsvText(
+      fs.readFileSync('public/data/panel_canonical_v2.csv', 'utf8'),
+      'panel_canonical_v2.csv',
+    )
+    const panelYears = panel.map((row) => row.year).filter(Number.isFinite)
+    const yearMin = Math.min(...panelYears)
+    const yearMax = Math.max(...panelYears)
+
     for (const fold of data.folds) {
-      // Just verify that test years are valid
-      // The v2 panel reaches back to 1981; the old 2000 floor was a v1 range.
-      expect(fold.testYearMin).toBeGreaterThanOrEqual(1981)
-      expect(fold.testYearMax).toBeLessThanOrEqual(2022)
+      expect(fold.testYearMin).toBeGreaterThanOrEqual(yearMin)
+      expect(fold.testYearMax).toBeLessThanOrEqual(yearMax)
     }
   })
 

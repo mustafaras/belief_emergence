@@ -682,7 +682,7 @@ const HUMAN_CHECKLIST: HumanCheckItem[] = [
   { id: 'h-abstract-screen',  category: 'Editor Fit',      question: 'Does the abstract pass first-pass screening (concise, evidence-calibrated, non-causal)?' },
   { id: 'h-claim-tier',       category: 'Claim Strength',  question: 'Are all strong claims tied to Tier A/B OOS evidence only (not Tier C or in-sample metrics)?' },
   { id: 'h-causal',           category: 'Claim Strength',  question: 'Does no sentence imply causal interpretation beyond the observational design?' },
-  { id: 'h-support',          category: 'Claim Strength',  question: 'Are support-density boundaries (n=87 country-years) explicitly acknowledged for high-dimensional terms?' },
+  { id: 'h-support',          category: 'Claim Strength',  question: 'Are support-density boundaries (n=146 country-years) explicitly acknowledged for high-dimensional terms?' },
   { id: 'h-lockbox-disclose', category: 'Claim Strength',  question: 'Is lockbox evidence clearly separated from development CV evidence in all claims?' },
   { id: 'h-novelty-precise',  category: 'Novelty Precision', question: 'Is the novelty claim precisely scoped (method + domain-specific contribution, no universal claims)?' },
   { id: 'h-review-ready',     category: 'Novelty Precision', question: 'Are top 5 reviewer attack surfaces pre-addressed (see reviewer_red_team.json)?' },
