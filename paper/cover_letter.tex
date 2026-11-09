@@ -134,13 +134,21 @@
 {\color{black!65}\rule{\linewidth}{0.4pt}}\\[0.4em]
 \noindent Full declaration statements---including funding, conflict of interest, data and code availability, deterministic replication instructions, author contributions, and ethics---are provided on the accompanying title page. The submission bundle includes the canonical analysis dataset, upstream raw extracts with a machine-readable provenance inventory, and all deterministic regeneration commands required for independent replication.
 
-\SmallHeading{Corresponding author} 
+\SmallHeading{Corresponding author}
+\ifAnonymous
+% Under double-blind review the corresponding-author block is the one place a
+% manuscript leaks identity most easily: it prints a name, an institutional
+% address, an e-mail and a phone number in a table that reads as administrative
+% rather than authorial, so it is easy to overlook when anonymising the byline.
+\noindent Contact details are recorded in the submission system and are withheld from this version in accordance with the journal's double-blind review policy.
+\else
 \noindent\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X@{}}
 Name & \CorrName\\
 Affiliation & \AffilOne\\
 Email & \CorrEmail\\
 Phone & \CorrPhone\\
 \end{tabularx}
+\fi
 \\[0.6em]
 
 \noindent Thank you for considering this submission. The authors would be grateful for the opportunity to have the manuscript reviewed, and welcome any questions regarding the modeling contract, evaluation diagnostics, or reproducibility materials.

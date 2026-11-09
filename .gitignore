@@ -61,3 +61,17 @@ q1_share.zip
 Thumbs.db
 .AppleDouble
 .LSOverride
+
+# LaTeX build artefacts (the PDFs are produced by CI and attached as workflow
+# artifacts; committed binaries drift from source and cannot be reviewed).
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz
+*.pdf
+!paper/**/fig*.pdf
