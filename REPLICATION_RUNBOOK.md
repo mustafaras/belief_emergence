@@ -189,7 +189,7 @@ of record.
 | `generate:analysis` | `observed_vs_predicted_authoritative.csv` | Figure 2 scatter plot |
 | `generate:headline-metrics` | `headline_metrics_authoritative.json` | Abstract & Section 4 headline numbers |
 | `generate:phase1-validation` | `model_ladder_metrics.json` | Table 2 model-ladder comparison |
-| `generate:phase1-validation` | `cv_country_out.json` | Section 4.2 leave-one-country-out CV |
+| `generate:phase1-validation` | `cv_country_out.json` | Section 4.2 leave-one-country-out CV (spatial stress test; pooled series is interpretable) |
 | `generate:phase1-validation` | `cv_rolling_origin.json` | Section 4.2 rolling-origin CV |
 | `generate:phase1-validation` | `prediction_interval_coverage.json` | Section 4.3 prediction intervals |
 | `generate:phase1-validation` | `parameter_stability.json` | Supplementary Table S3 stability |
@@ -197,6 +197,7 @@ of record.
 | `generate:phase1-validation` | `failure_log.json` | Section 5 failure documentation |
 | `generate:phase1-validation` | `construct_validity_invariance.json` | Supplementary construct validity |
 | `generate:lockbox-holdout` | `lockbox_holdout.json` | Section 4.4 holdout evaluation |
+| `generate:kfold` | `cv_kfold.json` | **Primary** OOS evidence: repeated grouped k-fold (5 folds x 20 repeats) |
 | `verify:constructs` | — (verifies `rawdata/wvs_construct_audit.json`) | Re-derives every construct from raw microdata and fails on drift |
 
 ---

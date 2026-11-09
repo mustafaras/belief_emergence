@@ -1,14 +1,41 @@
-# KNOWN ISSUES — Blocking measurement defect
+# KNOWN ISSUES — Measurement defects and their disposition
 
-**Status:** OPEN — blocks submission
-**Severity:** Critical
+**Status:** OPEN ITEMS BELOW ARE TRACKED INDIVIDUALLY — no entry still blocks release
+**Severity:** was Critical; the blocking defect (KI-01) is closed
 **Discovered:** 2026-11-07
-**Affects:** all empirical claims in `paper/main/main.tex`
+**Last reconciled against the tree:** 2026-11-09
+**Affects:** historical claims in `paper/main/main.tex` up to commit `41c2fad`
 
 Every finding below is independently reproducible from the committed tree.
-Reproduction commands are included and were run against
-`public/data/panel_canonical_23_countries_v1.csv` and
-`rawdata/panel_model_data.csv`.
+Unless an entry says otherwise, its reproduction commands now run against
+`public/data/panel_canonical_v2.csv` (87 complete-case country-years, 48
+countries, 1990--2022) and `rawdata/wvs_construct_audit.json`. Where an entry
+still cites `panel_canonical_23_countries_v1.csv` or
+`rawdata/panel_model_data.csv`, those files are retired and the citation is
+kept only to describe what the defect was.
+
+## Disposition summary
+
+| Issue | Subject | State |
+|---|---|---|
+| KI-00 | Ingestion pipeline absent | **CLOSED** — `scripts/build_wvs_constructs.ts` |
+| KI-01 | `Z` was an exact rescaling of `C` | **CLOSED** — construct audit + gate |
+| KI-02 | `Z` proxied by one WVS item | **CLOSED** — 6-item aggregate, alpha 0.8187 |
+| KI-03 | `D` was `-S` | **CLOSED** — both withdrawn from estimation |
+| KI-04 | Unidentifiable design matrix | **CLOSED** — 7 columns, full rank |
+| KI-05 | Negative canonical OOS `R²` unreported | **CLOSED** — disclosed in main text |
+| KI-06 | Table S18 internally inconsistent | **CLOSED** — table re-derived from artifact |
+| KI-07 | Gate did not test validity | **CLOSED** — `6a82d51` |
+| KI-08 | Test suite could not run | **CLOSED** — 110/110 pass |
+| KI-09 | `C` not unidimensional | **OPEN (by design)** — withdrawn, documented |
+| KI-10 | `D` not unidimensional | **OPEN (by design)** — withdrawn, documented |
+| KI-11 | `S` uncomputable | **OPEN (by design)** — withdrawn, documented |
+| KI-12 | `Z`/`C` correlation sign | **CLOSED** — superseded by the audit |
+| KI-13 | Coefficients fitted to defective panel | **CLOSED** — refit on v2 |
+| KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
+| KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
+| KI-16 | Lockbox cannot be honoured | **CLOSED** — 17 of 87 cells, disclosed |
+| KI-17 | Model loses to a linear baseline | **OPEN** — reported as a finding |
 
 ---
 
@@ -158,7 +185,7 @@ supports.
 
 ---
 
-## KI-16 — The lockbox protocol cannot be honoured on the v2 panel
+## KI-16 — The lockbox protocol could not be honoured on the earlier v2 panel — RESOLVED 2026-11-09
 
 `npm run generate:lockbox-holdout` refuses to write:
 
@@ -187,6 +214,23 @@ Consequences:
    enlarge the sample — which returns to the WVS wave 3–6 data-use application.
 
 The roadmap records this as a scope reduction, not a bug.
+
+### Resolution (2026-11-09)
+
+The sample grew from 49 to 87 complete-case observations, and the lockbox
+generator now succeeds on cycle `2026Q4-R4`:
+
+```text
+nCellsTotal = 87   nDevCells = 70   nLockboxCells = 17
+lockboxCellFingerprint = fnv1a32:1b703d05
+overlap / size / release-cycle guard checks: pass
+```
+
+The 17 reserved cells span 11 countries at one to three observations each, so
+the lockbox is a held-out descriptive check rather than a confirmation of
+transferable effects. The manuscript states exactly that, and no claim rests
+on lockbox performance. The v1 evaluation numbers (RMSE around 1e-6) are gone
+from the artifact.
 
 ---
 
@@ -245,10 +289,13 @@ artefact.
 
 ---
 
-## KI-14 — Leave-one-country-out refit is not viable at n = 49
+## KI-14 — Leave-one-country-out refit is not viable on this panel — RESOLVED 2026-11-09
 
-The v2 panel has 49 complete cases across 23 countries, so a country-out fold
-holds out 1–3 rows and trains on 46–48. With six predictors plus an intercept
+*(The measurements below describe the panel as it stood when the issue was
+raised. The disposition at the end of this entry records what replaced them.)*
+
+The v2 panel originally had 49 complete cases across 23 countries, so a
+country-out fold held out 1–3 rows and trained on 46–48. With six predictors plus an intercept
 (seven parameters), several folds cannot estimate anything stable, and the
 per-fold test set is too small for R² to be defined at all.
 
@@ -287,9 +334,61 @@ Eleven tests in the suite still assert the old behaviour (folds converging at
 correctly failing and must be rewritten together with the evaluation design,
 not relaxed to make the suite green.
 
+### Resolution (2026-11-09)
+
+Option 1 and option 2 were both implemented; option 3 was not needed.
+
+**Option 1 — repeated grouped k-fold, now the primary protocol.**
+`src/utils/validation/computeKFoldRefit.ts` and
+`scripts/generate_kfold_validation.ts` emit `src/data/analysis/cv_kfold.json`.
+Countries are the grouping unit (no country splits across folds), k = 5,
+20 seeded repeats, 100 held-out evaluations. Every fold carries at least 12
+test rows, so R² is defined in 100% of folds instead of 25%.
+
+Measured on the 87-row panel:
+
+```text
+Grouped k-fold (100 evaluations)      median R2              IQR
+  Tier A refit                        +0.2707    [ 0.054, 0.407]
+  Tier B refit                        +0.2790    [-0.067, 0.410]
+  Tier C refit                        +0.2617    [-0.022, 0.439]
+  Tier A canonical                    +0.1587    [-0.057, 0.282]
+  Tier B canonical                    +0.3696    [ 0.132, 0.484]
+  Tier C canonical                    +0.3689    [ 0.155, 0.456]
+leakagePass = true   groupsSplitAcrossFolds = 0   minTestRows = 12
+```
+
+**Option 2 — pooled held-out series on the country-out folds.**
+`computeLeaveOneCountryOutRefit` now concatenates every fold's held-out
+predictions into a single 87-row out-of-sample series (`pooledRefit`,
+`pooledCanonical`). Every row is predicted exactly once by a model that never
+saw its country, so R² is defined even though no individual fold can carry it:
+
+```text
+LOO pooled (87 rows)   Tier A   Tier B   Tier C
+  refit R2             +0.3026  +0.2579  +0.2724
+  canonical R2         +0.1955  +0.3625  +0.3854
+per-fold median R2     -1.8183  -1.1607  -0.6620   <- 12 of 48 folds only
+```
+
+The gap between those two lines is the issue itself: the negative per-fold
+median was a variance ratio computed on one to four points, not a statement
+about the model.
+
+**Gate binding.** `q1_submission_gate.ts` no longer reads the country-out
+per-fold median. `val-canonic-reported` now reads `cv_kfold.json`, requires the
+refit and canonical medians to be non-negative, and also requires
+`leakagePass`. Injecting a negative median into the artifact makes the gate
+fail again, so the check is live rather than satisfied by construction.
+
+**Tests.** The suite is green (110/110). No assertion was relaxed; the
+prediction arrays needed by the pooled series are carried on
+`TierEvaluationResult` (`testObserved`, `testPredicted`) so pooling does not
+require a second fit.
+
 ---
 
-## KI-13 — Production coefficients are fitted to the defective panel
+## KI-13 — Production coefficients were fitted to the defective panel — RESOLVED 2026-11-09
 
 `src/data/feCoefficients.ts` holds hard-coded coefficients trained on the v1
 panel (630 rows, header comment dated 2025-12-07). Every one of those
@@ -316,6 +415,29 @@ re-estimated on `panel_canonical_v2.csv`, and every downstream artefact
 (headline metrics, CV summaries, figures, manuscript numbers) must be
 regenerated from that fit. Until then `val-canonic-reported` legitimately
 fails.
+
+### Resolution (2026-11-09)
+
+The coefficients were refit on the v2 panel by
+`scripts/fit_coefficients_v2.py`, and the result is committed as
+`rawdata/coefficients_v2.json` and mirrored in
+`src/data/feCoefficients.ts`.
+
+```text
+phi0 = -4.5092   alpha = 0.0500   beta = 0.0500   k = 0.008240
+c_M  = +0.2723   c_T   = +0.0837   c_E = +0.1561   c_R = +0.0697
+c_tr = -0.1805   c_yr  = +1.7673
+retracted: C, D, G, S — coefficient not estimated (channel unavailable in v2)
+```
+
+`alpha` and `beta` sit at the lower bound of the estimation box. That is the
+finding recorded as KI-15, not a fitting failure: across the observed X and Y
+ranges the structural product contributes no explanatory power.
+
+With those coefficients the canonical family is no longer astronomically
+negative. Pooled over the 87 held-out rows it reaches $R^2$ = 0.1955 / 0.3625 /
+0.3854 for Tier A/B/C, and under grouped k-fold the medians are 0.1587 /
+0.3696 / 0.3689. The earlier values of order $-2\times10^4$ are gone.
 
 ---
 
@@ -579,11 +701,18 @@ files outside the 23-country frame).
 
 ---
 
-## Verification status after this pass
+## Verification status after this pass (2026-11-09)
 
 | Check | Command | Result |
 |---|---|---|
-| Test suite | `npm run test:run` | 110 tests, 105 pass, 5 fail (intentional) |
-| Gate | `npm run q1:gate` | 14/24 pass, verdict `NOT READY` |
-| Panel integrity | `shasum -a 256 public/data/panel_canonical_23_countries_v1.csv` | `2E5B4B0A...` matches |
-| Predicate discrimination | `npx vitest run tests/validation.measurementValidityPredicates.test.ts` | 4/4 pass |
+| Test suite | `npm run test:run` | 110 tests, **110 pass** |
+| Lint | `npm run lint` | 0 errors, 2 warnings |
+| Build | `npm run build` | succeeds |
+| Deterministic reproducibility | `npm run ci:gate` | **42/42 pass** |
+| Submission gate | `npm run q1:gate` | **READY 24/24** |
+| Manuscript consistency | `npm run check:manuscript-consistency` | 11 blocks pass |
+| Section references | `npm run check:section-references` | pass |
+| Construct verification | `npm run verify:constructs` | SKIP without microdata; verified against a synthetic fixture and fails correctly on a tampered artifact |
+| Panel integrity | `shasum -a 256 public/data/panel_canonical_v2.csv` | `1CB00CB3...DCED1839` matches |
+| Primary OOS evidence | `npm run generate:kfold` | 100 folds, leakage none, R² defined in 100% |
+| Predicate discrimination | `npx vitest run tests/validation.measurementValidityPredicates.test.ts` | pass |

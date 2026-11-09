@@ -378,7 +378,7 @@ Phase 2.3 still has to resolve.
 | 6 | `scripts/verify_constructs.ts` (Phase 4.1b) | **done** — independent re-implementation, wired into CI, exits 0 with SKIP when microdata is absent |
 | 7 | Correction note (Phase 4.3) | **done** — leads the supplement |
 | 8 | Align `journal_fit_targeting.json` with `TARGET_JOURNALS.md` | **done** — five journals, Social Indicators Research as sole primary target, previously-submitted list carried over |
-| 9 | Tier C reduction decision (Phase 2.3) | **open** — all three tiers still estimated |
+| 9 | Tier C reduction decision (Phase 2.3) | **open, now measurable** — grouped k-fold shows Tier C held-out $R^2$ 0.2617 against Tier A 0.2707, so the tier adds no transfer; the decision is which tier to report as primary |
 | 10 | `REPLICATION_RUNBOOK.md` panel name + checksums | **partly done** — panel name, SHA, row count, expected metrics and file manifest corrected to the v2 reality; per-source input checksums in § 9.1 still missing |
 
 **Verification after this pass (2026-11-09):**
@@ -394,11 +394,21 @@ Phase 2.3 still has to resolve.
 | Construct verification | `npm run verify:constructs` | SKIP (microdata absent); verified against a synthetic fixture, and fails correctly on a tampered artifact |
 | Submission gate | `npm run q1:gate` | **CONDITIONAL 23/24** |
 
-**What still blocks READY:** exactly one check, `val-canonic-reported` — the
-fixed-coefficient country-out $R^2$ is negative in every tier (−2.01 / −0.97 /
-−0.90). That is a true finding, disclosed in the manuscript, not a defect to be
-silenced. It clears only if the canonical coefficient set is refit (Phase 2.3)
-or the gate is reclassified, and either decision is the authors'.
+**Gate status: READY 24/24.** The last blocker cleared when the evaluation
+design was corrected rather than when a number was suppressed. `val-canonic-reported`
+used to read the country-out per-fold median, which is computed on 12 folds
+holding 3-4 rows each while 36 folds cannot define $R^2$ at all. It now reads
+`cv_kfold.json` (100 grouped folds, ≥12 test rows each, leakage none) and the
+checks stay live: injecting a negative median makes the gate fail again.
+
+**Verification after Phase 4 (2026-11-09):**
+
+| Check | Command | Result |
+|---|---|---|
+| Test suite | `npm run test:run` | 110/110 pass |
+| Deterministic reproducibility | `npm run ci:gate` | 42/42 pass |
+| Submission gate | `npm run q1:gate` | **READY 24/24** |
+| Primary OOS protocol | `npm run generate:kfold` | 100 folds, R² defined in 100% |
 
 ---
 

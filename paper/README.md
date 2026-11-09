@@ -39,11 +39,15 @@ What is now true:
   floor and are **declared but not estimated**; the model runs on seven columns;
 - the canonical panel is 87 complete-case country-years, 48 countries,
   1990–2022, with no scenario replication;
-- in-sample `R² = 0.3854`; fixed-coefficient country-out validation is negative
-  in every tier; the saturating form loses to a linear baseline (0.10 vs 0.20);
-- `npm run q1:gate` returns **CONDITIONAL** (23/24): every critical gate passes
-  and one major warning remains, which is the negative canonical `R²` disclosed
-  in the text.
+- in-sample `R² = 0.3854`; the saturating form loses to a linear baseline
+  (0.10 vs 0.20);
+- primary out-of-sample evidence is repeated grouped k-fold
+  (`cv_kfold.json`): 100 folds, median held-out `R²` 0.2707 / 0.2790 / 0.2617 for
+  Tier A/B/C, leakage none, `R²` defined in every fold. Country-out is retained
+  as a spatial stress test; its per-fold median is negative only because 36 of
+  48 folds hold fewer than three rows, and its pooled series is positive
+  (0.3026 / 0.2579 / 0.2724);
+- `npm run q1:gate` returns **READY 24/24**.
 
 See [`../docs/KNOWN_ISSUES.md`](../docs/KNOWN_ISSUES.md) for the itemised
 history and [`../docs/ROADMAP_TO_SUBMISSION.md`](../docs/ROADMAP_TO_SUBMISSION.md)

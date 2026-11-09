@@ -32,6 +32,7 @@ const METRICS  = path.join(ROOT, 'src', 'data', 'metrics');
 
 const EXPECTED_SCHEMAS: Record<string, { field: string; value: string | number }> = {
   'cv_country_out.json':                { field: 'schemaVersion', value: 'phase1.cv_country_out.v1' },
+  'cv_kfold.json':                      { field: 'schemaVersion', value: 'phase1.cv_kfold.v1' },
   'cv_rolling_origin.json':             { field: 'schemaVersion', value: 'phase1.cv_rolling_origin.v1' },
   'prediction_interval_coverage.json':  { field: 'schemaVersion', value: 'phase1.prediction_interval_coverage.v2' },
   'model_ladder_metrics.json':          { field: 'schemaVersion', value: 'phase1.model_ladder.v1' },
@@ -74,6 +75,7 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'metrics_authoritative.json'),
   path.join(ANALYSIS, 'observed_vs_predicted_authoritative.csv'),
   path.join(ANALYSIS, 'cv_country_out.json'),
+  path.join(ANALYSIS, 'cv_kfold.json'),
   path.join(ANALYSIS, 'cv_rolling_origin.json'),
   path.join(ANALYSIS, 'prediction_interval_coverage.json'),
   path.join(ANALYSIS, 'model_ladder_metrics.json'),
@@ -166,6 +168,7 @@ function phaseArtifactGeneration(): boolean {
     { label: 'Generate authoritative analysis',   cmd: 'npm run generate:analysis' },
     { label: 'Generate headline metrics',         cmd: 'npm run generate:headline-metrics' },
     { label: 'Generate phase-1 validation suite', cmd: 'npm run generate:phase1-validation' },
+    { label: 'Generate repeated grouped k-fold validation', cmd: 'npm run generate:kfold' },
   ];
   for (const s of steps) {
     if (!runCommand(s.label, s.cmd)) return false;
@@ -258,6 +261,7 @@ function phaseArtifactFingerprints(): void {
   try {
     execSync('npm run generate:analysis', { stdio: 'pipe', cwd: ROOT });
     execSync('npm run generate:phase1-validation', { stdio: 'pipe', cwd: ROOT });
+    execSync('npm run generate:kfold', { stdio: 'pipe', cwd: ROOT });
   } catch {
     record('Determinism re-generation', false, 'Regeneration command failed on second pass');
     return;

@@ -22,6 +22,16 @@ type TierAggregateRefit = TierAggregate & {
   failureRate: number;
 };
 
+/** Metrics over all held-out rows at once (see `pooledRefit`). */
+export type PooledMetrics = {
+  n: number;
+  r2: number;
+  corr: number;
+  mae: number;
+  rmse: number;
+  bias: number;
+};
+
 export type CountryOutFold = {
   foldId: string;
   holdoutCountry: string;
@@ -43,6 +53,15 @@ export type CountryOutRefitSummary = {
   aggregatesRefitSupportCollapsed: Record<ModelTier, TierAggregate>;
   aggregatesCanonical: Record<ModelTier, TierAggregate>;
   aggregatesCanonicalSupportCollapsed: Record<ModelTier, TierAggregate>;
+  /**
+   * Pooled held-out evaluation (KI-14 remedy 2). Every row is predicted exactly
+   * once, by a model that never saw its country; the metrics are then computed
+   * on all 87 pairs at once. Unlike the per-fold R² distribution, this statistic
+   * is defined because its denominator is the variance across the whole panel
+   * rather than across a 1-4 row test slice.
+   */
+  pooledRefit: Record<ModelTier, PooledMetrics>;
+  pooledCanonical: Record<ModelTier, PooledMetrics>;
   // Backward compatibility aliases (map to refit families)
   aggregates: Record<ModelTier, TierAggregateRefit>;
   aggregatesSupportCollapsed: Record<ModelTier, TierAggregate>;
@@ -55,6 +74,8 @@ export type CountryOutRefitSummary = {
       foldDiagnosticField: 'testMetricsCanonical';
       primaryUse: 'inferential';
       diagnosticUse: 'descriptive_only';
+      supersededForInferenceBy: string;
+      protocolStatus: 'spatial_stress_test';
     };
   };
   checks: {
@@ -105,6 +126,8 @@ function computeVariance(values: number[]): number {
 }
 
 function computeCanonicalTierMetrics(testRows: PanelRowCanonical[], tier: ModelTier): {
+  observed: number[];
+  predicted: number[];
   rowMetrics: {
     n: number;
     r2: number;
@@ -171,6 +194,8 @@ function computeCanonicalTierMetrics(testRows: PanelRowCanonical[], tier: ModelT
   };
 
   return {
+    observed,
+    predicted,
     rowMetrics,
     supportCollapsedMetrics,
     nUniqueCountryYears: collapsed.size,
@@ -221,6 +246,14 @@ export function computeLeaveOneCountryOutRefit(
   const lowVarianceFoldFlags: string[] = [];
   let supportOverlapPass = true;
 
+  // Pooled held-out predictions (KI-14 remedy 2). Each panel row is predicted
+  // exactly once by a model trained without its country, so concatenating the
+  // per-fold test predictions reconstructs a full 87-row out-of-sample series.
+  const pooledObservedRefit: Record<ModelTier, number[]> = { A: [], B: [], C: [] };
+  const pooledPredictedRefit: Record<ModelTier, number[]> = { A: [], B: [], C: [] };
+  const pooledObservedCanonical: Record<ModelTier, number[]> = { A: [], B: [], C: [] };
+  const pooledPredictedCanonical: Record<ModelTier, number[]> = { A: [], B: [], C: [] };
+
   for (const holdoutCountry of countries) {
     const testRows = rows.filter((row) => row.iso3 === holdoutCountry);
     const trainRows = rows.filter((row) => row.iso3 !== holdoutCountry);
@@ -242,6 +275,18 @@ export function computeLeaveOneCountryOutRefit(
       if (tierResults[tier].lowVarianceObservedTest) {
         lowVarianceFoldFlags.push(`country_out:${holdoutCountry}:${tier}`);
       }
+
+      // Pooled series: append this fold's held-out predictions in country
+      // order. The refit arrays ride along on the fold result, so no second fit
+      // is needed.
+      const refitObserved = tierResults[tier].testObserved;
+      const refitPredicted = tierResults[tier].testPredicted;
+      if (refitObserved && refitPredicted) {
+        pooledObservedRefit[tier].push(...refitObserved);
+        pooledPredictedRefit[tier].push(...refitPredicted);
+      }
+      pooledObservedCanonical[tier].push(...canonical.observed);
+      pooledPredictedCanonical[tier].push(...canonical.predicted);
     }
 
     folds.push({
@@ -312,6 +357,25 @@ export function computeLeaveOneCountryOutRefit(
     return acc;
   }, { A: undefined as never, B: undefined as never, C: undefined as never });
 
+  const poolMetrics = (observed: number[], predicted: number[]): PooledMetrics => ({
+    n: Math.min(observed.length, predicted.length),
+    r2: computeR2(observed, predicted),
+    corr: computePearsonCorr(observed, predicted),
+    mae: computeMAE(observed, predicted),
+    rmse: computeRMSE(observed, predicted),
+    bias: computeBias(observed, predicted),
+  });
+
+  const pooledRefit = (['A', 'B', 'C'] as ModelTier[]).reduce<Record<ModelTier, PooledMetrics>>((acc, tier) => {
+    acc[tier] = poolMetrics(pooledObservedRefit[tier], pooledPredictedRefit[tier]);
+    return acc;
+  }, { A: undefined as never, B: undefined as never, C: undefined as never });
+
+  const pooledCanonical = (['A', 'B', 'C'] as ModelTier[]).reduce<Record<ModelTier, PooledMetrics>>((acc, tier) => {
+    acc[tier] = poolMetrics(pooledObservedCanonical[tier], pooledPredictedCanonical[tier]);
+    return acc;
+  }, { A: undefined as never, B: undefined as never, C: undefined as never });
+
   const effectiveSampleSizeByTier = (['A', 'B', 'C'] as ModelTier[]).reduce<Record<ModelTier, number>>((acc, tier) => {
     acc[tier] = aggregate(
       folds.map((fold) => fold.tierResults[tier].nTestUniqueCountryYears ?? NaN)
@@ -328,22 +392,28 @@ export function computeLeaveOneCountryOutRefit(
     aggregatesRefitSupportCollapsed,
     aggregatesCanonical,
     aggregatesCanonicalSupportCollapsed,
+    pooledRefit,
+    pooledCanonical,
     aggregates: aggregatesRefit,
     aggregatesSupportCollapsed: aggregatesRefitSupportCollapsed,
     provenance: {
       metricSemanticsNotes: [
         'Primary OOS inference uses fold-specific refit metrics (testMetricsRefit / aggregatesRefit).',
         'Canonical fixed-model metrics are diagnostic-only and stored separately (testMetricsCanonical / aggregatesCanonical).',
-      ],
-      inferentialContract: {
-        primaryEvidenceFamily: 'aggregatesRefit',
-        diagnosticFamily: 'aggregatesCanonical',
-        foldPrimaryField: 'testMetricsRefit',
-        foldDiagnosticField: 'testMetricsCanonical',
-        primaryUse: 'inferential',
-        diagnosticUse: 'descriptive_only',
-      },
-    },
+            'DIAGNOSTIC ONLY, NOT THE PRIMARY EVALUATION: a country-out fold holds out 1-4 rows, and R² is undefined below three pairs. 36 of 48 folds therefore carry no R² (KI-14). The primary OOS evidence is cv_kfold.json (repeated grouped k-fold, ~17 test rows per fold). This file is reported as a spatial stress test.',
+        'pooledRefit / pooledCanonical are the exception: every row is predicted exactly once by a model that never saw its country, so the pooled series has 87 pairs and R² is defined. Use these two blocks when a single spatial OOS number is required; do not use the per-fold median.',
+          ],
+          inferentialContract: {
+            primaryEvidenceFamily: 'aggregatesRefit',
+            diagnosticFamily: 'aggregatesCanonical',
+            foldPrimaryField: 'testMetricsRefit',
+            foldDiagnosticField: 'testMetricsCanonical',
+            primaryUse: 'inferential',
+            diagnosticUse: 'descriptive_only',
+            supersededForInferenceBy: 'cv_kfold.json',
+            protocolStatus: 'spatial_stress_test',
+          },
+        },
     checks: {
       expectedFoldCount: countries.length,
       observedFoldCount: folds.length,

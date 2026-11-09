@@ -23,7 +23,7 @@
     "check:no-hardcoded-headline": "tsx scripts/check_no_hardcoded_headline_metrics.ts",
     "check:manuscript-consistency": "tsx scripts/check_manuscript_consistency.ts",
     "check:section-references": "tsx scripts/check_section_references.ts",
-    "verify:q1:core": "npm run generate:analysis && npm run generate:phase1-validation && npm run check:no-hardcoded-headline",
+    "verify:q1:core": "npm run generate:analysis && npm run generate:phase1-validation && npm run generate:kfold && npm run check:no-hardcoded-headline",
     "verify:q1:docs": "npm run check:manuscript-consistency && npm run check:section-references",
     "verify:q1:full": "npm run verify:q1:core && npm run verify:q1:docs",
     "verify:q1": "npm run verify:q1:core",
@@ -34,7 +34,8 @@
     "verify:all": "npm run audit:search && npm run test:run && npm run lint && npm run build",
     "build:wvs-constructs": "tsx scripts/build_wvs_constructs.ts",
     "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run",
-    "verify:constructs": "tsx scripts/verify_constructs.ts"
+    "verify:constructs": "tsx scripts/verify_constructs.ts",
+    "generate:kfold": "tsx scripts/generate_kfold_validation.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

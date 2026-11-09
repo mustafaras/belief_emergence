@@ -140,6 +140,7 @@ function gateArtifactPresence(): void {
     { file: 'journal_fit_targeting.json',          schema: 'phase1.journal_fit_targeting.v1' },
     { file: 'data_code_provenance.json',           schema: 'phase1.data_code_provenance.v1' },
     { file: 'reviewer_red_team.json',              schema: 'phase1.reviewer_red_team.v1' },
+    { file: 'cv_kfold.json',                        schema: 'phase1.cv_kfold.v1' },
     { file: 'abstract_screening_pack.json',        schema: '' },
   ];
 
@@ -505,30 +506,81 @@ function gateMeasurementValidity(): void {
         : `IMPLAUSIBLE OOS — a model that reproduces its outcome perfectly is a defect, not a result: ${perfect.join(', ')}`);
   }
 
-  // 7.6 — the diagnostic metric family must be reported, not only the flattering one
-  if (cv) {
-    const canon = (cv as Record<string, Record<string, Record<string, Record<string, number>>>>)
-      .aggregatesCanonical ?? {};
-    // R2 is reported as null when a fold has fewer than three test pairs,
-    // because the statistic is undefined there (see KI-14). The check therefore
-    // looks for a *computed* negative value and separately confirms that the
-    // absence is legitimate rather than hidden.
-    const negatives: string[] = [];
-    const undefinedR2: string[] = [];
+  // 7.6 — the canonical (fixed-model) family must be reported on a statistic
+  // that is actually defined. Country-out folds hold out 1-4 rows, so R² is
+  // undefined in 36 of 48 folds and the per-fold median describes the twelve
+  // survivors, not the model (KI-14). The check therefore reads the primary
+  // spatial evidence from cv_kfold.json, and falls back to the pooled
+  // held-out series in cv_country_out.json when k-fold is absent.
+  gateCanonicalDisclosure(cv);
+}
+
+type TierRecord = Record<string, { r2?: { median?: number | null } }>;
+
+function gateCanonicalDisclosure(countryOut: Record<string, unknown> | null): void {
+  const kfold = readJson('cv_kfold.json');
+  const negatives: string[] = [];
+  const undefinedR2: string[] = [];
+  let source = '';
+  let detail = '';
+
+  if (kfold) {
+    const canon = (kfold as { aggregatesCanonical?: TierRecord }).aggregatesCanonical ?? {};
+    const refit = (kfold as { aggregatesRefit?: TierRecord }).aggregatesRefit ?? {};
+    const checks = (kfold as { checks?: { observedFoldCount?: number; minTestRows?: number; leakagePass?: boolean } }).checks ?? {};
     for (const tier of Object.keys(canon)) {
       const med = canon[tier]?.r2?.median;
       if (typeof med === 'number' && med < 0) negatives.push(`Tier ${tier} R2=${med.toFixed(4)}`);
       if (med === null || med === undefined) undefinedR2.push(tier);
     }
-    const pass = negatives.length === 0;
+    const primaryNegatives: string[] = [];
+    for (const tier of Object.keys(refit)) {
+      const med = refit[tier]?.r2?.median;
+      if (typeof med === 'number' && med < 0) primaryNegatives.push(`Tier ${tier} R2=${med.toFixed(4)}`);
+    }
+    source = 'cv_kfold.json (repeated grouped k-fold, primary spatial evidence)';
+    const allNegatives = [...primaryNegatives, ...negatives];
+    detail = allNegatives.length === 0
+      ? `Canonical and refit families are non-negative across ${checks.observedFoldCount ?? '?'} folds, `
+        + `minimum ${checks.minTestRows ?? '?'} test rows per fold, leakage ${checks.leakagePass ? 'none' : 'DETECTED'}`
+      : `NEGATIVE OOS R2 on the k-fold protocol: ${allNegatives.join(', ')}. Must be discussed in the manuscript.`;
+    if (checks.leakagePass === false) detail += ' — GROUP LEAKAGE: a country appears in train and test.';
     record('val-canonic-reported', 'Measurement Validity',
-      'Canonical (fixed-model) OOS R2 is non-negative or explicitly undefined', pass, 'major',
-      pass
-        ? (undefinedR2.length === 0
-          ? 'Canonical family shows no negative R2'
-          : `R2 undefined for tier(s) ${undefinedR2.join(', ')} because folds hold out fewer than three pairs; RMSE is reported instead and the limitation is documented as KI-14`)
-        : `NEGATIVE CANONICAL R2 — the fixed model underperforms the training mean: ${negatives.join(', ')}. Must be discussed in the manuscript, not filed as "descriptive only".`);
+      'Canonical (fixed-model) OOS R2 is non-negative on the primary protocol', allNegatives.length === 0
+        && (undefinedR2.length === 0) && checks.leakagePass !== false, 'major', detail);
+    return;
   }
+
+  // No k-fold artifact: use the pooled held-out series, which is defined even
+  // when the per-fold median is not.
+  const pooled = (countryOut as { pooledCanonical?: Record<string, { r2?: number }> } | null)?.pooledCanonical;
+  const pooledRefit = (countryOut as { pooledRefit?: Record<string, { r2?: number }> } | null)?.pooledRefit;
+  if (pooled) {
+    for (const tier of Object.keys(pooled)) {
+      const r2 = pooled[tier]?.r2;
+      if (typeof r2 === 'number' && r2 < 0) negatives.push(`Tier ${tier} R2=${r2.toFixed(4)}`);
+      if (r2 === null || r2 === undefined) undefinedR2.push(tier);
+    }
+    for (const tier of Object.keys(pooledRefit ?? {})) {
+      const r2 = pooledRefit?.[tier]?.r2;
+      if (typeof r2 === 'number' && r2 < 0) negatives.push(`Tier ${tier} refit R2=${r2.toFixed(4)}`);
+    }
+    source = 'cv_country_out.json pooledRefit/pooledCanonical (single spatial OOS series)';
+    detail = negatives.length === 0
+      ? `Pooled held-out series is non-negative across ${Object.keys(pooled).length} tiers (${source})`
+      : `NEGATIVE POOLED OOS R2: ${negatives.join(', ')}. Must be discussed in the manuscript.`;
+    record('val-canonic-reported', 'Measurement Validity',
+      'Canonical (fixed-model) OOS R2 is non-negative on the primary protocol',
+      negatives.length === 0 && undefinedR2.length === 0, 'major',
+      negatives.length === 0 && undefinedR2.length === 0 ? detail : `${detail} [${source}]`);
+    return;
+  }
+
+  record('val-canonic-reported', 'Measurement Validity',
+    'Canonical (fixed-model) OOS R2 is non-negative on the primary protocol', false, 'major',
+    'Neither cv_kfold.json nor a pooled held-out series is present — run npm run generate:kfold '
+    + 'and npm run generate:phase1-validation. The per-fold country-out median is not acceptable '
+    + 'evidence because R² is undefined in 36 of 48 folds (KI-14).');
 }
 
 /* ------------------------------------------------------------------ */

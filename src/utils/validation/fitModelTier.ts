@@ -136,6 +136,13 @@ export type TierEvaluationResult = {
   testMetricsSupportCollapsed?: RefitMetrics;
   testMetricsCanonical?: RefitMetrics;
   testMetricsSupportCollapsedCanonical?: RefitMetrics;
+  /**
+   * Raw held-out series, aligned index-by-index with `usedRows`. Exposed so a
+   * caller can pool predictions across folds without refitting the model; the
+   * pooled series is what makes a spatial R² defined (KI-14).
+   */
+  testObserved?: number[];
+  testPredicted?: number[];
   lowVarianceObservedTest?: boolean;
   predictionIntervalCoverage95: number | null;
   predictionIntervalCoverage95Empirical?: number | null;
@@ -583,6 +590,8 @@ export function fitAndEvaluateTier(
     trainMetrics: model.trainMetrics,
     testMetricsRefit: testEval.metrics,
     testMetricsSupportCollapsedRefit: supportCollapsed.metrics,
+    testObserved: testEval.observed,
+    testPredicted: testEval.predicted,
     // Keep legacy names in sync with explicit refit fields.
     testMetrics: testEval.metrics,
     testMetricsSupportCollapsed: supportCollapsed.metrics,
