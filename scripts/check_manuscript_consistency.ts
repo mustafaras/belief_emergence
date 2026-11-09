@@ -12,15 +12,20 @@ type CheckFailure = {
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
 // The manuscript lives in one of three places depending on where this runs:
-//   <repo>/paper                          versioned layout (CI and fresh clones)
+//   <app>/paper                           versioned layout (CI, fresh clone)
 //   <repo>/BE_paper_latest                local development tree, app at root
 //   <repo>/../BE_paper_latest             local development tree, app in BE_app/
-// Resolve by existence rather than by assumption; assuming the third form is
-// what made the check pass locally and fail in CI.
+//
+// APP_ROOT is checked FIRST, and that ordering is the whole point. `REPO_ROOT`
+// is the parent of the app, so in a local development tree it is the folder
+// that also holds BE_paper_latest/ — a stale copy of the manuscript. Listing
+// REPO_ROOT candidates first made this check validate the stale copy while the
+// versioned paper/ went unread, i.e. it reported success on text nobody would
+// submit. The versioned layout must win whenever it exists.
 const PAPER_ROOT = [
+  path.join(APP_ROOT, 'paper'),
   path.join(REPO_ROOT, 'paper'),
   path.join(REPO_ROOT, 'BE_paper_latest'),
-  path.join(APP_ROOT, 'paper'),
   path.join(REPO_ROOT, '..', 'BE_paper_latest'),
 ].find((candidate) => fs.existsSync(candidate)) ?? path.join(REPO_ROOT, 'BE_paper_latest');
 const ANALYSIS_DIR = path.join(APP_ROOT, 'src', 'data', 'analysis');
@@ -120,18 +125,28 @@ function addRegexNumberCheck(args: {
   }
 }
 
-function addNthRegexNumberCheck(args: {
+/**
+ * Locate a table row by its leading label rather than by match order.
+ *
+ * The supplement carries three protocols (grouped k-fold, country-out,
+ * rolling-origin), each with a "Median OOS RMSE & ..." row. Selecting them by
+ * `occurrence: 1/2/3` binds the check to the order the tables happen to appear
+ * in, so inserting a protocol above them silently retargets every assertion.
+ * Matching on the label plus a nearby anchor phrase keeps each check pointed at
+ * the protocol it is meant to verify.
+ */
+function addLabelledRowNumberCheck(args: {
   stats: CheckRunStats;
   failures: CheckFailure[];
   id: string;
   file: string;
-  regex: RegExp;
-  occurrence: number;
+  anchor: RegExp;
+  row: RegExp;
   expected: number[];
   tolerance?: number;
   context?: string;
 }): void {
-  const { stats, failures, id, file, regex, occurrence, expected, tolerance = DEFAULT_TOLERANCE, context } = args;
+  const { stats, failures, id, file, anchor, row, expected, tolerance = DEFAULT_TOLERANCE, context } = args;
   const content = readText(file);
   if (content === null) {
     stats.skippedOptional += 1;
@@ -139,24 +154,41 @@ function addNthRegexNumberCheck(args: {
     return;
   }
   stats.executed += 1;
-  const matches = [...content.matchAll(regex)];
-  if (occurrence < 1 || occurrence > matches.length) {
+
+  // matchAll requires /g; the anchor is written without it at the call site so
+  // the shared regexes stay readable, so the flag is added here.
+  const anchorGlobal = new RegExp(anchor.source, anchor.flags.includes('g') ? anchor.flags : `${anchor.flags}g`);
+  const anchorMatch = [...content.matchAll(anchorGlobal)];
+  if (anchorMatch.length === 0) {
     failures.push({
       id,
       file,
-      message: `Configured occurrence #${occurrence} not found${context ? ` (${context})` : ''}.`,
-      remediation: 'Update whitelist occurrence index or synchronize manuscript table structure.',
+      message: `Protocol anchor not found${context ? ` (${context})` : ''}.`,
+      remediation: 'Restore the protocol heading, or update the anchor regex to the current wording.',
     });
     return;
   }
 
-  const selected = matches[occurrence - 1];
-  const found = parseNumbers(selected.slice(1));
+  const start = anchorMatch[0].index ?? 0;
+  // Search a bounded window so a later table cannot satisfy this check.
+  const window = content.slice(start, start + 4000);
+  const rowMatch = row.exec(window);
+  if (!rowMatch) {
+    failures.push({
+      id,
+      file,
+      message: `Labelled row not found after its protocol anchor${context ? ` (${context})` : ''}.`,
+      remediation: 'Restore the table row, or synchronize its label with the checker.',
+    });
+    return;
+  }
+
+  const found = parseNumbers(rowMatch.slice(1));
   if (found.length !== expected.length || found.some((value) => Number.isNaN(value))) {
     failures.push({
       id,
       file,
-      message: `Could not parse numeric captures for occurrence #${occurrence}${context ? ` (${context})` : ''}.`,
+      message: `Could not parse numeric captures for the labelled row${context ? ` (${context})` : ''}.`,
       remediation: 'Ensure claim keeps machine-parseable numeric formatting in this table row.',
     });
     return;
@@ -167,7 +199,7 @@ function addNthRegexNumberCheck(args: {
       failures.push({
         id,
         file,
-        message: `Occurrence #${occurrence} mismatch at capture ${index + 1}: found ${found[index].toFixed(4)} expected ${expected[index].toFixed(4)} (tol=${tolerance}).`,
+        message: `Labelled row mismatch at capture ${index + 1}: found ${found[index].toFixed(4)} expected ${expected[index].toFixed(4)} (tol=${tolerance}).`,
         remediation: 'Sync table values with canonical artifacts.',
       });
       return;
@@ -246,7 +278,9 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_RESULTS_LOO_MEDIANS',
       file: path.join('main', 'main.tex'),
-      regex: /median out-of-sample RMSE is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\} for Tier A\/B\/C/s,
+      // The country-out paragraph now reports the pooled series and the RMSE
+      // triple in one sentence; the triple is the assertion target.
+      regex: /spatial stress test[\s\S]{0,1200}?median held-out RMSE is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}/s,
       expected: expectedCountryMedians,
       context: 'Main results LOO medians',
     });
@@ -256,7 +290,8 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'MAIN_RESULTS_ROLLING_MEDIANS',
       file: path.join('main', 'main.tex'),
-      regex: /Median out-of-sample RMSE across the [0-9]+ rolling folds is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\} for Tier A\/B\/C/s,
+      // Rolling-origin reports its triple in the same sentence as its protocol name.
+      regex: /Forward-chaining rolling-origin evaluation[\s\S]{0,500}?median out-of-sample RMSE is \\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}\/\\num\{([0-9.]+)\}/s,
       expected: expectedRollingMedians,
       context: 'Main results rolling medians',
     });
@@ -272,48 +307,51 @@ export function runConsistencyChecks(): void {
       context: 'Main Tier C threshold language',
     });
 
-    addNthRegexNumberCheck({
+    // Each supplementary table is located by its protocol heading, not by the
+    // order the tables appear in: three protocols now publish a "Median OOS
+    // RMSE" row and position is not a stable key.
+    addLabelledRowNumberCheck({
       stats,
       failures,
       id: 'SUPP_LOO_MEDIANS_ROW',
       file: path.join('supplementary', 'supplementary_materials.tex'),
-      regex: /Median OOS RMSE & ([0-9.]+) & ([0-9.]+) & ([0-9.]+) &/g,
-      occurrence: 1,
+      anchor: /Leave-One-Country-Out Cross-Validation \(spatial stress test/,
+      row: /Median OOS RMSE & ([0-9.]+) & ([0-9.]+) & ([0-9.]+) &/,
       expected: expectedCountryMedians,
-      context: 'Supplementary LOO table medians',
+      context: 'Supplementary country-out table medians',
     });
 
-    addNthRegexNumberCheck({
+    addLabelledRowNumberCheck({
       stats,
       failures,
       id: 'SUPP_ROLLING_MEDIANS_ROW',
       file: path.join('supplementary', 'supplementary_materials.tex'),
-      regex: /Median OOS RMSE & ([0-9.]+) & ([0-9.]+) & ([0-9.]+) &/g,
-      occurrence: 2,
+      anchor: /Rolling-Origin Temporal Scope Diagnostic/,
+      row: /Median OOS RMSE & ([0-9.]+) & ([0-9.]+) & ([0-9.]+) &/,
       expected: expectedRollingMedians,
-      context: 'Supplementary rolling table medians',
+      context: 'Supplementary rolling-origin table medians',
     });
 
-    addNthRegexNumberCheck({
+    addLabelledRowNumberCheck({
       stats,
       failures,
       id: 'SUPP_LOO_IQR_ROW',
       file: path.join('supplementary', 'supplementary_materials.tex'),
-      regex: /IQR \(RMSE range\) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) &/g,
-      occurrence: 1,
+      anchor: /Leave-One-Country-Out Cross-Validation \(spatial stress test/,
+      row: /IQR \(RMSE range\) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) &/,
       expected: expectedCountryIqr,
-      context: 'Supplementary LOO IQR ranges',
+      context: 'Supplementary country-out IQR ranges',
     });
 
-    addNthRegexNumberCheck({
+    addLabelledRowNumberCheck({
       stats,
       failures,
       id: 'SUPP_ROLLING_IQR_ROW',
       file: path.join('supplementary', 'supplementary_materials.tex'),
-      regex: /IQR \(RMSE range\) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) &/g,
-      occurrence: 2,
+      anchor: /Rolling-Origin Temporal Scope Diagnostic/,
+      row: /IQR \(RMSE range\) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) & ([0-9.]+)--([0-9.]+) &/,
       expected: expectedRollingIqr,
-      context: 'Supplementary rolling IQR ranges',
+      context: 'Supplementary rolling-origin IQR ranges',
     });
 
     addRegexNumberCheck({
@@ -332,7 +370,10 @@ export function runConsistencyChecks(): void {
       failures,
       id: 'COVERLETTER_OOS_TRIPLETS',
       file: 'cover_letter.tex',
-      regex: /Leave-one-country-out\} \(([0-9]+) folds\): median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)[\s\S]*?Rolling-origin temporal validation\} \(([0-9]+) forward-chaining folds\): median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)/s,
+      // Tolerates a descriptor after the fold count (e.g. "48 folds, retained as
+      // a spatial stress test") so the protocol's role can change without
+      // silently disabling the numeric assertion.
+      regex: /Leave-one-country-out\} \(([0-9]+) folds[^)]*\):?\s*median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)[\s\S]*?Rolling-origin temporal validation\} \(([0-9]+) forward-chaining folds\): median OOS RMSE ([0-9.]+) \(Tier.A\), ([0-9.]+) \(Tier.B\), ([0-9.]+) \(Tier.C\)/s,
       expected: [expectedCountryFoldCount, ...expectedCountryMedians, expectedRollingFoldCount, ...expectedRollingMedians],
       tolerance: 0.0005,
       context: 'Cover letter OOS medians',
