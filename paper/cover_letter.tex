@@ -143,10 +143,14 @@ Phone & \CorrPhone\\
 
 \vspace{0.7em}
 \noindent Sincerely,\\[0.5em]
-\noindent \ifAnonymous\textbf{On behalf of all authors}\else\textbf{\AuthorA}\fi\\
-\ifAnonymous\noindent \emph{Corresponding author; contact details in the submission system}\else\textbf{\AuthorB}\\
+\noindent \ifAnonymous\textbf{On behalf of all authors}\else\textbf{\AuthorA}\fi
+\ifAnonymous
+\noindent \emph{Corresponding author; contact details in the submission system}
+\else
+\textbf{\AuthorB}\\
 \textbf{\AuthorC}\\
-\AffilOne\fi
+\AffilOne
+\fi
 
 \endgroup
 \end{document}
