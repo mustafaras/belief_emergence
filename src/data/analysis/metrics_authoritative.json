@@ -10,5 +10,5 @@
   "predicted_scale": "Predicted Z from calculateModel() clamped to [0.0001, 0.9999]",
   "dataset_id": "public/data/panel_canonical_v2.csv (sha256=B03C84971DD0BB0DE04C48CF146860AB87779BF02D6C781E313C419C1C31694D)",
   "model_id": "calculateModel@OPTIMIZED_STRUCTURAL_PARAMS(alpha=0.050000000013, beta=0.050000000014, k=0.0082395861202525, phi0=-4.509174497928035)",
-  "timestamp": "2026-11-09T17:20:15.139Z"
+  "timestamp": "2026-11-09T17:42:10.418Z"
 }

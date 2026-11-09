@@ -30,6 +30,14 @@
 \newcommand{\ManuscriptSubtitle}{Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels}
 \newcommand{\RunningHead}{Composite Constructs, Support Limits, and an Honest Model Comparison for Country Panels}
 
+% ---------------------------------------------------------------- %
+%  Anonymisation switch                                              %
+%  SIR uses double-blind review. Set \Anonymousfalse only after the  %
+%  manuscript is accepted, or for a venue that does not blind.       %
+% ---------------------------------------------------------------- %
+\newif\ifAnonymous
+\Anonymoustrue
+
 \newcommand{\AuthorA}{Dr\ Mustafa Ra\c{s}it \c{S}AH\.{I}N}
 \newcommand{\AuthorB}{Dr\ S\.{\i}la \"OZDEM\.{I}R}
 \newcommand{\AuthorC}{Prof.\ Dr\ Emine YET\.{I}\c{S}KUL}
@@ -128,6 +136,13 @@
 \metasep
 \metaitem{Figures / Tables}{\FigureCount\ / \TableCount}
 \metasep
+\ifAnonymous
+\metaitem{Authors}{Author names withheld for double-blind review. Author identities, affiliations and ORCID iDs are recorded in the submission system and will appear in the published version.}
+\metasep
+\metaitem{Affiliation}{Withheld for double-blind review.}
+\metasep
+\metaitem{Corresponding author}{Withheld for double-blind review; reachable through the editorial system.}
+\else
 \metaitem{Authors}{\textbf{\AuthorA}$^{1}$\,---\,\EmailA\,\textbar\,ORCID: \OrcidA\\
 \textbf{\AuthorB}$^{2}$\,---\,\EmailB\,\textbar\,ORCID: \OrcidB\\
 \textbf{\AuthorC}$^{3}$\,---\,\EmailC\,\textbar\,ORCID: \OrcidC}
@@ -135,6 +150,7 @@
 \metaitem{Affiliation}{$^{1,2,3}$\ \AffilOne}
 \metasep
 \metaitem{Corresponding author}{\AuthorA\\Email: \EmailA\\Phone: \CorrPhone}
+\fi
 \metasep
 \metaitem{Keywords}{\KeywordsLine}
 \end{MetaBlock}
@@ -151,6 +167,9 @@
 \metasep
 \metaitem{Conflict of interest}{The authors declare no conflict of interest.}
 \metasep
+\ifAnonymous
+\metaitem{Data \& code availability}{An anonymised repository is supplied to the editor and will be made public on acceptance. It contains the analysis code, the deterministic replication artifacts, and the canonical country--year panel. Source-data licence terms are documented there: World Bank WDI, UNDP HDR/HDI and UCDP are freely redistributable with attribution; OECD and EM-DAT are research-use with attribution; WVS/EVS microdata are redistribution-restricted and must be downloaded from the World Values Survey Association.}
+\else
 \metaitem{Data \& code availability}{Submission bundle (app repository): \href{\AppRepoDownloadUrl}{\nolinkurl{\AppRepoDownloadUrl}}\par
 Raw data archive: \href{\RawDataDownloadUrl}{\nolinkurl{\RawDataDownloadUrl}}\par\vspace{0.65\baselineskip}\noindent%
 All analysis code, deterministic replication artifacts, and the canonical country--year panel are available in the repository. The core dataset is shipped as \nolinkurl{public/data/panel_canonical_v2.csv} (69 countries; 142 complete-case country--year rows; 1990--2022; SHA-256 \texttt{40DB5B83...32B24C} (full digest in the replication runbook)).\par\vspace{\baselineskip}\noindent%
@@ -159,6 +178,7 @@ An upstream merged table and a machine-readable provenance summary are provided 
 \textbf{Conditional redistribution} (research use with attribution): OECD IDD/SOCX analytical extracts (OECD terms), EM-DAT disaster data (CRED academic license).\par\vspace{0.5\baselineskip}\noindent%
 \textbf{Redistribution restricted}: WVS/EVS microdata files are included in the reviewer archive under the WVS academic data use agreement. Public redistribution requires separate WVS Association permission; replicators must download from \href{https://www.worldvaluessurvey.org}{www.worldvaluessurvey.org}.\par\vspace{\baselineskip}\noindent%
 WVS construct definitions and item selections are versioned in \nolinkurl{config/wvs_items.yaml}; a raw-file\,$\rightarrow$\,column audit map is reported in Table~S5 in the Supplementary Material.}
+\fi
 \metasep
 \metaitem{Deterministic replication}{(analysis artifacts) From the repository root, run \texttt{npm ci}. Then run \texttt{npm run generate:analysis} to regenerate the authoritative fit artifacts used by the app and reported in the paper.\par\vspace{\baselineskip}\noindent%
 This writes \nolinkurl{src/data/analysis/metrics_authoritative.json} and \nolinkurl{src/data/analysis/observed_vs_predicted_authoritative.csv}.\par\vspace{\baselineskip}\noindent%
@@ -168,13 +188,17 @@ Optionally run \texttt{npm run generate:headline-metrics} to regenerate \nolinku
 \metasep
 \metaitem{Scope note}{The repository includes raw source extracts (subject to their respective licenses), the integrated country--year panel, and a machine-readable provenance inventory (\nolinkurl{src/data/analysis/data_code_provenance.json}) documenting license terms, redistribution status, and attribution requirements for every data source. End-to-end reconstruction of the integrated panel from all upstream raw files is documented in the Supplementary Material runbook rather than shipped as a single turnkey ETL pipeline. WVS/EVS microdata files are included in the reviewer archive under the WVS academic data use agreement; public redistribution of these files requires separate permission from the WVS Association (see provenance inventory for details).}
 \metasep
+\ifAnonymous
+\metaitem{Author contributions}{Withheld for double-blind review; supplied in the submission system.}
+\else
 \metaitem{Author contributions}{\ContribStmt}
+\fi
 \metasep
 \metaitem{Acknowledgements}{\AckStmt}
 \metasep
 \metaitem{Ethics/consent}{\EthicsStmt}
 \metasep
-\metaitem{Author approval}{All authors have read and approved the submitted version of the manuscript, and agree to its submission to \emph{Social Indicators Research}. This approval covers the present version, whose title, framing and reported results differ substantially from the earlier draft: the contribution is now a measurement audit rather than a bounded model, and every empirical number has been regenerated.}
+\metaitem{Author approval}{All authors have read and approved the submitted version and agree to its submission to \emph{Social Indicators Research}. Approval on file with the corresponding author, whose identity is withheld here for double-blind review. It covers this version specifically: the title, framing and every reported result differ from the earlier draft.}
 \metaitem{Submission note}{Prepared for submission.}
 \end{MetaBlock}
 
