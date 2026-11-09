@@ -478,7 +478,7 @@ GBR & 2005 & 2005 & 1 & \multicolumn{4}{c}{} \\
 \hline
 Symbol & CSV column & Scale / units (as encoded) & Transformation used in modeling & Missingness handling \\
 \midrule
-$X$ & \path{X_urbanization} & Fractional panel variable (empirical range in \path{public/data/panel_canonical_23_countries_v1.csv} within the contract bounds) & Structural safe mapping to the interior band using \texttt{PANEL\_X\_MIN}=0.4, \texttt{PANEL\_X\_MAX}=0.9 and \texttt{STRUCTURAL\_\allowbreak MIN}=$10^{-4}$, \texttt{STRUCTURAL\_\allowbreak MAX}=1.0 (linear map with clipping) & Complete-case (required columns) \\
+$X$ & \path{X_urbanization} & Fractional panel variable (empirical range in \path{public/data/panel_canonical_v2.csv} within the contract bounds) & Structural safe mapping to the interior band using \texttt{PANEL\_X\_MIN}=0.4, \texttt{PANEL\_X\_MAX}=0.9 and \texttt{STRUCTURAL\_\allowbreak MIN}=$10^{-4}$, \texttt{STRUCTURAL\_\allowbreak MAX}=1.0 (linear map with clipping) & Complete-case (required columns) \\
 $Y$ & \path{Y_gini} & Panel-scale inequality index (empirical range within the contract bounds) & Structural safe mapping to the interior band using \texttt{PANEL\_Y\_MIN}=-1.5, \texttt{PANEL\_Y\_MAX}=3.5 and \texttt{STRUCTURAL\_\allowbreak MIN}/\texttt{STRUCTURAL\_\allowbreak MAX} (linear map with clipping) & Complete-case (required columns) \\
 $Z$ & \path{Z_belief_outcome} & Raw outcome index scale (bounds defined by \texttt{Z\_NORMALIZATION} in \nolinkurl{src/data/feCoefficients.ts}) & For diagnostic comparisons to model-predicted $Z\in(0,1)$, observed $Z$ is normalized into the interior band using \texttt{Z\_NORMALIZATION} and \texttt{STRUCTURAL\_\allowbreak MIN}/\texttt{STRUCTURAL\_\allowbreak MAX}; predicted $Z$ is clamped to the same interior band in \nolinkurl{src/utils/calculateModel.ts} & Complete-case (required columns) \\
 $C$ & \path{C_cultural_intensity} & Raw construct scale (not standardized in the CSV) & Z-score with fixed constants from \path{src/data/feCoefficients.ts}: $C_{\mathrm{std}}=(C-2.613602)/0.542138$ & Complete-case (required columns) \\
@@ -494,7 +494,7 @@ $R$ & \path{R_welfare_capacity} & Standardized modifier & Used as-is & Complete-
 
 \vspace{0.25em}
 \TableNoteStyle
-\emph{Note.} Complete-case filtering is enforced in the canonical panel construction: rows in \nolinkurl{public/data/panel_canonical_23_countries_v1.csv} are intended to be non-missing for the full modeled block $X,Y,Z,C,M,T,D,G,E,S,R$.
+\emph{Note.} Complete-case filtering is enforced in the canonical panel construction: rows in \nolinkurl{public/data/panel_canonical_v2.csv} are intended to be non-missing for the full modeled block $X,Y,Z,C,M,T,D,G,E,S,R$.
 \end{table}
 \noindent\justifying
 \textit{Reading note.} The availability diagnostic in Table~\ref{tab:missingness} is intentionally computed after collapsing to unique (iso3, year) pairs.
@@ -530,7 +530,7 @@ Auxiliary & \path{M_internet_daily} & 0.029 & 0.000 & 1.000 \\
 a_{iv} = \frac{1}{n_i}\sum_{t} \mathbb{1}\{x_{itv}\neq \mathrm{NA}\}.
 \end{aligned}
 \]
-Computed from \path{public/data/panel_canonical_23_countries_v1.csv} with scenario replication collapsed.
+Computed from \path{public/data/panel_canonical_v2.csv}; the panel carries one row per country--year, so there is no scenario replication to collapse.
 \end{table}
 
 \noindent\justifying

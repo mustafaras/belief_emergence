@@ -76,6 +76,12 @@ jobs:
       - name: Generate functional-form comparison (linear baseline)
         run: npm run generate:functional-form
 
+      - name: Regenerate evaluation figures from artifacts
+        run: |
+          pip install --quiet matplotlib
+          npm run generate:figures
+          cp paper/main/fig_eval_pair.pdf paper/supplementary/fig_eval_pair.pdf
+
       - name: Check manuscript numeric consistency
         run: npm run check:manuscript-consistency
 

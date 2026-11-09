@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.prediction_interval_coverage.v2",
-  "generatedAtIso": "2026-11-09T13:17:16.146Z",
+  "generatedAtIso": "2026-11-09T14:19:21.221Z",
   "nominalCoverage": 0.95,
   "severeUnderCoverageThreshold": 0.8,
   "intervalMethods": {
