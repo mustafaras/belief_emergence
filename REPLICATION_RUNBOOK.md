@@ -35,7 +35,7 @@ gate. If the hash does not match, every script aborts before writing output.
 | Property | Value |
 |----------|-------|
 | File     | `public/data/panel_canonical_v2.csv` |
-| SHA-256  | `40DB5B83BC12E997A086556E4C988C4C3BDAFFABDC17B97FB3224FC4A232B24C` |
+| SHA-256  | `B03C84971DD0BB0DE04C48CF146860AB87779BF02D6C781E313C419C1C31694D` |
 | Rows     | 126 complete-case country-year observations |
 | Countries| 66 |
 | Years    | 1990–2022 |

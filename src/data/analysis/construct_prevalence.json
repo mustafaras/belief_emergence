@@ -1,12 +1,12 @@
 {
   "schemaVersion": "phase1.construct_prevalence.v1",
-  "generatedAtIso": "2026-11-09T15:25:48.632Z",
+  "generatedAtIso": "2026-11-09T17:11:12.590Z",
   "purpose": "Quantify how widely the measurement failure extends: how many configured constructs fail a routine reliability check, and how much of the available frame survives it.",
   "reliabilityFloor": 0.7,
   "frame": {
     "scannedCountryYears": 305,
     "zComputableCells": 287,
-    "canonicalCompleteCases": 126
+    "canonicalCompleteCases": 142
   },
   "constructs": [
     {
@@ -50,8 +50,8 @@
     "failureRate": 0.75,
     "frameUtilisation": {
       "scanned": 305,
-      "analysable": 126,
-      "fraction": 0.4131
+      "analysable": 142,
+      "fraction": 0.4656
     }
   },
   "implication": "Constructs specified by this project's own configuration fail at a 3-in-4 rate. Any pipeline that inherits item sets from an older conceptual scheme, rather than testing them, inherits the same risk; the failure is not specific to this dataset but the audit is."

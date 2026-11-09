@@ -71,6 +71,20 @@ const GINI_INDICATOR = 'SI.POV.GINI';
 /** Affine map from WDI Gini to the macro panel's Y_gini scale (verified exact). */
 const WDI_TO_Y_GIINI = { slope: 0.164028, intercept: -5.413122 };
 
+/**
+ * Education backfill, same construction as the Gini one.
+ *
+ * `E_education_capacity` in the macro panel is secondary gross enrolment under
+ * an affine map. Verified on 5,574 overlapping cells:
+ *     E = 0.03773538 * SE.SEC.ENRR - 3.65549220     max |residual| = 0.0000000000
+ * The other WDI education indicators are NOT equivalents and are not used:
+ * primary enrolment correlates 0.41, tertiary 0.80, education expenditure 0.31.
+ * Using any of those would conflate constructs, which is the defect this paper
+ * is about.
+ */
+const EDUCATION_INDICATOR = 'SE.SEC.ENRR';
+const WDI_TO_E = { slope: 0.03773538, intercept: -3.65549220 };
+
 function parseGiniWindow(argv: string[]): number {
   const flag = argv.indexOf('--gini-window');
   if (flag === -1) return 2;
@@ -236,30 +250,39 @@ function main(): void {
   }
   console.log(`  macro index size : ${macroIndex.size}`);
 
-  // WDI Gini, used only where the macro panel has no value for the same cell.
-  const wdiGini = new Map<string, number>();
-  if (fs.existsSync(WDI)) {
+  // WDI series used only where the macro panel has no value for the same cell.
+  // One index per indicator: Gini fills Y, secondary enrolment fills E.
+  const buildWdiIndex = (indicator: string): Map<string, number> => {
+    const index = new Map<string, number>();
+    if (!fs.existsSync(WDI)) return index;
     for (const r of readCsv(WDI)) {
-      if ((r['Indicator Code'] ?? '') !== GINI_INDICATOR) continue;
+      if ((r['Indicator Code'] ?? '') !== indicator) continue;
       const iso = (r['Country Code'] ?? '').trim();
       if (!iso) continue;
       for (const [key, value] of Object.entries(r)) {
         if (!/^\d{4}$/.test(key)) continue;
         if (!value || value === '..') continue;
         const v = Number.parseFloat(value);
-        if (Number.isFinite(v)) wdiGini.set(`${iso}|${key}`, v);
+        if (Number.isFinite(v)) index.set(`${iso}|${key}`, v);
       }
     }
+    return index;
+  };
+
+  const wdiGini = buildWdiIndex(GINI_INDICATOR);
+  const wdiEducation = buildWdiIndex(EDUCATION_INDICATOR);
+  if (fs.existsSync(WDI)) {
     console.log(`  WDI gini cells   : ${wdiGini.size} (window +/-${GINI_WINDOW} yr)`);
+    console.log(`  WDI educ cells   : ${wdiEducation.size} (window +/-${GINI_WINDOW} yr)`);
   } else {
-    console.log('  WDI gini cells   : absent — falling back to macro-only Gini');
+    console.log('  WDI series       : absent — falling back to macro-only covariates');
   }
 
-  /** Nearest WDI Gini within the window, else null. Reports the year distance. */
-  const lookupWdiGini = (iso3: string, year: number): { value: number; lag: number } | null => {
+  /** Nearest value within the window, else null. Reports the year distance. */
+  const lookupWdi = (index: Map<string, number>, iso3: string, year: number): { value: number; lag: number } | null => {
     for (let lag = 0; lag <= GINI_WINDOW; lag += 1) {
       for (const signed of lag === 0 ? [0] : [lag, -lag]) {
-        const hit = wdiGini.get(`${iso3}|${year + signed}`);
+        const hit = index.get(`${iso3}|${year + signed}`);
         if (hit !== undefined) return { value: hit, lag };
       }
     }
@@ -271,6 +294,8 @@ function main(): void {
   const missingByCovariate = new Map<string, number>();
   /** Cells rescued by the WDI Gini backfill, with the year distance used. */
   const giniRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
+  /** Cells rescued by the WDI education backfill, same bookkeeping. */
+  const eduRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
 
   for (const c of constructs) {
     const raw = (c.iso3 ?? '').trim();
@@ -295,12 +320,20 @@ function main(): void {
       const raw = m[csv];
       let v = raw ? Number.parseFloat(raw) : NaN;
 
-      // Gini fallback: only for Y, only when the macro value is absent.
+      // Backfills: only when the macro value is absent, and only through a map
+      // that was verified exact on the overlap. Two covariates qualify.
       if (!Number.isFinite(v) && out === 'Y') {
-        const found = lookupWdiGini(iso3, Number.parseInt(year, 10));
+        const found = lookupWdi(wdiGini, iso3, Number.parseInt(year, 10));
         if (found) {
           v = WDI_TO_Y_GIINI.slope * found.value + WDI_TO_Y_GIINI.intercept;
           giniRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
+        }
+      }
+      if (!Number.isFinite(v) && out === 'E') {
+        const found = lookupWdi(wdiEducation, iso3, Number.parseInt(year, 10));
+        if (found) {
+          v = WDI_TO_E.slope * found.value + WDI_TO_E.intercept;
+          eduRecovered.push({ iso3, year: Number.parseInt(year, 10), lag: found.lag });
         }
       }
 
@@ -326,11 +359,14 @@ function main(): void {
   console.log(`  - no macro row for (iso3, year)             : ${dropped.noMacro}`);
   console.log(`  - missing >=1 retained covariate            : ${dropped.missingCovariate}`);
   console.log(`  = complete-case rows                        : ${rows.length}`);
-  if (giniRecovered.length > 0) {
-    const exact = giniRecovered.filter((g) => g.lag === 0).length;
-    console.log(`  + Gini backfilled from WDI SI.POV.GINI   : ${giniRecovered.length}`);
-    console.log(`      exact year: ${exact}, borrowed +/-1-${GINI_WINDOW} yr: ${giniRecovered.length - exact}`);
-  }
+  const reportBackfill = (label: string, rows: Array<{ lag: number }>, indicator: string) => {
+    if (rows.length === 0) return;
+    const exact = rows.filter((g) => g.lag === 0).length;
+    console.log(`  + ${label.padEnd(38)}: ${rows.length}`);
+    console.log(`      from ${indicator}; exact year: ${exact}, borrowed +/-1-${GINI_WINDOW} yr: ${rows.length - exact}`);
+  };
+  reportBackfill('Y backfilled from WDI', giniRecovered, GINI_INDICATOR);
+  reportBackfill('E backfilled from WDI', eduRecovered, EDUCATION_INDICATOR);
   if (missingByCovariate.size > 0) {
     console.log('  covariate responsible for the first missing value:');
     for (const [k, v] of missingByCovariate) console.log(`    ${k}: ${v}`);
@@ -398,6 +434,31 @@ function main(): void {
     droppedConstructs: DROPPED,
     observationsPerParameter: Number((rows.length / nParams).toFixed(2)),
     attrition: dropped,
+    /**
+     * Covariate backfills. Recorded here rather than written by hand: an
+     * earlier hand-written block went stale the moment the panel changed, and
+     * an audit that lags its subject is worse than none.
+     */
+    backfills: [
+      {
+        covariate: 'Y',
+        indicator: GINI_INDICATOR,
+        source: path.relative(ROOT, WDI),
+        windowYears: GINI_WINDOW,
+        affine: { slope: WDI_TO_Y_GIINI.slope, intercept: WDI_TO_Y_GIINI.intercept },
+        cellsRecovered: giniRecovered.length,
+        exactYear: giniRecovered.filter((g) => g.lag === 0).length,
+      },
+      {
+        covariate: 'E',
+        indicator: EDUCATION_INDICATOR,
+        source: path.relative(ROOT, WDI),
+        windowYears: GINI_WINDOW,
+        affine: { slope: WDI_TO_E.slope, intercept: WDI_TO_E.intercept },
+        cellsRecovered: eduRecovered.length,
+        exactYear: eduRecovered.filter((g) => g.lag === 0).length,
+      },
+    ],
     validityAuditPassed: !failed,
   };
 

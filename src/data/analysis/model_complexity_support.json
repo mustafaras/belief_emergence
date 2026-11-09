@@ -1,11 +1,11 @@
 {
   "schemaVersion": "phase1.model_complexity_support.v1",
-  "generatedAtIso": "2026-11-09T16:47:11.577Z",
+  "generatedAtIso": "2026-11-09T17:13:30.416Z",
   "complexityByTier": [
     {
       "tier": "A",
       "parameterCount": 11,
-      "supportPerParameter": 11.454545454545455,
+      "supportPerParameter": 12.909090909090908,
       "supportRiskFlag": false,
       "exploratory": false,
       "inferentialRole": "primary"
@@ -13,7 +13,7 @@
     {
       "tier": "B",
       "parameterCount": 18,
-      "supportPerParameter": 7,
+      "supportPerParameter": 7.888888888888889,
       "supportRiskFlag": false,
       "exploratory": false,
       "inferentialRole": "primary"
@@ -21,7 +21,7 @@
     {
       "tier": "C",
       "parameterCount": 22,
-      "supportPerParameter": 5.7272727272727275,
+      "supportPerParameter": 6.454545454545454,
       "supportRiskFlag": false,
       "exploratory": true,
       "inferentialRole": "exploratory"
@@ -29,22 +29,22 @@
   ],
   "supportMask": {
     "schemaVersion": "phase1.support_mask.v1",
-    "generatedAtIso": "2026-11-09T16:47:11.577Z",
-    "nUniqueCountryYears": 126,
+    "generatedAtIso": "2026-11-09T17:13:30.416Z",
+    "nUniqueCountryYears": 142,
     "grid": {
       "xBins": 8,
       "yBins": 8,
-      "occupiedCells": 49,
-      "occupancyRatio": 0.765625,
-      "lowSupportCells": 19
+      "occupiedCells": 50,
+      "occupancyRatio": 0.78125,
+      "lowSupportCells": 15
     },
     "supportThresholds": {
       "lowCellCountThreshold": 2
     }
   },
   "supportConstrainedInference": {
-    "effectiveSupportUnits": 126,
-    "supportDensityNote": "Inference is conditioned on 126 unique country-years with uneven regime occupancy; evidence is support-bounded rather than population-general.",
+    "effectiveSupportUnits": 142,
+    "supportDensityNote": "Inference is conditioned on 142 unique country-years with uneven regime occupancy; evidence is support-bounded rather than population-general.",
     "highDimensionalTermsGuardrail": "Higher-dimensional interaction/curvature terms are interpreted as support-constrained diagnostics and are excluded from headline claims unless independently stabilized.",
     "tierDiscipline": {
       "primary": [

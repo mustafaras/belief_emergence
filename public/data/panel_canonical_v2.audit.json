@@ -1,13 +1,12 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-09T14:53:37.926Z",
+  "generatedAtIso": "2026-11-09T17:10:23.922Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
-    "macro": "rawdata/panel_model_data.csv",
-    "giniBackfill": "rawdata/WDICSV.csv (SI.POV.GINI)"
+    "macro": "rawdata/panel_model_data.csv"
   },
-  "rows": 126,
-  "countries": 66,
+  "rows": 142,
+  "countries": 69,
   "yearRange": [
     1990,
     2022
@@ -23,11 +22,11 @@
   "droppedConstructs": [
     {
       "out": "C",
-      "reason": "alpha 0.33 \u2014 not a unidimensional construct (KI-09)"
+      "reason": "alpha 0.33 — not a unidimensional construct (KI-09)"
     },
     {
       "out": "D",
-      "reason": "alpha -0.42 \u2014 items disagree (KI-10)"
+      "reason": "alpha -0.42 — items disagree (KI-10)"
     },
     {
       "out": "S",
@@ -38,24 +37,38 @@
       "reason": "disposable-income Gini unavailable outside the OECD sample"
     }
   ],
-  "observationsPerParameter": 18,
+  "observationsPerParameter": 20.29,
   "attrition": {
     "noIso": 11,
     "noMacro": 8,
-    "missingCovariate": 142,
+    "missingCovariate": 126,
     "missingOutcome": 18
   },
-  "validityAuditPassed": true,
-  "giniBackfill": {
-    "indicator": "SI.POV.GINI",
-    "window_years": 2,
-    "cellsRecovered": 79,
-    "exactYearRecoveries": 0,
-    "affineToMacro": {
-      "slope": 0.164028,
-      "intercept": -5.413122,
-      "maxResidual": 0.0
+  "backfills": [
+    {
+      "covariate": "Y",
+      "indicator": "SI.POV.GINI",
+      "source": "rawdata/WDICSV.csv",
+      "windowYears": 2,
+      "affine": {
+        "slope": 0.164028,
+        "intercept": -5.413122
+      },
+      "cellsRecovered": 79,
+      "exactYear": 0
     },
-    "sensitivityArtifact": "src/data/analysis/gini_window_sensitivity.json"
-  }
+    {
+      "covariate": "E",
+      "indicator": "SE.SEC.ENRR",
+      "source": "rawdata/WDICSV.csv",
+      "windowYears": 2,
+      "affine": {
+        "slope": 0.03773538,
+        "intercept": -3.6554922
+      },
+      "cellsRecovered": 17,
+      "exactYear": 0
+    }
+  ],
+  "validityAuditPassed": true
 }

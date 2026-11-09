@@ -762,6 +762,6 @@ files outside the 23-country frame).
 | Manuscript consistency | `npm run check:manuscript-consistency` | 11 blocks pass |
 | Section references | `npm run check:section-references` | pass |
 | Construct verification | `npm run verify:constructs` | SKIP without microdata; verified against a synthetic fixture and fails correctly on a tampered artifact |
-| Panel integrity | `shasum -a 256 public/data/panel_canonical_v2.csv` | `40DB5B83...A232B24C` matches |
+| Panel integrity | `shasum -a 256 public/data/panel_canonical_v2.csv` | `B03C8497...C31694D` matches |
 | Primary OOS evidence | `npm run generate:kfold` | 100 folds, leakage none, R² defined in 100% |
 | Predicate discrimination | `npx vitest run tests/validation.measurementValidityPredicates.test.ts` | pass |
