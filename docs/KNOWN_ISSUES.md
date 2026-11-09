@@ -18,7 +18,7 @@ kept only to describe what the defect was.
 
 | Issue | Subject | State |
 |---|---|---|
-| KI-00 | Ingestion pipeline absent | **CLOSED** — `scripts/build_wvs_constructs.ts` |
+| KI-00 | Ingestion pipeline absent | **CLOSED** — builder + independent verifier written; upstream macro merge still hash-pinned only |
 | KI-01 | `Z` was an exact rescaling of `C` | **CLOSED** — construct audit + gate |
 | KI-02 | `Z` proxied by one WVS item | **CLOSED** — 6-item aggregate, alpha 0.8187 |
 | KI-03 | `D` was `-S` | **CLOSED** — both withdrawn from estimation |
@@ -35,7 +35,7 @@ kept only to describe what the defect was.
 | KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
 | KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
 | KI-16 | Lockbox cannot be honoured | **CLOSED** — 17 of 87 cells, disclosed |
-| KI-17 | Model loses to a linear baseline | **OPEN** — reported as a finding |
+| KI-17 | Functional form vs linear baseline | **REVISED** — measured; the two are indistinguishable out of sample |
 
 ---
 
@@ -127,41 +127,64 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 
 ---
 
-## KI-17 — On the full 1981–2023 panel the bounded model underperforms a linear baseline
+## KI-17 — The bounded model and a linear baseline are statistically indistinguishable — REVISED 2026-11-09
 
 Acquiring the WVS Trend File (1981–2022, v4.1.0) raised the sample from 49 to
 87 complete cases across 48 countries. It also removed the possibility of
 attributing the weak fit to a small sample.
 
-Leave-one-out comparison on the same 87 rows, same six predictors:
+### Revision (2026-11-09): the original numbers could not be regenerated
 
-| Model | LOO R² | LOO RMSE |
-|---|---:|---:|
-| Plain linear regression | **+0.2020** | 0.8574 |
-| Fitted saturating model | **+0.1023** | 0.9094 |
+The original entry reported a decisive linear win (LOO R² 0.2020 against
+0.1023). Those figures were typed into the text; nothing in the tree produced
+them, and when the comparison was actually implemented
+(`src/utils/validation/computeFunctionalFormComparison.ts`, emitted as
+`functional_form_comparison.json`) the gap did not appear.
 
-In-sample, the linear model reaches `R² = 0.3617` and the saturating model
-`R² = 0.2890`. **The nonlinear structure is costing accuracy, not adding it.**
+Measured on the canonical panel, same 87 rows, same six predictors, identical
+folds for both models:
 
-### Why
+| Model | In-sample R² | Grouped k-fold R² (median) | Pooled country-out R² |
+|---|---:|---:|---:|
+| Ordinary linear regression | **0.4462** | 0.2682 | 0.2914 |
+| Fitted saturating model | 0.3854 | **0.2707** | **0.3026** |
 
-`Z` pooled over 1981–2023 is close to normally distributed with SD 0.97. A
+In sample the linear model is ahead by 0.061. Out of sample the two are
+indistinguishable: the bounded form leads by 0.0025 under grouped k-fold and by
+0.0112 in the pooled series, both far inside the interquartile ranges
+(0.049-0.405 versus 0.054-0.407).
+
+**The corrected finding is narrower than both the original claim and its
+opposite.** At 87 country-years the choice between these two links is not
+identified by predictive performance. In-sample fit favours the linear form,
+held-out fit is a tie, and neither supports a claim of predictive superiority.
+The original sentence "the nonlinear structure is costing accuracy, not adding
+it" is withdrawn; the defensible statement is that the curvature costs
+in-sample accuracy and buys nothing measurable out of sample.
+
+### Why curvature does not pay here
+
+`Z` pooled over the panel is close to normally distributed with SD 0.97. A
 sigmoid maps exposure into `(0,1)` with its steepest gradient near the midpoint
 and vanishing gradient in the tails. Regressing a roughly linear outcome on it
 forces the fit to spend its curvature where the data are densest and to
-flatten exactly where the extremes live — the opposite of what a linear
-relationship needs.
+flatten exactly where the extremes live — which is why the linear form wins
+in sample.
 
 Two cells make this concrete: CHN 1990 (`Z = +3.37`, the only pre-1995 row) and
-IDN 2006 (`Z = -2.19`). With min–max scaling they compress the other 85
-observations into roughly 0.22–0.78 and in-sample `R²` falls from 0.55 to 0.36.
-Percentile anchoring recovers part of it, but not the ordering between models.
+IDN 2006 (`Z = -2.19`). Under min–max scaling they compress the other 85
+observations into roughly 0.22–0.78. Percentile anchoring (the rule actually
+used, `Z_NORMALIZATION = [-1.889, 1.854]`) keeps them inside the band while
+preserving the bulk's dynamic range.
+
+That in-sample cost does not carry to held-out rows, which is the part the
+original entry did not test.
 
 ### What this means for the paper
 
 The bounded functional form was introduced because the outcome is a composite
 index on a closed scale. That argument is about the *measurement*, not about
-the *response shape*, and this sample does not support the shape:
+the *response shape*, and this sample does not arbitrate the shape:
 
 1. **The saturation claim has no empirical support here.** Nothing in 87
    country-years indicates that effects flatten at high exposure. The
@@ -174,14 +197,20 @@ the *response shape*, and this sample does not support the shape:
    that the structural exponents sit at their lower bound; this finding is the
    same fact seen from the predictive side.
 
-### Recommendation
+### Recommendation — implemented 2026-11-09
 
-Add the linear baseline to the Results as a model comparison, state that the
-saturating form does not outperform it on this sample, and reframe the
-contribution as a **measurement and validation framework** whose functional
-form is a design choice under test — not an empirically established feature.
-That is a weaker claim than the title implies, and it is the one the data
-supports.
+The linear baseline is now in the Results as a model comparison
+(Table~\ref{tab:functional-form} in `main.tex`), generated by
+`npm run generate:functional-form`. The text states that in-sample fit favours
+the linear form and that held-out fit is a tie, and the contribution is framed
+as a **measurement and validation framework** whose functional form is a design
+choice under test rather than an empirically established feature.
+
+The stronger sentence the earlier draft carried ("the saturating form does not
+beat a linear baseline", with R² 0.2020 against 0.1023) has been withdrawn,
+because the measurement does not support it. A tie is the accurate description,
+and a tie at this sample size is itself the result: the link function is not
+identified by predictive performance on 87 country-years.
 
 ---
 
@@ -441,7 +470,7 @@ negative. Pooled over the 87 held-out rows it reaches $R^2$ = 0.1955 / 0.3625 /
 
 ---
 
-## KI-00 — The ingestion pipeline is not in the repository
+## KI-00 — The ingestion pipeline was not in the repository — CLOSED 2026-11-07
 
 This is the reason every other finding survived to submission.
 
@@ -474,13 +503,33 @@ Consequences:
 - A reviewer cannot reproduce `Z` or `C`, which undermines the paper's central
   claim of end-to-end reproducibility more than the defect itself does.
 
-### A second runbook error
+### A second runbook error — RESOLVED 2026-11-09
 
-`REPLICATION_RUNBOOK.md` § 2 names `public/data/panel_model_data.csv` with
-SHA-256 `2E5B4B0A...` and "630 rows". That hash and row count belong to
-`panel_canonical_23_countries_v1.csv`. The actual
-`rawdata/panel_model_data.csv` has 22,097 lines. The documented fingerprint
-points at a different file than the documented filename.
+When this was written, `REPLICATION_RUNBOOK.md` § 2 named
+`public/data/panel_model_data.csv` with SHA-256 `2E5B4B0A...` and "630 rows".
+That hash and row count belonged to `panel_canonical_23_countries_v1.csv`,
+while the actual `rawdata/panel_model_data.csv` has 22,097 lines: the documented
+fingerprint pointed at a different file than the documented name.
+
+The runbook now names `public/data/panel_canonical_v2.csv` with its correct
+SHA-256 (`1CB00CB3...DCED1839`) and row count (87), and § 9.1 pins every input
+file with its own hash.
+
+### Resolution (2026-11-07 / 2026-11-09)
+
+The missing generator was written: `scripts/build_wvs_constructs.ts` reads
+`config/wvs_items.yaml` and refuses to emit output that violates it, and
+`scripts/verify_constructs.ts` re-derives every audit number with an
+independent implementation. The panel builder
+(`scripts/build_canonical_panel.ts`) was also made executable and now
+reproduces `panel_canonical_v2.csv` byte-for-byte from pinned inputs.
+
+One honest limitation remains: the *upstream* macro merge
+(`rawdata/panel_model_data.csv`, 22,096 rows) still has no generator in the
+repository. That is a documented gap, not a silent one — the file is now
+hash-pinned, so a replicator can confirm they hold the same bytes even though
+they cannot rebuild them from the original OECD/World Bank/UCDP downloads
+without writing that merge themselves.
 
 ---
 

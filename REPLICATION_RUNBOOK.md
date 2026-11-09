@@ -198,6 +198,8 @@ of record.
 | `generate:phase1-validation` | `construct_validity_invariance.json` | Supplementary construct validity |
 | `generate:lockbox-holdout` | `lockbox_holdout.json` | Section 4.4 holdout evaluation |
 | `generate:kfold` | `cv_kfold.json` | **Primary** OOS evidence: repeated grouped k-fold (5 folds x 20 repeats) |
+| `generate:functional-form` | `functional_form_comparison.json` | Results Table: bounded map vs ordinary linear regression on identical rows and folds |
+| `build:panel` | `public/data/panel_canonical_v2.csv` | Rebuilds the canonical panel from hash-pinned inputs |
 | `verify:constructs` | — (verifies `rawdata/wvs_construct_audit.json`) | Re-derives every construct from raw microdata and fails on drift |
 
 ---
@@ -268,6 +270,38 @@ is restricted.
 > future, record what it asked for here rather than reintroducing a step that
 > was never verified.
 
+#### Pinned input fingerprints
+
+The pipeline verifies these SHA-256 values before it reads anything. A file that
+does not match is refused rather than silently producing a different panel.
+`scripts/build_canonical_panel.ts` owns the two panel inputs;
+`scripts/build_wvs_constructs.ts` owns the item-level source.
+
+| File | Bytes | SHA-256 |
+|---|---:|---|
+| `wvs_trend_all_items.csv` | 30,948,190 | `915646E9E98BBD93D52E13C88773C049FB1B58597CA03517B73FA0A1EF09E3FC` |
+| `EVS_WVS_Joint_Csv_v5_0.csv` | 109,403,768 | `BB9094400071C37A0E43FD8B5A21875303D0329F57B51A0ED870FC278659258F` |
+| `panel_model_data.csv` | 6,255,047 | `D97992B158EA170A0A6C5B4AF7D1412CB01ED09C8F233B6A5A2640D1E1054202` |
+| `wvs_combined.csv` (derived) | 22,725 | `12E6B66AE3D1D6C459AA67379B2DDB8728169667F3035952408BC00298EBF1A1` |
+| `API_IT.NET.USER.ZS_DS2_en_csv_v2_280824.csv` | 111,353 | `9CE70858B89B320E3B44071EFC3BD98BCE61485D7160F98A1B5C10A42C17A689` |
+| `HDR25_Composite_indices_complete_time_series.csv` | 2,001,263 | `61ED82E5B66C88DFCA8FF9FAC775C63981ECAB6A254862AF97ACACC41C143117` |
+| `OECD.WISE.INE,DSD_WISE_IDD@DF_IDD,1.0+.A.INC_DISP_GINI..._T.METH2012.D_CUR..csv` | 151,389 | `FC6CDDC5A445548BD3BCE55011DDD98B5199C63E844062A5EC36322FA7C7CFB2` |
+| `OECD_Redistribution_derived.csv` | 1,097,392 | `95EAD63169F558E5643C97308DBD1CCF56F01EEDBC955029BF5977F57CD9DF92` |
+| `SOCX2025-All-nat-cur.xlsx` | 5,105,016 | `39C2A673513CBAB41E72752493564E26BFA819D3737D53757644E6F6C9209CFD` |
+| `WDICSV.csv` | 198,078,699 | `C1CC1613DEE65121F0F77A26AC589A266E8A13AD56956B9BAEAD7ADF7E155309` |
+| `GEDEvent_v25_1.csv` (UCDP) | 250,393,383 | `3F286DE84CC0CB9152403F53E6AEA2AC604D623F156E61079338596E09E8B550` |
+
+`wvs_combined.csv` is derived, not downloaded: `npm run build:wvs-constructs`
+produces it from `wvs_trend_all_items.csv` under `config/wvs_items.yaml`. Its
+hash is pinned anyway, because it is the input that the panel builder actually
+reads and an edit there is indistinguishable from an edit to the microdata.
+
+To verify a local set after downloading:
+
+```bash
+shasum -a 256 rawdata/*.csv rawdata/*.xlsx | sort -k2
+```
+
 #### EM-DAT — International Disaster Database
 
 1. Navigate to <https://www.emdat.be/>
@@ -307,6 +341,9 @@ npm run replicate
 │   ├── ci_gate.ts                            # Deterministic CI gate (§ 5)
 │   ├── build_wvs_constructs.ts               # Construct builder (config-driven)
 │   ├── verify_constructs.ts                  # Independent construct verification
+│   ├── build_canonical_panel.ts              # Panel rebuild (hash-pinned inputs)
+│   ├── generate_kfold_validation.ts          # Primary OOS: grouped k-fold
+│   ├── generate_functional_form_comparison.ts # Linear baseline vs bounded map
 │   ├── generate_authoritative_analysis.ts    # Phase 1a
 │   ├── generate_headline_metrics.ts          # Phase 1b
 │   ├── generate_phase1_validation.ts         # Phase 1c

@@ -45,6 +45,64 @@ const OUT_AUDIT = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.audit.js
 
 const DRY_RUN = process.argv.includes('--dry-run');
 
+/**
+ * Pinned input fingerprints. The panel is only reproducible if the two inputs
+ * are the ones it was built from, and both are gitignored (one is
+ * licence-restricted, the other is a 22k-row merge). A silent input swap would
+ * produce a different panel with the same name, so the build refuses to run
+ * against an unrecognised file instead of emitting one.
+ *
+ * SHA-256 values are recorded in REPLICATION_RUNBOOK.md section 9.1 alongside
+ * the download instructions. Regenerate them deliberately, never automatically.
+ */
+const EXPECTED_INPUTS: Array<{ label: string; path: string; sha256: string }> = [
+  {
+    label: 'WVS construct table (derived by build_wvs_constructs.ts)',
+    path: WVS_CONSTRUCTS,
+    sha256: '12E6B66AE3D1D6C459AA67379B2DDB8728169667F3035952408BC00298EBF1A1',
+  },
+  {
+    label: 'Upstream macro panel (22,096 rows)',
+    path: MACRO,
+    sha256: 'D97992B158EA170A0A6C5B4AF7D1412CB01ED09C8F233B6A5A2640D1E1054202',
+  },
+];
+
+function sha256Of(file: string): string {
+  return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').toUpperCase();
+}
+
+/**
+ * Verify every input before reading it. Returns false (and prints why) instead
+ * of throwing, so `--dry-run` still reports a diagnosable state.
+ */
+function verifyInputs(): boolean {
+  let ok = true;
+  for (const input of EXPECTED_INPUTS) {
+    if (!fs.existsSync(input.path)) {
+      console.error(`\n  MISSING INPUT: ${path.relative(ROOT, input.path)}`);
+      console.error(`    ${input.label}`);
+      console.error('    Download it per REPLICATION_RUNBOOK.md section 9.1, then re-run.');
+      ok = false;
+      continue;
+    }
+    const actual = sha256Of(input.path);
+    if (input.sha256.startsWith('RAW_')) {
+      console.log(`  ${path.relative(ROOT, input.path)}: ${actual}`);
+      console.log('    (no pinned hash yet — record this value in REPLICATION_RUNBOOK.md section 9.1)');
+      continue;
+    }
+    if (actual !== input.sha256) {
+      console.error(`\n  CHECKSUM MISMATCH: ${path.relative(ROOT, input.path)}`);
+      console.error(`    expected ${input.sha256}`);
+      console.error(`    actual   ${actual}`);
+      console.error('    The panel would be built from different inputs than the committed one.');
+      ok = false;
+    }
+  }
+  return ok;
+}
+
 /** WVS stores ISO-2 country codes; the macro panel uses ISO-3. */
 const ISO2_TO_ISO3: Record<string, string> = {
   AD: 'AND', AL: 'ALB', AM: 'ARM', AR: 'ARG', AT: 'AUT', AU: 'AUS', AZ: 'AZE',
@@ -121,6 +179,12 @@ function main(): void {
   console.log(`macro      : ${path.relative(ROOT, MACRO)}`);
   console.log(`output     : ${path.relative(ROOT, OUT)}`);
   console.log(`mode       : ${DRY_RUN ? 'dry-run' : 'write'}`);
+
+  if (!verifyInputs()) {
+    console.error('\n  Refusing to build: an input is missing or does not match its pinned hash.\n');
+    process.exitCode = 1;
+    return;
+  }
 
   const constructs = readCsv(WVS_CONSTRUCTS);
   console.log(`\n  WVS construct rows: ${constructs.length}`);

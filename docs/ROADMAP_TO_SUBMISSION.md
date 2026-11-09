@@ -199,10 +199,35 @@ At **87** realised cells:
 Dropping Tier C removes the "22 parameters" attack surface entirely. The
 paper becomes an 11-parameter model with an explicitly exploratory appendix.
 
-**Status:** [ ] open. All three tiers are still estimated and reported.
-`model_complexity_support.json` already flags B and C with
-`supportRiskFlag: true` and marks C `exploratory: true`, so the labelling half
-of this task is done; the reduction decision is not.
+**Status:** [x] **decided 2026-11-09 — Tier C is retained as an exploratory
+appendix, not dropped.**
+
+The decision was blocked on evidence until the evaluation was fixed. Grouped
+k-fold now supplies it:
+
+| Tier | Params | In-sample $R^2$ | Held-out $R^2$ (median) | IQR | obs/param |
+|---|---:|---:|---:|---|---:|
+| A | 11 | 0.4569 | **0.2707** | 0.054–0.407 | 7.91 |
+| B | 18 | 0.5213 | 0.2790 | −0.067–0.410 | 4.83 |
+| C | 22 | 0.5678 | 0.2617 | −0.022–0.439 | 3.95 |
+
+Eleven extra parameters over Tier A buy **+0.111 in sample and −0.009 out of
+sample**. Complexity does not transfer, which is the finding: the correct
+response is to report the null transfer as evidence about the functional form,
+not to delete the tier. Deleting it would remove the observation that in-sample
+fit is not a guide to out-of-sample fit on this panel.
+
+Why not drop it:
+- The gate already enforces `inferentialRole: exploratory` and
+  `supportRiskFlag: true` for C (`model_complexity_support.json`), so no
+  headline claim can use it.
+- The paper's contribution is an audit protocol, and a tier that gains 0.111
+  in sample while losing 0.009 out of sample is the demonstration.
+- Dropping it would also drop the honest disclosure of what happened when the
+  full interaction structure was estimated.
+
+Guarded by `tests/model.tierDiscipline.test.ts`: if a future regeneration marks
+Tier C primary or removes the support-risk flag, the suite fails.
 
 ---
 
@@ -378,8 +403,11 @@ Phase 2.3 still has to resolve.
 | 6 | `scripts/verify_constructs.ts` (Phase 4.1b) | **done** — independent re-implementation, wired into CI, exits 0 with SKIP when microdata is absent |
 | 7 | Correction note (Phase 4.3) | **done** — leads the supplement |
 | 8 | Align `journal_fit_targeting.json` with `TARGET_JOURNALS.md` | **done** — five journals, Social Indicators Research as sole primary target, previously-submitted list carried over |
-| 9 | Tier C reduction decision (Phase 2.3) | **open, now measurable** — grouped k-fold shows Tier C held-out $R^2$ 0.2617 against Tier A 0.2707, so the tier adds no transfer; the decision is which tier to report as primary |
-| 10 | `REPLICATION_RUNBOOK.md` panel name + checksums | **partly done** — panel name, SHA, row count, expected metrics and file manifest corrected to the v2 reality; per-source input checksums in § 9.1 still missing |
+| 9 | Tier C decision (Phase 2.3) | **done** — retained as exploratory appendix; k-fold shows +0.111 in-sample for −0.009 out-of-sample |
+| 10 | `REPLICATION_RUNBOOK.md` panel name + checksums | **done** — panel name, SHA, row count, expected metrics and file manifest corrected; § 9.1 now pins all ten input files with their own SHA-256 |
+| 11 | Canonical panel builder | **done** — `npm run build:panel` verifies pinned input hashes and reproduces `panel_canonical_v2.csv` byte-for-byte |
+| 12 | Tier C decision (Phase 2.3) | **done** — retained as exploratory appendix; +0.111 in-sample for −0.009 held-out, enforced by `tests/model.tierDiscipline.test.ts` |
+| 13 | Linear baseline had no generator | **done** — `npm run generate:functional-form` emits `functional_form_comparison.json`; the measured result is a near-tie, so the original "bounded form loses" claim was **withdrawn** |
 
 **Verification after this pass (2026-11-09):**
 
@@ -405,10 +433,12 @@ checks stay live: injecting a negative median makes the gate fail again.
 
 | Check | Command | Result |
 |---|---|---|
-| Test suite | `npm run test:run` | 110/110 pass |
-| Deterministic reproducibility | `npm run ci:gate` | 42/42 pass |
-| Submission gate | `npm run q1:gate` | **READY 24/24** |
+| Test suite | `npm run test:run` | 125/125 pass |
+| Deterministic reproducibility | `npm run ci:gate` | 45/45 pass |
+| Submission gate | `npm run q1:gate` | **READY 25/25** |
 | Primary OOS protocol | `npm run generate:kfold` | 100 folds, R² defined in 100% |
+| Panel rebuild | `npm run build:panel` | byte-identical, pinned inputs verified |
+| Functional form | `npm run generate:functional-form` | near-tie; in-sample favours linear |
 
 ---
 

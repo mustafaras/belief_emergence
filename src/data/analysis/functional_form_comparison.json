@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "phase1.functional_form_comparison.v1",
+  "generatedAtIso": "2026-11-09T12:50:38.775Z",
+  "purpose": "Tests whether the bounded saturation form beats an ordinary linear regression on identical rows and folds.",
+  "covariates": [
+    "X",
+    "Y",
+    "T",
+    "E",
+    "R",
+    "M"
+  ],
+  "nRows": 87,
+  "kfold": {
+    "k": 5,
+    "repeats": 20,
+    "folds": 100,
+    "seed": 20260101
+  },
+  "models": [
+    {
+      "model": "linear_baseline",
+      "inSample": {
+        "n": 87,
+        "r2": 0.44623754703572827,
+        "corr": 0.6680101399198428,
+        "mae": 0.13656799091102564,
+        "rmse": 0.17970329635507143
+      },
+      "kfold": {
+        "median": 0.2681918850105624,
+        "q25": 0.049147055517629684,
+        "q75": 0.4050510339384965,
+        "n": 100
+      },
+      "countryOutPerFold": {
+        "median": -1.8910704217028427,
+        "q25": -8.939946247062863,
+        "q75": 0.11080861381792148,
+        "n": 12
+      },
+      "countryOutPooled": {
+        "n": 87,
+        "r2": 0.2913951873531797,
+        "corr": 0.5537470742752828,
+        "mae": 0.15433412050088666,
+        "rmse": 0.2032807898641159
+      }
+    },
+    {
+      "model": "saturating_bounded",
+      "inSample": {
+        "n": 87,
+        "r2": 0.38536138540056153,
+        "corr": 0.631111021433512,
+        "mae": 0.14983707684282632,
+        "rmse": 0.1893233634419947
+      },
+      "kfold": {
+        "median": 0.270708242697649,
+        "q25": 0.053592520507605323,
+        "q75": 0.4065149910242839,
+        "n": 100
+      },
+      "countryOutPerFold": {
+        "median": -1.8182533828257998,
+        "q25": -10.339117980070231,
+        "q75": 0.06487660367279394,
+        "n": 12
+      },
+      "countryOutPooled": {
+        "n": 87,
+        "r2": 0.30255748443220476,
+        "corr": 0.5635208492055331,
+        "mae": 0.15324919567583994,
+        "rmse": 0.20167334412623342
+      }
+    }
+  ],
+  "verdict": "The saturating form matches or beats the linear baseline on held-out R2 (0.2707 against 0.2682).",
+  "provenance": {
+    "notes": [
+      "Both models use the same rows, the same six covariates and the same fold assignment.",
+      "The linear model is ordinary least squares on the structural-band normalised outcome, with a 1e-6 ridge on slopes only.",
+      "The saturating model is the paper's production map, refitted per fold by its own optimizer.",
+      "R2 requires at least three test pairs; folds below that contribute no R2 to either model.",
+      "countryOutPooled concatenates all folds so every row is predicted once; countryOutPerFold is the degenerate per-fold median, retained for comparison with cv_country_out.json."
+    ],
+    "sameFolds": true,
+    "sameRows": true
+  }
+}

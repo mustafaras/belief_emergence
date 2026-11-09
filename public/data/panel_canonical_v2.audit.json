@@ -1,6 +1,6 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-07T14:11:29.327Z",
+  "generatedAtIso": "2026-11-09T12:31:30.476Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
     "macro": "rawdata/panel_model_data.csv"

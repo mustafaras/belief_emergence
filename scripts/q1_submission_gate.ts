@@ -14,7 +14,7 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 /* ------------------------------------------------------------------ */
 /*  Paths                                                              */
@@ -141,6 +141,7 @@ function gateArtifactPresence(): void {
     { file: 'data_code_provenance.json',           schema: 'phase1.data_code_provenance.v1' },
     { file: 'reviewer_red_team.json',              schema: 'phase1.reviewer_red_team.v1' },
     { file: 'cv_kfold.json',                        schema: 'phase1.cv_kfold.v1' },
+    { file: 'functional_form_comparison.json',      schema: 'phase1.functional_form_comparison.v1' },
     { file: 'abstract_screening_pack.json',        schema: '' },
   ];
 
@@ -513,6 +514,7 @@ function gateMeasurementValidity(): void {
   // spatial evidence from cv_kfold.json, and falls back to the pooled
   // held-out series in cv_country_out.json when k-fold is absent.
   gateCanonicalDisclosure(cv);
+  gateFunctionalFormDisclosure();
 }
 
 type TierRecord = Record<string, { r2?: { median?: number | null } }>;
@@ -581,6 +583,87 @@ function gateCanonicalDisclosure(countryOut: Record<string, unknown> | null): vo
     'Neither cv_kfold.json nor a pooled held-out series is present — run npm run generate:kfold '
     + 'and npm run generate:phase1-validation. The per-fold country-out median is not acceptable '
     + 'evidence because R² is undefined in 36 of 48 folds (KI-14).');
+}
+
+/**
+ * The manuscript's functional-form claim must be generated, not asserted.
+ *
+ * An earlier draft carried "the saturating form does not beat a linear
+ * baseline" with numbers nothing in the tree produced. The comparison now has a
+ * generator; this check requires the artifact to exist, to assert that both
+ * models saw identical rows and folds, and to report finite, plausible R2.
+ */
+/**
+ * Pure predicate for the functional-form artifact. Exported so the suite can
+ * exercise it on synthetic bad input: during a full gate run, Gate 6 (`ci:gate`)
+ * regenerates the artifact before Gate 7 reads it, so tampering the file cannot
+ * demonstrate that this check is live.
+ */
+export function findFunctionalFormProblems(artifact: Record<string, unknown> | null): string[] {
+  if (!artifact) return ['artifact is absent'];
+  const provenance = artifact['provenance'] as { sameFolds?: boolean; sameRows?: boolean } | undefined;
+  const models = artifact['models'] as Array<{
+    model?: string;
+    inSample?: { r2?: number };
+    kfold?: { median?: number };
+  }> | undefined;
+
+  const linear = models?.find((m) => m.model === 'linear_baseline');
+  const bounded = models?.find((m) => m.model === 'saturating_bounded');
+  const problems: string[] = [];
+
+  if (!linear || !bounded) problems.push('both models are not present');
+  if (!provenance?.sameFolds) problems.push('sameFolds is not asserted');
+  if (!provenance?.sameRows) problems.push('sameRows is not asserted');
+
+  const linearIn = linear?.inSample?.r2;
+  const boundedIn = bounded?.inSample?.r2;
+  const linearKf = linear?.kfold?.median;
+  const boundedKf = bounded?.kfold?.median;
+
+  for (const [label, value] of [
+    ['linear in-sample R2', linearIn],
+    ['bounded in-sample R2', boundedIn],
+    ['linear k-fold R2', linearKf],
+    ['bounded k-fold R2', boundedKf],
+  ] as const) {
+    if (typeof value !== 'number' || !Number.isFinite(value)) problems.push(`${label} is not finite`);
+  }
+
+  // A held-out R2 near unity would mean the models were not evaluated out of
+  // sample at all — the exact failure mode the original tautology produced.
+  if (typeof linearKf === 'number' && linearKf > 0.9) problems.push(`linear k-fold R2 ${linearKf.toFixed(3)} is implausibly high`);
+  if (typeof boundedKf === 'number' && boundedKf > 0.9) problems.push(`bounded k-fold R2 ${boundedKf.toFixed(3)} is implausibly high`);
+
+  return problems;
+}
+
+function gateFunctionalFormDisclosure(): void {
+  const artifact = readJson('functional_form_comparison.json');
+  if (!artifact) {
+    record('val-functional-form', 'Measurement Validity',
+      'Functional-form comparison is generated, not asserted', false, 'major',
+      'functional_form_comparison.json is absent — run npm run generate:functional-form. '
+      + 'The linear-baseline claim in Results must be reproducible.');
+    return;
+  }
+
+  const problems = findFunctionalFormProblems(artifact);
+  const models = artifact['models'] as Array<{
+    model?: string;
+    inSample?: { r2?: number };
+    kfold?: { median?: number };
+  }> | undefined;
+  const linear = models?.find((m) => m.model === 'linear_baseline');
+  const bounded = models?.find((m) => m.model === 'saturating_bounded');
+  const ok = problems.length === 0;
+
+  record('val-functional-form', 'Measurement Validity',
+    'Functional-form comparison is generated, not asserted', ok, 'major',
+    ok
+      ? `Linear ${linear?.inSample?.r2?.toFixed(4)} in-sample / ${linear?.kfold?.median?.toFixed(4)} k-fold vs bounded `
+        + `${bounded?.inSample?.r2?.toFixed(4)} / ${bounded?.kfold?.median?.toFixed(4)}; identical rows and folds`
+      : `Functional-form comparison is not usable: ${problems.join('; ')}`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -762,4 +845,11 @@ function run(): void {
   process.exit(criticalFailed ? 1 : 0);
 }
 
-run();
+// Guarded so the pure predicates above can be imported by the test suite
+// without running the whole gate as a side effect. `process.argv[1]` is absent
+// when the module is loaded by an inline evaluator, so it is checked first.
+const invokedDirectly = typeof process.argv[1] === 'string'
+  && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (invokedDirectly) {
+  run();
+}

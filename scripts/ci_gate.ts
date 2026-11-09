@@ -33,6 +33,7 @@ const METRICS  = path.join(ROOT, 'src', 'data', 'metrics');
 const EXPECTED_SCHEMAS: Record<string, { field: string; value: string | number }> = {
   'cv_country_out.json':                { field: 'schemaVersion', value: 'phase1.cv_country_out.v1' },
   'cv_kfold.json':                      { field: 'schemaVersion', value: 'phase1.cv_kfold.v1' },
+  'functional_form_comparison.json':    { field: 'schemaVersion', value: 'phase1.functional_form_comparison.v1' },
   'cv_rolling_origin.json':             { field: 'schemaVersion', value: 'phase1.cv_rolling_origin.v1' },
   'prediction_interval_coverage.json':  { field: 'schemaVersion', value: 'phase1.prediction_interval_coverage.v2' },
   'model_ladder_metrics.json':          { field: 'schemaVersion', value: 'phase1.model_ladder.v1' },
@@ -76,6 +77,7 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'observed_vs_predicted_authoritative.csv'),
   path.join(ANALYSIS, 'cv_country_out.json'),
   path.join(ANALYSIS, 'cv_kfold.json'),
+  path.join(ANALYSIS, 'functional_form_comparison.json'),
   path.join(ANALYSIS, 'cv_rolling_origin.json'),
   path.join(ANALYSIS, 'prediction_interval_coverage.json'),
   path.join(ANALYSIS, 'model_ladder_metrics.json'),
@@ -146,9 +148,11 @@ function runCommand(label: string, command: string): boolean {
 /* ------------------------------------------------------------------ */
 
 function phaseCanonicalDataFingerprint(): void {
-  const panelPath = path.join(ROOT, 'public', 'data', 'panel_model_data.csv');
-  const altPath   = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.csv');
-  const resolved  = fs.existsSync(panelPath) ? panelPath : altPath;
+  // The canonical panel is panel_canonical_v2.csv. panel_model_data.csv is a
+  // retired 630-row scenario file that must not be fingerprint-checked in its
+  // place: it has a different hash and would silently pass or fail the gate for
+  // the wrong reason.
+  const resolved = path.join(ROOT, 'public', 'data', 'panel_canonical_v2.csv');
 
   if (!fs.existsSync(resolved)) {
     record('Canonical data fingerprint', false, 'Panel CSV not found');
@@ -169,6 +173,7 @@ function phaseArtifactGeneration(): boolean {
     { label: 'Generate headline metrics',         cmd: 'npm run generate:headline-metrics' },
     { label: 'Generate phase-1 validation suite', cmd: 'npm run generate:phase1-validation' },
     { label: 'Generate repeated grouped k-fold validation', cmd: 'npm run generate:kfold' },
+    { label: 'Generate functional-form comparison', cmd: 'npm run generate:functional-form' },
   ];
   for (const s of steps) {
     if (!runCommand(s.label, s.cmd)) return false;
@@ -262,6 +267,7 @@ function phaseArtifactFingerprints(): void {
     execSync('npm run generate:analysis', { stdio: 'pipe', cwd: ROOT });
     execSync('npm run generate:phase1-validation', { stdio: 'pipe', cwd: ROOT });
     execSync('npm run generate:kfold', { stdio: 'pipe', cwd: ROOT });
+    execSync('npm run generate:functional-form', { stdio: 'pipe', cwd: ROOT });
   } catch {
     record('Determinism re-generation', false, 'Regeneration command failed on second pass');
     return;

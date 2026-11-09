@@ -73,6 +73,9 @@ jobs:
       - name: Generate repeated grouped k-fold validation (primary OOS evidence)
         run: npm run generate:kfold
 
+      - name: Generate functional-form comparison (linear baseline)
+        run: npm run generate:functional-form
+
       - name: Check manuscript numeric consistency
         run: npm run check:manuscript-consistency
 
