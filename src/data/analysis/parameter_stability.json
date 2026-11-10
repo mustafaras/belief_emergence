@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.parameter_stability.v1",
-  "generatedAtIso": "2026-11-10T06:56:47.034Z",
+  "generatedAtIso": "2026-11-10T07:15:15.427Z",
   "thresholdSignConsistency": 0.7,
   "thresholdsByTier": {
     "A": 0.7,

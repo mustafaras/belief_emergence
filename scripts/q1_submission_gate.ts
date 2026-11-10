@@ -491,6 +491,61 @@ function gateMeasurementValidity(): void {
     }
   }
 
+  // 7.2c — hand-maintained artifacts must not describe a different panel.
+  // Five artifacts have no generator (they are prose: a red-team pack, a journal
+  // fit memo, an abstract screening pack, a provenance inventory and a notation
+  // glossary). Because nothing rebuilds them, they silently kept stating 87
+  // country-years and 48 countries after the panel reached 146 and 70. A
+  // reviewer reading any of them would form a picture of a different study, so
+  // their panel facts are pinned here rather than trusted.
+  {
+    const panelRows = rows.length;
+    const panelCountries = new Set(rows.map((r) => r.iso3)).size;
+    const maxYear = Math.max(...rows.map((r) => r.year));
+    const manual = [
+      'reviewer_red_team.json',
+      'journal_fit_targeting.json',
+      'abstract_screening_pack.json',
+      'data_code_provenance.json',
+      'notation_glossary.json',
+    ];
+    const drift: string[] = [];
+    for (const file of manual) {
+      const full = path.join(ANALYSIS, file);
+      if (!fs.existsSync(full)) continue;
+      const text = fs.readFileSync(full, 'utf8');
+      // Panel facts that must track the current panel.
+      // Match on digit boundaries. A naive substring test flags "287
+      // country-years" (the correct Z construct cell count) as "87
+      // country-years", which is a false positive -- the first version of this
+      // check did exactly that.
+      const stalePatterns: [string, RegExp][] = [
+        ['87 complete-case', /(?<!\d)87 complete-case/],
+        ['87 unique country-year', /(?<!\d)87 unique country-year/],
+        ['87 country-year', /(?<!\d)87 country-year/],
+        ['87 rows', /(?<!\d)87 rows/],
+        ['48 countries', /(?<!\d)48 countries/],
+        ['1990-2022', /1990[-–]2022/],
+        ['n=87', /(?<![\d=])n=87(?![\d])/],
+      ];
+      for (const [label, pattern] of stalePatterns) {
+        if (pattern.test(text)) drift.push(`${file}: "${label}"`);
+      }
+      if (new RegExp(`\\b${panelRows}\\b`).test(text) === false && !file.includes('notation')) {
+        drift.push(`${file}: never states the current row count ${panelRows}`);
+      }
+      if (!text.includes(String(panelCountries)) && !file.includes('notation')) {
+        drift.push(`${file}: never states the current country count ${panelCountries}`);
+      }
+      if (text.includes('1990-2022') || text.includes('1990–2022')) drift.push(`${file}: year span excludes ${maxYear}`);
+    }
+    record('val-manual-artifacts-current', 'Measurement Validity',
+      'Hand-maintained artifacts describe the current panel', drift.length === 0, 'major',
+      drift.length === 0
+        ? `All 5 generator-less artifacts agree on ${panelRows} rows, ${panelCountries} countries, through ${maxYear}`
+        : `STALE MANUAL ARTIFACT — ${[...new Set(drift)].join('; ')}`);
+  }
+
   // 7.3 — design matrix must be full column rank, tested on complete rows only
   const completeRows = rows.filter((r) =>
     [OUTCOME, ...PREDICTORS].every((k) => Number.isFinite(Number.parseFloat(r[k]))));

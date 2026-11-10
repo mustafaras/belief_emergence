@@ -297,11 +297,11 @@
     },
     {
       "id": "canonical_panel",
-      "name": "Canonical Analytical Panel (48 countries, 87 complete-case country-years)",
+      "name": "Canonical Analytical Panel (70 countries, 146 complete-case country-years)",
       "files": [
         "public/data/panel_canonical_v2.csv"
       ],
-      "description": "Complete-case analytical sample: 87 country-year observations across 48 countries, 1990-2022. One row per country-year; no scenario replication. Contains only country-year aggregated values, no individual-level microdata.",
+      "description": "Complete-case analytical sample: 146 country-year observations across 70 countries, 1990-2023. One row per country-year; no scenario replication. Contains only country-year aggregated values, no individual-level microdata.",
       "redistribution_note": "Country-year aggregates derived from survey data. Aggregation level is above individual respondent data, which reduces redistribution risk. However, underlying WVS terms should be reviewed for derived-aggregate policies."
     }
   ],

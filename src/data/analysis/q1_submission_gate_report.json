@@ -1,10 +1,10 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-10T06:57:08.278Z",
+  "generatedAtIso": "2026-11-10T07:15:39.387Z",
   "verdict": "READY",
   "summary": {
-    "totalChecks": 26,
-    "passed": 26,
+    "totalChecks": 27,
+    "passed": 27,
     "failed": 0,
     "criticalFailed": 0,
     "majorFailed": 0,
@@ -178,6 +178,14 @@
       "pass": true,
       "severity": "major",
       "detail": "VIF computed on all 146 rows for 6 covariates; max 9.19"
+    },
+    {
+      "id": "val-manual-artifacts-current",
+      "category": "Measurement Validity",
+      "label": "Hand-maintained artifacts describe the current panel",
+      "pass": true,
+      "severity": "major",
+      "detail": "All 5 generator-less artifacts agree on 146 rows, 70 countries, through NaN"
     },
     {
       "id": "val-rank",

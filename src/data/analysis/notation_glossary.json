@@ -340,25 +340,25 @@
       "label": "Low-uptake",
       "formal_definition": "Z < 0.33",
       "empirical_characterization": "Below-transition zone; outcome near floor. Marginal sensitivity ∂Z/∂Φ = Z(1−Z) is low. Dominated by secular / low-religiosity country-years.",
-      "support_density": "19 of 87 country-years (21.8%); extrapolation risk elevated."
+      "support_density": "100 of 146 country-years (68.5%); extrapolation risk elevated."
     },
     {
       "label": "Transition corridor",
       "formal_definition": "0.33 ≤ Z < 0.67",
       "empirical_characterization": "Mid-response band where sensitivity peaks. Contains moderate-religiosity and transitioning country-years.",
-      "support_density": "43 of 87 (49.4%); best-supported regime."
+      "support_density": "17 of 146 (11.6%); best-supported regime."
     },
     {
       "label": "Ridge peak",
       "formal_definition": "0.45 ≤ Z ≤ 0.55",
       "empirical_characterization": "Narrow band around Z=0.5 (Φ+s ≈ 0) where ∂Z/∂Φ is maximal. Location determined by mapping geometry, not empirical discovery.",
-      "support_density": "8 of 87 (9.2%); high leverage, limited empirical coverage."
+      "support_density": "4 of 146 (2.7%); high leverage, limited empirical coverage."
     },
     {
       "label": "High-uptake",
       "formal_definition": "Z ≥ 0.67",
       "empirical_characterization": "Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. Dominated by high-religiosity country-years.",
-      "support_density": "25 of 87 (28.7%); saturation effects dominant."
+      "support_density": "29 of 146 (19.9%); saturation effects dominant."
     },
     {
       "label": "Saturated tails",
