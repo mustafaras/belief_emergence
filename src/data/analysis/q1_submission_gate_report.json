@@ -1,13 +1,13 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-10T06:50:01.803Z",
-  "verdict": "CONDITIONAL",
+  "generatedAtIso": "2026-11-10T06:57:08.278Z",
+  "verdict": "READY",
   "summary": {
     "totalChecks": 26,
-    "passed": 25,
-    "failed": 1,
+    "passed": 26,
+    "failed": 0,
     "criticalFailed": 0,
-    "majorFailed": 1,
+    "majorFailed": 0,
     "minorFailed": 0
   },
   "automatedChecks": [
@@ -175,9 +175,9 @@
       "id": "val-collinearity-disclosed",
       "category": "Measurement Validity",
       "label": "Collinearity screen covers the fitted design and matches the panel",
-      "pass": false,
+      "pass": true,
       "severity": "major",
-      "detail": "COLLINEARITY DISCLOSURE DRIFT — artifact n=87 but panel has 146 rows"
+      "detail": "VIF computed on all 146 rows for 6 covariates; max 9.19"
     },
     {
       "id": "val-rank",
@@ -220,14 +220,7 @@
       "detail": "Linear 0.4556 in-sample / 0.3684 k-fold vs bounded 0.2745 / 0.3926; identical rows and folds"
     }
   ],
-  "blockers": [
-    {
-      "id": "val-collinearity-disclosed",
-      "severity": "major",
-      "label": "Collinearity screen covers the fitted design and matches the panel",
-      "detail": "COLLINEARITY DISCLOSURE DRIFT — artifact n=87 but panel has 146 rows"
-    }
-  ],
+  "blockers": [],
   "humanChecklist": [
     {
       "id": "h-editor-fit",

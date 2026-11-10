@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "phase1.collinearity_ablation.v1",
+  "generatedAtIso": "2026-11-10T06:55:40.477Z",
+  "n": 146,
+  "specs": [
+    {
+      "label": "full design",
+      "neutralised": [],
+      "inSample": {
+        "A": 0.463284,
+        "B": 0.539928,
+        "C": 0.546979
+      },
+      "kFold": {
+        "A": 0.392631,
+        "B": 0.466461,
+        "C": 0.435793
+      },
+      "cMinusB": -0.030668
+    },
+    {
+      "label": "without R",
+      "neutralised": [
+        "R"
+      ],
+      "inSample": {
+        "A": 0.460913,
+        "B": 0.532801,
+        "C": 0.537309
+      },
+      "kFold": {
+        "A": 0.412571,
+        "B": 0.477413,
+        "C": 0.429095
+      },
+      "cMinusB": -0.048318
+    },
+    {
+      "label": "without E",
+      "neutralised": [
+        "E"
+      ],
+      "inSample": {
+        "A": 0.440969,
+        "B": 0.498745,
+        "C": 0.501136
+      },
+      "kFold": {
+        "A": 0.379343,
+        "B": 0.415609,
+        "C": 0.381919
+      },
+      "cMinusB": -0.033691
+    },
+    {
+      "label": "without R and E",
+      "neutralised": [
+        "R",
+        "E"
+      ],
+      "inSample": {
+        "A": 0.400699,
+        "B": 0.434422,
+        "C": 0.442242
+      },
+      "kFold": {
+        "A": 0.334617,
+        "B": 0.352825,
+        "C": 0.315671
+      },
+      "cMinusB": -0.037154
+    }
+  ],
+  "reversalStable": true,
+  "orderingStableInSample": true,
+  "interpretation": "Tier C ranks below Tier B out of sample in every ablation, and in-sample fit stays monotone A < B < C. The reversal does not depend on the dependent covariates."
+}

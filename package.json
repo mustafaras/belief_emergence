@@ -41,7 +41,8 @@
     "generate:functional-form": "tsx scripts/generate_functional_form_comparison.ts",
     "generate:figures": "python3 scripts/make_fig_eval_pair.py && python3 scripts/make_fig_resid_pair.py",
     "generate:prevalence": "tsx scripts/generate_construct_prevalence.ts",
-    "generate:collinearity": "tsx scripts/generate_collinearity_diagnostics.ts"
+    "generate:collinearity": "tsx scripts/generate_collinearity_diagnostics.ts",
+    "generate:collinearity-ablation": "tsx scripts/generate_collinearity_ablation.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

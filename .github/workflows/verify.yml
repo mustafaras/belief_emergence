@@ -79,6 +79,9 @@ jobs:
       - name: Generate collinearity diagnostics
         run: npm run generate:collinearity
 
+      - name: Generate collinearity ablation
+        run: npm run generate:collinearity-ablation
+
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence
 

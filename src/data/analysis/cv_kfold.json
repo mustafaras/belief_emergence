@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.cv_kfold.v1",
-  "generatedAtIso": "2026-11-10T06:49:41.343Z",
+  "generatedAtIso": "2026-11-10T06:56:47.405Z",
   "protocol": "repeated_grouped_kfold_refit",
   "config": {
     "k": 5,
