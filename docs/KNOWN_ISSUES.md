@@ -223,10 +223,11 @@ Error: Lockbox protocol violations detected:
        lockbox_rows_below_minimum_threshold. Artifact was not written.
 ```
 
-The protocol reserves 7 of 34 unique country-years (72 of 630 rows). The v2
-panel has 49 complete cases across 45 countries, 41 of which contribute a
-single row. A 7-cell holdout would remove every observation for seven
-countries and leave 42 rows for a model with seven parameters.
+The protocol reserved 7 of 34 unique country-years (72 of 630 rows) on the
+retired 630-row scenario panel. That history is why the current split draws 20%
+rather than a fixed 7: on the 167-row panel a 7-cell holdout would remove every
+observation for seven countries and leave 160 rows for a model with seven
+parameters.
 
 **The generator is correct to refuse.** A lockbox is a credibility device: it
 works only when the held-out block is large enough to be informative and small
@@ -279,15 +280,24 @@ exponent above that floor lowers the fit.
 Meaning: the sublinear-power structural term contributes no explanatory power
 on this sample. `X^0.05` and `Y^0.05` are near-constant across the observed
 range, so `Z` is effectively driven by `exp(Phi)` alone. `Y` still matters, but
-through the interaction term `c_yr * Y_s * R` (fitted at -1.60), not through the
+through the interaction term `c_yr * Y_s * R` (fitted at +0.63), not through the
 elasticity `beta`.
 
 ### Why this is expected here, and what it costs
 
-The v2 panel spans only 49 observations across 45 countries, 41 of which
-contribute a single row. There is not enough within-country variation for an
-elasticity to be identified separately from the level term. The v1 panel could
-report `alpha` near 1 only because `C` was restating `Z`.
+The v2 panel spans 167 observations across 76 countries, 27 of which contribute a
+single row. There is not enough within-country variation for an elasticity to be
+identified separately from the level term. The v1 panel could report `alpha` near
+1 only because `C` was restating `Z`.
+
+**Measured, not assumed.** An earlier version of this entry asserted that the
+exponents "stay at the bound when it is widened" without anything having measured
+that. It now has: moving the alpha/beta floor from 0.050 to 0.001 and refitting
+leaves both exponents at whatever floor is in force and *raises* in-sample R2 from
+0.3622 to 0.4034 (`src/data/analysis/elasticity_bound_sensitivity.json`). The
+constraint therefore binds, and the data prefer the limit alpha, beta -> 0, in
+which the multiplicative baseline drops out entirely. The manuscript reports this
+as a finding (Results, "the structural baseline is inert on this sample").
 
 **Cost:** the paper's title and framing — "Bounded Nonlinear Response Surfaces
 for Macro-Urban Belief Emergence" driven by urbanization and inequality — no
@@ -426,7 +436,7 @@ panel (630 rows, header comment dated 2025-12-07). Every one of those
 coefficients was estimated on data where `C` was `Z`.
 
 Evidence that they do not transfer: refitted against the v2 panel
-(49 complete cases, six retained predictors), the fixed-coefficient model
+(167 complete cases, six retained predictors), the fixed-coefficient model
 yields
 
 ```text
@@ -449,15 +459,15 @@ fails.
 
 ### Resolution (2026-11-09)
 
-The coefficients were refit on the v2 panel by
+The coefficients were refit on the 167-cell v2 panel by
 `scripts/fit_coefficients_v2.py`, and the result is committed as
 `rawdata/coefficients_v2.json` and mirrored in
 `src/data/feCoefficients.ts`.
 
 ```text
-phi0 = -4.5092   alpha = 0.0500   beta = 0.0500   k = 0.008240
-c_M  = +0.2723   c_T   = +0.0837   c_E = +0.1561   c_R = +0.0697
-c_tr = -0.1805   c_yr  = +1.7673
+phi0 = +0.5303   alpha = 0.0500   beta = 0.0500   k = 0.9685
+c_M  = +0.0022   c_T   = -0.0461   c_E = +0.4586   c_R = +0.1946
+c_tr = -0.1861   c_yr  = +0.6279
 retracted: C, D, G, S — coefficient not estimated (channel unavailable in v2)
 ```
 

@@ -690,6 +690,44 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // KNOWN_ISSUES records the fitted parameter vector a second time, as a text
+    // block for readers who want the numbers without opening JSON. Two copies of
+    // the same values is one copy too many unless something compares them, and
+    // that block had been carrying an 87-row fit for three panel revisions.
+    {
+      const fitPath = path.join(ANALYSIS_DIR, 'coefficient_fit.json');
+      const knownIssuesPath = path.join(APP_ROOT, 'docs', 'KNOWN_ISSUES.md');
+      if (fs.existsSync(fitPath) && fs.existsSync(knownIssuesPath)) {
+        const fit = JSON.parse(fs.readFileSync(fitPath, 'utf8')) as { parameters: Record<string, number> };
+        const kiFull = fs.readFileSync(knownIssuesPath, 'utf8');
+        // Only the parameter block, not the whole document: "k = 5" also
+        // describes the k-fold protocol, and matching that would be a false
+        // positive that never goes away.
+        const blockStart = kiFull.indexOf('phi0 = ');
+        const ki = blockStart === -1 ? '' : kiFull.slice(blockStart, blockStart + 400);
+        stats.executed += 1;
+        const drift: string[] = [];
+        for (const [key, value] of Object.entries(fit.parameters)) {
+          // Match "key = +1.2345" allowing variable spacing.
+          const pattern = new RegExp(`(?<![A-Za-z0-9_])${key}\\s*=\\s*([+-]?[0-9.]+)`);
+          const m = ki.match(pattern);
+          if (!m) continue;
+          const quoted = Number.parseFloat(m[1]);
+          if (Math.abs(quoted - value) > 0.01) {
+            drift.push(`${key}: doc says ${quoted}, artifact ${value.toFixed(4)}`);
+          }
+        }
+        if (drift.length > 0) {
+          failures.push({
+            id: 'KNOWN_ISSUES_COEFFICIENT_DRIFT',
+            file: 'docs/KNOWN_ISSUES.md',
+            message: drift.join('; '),
+            remediation: 'Update the coefficient block in KNOWN_ISSUES.md from coefficient_fit.json.',
+          });
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
