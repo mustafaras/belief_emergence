@@ -37,6 +37,7 @@ Usage:
 import json
 import math
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -45,6 +46,7 @@ from scipy.optimize import differential_evolution, minimize
 ROOT = Path(__file__).resolve().parent.parent
 PANEL = ROOT / "public" / "data" / "panel_canonical_v2.csv"
 OUT = ROOT / "rawdata" / "coefficients_v2.json"
+COMMITTED = ROOT / "src" / "data" / "analysis" / "coefficient_fit.json"
 
 # Bounds must contain the v2 panel. The previous v1 window (X 0.4-0.9,
 # Y -1.5-3.5) excluded 6 of 49 observations; clipping pinned x_s to the floor
@@ -248,6 +250,29 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"\nwrote {OUT.relative_to(ROOT)}")
+
+    # The fitted values are derived quantities, not licensed data, so a copy is
+    # committed. Without it the manuscript's coefficient sentences had no
+    # machine-checkable source: the numbers lived in a gitignored file that no
+    # test could read, and three paragraphs described an 87-row fit for four
+    # panel revisions because nothing compared them.
+    committed = {
+        "schemaVersion": "phase1.coefficient_fit.v1",
+        "generatedAtIso": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+        "source": "scripts/fit_coefficients_v2.py",
+        "fittedOn": payload["fittedOn"],
+        "nRows": payload["nRows"],
+        "nCountries": payload["nCountries"],
+        "parameters": payload["parameters"],
+        "note": (
+            "The fitted coefficients are derived quantities, not licensed data: this file "
+            "is committed so the manuscript numbers can be checked, while the raw inputs "
+            "that produce them stay out of the repository."
+        ),
+    }
+    COMMITTED.parent.mkdir(parents=True, exist_ok=True)
+    COMMITTED.write_text(json.dumps(committed, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"wrote {COMMITTED.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

@@ -99,6 +99,11 @@ jobs:
       - name: Generate Gini window sensitivity
         run: npm run generate:gini-window
 
+      - name: Fit coefficients and refresh the committed copy
+        run: |
+          python3 -m pip install --quiet numpy scipy
+          npm run generate:coefficient-fit
+
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence
 

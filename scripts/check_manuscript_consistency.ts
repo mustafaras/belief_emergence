@@ -594,6 +594,11 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The contribution list quotes the size of the enforcement machinery. Those
+    // counts are as capable of going stale as any other number, and quoting a
+    // gate count that no longer matches the gate would be an unusually poor look
+    // in a paragraph about checkable claims.
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
