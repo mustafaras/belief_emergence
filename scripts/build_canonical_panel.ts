@@ -97,6 +97,14 @@ const WDI_TO_E = { slope: 0.03773538, intercept: -3.65549220 };
  *   R_welfare_capacity vs HD.HCI.OVRL        max |residual| = 1.327  (not affine)
  *   R_welfare_capacity vs NY.GDP.PCAP.PP.KD  max |residual| = 3.661  (not affine)
  *   T_trauma_shock vs UCDP battle deaths     corr = -0.029            (not the same measure)
+ *
+ * On T specifically: the shipped T_trauma_shock is exactly total_deaths
+ * (13,518 rows, zero residual), i.e. the EM-DAT disaster-death series, not a
+ * composite of it with UCDP. UCDP covers only 65 of the 195 outcome-bearing
+ * country-years in the upstream merge, so it cannot be added without either
+ * dropping rows or imputing. Combining total_deaths with total_affected was
+ * tested in the manuscript (Step 2c) and rejected: it leaves the 146-row sample
+ * unchanged but destabilises the Tier B/C ordering across k-fold seeds.
  */
 const URBAN_INDICATOR = 'SP.URB.TOTL.IN.ZS';
 const WDI_TO_X = { slope: 0.010573, intercept: -0.0573 };

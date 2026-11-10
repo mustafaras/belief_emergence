@@ -443,6 +443,13 @@ are harder, which is a reason to keep them rather than to drop them: a panel
 selected on data availability is not a random sample, and the rows that were
 missing are the ones where the covariates were hardest to observe.
 
+\subsection*{Step 2c: the shock channel was tested and left as it stands}\label{sec:trauma-composite}
+The trauma channel $T$ is the one covariate whose construction is genuinely a choice rather than a lookup. The upstream macro panel exposes three standardized shock fields---EM-DAT disaster deaths, EM-DAT persons affected, and UCDP battle deaths---but the shipped $T$ is, exactly and without residual, the first of them: $T$ equals \texttt{total\_deaths} on all \num{13518} upstream rows. It is therefore a single-series measure despite being described in the code base as a composite.
+
+Averaging the two EM-DAT dimensions is available and costs no sample: persons affected is populated on exactly the same \num{163} of \num{195} outcome-bearing country--years as deaths, so a composite changes the \emph{measurement} of $T$ on \num{145} of \num{146} estimation rows without changing which rows are in the panel. UCDP adds nothing at this scope, covering only \num{65} of \num{195}.
+
+The composite was fitted and rejected. Its headline in-sample fit is marginally better ($R^2=\num{0.4696}$ against \num{0.4633}), but that is not the reason to prefer one definition. The reason is that the composite makes the Tier~C result \emph{unstable}. Under the shipped single-series $T$, grouped $k$-fold returns Tier~C below Tier~B at all eight seeds tested (differences of \num{-0.031} to \num{-0.056}). Under the composite the sign flips between seeds (+\num{0.009} to \num{-0.052})---some seeds reproduce the reversal, others reverse it. A definition that moves a reported ordering across seeds is not an improvement over one that does not, so $T$ is retained as shipped and the composite is recorded here rather than adopted. The single-seed result favouring the composite was itself the artefact this paper warns about elsewhere: fold choice moves the statistic more than model choice does.
+
 \subsection*{Step 3: check the design before fitting it}
 Four conditions are tested directly on the panel, and any failure blocks a release build.
 

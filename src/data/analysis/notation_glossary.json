@@ -78,7 +78,8 @@
       "role": "amplifier",
       "type": "index",
       "scale": "standardized",
-      "source": "UCDP conflict deaths + EM-DAT disasters"
+      "source": "EM-DAT disaster deaths (total_deaths, standardized); UCDP battle deaths available as a separate field but not combined",
+      "note": "The macro panel exposes total_deaths, total_affected and total_battle_deaths. T equals total_deaths exactly (13,518 rows, zero residuals); total_affected has identical coverage (163/195 outcome cells) and UCDP covers only 65/195. Combining them leaves the 146-row complete-case sample unchanged, so the composite is a measurement change, not a sample change."
     },
     {
       "symbol": "D",
