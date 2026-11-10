@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "phase1.elasticity_bound_sensitivity.v1",
+  "generatedAtIso": "2026-11-10T15:32:21.561Z",
+  "question": "Do alpha and beta sit at their lower bound because that bound is too tight, or because the panel cannot identify them?",
+  "design": "The same fit is repeated with the alpha/beta lower bound moved from 0.05 to 0.001, everything else held fixed.",
+  "runs": [
+    {
+      "lowerBound": 0.05,
+      "alpha": 0.05,
+      "beta": 0.05,
+      "k": 0.9685,
+      "r2": 0.3622,
+      "corr": 0.6057,
+      "atBound": true
+    },
+    {
+      "lowerBound": 0.001,
+      "alpha": 0.001,
+      "beta": 0.001,
+      "k": 0.4378,
+      "r2": 0.4034,
+      "corr": 0.6357,
+      "atBound": true
+    }
+  ],
+  "finding": "Both runs terminate at whatever lower bound is in force, and relaxing it improves in-sample R2 from 0.3622 to 0.4034. The exponents are not merely bounded: they are driven toward zero, and the fit prefers it.",
+  "interpretation": "As alpha and beta approach zero, X^alpha Y^beta approaches one, so the multiplicative structural baseline drops out and the map reduces to exp(Phi)/(exp(Phi)+k). X and Y still enter through the interaction terms, but carry no separate power term.",
+  "consequence": "The paper reports the shipped fit (bound 0.05) and states that alpha and beta are at the floor. It does not describe the bound as harmless: relaxing it raises the fit, which is what a binding constraint looks like."
+}

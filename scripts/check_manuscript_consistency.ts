@@ -651,6 +651,45 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The elasticity bound test is quoted twice: the two R2 values in Results
+    // and the improvement in the contribution list. Both must match the artifact,
+    // because the paragraph's whole argument is that the constraint binds -- a
+    // stale pair of numbers would silently turn it into the opposite claim.
+    {
+      const boundPath = path.join(ANALYSIS_DIR, 'elasticity_bound_sensitivity.json');
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      if (fs.existsSync(boundPath)) {
+        const bound = JSON.parse(fs.readFileSync(boundPath, 'utf8')) as {
+          runs: { lowerBound: number; r2: number; alpha: number; beta: number }[];
+        };
+        const shipped = bound.runs.find((r) => r.lowerBound === 0.05);
+        const relaxed = bound.runs.find((r) => r.lowerBound === 0.001);
+        if (shipped && relaxed) {
+          stats.executed += 1;
+          const from = shipped.r2.toFixed(4);
+          const to = relaxed.r2.toFixed(4);
+          if (!mainText.includes(from) || !mainText.includes(to)) {
+            failures.push({
+              id: 'ELASTICITY_BOUND_DRIFT',
+              file: 'main/main.tex',
+              message: `bound test reports R2 ${from} -> ${to}; the manuscript quotes ${mainText.includes(from) ? 'the first' : 'neither'} and ${mainText.includes(to) ? 'the second' : 'neither'}`,
+              remediation: 'Run npm run generate:elasticity-bound and update the inertness paragraph and the contribution item.',
+            });
+          }
+          // The claim is that relaxing the bound improves the fit. If that ever
+          // reverses, the paragraph's conclusion reverses with it.
+          if (relaxed.r2 <= shipped.r2) {
+            failures.push({
+              id: 'ELASTICITY_BOUND_CLAIM',
+              file: 'elasticity_bound_sensitivity.json',
+              message: `manuscript claims the constraint binds, but relaxing it does not improve R2 (${from} -> ${to})`,
+              remediation: 'Rewrite the inertness paragraph: the exponents would then be slack rather than driven to zero.',
+            });
+          }
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold

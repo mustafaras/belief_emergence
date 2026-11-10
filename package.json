@@ -47,7 +47,8 @@
     "generate:r-collinearity": "tsx scripts/generate_r_collinearity_case.ts",
     "generate:gini-window": "tsx scripts/generate_gini_window_sensitivity.ts",
     "generate:coefficient-fit": "python3 scripts/fit_coefficients_v2.py",
-    "generate:environment": "tsx scripts/generate_software_environment.ts"
+    "generate:environment": "tsx scripts/generate_software_environment.ts",
+    "generate:elasticity-bound": "tsx scripts/generate_elasticity_bound_sensitivity.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",
