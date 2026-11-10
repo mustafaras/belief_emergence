@@ -155,7 +155,7 @@ indistinguishable: the bounded form leads by 0.0025 under grouped k-fold and by
 (0.049-0.405 versus 0.054-0.407).
 
 **The corrected finding is narrower than both the original claim and its
-opposite.** At 146 country-years the choice between these two links is not
+opposite.** At 167 country-years the choice between these two links is not
 identified by predictive performance. In-sample fit favours the linear form,
 held-out fit is a tie, and neither supports a claim of predictive superiority.
 The original sentence "the nonlinear structure is costing accuracy, not adding
@@ -210,7 +210,7 @@ The stronger sentence the earlier draft carried ("the saturating form does not
 beat a linear baseline", with R² 0.2020 against 0.1023) has been withdrawn,
 because the measurement does not support it. A tie is the accurate description,
 and a tie at this sample size is itself the result: the link function is not
-identified by predictive performance on 146 country-years.
+identified by predictive performance on 167 country-years.
 
 ---
 

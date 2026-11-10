@@ -38,7 +38,7 @@ threshold, not a judgement, and `tests/model.tierDiscipline.test.ts` no longer
 asserts it.
 
 The test also no longer asserts an exchange rate between in-sample and held-out
-gain. That ratio was 59x at 87 cells and fell to 1.9x at 146, so pinning it would
+gain. That ratio was 59x at 87 cells and fell to 1.9x at 146 and further at 167, so pinning it would
 have meant lowering a threshold every time the sample grew. What the test asserts
 instead is an **ordering reversal**, which is both stronger and stable: in sample
 fit rises monotonically A < B < C (0.4633 / 0.5399 / 0.5470), but under repeated

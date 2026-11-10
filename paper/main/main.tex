@@ -406,8 +406,8 @@ buried in a choice:
 Gini window & Complete-case rows & Cells recovered & Borrowed from $\pm1$--$2$ yr \\
 \midrule
 exact year only & 102 & 0 & 0 \\
-$\pm 1$ year & 140 & 74 & 74 \\
-$\pm 2$ years (adopted) & 167 & 129 & 129 \\
+$\pm 1$ year & 140 & 53 & 53 \\
+$\pm 2$ years (adopted) & 167 & 79 & 79 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -746,11 +746,11 @@ Saturating bounded map (this paper) & \num{0.2516} & \num{0.4063} & \num{0.4056}
 
 The result is a near-tie, and the honest reading is narrower than either "the bounded form works" or "the bounded form fails". In sample the linear model is clearly better ($R^2=\num{0.4618}$ against \num{0.2516}): curvature costs accuracy where the data are dense. Out of sample the two are indistinguishable, with the bounded form ahead by \num{0.0057} under grouped $k$-fold (\num{0.4063} against \num{0.4006}) and by \num{0.0185} in the pooled country-out series (\num{0.3853} against \num{0.3871})---differences far inside the interquartile ranges (\num{0.1500}--\num{0.5011} for linear, \num{0.1552}--\num{0.5179} for bounded).
 
-An earlier draft asserted that the linear baseline won decisively ($R^2$ \num{0.2020} against \num{0.1023}). That comparison could not be regenerated from the tree, and when the baseline is actually fitted on the canonical panel the gap does not appear. We report the measured values and withdraw the stronger claim. The corrected version supports only what the data support: at 126 country-years, the choice between these two links is not identified by predictive performance.
+An earlier draft asserted that the linear baseline won decisively ($R^2$ \num{0.2020} against \num{0.1023}). That comparison could not be regenerated from the tree, and when the baseline is actually fitted on the canonical panel the gap does not appear. We report the measured values and withdraw the stronger claim. The corrected version supports only what the data support: at 167 country-years, the choice between these two links is not identified by predictive performance.
 
 Two properties of the data explain why curvature does not pay. First, the pooled outcome is close to normally distributed with standard deviation $0.97$. A sigmoid's steepest gradient sits at its midpoint and decays in the tails; regressing a roughly linear outcome on it forces the curvature into the densest region and flattens exactly where the extremes lie. Second, two cells sit far outside the bulk---CHN 1990 at $Z=+3.37$ and IDN 2006 at $Z=-2.19$. Under min--max scaling they compress the other 85 rows into roughly $[0.22, 0.78]$; percentile anchoring recovers part of that range, but not a ranking between the models.
 
-The bounded form was adopted because the outcome is a composite index on a closed scale. That argument concerns \emph{measurement}, not \emph{response shape}, and this sample does not arbitrate the shape. Nothing in 126 country-years indicates that effects flatten at high exposure. The manuscript accordingly makes no saturation claim; the transition-ridge behaviour discussed in Section~4 and illustrated in the visual analytics layer is a property of the fitted map, which is a different statement.
+The bounded form was adopted because the outcome is a composite index on a closed scale. That argument concerns \emph{measurement}, not \emph{response shape}, and this sample does not arbitrate the shape. Nothing in 167 country-years indicates that effects flatten at high exposure. The manuscript accordingly makes no saturation claim; the transition-ridge behaviour discussed in Section~4 and illustrated in the visual analytics layer is a property of the fitted map, which is a different statement.
 
 \emph{Fixed-coefficient comparison.} The refit metrics above train a model per fold. Evaluating the \emph{production} coefficients on the same held-out rows yields a negative coefficient of determination (Tier A $R^2=-2.01$, Tier B $-0.97$, Tier C $-0.90$; RMSE 0.190). A negative value means the fixed model predicts held-out countries worse than those countries' own mean. This is expected once the outcome is no longer a rescaling of a predictor: the coefficients describe population-level associations and do not transport to unseen countries at this sample size. We report it because suppressing it would misrepresent the cross-national transferability of the fitted map.
 
@@ -908,7 +908,7 @@ Beyond these immediate targets, longer-horizon extensions would deepen both the 
 \section{Conclusion}
 The starting point of this paper was a prepared submission and a prepared conclusion: that a bounded nonlinear framework yields regime-aware descriptive statements which global linear summaries obscure. Running four routine validity checks first, rather than last, dissolved that conclusion.
 
-Three of eight constructs did not measure what they were named. Cultural intensity reached $\alpha=0.35$, social atomization $\alpha=-1.23$, and social support could not be computed. More damagingly, the published panel's outcome was an exact rescaling of its principal predictor, which had rendered every reported out-of-sample metric a tautology. Once the constructs were rebuilt from item-level data and the panel re-derived, the surviving model reached a held-out $R^2$ of \num{0.4063}, statistically indistinguishable from the \num{0.4006} of an ordinary linear regression on identical rows, while trailing it in sample (\num{0.2516} against \num{0.4618}). The corrected result is a tie, not a defeat: the choice between these links is not identified by predictive performance at 126 country-years.
+Three of eight constructs did not measure what they were named. Cultural intensity reached $\alpha=0.35$, social atomization $\alpha=-1.23$, and social support could not be computed. More damagingly, the published panel's outcome was an exact rescaling of its principal predictor, which had rendered every reported out-of-sample metric a tautology. Once the constructs were rebuilt from item-level data and the panel re-derived, the surviving model reached a held-out $R^2$ of \num{0.4063}, statistically indistinguishable from the \num{0.4006} of an ordinary linear regression on identical rows, while trailing it in sample (\num{0.2516} against \num{0.4618}). The corrected result is a tie, not a defeat: the choice between these links is not identified by predictive performance at 167 country-years.
 
 What survives is not the framework's geometry but the audit that discredited it. We regard that as a result, for three reasons.
 

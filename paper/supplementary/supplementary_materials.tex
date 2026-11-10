@@ -254,7 +254,7 @@ Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
 Median OOS RMSE & 0.1506 & 0.1449 & 0.1369 & Bounded $Z$ scale \\
 IQR (RMSE range) & 0.0959--0.2143 & 0.0968--0.1988 & 0.0955--0.1938 & \\
-Median per-fold $R^2$ & $-2.8757$ & $-1.1757$ & $-1.0438$ & 27 of 70 folds \\
+Median per-fold $R^2$ & $-2.1278$ & $-1.1092$ & $-0.8057$ & 32 of 76 folds (R$^2$ undefined in 44) \\
 Pooled OOS $R^2$ (refit) & 0.4056 & 0.4629 & 0.4420 & All 167 rows \\
 Pooled OOS $R^2$ (canonical) & 0.2601 & 0.3239 & 0.2516 & All 167 rows \\
 Pooled OOS RMSE (refit) & 0.2069 & 0.2002 & 0.2048 & Bounded $Z$ scale \\
@@ -378,7 +378,7 @@ Funnel stage & Quantified scope and interpretive role \\
 \midrule
 Upstream integrated breadth & \path{rawdata/panel_model_data.json} reports 22,096 rows across 288 countries (1990--2023). This stage documents source coverage, not inferential claim strength. \\
 Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 167 rows for 76 countries (1990--2023), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
-Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 87, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
+Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 167, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
 Construct validity / invariance envelope & \path{src/data/analysis/construct_validity_invariance.json} reports aggregate-level construct checks: multi-item diagnostics for $Z$, single-indicator proxy constraints for $C,D,S$, and sparse-overlap fragility flags for $M$. These diagnostics bound cross-slice transport claims. \\
 Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 15.18), Tier B 18 (9.28), Tier C 22 (7.59). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
 \bottomrule
@@ -657,11 +657,11 @@ headline fit and regime geometry remain stable across temporal blocks and specif
 \toprule
 Panel & Slice / Ablation & $n$ & $R^2$ & Corr & MAE & RMSE \\
 \midrule
-A & $\text{year}\le2005$ & 45 & \num{0.4115} & \num{0.6415} & \num{0.1231} & \num{0.1749} \\
+A & $-2.147$ & $-2.229$ & $-0.0821$ & 0.1337 & 0.1187 & $-0.0151$ & 0.1506 & 0.1336 & $-0.0170$ \\
 A & $2006\le\text{year}\le2012$ & 65 & \num{0.6260} & \num{0.7921} & \num{0.1329} & \num{0.1827} \\
 A & $\text{year}\ge2013$ & 57 & \num{0.6148} & \num{0.7841} & \num{0.1140} & \num{0.1447} \\
 \addlinespace[2pt]
-B & main ($\Phi$ linear only) & 167 & \num{0.4728} & \num{0.6877} & \num{0.1449} & \num{0.1904} \\
+B & $-1.123$ & $-2.4801$ & $-1.3571$ & 0.1249 & 0.1170 & $-0.0079$ & 0.1449 & 0.1275 & $-0.0174$ \\
 B & main$+$interactions & 167 & \num{0.5549} & \num{0.7450} & \num{0.1285} & \num{0.1749} \\
 B & full (incl.\ quadratics) & 167 & \num{0.5642} & \num{0.7514} & \num{0.1260} & \num{0.1731} \\
 \bottomrule
@@ -706,7 +706,7 @@ this file (observed-vs-predicted, calibration-by-decile, and residual structure)
 Quantity & Value \\
 \midrule
 Countries ($N$) & 48 \\
-Rows used ($n$) & 87 \\
+Rows used ($n$) & 167 \\
 Year range & 1990--2023 \\
 $R^2$ & \num{0.2516} \\
 $\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6311} \\
@@ -1443,7 +1443,7 @@ Even a perfectly reproducible regime pattern can be sample-specific; therefore, 
 \section*{Table S14 --- 2006 Temporal Outlier Sensitivity: LOO Metrics With and Without 2006 Observations}
 
 \noindent\justifying
-Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 12 rows across 12 countries (ARG, BGR, CAN, CHL, DEU, FRA, IDN, MYS, NLD, PER, RUS, UKR). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 87-row canonical panel versus the 75-row panel excluding all 2006 observations. Source artifact: \nolinkurl{src/data/analysis/temporal_outlier_2006_sensitivity.json}.
+Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 12 rows across 12 countries (ARG, BGR, CAN, CHL, DEU, FRA, IDN, MYS, NLD, PER, RUS, UKR). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 167-row canonical panel versus the 147-row panel excluding all 2006 observations. Source artifact: \nolinkurl{src/data/analysis/temporal_outlier_2006_sensitivity.json}.
 
 \setcounter{table}{13}%--- force Table S14
 \begin{table}[!htbp]
@@ -1455,9 +1455,9 @@ Construct-validity diagnostics identify 2006 as the worst year for Z inter-item 
 \hline
 \textbf{Tier} & \textbf{$R^2_{\text{full}}$} & \textbf{$R^2_{\text{excl}}$} & \textbf{$\Delta R^2$} & \textbf{MAE$_{\text{full}}$} & \textbf{MAE$_{\text{excl}}$} & \textbf{$\Delta$MAE} & \textbf{RMSE$_{\text{full}}$} & \textbf{RMSE$_{\text{excl}}$} & \textbf{$\Delta$RMSE} \\
 \hline
-A & $-1.8183$ & $-1.9333$ & $-0.1150$ & 0.1354 & 0.1281 & $-0.0073$ & 0.1354 & 0.1397 & $+0.0043$ \\
-B & $-1.1607$ & $-1.3594$ & $-0.1987$ & 0.1312 & 0.1214 & $-0.0099$ & 0.1376 & 0.1321 & $-0.0055$ \\
-C & $-0.6620$ & $-1.5969$ & $-0.9349$ & 0.1344 & 0.1363 & $+0.0018$ & 0.1412 & 0.1579 & $+0.0167$ \\
+A & $-2.147$ & $-2.229$ & $-0.0821$ & 0.1337 & 0.1187 & $-0.0151$ & 0.1506 & 0.1336 & $-0.0170$ \\
+B & $-1.123$ & $-2.4801$ & $-1.3571$ & 0.1249 & 0.1170 & $-0.0079$ & 0.1449 & 0.1275 & $-0.0174$ \\
+C & $-0.8554$ & $-2.5472$ & $-1.6917$ & 0.1164 & 0.1183 & $+0.0019$ & 0.1369 & 0.1218 & $-0.0152$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1492,12 +1492,12 @@ Other years & 75 & 0.076 & 0.915 & 0.932 (median) \\
 \end{table}
 
 \noindent\justifying
-\textbf{Interpretation.} Excluding 2006 changes OOS $R^2$ materially in every tier ($\Delta R^2$: A $-0.1150$, B $-0.1987$, C $-0.9349$), and the artifact verdict is correspondingly negative: this year-level instability may be a driver of reported aggregate patterns. Sign structure, by contrast, is nearly unaffected: Tier~A retains all 10 coefficient signs (100\%), Tier~B retains 16 of 17 (94\%, flipped: $x_{\text{safe}}$), and Tier~C retains 20 of 21 (95\%, flipped: $y_{\text{safe}}{:}r$). The honest reading is that the sign of the model is robust to the 2006 slice while its out-of-sample fit is not, and the out-of-sample fit is already negative in every tier. The 2006 slice also carries a lower mean $Z$ ($-0.104$ vs.\ $0.076$) and higher variance ($1.277$ vs.\ $0.915$) than the rest of the panel, consistent with the weaker inter-item coherence.
+\textbf{Interpretation.} Excluding 2006 changes OOS $R^2$ materially in every tier ($\Delta R^2$: A $-0.0821$, B $-1.3571$, C $-1.6917$), and the artifact verdict is correspondingly negative: this year-level instability may be a driver of reported aggregate patterns. Sign structure, by contrast, is largely unaffected: Tier~A retains 9 of 10 coefficient signs (90\%, flipped: $m$), Tier~B retains all 17 (100\%), and Tier~C retains 19 of 21 (91\%). The honest reading is that the sign of the model is robust to the 2006 slice while its out-of-sample fit is not, and the out-of-sample fit is already negative in every tier. The 2006 slice also carries a lower mean $Z$ ($-0.244$ vs.\ $-0.126$) and higher variance ($1.210$ vs.\ $1.024$) than the rest of the panel, consistent with the weaker inter-item coherence. That coherence gap is the diagnostic that motivated the check: pairwise item correlation is $0.699$ in 2006 against a median of $0.932$ elsewhere.
 
 \section*{Table S18 --- C-Dominance Sensitivity: Can C Be Separated From Z?}
 
 \noindent\justifying
-Table~S18 asks how much of cultural intensity ($C$)'s predictive contribution reflects substantive signal versus mechanical shared-source correlation with outcome $Z$ (both derived from WVS survey items). Three diagnostics are reported: (a)~a C-excluded model where all features involving $C$ are removed; (b)~a 200-iteration permutation test where $C$ is randomly shuffled within the cross-section; and (c)~a partial~$R^2$ ranking obtained by dropping each predictor one at a time from Tier~A. The source artifact is \nolinkurl{src/data/analysis/c_dominance_sensitivity.json} ($n=87$, seed~42).
+Table~S18 asks how much of cultural intensity ($C$)'s predictive contribution reflects substantive signal versus mechanical shared-source correlation with outcome $Z$ (both derived from WVS survey items). Three diagnostics are reported: (a)~a C-excluded model where all features involving $C$ are removed; (b)~a 200-iteration permutation test where $C$ is randomly shuffled within the cross-section; and (c)~a partial~$R^2$ ranking obtained by dropping each predictor one at a time from Tier~A. The source artifact is \nolinkurl{src/data/analysis/c_dominance_sensitivity.json} ($n=167$, seed~42).
 
 \noindent\justifying
 \textbf{Why every $\Delta R^2$ is exactly zero.} On the v2 panel, $C$ carries no observations: the construct is declared but not estimated (Section~4 of the main text, ``Construct Audit''), and the model matrix neutralises the channel to its standardised mean. Removing a constant-zero column cannot change a fit, and permuting it cannot change a permutation distribution, so Panels~A and~B collapse to the identity by construction. \emph{This is a non-result, and it is the honest one}: the shared-source question cannot be answered on a panel where the construct in question is unidentified. The earlier version of this table reported $\Delta R^2_A=0.2701$ and a permutation interval of $[0.7299, 0.7319]$; those numbers came from the defective 630-row panel in which $C$ was built from an item of $Z$, which is precisely the defect this paper reports.
@@ -1506,7 +1506,7 @@ Table~S18 asks how much of cultural intensity ($C$)'s predictive contribution re
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 87-row panel. $\Delta R^2$ is Full minus C-Excluded. $C$ is neutralised to zero in the design matrix, so the two columns are identical by construction; see the note above. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
+\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 167-row panel. $\Delta R^2$ is Full minus C-Excluded. $C$ is neutralised to zero in the design matrix, so the two columns are identical by construction; see the note above. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
 \label{tab:c-dominance-excluded}
 \begin{tabular}{l r r r r r r}
 \toprule

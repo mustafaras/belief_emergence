@@ -87,6 +87,17 @@ jobs:
 
       - name: Generate R collinearity case
         run: npm run generate:r-collinearity
+      - name: Generate C-dominance sensitivity
+        run: npm run generate:c-dominance
+
+      - name: Generate 2006 outlier sensitivity
+        run: npm run generate:2006-outlier
+
+      - name: Generate Tier B stability sweep
+        run: npm run generate:tier-b-sweep
+
+      - name: Generate Gini window sensitivity
+        run: npm run generate:gini-window
 
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence

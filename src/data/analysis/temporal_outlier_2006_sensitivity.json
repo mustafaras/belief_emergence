@@ -1,89 +1,97 @@
 {
   "schemaVersion": "phase1.temporal_outlier_2006_sensitivity.v1",
-  "generatedAtIso": "2026-11-09T11:07:35.786Z",
-  "fullPanelNRows": 87,
-  "excluded2006NRows": 75,
-  "nRowsExcluded": 12,
+  "generatedAtIso": "2026-11-10T12:33:36.982Z",
+  "fullPanelNRows": 167,
+  "excluded2006NRows": 147,
+  "nRowsExcluded": 20,
   "looComparisonRefit": [
     {
       "tier": "A",
       "rmse": {
-        "fullPanel": 0.13542754348013944,
-        "excluded2006": 0.13974504588824999,
-        "delta": 0.004317502408110546
+        "fullPanel": 0.150595458067243,
+        "excluded2006": 0.13360661331520152,
+        "delta": -0.016988844752041488
       },
       "mae": {
-        "fullPanel": 0.13542754348013944,
-        "excluded2006": 0.12812368449495576,
-        "delta": -0.007303858985183681
+        "fullPanel": 0.13372687533950162,
+        "excluded2006": 0.11866179808156536,
+        "delta": -0.015065077257936252
       },
       "r2": {
-        "fullPanel": -1.8182533828257998,
-        "excluded2006": -1.9332854031435698,
-        "delta": -0.11503202031776993
+        "fullPanel": -2.1469877585553836,
+        "excluded2006": -2.2290467045152447,
+        "delta": -0.08205894595986107
       }
     },
     {
       "tier": "B",
       "rmse": {
-        "fullPanel": 0.13757387451003802,
-        "excluded2006": 0.13209163677971753,
-        "delta": -0.0054822377303204994
+        "fullPanel": 0.14492162512196172,
+        "excluded2006": 0.12747333730234567,
+        "delta": -0.01744828781961605
       },
       "mae": {
-        "fullPanel": 0.13120988603846567,
-        "excluded2006": 0.12135821262313559,
-        "delta": -0.009851673415330081
+        "fullPanel": 0.12485926793886118,
+        "excluded2006": 0.11697939946823488,
+        "delta": -0.0078798684706263
       },
       "r2": {
-        "fullPanel": -1.160700765415195,
-        "excluded2006": -1.3593777112135954,
-        "delta": -0.19867694579840034
+        "fullPanel": -1.1229927232820593,
+        "excluded2006": -2.4800600912113566,
+        "delta": -1.3570673679292973
       }
     },
     {
       "tier": "C",
       "rmse": {
-        "fullPanel": 0.14120076618943792,
-        "excluded2006": 0.1579487500016141,
-        "delta": 0.01674798381217618
+        "fullPanel": 0.1369496468314449,
+        "excluded2006": 0.12176024972740665,
+        "delta": -0.015189397104038244
       },
       "mae": {
-        "fullPanel": 0.13442066852854728,
-        "excluded2006": 0.13626361771288986,
-        "delta": 0.0018429491843425794
+        "fullPanel": 0.11641806122598838,
+        "excluded2006": 0.11828675322008149,
+        "delta": 0.0018686919940931052
       },
       "r2": {
-        "fullPanel": -0.661967593240495,
-        "excluded2006": -1.5968600313714933,
-        "delta": -0.9348924381309983
+        "fullPanel": -0.855439619089152,
+        "excluded2006": -2.547180905766009,
+        "delta": -1.6917412866768569
       }
     }
   ],
   "constructDiagnostics": {
     "year2006": {
-      "nRows": 12,
+      "nRows": 20,
       "countries": [
         "ARG",
         "BGR",
         "CAN",
         "CHL",
+        "CYP",
         "DEU",
         "FRA",
         "IDN",
+        "IND",
+        "IRQ",
         "MYS",
         "NLD",
         "PER",
         "RUS",
-        "UKR"
+        "SRB",
+        "SWE",
+        "UKR",
+        "URY",
+        "USA",
+        "ZAF"
       ],
-      "meanZ": -0.1038619823661439,
-      "sdZ": 1.2767114256101713
+      "meanZ": -0.2439427564147277,
+      "sdZ": 1.209889223452218
     },
     "otherYears": {
-      "nRows": 75,
-      "meanZ": 0.07556216255967764,
-      "sdZ": 0.9145032383829489
+      "nRows": 147,
+      "meanZ": -0.12597238570964872,
+      "sdZ": 1.0239667396907948
     },
     "constructCorrelation2006": 0.6993,
     "constructCorrelationMedian": 0.9322
@@ -92,26 +100,27 @@
     {
       "tier": "A",
       "nCoeffs": 10,
-      "nSignRetained": 10,
-      "fractionRetained": 1,
-      "flippedFeatures": []
+      "nSignRetained": 9,
+      "fractionRetained": 0.9,
+      "flippedFeatures": [
+        "m"
+      ]
     },
     {
       "tier": "B",
       "nCoeffs": 17,
-      "nSignRetained": 16,
-      "fractionRetained": 0.9411764705882353,
-      "flippedFeatures": [
-        "x_safe"
-      ]
+      "nSignRetained": 17,
+      "fractionRetained": 1,
+      "flippedFeatures": []
     },
     {
       "tier": "C",
       "nCoeffs": 21,
-      "nSignRetained": 20,
-      "fractionRetained": 0.9523809523809523,
+      "nSignRetained": 19,
+      "fractionRetained": 0.9047619047619048,
       "flippedFeatures": [
-        "y_safe:r"
+        "t",
+        "x_safe:y_safe"
       ]
     }
   ],

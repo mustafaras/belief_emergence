@@ -1,39 +1,23 @@
 {
   "schemaVersion": "phase1.gini_window_sensitivity.v1",
-  "generatedAtIso": "2026-11-09T14:53:09.562655Z",
+  "generatedAtIso": "2026-11-10T12:40:01.673Z",
   "purpose": "Sample size as a function of how far a neighbouring year's World Bank Gini may be borrowed when the exact year is absent.",
   "indicator": "SI.POV.GINI (World Bank WDI)",
-  "affineToMacro": {
-    "slope": 0.164028,
-    "intercept": -5.413122,
-    "maxResidual": 0.0
-  },
   "rows": [
     {
       "window": 0,
-      "completeCaseRows": 87,
-      "giniBackfilled": 0,
-      "exactYear": 0,
-      "borrowed": 0
+      "completeCaseRows": 102,
+      "giniBackfilled": 0
     },
     {
       "window": 1,
-      "completeCaseRows": 113,
-      "giniBackfilled": 41,
-      "exactYear": 0,
-      "borrowed": 41
+      "completeCaseRows": 140,
+      "giniBackfilled": 53
     },
     {
       "window": 2,
-      "completeCaseRows": 126,
-      "giniBackfilled": 79,
-      "exactYear": 0,
-      "borrowed": 79
+      "completeCaseRows": 167,
+      "giniBackfilled": 79
     }
-  ],
-  "notes": [
-    "The upstream macro panel and WDI publish the same construct; on 2,200 overlapping cells the relation is exactly affine with zero residual, so the backfill changes scale, not meaning.",
-    "Every recovered cell borrowed a neighbouring year: there were no exact-year recoveries at any window, so the gain is entirely a temporal-proximity decision and must be reported as such.",
-    "Window 0 is the pre-expansion panel and is retained as the conservative baseline in every downstream artifact."
   ]
 }

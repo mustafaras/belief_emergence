@@ -106,6 +106,10 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'collinearity_ablation.json'),
   path.join(ANALYSIS, 'zero_fill_sensitivity.json'),
   path.join(ANALYSIS, 'r_collinearity_case.json'),
+  path.join(ANALYSIS, 'gini_window_sensitivity.json'),
+  path.join(ANALYSIS, 'c_dominance_sensitivity.json'),
+  path.join(ANALYSIS, 'temporal_outlier_2006_sensitivity.json'),
+  path.join(ANALYSIS, 'tier_b_stability_sweep.json'),
   path.join(ANALYSIS, 'lockbox_holdout.json'),
   path.join(METRICS,  'headline_metrics_authoritative.json'),
 ];
