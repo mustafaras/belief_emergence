@@ -85,6 +85,9 @@ jobs:
       - name: Generate zero-fill sensitivity
         run: npm run generate:zero-fill
 
+      - name: Generate R collinearity case
+        run: npm run generate:r-collinearity
+
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence
 

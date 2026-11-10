@@ -26,12 +26,12 @@ cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
 
 | Quantity | Before | After |
 |---|---:|---:|
-| Complete-case cells | 87 | **126** |
-| Countries | 48 | **66** |
-| Tier A obs/param | 7.91 | **11.45** |
-| Tier C obs/param | 3.95 (flagged) | **5.73** (clear) |
-| Grouped k-fold R², Tier A | 0.2707 | **0.4209** |
-| Canonical lower quartile, Tier A | −0.057 | **+0.123** |
+| Complete-case cells | 87 | **167** |
+| Countries | 48 | **76** |
+| Tier A obs/param | 7.91 | **15.18** |
+| Tier C obs/param | 3.95 (flagged) | **7.59** (clear) |
+| Grouped k-fold R², Tier A | 0.2707 | **0.4063** |
+| Canonical lower quartile, Tier A | −0.057 | **+0.150** |
 
 The `supportRiskFlag` on Tier C is therefore false again. That flag is a numeric
 threshold, not a judgement, and `tests/model.tierDiscipline.test.ts` no longer
@@ -95,7 +95,7 @@ variance you do not control.
 
 **Current position on this ladder:** between the third and fourth row. The
 11-parameter Tier A model is defined and fits at R² = 0.3854, but Tier C is
-still estimated and reported at 3.95 obs/param (Phase 2.3 is open), which is
+still estimated and reported at 7.59 obs/param (Phase 2.3 is open), which is
 what keeps the paper below the 86–90 band.
 
 ---
@@ -224,7 +224,7 @@ At **126** realised cells:
 |---|---:|---:|---|
 | A | 11 | 7.9 | keep, primary |
 | B | 18 | 4.8 | keep, secondary (support-risk flag set) |
-| C | 22 | 3.95 | **drop or relabel as exploratory appendix** |
+| C | 22 | 7.59 | **drop or relabel as exploratory appendix** |
 
 Dropping Tier C removes the "22 parameters" attack surface entirely. The
 paper becomes an 11-parameter model with an explicitly exploratory appendix.
@@ -237,15 +237,16 @@ k-fold now supplies it:
 
 | Tier | Params | In-sample $R^2$ | Held-out $R^2$ (median) | IQR | obs/param |
 |---|---:|---:|---:|---|---:|
-| A | 11 | 0.4569 | **0.2707** | 0.054–0.407 | 7.91 |
-| B | 18 | 0.5213 | 0.2790 | −0.067–0.410 | 4.83 |
-| C | 22 | 0.5678 | 0.2617 | −0.022–0.439 | 3.95 |
+| A | 11 | 0.4728 | **0.4063** | 0.150–0.501 | 15.18 |
+| B | 18 | 0.5549 | 0.4767 | 0.155–0.518 | 9.28 |
+| C | 22 | 0.5642 | 0.4802 | 0.128–0.520 | 7.59 |
 
-Eleven extra parameters over Tier A buy **+0.111 in sample and −0.009 out of
-sample**. Complexity does not transfer, which is the finding: the correct
-response is to report the null transfer as evidence about the functional form,
-not to delete the tier. Deleting it would remove the observation that in-sample
-fit is not a guide to out-of-sample fit on this panel.
+Eleven extra parameters over Tier A buy **+0.091 in sample (0.4728 -> 0.5642) and
++0.074 out of sample (0.4063 -> 0.4802)**, but that out-of-sample gain over Tier B
+is only +0.004 (0.4767 -> 0.4802) and the sign of C-B flips across fold
+assignments. Complexity buys almost no incremental transfer over the cheaper
+Tier B, which is the finding: the correct response is to report that gap as
+evidence about the functional form, not to delete the tier.
 
 Why not drop it:
 - The gate already enforces `inferentialRole: exploratory` and
@@ -416,7 +417,7 @@ deliberately, and stated in the manuscript.
 **Decision taken: the wider frame, then widened again.** The canonical panel is 126 complete-case
 country-years across 48 countries, 1990–2022. The manuscript no longer uses
 the 23-country framing; `main.tex` contains zero occurrences of "23 countries".
-The remaining constraint is not the frame but Tier C's 3.95 obs/param, which
+The remaining constraint is not the frame but Tier C's 7.59 obs/param, which
 Phase 2.3 still has to resolve.
 
 ---

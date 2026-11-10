@@ -34,6 +34,7 @@ const EXPECTED_SCHEMAS: Record<string, { field: string; value: string | number }
   'collinearity_diagnostics.json': { field: 'schemaVersion', value: 'phase1.collinearity_diagnostics.v1' },
   'collinearity_ablation.json': { field: 'schemaVersion', value: 'phase1.collinearity_ablation.v1' },
   'zero_fill_sensitivity.json': { field: 'schemaVersion', value: 'phase1.zero_fill_sensitivity.v1' },
+  'r_collinearity_case.json': { field: 'schemaVersion', value: 'phase1.r_collinearity_case.v1' },
   'cv_country_out.json':                { field: 'schemaVersion', value: 'phase1.cv_country_out.v1' },
   'cv_kfold.json':                      { field: 'schemaVersion', value: 'phase1.cv_kfold.v1' },
   'functional_form_comparison.json':    { field: 'schemaVersion', value: 'phase1.functional_form_comparison.v1' },
@@ -104,6 +105,7 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'collinearity_diagnostics.json'),
   path.join(ANALYSIS, 'collinearity_ablation.json'),
   path.join(ANALYSIS, 'zero_fill_sensitivity.json'),
+  path.join(ANALYSIS, 'r_collinearity_case.json'),
   path.join(ANALYSIS, 'lockbox_holdout.json'),
   path.join(METRICS,  'headline_metrics_authoritative.json'),
 ];
