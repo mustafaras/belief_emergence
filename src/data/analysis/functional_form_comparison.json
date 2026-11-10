@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.functional_form_comparison.v1",
-  "generatedAtIso": "2026-11-10T07:15:16.316Z",
+  "generatedAtIso": "2026-11-10T09:30:25.469Z",
   "purpose": "Tests whether the bounded saturation form beats an ordinary linear regression on identical rows and folds.",
   "covariates": [
     "X",
@@ -10,7 +10,7 @@
     "R",
     "M"
   ],
-  "nRows": 146,
+  "nRows": 167,
   "kfold": {
     "k": 5,
     "repeats": 20,
@@ -21,63 +21,63 @@
     {
       "model": "linear_baseline",
       "inSample": {
-        "n": 146,
-        "r2": 0.4556354289028782,
-        "corr": 0.6750077250690387,
-        "mae": 0.14727083835898205,
-        "rmse": 0.19250938430474737
+        "n": 167,
+        "r2": 0.46179351809421343,
+        "corr": 0.6795539111021388,
+        "mae": 0.14863648119700276,
+        "rmse": 0.19237255769749564
       },
       "kfold": {
-        "median": 0.368360016759664,
-        "q25": 0.1500081077455169,
-        "q75": 0.5011438724414078,
+        "median": 0.4005604986490697,
+        "q25": 0.17929652657735332,
+        "q75": 0.5332910515233382,
         "n": 100
       },
       "countryOutPerFold": {
-        "median": -3.0985176739879767,
-        "q25": -6.346590983488271,
-        "q75": -0.5996407137434696,
-        "n": 27
+        "median": -2.631182923339936,
+        "q25": -7.40823079970825,
+        "q75": -0.5779200188350146,
+        "n": 32
       },
       "countryOutPooled": {
-        "n": 146,
-        "r2": 0.37012399797364604,
-        "corr": 0.6127869937904662,
-        "mae": 0.1581455558755858,
-        "rmse": 0.20707826139086355
+        "n": 167,
+        "r2": 0.38708450401701033,
+        "corr": 0.6254436901526503,
+        "mae": 0.15864374363273917,
+        "rmse": 0.20529054988666717
       }
     },
     {
       "model": "saturating_bounded",
       "inSample": {
-        "n": 146,
-        "r2": 0.2744577576385483,
-        "corr": 0.585125469196491,
-        "mae": 0.1736886114177045,
-        "rmse": 0.2222482399547035
+        "n": 167,
+        "r2": 0.2516085022496801,
+        "corr": 0.577177621462346,
+        "mae": 0.1789301205321377,
+        "rmse": 0.2268470206566549
       },
       "kfold": {
-        "median": 0.39263062907637064,
-        "q25": 0.1552014251365723,
-        "q75": 0.5179165537013068,
+        "median": 0.40630869756065807,
+        "q25": 0.21366314668963618,
+        "q75": 0.5367544422141187,
         "n": 100
       },
       "countryOutPerFold": {
-        "median": -2.583688011553656,
-        "q25": -5.16558441305163,
-        "q75": -0.5799525352583419,
-        "n": 27
+        "median": -2.1469877585553836,
+        "q25": -6.082408876982149,
+        "q75": -0.4571778913971607,
+        "n": 32
       },
       "countryOutPooled": {
-        "n": 146,
-        "r2": 0.38525231069465593,
-        "corr": 0.622853088267561,
-        "mae": 0.15389447743022458,
-        "rmse": 0.20457635265485163
+        "n": 167,
+        "r2": 0.40559410426462117,
+        "corr": 0.6381289751342221,
+        "mae": 0.154086725145109,
+        "rmse": 0.2021669743570987
       }
     }
   ],
-  "verdict": "The saturating form matches or beats the linear baseline on held-out R2 (0.3926 against 0.3684).",
+  "verdict": "The saturating form matches or beats the linear baseline on held-out R2 (0.4063 against 0.4006).",
   "provenance": {
     "notes": [
       "Both models use the same rows, the same six covariates and the same fold assignment.",

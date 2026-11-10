@@ -72,10 +72,10 @@
 \Section{Functional form is tested, not assumed}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item On the rebuilt panel (70 countries, 146 complete-case observations, 1990--2023) the saturating model reaches held-out $R^2=0.3926$ against $0.3684$ for an ordinary linear regression on identical rows, folds and covariates.
+    \item On the rebuilt panel (76 countries, 167 complete-case observations, 1990--2023) the saturating model reaches held-out $R^2=0.4063$ against $0.3684$ for an ordinary linear regression on identical rows, folds and covariates.
     \item The bounded form was adopted because the outcome lies on a closed scale. That is a property of the measurement, not evidence that the response saturates; on this sample the shape is not supported and the claim is withdrawn.
-    \item Primary evidence is repeated grouped $k$-fold (5 folds $\times$ 20 seeded repeats, countries intact): median held-out $R^2$ 0.3926 (Tier~A), 0.4665 (Tier~B), 0.4358 (Tier~C), with $R^2$ defined in all 100 folds. Both are reported alongside it: leave-one-country-out (70 folds) and forward-chaining rolling origin (20 folds) with median OOS RMSE 0.1459 and 0.1336 for Tier~A.
-    \item The country-out per-fold median is negative only because 43 of 70 folds hold fewer than three rows; the pooled held-out series, in which every row is predicted once, gives $R^2$ 0.3853 (Tier~A) and is reported as a spatial stress test rather than primary evidence.
+    \item Primary evidence is repeated grouped $k$-fold (5 folds $\times$ 20 seeded repeats, countries intact): median held-out $R^2$ 0.4063 (Tier~A), 0.4767 (Tier~B), 0.4802 (Tier~C), with $R^2$ defined in all 100 folds. Both are reported alongside it: leave-one-country-out (76 folds) and forward-chaining rolling origin (20 folds) with median OOS RMSE 0.1506 and 0.1296 for Tier~A.
+    \item The country-out per-fold median is negative only because 44 of 76 folds hold fewer than three rows; the pooled held-out series, in which every row is predicted once, gives $R^2$ 0.3853 (Tier~A) and is reported as a spatial stress test rather than primary evidence.
 \end{itemize}
 
 \Section{Practical consequence}
@@ -99,7 +99,7 @@
 \Section{Data and reproducibility}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Canonical panel: 70 countries; 146 complete-case country--year observations (1990--2023), one row per country--year with no scenario replication. Upstream raw extracts, hash-pinned inputs and machine-readable provenance shipped for full auditability.
+    \item Canonical panel: 76 countries; 167 complete-case country--year observations (1990--2023), one row per country--year with no scenario replication. Upstream raw extracts, hash-pinned inputs and machine-readable provenance shipped for full auditability.
     \item Preprocessing treated as a numerical contract: $\varepsilon=10^{-4}$ interior band; clipped min--max mapping for $X$, $Y$, and observed $Z$; clamp $\Phi\in[-50,50]$ before $\exp(\Phi)$; clamp predictions to $[\varepsilon,1-\varepsilon]$.
     \item Deterministic artifact pipeline: identical inputs reproduce identical outputs across all codepaths. Claim-evidence traceability map (Table~S0) links every major claim to its artifact source, evidence tier, and uncertainty caveat.
 \end{itemize}

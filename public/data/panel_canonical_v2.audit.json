@@ -1,12 +1,12 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-09T17:59:40.276Z",
+  "generatedAtIso": "2026-11-10T09:24:31.532Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
     "macro": "rawdata/panel_model_data.csv"
   },
-  "rows": 146,
-  "countries": 70,
+  "rows": 167,
+  "countries": 76,
   "yearRange": [
     1990,
     2023
@@ -37,11 +37,11 @@
       "reason": "disposable-income Gini unavailable outside the OECD sample"
     }
   ],
-  "observationsPerParameter": 20.86,
+  "observationsPerParameter": 23.86,
   "attrition": {
     "noIso": 11,
     "noMacro": 8,
-    "missingCovariate": 122,
+    "missingCovariate": 101,
     "missingOutcome": 18
   },
   "backfills": [
@@ -66,8 +66,46 @@
         "slope": 0.03773538,
         "intercept": -3.6554922
       },
-      "cellsRecovered": 17,
+      "cellsRecovered": 19,
       "exactYear": 0
+    },
+    {
+      "covariate": "X",
+      "indicator": "SP.URB.TOTL.IN.ZS",
+      "source": "rawdata/WDICSV.csv",
+      "windowYears": 2,
+      "affine": {
+        "slope": 0.010573,
+        "intercept": -0.0573
+      },
+      "cellsRecovered": 0,
+      "exactYear": 0
+    },
+    {
+      "covariate": "M",
+      "indicator": "IT.NET.USER.ZS",
+      "source": "rawdata/WDICSV.csv",
+      "windowYears": 2,
+      "affine": {
+        "slope": 0.03122824,
+        "intercept": -1.68101806
+      },
+      "cellsRecovered": 4,
+      "exactYear": 0
+    },
+    {
+      "covariate": "T",
+      "indicator": "EM-DAT total_deaths, log-standardised with fixed constants",
+      "source": "rawdata/emdat_disasters.csv",
+      "windowYears": 0,
+      "affine": {
+        "slope": 0.47927449344280604,
+        "intercept": -1.4923026119980618
+      },
+      "cellsRecovered": 30,
+      "exactYear": 30,
+      "zeroDeathCells": 29,
+      "isoAliasCells": 1
     }
   ],
   "validityAuditPassed": true

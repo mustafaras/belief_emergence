@@ -106,6 +106,36 @@ const WDI_TO_E = { slope: 0.03773538, intercept: -3.65549220 };
  * tested in the manuscript (Step 2c) and rejected: it leaves the 146-row sample
  * unchanged but destabilises the Tier B/C ordering across k-fold seeds.
  */
+/**
+ * Trauma channel (T): two corrections, both verified against EM-DAT rather than
+ * assumed.
+ *
+ * (a) Zero-death cells. T is the log-standardised EM-DAT death count,
+ *     T = (ln(1 + deaths) - 3.11367) / 2.086487, recovered from the 4,549
+ *     upstream rows that overlap EM-DAT with a maximum residual of 2.4e-3. A
+ *     country-year with no above-threshold disaster has deaths = 0 and therefore
+ *     T = -1.492303. This is not an imputed value: the same number already
+ *     occurs 1,842 times in the upstream column, because EM-DAT does report
+ *     zero-death events. Filling these cells moves no existing observation --
+ *     the standardisation constants are EM-DAT-wide and are not recomputed from
+ *     the panel.
+ *
+ * (b) Serbia 2006. EM-DAT records that country-year under the Serbia and
+ *     Montenegro code (SCG), which the upstream merge did not alias to SRB, so
+ *     four events totalling 49 deaths were lost. Recovering them gives
+ *     T = +0.382630.
+ *
+ * UCDP was tested for the same role and rejected: corr(T, UCDP battle deaths)
+ * = 0.0052 over 64 overlapping cells. Battle deaths and disaster deaths are
+ * different phenomena; the channel is not combined.
+ */
+const EM_DAT = path.join(ROOT, 'rawdata', 'emdat_disasters.csv');
+/** T = (ln(1 + deaths) - LOG_MEAN) / LOG_SD, from the upstream overlap. */
+const T_LOG_MEAN = 3.11367;
+const T_LOG_SD = 2.086487;
+/** ISO3 codes EM-DAT uses that the upstream merge does not alias. */
+const EM_DAT_ISO_ALIAS: Record<string, string> = { SCG: 'SRB' };
+
 const URBAN_INDICATOR = 'SP.URB.TOTL.IN.ZS';
 const WDI_TO_X = { slope: 0.010573, intercept: -0.0573 };
 const MEDIA_INDICATOR = 'IT.NET.USER.ZS';
@@ -317,6 +347,32 @@ function main(): void {
     return null;
   };
 
+  /**
+   * EM-DAT deaths by country-year, with the SCG -> SRB alias applied on load.
+   * Used only to fill the trauma channel where the upstream merge is silent.
+   */
+  const emDatDeaths = new Map<string, number>();
+  /** Countries EM-DAT records at all; absence for these means zero deaths. */
+  const emDatCountries = new Set<string>();
+  if (fs.existsSync(EM_DAT)) {
+    for (const r of readCsv(EM_DAT)) {
+      const rawIso = (r.iso3 ?? '').trim();
+      const iso = EM_DAT_ISO_ALIAS[rawIso] ?? rawIso;
+      const year = (r.year ?? '').trim();
+      const deaths = Number.parseFloat(r.total_deaths ?? '');
+      if (!iso || !year || !Number.isFinite(deaths)) continue;
+      const key = `${iso}|${year}`;
+      // EM-DAT is already aggregated per country-year; keep the larger value if
+      // a legacy code and a modern code both appear.
+      emDatDeaths.set(key, Math.max(emDatDeaths.get(key) ?? Number.NEGATIVE_INFINITY, deaths));
+    }
+    for (const key of emDatDeaths.keys()) emDatCountries.add(key.split('|')[0]);
+    console.log(`  EM-DAT index     : ${emDatDeaths.size} country-years, `
+      + `${emDatCountries.size} countries (SCG -> SRB aliased)`);
+  } else {
+    console.log('  EM-DAT series    : absent — trauma channel will not be backfilled');
+  }
+
   const rows: Array<Record<string, string | number>> = [];
   const dropped = { noIso: 0, noMacro: 0, missingCovariate: 0, missingOutcome: 0 };
   const missingByCovariate = new Map<string, number>();
@@ -327,6 +383,8 @@ function main(): void {
   /** X and M recoveries; both covariates were nearly complete already. */
   const urbanRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
   const mediaRecovered: Array<{ iso3: string; year: number; lag: number }> = [];
+  /** Trauma recoveries: zero-death cells and the SCG alias, logged separately. */
+  const traumaRecovered: Array<{ iso3: string; year: number; deaths: number; via: 'zero-death' | 'iso-alias' }> = [];
 
   for (const c of constructs) {
     const raw = (c.iso3 ?? '').trim();
@@ -382,6 +440,28 @@ function main(): void {
         }
       }
 
+      if (!Number.isFinite(v) && out === 'T') {
+        // EM-DAT publishes only country-years that had an above-threshold
+        // event, so absence from the file means "no qualifying disaster", not
+        // "unknown". That inference is safe only if the country is otherwise
+        // present in EM-DAT: a country EM-DAT never records at all tells us
+        // nothing about its shocks, and filling it with zero would impute a
+        // measurement we do not have. The two cases are therefore separated.
+        const deaths = emDatDeaths.get(`${iso3}|${year}`);
+        const knownCountry = emDatCountries.has(iso3);
+        if (deaths === undefined && knownCountry) {
+          v = (Math.log1p(0) - T_LOG_MEAN) / T_LOG_SD;
+          traumaRecovered.push({ iso3, year: Number.parseInt(year, 10), deaths: 0, via: 'zero-death' });
+        } else if (deaths !== undefined) {
+          // T is the log-standardised EM-DAT death count with fixed constants;
+          // see the block comment above EM_DAT for why they are not refitted.
+          v = (Math.log1p(deaths) - T_LOG_MEAN) / T_LOG_SD;
+          traumaRecovered.push({
+            iso3, year: Number.parseInt(year, 10), deaths,
+            via: deaths === 0 ? 'zero-death' : 'iso-alias',
+          });
+        }
+      }
       if (!Number.isFinite(v)) {
         complete = false;
         missingByCovariate.set(out, (missingByCovariate.get(out) ?? 0) + 1);
@@ -504,6 +584,35 @@ function main(): void {
         affine: { slope: WDI_TO_E.slope, intercept: WDI_TO_E.intercept },
         cellsRecovered: eduRecovered.length,
         exactYear: eduRecovered.filter((g) => g.lag === 0).length,
+      },
+      {
+        covariate: 'X',
+        indicator: URBAN_INDICATOR,
+        source: path.relative(ROOT, WDI),
+        windowYears: GINI_WINDOW,
+        affine: { slope: WDI_TO_X.slope, intercept: WDI_TO_X.intercept },
+        cellsRecovered: urbanRecovered.length,
+        exactYear: urbanRecovered.filter((g) => g.lag === 0).length,
+      },
+      {
+        covariate: 'M',
+        indicator: MEDIA_INDICATOR,
+        source: path.relative(ROOT, WDI),
+        windowYears: GINI_WINDOW,
+        affine: { slope: WDI_TO_M.slope, intercept: WDI_TO_M.intercept },
+        cellsRecovered: mediaRecovered.length,
+        exactYear: mediaRecovered.filter((g) => g.lag === 0).length,
+      },
+      {
+        covariate: 'T',
+        indicator: 'EM-DAT total_deaths, log-standardised with fixed constants',
+        source: path.relative(ROOT, EM_DAT),
+        windowYears: 0,
+        affine: { slope: 1 / T_LOG_SD, intercept: -T_LOG_MEAN / T_LOG_SD },
+        cellsRecovered: traumaRecovered.length,
+        exactYear: traumaRecovered.length,
+        zeroDeathCells: traumaRecovered.filter((t) => t.via === 'zero-death').length,
+        isoAliasCells: traumaRecovered.filter((t) => t.via === 'iso-alias').length,
       },
     ],
     validityAuditPassed: !failed,

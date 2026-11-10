@@ -1,6 +1,6 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-10T07:15:39.387Z",
+  "generatedAtIso": "2026-11-10T09:30:47.994Z",
   "verdict": "READY",
   "summary": {
     "totalChecks": 27,
@@ -177,7 +177,7 @@
       "label": "Collinearity screen covers the fitted design and matches the panel",
       "pass": true,
       "severity": "major",
-      "detail": "VIF computed on all 146 rows for 6 covariates; max 9.19"
+      "detail": "VIF computed on all 167 rows for 6 covariates; max 8.74"
     },
     {
       "id": "val-manual-artifacts-current",
@@ -185,7 +185,7 @@
       "label": "Hand-maintained artifacts describe the current panel",
       "pass": true,
       "severity": "major",
-      "detail": "All 5 generator-less artifacts agree on 146 rows, 70 countries, through NaN"
+      "detail": "All 5 generator-less artifacts agree on 167 rows, 76 countries, through NaN"
     },
     {
       "id": "val-rank",
@@ -193,7 +193,7 @@
       "label": "Design matrix full rank (7 columns)",
       "pass": true,
       "severity": "critical",
-      "detail": "rank=7/7 on 146 complete rows"
+      "detail": "rank=7/7 on 167 complete rows"
     },
     {
       "id": "val-single-r2",
@@ -217,7 +217,7 @@
       "label": "Canonical (fixed-model) OOS R2 is non-negative on the primary protocol",
       "pass": true,
       "severity": "major",
-      "detail": "Canonical and refit families are non-negative across 100 folds, minimum 20 test rows per fold, leakage none"
+      "detail": "Canonical and refit families are non-negative across 100 folds, minimum 23 test rows per fold, leakage none"
     },
     {
       "id": "val-functional-form",
@@ -225,7 +225,7 @@
       "label": "Functional-form comparison is generated, not asserted",
       "pass": true,
       "severity": "major",
-      "detail": "Linear 0.4556 in-sample / 0.3684 k-fold vs bounded 0.2745 / 0.3926; identical rows and folds"
+      "detail": "Linear 0.4618 in-sample / 0.4006 k-fold vs bounded 0.2516 / 0.4063; identical rows and folds"
     }
   ],
   "blockers": [],

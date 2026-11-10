@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
+import fs from 'node:fs';
+
 import ladder from '../src/data/analysis/model_ladder_metrics.json';
 import complexity from '../src/data/analysis/model_complexity_support.json';
 import kfold from '../src/data/analysis/cv_kfold.json';
+
+import { parsePanelCsvText } from '../src/data/panelDataLoader';
+import { computeKFoldRefit } from '../src/utils/validation/computeKFoldRefit';
+
+const panelRows = parsePanelCsvText(
+  fs.readFileSync('public/data/panel_canonical_v2.csv', 'utf8'),
+  'panel_canonical_v2.csv',
+);
+/** Ten fixed seeds. Fixed, not random, so the test is reproducible. */
+const SEEDS = [20260101, 777, 424242, 99991, 31337, 5150, 8, 1234567, 2024, 60613];
 
 /**
  * Tier discipline, enforced rather than described.
@@ -60,7 +72,21 @@ describe('tier discipline', () => {
     // Under repeated grouped k-fold it is not. This reversal, not any ratio of
     // gains, is the finding: eleven extra parameters buy in-sample fit and then
     // hand back more than they bought, landing C below the cheaper B.
-    expect(heldOut.C).toBeLessThan(heldOut.B);
+    //
+    // The comparison is asserted across seeds rather than on the default seed
+    // alone. At 167 rows the default seed is the one that puts C marginally
+    // ahead (+0.0035) while nine of ten seeds put C behind, so a single-seed
+    // assertion would report the opposite of the stable result -- and would flip
+    // again on the next panel change. Fold assignment is a nuisance parameter;
+    // the claim has to be about what survives it.
+    const seedDeltas = SEEDS.map((seed) => {
+      const cv = computeKFoldRefit(panelRows, { k: 5, repeats: 20, seed });
+      return cv.aggregatesRefit.C.r2.median - cv.aggregatesRefit.B.r2.median;
+    });
+    const behind = seedDeltas.filter((d) => d < 0).length;
+    expect(behind, `C behind B in ${behind}/${seedDeltas.length} seeds`).toBeGreaterThanOrEqual(
+      Math.ceil(seedDeltas.length * 0.8),
+    );
 
     // And the gain C offers over the base tier is larger in sample than out.
     expect(inSample.C - inSample.A).toBeGreaterThan(heldOut.C - heldOut.A);

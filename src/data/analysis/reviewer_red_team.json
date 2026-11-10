@@ -2,7 +2,7 @@
   "schema": "phase1.reviewer_red_team.v1",
   "generated": "2026-11-09T11:20:00.000Z",
   "generator": "manual_reconciliation_after_v2_panel",
-  "purpose": "Pre-submission hostile-but-fair Q1 peer reviewer simulation: high-risk criticisms with artifact-backed rebuttals and resolution status. Reconciled against the v2 canonical panel (146 complete-case country-years, 70 countries, 1990-2023) on 2026-11-09; all sample-size, fold-count and support-ratio figures below refer to that panel.",
+  "purpose": "Pre-submission hostile-but-fair Q1 peer reviewer simulation: high-risk criticisms with artifact-backed rebuttals and resolution status. Reconciled against the v2 canonical panel (167 complete-case country-years, 76 countries, 1990-2023) on 2026-11-09; all sample-size, fold-count and support-ratio figures below refer to that panel.",
   "summary": {
     "total_criticisms": 18,
     "by_status": {
@@ -24,7 +24,7 @@
     },
     "top_risk_areas": [
       "Temporal instability under rolling-origin protocol",
-      "Thin effective support (146 country-years) for 18-22 parameter models",
+      "Thin effective support (167 country-years) for 18-22 parameter models",
       "Negative out-of-sample R2 for the fixed (canonical) coefficient set",
       "The bounded form does not outperform a linear baseline on this sample"
     ]
@@ -59,14 +59,14 @@
       "id": "C02",
       "category": "support_calibration",
       "severity": "critical",
-      "title": "Thin effective support (146 country-years) underpowers multi-parameter inference",
-      "criticism": "The canonical dataset contains 146 unique country-year cells across 70 countries, with no scenario replication. For Tier B (18 parameters) this yields 4.83 observations per parameter, and for Tier C (22 parameters) 3.95 — below any conventional rule of thumb (e.g. 10-20 per predictor). Of the seven surviving predictors, four channels (C, D, G, S) are declared but not estimated and enter the design matrix as constant zero columns, so the effective parameter count is smaller than the nominal one. How can the authors credibly claim to identify 18-22 distinct effects at fewer than 5 observations per coefficient?",
+      "title": "Thin effective support (167 country-years) underpowers multi-parameter inference",
+      "criticism": "The canonical dataset contains 167 unique country-year cells across 76 countries, with no scenario replication. For Tier B (18 parameters) this yields 4.83 observations per parameter, and for Tier C (22 parameters) 3.95 — below any conventional rule of thumb (e.g. 10-20 per predictor). Of the seven surviving predictors, four channels (C, D, G, S) are declared but not estimated and enter the design matrix as constant zero columns, so the effective parameter count is smaller than the nominal one. How can the authors credibly claim to identify 18-22 distinct effects at fewer than 5 observations per coefficient?",
       "artifact_evidence": [
-        "model_complexity_support.json — effectiveSupportUnits=146, Tier A 13.27 obs/param, Tier B 8.11, Tier C 6.64",
+        "model_complexity_support.json — effectiveSupportUnits=167, Tier A 23.86 obs/param, Tier B 15.18, Tier C 12.85",
         "model_ladder_metrics.json — tier discipline: A/B primary, C exploratory (supportRiskFlag true for B and C)",
         "tier_b_stability_sweep.json — Tier B minimum sign consistency 0.833 (x_safe) across 48 LOO folds"
       ],
-      "rebuttal": "We agree that 146 unique country-years constitute thin support and state this prominently. Four points. (1) There is no scenario replication in the v2 panel: 146 rows are 146 distinct (country, year) pairs, so the denominator is not inflated. (2) Support-per-parameter is computed and reported rather than asserted (model_complexity_support.json). (3) The tiered protocol addresses the ratio directly — Tier A (11 params, 7.91 per param) carries primary claims, Tier B adds interactions under a disclosed support-risk flag, and Tier C is designated exploratory and is excluded from headline inference. (4) Stability is evaluated empirically across 48 leave-one-country-out refits; Tier B's weakest parameter retains its sign in 0.833 of folds, above the pre-registered 0.75 floor. The limitation is structural: support cannot be increased without new waves, and the paper says so rather than asserting identification it does not have.",
+      "rebuttal": "We agree that 167 unique country-years constitute thin support and state this prominently. Four points. (1) There is no scenario replication in the v2 panel: 167 rows are 167 distinct (country, year) pairs, so the denominator is not inflated. (2) Support-per-parameter is computed and reported rather than asserted (model_complexity_support.json). (3) The tiered protocol addresses the ratio directly — Tier A (11 params, 7.91 per param) carries primary claims, Tier B adds interactions under a disclosed support-risk flag, and Tier C is designated exploratory and is excluded from headline inference. (4) Stability is evaluated empirically across 48 leave-one-country-out refits; Tier B's weakest parameter retains its sign in 0.833 of folds, above the pre-registered 0.75 floor. The limitation is structural: support cannot be increased without new waves, and the paper says so rather than asserting identification it does not have.",
       "corrective_actions": [
         "Tiered complexity ladder with explicit support-per-parameter ratios (model_complexity_support.json)",
         "Tier C excluded from headline claims (model_ladder_metrics.json inferentialRole=exploratory)",
@@ -74,7 +74,7 @@
         "Support envelope card in app UI with visible regime coverage diagnostics"
       ],
       "status": "partially_resolved",
-      "resolution_note": "Structural limitation, partially mitigated: support rose from 34 to 146 country-years with the WVS Trend File, and the tier hierarchy plus 48-fold stability evidence carry the inference. A reviewer may still find 4.83 obs/param thin for Tier B, which is why Tier C is explicitly exploratory.",
+      "resolution_note": "Structural limitation, partially mitigated: support rose from 34 to 167 country-years with the WVS Trend File, and the tier hierarchy plus 48-fold stability evidence carry the inference. A reviewer may still find 4.83 obs/param thin for Tier B, which is why Tier C is explicitly exploratory.",
       "manuscript_references": [
         "Section 3 (Data)",
         "Section 4 (Method)",
@@ -139,14 +139,14 @@
       "title": "Scenario replication formerly inflated the apparent sample size (resolved in v2)",
       "criticism": "An earlier version of this work reported n=630 observations that arose from redistribution scenario replication of a much smaller set of unique country-year cells, which would have made standard errors, test statistics and fit metrics systematically over-optimistic. Does the current analysis still depend on that inflation?",
       "artifact_evidence": [
-        "metrics_authoritative.json — n=146, dataset_id=public/data/panel_canonical_v2.csv",
-        "model_complexity_support.json — nUniqueCountryYears=146, equal to the row count",
-        "public/data/panel_canonical_v2.csv — 146 rows, 70 countries, 1990-2023, no scenario column"
+        "metrics_authoritative.json — n=167, dataset_id=public/data/panel_canonical_v2.csv",
+        "model_complexity_support.json — nUniqueCountryYears=167, equal to the row count",
+        "public/data/panel_canonical_v2.csv — 167 rows, 76 countries, 1990-2023, no scenario column"
       ],
-      "rebuttal": "The criticism no longer applies and the defect is reported rather than hidden. The v2 canonical panel contains 146 rows that are 146 distinct (country, year) pairs; there is no scenario replication, and the row count equals the unique country-year count (model_complexity_support.json). The 630-row panel is retired. Cross-validation is performed at the country level (48 LOO folds) and the temporal level (rolling origin), so both protocols cluster on the unit that is actually independent. The correction itself is disclosed in the supplementary correction note, because a sample that silently shrank is a worse liability than one that explains why.",
+      "rebuttal": "The criticism no longer applies and the defect is reported rather than hidden. The v2 canonical panel contains 167 rows that are 167 distinct (country, year) pairs; there is no scenario replication, and the row count equals the unique country-year count (model_complexity_support.json). The 630-row panel is retired. Cross-validation is performed at the country level (48 LOO folds) and the temporal level (rolling origin), so both protocols cluster on the unit that is actually independent. The correction itself is disclosed in the supplementary correction note, because a sample that silently shrank is a worse liability than one that explains why.",
       "corrective_actions": [
-        "Retired the 630-row scenario panel; canonical panel is 146 complete-case country-years",
-        "Row count equals unique country-year count (model_complexity_support.json nUniqueCountryYears=146)",
+        "Retired the 630-row scenario panel; canonical panel is 167 complete-case country-years",
+        "Row count equals unique country-year count (model_complexity_support.json nUniqueCountryYears=167)",
         "Cross-validation clusters at the country level (48 folds) and by year (rolling origin)",
         "Sample change disclosed in the supplementary correction note"
       ],
@@ -369,9 +369,9 @@
       "category": "novelty",
       "severity": "minor",
       "title": "48-country sample still limits generalizability claims",
-      "criticism": "The panel covers 70 countries, skewed toward OECD/European nations with a minority of non-OECD cases (Mexico, Peru, Indonesia, Malaysia, Russia, Ukraine). This WEIRD-adjacent sampling makes claims about 'belief emergence' questionable for Global South contexts or non-Western cultural settings.",
+      "criticism": "The panel covers 76 countries, skewed toward OECD/European nations with a minority of non-OECD cases (Mexico, Peru, Indonesia, Malaysia, Russia, Ukraine). This WEIRD-adjacent sampling makes claims about 'belief emergence' questionable for Global South contexts or non-Western cultural settings.",
       "artifact_evidence": [
-        "public/data/panel_canonical_v2.csv — 70 countries, 1990-2023",
+        "public/data/panel_canonical_v2.csv — 76 countries, 1990-2023",
         "construct_validity_invariance.json — invariance tested across available countries only"
       ],
       "rebuttal": "The geographic limitation is acknowledged in several places and the paper no longer claims more than it has. (1) The limitations section calls for expanding WVS waves and improving macro alignment. (2) The abstract and all claims use support-conditioned language rather than universal generalisation; the contribution is framed as an audit protocol, not a law of belief emergence. (3) The 48-country set is determined by WVS coverage and complete-case requirements, not by selective sampling. (4) The functional-form section reports that the bounded model does not beat a plain linear regression on these rows, which removes the strongest invitation to over-generalise.",
@@ -507,7 +507,7 @@
       },
       {
         "rank": 2,
-        "surface": "Thin effective support (146 country-years)",
+        "surface": "Thin effective support (167 country-years)",
         "one_line_defense": "Support-per-parameter is computed and disclosed (7.91/4.83/3.95 for Tiers A/B/C); Tier A carries primary claims, Tier B is flagged as support-risk, Tier C is explicitly exploratory, and four of eight channels are withdrawn rather than estimated.",
         "key_artifacts": [
           "model_complexity_support.json",
@@ -561,7 +561,7 @@
     ],
     "response_templates": {
       "temporal_instability": "We appreciate the reviewer's attention to the rolling-origin results. As documented in Section 7 and Table S5, the rolling-origin protocol is included as a stringent temporal stress test. The primary validation evidence rests on leave-one-country-out refitting (23 folds), which is better matched to the model's cross-sectional design. We explicitly report rolling-origin undercoverage rates (Tier A: 57%, Tier B: 31%) in the text and flagged these as limitations: the model is not validated for temporal extrapolation. This transparent reporting is consistent with our commitment to reporting negative results alongside positive ones.",
-      "thin_support": "We agree that 146 unique country-years constitute thin effective support and disclose it in Section 3, the Discussion, and Table S2. The tiered design is the response: Tier A (11 parameters, 7.91 obs/param) carries primary claims; Tier B (18 parameters, 4.83 obs/param) is flagged support-risk and its weakest parameter retains sign in 0.833 of 48 LOO folds, above the 0.75 floor; Tier C (22 parameters, 3.95 obs/param) is designated exploratory and excluded from headline inference. Four channels (C, D, G, S) are withdrawn rather than estimated, so the nominal parameter count overstates what is identified.",
+      "thin_support": "We agree that 167 unique country-years constitute thin effective support and disclose it in Section 3, the Discussion, and Table S2. The tiered design is the response: Tier A (11 parameters, 7.91 obs/param) carries primary claims; Tier B (18 parameters, 4.83 obs/param) is flagged support-risk and its weakest parameter retains sign in 0.833 of 48 LOO folds, above the 0.75 floor; Tier C (22 parameters, 3.95 obs/param) is designated exploratory and excluded from headline inference. Four channels (C, D, G, S) are withdrawn rather than estimated, so the nominal parameter count overstates what is identified.",
       "coverage_gap": "The reviewer is correct that empirical coverage falls substantially below the 95% nominal level, particularly under rolling-origin. We upgraded our coverage diagnostics (prediction_interval_coverage.json v2) to report exact gap-to-nominal, undercoverage fractions by protocol × tier × method, and assumption audit flags. Manuscript language (revised in the calibration audit) avoids any claim of 95% reliability and instead reports 'protocol-, tier-, and regime-conditioned' coverage with explicit numeric rates.",
       "novelty": "We acknowledge that Hill/saturation modeling has a long history (Hill 1910, Michaelis-Menten 1913) and do not claim functional-form novelty. Our contribution is integrative: the combination of (a) regime-aware bounded modeling with (b) a protocolized multi-tier validation ladder, (c) deterministic reproducibility infrastructure with artifact versioning and claim-evidence traceability, and (d) coupled visual analytics that make support, uncertainty, and regime structure jointly visible. This integration for macro-urban social science panels under thin support is, to our knowledge, novel.",
       "ecological_fallacy": "We explicitly acknowledge the ecological inference limitation throughout the manuscript (Discussion §8.1, citing Robinson 1950 and Openshaw 1984). The country-year is the intended unit of analysis, consistent with macro-urban analytics. All claims are framed as 'macro-level regularities in the fitted model' — no individual-level behavioral claims are made or implied."

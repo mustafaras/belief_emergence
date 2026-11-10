@@ -12,13 +12,20 @@ import vif from '../src/data/analysis/collinearity_diagnostics.json';
  */
 
 describe('collinearity does not carry the central result', () => {
-  it('keeps Tier C below Tier B out of sample in every ablation', () => {
+  it('reports the Tier C ordering as unstable rather than claiming a reversal', () => {
+    // At 167 cells the reversal does not hold across specifications: the full
+    // design and the without-E ablation put C marginally ahead of B. The test
+    // therefore asserts what is measured -- a small, sign-unstable difference --
+    // instead of a stable reversal the data no longer support. What must stay
+    // true is that the difference is small enough to be uninformative.
     expect(ablation.specs.length).toBe(4);
     for (const spec of ablation.specs) {
-      expect(spec.kFold.C, `${spec.label}: C must rank below B`).toBeLessThan(spec.kFold.B);
-      expect(spec.cMinusB).toBeLessThan(0);
+      expect(Math.abs(spec.cMinusB), `${spec.label}: |C-B| must be small`).toBeLessThan(0.06);
     }
-    expect(ablation.reversalStable).toBe(true);
+    expect(ablation.reversalStable).toBe(false);
+    // At least one specification must put C behind B, or the exploratory label
+    // would rest on nothing at all.
+    expect(ablation.specs.some((s) => s.cMinusB < 0)).toBe(true);
   });
 
   it('keeps in-sample fit monotone A < B < C in every ablation', () => {
@@ -49,6 +56,6 @@ describe('collinearity does not carry the central result', () => {
 
   it('pins the diagnostics to the current panel size', () => {
     expect(vif.n).toBe(ablation.n);
-    expect(vif.n).toBe(146);
+    expect(vif.n).toBe(167);
   });
 });
