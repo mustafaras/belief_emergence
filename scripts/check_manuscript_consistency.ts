@@ -395,6 +395,111 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // Fitted coefficients quoted in prose. These had no checker at all, which is
+    // how three paragraphs came to describe a fit four panel revisions old: the
+    // numbers lived in a gitignored file that no test could see. The fitted values
+    // are derived quantities, not licensed data, so they are copied into
+    // coefficient_fit.json (committed) and checked here against the manuscript.
+    {
+      const fitPath = path.join(ANALYSIS_DIR, 'coefficient_fit.json');
+      if (fs.existsSync(fitPath)) {
+        const fit = JSON.parse(fs.readFileSync(fitPath, 'utf8')) as {
+          parameters: Record<string, number>;
+          nRows: number;
+        };
+        const mainText = readText(path.join('main', 'main.tex')) ?? '';
+        // Each entry: how the manuscript writes it, and the tolerance.
+        const quoted: { pattern: RegExp; key: string; tol: number; label: string }[] = [
+          { pattern: /\$c_E=([+-]?[0-9.]+)\$/, key: 'c_E', tol: 0.005, label: 'c_E' },
+          { pattern: /\$c_R=([+-]?[0-9.]+)\$/, key: 'c_R', tol: 0.005, label: 'c_R' },
+          { pattern: /\$c_M=([+-]?[0-9.]+)\$/, key: 'c_M', tol: 0.005, label: 'c_M' },
+          { pattern: /\$c_T=([+-]?[0-9.]+)\$/, key: 'c_T', tol: 0.005, label: 'c_T' },
+          { pattern: /c_\{\\mathrm\{tr\}\}Y_\{\\mathrm\{s\}\}R=([+-]?[0-9.]+)/, key: 'c_tr', tol: 0.005, label: 'c_tr' },
+          { pattern: /c_\{\\mathrm\{yr\}\}Y_\{\\mathrm\{s\}\}R=([+-]?[0-9.]+)/, key: 'c_yr', tol: 0.005, label: 'c_yr' },
+        ];
+        for (const q of quoted) {
+          const match = mainText.match(q.pattern);
+          if (!match) continue;
+          const quotedValue = Number.parseFloat(match[1]);
+          const fitted = fit.parameters[q.key];
+          if (!Number.isFinite(quotedValue) || !Number.isFinite(fitted)) continue;
+          // The manuscript rounds to 1-2 decimals; compare the rounding, not the raw.
+          const decimals = (match[1].split('.')[1] ?? '').length;
+          const expected = Number(fitted.toFixed(decimals));
+          if (Math.abs(quotedValue - expected) > q.tol) {
+            failures.push({
+              id: 'COEFFICIENT_FIT_DRIFT',
+              file: 'main/main.tex',
+              message: `${q.label}: manuscript says ${quotedValue}, coefficient_fit.json gives ${fitted.toFixed(4)} (rounded: ${expected})`,
+              remediation: 'Re-run scripts/fit_coefficients_v2.py on the current panel, refresh coefficient_fit.json, and update the prose.',
+            });
+          }
+        }
+        stats.executed += 1;
+      }
+    }
+
+    // Derived ratios: frame coverage and observations per parameter. Both are
+    // arithmetic on numbers the artifacts already contain, which is exactly the
+    // kind of quantity that drifts silently because nobody recomputes it. Frame
+    // coverage said 47.9% (146/305) after the panel reached 167, and obs/param
+    // said 13.27 after it reached 23.86.
+    {
+      const auditPath = path.join(APP_ROOT, 'public', 'data', 'panel_canonical_v2.audit.json');
+      const complexityPath = path.join(ANALYSIS_DIR, 'model_complexity_support.json');
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+
+      if (fs.existsSync(auditPath)) {
+        const audit = JSON.parse(fs.readFileSync(auditPath, 'utf8')) as { rows: number };
+        // Position-based extraction, not a regex. LaTeX's `\num{54.8}\%`
+        // needs two literal backslashes in a pattern and every attempt to
+        // write that inline was wrong in a different way, so the surrounding
+        // numbers are read by position instead.
+        const frameAnchor = mainText.indexOf('of the scanned country-year frame');
+        const frameWindow = frameAnchor === -1 ? '' : mainText.slice(frameAnchor - 80, frameAnchor + 120);
+        const frameNums = [...frameWindow.matchAll(/[0-9]+(?:\.[0-9]+)?/g)].map((m) => m[0]);
+        const frame = frameNums.length >= 3 ? frameNums : null;
+        if (frame) {
+          const stated = Number.parseFloat(frame[0]);
+          const covered = Number(frame[1]);
+          const universe = Number(frame[2]);
+          const actual = (100 * audit.rows) / universe;
+          if (covered !== audit.rows || Math.abs(stated - actual) > 0.15) {
+            failures.push({
+              id: 'DERIVED_FRAME_COVERAGE',
+              file: 'main/main.tex',
+              message: `states ${covered} of ${universe} = ${stated}%, but the panel has ${audit.rows} rows = ${actual.toFixed(1)}%`,
+              remediation: 'Recompute frame coverage from the panel audit; both the count and the percentage must move together.',
+            });
+          }
+          stats.executed += 1;
+        }
+      }
+
+      if (fs.existsSync(complexityPath)) {
+        const complexity = JSON.parse(fs.readFileSync(complexityPath, 'utf8')) as {
+          complexityByTier: { tier: string; supportPerParameter: number }[];
+        };
+        const tiers = ['A', 'B', 'C'];
+        for (const tier of tiers) {
+          const expected = complexity.complexityByTier.find((t) => t.tier === tier)?.supportPerParameter;
+          if (!Number.isFinite(expected)) continue;
+          // Look for the tier's ratio in prose, tolerating 1-2 decimals.
+          const quoted = mainText.match(new RegExp(`\\b([0-9]+\\.[0-9]{1,2})\\s*\\(Tier~${tier}\\)`));
+          if (!quoted) continue;
+          if (Math.abs(Number.parseFloat(quoted[1]) - (expected as number)) > 0.02) {
+            failures.push({
+              id: 'DERIVED_OBS_PER_PARAM',
+              file: 'main/main.tex',
+              message: `Tier ${tier}: manuscript says ${quoted[1]}, model_complexity_support.json gives ${(expected as number).toFixed(2)}`,
+              remediation: 'Re-run generate:phase1-validation and update the support-per-parameter sentence.',
+            });
+          }
+          stats.executed += 1;
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
