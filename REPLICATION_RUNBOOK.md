@@ -36,9 +36,9 @@ gate. If the hash does not match, every script aborts before writing output.
 |----------|-------|
 | File     | `public/data/panel_canonical_v2.csv` |
 | SHA-256  | `ECF5D041953AF9E07FD72F7AA1739FCC6D0BB8378BE1BFD45F5530A4BA24967A` |
-| Rows     | 126 complete-case country-year observations |
-| Countries| 66 |
-| Years    | 1990–2022 |
+| Rows     | 167 complete-case country-year observations |
+| Countries| 76 |
+| Years    | 1990–2023 |
 
 The row count equals the number of unique `(iso3, year)` pairs — there is no
 scenario replication. One row per country-year is the invariant this gate
@@ -140,17 +140,26 @@ must appear in `src/data/analysis/metrics_authoritative.json`:
 
 | Metric          | Expected value |
 |-----------------|----------------|
-| n               | 126            |
-| R²              | 0.2745         |
-| Correlation     | 0.6392         |
-| MAE             | 0.1631         |
-| RMSE            | 0.2101         |
-| Bias            | 0.0461         |
+| n               | 167            |
+| R²              | 0.2516         |
+| Correlation     | 0.5772         |
+| MAE             | 0.1789         |
+| RMSE            | 0.2268         |
+| Bias            | 0.0611         |
 
 Any deviation indicates a data-integrity or code-path change and must be
 investigated before proceeding. These are in-sample descriptive metrics on the
-87 complete-case country-years; the inferential evidence lives in
-`cv_country_out.json` and `cv_rolling_origin.json`.
+167 complete-case country-years (76 countries, 1990--2023); the inferential
+evidence lives in `cv_country_out.json`, `cv_kfold.json` and
+`cv_rolling_origin.json`.
+
+Note that the panel itself is committed but its *inputs* are not: `rawdata/` is
+gitignored because the EM-DAT download cannot be redistributed. The committed CSV
+therefore contains 30 rows whose trauma value was recovered from EM-DAT (29 at
+the zero anchor, 1 through the SCG -> SRB alias). Rebuilding from a clean clone
+without `rawdata/` will produce 146 rows rather than 167, and the build will say
+so. The gate does not rebuild the panel, so this does not fail CI, but a reader
+verifying the build should expect the difference.
 
 ---
 

@@ -8,7 +8,7 @@
 
 Every finding below is independently reproducible from the committed tree.
 Unless an entry says otherwise, its reproduction commands now run against
-`public/data/panel_canonical_v2.csv` (146 complete-case country-years, 70
+`public/data/panel_canonical_v2.csv` (167 complete-case country-years, 76
 countries, 1990--2023) and `rawdata/wvs_construct_audit.json`. Where an entry
 still cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
@@ -130,7 +130,7 @@ has alpha 0.30. The +0.496 figure must not be cited anywhere.
 ## KI-17 — The bounded model and a linear baseline are statistically indistinguishable — REVISED 2026-11-09
 
 Acquiring the WVS Trend File (1981–2022, v4.1.0) raised the sample from 49 to
-146 complete cases across 70 countries. It also removed the possibility of
+167 complete cases across 76 countries. It also removed the possibility of
 attributing the weak fit to a small sample.
 
 ### Revision (2026-11-09): the original numbers could not be regenerated
@@ -399,7 +399,7 @@ grouped k-fold (146 rows, 20 repeats x 5 folds)   Tier A   Tier B   Tier C
   canonical, median across folds                +0.2121  +0.3137  +0.2979
 country-out, pooled held-out series             Tier A   Tier B   Tier C
   refit R2 (predict every row once)             +0.3853  +0.4288  +0.4036
-  canonical R2                                  +0.2620  +0.3113  +0.2745
+  canonical R2                                  +0.2605  +0.3062  +0.2516
 ```
 
 The gap between those two lines is the issue itself: the negative per-fold
@@ -467,7 +467,7 @@ ranges the structural product contributes no explanatory power.
 
 With those coefficients the canonical family is no longer astronomically
 negative. Pooled over the 146 held-out rows of the country-out design the
-canonical family reaches $R^2$ = 0.2620 / 0.3113 / 0.2745 for Tier A/B/C, while
+canonical family reaches $R^2$ = 0.2605 / 0.3062 / 0.2516 for Tier A/B/C, while
 grouped k-fold gives refit fold medians of 0.3926 / 0.4665 / 0.4358. The earlier
 values of order $-2\times10^4$ are gone.
 

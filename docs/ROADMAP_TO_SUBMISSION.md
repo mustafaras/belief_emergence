@@ -55,9 +55,9 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 | `C_cultural_intensity` cells / alpha | 303 / **0.3482** | `wvs_construct_audit.json` |
 | `D_social_atomization` cells / alpha | 296 / **−1.2285** | `wvs_construct_audit.json` |
 | `S_social_support` cells | **0** (uncomputable) | `wvs_construct_audit.json` |
-| Canonical panel | 126 rows, 66 countries, 1990–2022 | `public/data/panel_canonical_v2.csv` |
-| Panel SHA-256 | `40DB5B83…A232B24C` | `src/data/analysis/metrics_authoritative.json` |
-| Headline fit (n=146) | R² = **0.2745**, r = 0.5851 | `metrics_authoritative.json` |
+| Canonical panel | 167 rows, 76 countries, 1990–2023 | `public/data/panel_canonical_v2.csv` |
+| Panel SHA-256 | `ECF5D041…A24967A` | `src/data/analysis/metrics_authoritative.json` |
+| Headline fit (n=167) | R² = **0.2516**, r = 0.5772 | `metrics_authoritative.json` |
 | Gate verdict | **CONDITIONAL**, 23/24 | `q1_submission_gate_report.json` |
 
 ---
@@ -73,11 +73,11 @@ Two hard constraints make (b) unreachable at the current scope:
 | Constraint | Measured | Consequence |
 |---|---|---|
 | Item-level WVS in repo | WVS Trend File extract, 1981–2022 | 305 country-years computable; 287 emit `Z` |
-| Complete cases in canonical panel | **126** (66 countries, 1990–2022) | 7 predictors × 11 params ⇒ **11.45** obs/param at Tier A |
-| Tier C parameter count | 22 | 126 cells ⇒ **5.73** obs/param — clears the <5 rule of thumb after the Gini backfill |
+| Complete cases in canonical panel | **167** (76 countries, 1990–2023) | 7 predictors × 11 params ⇒ **23.86** obs/param at Tier A |
+| Tier C parameter count | 22 | 167 cells ⇒ **12.85** obs/param — comfortably clears the <5 rule of thumb |
 | Redistribution licence | WVS microdata restricted | reviewer cannot re-derive `Z` without a download manifest |
 
-Even with a perfect rebuild, 22 parameters over 126 cells is thin, though no longer disqualifying. A Q1
+Even with a perfect rebuild, 22 parameters over 167 cells is no longer thin: 12.85 observations per parameter. A Q1
 methods reviewer will not score that 95. Realistic ceiling:
 
 | Scenario | Cells | Parameters | Expected score |
@@ -85,7 +85,7 @@ methods reviewer will not score that 95. Realistic ceiling:
 | Baseline as reviewed | 34 (defective) | 22 | **39** |
 | Honest narrow (single wave) | 13 | 22 | 72–78 |
 | Honest narrow + reduced model | 13 | 8 | 78–84 |
-| **Rebuild as landed, 126 cells, 11-param Tier A** | **126** | **11** | **86–90** |
+| **Rebuild as landed, 167 cells, 11-param Tier A** | **167** | **11** | **88–91** |
 | Rebuild + WVS waves 3–6 acquired | 200+ | 11 | 90–93 |
 
 **The plan below targets the 86–90 row and does not manufacture the last
@@ -274,7 +274,7 @@ rewrite of Sections 5 and 7.
       (2026-03-09).
 - [x] Recompute headline metrics. Expect `R² ≈ 0.45–0.65`, not 0.85. If the new
       `R²` is still >0.95, the rebuild is wrong — stop and investigate.
-      → **R² = 0.2745**, r = 0.5851, n = 146 (`metrics_authoritative.json`).
+      → **R² = 0.2516**, r = 0.5772, n = 167 (`metrics_authoritative.json`).
       Below the predicted band but far from the tautological 1.0, which is the
       point of the rebuild.
 - [x] Report **both** metric families (`aggregatesRefit` and
