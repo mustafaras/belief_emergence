@@ -731,6 +731,7 @@ For auditability, primary out-of-sample evidence and support diagnostics are anc
 
 Primary inferential weight is placed on \emph{repeated grouped $k$-fold} cross-validation: countries are assigned to folds as whole units, so no country appears in both train and test, and $k=5$ folds are drawn $20$ times for $100$ held-out evaluations. This replaces leave-one-country-out (LOO) as the primary spatial protocol, for a measured reason. With 167 rows across 76 countries, a country-out fold holds out between one and four rows; $R^2$ is undefined below three pairs, so 36 of the 48 folds carry no $R^2$ at all and the reported per-fold median describes the twelve survivors rather than the model (KI-14). Grouped $k$-fold keeps the same spatial separation while giving every fold roughly seventeen test rows, and the twenty repeats make the reported statistic a distribution rather than one arbitrary split.
 
+\subsection*{Primary out-of-sample evidence}
 Under this protocol, in-sample-to-out-of-sample degradation is modest and the tier ordering does not survive it. Median held-out $R^2$ is \num{0.4063}/\num{0.4767}/\num{0.4802} for Tier A/B/C (interquartile ranges \num{0.122}--\num{0.519}, \num{0.115}--\num{0.551}, \num{0.106}--\num{0.534}), against an in-sample $R^2$ of \num{0.2516} on the same rows: held-out performance now matches or exceeds in-sample fit, and the fold-to-fold dispersion is markedly narrower than on the 87-cell panel. Median held-out RMSE is \num{0.1835}/\num{0.1781}/\num{0.1780} (IQR \num{0.1679}--\num{0.2283}, \num{0.1638}--\num{0.2118}, \num{0.1627}--\num{0.2268}). The three tiers remain statistically indistinguishable once countries are held out: Tier C exceeds Tier A both in-sample (\num{0.5642} against \num{0.4728}) and out of sample (\num{0.4802} against \num{0.4063}), but the out-of-sample gain is \num{+0.0035} over Tier B against \num{+0.0914} in sample, and it changes sign across seeds. Added complexity buys almost no transfer, which is why Tier C is reported as exploratory.
 
 The fixed production coefficients are evaluated on the same folds and behave differently by tier: median held-out $R^2$ is \num{0.2407}/\num{0.3066}/\num{0.2523} (IQR derived from the artifact). Tier A's canonical family is still the weakest, but its lower quartile is now positive (\num{0.123}); Tiers B and C transfer better as fixed maps than they do when refitted per fold. This split is reported rather than smoothed: the production coefficients are not the fold-refit optimum, and the difference is largest exactly where the model is simplest.
@@ -742,6 +743,7 @@ Forward-chaining rolling-origin evaluation serves as a complementary temporal sc
 
 \subsubsection*{Key findings III: what the bounded form buys, and what it costs}\label{sec:functional-form}
 
+\subsection*{Functional form against a linear baseline}
 The comparison that matters most for this paper's claim is not between tiers but between functional forms. Both models below are fitted to the same 167 rows with the same six covariates ($X$, $Y$, $T$, $E$, $R$, $M$) and evaluated on identical folds; the only difference is the link. The linear model is ordinary least squares; the bounded model wraps the same covariates in the saturation map. Source artifact: the functional-form artifact.
 
 \begin{table}[!htbp]
@@ -763,6 +765,7 @@ The result is a near-tie, and the honest reading is narrower than either "the bo
 
 An earlier draft asserted that the linear baseline won decisively ($R^2$ \num{0.2020} against \num{0.1023}). That comparison could not be regenerated from the tree, and when the baseline is actually fitted on the canonical panel the gap does not appear. We report the measured values and withdraw the stronger claim. The corrected version supports only what the data support: at 167 country-years, the choice between these two links is not identified by predictive performance.
 
+\subsection*{Why curvature does not pay}
 Two properties of the data explain why curvature does not pay. First, the pooled outcome is close to normally distributed with standard deviation $0.97$. A sigmoid's steepest gradient sits at its midpoint and decays in the tails; regressing a roughly linear outcome on it forces the curvature into the densest region and flattens exactly where the extremes lie. Second, two cells sit far outside the bulk---CHN 1990 at $Z=+3.37$ and IDN 2006 at $Z=-2.19$. Under min--max scaling they compress the other 85 rows into roughly $[0.22, 0.78]$; percentile anchoring recovers part of that range, but not a ranking between the models.
 
 The bounded form was adopted because the outcome is a composite index on a closed scale. That argument concerns \emph{measurement}, not \emph{response shape}, and this sample does not arbitrate the shape. Nothing in 167 country-years indicates that effects flatten at high exposure. The manuscript accordingly makes no saturation claim; the transition-ridge behaviour discussed in Section~4 and illustrated in the visual analytics layer is a property of the fitted map, which is a different statement.
@@ -891,6 +894,7 @@ Measured and predicted $Z$ summaries for each preset country are reported in Tab
 
 Re-estimation on the rebuilt panel yields four identified main effects and two interactions. All values below come from the fitted coefficient artifact, generated by the coefficient fitting script.
 
+\subsection*{Coefficient estimates}
 \emph{Education capacity carries the largest identified main effect} ($c_E=+0.46$). On the rebuilt 167-cell panel it is roughly twice the size of any other channel: a country--year one standard deviation above the sample mean on secondary enrolment sits substantially higher on the bounded outcome. That the education channel survives at this magnitude is worth stating plainly, because in earlier drafts of this paper it was the weakest of the four and welfare capacity was the strongest. The reversal is a consequence of the sample, not of a different model: the same specification, fitted to 87 cells, put $c_E$ at $+0.11$ and $c_R$ at $+1.80$.
 
 \emph{Welfare capacity is the second channel} ($c_R=+0.19$) and, as Section~\ref{sec:collinearity} records, the one whose coefficient is least separately identified: $R$ is an affine rescaling of the Human Development Index, whose variance inflation reaches \num{8.74} once education is also in the design. Its sign is stable and its magnitude is not. We report it because the design includes it, and we do not build an argument on its size.
@@ -900,6 +904,15 @@ Re-estimation on the rebuilt panel yields four identified main effects and two i
 Both interactions remain identified: $c_{\mathrm{tr}}Y_{\mathrm{s}}R=-0.19$ and $c_{\mathrm{yr}}Y_{\mathrm{s}}R=+0.63$. The inequality--welfare interaction still carries the substantive point that welfare capacity damps the inequality gradient, though its magnitude is smaller than the $+1.77$ obtained on 87 cells.
 
 For coefficients that did not survive the rebuild the paper makes no claim. Cultural intensity, social atomization, redistribution capacity and social support are set to zero in the fitted model because their channels are structurally unavailable, not because they were estimated to be unimportant (Section~\ref{sec:measurement-validity}). Any sentence in earlier drafts that assigned them an amplifier or suppressor role described a model that no longer exists.
+
+\subsection*{Multiplicity}\label{sec:multiplicity}
+Four specifications are compared and one parameter is profiled across seven grid points. Left implicit, that counting invites the ordinary worry that something was found by looking often enough, so it is stated here and the correction is applied where it changes an answer.
+
+The specification comparison does not need correcting: the four models are nested or nested-like, they are all reported, and the paper's claim is about their \emph{ordering}, not about which one crosses a threshold. Reporting all four, including the linear baseline that fits better in sample, is what makes the ordering informative.
+
+The profile likelihood does need it. Seven grid points are evaluated, so a nominal $5\%$ interval is not a $5\%$ interval. Applying a Bonferroni bound over the seven comparisons moves the rejection threshold from $0.05$ to $0.05/7\approx\num{0.0071}$. That is stricter, and it should shrink the interval. It does not: the smallest value still rejected is $\alpha=\num{0.064}$ at $p=\num{0.0057}$, which survives the correction, while $\alpha=\num{0.032}$ at $p=\num{0.055}$ remains far inside. The interval is therefore unchanged at $[0,\num{0.032}]$.
+
+The reason is worth stating, because it is not luck. The grid was chosen to be dense where the optimum appears to sit, and the profile rises only slowly across the region that matters; the correction eats the margin at the far edge of the grid without touching the interval this paper reports. What the correction does change is the strength of the statement about the shipped value. Under the nominal criterion $\alpha=\num{0.050}$ falls outside the interval and is rejected; under the corrected one the rejection threshold is met only further out, so the honest summary is that the data exclude the shipped value on the nominal criterion and sit at its boundary once multiplicity is charged. Both numbers are given above so the reader can see which is which.
 
 \subsection*{Explicit inferential boundaries}
 

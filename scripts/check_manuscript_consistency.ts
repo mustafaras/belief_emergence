@@ -769,6 +769,48 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The multiplicity paragraph makes a numerical claim about whether the
+    // Bonferroni correction moves the profile interval. That is arithmetic on the
+    // profile artifact, so it is computed rather than trusted -- and the first
+    // version of the paragraph got it backwards, asserting the interval widened
+    // when the correction in fact leaves it unchanged.
+    {
+      const profPath = path.join(ANALYSIS_DIR, 'elasticity_profile.json');
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      if (fs.existsSync(profPath) && mainText.includes('Bonferroni')) {
+        const prof = JSON.parse(fs.readFileSync(profPath, 'utf8')) as {
+          profiles: { value: number; pValue: number }[];
+        };
+        const bonferroni = 0.05 / prof.profiles.length;
+        const insideCorrected = prof.profiles.filter((p) => p.pValue > bonferroni);
+        const insideNominal = prof.profiles.filter((p) => p.pValue > 0.05);
+        stats.executed += 1;
+        const upperCorrected = Math.max(...insideCorrected.map((p) => p.value));
+        const upperNominal = Math.max(...insideNominal.map((p) => p.value));
+        const widened = upperCorrected > upperNominal;
+        const claimsWidened = /widens from|interval widens/.test(mainText);
+        if (widened !== claimsWidened && mainText.includes('unchanged')) {
+          // The prose says unchanged; only complain if the arithmetic disagrees.
+          if (widened) {
+            failures.push({
+              id: 'MULTIPLICITY_CLAIM_DRIFT',
+              file: 'main/main.tex',
+              message: `prose says the Bonferroni correction leaves the interval unchanged, but it would move the upper bound from ${upperNominal} to ${upperCorrected}`,
+              remediation: 'Recompute the corrected interval from elasticity_profile.json and update the multiplicity paragraph.',
+            });
+          }
+        }
+        if (claimsWidened && !widened) {
+          failures.push({
+            id: 'MULTIPLICITY_CLAIM_DRIFT',
+            file: 'main/main.tex',
+            message: `prose says the correction widens the interval (${upperNominal} -> ${upperCorrected}), which is false`,
+            remediation: 'Correct the multiplicity paragraph: the correction does not move the bound at this grid.',
+          });
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
