@@ -500,6 +500,100 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // VIF values quoted in prose. These had an artifact and no check, so the
+    // manuscript kept the 146-row figures (R 9.19, E 4.74, T 1.08) after the
+    // panel gave 8.74 / 4.50 / 1.15. Matched by position around a text anchor
+    // rather than by regex: LaTeX's `\num{8.74}` needs escaping that is easy to
+    // get subtly wrong, and the last four attempts at it here were each wrong
+    // differently.
+    {
+      const vifPath = path.join(ANALYSIS_DIR, 'collinearity_diagnostics.json');
+      if (fs.existsSync(vifPath)) {
+        const vif = JSON.parse(fs.readFileSync(vifPath, 'utf8')) as {
+          entries: { covariate: string; vif: number }[];
+          maxVif: number;
+        };
+        const byCovariate = new Map(vif.entries.map((e) => [e.covariate, e.vif]));
+        const mainText = readText(path.join('main', 'main.tex')) ?? '';
+
+        const expectNear = (
+          anchorText: string,
+          covariate: string,
+          tolerance: number,
+        ): void => {
+          const at = mainText.indexOf(anchorText);
+          if (at === -1) return;
+          const window = mainText.slice(at, at + 160);
+          const nums = [...window.matchAll(/-?[0-9]+\.[0-9]+/g)].map((m) => Number.parseFloat(m[0]));
+          const expected = byCovariate.get(covariate);
+          if (!Number.isFinite(expected) || nums.length === 0) return;
+          const quoted = nums[0];
+          stats.executed += 1;
+          if (Math.abs(quoted - (expected as number)) > tolerance) {
+            failures.push({
+              id: 'VIF_VALUE_DRIFT',
+              file: 'main/main.tex',
+              message: `${covariate}: manuscript says ${quoted}, collinearity_diagnostics.json gives ${(expected as number).toFixed(2)}`,
+              remediation: 'Run npm run generate:collinearity and update the VIF sentence.',
+            });
+          }
+        };
+
+        expectNear('Welfare capacity $R$ reaches', 'R', 0.02);
+        expectNear('education capacity $E$ reaches', 'E', 0.02);
+        expectNear('orthogonal to the rest', 'T', 0.02);
+      }
+    }
+
+    // Affine backfill constants. The manuscript states the Gini and education
+    // conversions to six decimals; if the builder's constants ever move, those
+    // sentences silently become wrong. The audit already records them, so this
+    // compares the prose against the audit rather than against the source.
+    {
+      const auditPath = path.join(APP_ROOT, 'public', 'data', 'panel_canonical_v2.audit.json');
+      if (fs.existsSync(auditPath)) {
+        const audit = JSON.parse(fs.readFileSync(auditPath, 'utf8')) as {
+          backfills?: { covariate: string; affine?: { slope: number; intercept: number } }[];
+        };
+        const mainText = readText(path.join('main', 'main.tex')) ?? '';
+        const pairs: { covariate: string; anchorText: string }[] = [
+          { covariate: 'Y', anchorText: 'SI.POV.GINI' },
+          { covariate: 'E', anchorText: 'SE.SEC.ENRR' },
+        ];
+        for (const { covariate, anchorText } of pairs) {
+          const affine = audit.backfills?.find((b) => b.covariate === covariate)?.affine;
+          if (!affine) continue;
+          const at = mainText.indexOf(anchorText);
+          if (at === -1) continue;
+          // The slope precedes the indicator name in the equation, so the
+          // window has to reach backwards as well as forwards.
+          const window = mainText.slice(Math.max(0, at - 80), at + 140);
+          // Numbers live inside \num{...} with an optional leading minus outside it;
+          // parsing that with a character class was the fifth escaping bug here, so the
+          // brace content is extracted literally instead.
+          const nums = [...window.matchAll(/\\num[ ]*\{(-?[0-9.]+)\}/g)].map((m) => {
+            const value = Number.parseFloat(m[1]);
+            // The minus belongs to a preceding `\;-\;` outside the braces, so the
+            // sign is read from the text just before the match.
+            const before = window.slice(Math.max(0, (m.index ?? 0) - 8), m.index ?? 0);
+            return before.includes('-') ? -Math.abs(value) : value;
+          });
+          if (nums.length < 2) continue;
+          stats.executed += 1;
+          const slopeOk = Math.abs(nums[0] - affine.slope) < 1e-6;
+          const interceptOk = Math.abs(nums[1] - affine.intercept) < 1e-4;
+          if (!slopeOk || !interceptOk) {
+            failures.push({
+              id: 'BACKFILL_CONSTANT_DRIFT',
+              file: 'main/main.tex',
+              message: `${covariate}: manuscript gives ${nums[0]} / ${nums[1]}, audit gives ${affine.slope} / ${affine.intercept}`,
+              remediation: 'Update the affine sentence in Step 2b to match the builder constants recorded in the panel audit.',
+            });
+          }
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
