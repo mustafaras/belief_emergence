@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "phase1.zero_fill_sensitivity.v1",
+  "generatedAtIso": "2026-11-10T10:21:33.071Z",
+  "nZeroAnchor": 30,
+  "splits": [
+    {
+      "label": "full panel",
+      "n": 167,
+      "inSample": {
+        "A": 0.472841,
+        "B": 0.554947,
+        "C": 0.564201
+      },
+      "kFold": {
+        "A": 0.423483,
+        "B": 0.48275,
+        "C": 0.458479
+      },
+      "cMinusB": -0.024271,
+      "perRepeatMedianCminusB": -0.004274
+    },
+    {
+      "label": "zero-anchor rows removed",
+      "n": 137,
+      "inSample": {
+        "A": 0.459914,
+        "B": 0.543011,
+        "C": 0.561839
+      },
+      "kFold": {
+        "A": 0.377829,
+        "B": 0.420856,
+        "C": 0.386974
+      },
+      "cMinusB": -0.033882,
+      "perRepeatMedianCminusB": -0.007173
+    }
+  ],
+  "resultSurvivesRemoval": true,
+  "interpretation": "Deleting all 30 rows at the zero anchor leaves the Tier C gap intact (-0.024271 -> -0.033882), so the report does not depend on the imputed zero-death cells."
+}

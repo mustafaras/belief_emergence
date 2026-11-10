@@ -82,6 +82,9 @@ jobs:
       - name: Generate collinearity ablation
         run: npm run generate:collinearity-ablation
 
+      - name: Generate zero-fill sensitivity
+        run: npm run generate:zero-fill
+
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence
 

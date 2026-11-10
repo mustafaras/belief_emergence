@@ -307,6 +307,47 @@ export function runConsistencyChecks(): void {
       context: 'Main Tier C threshold language',
     });
 
+    // Derived from the panel rather than written down, so the sentence cannot
+    // drift away from the data it describes.
+    const panelRowsPath = path.join(APP_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
+    const countryCounts = new Map<string, number>();
+    if (fs.existsSync(panelRowsPath)) {
+      const csv = fs.readFileSync(panelRowsPath, 'utf8');
+      const [header, ...body] = csv.split(/\r?\n/).filter((line) => line.trim().length > 0);
+      const isoIndex = header.split(',').indexOf('iso3');
+      for (const line of body) {
+        const iso = line.split(',')[isoIndex];
+        if (iso) countryCounts.set(iso, (countryCounts.get(iso) ?? 0) + 1);
+      }
+    }
+    const panelCountryCount = countryCounts.size;
+    const singleObservationCountries = [...countryCounts.values()].filter((n) => n === 1).length;
+
+    // Structural panel facts. "N of M countries contribute exactly one
+    // observation" reads like description but is a number, and it drifted
+    // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
+    // count has the same property: one fold per country, so it is the country
+    // count wearing a different name.
+    addRegexNumberCheck({
+      stats,
+      failures,
+      id: 'MAIN_PANEL_BALANCE',
+      file: path.join('main', 'main.tex'),
+      regex: /(\d+) of (\d+) countries contribute exactly one observation/,
+      expected: [singleObservationCountries, panelCountryCount],
+      context: 'Main panel balance sentence',
+    });
+
+    addRegexNumberCheck({
+      stats,
+      failures,
+      id: 'SUPP_PANEL_BALANCE_AND_FOLDS',
+      file: path.join('supplementary', 'supplementary_materials.tex'),
+      regex: /Across (\d+) folds \(one country held out per fold\)\. Because (\d+) of (\d+) countries contribute a single observation/,
+      expected: [panelCountryCount, singleObservationCountries, panelCountryCount],
+      context: 'Supplementary fold count and balance sentence',
+    });
+
     // Each supplementary table is located by its protocol heading, not by the
     // order the tables appear in: three protocols now publish a "Median OOS
     // RMSE" row and position is not a stable key.
