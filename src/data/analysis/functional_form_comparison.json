@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.functional_form_comparison.v1",
-  "generatedAtIso": "2026-11-10T14:48:20.233Z",
+  "generatedAtIso": "2026-11-10T15:01:24.175Z",
   "purpose": "Tests whether the bounded saturation form beats an ordinary linear regression on identical rows and folds.",
   "covariates": [
     "X",

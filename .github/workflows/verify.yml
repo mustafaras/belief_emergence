@@ -96,6 +96,9 @@ jobs:
       - name: Generate Tier B stability sweep
         run: npm run generate:tier-b-sweep
 
+      - name: Record the software environment
+        run: npm run generate:environment
+
       - name: Generate Gini window sensitivity
         run: npm run generate:gini-window
 

@@ -599,6 +599,58 @@ export function runConsistencyChecks(): void {
     // gate count that no longer matches the gate would be an unusually poor look
     // in a paragraph about checkable claims.
 
+    // The number of specifications examined, and the parameter counts of the
+    // ladder. Both are quoted in the Method and both come from artifacts, so
+    // they are checked rather than trusted: "four specifications were estimated"
+    // is the sentence a referee reads when asking about specification search.
+    {
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      const ladderPath = path.join(ANALYSIS_DIR, 'model_ladder_metrics.json');
+      const ffPath = path.join(ANALYSIS_DIR, 'functional_form_comparison.json');
+      if (fs.existsSync(ladderPath) && fs.existsSync(ffPath)) {
+        const ladder = JSON.parse(fs.readFileSync(ladderPath, 'utf8')) as {
+          tiers: { tier: string; parameterCount: number }[];
+        };
+        const ff = JSON.parse(fs.readFileSync(ffPath, 'utf8')) as { models: { model: string }[] };
+        const distinct = ladder.tiers.length + ff.models.filter((m) => m.model === 'linear_baseline').length;
+
+        const at = mainText.indexOf('specifications were estimated');
+        if (at !== -1) {
+          stats.executed += 1;
+          const before = mainText.slice(Math.max(0, at - 24), at);
+          const wordToNumber: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
+          const m = before.match(/([A-Za-z]+|[0-9]+)\s*$/);
+          const stated = m ? (wordToNumber[m[1].toLowerCase()] ?? Number(m[1])) : NaN;
+          if (Number.isFinite(stated) && stated !== distinct) {
+            failures.push({
+              id: 'SPECIFICATION_COUNT_DRIFT',
+              file: 'main/main.tex',
+              message: `Method says ${stated} specifications; artifacts define ${distinct} (${ladder.tiers.length} ladder tiers + linear baseline)`,
+              remediation: 'Update the Method sentence to the number of specifications actually present in the artifacts.',
+            });
+          }
+        }
+
+        // Parameter counts appear as ($11$, $18$ and $22$ parameters).
+        stats.executed += 1;
+        const countsAt = mainText.indexOf('parameters) and one ordinary-least-squares');
+        if (countsAt !== -1) {
+          const before = mainText.slice(Math.max(0, countsAt - 60), countsAt);
+          const quoted = [...before.matchAll(/([0-9]+)/g)].map((m) => Number(m[1]));
+          const actual = ladder.tiers.map((t) => t.parameterCount);
+          const matches = actual.every((n) => quoted.includes(n));
+          if (!matches) {
+            failures.push({
+              id: 'TIER_PARAMETER_COUNT_DRIFT',
+              file: 'main/main.tex',
+              message: `Method quotes ${quoted.join('/')} parameters for the ladder; artifacts give ${actual.join('/')}`,
+              remediation: 'Update the tier parameter counts in the specification-count paragraph.',
+            });
+          }
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
