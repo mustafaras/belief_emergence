@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "phase1.elasticity_profile.v1",
+  "generatedAtIso": "2026-11-10T16:23:42.000Z",
+  "profiledParameter": "alpha",
+  "nRows": 167,
+  "method": "Profile likelihood: the parameter is fixed on a grid and every other parameter is re-optimised at each point (differential evolution, then L-BFGS-B). The loss is unpenalised MSE on the percentile-anchored outcome, matching the shipped fit.",
+  "grid": [
+    0.001,
+    0.002,
+    0.004,
+    0.008,
+    0.016,
+    0.032,
+    0.064
+  ],
+  "profiles": [
+    {
+      "value": 0.001,
+      "loss": 0.03152351681878002,
+      "lrStatistic": 0.0,
+      "pValue": 1.0
+    },
+    {
+      "value": 0.002,
+      "loss": 0.031545195040632544,
+      "lrStatistic": 0.1148,
+      "pValue": 0.734696
+    },
+    {
+      "value": 0.004,
+      "loss": 0.03158870714366499,
+      "lrStatistic": 0.3454,
+      "pValue": 0.556755
+    },
+    {
+      "value": 0.008,
+      "loss": 0.03167633698224856,
+      "lrStatistic": 0.8096,
+      "pValue": 0.368243
+    },
+    {
+      "value": 0.016,
+      "loss": 0.0318538835643517,
+      "lrStatistic": 1.7502,
+      "pValue": 0.185856
+    },
+    {
+      "value": 0.032,
+      "loss": 0.03221704198384541,
+      "lrStatistic": 3.674,
+      "pValue": 0.055266
+    },
+    {
+      "value": 0.064,
+      "loss": 0.03296690933467733,
+      "lrStatistic": 7.6466,
+      "pValue": 0.005688
+    }
+  ],
+  "bestValue": 0.001,
+  "bestLoss": 0.03152352,
+  "monotoneRising": true,
+  "interiorMinimum": false,
+  "verdict": "The loss rises monotonically as alpha grows, so it is minimised at or below the smallest value tested (0.001). No interior optimum exists: the parameter is not identified on this panel, and the optimiser is not choosing a value so much as running to whatever floor is imposed."
+}

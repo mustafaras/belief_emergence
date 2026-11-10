@@ -48,7 +48,8 @@
     "generate:gini-window": "tsx scripts/generate_gini_window_sensitivity.ts",
     "generate:coefficient-fit": "python3 scripts/fit_coefficients_v2.py",
     "generate:environment": "tsx scripts/generate_software_environment.ts",
-    "generate:elasticity-bound": "tsx scripts/generate_elasticity_bound_sensitivity.ts"
+    "generate:elasticity-bound": "tsx scripts/generate_elasticity_bound_sensitivity.ts",
+    "generate:elasticity-profile": "python3 scripts/profile_elasticity.py"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

@@ -728,6 +728,47 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The profile-likelihood interval is the strongest statement in the paper about
+    // what the data can see, and it is quoted three ways: the upper bound of the
+    // 95% interval, the p-value at the grid edge, and the fact that the shipped
+    // value falls outside the interval. All three come from the profile artifact.
+    {
+      const profPath = path.join(ANALYSIS_DIR, 'elasticity_profile.json');
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      if (fs.existsSync(profPath)) {
+        const prof = JSON.parse(fs.readFileSync(profPath, 'utf8')) as {
+          profiles: { value: number; pValue: number }[];
+          bestValue: number;
+        };
+        const inside = prof.profiles.filter((p) => p.pValue > 0.05);
+        if (inside.length > 0) {
+          stats.executed += 1;
+          const upper = Math.max(...inside.map((p) => p.value));
+          const shipped = 0.05;
+          const problems: string[] = [];
+          if (!mainText.includes(upper.toFixed(3))) {
+            problems.push(`manuscript does not quote the profile upper bound ${upper.toFixed(3)}`);
+          }
+          const shippedOutside = !inside.some((p) => Math.abs(p.value - shipped) < 1e-9);
+          const claimsOutside = /outside.*interval|rejected at the \$5\$|outside\}? that interval/.test(mainText);
+          if (shippedOutside && !claimsOutside) {
+            problems.push('the shipped alpha lies outside the 95% interval but the manuscript does not say so');
+          }
+          if (!shippedOutside && claimsOutside) {
+            problems.push('the manuscript claims alpha is outside the interval, but the profile includes it');
+          }
+          if (problems.length > 0) {
+            failures.push({
+              id: 'ELASTICITY_PROFILE_DRIFT',
+              file: 'main/main.tex',
+              message: problems.join('; '),
+              remediation: 'Re-run scripts/profile_elasticity.py and update the profile paragraph.',
+            });
+          }
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
