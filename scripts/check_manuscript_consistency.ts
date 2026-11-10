@@ -323,6 +323,78 @@ export function runConsistencyChecks(): void {
     const panelCountryCount = countryCounts.size;
     const singleObservationCountries = [...countryCounts.values()].filter((n) => n === 1).length;
 
+    // LaTeX table column counts. A row with more cells than its declared
+    // preamble compiles to "Extra alignment tab has been changed to \\cr" --
+    // a warning that pdflatex does not treat as fatal, so the build can succeed
+    // locally while the row silently loses its tail. It failed on CI instead.
+    // This catches it before either happens.
+    for (const file of ['main/main.tex', 'supplementary/supplementary_materials.tex']) {
+      const content = readText(file);
+      if (!content) continue;
+      const lines = content.split('\n');
+      let declared: number | null = null;
+      for (let i = 0; i < lines.length; i += 1) {
+        const line = lines[i];
+        // Brace-matched preamble extraction: column specs contain nested
+        // braces (`@{}`, `p{3cm}`, `*{5}{X}`) so a regex cannot count them.
+        const beginMatch = line.match(/\\begin\{(tab(ularx?)|longtable)\}/);
+        if (beginMatch) {
+          let depth = 0;
+          let seen = 0;
+          let start = -1;
+          for (let c = beginMatch.index! + beginMatch[0].length; c < line.length; c += 1) {
+            if (line[c] === '{') {
+              depth += 1;
+              if (depth === 1) { seen += 1; start = c + 1; }
+            } else if (line[c] === '}') {
+              depth -= 1;
+              if (depth === 0 && seen === 2) {
+                const raw = line.slice(start, c);
+                // Strip the decorations that themselves contain column letters:
+                // `@{}` separators, `>{...}` / `<{...}` modifiers (whose bodies
+                // hold things like \raggedleft\arraybackslash) and any
+                // `>{...}`-wrapped body. What is left is the column skeleton.
+                let spec = raw
+                  .replace(/@\{[^{}]*\}/g, '')
+                  .replace(/[<>]\{(?:[^{}]|\{[^{}]*\})*\}/g, '')
+                  // Width-bearing column types collapse to a single marker, or
+                  // the letters inside their argument (`\linewidth`) would be
+                  // counted as columns.
+                  .replace(/[pmb]\{[^{}]*\}/g, '#')
+                  // siunitx S columns carry options in brackets.
+                  .replace(/S\[[^\]]*\]/g, '#');
+                let multiplied = 0;
+                spec = spec.replace(/\*\{(\d+)\}\{([^{}]*)\}/g, (_m, n: string, body: string) => {
+                  multiplied += Number(n) - 1;
+                  return body;
+                });
+                const base = (spec.match(/[#lcrX]/g) ?? []).length;
+                declared = base + multiplied;
+                break;
+              }
+            }
+          }
+          continue;
+        }
+        if (declared !== null && line.includes('&') && line.trim().endsWith('\\\\')) {
+          const cells = line.split('&').length;
+          // Both directions matter. Too many cells drops the tail silently;
+          // too few shifts every value in the row one column left, which
+          // produces a table that compiles and is wrong -- worse than a crash.
+          if (cells !== declared && !line.includes('\\multicolumn')) {
+            failures.push({
+              id: 'LATEX_TABLE_COLUMNS',
+              file,
+              message: `line ${i + 1}: row has ${cells} cells but the table declares ${declared}`,
+              remediation: 'Fix the row or the preamble; pdflatex reports this as a warning and drops the excess cells.',
+            });
+            stats.executed += 1;
+          }
+        }
+        if (line.includes('\\end{tabular')) declared = null;
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold

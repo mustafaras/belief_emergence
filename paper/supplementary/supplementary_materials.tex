@@ -657,11 +657,11 @@ headline fit and regime geometry remain stable across temporal blocks and specif
 \toprule
 Panel & Slice / Ablation & $n$ & $R^2$ & Corr & MAE & RMSE \\
 \midrule
-A & $-2.147$ & $-2.229$ & $-0.0821$ & 0.1337 & 0.1187 & $-0.0151$ & 0.1506 & 0.1336 & $-0.0170$ \\
+A & $\text{year}\le2005$ & 45 & \num{0.4115} & \num{0.6415} & \num{0.1231} & \num{0.1749} \\
 A & $2006\le\text{year}\le2012$ & 65 & \num{0.6260} & \num{0.7921} & \num{0.1329} & \num{0.1827} \\
 A & $\text{year}\ge2013$ & 57 & \num{0.6148} & \num{0.7841} & \num{0.1140} & \num{0.1447} \\
 \addlinespace[2pt]
-B & $-1.123$ & $-2.4801$ & $-1.3571$ & 0.1249 & 0.1170 & $-0.0079$ & 0.1449 & 0.1275 & $-0.0174$ \\
+B & main ($\Phi$ linear only) & 167 & \num{0.4728} & \num{0.6877} & \num{0.1449} & \num{0.1904} \\
 B & main$+$interactions & 167 & \num{0.5549} & \num{0.7450} & \num{0.1285} & \num{0.1749} \\
 B & full (incl.\ quadratics) & 167 & \num{0.5642} & \num{0.7514} & \num{0.1260} & \num{0.1731} \\
 \bottomrule
@@ -1455,8 +1455,8 @@ Construct-validity diagnostics identify 2006 as the worst year for Z inter-item 
 \hline
 \textbf{Tier} & \textbf{$R^2_{\text{full}}$} & \textbf{$R^2_{\text{excl}}$} & \textbf{$\Delta R^2$} & \textbf{MAE$_{\text{full}}$} & \textbf{MAE$_{\text{excl}}$} & \textbf{$\Delta$MAE} & \textbf{RMSE$_{\text{full}}$} & \textbf{RMSE$_{\text{excl}}$} & \textbf{$\Delta$RMSE} \\
 \hline
-A & $-2.147$ & $-2.229$ & $-0.0821$ & 0.1337 & 0.1187 & $-0.0151$ & 0.1506 & 0.1336 & $-0.0170$ \\
-B & $-1.123$ & $-2.4801$ & $-1.3571$ & 0.1249 & 0.1170 & $-0.0079$ & 0.1449 & 0.1275 & $-0.0174$ \\
+A & $\text{year}\le2005$ & 45 & \num{0.4115} & \num{0.6415} & \num{0.1231} & \num{0.1749} \\
+B & main ($\Phi$ linear only) & 167 & \num{0.4728} & \num{0.6877} & \num{0.1449} & \num{0.1904} \\
 C & $-0.8554$ & $-2.5472$ & $-1.6917$ & 0.1164 & 0.1183 & $+0.0019$ & 0.1369 & 0.1218 & $-0.0152$ \\
 \hline
 \end{tabular}
