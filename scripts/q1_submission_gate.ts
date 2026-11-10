@@ -457,6 +457,40 @@ function gateMeasurementValidity(): void {
       ? 'All predictor pairs are distinguishable'
       : `COLLINEAR DESIGN — duplicate predictor(s): ${dupHits.join('; ')}`);
 
+  // 7.2b — collinearity screen must be disclosed and consistent with the panel.
+  // The earlier VIF table listed C, D, G and S as infinite-VIF columns that are
+  // not in the design matrix, and carried E = 1.99 where the panel gives 4.74,
+  // on N=87 rows. A reviewer recomputing it would find a different number, so
+  // this check pins the artifact to the panel and requires every retained
+  // covariate to appear exactly once.
+  {
+    const vifPath = path.join(ANALYSIS, 'collinearity_diagnostics.json');
+    if (!fs.existsSync(vifPath)) {
+      record('val-collinearity-disclosed', 'Measurement Validity',
+        'Collinearity diagnostics are generated', false, 'major',
+        'collinearity_diagnostics.json is missing; run npm run generate:collinearity');
+    } else {
+      const vif = JSON.parse(fs.readFileSync(vifPath, 'utf8')) as {
+        n: number; maxVif: number; entries: { covariate: string; vif: number }[];
+      };
+      const problems: string[] = [];
+      if (vif.n !== rows.length) problems.push(`artifact n=${vif.n} but panel has ${rows.length} rows`);
+      const listed = vif.entries.map((e) => e.covariate).sort().join(',');
+      const expected = [...PREDICTORS].sort().join(',');
+      if (listed !== expected) problems.push(`covariates ${listed} != design matrix ${expected}`);
+      for (const e of vif.entries) {
+        if (!Number.isFinite(e.vif) || e.vif <= 0) problems.push(`${e.covariate} has invalid VIF ${e.vif}`);
+      }
+      const maxVif = Math.max(...vif.entries.map((e) => e.vif));
+      if (Math.abs(maxVif - vif.maxVif) > 1e-6) problems.push(`declared maxVif ${vif.maxVif} != computed ${maxVif}`);
+      record('val-collinearity-disclosed', 'Measurement Validity',
+        'Collinearity screen covers the fitted design and matches the panel', problems.length === 0, 'major',
+        problems.length === 0
+          ? `VIF computed on all ${vif.n} rows for ${vif.entries.length} covariates; max ${maxVif.toFixed(2)}`
+          : `COLLINEARITY DISCLOSURE DRIFT — ${problems.join('; ')}`);
+    }
+  }
+
   // 7.3 — design matrix must be full column rank, tested on complete rows only
   const completeRows = rows.filter((r) =>
     [OUTCOME, ...PREDICTORS].every((k) => Number.isFinite(Number.parseFloat(r[k]))));

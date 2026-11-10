@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "phase1.collinearity_diagnostics.v1",
+  "generatedAtIso": "2026-11-10T06:46:16.202Z",
+  "n": 146,
+  "covariates": [
+    "X",
+    "Y",
+    "T",
+    "E",
+    "R",
+    "M"
+  ],
+  "conditionNumber": 24.01,
+  "entries": [
+    {
+      "covariate": "R",
+      "r2OnOthers": 0.891131,
+      "vif": 9.1853
+    },
+    {
+      "covariate": "E",
+      "r2OnOthers": 0.789218,
+      "vif": 4.7442
+    },
+    {
+      "covariate": "X",
+      "r2OnOthers": 0.676648,
+      "vif": 3.0926
+    },
+    {
+      "covariate": "M",
+      "r2OnOthers": 0.615283,
+      "vif": 2.5993
+    },
+    {
+      "covariate": "Y",
+      "r2OnOthers": 0.303725,
+      "vif": 1.4362
+    },
+    {
+      "covariate": "T",
+      "r2OnOthers": 0.074067,
+      "vif": 1.08
+    }
+  ],
+  "maxVif": 9.1853,
+  "interpretation": "Maximum VIF is 9.1853, above the conventional threshold of 5; coefficients on the affected covariates are reported as association under a fixed design, not as separately identified effects."
+}

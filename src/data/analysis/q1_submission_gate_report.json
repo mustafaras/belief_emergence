@@ -1,13 +1,13 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-10T06:24:06.255Z",
-  "verdict": "READY",
+  "generatedAtIso": "2026-11-10T06:50:01.803Z",
+  "verdict": "CONDITIONAL",
   "summary": {
-    "totalChecks": 25,
+    "totalChecks": 26,
     "passed": 25,
-    "failed": 0,
+    "failed": 1,
     "criticalFailed": 0,
-    "majorFailed": 0,
+    "majorFailed": 1,
     "minorFailed": 0
   },
   "automatedChecks": [
@@ -172,6 +172,14 @@
       "detail": "All predictor pairs are distinguishable"
     },
     {
+      "id": "val-collinearity-disclosed",
+      "category": "Measurement Validity",
+      "label": "Collinearity screen covers the fitted design and matches the panel",
+      "pass": false,
+      "severity": "major",
+      "detail": "COLLINEARITY DISCLOSURE DRIFT — artifact n=87 but panel has 146 rows"
+    },
+    {
       "id": "val-rank",
       "category": "Measurement Validity",
       "label": "Design matrix full rank (7 columns)",
@@ -212,7 +220,14 @@
       "detail": "Linear 0.4556 in-sample / 0.3684 k-fold vs bounded 0.2745 / 0.3926; identical rows and folds"
     }
   ],
-  "blockers": [],
+  "blockers": [
+    {
+      "id": "val-collinearity-disclosed",
+      "severity": "major",
+      "label": "Collinearity screen covers the fitted design and matches the panel",
+      "detail": "COLLINEARITY DISCLOSURE DRIFT — artifact n=87 but panel has 146 rows"
+    }
+  ],
   "humanChecklist": [
     {
       "id": "h-editor-fit",

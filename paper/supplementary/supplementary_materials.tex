@@ -1207,26 +1207,24 @@ VNM & 1 / 1 & \textemdash{} & \textemdash{} & 0.3087 & 0.3087 & 0.3087 & 0.3087 
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} variance-inflation-factor diagnostics for the model input block on complete-case rows. \textbf{Method context:} VIFs are computed on $\log X$, $\log Y$, and z-scored $C,M,T,D,G,E,S,R$ to summarize collinearity in the estimation design matrix. \textbf{Interpretation boundary:} this is stability context only; high VIF does not by itself invalidate fitted results or establish causal structure.}
+\caption{\textbf{Data scope:} variance-inflation-factor diagnostics for the six retained covariates on the complete-case estimation rows ($n=\num{146}$). \textbf{Method context:} $\mathrm{VIF}_j = 1/(1-R_j^2)$, where $R_j^2$ comes from regressing covariate $j$ on the other five; the condition number is that of the design matrix with intercept. Values are emitted by \texttt{generate:collinearity}, not transcribed. \textbf{Interpretation boundary:} this is stability context for reading coefficient signs, not evidence of causal structure; a VIF above the conventional threshold of five describes association under a fixed design rather than a separately identified effect.}
 \label{tab:appx-vif}
-\begin{tabular}{@{}lr@{}}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-Variable & VIF \\
+Variable & $R^2$ on other covariates & VIF \\
 \midrule
-$D$ & \ensuremath{\infty} \\
-$S$ & \ensuremath{\infty} \\
-$R$ & 7.28 \\
-$M$ & 4.74 \\
-$C$ & 3.53 \\
-$\log X$ & 2.63 \\
-$\log Y$ & 2.17 \\
-$E$ & 1.99 \\
-$T$ & 1.72 \\
-$G$ & 1.61 \\
+$R$ (welfare capacity) & 0.8911 & \num{9.19} \\
+$E$ (education capacity) & 0.7892 & \num{4.74} \\
+$X$ (urbanization) & 0.6766 & \num{3.09} \\
+$M$ (media environment) & 0.6153 & \num{2.60} \\
+$Y$ (inequality) & 0.3037 & \num{1.44} \\
+$T$ (trauma/shock) & 0.0741 & \num{1.08} \\
 \midrule
-\multicolumn{2}{@{}l@{}}{\footnotesize Notes: computed on complete-case rows (N=87); inputs are $\log X$, $\log Y$, and $C,M,T,D,G,E,S,R$ (z-scored; $C,D,G,S$ enter as constant zero columns).} \\
+\multicolumn{3}{@{}l@{}}{\footnotesize Condition number of the design matrix: \num{24.01}} \\
 \bottomrule
 \end{tabular}
+\\[0.35em]
+{\TableNoteStyle Two covariates sit high: $R$ at \num{9.19} and $E$ at \num{4.74}. The reason is substantive rather than statistical. $R$ is an affine rescaling of the Human Development Index, $R = 7.303771\,\mathrm{HDI} - 6.005361$ (max residual $0.000000$ over \num{13441} rows), and HDI is itself built partly from education; $E$ is gross secondary enrolment. The two channels therefore share a component by construction. Coefficients on $R$ and $E$ are reported as conditional associations under this design, and no claim in the paper rests on separating their individual contributions. The remaining four covariates are well separated, with $T$ effectively orthogonal ($\mathrm{VIF}=\num{1.08}$).}
 \end{table}
 \Section{Visual analytics tooling (dashboard, pinned inspection, export contract)}
 \noindent\justifying

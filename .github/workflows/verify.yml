@@ -76,6 +76,9 @@ jobs:
       - name: Generate functional-form comparison (linear baseline)
         run: npm run generate:functional-form
 
+      - name: Generate collinearity diagnostics
+        run: npm run generate:collinearity
+
       - name: Generate construct prevalence summary
         run: npm run generate:prevalence
 
