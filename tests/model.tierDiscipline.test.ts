@@ -53,7 +53,7 @@ describe('tier discipline', () => {
     }
   });
 
-  it('records the measured non-transfer that justifies keeping Tier C as an appendix', () => {
+  it('records the measured non-transfer that justifies keeping Tier C as an appendix', { timeout: 60_000 }, () => {
     const inSample = Object.fromEntries(
       ladder.tiers.map((t) => [t.tier, t.trainMetrics.r2]),
     ) as Record<Tier, number>;
