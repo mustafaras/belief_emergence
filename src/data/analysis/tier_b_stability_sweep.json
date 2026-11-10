@@ -1,118 +1,118 @@
 {
   "schemaVersion": "phase1.tier_b_stability_sweep.v1",
-  "generatedAtIso": "2026-11-09T11:07:38.679Z",
+  "generatedAtIso": "2026-11-10T13:10:03.277Z",
   "source": "parameter_stability.json (country_out protocol, Tier B)",
   "protocol": "country_out",
-  "nFolds": 48,
+  "nFolds": 76,
   "nParameters": 18,
   "parameters": [
     {
       "name": "intercept",
       "signConsistency": 1,
-      "nFolds": 48,
-      "median": 0.5781962239028344
+      "nFolds": 76,
+      "median": 0.5463935852550557
     },
     {
       "name": "x_safe",
-      "signConsistency": 0.8333333333333334,
-      "nFolds": 48,
-      "median": 0.03212087105273653
+      "signConsistency": 1,
+      "nFolds": 76,
+      "median": 0.09142667711247299
     },
     {
       "name": "y_safe",
       "signConsistency": 1,
-      "nFolds": 48,
-      "median": -0.39545722179958087
+      "nFolds": 76,
+      "median": -0.27585600458261483
     },
     {
       "name": "c_std",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "m",
       "signConsistency": 1,
-      "nFolds": 48,
-      "median": 0.09357567036525744
+      "nFolds": 76,
+      "median": 0.06631512866879746
     },
     {
       "name": "t",
-      "signConsistency": 1,
-      "nFolds": 48,
-      "median": 0.01985701997270572
+      "signConsistency": 0.9473684210526315,
+      "nFolds": 76,
+      "median": 0.004211458287074204
     },
     {
       "name": "d",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "g",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "e",
       "signConsistency": 1,
-      "nFolds": 48,
-      "median": 0.08111488720883857
+      "nFolds": 76,
+      "median": 0.14664367344140694
     },
     {
       "name": "s",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "r",
-      "signConsistency": 0.9791666666666666,
-      "nFolds": 48,
-      "median": 0.03856325205715039
+      "signConsistency": 1,
+      "nFolds": 76,
+      "median": 0.07017029576811773
     },
     {
       "name": "y_safe:r",
-      "signConsistency": 0.9583333333333334,
-      "nFolds": 48,
-      "median": 0.06387239844114301
+      "signConsistency": 1,
+      "nFolds": 76,
+      "median": -0.06370546457015058
     },
     {
       "name": "t:r",
-      "signConsistency": 0.9791666666666666,
-      "nFolds": 48,
-      "median": -0.01989241690546309
+      "signConsistency": 1,
+      "nFolds": 76,
+      "median": -0.024817251751185758
     },
     {
       "name": "x_safe:y_safe",
-      "signConsistency": 0.9583333333333334,
-      "nFolds": 48,
-      "median": 0.1702381294924109
+      "signConsistency": 0.9078947368421053,
+      "nFolds": 76,
+      "median": -0.03450676953007248
     },
     {
       "name": "c_std:m",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "e:s",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "c_std^2",
       "signConsistency": 1,
-      "nFolds": 48,
+      "nFolds": 76,
       "median": 0
     },
     {
       "name": "m^2",
       "signConsistency": 1,
-      "nFolds": 48,
-      "median": 0.09060796957284868
+      "nFolds": 76,
+      "median": 0.09459235343345664
     }
   ],
   "thresholdSweep": [
@@ -130,31 +130,28 @@
     },
     {
       "threshold": 0.85,
-      "nMeeting": 17,
-      "nFailing": 1,
-      "failing": [
-        "x_safe"
-      ]
+      "nMeeting": 18,
+      "nFailing": 0,
+      "failing": []
     },
     {
       "threshold": 0.9,
-      "nMeeting": 17,
-      "nFailing": 1,
-      "failing": [
-        "x_safe"
-      ]
+      "nMeeting": 18,
+      "nFailing": 0,
+      "failing": []
     },
     {
       "threshold": 0.95,
-      "nMeeting": 17,
-      "nFailing": 1,
+      "nMeeting": 16,
+      "nFailing": 2,
       "failing": [
-        "x_safe"
+        "t",
+        "x_safe:y_safe"
       ]
     }
   ],
-  "minimumSignConsistency": 0.8333333333333334,
-  "minimumSignConsistencyParameter": "x_safe",
+  "minimumSignConsistency": 0.9078947368421053,
+  "minimumSignConsistencyParameter": "x_safe:y_safe",
   "demotionCandidates": [],
-  "verdict": "SUPPORTED: All 18 Tier B parameters maintain ≥0.75 sign-consistency (min=0.833 for x_safe). Tier B classification as primary inferential holds under the disclosed thin-support constraint."
+  "verdict": "ROBUST: All 18 Tier B parameters maintain ≥0.85 sign-consistency across 76 LOO refits. Classification as primary inferential is supported."
 }

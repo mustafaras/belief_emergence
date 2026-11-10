@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.gini_window_sensitivity.v1",
-  "generatedAtIso": "2026-11-10T12:40:01.673Z",
+  "generatedAtIso": "2026-11-10T13:09:34.728Z",
   "purpose": "Sample size as a function of how far a neighbouring year's World Bank Gini may be borrowed when the exact year is absent.",
   "indicator": "SI.POV.GINI (World Bank WDI)",
   "rows": [

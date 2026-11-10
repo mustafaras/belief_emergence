@@ -18,6 +18,18 @@ const AUDIT = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.audit.j
 
 type Row = { window: number; completeCaseRows: number; giniBackfilled: number };
 
+// This script rebuilds the panel three times, which needs the gitignored raw
+// inputs. On a clean clone they are absent, so the measurement cannot be made;
+// the committed artifact is then left untouched rather than replaced by zeros.
+// The alternative -- failing the build -- would make the CI gate impossible to
+// run without licensed data it is not allowed to ship.
+const REQUIRED_INPUTS = ['panel_model_data.csv', 'wvs_combined.csv'];
+const missing = REQUIRED_INPUTS.filter((f) => !fs.existsSync(path.join(REPO_ROOT, 'rawdata', f)));
+if (missing.length > 0) {
+  console.log(`SKIP  raw inputs absent (${missing.join(', ')}); leaving the committed artifact as is.`);
+  process.exit(0);
+}
+
 const rows: Row[] = [];
 const original = fs.readFileSync(PANEL, 'utf8');
 const originalAudit = fs.readFileSync(AUDIT, 'utf8');
