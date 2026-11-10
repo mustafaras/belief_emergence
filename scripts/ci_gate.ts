@@ -154,8 +154,14 @@ function runCommand(label: string, command: string): boolean {
   try {
     execSync(command, { stdio: 'pipe', cwd: ROOT });
     return true;
-  } catch {
-    record(label, false, `Command failed: ${command}`);
+  } catch (error) {
+    // Swallowing the child's output turns a diagnosable failure into "command
+    // failed", which is what happened when this gate failed in CI and passed
+    // locally with no way to see why. Print the tail of both streams.
+    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
+    const tail = out.split(/\r?\n/).slice(-25).join('\n');
+    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
     return false;
   }
 }
