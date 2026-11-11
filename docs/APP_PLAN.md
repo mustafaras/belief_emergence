@@ -7,7 +7,7 @@ chart, one table. It lets a reader move `X`, `Y`, `α`, `β`, `k` and watch a su
 respond, which is a legitimate thing to build — but it is not what the paper is about.
 The paper is an audit: three of four configured constructs fail a reliability test,
 the structural exponents cannot be identified on this panel, fifty-nine of the cells
-are not lockbox-blind, and the surviving construct covers 54.8% of the frame. **None
+were never in the reserved set, and the surviving construct covers 54.8% of the frame. **None
 of that is on screen.** The interface therefore argues the opposite of the manuscript:
 it presents a confident fitted surface where the paper reports a measurement failure.
 
@@ -98,7 +98,7 @@ education 82, no macro row 22). `data_code_provenance.json` and the panel audit 
 all of it.
 
 **1.5 Render the limits.** The exponents at their bound with the profile interval
-[0, 0.032]; the 59 cells that are not lockbox-blind; the `R`/`E` collinearity with VIF
+[0, 0.032]; the 150 rows never in the reserved set; the `R`/`E` collinearity with VIF
 8.74. A section titled, plainly, "what this model cannot show".
 
 ## Phase 2 — Make every displayed number checkable

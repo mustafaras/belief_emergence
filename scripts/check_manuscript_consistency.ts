@@ -872,6 +872,57 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The application documents quote the same artifacts the manuscript does, and they
+    // have already drifted once: the plan said "59 cells are not lockbox-blind" which
+    // was true when the panel had 146 rows and false at 167. A plan a reader acts on is
+    // a claim like any other.
+    {
+      const docs = ['APP_PLAN.md', 'APP_EXECUTION_PROMPTS.md'];
+      const profPath = path.join(ANALYSIS_DIR, 'elasticity_profile.json');
+      const lockPath = path.join(ANALYSIS_DIR, 'lockbox_holdout.json');
+      const vifPath = path.join(ANALYSIS_DIR, 'collinearity_diagnostics.json');
+      if (fs.existsSync(profPath) && fs.existsSync(lockPath) && fs.existsSync(vifPath)) {
+        const prof = JSON.parse(fs.readFileSync(profPath, 'utf8')) as {
+          profiles: { value: number; pValue: number }[];
+        };
+        const lock = JSON.parse(fs.readFileSync(lockPath, 'utf8')) as { splitPolicy: { nLockboxCells: number } };
+        const vif = JSON.parse(fs.readFileSync(vifPath, 'utf8')) as { maxVif: number };
+        const inside = prof.profiles.filter((p) => p.pValue > 0.05);
+        const upper = Math.max(...inside.map((p) => p.value));
+        const panelPath = path.join(APP_ROOT, 'public', 'data', 'panel_canonical_v2.csv');
+        const panelRows = fs.readFileSync(panelPath, 'utf8').trim().split(/\r?\n/).length - 1;
+        const outsideReserve = panelRows - lock.splitPolicy.nLockboxCells;
+
+        for (const doc of docs) {
+          const full = path.join(APP_ROOT, 'docs', doc);
+          if (!fs.existsSync(full)) continue;
+          const text = fs.readFileSync(full, 'utf8');
+          stats.executed += 1;
+          const problems: string[] = [];
+          // Any claim about how many rows the lockbox does not cover must use the
+          // current arithmetic, not the arithmetic of an earlier panel.
+          const staleLock = text.match(/\b\d+\s+(?:cells|rows)[^.]{0,40}not lockbox-blind/);
+          if (staleLock && !staleLock[0].includes(String(outsideReserve))) {
+            problems.push(`lockbox coverage claim does not match ${outsideReserve} rows outside the reserved set`);
+          }
+          if (text.includes('VIF 8.74') && Math.abs(vif.maxVif - 8.74) > 0.01) {
+            problems.push(`quotes VIF 8.74 but the artifact gives ${vif.maxVif.toFixed(2)}`);
+          }
+          if (text.includes('[0, 0.032]') && Math.abs(upper - 0.032) > 0.001) {
+            problems.push(`quotes a profile interval ending at 0.032 but the artifact gives ${upper}`);
+          }
+          if (problems.length > 0) {
+            failures.push({
+              id: 'APP_DOC_NUMBER_DRIFT\u200b'.replace('\u200b', ''),
+              file: `docs/${doc}`,
+              message: problems.join('; '),
+              remediation: 'Update the document to the current artifact values; these are the numbers an agent will act on.',
+            });
+          }
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
