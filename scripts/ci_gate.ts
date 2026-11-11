@@ -81,11 +81,11 @@ interface MetricExpectation {
  */
 const CANONICAL_METRICS: MetricExpectation[] = [
   { key: 'n',    expected: 167,     tolerance: 0 },
-  { key: 'r2',   expected: 0.2516,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.5772,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1789,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.2268,  tolerance: 0.0001 },
-  { key: 'bias', expected: 0.0611,  tolerance: 0.0001 },
+  { key: 'r2',   expected: 0.3376,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6207,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1643,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.2134,  tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0254,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */

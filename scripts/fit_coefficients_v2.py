@@ -144,6 +144,67 @@ def to_observed(pred, zmin, zmax):
     return zmin + pred * (zmax - zmin)
 
 
+FE_MODULE = ROOT / "src" / "data" / "feCoefficients.ts"
+
+
+def write_fe_coefficients(payload, n_rows, n_countries):
+    """Rewrite the numeric blocks of feCoefficients.ts from the current fit."""
+    path = FE_MODULE
+    if not path.exists():
+        print(f"skipped {path.relative_to(ROOT)}: file absent")
+        return
+    text = path.read_text(encoding="utf-8")
+    p = payload["parameters"]
+
+    import re
+
+    # Structural block.
+    struct_block = (
+        "export const OPTIMIZED_STRUCTURAL_PARAMS: StructuralParameters = {\n"
+        f"  alpha: {float(p['alpha'])!r},\n"
+        f"  beta: {float(p['beta'])!r},\n"
+        f"  k: {float(p['k'])!r},\n"
+        f"  phi0: {float(p['phi0'])!r},\n"
+        "};"
+    )
+    text = re.sub(
+        r"export const OPTIMIZED_STRUCTURAL_PARAMS: StructuralParameters = \{[^}]*\};",
+        struct_block,
+        text,
+        count=1,
+    )
+
+    # Main-effect block. Channels c1, c4, c5, c7 are unavailable, not estimated.
+    sig_block = (
+        "export const OPTIMIZED_SIGMOID_COEFFICIENTS: BeliefCoefficients = {\n"
+        "  c1: 0,                        // Culture - channel unavailable (KI-09)\n"
+        f"  c2: {float(p['c_M'])!r},  // Media environment\n"
+        f"  c3: {float(p['c_T'])!r},  // Trauma / shock\n"
+        "  c4: 0,                        // Atomization - channel unavailable (KI-10)\n"
+        "  c5: 0,                        // Redistribution - unavailable outside OECD\n"
+        f"  c6: {float(p['c_E'])!r},  // Education capacity\n"
+        "  c7: 0,                        // Social support - channel unavailable (KI-11)\n"
+        f"  c8: {float(p['c_R'])!r},  // Welfare capacity\n"
+        "};"
+    )
+    text = re.sub(
+        r"export const OPTIMIZED_SIGMOID_COEFFICIENTS: BeliefCoefficients = \{[^}]*\};",
+        sig_block,
+        text,
+        count=1,
+    )
+
+    # Header comment carrying the panel size, so it cannot keep claiming 49 rows.
+    text = re.sub(
+        r"\* Structural parameters fitted on the v2 panel \([^)]*\)\.",
+        f"* Structural parameters fitted on the v2 panel "
+        f"(public/data/panel_canonical_v2.csv, {n_rows} complete cases, {n_countries} countries).",
+        text,
+        count=1,
+    )
+    path.write_text(text, encoding="utf-8")
+    print(f"wrote {path.relative_to(ROOT)}")
+
 def main():
     rows = read_panel()
     if not rows:
@@ -273,6 +334,14 @@ def main():
     COMMITTED.parent.mkdir(parents=True, exist_ok=True)
     COMMITTED.write_text(json.dumps(committed, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"wrote {COMMITTED.relative_to(ROOT)}")
+
+    # The runtime coefficient module had been maintained by hand, so it kept the
+    # 87-row fit while the artifact moved on: the application reported
+    # phi0 = -4.5092 / k = 0.00824 where the fit gives +0.5303 / 0.9685, and the
+    # model_id string in metrics_authoritative.json inherited the same stale
+    # numbers. Writing it from the same run that writes the artifact removes the
+    # possibility of the two diverging.
+    write_fe_coefficients(payload, len(rows), len({r["iso3"] for r in rows}))
 
 
 if __name__ == "__main__":
