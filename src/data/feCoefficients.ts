@@ -6,8 +6,8 @@
  * Canonical headline metrics: src/data/metrics/headline_metrics_authoritative.json
  * Generation command: npm run generate:headline-metrics
  * Dataset: 630 observations, 23 countries, years 2000-2022
- * Training Date: 2025-12-07
- * Training/optimizer metadata metrics: R²=0.9481, Correlation=0.9794, MAE=0.1341, RMSE=0.2206, Bias=-0.0023 (obs - pred)
+ * Training Date: 2026-11-11
+ * Training/optimizer metadata metrics: R²=0.3376, Correlation=0.6207, MAE=0.1643, RMSE=0.2134, Bias=0.0254 (obs - pred)
  * Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *
  * IMPORTANT (METRICS):
@@ -70,7 +70,7 @@
  *   Trained on 23 countries, 630 observations (2000–2022)
  *   Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *   Feature standardization: z-score
- *   Training metadata (from canonical JSON): Corr 0.9794, R² 0.9481, MAE 0.1341, Bias -0.0023 (obs - pred)
+ *   Training metadata (from canonical JSON): Corr 0.6207, R² 0.3376, MAE 0.1643, Bias 0.0254 (obs - pred)
  *
  *   Headline (paper/app): use PRODUCTION_MODEL_METADATA.headline (canonical panel-fit)
  */
@@ -132,40 +132,38 @@ export const PRODUCTION_MODEL_METADATA = {
     provenance: headlineMetrics,
   },
   training: {
-    date: '2025-12-07',
+    date: '2026-11-11',
     metrics: {
-      // NOTE: These values are the training-phase summary metrics from optimizer.
-      // For production headline metrics, use headline.metrics (sourced from generate_headline_metrics.ts).
-      r2: 0.9480535935831287,
-      correlation: 0.9794331266943296,
-      mae: 0.1340587023865254,
-      rmse: 0.22060345343596452,
-      bias: -0.002304291744825522,
+      r2: 0.3376322555297747,
+      correlation: 0.6206642608759881,
+      mae: 0.16428550068932699,
+      rmse: 0.2134117096230468,
+      bias: 0.02542721281473393,
     },
   },
 } as const;
 
 /**
- * SCIENTIFIC PRODUCTION COEFFICIENTS (23 Countries, 630 observations)
+ * SCIENTIFIC PRODUCTION COEFFICIENTS (76 countries, 167 observations)
  * Source: data_final/sigmoid_coefficients_PRODUCTION.json
- * Date: 2025-12-07
+ * Date: 2026-11-11
  *
  * Training Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  * Feature Standardization: z-score
  * Loss Function: (1-R²) + (1-Corr) + MAE + 0.1|Bias| + ridge
  *
  * Structural Parameters (SUBLINEAR, φ₀ fixed baseline):
- * - α (alpha) = 0.300 (settlement power - SUBLINEAR)
- * - β (beta) = 0.300 (inequality power - SUBLINEAR)
- * - k = 1.307 (saturation - moderate)
- * - φ₀ (phi0) = 0.921 (baseline offset - POSITIVE, fixed and not user-configurable)
+ * - α (alpha) = 0.0500 (settlement power - at lower bound)
+ * - β (beta) = 0.0500 (inequality power - at lower bound)
+ * - k = 0.9685 (saturation)
+ * - φ₀ (phi0) = +0.5303 (baseline offset)
  *
- * Training summary (canonical production, 2025-12-07):
- * - R²: 0.9481
- * - Correlation: 0.9794
- * - MAE: 0.1341
- * - RMSE: 0.2206
- * - Bias: -0.0023
+ * Training summary (current canonical fit):
+ * - R²: 0.3376
+ * - Correlation: 0.6207
+ * - MAE: 0.1643
+ * - RMSE: 0.2134
+ * - Bias: 0.0254
  */
 /**
  * Main-effect coefficients fitted on the v2 panel.

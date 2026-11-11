@@ -194,6 +194,48 @@ def write_fe_coefficients(payload, n_rows, n_countries):
         count=1,
     )
 
+    # Training metadata. This block carried the tautology-era summary (R2 = 0.9481,
+    # alpha = 0.300, k = 1.307) and the UI renders it as "training metadata", so a
+    # user would read 0.948 next to a paper reporting 0.3376. Written from the same
+    # fit as everything else.
+    # The UI prints these beside the headline figures and labels both "MAE", so the
+    # block has to use the headline's scale. The script's own fit block is computed
+    # on the raw Z index, where MAE is 0.62; the production predictor works on the
+    # bounded percentile-anchored scale, where MAE is 0.164. Putting the raw number
+    # here would show a reader two MAEs an order of magnitude apart with no marker
+    # saying they measure different things.
+    headline_path = ROOT / "src" / "data" / "analysis" / "metrics_authoritative.json"
+    if headline_path.exists():
+        headline = json.loads(headline_path.read_text(encoding="utf-8"))
+        fit = {
+            "r2": headline["r2"],
+            "corr": headline["corr"],
+            "mae": headline["mae"],
+            "rmse": headline["rmse"],
+            "bias": headline["bias"],
+        }
+    else:
+        fit = payload["fit"]
+        print("warning: headline metrics absent; training block uses the raw-scale fit")
+    meta_block = (
+        "  training: {\n"
+        f"    date: '{datetime.now(timezone.utc).strftime('%Y-%m-%d')}',\n"
+        "    metrics: {\n"
+        f"      r2: {float(fit['r2'])!r},\n"
+        f"      correlation: {float(fit['corr'])!r},\n"
+        f"      mae: {float(fit['mae'])!r},\n"
+        f"      rmse: {float(fit['rmse'])!r},\n"
+        f"      bias: {float(fit['bias'])!r},\n"
+        "    },\n"
+        "  },"
+    )
+    text = re.sub(
+        r"  training: \{\n    date: '[^']*',\n    metrics: \{\n(?:[^}]*\n)*?    \},\n  \},",
+        meta_block,
+        text,
+        count=1,
+    )
+
     # Header comment carrying the panel size, so it cannot keep claiming 49 rows.
     text = re.sub(
         r"\* Structural parameters fitted on the v2 panel \([^)]*\)\.",

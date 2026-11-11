@@ -811,6 +811,67 @@ export function runConsistencyChecks(): void {
       }
     }
 
+    // The runtime module must agree with the fit artifact. This is the axis that
+    // nothing checked: feCoefficients.ts is what the production predictor reads and
+    // what the UI displays, and it had been carrying an 87-row parameter vector and
+    // a tautology-era training summary (R2 = 0.9481) while the artifacts said
+    // otherwise. Both were internally consistent and consistently wrong.
+    {
+      const fePath = path.join(APP_ROOT, 'src', 'data', 'feCoefficients.ts');
+      const fitPath = path.join(ANALYSIS_DIR, 'coefficient_fit.json');
+      if (fs.existsSync(fePath) && fs.existsSync(fitPath)) {
+        const fe = fs.readFileSync(fePath, 'utf8');
+        const fit = JSON.parse(fs.readFileSync(fitPath, 'utf8')) as { parameters: Record<string, number> };
+        stats.executed += 1;
+
+        // Anchor on the `export const` declaration, not the first mention of the
+        // name: both identifiers appear in a header comment first, and slicing
+        // from there read the comment instead of the code.
+        const blockOf = (name: string, span: number): string => {
+          const at = fe.indexOf(`export const ${name}`);
+          return at === -1 ? '' : fe.slice(at, at + span);
+        };
+        const structBlock = blockOf('OPTIMIZED_STRUCTURAL_PARAMS', 600);
+        const sigBlock = blockOf('OPTIMIZED_SIGMOID_COEFFICIENTS', 900);
+        const read = (block: string, key: string): number | null => {
+          const m = block.match(new RegExp(`\\b${key}:\\s*([-0-9.eE+]+)`));
+          return m ? Number.parseFloat(m[1]) : null;
+        };
+
+        const comparisons: [string, number | null, number][] = [
+          ['alpha', read(structBlock, 'alpha'), fit.parameters.alpha],
+          ['beta', read(structBlock, 'beta'), fit.parameters.beta],
+          ['k', read(structBlock, 'k'), fit.parameters.k],
+          ['phi0', read(structBlock, 'phi0'), fit.parameters.phi0],
+          ['c_M', read(sigBlock, 'c2'), fit.parameters.c_M],
+          ['c_T', read(sigBlock, 'c3'), fit.parameters.c_T],
+          ['c_E', read(sigBlock, 'c6'), fit.parameters.c_E],
+          ['c_R', read(sigBlock, 'c8'), fit.parameters.c_R],
+        ];
+        const drift = comparisons
+          .filter(([, actual, expected]) => actual !== null && Math.abs((actual as number) - expected) > 1e-6)
+          .map(([name, actual, expected]) => `${name}: module ${actual}, artifact ${expected.toFixed(4)}`);
+        if (drift.length > 0) {
+          failures.push({
+            id: 'RUNTIME_COEFFICIENT_DRIFT',
+            file: 'src/data/feCoefficients.ts',
+            message: drift.join('; '),
+            remediation: 'Run npm run generate:coefficient-fit: the script rewrites both the structural and main-effect blocks from the current fit.',
+          });
+        }
+
+        // A tautology-era training summary has no business appearing anywhere.
+        if (/0\.948|0\.9794|alpha\s*=\s*0\.300/.test(fe)) {
+          failures.push({
+            id: 'RUNTIME_TAUTOLOGY_LEFTOVER',
+            file: 'src/data/feCoefficients.ts',
+            message: 'the runtime module still carries values from the era when C was an exact rescaling of Z',
+            remediation: 'Rewrite the training metadata and header comments from the current fit.',
+          });
+        }
+      }
+    }
+
     // Structural panel facts. "N of M countries contribute exactly one
     // observation" reads like description but is a number, and it drifted
     // 29 -> 30 -> 27 as the panel grew because nothing computed it. The fold
