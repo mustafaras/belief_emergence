@@ -1,62 +1,62 @@
 {
   "schemaVersion": "phase1.temporal_outlier_2006_sensitivity.v1",
-  "generatedAtIso": "2026-11-10T13:10:02.864Z",
-  "fullPanelNRows": 167,
-  "excluded2006NRows": 147,
+  "generatedAtIso": "2026-11-11T15:21:41.521Z",
+  "fullPanelNRows": 207,
+  "excluded2006NRows": 187,
   "nRowsExcluded": 20,
   "looComparisonRefit": [
     {
       "tier": "A",
       "rmse": {
-        "fullPanel": 0.150595458067243,
-        "excluded2006": 0.13360661331520152,
-        "delta": -0.016988844752041488
+        "fullPanel": 0.15005219110514423,
+        "excluded2006": 0.13450922729881803,
+        "delta": -0.015542963806326193
       },
       "mae": {
-        "fullPanel": 0.13372687533950162,
-        "excluded2006": 0.11866179808156536,
-        "delta": -0.015065077257936252
+        "fullPanel": 0.13888539317970475,
+        "excluded2006": 0.12684577058592694,
+        "delta": -0.012039622593777805
       },
       "r2": {
-        "fullPanel": -2.1469877585553836,
-        "excluded2006": -2.2290467045152447,
-        "delta": -0.08205894595986107
+        "fullPanel": -1.6667528352899486,
+        "excluded2006": -2.2684631059204463,
+        "delta": -0.6017102706304978
       }
     },
     {
       "tier": "B",
       "rmse": {
-        "fullPanel": 0.14492162512196172,
-        "excluded2006": 0.12747333730234567,
-        "delta": -0.01744828781961605
+        "fullPanel": 0.13251279528650317,
+        "excluded2006": 0.12659780995195513,
+        "delta": -0.00591498533454804
       },
       "mae": {
-        "fullPanel": 0.12485926793886118,
-        "excluded2006": 0.11697939946823488,
-        "delta": -0.0078798684706263
+        "fullPanel": 0.1159835922290168,
+        "excluded2006": 0.11719627794812319,
+        "delta": 0.0012126857191063906
       },
       "r2": {
-        "fullPanel": -1.1229927232820593,
-        "excluded2006": -2.4800600912113566,
-        "delta": -1.3570673679292973
+        "fullPanel": -1.5705938969260833,
+        "excluded2006": -1.632586681096029,
+        "delta": -0.06199278416994569
       }
     },
     {
       "tier": "C",
       "rmse": {
-        "fullPanel": 0.1369496468314449,
-        "excluded2006": 0.12176024972740665,
-        "delta": -0.015189397104038244
+        "fullPanel": 0.1365936767329947,
+        "excluded2006": 0.12793934480807462,
+        "delta": -0.008654331924920072
       },
       "mae": {
-        "fullPanel": 0.11641806122598838,
-        "excluded2006": 0.11828675322008149,
-        "delta": 0.0018686919940931052
+        "fullPanel": 0.12332062707257718,
+        "excluded2006": 0.11710580079798046,
+        "delta": -0.006214826274596727
       },
       "r2": {
-        "fullPanel": -0.855439619089152,
-        "excluded2006": -2.547180905766009,
-        "delta": -1.6917412866768569
+        "fullPanel": -0.918883047193515,
+        "excluded2006": -1.8001409302265137,
+        "delta": -0.8812578830329987
       }
     }
   ],
@@ -89,9 +89,9 @@
       "sdZ": 1.209889223452218
     },
     "otherYears": {
-      "nRows": 147,
-      "meanZ": -0.12597238570964872,
-      "sdZ": 1.0239667396907948
+      "nRows": 187,
+      "meanZ": -0.06861118962997398,
+      "sdZ": 1.001595238013673
     },
     "constructCorrelation2006": 0.6993,
     "constructCorrelationMedian": 0.9322
@@ -100,26 +100,25 @@
     {
       "tier": "A",
       "nCoeffs": 10,
-      "nSignRetained": 9,
-      "fractionRetained": 0.9,
-      "flippedFeatures": [
-        "m"
-      ]
-    },
-    {
-      "tier": "B",
-      "nCoeffs": 17,
-      "nSignRetained": 17,
+      "nSignRetained": 10,
       "fractionRetained": 1,
       "flippedFeatures": []
     },
     {
+      "tier": "B",
+      "nCoeffs": 17,
+      "nSignRetained": 16,
+      "fractionRetained": 0.9411764705882353,
+      "flippedFeatures": [
+        "t"
+      ]
+    },
+    {
       "tier": "C",
       "nCoeffs": 21,
-      "nSignRetained": 19,
-      "fractionRetained": 0.9047619047619048,
+      "nSignRetained": 20,
+      "fractionRetained": 0.9523809523809523,
       "flippedFeatures": [
-        "t",
         "x_safe:y_safe"
       ]
     }

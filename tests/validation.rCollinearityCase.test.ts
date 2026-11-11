@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import rCase from '../src/data/analysis/r_collinearity_case.json';
@@ -18,7 +19,12 @@ describe('R is retained despite the temptation to drop it', () => {
     const withoutR = rCase.variants.find((v) => v.label === 'without R')!;
     expect(withR.covariates).toContain('R');
     expect(withoutR.covariates).not.toContain('R');
-    expect(withR.n).toBe(167);
+    // Read the panel rather than a literal: this was toBe(167) and failed when the
+    // covariate window widened. A test that restates the sample size is testing the
+    // sample size, not the agreement between the module and the artifact.
+    const panelCsv = fs.readFileSync('public/data/panel_canonical_v2.csv', 'utf8');
+    const panelRows = panelCsv.trim().split(String.fromCharCode(10)).length - 1;
+    expect(withR.n).toBe(panelRows);
   });
 
   it('retains R even though dropping it looks better', () => {

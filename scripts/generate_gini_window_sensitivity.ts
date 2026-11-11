@@ -35,7 +35,7 @@ const original = fs.readFileSync(PANEL, 'utf8');
 const originalAudit = fs.readFileSync(AUDIT, 'utf8');
 
 try {
-  for (const window of [0, 1, 2]) {
+  for (const window of [0, 1, 2, 3, 5]) {
     execFileSync('npx', ['tsx', 'scripts/build_canonical_panel.ts', '--gini-window', String(window)], {
       cwd: REPO_ROOT,
       stdio: 'pipe',
@@ -61,7 +61,7 @@ try {
 const payload = {
   schemaVersion: 'phase1.gini_window_sensitivity.v1',
   generatedAtIso: new Date().toISOString(),
-  purpose: 'Sample size as a function of how far a neighbouring year\'s World Bank Gini may be borrowed when the exact year is absent.',
+  purpose: 'Sample size as a function of how far a neighbouring year\'s World Bank Gini may be borrowed when the exact year is absent. The adopted window is +/-5.',
   indicator: 'SI.POV.GINI (World Bank WDI)',
   rows,
 };

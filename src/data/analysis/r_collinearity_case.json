@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.r_collinearity_case.v1",
-  "generatedAtIso": "2026-11-10T11:46:16.930Z",
+  "generatedAtIso": "2026-11-11T15:21:16.542Z",
   "variants": [
     {
       "label": "with R",
@@ -12,12 +12,12 @@
         "M",
         "R"
       ],
-      "n": 167,
-      "maxVif": 8.737,
-      "conditionNumber": 22.62,
-      "inSampleR2": 0.472841,
-      "kFoldR2": 0.423483,
-      "cMinusB": -0.024271
+      "n": 207,
+      "maxVif": 9.4274,
+      "conditionNumber": 23.52,
+      "inSampleR2": 0.465416,
+      "kFoldR2": 0.416446,
+      "cMinusB": -0.030234
     },
     {
       "label": "without R",
@@ -28,19 +28,19 @@
         "E",
         "M"
       ],
-      "n": 167,
-      "maxVif": 2.4946,
+      "n": 207,
+      "maxVif": 2.4722,
       "conditionNumber": 0,
-      "inSampleR2": 0.469975,
-      "kFoldR2": 0.440064,
-      "cMinusB": -0.039584
+      "inSampleR2": 0.456875,
+      "kFoldR2": 0.422582,
+      "cMinusB": -0.027925
     }
   ],
   "verdict": {
-    "vifDrop": 6.2424,
-    "inSampleCost": 0.002866,
-    "kFoldCost": -0.016581,
+    "vifDrop": 6.9552,
+    "inSampleCost": 0.008541,
+    "kFoldCost": -0.006136,
     "recommendation": "retain",
-    "reason": "Dropping R would lower the maximum VIF from 8.74 to 2.49, cost only 0.0029 of in-sample R2, and raise grouped k-fold from 0.4235 to 0.4401. It is retained anyway: acting on that improvement after seeing it is post-hoc specification selection, which is the practice this paper argues against. The dependence is disclosed instead of engineered away."
+    "reason": "Dropping R would lower the maximum VIF from 9.43 to 2.47, cost only 0.0085 of in-sample R2, and raise grouped k-fold from 0.4164 to 0.4226. It is retained anyway: acting on that improvement after seeing it is post-hoc specification selection, which is the practice this paper argues against. The dependence is disclosed instead of engineered away."
   }
 }
