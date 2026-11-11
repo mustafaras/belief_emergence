@@ -1,128 +1,169 @@
-# Application plan
+# Application plan — from demo to evidence surface
 
-The manuscript is done: 68 gate checks, 26 consistency blocks, 137 tests, and both
-PDF sources compile clean. The application has not had the same treatment. This
-plan comes from measuring it rather than from taste, and every figure below was
-taken from the tree on 2026-11-11.
+## The diagnosis in one paragraph
 
-## What the measurements say
+The application is a parameter explorer. Twelve sliders, forty-six buttons, one
+chart, one table. It lets a reader move `X`, `Y`, `α`, `β`, `k` and watch a surface
+respond, which is a legitimate thing to build — but it is not what the paper is about.
+The paper is an audit: three of four configured constructs fail a reliability test,
+the structural exponents cannot be identified on this panel, fifty-nine of the cells
+are not lockbox-blind, and the surviving construct covers 54.8% of the frame. **None
+of that is on screen.** The interface therefore argues the opposite of the manuscript:
+it presents a confident fitted surface where the paper reports a measurement failure.
 
-| finding | measurement | why it matters |
-|---|---|---|
-| Bundle is 6.9 MB | `dist/assets/index-*.js` = 6,664 KB | slow first load; the manuscript's own claim is that the evidence surface is inspectable |
-| Two dependencies are dead | `plotly.js-basic-dist-min` never imported (only `plotly.js-dist-min` is); `three` never imported at all | two full Plotly builds and a complete WebGL renderer in the tree for code that does not use either |
-| The UI does not present the paper's contribution | the construct audit appears in **1** of 18 section components, and that mention is incidental | the paper's thesis is that three of four constructs fail; the app shows none of that |
-| No component is tested | 0 of 22 `.tsx` files have a test; all 137 tests are model/artifact tests | every UI regression so far was caught by hand or by the render check's 5 patterns |
-| Accessibility is thin | 25 `aria-*`/`role=` attributes across 18 sections | keyboard and screen-reader access is not demonstrated |
-| Two components are vast | `Surface3DSurface.tsx` 4,341 lines, `InteractiveDocumentation.tsx` 2,504 | changes there are risky and slow to review |
-| CSS is not scoped by system | 20 CSS files, 24,037 lines, no design tokens | visual consistency is maintained by hand |
+The plan below is ordered by what makes the application true to the paper first, and
+useful as a tool second. Every claim is followed by the measurement that produced it.
 
-## Phase 1 — Truth (nothing new, only alignment)
+## Measurements taken 2026-11-11
 
-**Goal:** every number and every sentence in the interface comes from an artifact.
+| # | measurement | value | source |
+|---|---|---|---|
+| 1 | Analysis artifacts in the tree | **31** | `src/data/analysis/*.json` |
+| 2 | Artifacts imported by any module | **7 of 31** | grep of all `analysis/*.json` imports |
+| 3 | Artifacts whose content is visible on first paint | **0 of 7** | DOM text search for each artifact's signature terms |
+| 4 | Charts on first paint | **1** Plotly surface | `document.querySelectorAll('.js-plotly-plot')` |
+| 5 | Tables on first paint | **1** | `querySelectorAll('table')` |
+| 6 | Interactive controls | 12 sliders, 46 buttons, 0 selects | DOM count |
+| 7 | Navigation depth | **5** items, one scroll page, no routing | sidebar DOM |
+| 8 | Analysis panels | 6 `h3` groups on one page | heading structure |
+| 9 | First paint | DOM 593 ms, load 1242 ms, 6.9 MB bundle | navigation timing |
+| 10 | Component tests | **0 of 22** `.tsx` | `tests/` inventory |
+| 11 | Accessibility attributes | 25 across 18 section components | aria/role grep |
+| 12 | Dead dependencies | `plotly.js-basic-dist-min`, `three` | static import scan |
+| 13 | Largest component | `Surface3DSurface.tsx` 4,341 lines | line count |
+| 14 | CSS | 24,035 lines, 20 files, no tokens | line count |
 
-1.1 Extend `check:ui-artifacts` from 26 values to **every** displayed number. Enumerate
-them by instrumenting the render: walk the DOM, extract numeric text, and assert each
-one appears in some artifact. The current check covers the metrics panel and the
-coefficient blocks; it does not cover the tables and the chart annotations.
+Row 3 is the finding that matters, and it is starker than row 2 suggests. All seven
+imported artifacts are wired to a component — but searching the rendered text for each
+one's signature term ("cronbach", "lockbox", "provenance", "glossary", "red team",
+"screening", "construct validity", "journal") returns nothing on first paint. They sit
+behind the Documentation and Advanced Parameters menus, two clicks from the landing
+view, while the landing view itself is a fitted surface.
 
-1.2 Extend `check:render` from five forbidden patterns to a **section reachability**
-assertion. Today it reads 11,518 characters and one Plotly chart; the app has 18
-sections and 46 controls. It should click each section, wait for render, and fail if
-a section produces fewer than a threshold of characters or throws.
+So the evidence exists, is regenerated on every push, is guarded by 68 gate assertions,
+and is invisible unless you already know it is there. That is the whole problem: the
+interface's front door argues that this paper is about a surface, when the paper is
+about the audit that the surface failed.
 
-1.3 Add the numbers the manuscript reports and the app omits: the construct alphas
-(0.819 / 0.348 / −1.228), the withdrawn constructs, frame coverage 54.8%, the
-profile-likelihood interval [0, 0.032], and the Tier C instability. None of these is
-on screen today.
+## Phase 0 — Decide what the application is for
 
-  One trap to avoid while doing it: `wvs_construct_audit.json` carries a
-  `cronbachAlpha` of 0.753 for `S_social_support` even though that construct has
-  `cellsEmitted: 0` and `computable: false`. The field is a leftover from a run in
-  which some items were momentarily available. Any panel that renders "alpha" must
-  check `computable` first and print "not computable", or it will show a reliability
-  figure for a construct that has no observations.
+This is a design decision and it must be made before any code, because the rest of the
+plan is different depending on the answer. Three coherent products are available from
+the same artifacts.
 
-## Phase 2 — The contribution, made visible
+**Option A — Evidence surface.** The application's job is to let a reader verify the
+paper. Every artifact gets a view; the surface explorer becomes one panel among many
+rather than the whole thing. A reader can see the construct audit withdraw three
+channels, see the attrition cascade, see the profile likelihood put the exponents at
+a bound, and then — if they want — explore the surface. This is the option that
+matches the manuscript, and it is what the rest of this plan assumes.
 
-**Goal:** an inspectable audit, not a dashboard of one fitted surface.
+**Option B — Teaching tool.** The application explains bounded response surfaces to
+someone who has not read the paper. The audit becomes context, not content.
 
-2.1 A **Construct Audit** section: one row per configured construct with item set,
-usable items, cells emitted, Cronbach alpha, and the verdict (retained / withdrawn).
-All of it already exists in `wvs_construct_audit.json`; none of it is rendered.
+**Option C — Sensitivity laboratory.** The application is for analysts who want to
+perturb a fitted model. The current design, taken seriously: proper controls, saved
+states, comparison mode, export of every perturbation.
 
-2.2 A **Support** panel: the attrition cascade from 442,026 respondents to 167
-complete cases, with the per-covariate blockers (Gini 94, education 82, no macro row
-22). `data_code_provenance` and the panel audit already carry these numbers.
+**Recommendation: A.** It is the only option where the interface and the manuscript
+say the same thing, and it makes the existing explorer more useful rather than
+deleting it — the surface panel stays, it just stops being the front door.
 
-2.3 A **Limits** section stating what the app cannot show: the exponents are at their
-bound, the panel cannot identify them, 59 cells are not lockbox-blind, `R` and `E`
-share a component. This is the paper's posture and the app contradicts it by looking
-decisive.
+## Phase 1 — Make the evidence reachable
 
-2.4 Retire or relabel every string that still implies the retired 630-row panel. The
-render check catches the literals; it cannot catch a sentence that describes the old
-design in words.
+**1.1 Routing.** Five navigation items over one scroll page means a reader cannot
+link to anything, cannot return to a view, and cannot tell how much is below the fold.
+Introduce a router with one route per panel; deep-link every control state through the
+URL. The export path already serialises state deterministically — that serialiser is
+the URL encoder, and writing a second one would be the mistake.
 
-## Phase 3 — Engineering
+**1.2 An evidence index.** A landing view listing every analysis artifact with its
+schema version, generation timestamp, row count and a one-line description of what it
+establishes. Thirty-one rows. This is the single highest-value screen in the plan
+because it converts the artifact directory from a developer concern into a reader's
+map.
 
-3.1 Drop two unused packages. `plotly.js-basic-dist-min` is never imported -- only
-`plotly.js-dist-min` is -- and `three` is never imported either, despite Plotly
-already providing the 3D surface it would be used for. Neither is in the bundle,
-since Vite tree-shakes unreferenced packages, so the saving is not bytes: it is the
-removal of two traps. A package named one word away from the one in use, and a whole
-WebGL renderer sitting in `dependencies` next to a charting library that draws the
-same surface, will both eventually attract a second implementation.
+**1.3 Render the audit.** `wvs_construct_audit.json` has, per construct: configured
+items, usable items, cells emitted, cells rejected, Cronbach alpha, unidimensionality,
+and a `computable` flag. One table, one row per construct, verdict column. This is the
+paper's central finding and it is currently invisible.
 
-  Checked and kept: `html2canvas` is used, but through `await import(...)` inside the
-  PDF export path, so a source grep for a static import finds nothing. Removing it on
-  that basis would break export at runtime and pass every test that does not exercise
-  the export path.
+  Trap: `S_social_support` carries `cronbachAlpha: 0.753` with `cellsEmitted: 0` and
+  `computable: false`. The alpha is a leftover. Render `computable` first, or the table
+  shows a reliability figure for a construct with no observations.
 
-3.2 Split the bundle. `Surface3DSurface` and `InteractiveDocumentation` are the two
-largest components and neither is needed for first paint. Lazy-load both behind
-`React.lazy`; target under 2 MB for the initial chunk. This is the single largest
-user-visible improvement available.
+**1.4 Render the support picture.** The attrition cascade 442,026 respondents → 305
+construct country-years → 167 complete cases, with the per-covariate blockers (Gini 94,
+education 82, no macro row 22). `data_code_provenance.json` and the panel audit carry
+all of it.
 
-3.3 Decompose the two giant components. 4,341 lines in one file is not reviewable.
-Extract the surface geometry, the camera controls, the legend, and the export path
-into separate modules with their own tests.
+**1.5 Render the limits.** The exponents at their bound with the profile interval
+[0, 0.032]; the 59 cells that are not lockbox-blind; the `R`/`E` collinearity with VIF
+8.74. A section titled, plainly, "what this model cannot show".
 
-3.4 Introduce design tokens. 24,037 lines of CSS with no shared scale means every
-spacing and colour decision is local. This is a prerequisite for 3.5, not a
-cosmetic wish.
+## Phase 2 — Make every displayed number checkable
 
-## Phase 4 — Quality gates the app has never had
+**2.1 Extend `check:ui-artifacts` to the whole DOM.** Today it compares 26 values from
+the data layer. Instrument the render, walk the DOM, extract every numeric token, and
+match each against the artifact corpus. Values that legitimately come from arithmetic
+(percentages, ratios) get computed from artifacts rather than exempted.
 
-4.1 Component tests. Start with the render-critical paths: metric formatting, the
-validator self-tests (already covered indirectly), the export serializer, and the
-preset modal. Target the ten components that carry displayed numbers.
+**2.2 Section reachability in `check:render`.** Five forbidden patterns and one page
+load. It should visit every route, wait for stable render, and fail if a panel produces
+less than a threshold of text, throws, or renders an empty chart.
 
-4.2 An accessibility pass to WCAG 2.2 AA. The 25 existing attributes are not a
-demonstration of conformance. Concretely: every chart needs an accessible name and a
-data-table alternative; every control needs a visible focus state; the theme toggle
-and the preset modal need keyboard traps removed.
+**2.3 A visual baseline.** The export path already produces deterministic snapshots.
+One golden image per panel, diffed on CI, would have caught the `630 / 23 countries`
+regression the day it landed rather than the week I finally opened a browser.
 
-4.3 Visual regression. The export path already serialises state deterministically —
-that is the same machinery a screenshot baseline needs. One golden image per section,
-diffed on CI, would have caught the `630 / 23 countries` regression the moment it
-landed.
+## Phase 3 — Engineering the load
 
-## Order of work and why
+**3.1 Split the bundle.** 6.9 MB, of which 6.6 MB is one chunk containing Plotly, jsPDF,
+html2canvas and KaTeX. None is needed for first paint. `React.lazy` the surface, the
+documentation and the export path; target under 2 MB initial. This is the largest
+user-visible improvement available and it is independent of everything above.
 
-Phase 1 first because a wrong number on screen is worse than a slow page, and because
-1.1 and 1.2 are the checks that make everything after them safe. Phase 2 is the
-highest value per unit of effort: the data exists, the rendering does not, and it is
-what converts the app from a demo into the paper's evidence surface. Phase 3 pays off
-in load time and in the ability to change anything without fear. Phase 4 is what keeps
-it true once the other three are done.
+**3.2 Remove two dead packages.** `plotly.js-basic-dist-min` and `three` are imported
+nowhere. Neither ships, so the saving is not bytes — it is the removal of two traps. A
+package one word away from the one in use, and a WebGL renderer beside a charting
+library that draws the same surface, will both attract a second implementation.
 
-Nothing in Phases 2–4 should start before 1.1 and 1.2 are green, because every one of
-them changes what the interface displays and there is currently no automated way to
-tell whether the change is correct.
+  Keep `html2canvas`: it greps as unused but loads through `await import(...)` in the
+  export path. Deleting it on grep evidence breaks export and passes every test.
 
-## What this plan explicitly does not do
+**3.3 Decompose `Surface3DSurface`.** 4,341 lines. Extract geometry, camera, legend,
+and export into modules with their own tests. Prerequisite for 3.4, not cosmetics.
 
-It does not touch the manuscript. The paper is at 95 and its remaining gap is data,
-not software. This is about the application agreeing with the paper, and then being
-worth visiting on its own terms.
+**3.4 Design tokens.** 24,035 lines of CSS with no shared scale. Every spacing and
+colour decision is local, so consistency is maintained by memory.
+
+## Phase 4 — Quality the app has never had
+
+**4.1 Component tests** for the ten components that carry displayed numbers. Today
+zero of twenty-two are tested, and every UI regression was found by hand.
+
+**4.2 Accessibility to WCAG 2.2 AA.** Twenty-five attributes across six panels is not
+conformance. Every chart needs an accessible name and a data-table alternative; every
+control a visible focus state; the preset modal and theme toggle need keyboard traps
+removed.
+
+**4.3 Performance budget in CI.** Fail the build when the initial chunk exceeds 2 MB,
+so the 6.9 MB does not creep back.
+
+## Order, and what each step unblocks
+
+Phase 0 is a decision, not work. Phase 1 is the product change and depends on that
+decision. Phase 2 makes Phase 1 safe to iterate on — without it, every new panel is an
+unverifiable claim. Phase 3 is orthogonal and can run in parallel by someone who is not
+touching panels. Phase 4 locks in what the first three built.
+
+**Do not start Phase 1.3–1.5 before 2.1 and 2.2 are green.** Those three panels add
+roughly sixty new displayed numbers, and there is currently no automated way to tell
+whether any of them is right. Adding unverified numbers to an interface whose problem
+was unverified numbers would repeat the defect at a larger scale.
+
+## What this plan does not do
+
+It does not touch the manuscript. The paper is at 95 and its remaining gap is data —
+a completed WVS and Gini panel — not software. This is about the application agreeing
+with the paper, and then being worth visiting on its own terms.
