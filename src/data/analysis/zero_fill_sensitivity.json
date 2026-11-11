@@ -1,41 +1,41 @@
 {
   "schemaVersion": "phase1.zero_fill_sensitivity.v1",
-  "generatedAtIso": "2026-11-10T10:21:33.071Z",
-  "nZeroAnchor": 30,
+  "generatedAtIso": "2026-11-11T15:07:36.621Z",
+  "nZeroAnchor": 42,
   "splits": [
     {
       "label": "full panel",
-      "n": 167,
+      "n": 207,
       "inSample": {
-        "A": 0.472841,
-        "B": 0.554947,
-        "C": 0.564201
+        "A": 0.465416,
+        "B": 0.559939,
+        "C": 0.565758
       },
       "kFold": {
-        "A": 0.423483,
-        "B": 0.48275,
-        "C": 0.458479
+        "A": 0.416446,
+        "B": 0.506398,
+        "C": 0.476164
       },
-      "cMinusB": -0.024271,
-      "perRepeatMedianCminusB": -0.004274
+      "cMinusB": -0.030234,
+      "perRepeatMedianCminusB": -0.006644
     },
     {
       "label": "zero-anchor rows removed",
-      "n": 137,
+      "n": 165,
       "inSample": {
-        "A": 0.459914,
-        "B": 0.543011,
-        "C": 0.561839
+        "A": 0.450872,
+        "B": 0.542561,
+        "C": 0.55355
       },
       "kFold": {
-        "A": 0.377829,
-        "B": 0.420856,
-        "C": 0.386974
+        "A": 0.373721,
+        "B": 0.451736,
+        "C": 0.437581
       },
-      "cMinusB": -0.033882,
-      "perRepeatMedianCminusB": -0.007173
+      "cMinusB": -0.014156,
+      "perRepeatMedianCminusB": 0.003549
     }
   ],
   "resultSurvivesRemoval": true,
-  "interpretation": "Deleting all 30 rows at the zero anchor leaves the Tier C gap intact (-0.024271 -> -0.033882), so the report does not depend on the imputed zero-death cells."
+  "interpretation": "Deleting all 42 rows at the zero anchor leaves the Tier C gap intact (-0.030234 -> -0.014156), so the report does not depend on the imputed zero-death cells."
 }
