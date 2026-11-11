@@ -236,6 +236,70 @@ def write_fe_coefficients(payload, n_rows, n_countries):
         count=1,
     )
 
+    # Dataset descriptor. This block said 630 observations across 23 countries and
+    # 2000-2022 -- the retired scenario panel -- while the paper reported 167 across
+    # 76 from 1990 to 2023. The interface renders it verbatim.
+    years = sorted(int(r["year"]) for r in read_panel())
+    ds_block = (
+        "  dataset: {\n"
+        f"    observations: {n_rows},\n"
+        f"    countries: {n_countries},\n"
+        f"    yearStart: {years[0]},\n"
+        f"    yearEnd: {years[-1]},\n"
+        "  },"
+    )
+    text = re.sub(
+        r"  dataset: \{\n(?:[^}]*\n)*?  \},",
+        ds_block,
+        text,
+        count=1,
+    )
+
+    # Interaction terms. The fit estimates two of them (c_tr, c_yr); everything else
+    # is a leftover from the retired 630-row panel, where eleven interactions and
+    # quadratics were fitted against a tautological outcome. They were still in the
+    # module the application loads, so the interface computed a model with an active
+    # C x M term (c_cm = 0.422) and a C^2 curvature (c_c2 = 0.704) while the paper
+    # stated that C is neutralised to zero for lack of a usable construct.
+    inter_block = (
+        "export const INTERACTION_TERMS: InteractionTerms = {\n"
+        f"  c_yr: {float(payload['parameters']['c_yr'])!r},   // Y x R: estimated\n"
+        f"  c_tr: {float(payload['parameters']['c_tr'])!r},   // T x R: estimated\n"
+        "  // Everything below involves at least one channel the construct audit withdrew\n"
+        "  // (C, D, G, S), so none of it is identified on this panel. They are zero, not\n"
+        "  // estimated: a non-zero value here would mean the interface is computing a\n"
+        "  // model the paper does not report.\n"
+        "  c_xy: 0,\n"
+        "  c_cm: 0,\n"
+        "  c_es: 0,\n"
+        "  c_dt: 0,\n"
+        "  c_gr: 0,\n"
+        "};"
+    )
+    text = re.sub(
+        r"export const INTERACTION_TERMS: InteractionTerms = \{(?:[^}]*\n)*?\};",
+        inter_block,
+        text,
+        count=1,
+    )
+
+    # Quadratic terms: a second, separate block the model also reads. Every one of
+    # these was fitted on the retired panel and none is identified here.
+    quad_block = (
+        "export const QUADRATIC_TERMS: QuadraticTerms = {\n"
+        "  c_c2: 0,   // C^2: channel unavailable\n"
+        "  c_m2: 0,\n"
+        "  c_t2: 0,\n"
+        "  c_e2: 0,\n"
+        "};"
+    )
+    text = re.sub(
+        r"export const QUADRATIC_TERMS: QuadraticTerms = \{(?:[^}]*\n)*?\};",
+        quad_block,
+        text,
+        count=1,
+    )
+
     # Header comment carrying the panel size, so it cannot keep claiming 49 rows.
     text = re.sub(
         r"\* Structural parameters fitted on the v2 panel \([^)]*\)\.",

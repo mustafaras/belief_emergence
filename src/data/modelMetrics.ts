@@ -27,7 +27,7 @@ export type DatasetMetadata = {
  * Single-source access layer for all reported metrics.
  *
  * IMPORTANT:
- * - "Headline" metrics are the canonical panel-fit computed on the 630-row panel
+ * - "Headline" metrics are the canonical panel-fit computed on the 167-row v2 panel
  *   and stored in src/data/metrics/headline_metrics_authoritative.json (generated).
  * - "Training metadata" metrics come from the optimizer summary embedded in the
  *   coefficients JSON and must NOT be used as the repo-wide headline.

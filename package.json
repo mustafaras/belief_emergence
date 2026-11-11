@@ -49,7 +49,9 @@
     "generate:coefficient-fit": "python3 scripts/fit_coefficients_v2.py",
     "generate:environment": "tsx scripts/generate_software_environment.ts",
     "generate:elasticity-bound": "tsx scripts/generate_elasticity_bound_sensitivity.ts",
-    "generate:elasticity-profile": "python3 scripts/profile_elasticity.py"
+    "generate:elasticity-profile": "python3 scripts/profile_elasticity.py",
+    "check:ui-artifacts": "tsx scripts/check_ui_agrees_with_artifacts.ts",
+    "check:render": "node scripts/render_check.cjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",
@@ -96,6 +98,7 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "playwright-core": "^1.49.0"
   }
 }

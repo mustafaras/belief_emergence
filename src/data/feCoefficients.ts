@@ -5,14 +5,14 @@
  * SOURCE: Hardcoded in this file (see OPTIMIZED_SIGMOID_COEFFICIENTS below)
  * Canonical headline metrics: src/data/metrics/headline_metrics_authoritative.json
  * Generation command: npm run generate:headline-metrics
- * Dataset: 630 observations, 23 countries, years 2000-2022
+ * Dataset: 167 observations, 76 countries, years 1990-2023
  * Training Date: 2026-11-11
  * Training/optimizer metadata metrics: R²=0.3376, Correlation=0.6207, MAE=0.1643, RMSE=0.2134, Bias=0.0254 (obs - pred)
  * Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *
  * IMPORTANT (METRICS):
  *   The numbers above are the optimizer/training summary embedded in the coefficients JSON.
- *   The app/paper "headline" metrics are the canonical panel-fit computed on the 630-row panel
+ *   The app/paper "headline" metrics are the canonical panel-fit computed on the 167-row v2 panel
  *   using CANONICAL_PREPROCESSING + structural=fixed_map:
  *     scripts/generate_headline_metrics.ts (run via: npm run generate:headline-metrics)
  *     Data: public/data/panel_canonical_v2.csv
@@ -67,7 +67,7 @@
  *   Components must not reimplement math or negate coefficients.
  *
  * MODEL PERFORMANCE (SCIENTIFIC PRODUCTION):
- *   Trained on 23 countries, 630 observations (2000–2022)
+ *   Trained on 76 countries, 167 observations (1990–2023)
  *   Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *   Feature standardization: z-score
  *   Training metadata (from canonical JSON): Corr 0.6207, R² 0.3376, MAE 0.1643, Bias 0.0254 (obs - pred)
@@ -110,10 +110,10 @@ export interface OptimizedSigmoidConfig {
 
 export const PRODUCTION_MODEL_METADATA = {
   dataset: {
-    observations: 630,
-    countries: 23,
-    yearStart: 2000,
-    yearEnd: 2022,
+    observations: 167,
+    countries: 76,
+    yearStart: 1990,
+    yearEnd: 2023,
   },
   headline: {
     // Canonical global performance used as the repo-wide "headline" (paper/app).
@@ -134,11 +134,11 @@ export const PRODUCTION_MODEL_METADATA = {
   training: {
     date: '2026-11-11',
     metrics: {
-      r2: 0.3376322555297747,
-      correlation: 0.6206642608759881,
-      mae: 0.16428550068932699,
-      rmse: 0.2134117096230468,
-      bias: 0.02542721281473393,
+      r2: 0.3620427395031318,
+      correlation: 0.6225688509325221,
+      mae: 0.16624027098677047,
+      rmse: 0.20944232460458298,
+      bias: -0.04154269862531647,
     },
   },
 } as const;
@@ -215,13 +215,17 @@ export interface InteractionTerms {
 }
 
 export const INTERACTION_TERMS: InteractionTerms = {
-  c_yr: 1.7673005644056849,       // Y×R: Inequality × Welfare Capacity
-  c_tr: -0.1805496395106426,    // T×R: Trauma × Welfare Capacity
-  c_xy: -0.07407841500627856,    // X×Y: Urbanization × Inequality
-  c_cm: 0.4224870328989847,      // C×M: Culture × Media
-  c_es: 0.3597710473523405,      // E×S: Education × Social Support
-  c_dt: -0.28164864210127627,    // D×T: Atomization × Trauma
-  c_gr: -0.020916923961295752,   // G×R: Redistribution × Welfare
+  c_yr: 0.6279399061595192,   // Y x R: estimated
+  c_tr: -0.18610423347841465,   // T x R: estimated
+  // Everything below involves at least one channel the construct audit withdrew
+  // (C, D, G, S), so none of it is identified on this panel. They are zero, not
+  // estimated: a non-zero value here would mean the interface is computing a
+  // model the paper does not report.
+  c_xy: 0,
+  c_cm: 0,
+  c_es: 0,
+  c_dt: 0,
+  c_gr: 0,
 };
 
 /**
@@ -236,10 +240,10 @@ export interface QuadraticTerms {
 }
 
 export const QUADRATIC_TERMS: QuadraticTerms = {
-  c_c2: 0.704239710511195,        // C²: Cultural intensity curvature
-  c_m2: -0.021112867097885724,    // M²: Media saturation
-  c_t2: -0.09630475486001498,     // T²: Trauma accumulation
-  c_e2: 0.20044395262262213,      // E²: Education diminishing returns
+  c_c2: 0,   // C^2: channel unavailable
+  c_m2: 0,
+  c_t2: 0,
+  c_e2: 0,
 };
 
 /**

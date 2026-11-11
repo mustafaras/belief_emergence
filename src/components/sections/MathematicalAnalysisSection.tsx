@@ -143,7 +143,7 @@ const deepEqual = (a: unknown, b: unknown): boolean => {
 };
 
 // Headline performance metrics used throughout Sections 1–4.
-// Source: canonical panel-fit on the 630-row panel (see scripts/generate_headline_metrics.ts via npm run generate:headline-metrics).
+// Source: canonical panel-fit on the 167-row v2 panel (see scripts/generate_headline_metrics.ts via npm run generate:headline-metrics).
 const HEADLINE = getProductionHeadlineMetrics();
 const PRODUCTION = {
   r2: HEADLINE.r2,

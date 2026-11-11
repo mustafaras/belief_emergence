@@ -61,7 +61,7 @@ const presets: PresetData[] = [
     name: "Australia",
     flag: "🇦🇺",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.85,
       C: -0.94,
@@ -79,7 +79,7 @@ const presets: PresetData[] = [
     name: "Brazil",
     flag: "🇧🇷",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.86,
       C: 1.20,
@@ -97,7 +97,7 @@ const presets: PresetData[] = [
     name: "Bulgaria",
     flag: "🇧🇬",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.72,
       C: 1.40,
@@ -115,7 +115,7 @@ const presets: PresetData[] = [
     name: "Canada",
     flag: "🇨🇦",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.82,
       C: -0.50,
@@ -133,7 +133,7 @@ const presets: PresetData[] = [
     name: "Chile",
     flag: "🇨🇱",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.88,
       C: 0.20,
@@ -151,7 +151,7 @@ const presets: PresetData[] = [
     name: "Czechia",
     flag: "🇨🇿",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.74,
       C: -0.70,
@@ -169,7 +169,7 @@ const presets: PresetData[] = [
     name: "Estonia",
     flag: "🇪🇪",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.70,
       C: -0.71,
@@ -187,7 +187,7 @@ const presets: PresetData[] = [
     name: "Finland",
     flag: "🇫🇮",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.84,
       C: -1.03,
@@ -205,7 +205,7 @@ const presets: PresetData[] = [
     name: "Germany",
     flag: "🇩🇪",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.76,
       C: -0.65,
@@ -223,7 +223,7 @@ const presets: PresetData[] = [
     name: "Greece",
     flag: "🇬🇷",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.62,
       C: 0.30,
@@ -241,7 +241,7 @@ const presets: PresetData[] = [
     name: "Korea",
     flag: "🇰🇷",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.82,
       C: 0.38,
@@ -259,7 +259,7 @@ const presets: PresetData[] = [
     name: "Mexico",
     flag: "🇲🇽",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.79,
       C: 0.64,
@@ -277,7 +277,7 @@ const presets: PresetData[] = [
     name: "Netherlands",
     flag: "🇳🇱",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.90,
       C: -1.05,
@@ -295,7 +295,7 @@ const presets: PresetData[] = [
     name: "Poland",
     flag: "🇵🇱",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.61,
       C: 0.35,
@@ -313,7 +313,7 @@ const presets: PresetData[] = [
     name: "Romania",
     flag: "🇷🇴",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.55,
       C: 0.41,
@@ -331,7 +331,7 @@ const presets: PresetData[] = [
     name: "Russia",
     flag: "🇷🇺",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.74,
       C: -0.18,
@@ -349,7 +349,7 @@ const presets: PresetData[] = [
     name: "Slovak Republic",
     flag: "🇸🇰",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.56,
       C: -0.43,
@@ -367,7 +367,7 @@ const presets: PresetData[] = [
     name: "Slovenia",
     flag: "🇸🇮",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.52,
       C: -0.68,
@@ -385,7 +385,7 @@ const presets: PresetData[] = [
     name: "Spain",
     flag: "🇪🇸",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.78,
       C: -0.85,
@@ -403,7 +403,7 @@ const presets: PresetData[] = [
     name: "Switzerland",
     flag: "🇨🇭",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.74,
       C: -0.59,
@@ -421,7 +421,7 @@ const presets: PresetData[] = [
     name: "Turkiye",
     flag: "🇹🇷",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.71,
       C: 0.54,
@@ -439,7 +439,7 @@ const presets: PresetData[] = [
     name: "United Kingdom",
     flag: "🇬🇧",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.83,
       C: -0.65,
@@ -457,7 +457,7 @@ const presets: PresetData[] = [
     name: "United States",
     flag: "🇺🇸",
     type: "Panel Data Average",
-    description: "Panel data average (2000-2022): 23 observations",
+    description: "Panel data average (1990-2023): 167 observations",
     values: {
       X: 0.81,
       C: 0.17,
@@ -610,7 +610,7 @@ const PresetModal: React.FC<PresetModalProps> = ({ isOpen, onClose, onSelectPres
         <div className="preset-modal-header">
           <h2 id="preset-modal-title" className="preset-modal-title">Country Presets</h2>
           <p id="preset-modal-subtitle" className="preset-modal-subtitle">
-            Select a country to load its average parameter values from panel data (2000-2022).
+            Select a country to load its average parameter values from panel data (1990-2023).
             The table also shows paper-aligned observed/predicted $Z$ summary metrics computed from the canonical panel.
           </p>
           <button

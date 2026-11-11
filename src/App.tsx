@@ -8,7 +8,7 @@ import ModernSidebar from './components/sidebar/ModernSidebar'
 import AiInterpreterModal from './components/ai/AiInterpreterModal'
 import TopBar from './components/visualization/TopBar'
 import Surface3DOverlay from './components/visualization/Surface3DOverlay'
-import { FIXED_COEFFICIENTS } from './data/feCoefficients'
+import { FIXED_COEFFICIENTS, OPTIMIZED_STRUCTURAL_PARAMS } from './data/feCoefficients'
 import { getProductionHeadlineMetrics } from './data/modelMetrics'
 import { runValidationTests, logValidationReport } from './utils/modelValidator'
 import { calculateModel, computeStructuralBase } from './utils/calculateModel'
@@ -20,9 +20,9 @@ import { readAppStateFromUrl, writeAppStateToUrl } from './utils/urlState'
 const DEFAULT_PARAMS: BeliefParameters = {
   X: 0.73, // Neutral: panel-scale urbanization mean (UI slider space)
   Y: 0.12, // Neutral: panel-scale inequality mean (UI slider space)
-  alpha: 0.3, // PRODUCTION: sublinear urbanization exponent
-  beta: 0.3, // PRODUCTION: sublinear inequality exponent
-  k: 1.307, // PRODUCTION: saturation constant
+  alpha: OPTIMIZED_STRUCTURAL_PARAMS.alpha, // PRODUCTION: sublinear urbanization exponent
+  beta: OPTIMIZED_STRUCTURAL_PARAMS.beta, // PRODUCTION: sublinear inequality exponent
+  k: OPTIMIZED_STRUCTURAL_PARAMS.k, // PRODUCTION: saturation constant
   C: 2.614, // Cultural Intensity (panel-scale raw mean; z-scored later unless preset is active)
   M: 0.42, // Media Environment (panel-scale slider default; calculateModel z-scores when needed)
   T: 0.04, // Trauma/Shock (panel-scale slider default)
@@ -297,7 +297,7 @@ function App() {
     // 1. Match computed beliefValue against expected implementation (PRODUCTION scientific model)
     const testParams: BeliefParameters = {
       X: 0.5, Y: 0.5, 
-      alpha: 0.3, beta: 0.3, k: 1.307,  // PRODUCTION values
+      alpha: OPTIMIZED_STRUCTURAL_PARAMS.alpha, beta: OPTIMIZED_STRUCTURAL_PARAMS.beta, k: OPTIMIZED_STRUCTURAL_PARAMS.k,  // from the fitted module
       C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
     };
     // NOTE: In the PRODUCTION pipeline, the modifier suite (C..R) is often used in z-scored space.
@@ -372,7 +372,7 @@ function App() {
     createMathTest('Z calculation consistency - baseline (PRODUCTION)', () => {
       const testParams: BeliefParameters = {
         X: 0.5, Y: 0.5,
-        alpha: 0.3, beta: 0.3, k: 1.307,
+        alpha: OPTIMIZED_STRUCTURAL_PARAMS.alpha, beta: OPTIMIZED_STRUCTURAL_PARAMS.beta, k: OPTIMIZED_STRUCTURAL_PARAMS.k,
         C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
       };
       const result = calculateModel(uiToModelParams(testParams), { modifiersAreStandardized: true });

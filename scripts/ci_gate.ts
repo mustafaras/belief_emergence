@@ -81,11 +81,11 @@ interface MetricExpectation {
  */
 const CANONICAL_METRICS: MetricExpectation[] = [
   { key: 'n',    expected: 167,     tolerance: 0 },
-  { key: 'r2',   expected: 0.3376,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.6207,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1643,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.2134,  tolerance: 0.0001 },
-  { key: 'bias', expected: 0.0254,  tolerance: 0.0001 },
+  { key: 'r2',   expected: 0.3620,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6226,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1662,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.2094,  tolerance: 0.0001 },
+  { key: 'bias', expected: -0.0415,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -339,6 +339,7 @@ function phaseValidationChecks(): boolean {
   console.log('\n── Phase 6: Validation Checks ──');
   const checks = [
     { label: 'Manuscript consistency',       cmd: 'npm run check:manuscript-consistency' },
+    { label: 'UI agrees with artifacts',     cmd: 'npm run check:ui-artifacts' },
     { label: 'Section references',           cmd: 'npm run check:section-references' },
     { label: 'No hardcoded headline metrics', cmd: 'npm run check:no-hardcoded-headline' },
   ];

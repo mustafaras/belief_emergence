@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.coefficient_fit.v1",
-  "generatedAtIso": "2026-11-11T07:27:35.000Z",
+  "generatedAtIso": "2026-11-11T08:28:10.000Z",
   "source": "scripts/fit_coefficients_v2.py",
   "fittedOn": "public/data/panel_canonical_v2.csv",
   "nRows": 167,

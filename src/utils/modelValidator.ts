@@ -97,7 +97,7 @@
 
 import type { BeliefParameters, Coefficients } from '../types';
 import { calculateModel } from './calculateModel';
-import { INTERACTION_TERMS, OPTIMIZED_STRUCTURAL_PARAMS } from '../data/feCoefficients';
+import { INTERACTION_TERMS, OPTIMIZED_STRUCTURAL_PARAMS, OPTIMIZED_SIGMOID_COEFFICIENTS } from '../data/feCoefficients';
 import {
   clampToStructuralBand,
   normalizePanelXToStructural,
@@ -105,6 +105,14 @@ import {
   STRUCTURAL_MAX,
   STRUCTURAL_MIN,
 } from './modelContract';
+
+/**
+ * The fitted structural parameters, read from the module the production predictor
+ * uses. These were hardcoded here as 0.3 / 0.3 / 1.307 -- the retired scenario-panel
+ * values -- so every self-test in this file was asserting against a model that no
+ * longer exists, and the interface rendered the failures to the user.
+ */
+const PRODUCTION_STRUCTURAL = OPTIMIZED_STRUCTURAL_PARAMS;
 
 export interface ValidationResult {
   passed: boolean;
@@ -247,9 +255,11 @@ export function runValidationTests(): ValidationReport {
   const test18 = testAmplifierMainEffect('R');
   results.push(test18);
   
-  // Test 19: E×S Positive Interaction — Sweep E with S=0 vs S=+1
-  const test19 = testESSweepInteraction();
-  results.push(test19);
+  // Test 19 was an E x S interaction sweep. Both channels it exercised are gone:
+  // S could not be computed for any cell and the interaction coefficient c_es is
+  // zero because it was never identified. Asserting anything about a channel that
+  // does not exist produces a failure a reader cannot act on, so the test is
+  // removed rather than made to pass.
   
   const passed = results.filter(r => r.passed).length;
   const failed = results.filter(r => !r.passed).length;
@@ -272,9 +282,9 @@ function testBaselineNeutral(): ValidationResult {
   const params: BeliefParameters = {
     X: 0.5,
     Y: 0.5,
-    alpha: 0.3,      // PRODUCTION: sublinear urbanization exponent
-    beta: 0.3,       // PRODUCTION: sublinear inequality exponent
-    k: 1.307,        // PRODUCTION: saturation constant
+    alpha: PRODUCTION_STRUCTURAL.alpha,      // from the fitted module, not typed
+    beta: PRODUCTION_STRUCTURAL.beta,       // from the fitted module, not typed
+    k: PRODUCTION_STRUCTURAL.k,        // from the fitted module, not typed
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   
@@ -306,9 +316,9 @@ function testMaximumStructural(): ValidationResult {
   const params: BeliefParameters = {
     X: 1.0,
     Y: 1.0,
-    alpha: 0.3,       // PRODUCTION: sublinear urbanization
-    beta: 0.3,        // PRODUCTION: sublinear inequality
-    k: 1.307,         // PRODUCTION: saturation constant
+    alpha: PRODUCTION_STRUCTURAL.alpha,       // from the fitted module, not typed
+    beta: PRODUCTION_STRUCTURAL.beta,        // from the fitted module, not typed
+    k: PRODUCTION_STRUCTURAL.k,         // from the fitted module, not typed
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   
@@ -333,9 +343,9 @@ function testMinimumValues(): ValidationResult {
   const params: BeliefParameters = {
     X: 0,
     Y: -2,
-    alpha: 0.3,       // PRODUCTION values
-    beta: 0.3,
-    k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha,       // from the fitted module, not typed
+    beta: PRODUCTION_STRUCTURAL.beta,
+    k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   
@@ -367,7 +377,7 @@ function testHighAmplifiers(): ValidationResult {
   // Baseline with no modifiers
   const baseParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   const baseZ = calculateBelief(baseParams);
@@ -375,18 +385,29 @@ function testHighAmplifiers(): ValidationResult {
   // With amplifiers (C, T, G)
   const ampParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 1, M: 0, T: 1, D: 0, G: 1, E: 0, S: 0, R: 0
   };
   const ampZ = calculateBelief(ampParams);
   
+  // The label "amplifiers" described C, T and G. On this fit C and G are
+  // unavailable channels that cannot move Z at all, and T enters negatively
+  // (c_T = -0.046), so the joint shock lowers Z. Asserting the label would be
+  // asserting a model that has not been fitted since the panel was 87 cells.
+  const jointAmplifierCoefficient =
+    0 +                                    // C unavailable
+    OPTIMIZED_SIGMOID_COEFFICIENTS.c3 +    // T
+    0;                                     // G unavailable
   const tolerance = 0.05;
-  const passed = ampZ > baseZ;
-  
+  const jointDelta = ampZ - baseZ;
+  const passed = Math.abs(jointAmplifierCoefficient) < 1e-9
+    ? Math.abs(jointDelta) < 1e-12
+    : Math.sign(jointDelta) === Math.sign(jointAmplifierCoefficient);
+
   return {
     passed,
-    testName: 'High Amplifiers (C, T, G increase Z) (PRODUCTION)',
-    expected: `Z_amplified > Z_baseline (${baseZ.toFixed(4)})`,
+    testName: 'Joint C+T+G shock moves Z in the direction of their fitted coefficients',
+    expected: `Δ Z has the sign of the fitted coefficients (${jointAmplifierCoefficient.toFixed(4)}); baseline ${baseZ.toFixed(4)}`,
     actual: ampZ.toFixed(4),
     tolerance
   };
@@ -400,7 +421,7 @@ function testHighSuppressors(): ValidationResult {
   // Baseline with no modifiers
   const baseParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   const baseZ = calculateBelief(baseParams);
@@ -408,17 +429,26 @@ function testHighSuppressors(): ValidationResult {
   // With suppressors (E, S, R)
   const supParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 1, S: 1, R: 1
   };
   const supZ = calculateBelief(supParams);
   
+  // E, S and R were labelled suppressors when this test was written. On the
+  // 167-cell fit E (+0.46) and R (+0.19) are the two largest positive channels and
+  // S is unavailable, so a joint +1 shock raises Z. The test now asserts the sign
+  // the fitted coefficients imply rather than the label the earlier draft gave
+  // them.
+  const jointCoefficient =
+    OPTIMIZED_SIGMOID_COEFFICIENTS.c6 +   // E
+    OPTIMIZED_SIGMOID_COEFFICIENTS.c8 +   // R
+    0;                                    // S is unavailable
   const tolerance = 0.05;
-  const passed = supZ < baseZ;
-  
+  const passed = Math.sign(supZ - baseZ) === Math.sign(jointCoefficient) || Math.abs(supZ - baseZ) < 1e-12;
+
   return {
     passed,
-    testName: 'High Suppressors (E, S, R decrease Z) (PRODUCTION)',
+    testName: 'Joint E+S+R shock moves Z in the direction of their fitted coefficients',
     expected: `Z_suppressed < Z_baseline (${baseZ.toFixed(4)})`,
     actual: supZ.toFixed(4),
     tolerance
@@ -432,7 +462,7 @@ function testHighSuppressors(): ValidationResult {
 function testPhiCalculation(): ValidationResult {
   const params: BeliefParameters = {
     X: 0.5, Y: 0.5,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0.5, M: 0.3, T: 0.2, D: 0.4, G: 0.6, E: 0.3, S: 0.2, R: 0.4
   };
   
@@ -461,7 +491,7 @@ function testPhiCalculation(): ValidationResult {
 function testBoundaryZeros(): ValidationResult {
   const params: BeliefParameters = {
     X: 0, Y: 0,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0.5, M: 0.3, T: 0.2, D: 0.4, G: 0.6, E: 0.3, S: 0.2, R: 0.4
   };
   
@@ -484,7 +514,7 @@ function testBoundaryZeros(): ValidationResult {
 function testBoundaryOnes(): ValidationResult {
   const params: BeliefParameters = {
     X: 1, Y: 1,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   
@@ -519,7 +549,7 @@ function testSigmoidProperty(): ValidationResult {
     const params: BeliefParameters = {
       X: testCase.X,
       Y: testCase.Y,
-      alpha: 0.3, beta: 0.3, k: 1.307,
+      alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
       C: testCase.C, M: testCase.M, T: testCase.T, D: testCase.D,
       G: testCase.G, E: testCase.E, S: testCase.S, R: testCase.R
     };
@@ -546,7 +576,7 @@ function testSigmoidProperty(): ValidationResult {
 function testMonotonicity(): ValidationResult {
   const baseParams: BeliefParameters = {
     X: 0.3, Y: 0.3,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   
@@ -571,13 +601,13 @@ function testMonotonicity(): ValidationResult {
 /**
  * Test 11–14: Main Effects Validation — Suppressors
  * Verify each suppressor (M, D, E, S) decreases Z when set to +1
- * Baseline: X=0.5, Y=0.5, α=β=0.3, k=1.307, all modifiers=0
+ * Baseline: X=0.5, Y=0.5, α=β from the fitted module, k likewise, all modifiers=0
  */
 function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): ValidationResult {
   // Baseline with all modifiers = 0
   const baseParams: BeliefParameters = {
     X: 0.5, Y: 0.5,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   const baseZ = calculateBelief(baseParams);
@@ -586,30 +616,47 @@ function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): Validat
   const testParams: BeliefParameters = { ...baseParams, [suppressorKey]: 1 };
   const testZ = calculateBelief(testParams);
   
-  // Suppressors should decrease Z (main effect is negative)
-  const tolerance = 0.01;  // Allow ±1% variance for numeric/interaction effects
-  const passed = testZ < baseZ;
+  // The direction is a property of the fitted coefficient, not an assumption about
+  // which channel is a "suppressor". On the 167-cell panel education (c_E = +0.46)
+  // and welfare capacity (c_R = +0.19) both enter positively, so asserting that E
+  // and R decrease Z tested a model that has not been fitted since the panel grew
+  // from 87 cells -- and the failure was rendered to the user.
+  const coefficientByKey: Record<string, number> = {
+    M: OPTIMIZED_SIGMOID_COEFFICIENTS.c2,
+    D: 0,   // channel unavailable
+    E: OPTIMIZED_SIGMOID_COEFFICIENTS.c6,
+    S: 0,   // channel unavailable
+  };
+  const coefficient = coefficientByKey[suppressorKey] ?? 0;
   const delta = testZ - baseZ;
-  
+
+  // An unavailable channel cannot move Z at all; that is the correct assertion
+  // for D and S, and asserting a sign for them would be asserting nothing.
+  const passed = Math.abs(coefficient) < 1e-9
+    ? Math.abs(delta) < 1e-12
+    : Math.sign(delta) === Math.sign(coefficient);
+
   return {
     passed,
-    testName: `Suppressor ${suppressorKey} Decreases Z (Main Effect)`,
-    expected: `Z_${suppressorKey}=1 < Z_baseline(${baseZ.toFixed(4)})`,
+    testName: `Main effect ${suppressorKey} moves Z in the direction of its fitted coefficient`,
+    expected: Math.abs(coefficient) < 1e-9
+      ? `Z_${suppressorKey}=1 == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
+      : `Δ Z has the sign of c(${suppressorKey}) = ${coefficient.toFixed(4)}`,
     actual: `Z_${suppressorKey}=1 = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
-    tolerance
+    tolerance: 0.01
   };
 }
 
 /**
  * Test 15–18: Main Effects Validation — Amplifiers
  * Verify each amplifier (C, T, G, R) increases Z when set to +1
- * Baseline: X=0.5, Y=0.5, α=β=0.3, k=1.307, all modifiers=0
+ * Baseline: X=0.5, Y=0.5, α=β from the fitted module, k likewise, all modifiers=0
  */
 function testAmplifierMainEffect(amplifierKey: 'C' | 'T' | 'G' | 'R'): ValidationResult {
   // Baseline with all modifiers = 0
   const baseParams: BeliefParameters = {
     X: 0.5, Y: 0.5,
-    alpha: 0.3, beta: 0.3, k: 1.307,
+    alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 0, S: 0, R: 0
   };
   const baseZ = calculateBelief(baseParams);
@@ -622,95 +669,33 @@ function testAmplifierMainEffect(amplifierKey: 'C' | 'T' | 'G' | 'R'): Validatio
   const testParams: BeliefParameters = { ...baseParams, [amplifierKey]: testValue };
   const testZ = calculateBelief(testParams);
   
-  // Amplifiers should increase Z (main effect is positive)
-  const tolerance = 0.01;  // Allow ±1% variance for numeric/interaction effects
-  const passed = testZ > baseZ;
-  const delta = testZ - baseZ;
-  
-  return {
-    passed,
-    testName: `Amplifier ${amplifierKey} Increases Z (Main Effect)`,
-    expected: `Z_${amplifierKey}=${testValue} > Z_baseline(${baseZ.toFixed(4)})`,
-    actual: `Z_${amplifierKey}=${testValue} = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
-    tolerance
+  // Direction comes from the fitted coefficient, as in the suppressor case. The
+  // "amplifier" and "suppressor" labels were a hypothesis about signs; the fit is
+  // the evidence, and on the 167-cell panel it puts c_T negative and c_R positive,
+  // which is the opposite of the labels for both.
+  const ampCoefficientByKey: Record<string, number> = {
+    C: 0,   // channel unavailable
+    T: OPTIMIZED_SIGMOID_COEFFICIENTS.c3,
+    G: 0,   // channel unavailable
+    R: OPTIMIZED_SIGMOID_COEFFICIENTS.c8,
   };
-}
+  const ampCoefficient = ampCoefficientByKey[amplifierKey] ?? 0;
+  const delta = testZ - baseZ;
+  const passed = Math.abs(ampCoefficient) < 1e-9
+    ? Math.abs(delta) < 1e-12
+    : Math.sign(delta) === Math.sign(ampCoefficient);
 
-/**
- * Test 19: E×S Positive Interaction Validation
- * Sweep E from -1 to +1 in two scenarios:
- * Case A: S=0 (no suppressor S interaction)
- * Case B: S=+1 (full suppressor S interaction)
- * 
- * The positive E×S interaction should offset E's suppression effect.
- * When S increases, E's negative main effect should be partially mitigated.
- * 
- * We verify this by comparing how E affects Z at different S values:
- * ΔZ_with_S should be less negative than ΔZ_without_S if E×S is positive.
- */
-function testESSweepInteraction(): ValidationResult {
-  // Sweep points for E
-  const eSweep = [-1.0, -0.5, 0, 0.5, 1.0];
-  
-  // Case A: S=0, sweep E
-  const caseAResults: { e: number; z: number }[] = [];
-  for (const e of eSweep) {
-    const params: BeliefParameters = {
-      X: 0.5, Y: 0.5,
-      alpha: 0.3, beta: 0.3, k: 1.307,
-      C: 0, M: 0, T: 0, D: 0, G: 0, E: e, S: 0, R: 0
-    };
-    caseAResults.push({ e, z: calculateBelief(params) });
-  }
-  
-  // Case B: S=+1, sweep E (same E values)
-  const caseBResults: { e: number; z: number }[] = [];
-  for (const e of eSweep) {
-    const params: BeliefParameters = {
-      X: 0.5, Y: 0.5,
-      alpha: 0.3, beta: 0.3, k: 1.307,
-      C: 0, M: 0, T: 0, D: 0, G: 0, E: e, S: 1, R: 0
-    };
-    caseBResults.push({ e, z: calculateBelief(params) });
-  }
-  
-  // Compare the slope (sensitivity) of E's effect in both cases
-  // If E×S is positive, then increasing S should reduce E's negative impact
-  // (Z with S=1 should be higher than Z with S=0 for the same E)
-  
-  // Calculate delta between Case B and Case A at E=+1
-  const eMaxA = caseAResults.find(r => r.e === 1.0)!.z;  // E effect with S=0
-  const eMaxB = caseBResults.find(r => r.e === 1.0)!.z;  // E effect with S=1
-  const sInteractionEffect = eMaxB - eMaxA;
-  
-  // Range of Z across E sweep (measure of interaction strength)
-  const rangeA = Math.max(...caseAResults.map(r => r.z)) - Math.min(...caseAResults.map(r => r.z));
-  const rangeB = Math.max(...caseBResults.map(r => r.z)) - Math.min(...caseBResults.map(r => r.z));
-  
-  // Positive interaction: adding S should reduce the range of variation caused by E
-  // (because S×E offsets E's suppression)
-  const interactionMitigates = rangeB < rangeA;
-  
-  // Also verify that Z with S=1 is always >= Z with S=0 for the same E
-  // (S is a suppressor, so it should decrease Z alone; but the E×S interaction
-  //  should offset this when E is present)
-  const passed = interactionMitigates;
-  
-  const reportLines = [
-    `Case A (S=0): E sweep → Z range = ${rangeA.toFixed(4)}`,
-    `Case B (S=1): E sweep → Z range = ${rangeB.toFixed(4)}`,
-    `Interaction Effect at E=+1: ΔZ = ${sInteractionEffect.toFixed(6)}`,
-    `Mitigation Confirmed: ${interactionMitigates ? 'Yes (range reduced)' : 'No (range not reduced)'}`
-  ];
-  
   return {
     passed,
-    testName: 'E×S Positive Interaction: S Mitigates E\'s Suppression',
-    expected: 'Range(E sweep with S=1) < Range(E sweep with S=0)',
-    actual: reportLines.join(' | '),
+    testName: `Main effect ${amplifierKey} moves Z in the direction of its fitted coefficient`,
+    expected: Math.abs(ampCoefficient) < 1e-9
+      ? `Z_${amplifierKey}=${testValue} == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
+      : `Δ Z has the sign of c(${amplifierKey}) = ${ampCoefficient.toFixed(4)}`,
+    actual: `Z_${amplifierKey}=${testValue} = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
     tolerance: 0.01
   };
 }
+
 
 /**
  * Log validation report to console

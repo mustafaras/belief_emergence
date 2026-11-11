@@ -683,8 +683,8 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               religiosity-related belief intensity. A support-aware bounded nonlinear framework models this
               outcome under urbanization and inequality, paired with diagnostic visual analytics, refit
               out-of-sample validation, and deterministic evidence export. The analysis uses a canonical
-              panel of 23 countries (630 scenario-replicated rows, 2000–2022) that collapses to 34 unique
-              country–years of complete-case support. Effective exposure is defined as{' '}
+              panel of 76 countries (167 complete-case country–years, 1990–2023), one row per country–year
+              with no scenario replication. Effective exposure is defined as{' '}
               <span className="nowrap"><InlineMath math="S=X^{\\alpha}Y^{\\beta}\\exp(\\Phi)" /></span> and mapped to the bounded outcome through{' '}
               <span className="nowrap"><InlineMath math="Z=S/(S+k)" /></span>, making transition-ridge sensitivity and
               saturation explicit. Primary claims are anchored to Tier&nbsp;A/B refit out-of-sample evidence from
