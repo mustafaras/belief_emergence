@@ -184,9 +184,11 @@ pdflatex -interaction=nonstopmode supplementary_materials.tex
 
 Expected output: `paper/main/main.pdf` and
 `paper/supplementary/supplementary_materials.pdf`. These are the two files the
-CI `build-paper` job compiles; the copies at `paper/main.tex` and
-`paper/supplementary_materials.tex` are stale by design and are not the source
-of record.
+CI `build-paper` job compiles and they are the only manuscript sources in the
+tree. Duplicate root-level copies (`paper/main.tex`,
+`paper/supplementary_materials.tex`) used to sit beside them dated 7 November and
+did drift out of step; they were removed so that the file a reader opens is the
+file CI builds.
 
 ---
 

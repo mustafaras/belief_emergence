@@ -353,8 +353,9 @@ previous version reported, what the defect was, what changed. This converts
 the worst liability into evidence of rigour, and it is the single highest-value
 paragraph in the rebuild.
 
-**Status:** [ ] open. No correction note exists in
-`paper/supplementary_materials.tex`.
+**Status:** [x] closed. The correction note is in
+`paper/supplementary/supplementary_materials.tex`; the stale root-level copy
+that this item referred to has been removed.
 
 ---
 
