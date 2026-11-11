@@ -10,7 +10,7 @@ taken from the tree on 2026-11-11.
 | finding | measurement | why it matters |
 |---|---|---|
 | Bundle is 6.9 MB | `dist/assets/index-*.js` = 6,664 KB | slow first load; the manuscript's own claim is that the evidence surface is inspectable |
-| A dependency is dead | `plotly.js-basic-dist-min` imported nowhere; only `plotly.js-dist-min` is used | two full Plotly builds in the tree |
+| Two dependencies are dead | `plotly.js-basic-dist-min` never imported (only `plotly.js-dist-min` is); `three` never imported at all | two full Plotly builds and a complete WebGL renderer in the tree for code that does not use either |
 | The UI does not present the paper's contribution | the construct audit appears in **1** of 18 section components, and that mention is incidental | the paper's thesis is that three of four constructs fail; the app shows none of that |
 | No component is tested | 0 of 22 `.tsx` files have a test; all 137 tests are model/artifact tests | every UI regression so far was caught by hand or by the render check's 5 patterns |
 | Accessibility is thin | 25 `aria-*`/`role=` attributes across 18 sections | keyboard and screen-reader access is not demonstrated |
@@ -66,9 +66,18 @@ design in words.
 
 ## Phase 3 — Engineering
 
-3.1 Drop `plotly.js-basic-dist-min`. Expected saving is small in the bundle (the
-`dist-min` build is what ships) but it removes a maintenance trap: two packages whose
-names differ by one word.
+3.1 Drop two unused packages. `plotly.js-basic-dist-min` is never imported -- only
+`plotly.js-dist-min` is -- and `three` is never imported either, despite Plotly
+already providing the 3D surface it would be used for. Neither is in the bundle,
+since Vite tree-shakes unreferenced packages, so the saving is not bytes: it is the
+removal of two traps. A package named one word away from the one in use, and a whole
+WebGL renderer sitting in `dependencies` next to a charting library that draws the
+same surface, will both eventually attract a second implementation.
+
+  Checked and kept: `html2canvas` is used, but through `await import(...)` inside the
+  PDF export path, so a source grep for a static import finds nothing. Removing it on
+  that basis would break export at runtime and pass every test that does not exercise
+  the export path.
 
 3.2 Split the bundle. `Surface3DSurface` and `InteractiveDocumentation` are the two
 largest components and neither is needed for first paint. Lazy-load both behind
