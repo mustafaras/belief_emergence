@@ -1,7 +1,7 @@
 {
   "schemaVersion": "phase1.collinearity_diagnostics.v1",
-  "generatedAtIso": "2026-11-10T09:15:02.753Z",
-  "n": 167,
+  "generatedAtIso": "2026-11-11T14:47:09.111Z",
+  "n": 207,
   "covariates": [
     "X",
     "Y",
@@ -10,39 +10,39 @@
     "R",
     "M"
   ],
-  "conditionNumber": 22.62,
+  "conditionNumber": 23.52,
   "entries": [
     {
       "covariate": "R",
-      "r2OnOthers": 0.885544,
-      "vif": 8.737
+      "r2OnOthers": 0.893926,
+      "vif": 9.4274
     },
     {
       "covariate": "E",
-      "r2OnOthers": 0.777785,
-      "vif": 4.5002
+      "r2OnOthers": 0.792852,
+      "vif": 4.8275
     },
     {
       "covariate": "X",
-      "r2OnOthers": 0.659974,
-      "vif": 2.941
+      "r2OnOthers": 0.694059,
+      "vif": 3.2686
     },
     {
       "covariate": "M",
-      "r2OnOthers": 0.609679,
-      "vif": 2.562
+      "r2OnOthers": 0.538074,
+      "vif": 2.1649
     },
     {
       "covariate": "Y",
-      "r2OnOthers": 0.320018,
-      "vif": 1.4706
+      "r2OnOthers": 0.28364,
+      "vif": 1.3959
     },
     {
       "covariate": "T",
-      "r2OnOthers": 0.127526,
-      "vif": 1.1462
+      "r2OnOthers": 0.145687,
+      "vif": 1.1705
     }
   ],
-  "maxVif": 8.737,
-  "interpretation": "Maximum VIF is 8.737, above the conventional threshold of 5; coefficients on the affected covariates are reported as association under a fixed design, not as separately identified effects."
+  "maxVif": 9.4274,
+  "interpretation": "Maximum VIF is 9.4274, above the conventional threshold of 5; coefficients on the affected covariates are reported as association under a fixed design, not as separately identified effects."
 }

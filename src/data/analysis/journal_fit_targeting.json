@@ -10,7 +10,7 @@
     ],
     "scope": "Journal-fit targeting reconciled with TARGET_JOURNALS.md strategic priority ranking (2026-11-09)",
     "manuscriptTitle": "Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models",
-    "sampleScope": "167 complete-case country-years, 76 countries, 1990-2023",
+    "sampleScope": "207 complete-case country-years, 83 countries, 1990-2023",
     "tagScale": [
       "fit",
       "risky",
@@ -171,7 +171,7 @@
     {
       "id": "C3",
       "section": "Data and correction",
-      "claim": "In the previous panel the outcome was an exact rescaling of a predictor (corr = 1.0); the rebuilt panel contains 167 complete-case country-years across 76 countries, 1990-2023.",
+      "claim": "In the previous panel the outcome was an exact rescaling of a predictor (corr = 1.0); the rebuilt panel contains 207 complete-case country-years across 83 countries, 1990-2023.",
       "tags": {
         "social_indicators_research": "fit",
         "technological_forecasting_social_change": "fit",
@@ -228,7 +228,7 @@
     {
       "id": "C6",
       "section": "Discussion - support",
-      "claim": "Inference is conditioned on 167 unique country-years; Tier C (22 parameters, 12.85 obs/param) is exploratory and excluded from headline claims.",
+      "claim": "Inference is conditioned on 207 unique country-years; Tier C (22 parameters, 12.85 obs/param) is exploratory and excluded from headline claims.",
       "tags": {
         "social_indicators_research": "fit",
         "technological_forecasting_social_change": "risky",

@@ -544,6 +544,17 @@ function main(): void {
   }).join(','));
   const csvText = [header.join(','), ...body].join('\r\n') + '\r\n';
 
+  /**
+   * How far each recovered cell had to borrow. A single "window +/-5" figure hides
+   * whether the borrows are mostly one year (harmless) or mostly five (a real
+   * measurement cost), and the manuscript has to state which it is.
+   */
+  const lagHistogram = (rows: Array<{ lag: number }>): Record<string, number> => {
+    const hist: Record<string, number> = {};
+    for (const r of rows) hist[String(r.lag)] = (hist[String(r.lag)] ?? 0) + 1;
+    return hist;
+  };
+
   const audit = {
     schemaVersion: 'canonical.panel.v2',
     generatedAtIso: new Date().toISOString(),
@@ -575,6 +586,7 @@ function main(): void {
         affine: { slope: WDI_TO_Y_GIINI.slope, intercept: WDI_TO_Y_GIINI.intercept },
         cellsRecovered: giniRecovered.length,
         exactYear: giniRecovered.filter((g) => g.lag === 0).length,
+        lagDistribution: lagHistogram(giniRecovered),
       },
       {
         covariate: 'E',
@@ -584,6 +596,7 @@ function main(): void {
         affine: { slope: WDI_TO_E.slope, intercept: WDI_TO_E.intercept },
         cellsRecovered: eduRecovered.length,
         exactYear: eduRecovered.filter((g) => g.lag === 0).length,
+        lagDistribution: lagHistogram(eduRecovered),
       },
       {
         covariate: 'X',
@@ -593,6 +606,7 @@ function main(): void {
         affine: { slope: WDI_TO_X.slope, intercept: WDI_TO_X.intercept },
         cellsRecovered: urbanRecovered.length,
         exactYear: urbanRecovered.filter((g) => g.lag === 0).length,
+        lagDistribution: lagHistogram(urbanRecovered),
       },
       {
         covariate: 'M',
@@ -602,6 +616,7 @@ function main(): void {
         affine: { slope: WDI_TO_M.slope, intercept: WDI_TO_M.intercept },
         cellsRecovered: mediaRecovered.length,
         exactYear: mediaRecovered.filter((g) => g.lag === 0).length,
+        lagDistribution: lagHistogram(mediaRecovered),
       },
       {
         covariate: 'T',

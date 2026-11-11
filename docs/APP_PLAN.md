@@ -98,7 +98,7 @@ education 82, no macro row 22). `data_code_provenance.json` and the panel audit 
 all of it.
 
 **1.5 Render the limits.** The exponents at their bound with the profile interval
-[0, 0.032]; the 150 rows never in the reserved set; the `R`/`E` collinearity with VIF
+[0, 0.016]; the 150 rows never in the reserved set; the `R`/`E` collinearity with VIF
 8.74. A section titled, plainly, "what this model cannot show".
 
 ## Phase 2 — Make every displayed number checkable

@@ -159,11 +159,11 @@ must not claim a cause the artifacts do not support.
 
 Add a section titled plainly, "What this model cannot show", covering:
 - the structural exponents sit at their lower bound, and the profile likelihood gives
-  an interval of `[0, 0.032]` — the panel bounds the exponent from above only;
+  an interval of `[0, 0.016]` — the panel bounds the exponent from above only;
 - the shipped value 0.050 lies outside that interval;
 - the lockbox split drew 17 cells from a panel of 87, and the panel is now 167 rows, so
   150 rows were never in the reserved set — the split protects 17 cells, not the sample;
-- `R` and `E` share a component (VIF 8.74 for R).
+- `R` and `E` share a component (VIF 9.43 for R).
 
 Source from `elasticity_profile.json`, `lockbox_holdout.json`,
 `collinearity_diagnostics.json`. Each statement must cite its artifact on screen — not

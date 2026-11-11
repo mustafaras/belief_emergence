@@ -465,9 +465,9 @@ The coefficients were refit on the 167-cell v2 panel by
 `src/data/feCoefficients.ts`.
 
 ```text
-phi0 = +0.5303   alpha = 0.0500   beta = 0.0500   k = 0.9685
-c_M  = +0.0022   c_T   = -0.0461   c_E = +0.4586   c_R = +0.1946
-c_tr = -0.1861   c_yr  = +0.6279
+phi0 = +3.3431   alpha = 0.0500   beta = 0.0500   k = 14.6163
+c_M  = -0.1356   c_T   = -0.0858   c_E = +0.3882   c_R = +0.2587
+c_tr = -0.1668   c_yr  = +0.6325
 retracted: C, D, G, S — coefficient not estimated (channel unavailable in v2)
 ```
 

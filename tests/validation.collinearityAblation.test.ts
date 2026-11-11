@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import ablation from '../src/data/analysis/collinearity_ablation.json';
@@ -55,7 +56,12 @@ describe('collinearity does not carry the central result', () => {
   });
 
   it('pins the diagnostics to the current panel size', () => {
+    // Read the panel rather than a literal: this assertion was written as toBe(167)
+    // and failed the moment the window widened to 207, which tests the constant and
+    // not the agreement between the two artifacts.
+    const panelCsv = fs.readFileSync('public/data/panel_canonical_v2.csv', 'utf8');
+    const rows = panelCsv.trim().split(String.fromCharCode(10)).length - 1;
     expect(vif.n).toBe(ablation.n);
-    expect(vif.n).toBe(167);
+    expect(vif.n).toBe(rows);
   });
 });

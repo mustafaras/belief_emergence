@@ -80,12 +80,12 @@ interface MetricExpectation {
  * to make a failing build green without a corresponding data change.
  */
 const CANONICAL_METRICS: MetricExpectation[] = [
-  { key: 'n',    expected: 167,     tolerance: 0 },
-  { key: 'r2',   expected: 0.3620,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.6226,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1662,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.2094,  tolerance: 0.0001 },
-  { key: 'bias', expected: -0.0415,  tolerance: 0.0001 },
+  { key: 'n',    expected: 207,     tolerance: 0 },
+  { key: 'r2',   expected: 0.3461,  tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6150,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.1617,  tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.2089,  tolerance: 0.0001 },
+  { key: 'bias', expected: -0.0440,  tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -126,7 +126,7 @@ const REQUIRED_ARTIFACTS = [
 /*  Canonical data fingerprint                                         */
 /* ------------------------------------------------------------------ */
 
-const CANONICAL_PANEL_SHA256 = 'ECF5D041953AF9E07FD72F7AA1739FCC6D0BB8378BE1BFD45F5530A4BA24967A';
+const CANONICAL_PANEL_SHA256 = '5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9';
 
 /* ------------------------------------------------------------------ */
 /*  Utilities                                                          */

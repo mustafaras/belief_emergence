@@ -788,17 +788,20 @@ export function runConsistencyChecks(): void {
         const upperCorrected = Math.max(...insideCorrected.map((p) => p.value));
         const upperNominal = Math.max(...insideNominal.map((p) => p.value));
         const widened = upperCorrected > upperNominal;
-        const claimsWidened = /widens from|interval widens/.test(mainText);
-        if (widened !== claimsWidened && mainText.includes('unchanged')) {
-          // The prose says unchanged; only complain if the arithmetic disagrees.
-          if (widened) {
-            failures.push({
-              id: 'MULTIPLICITY_CLAIM_DRIFT',
-              file: 'main/main.tex',
-              message: `prose says the Bonferroni correction leaves the interval unchanged, but it would move the upper bound from ${upperNominal} to ${upperCorrected}`,
-              remediation: 'Recompute the corrected interval from elasticity_profile.json and update the multiplicity paragraph.',
-            });
-          }
+        // Scope the search to the multiplicity paragraph. Searching the whole file for
+        // the word "unchanged" matched an unrelated sentence about the C-exclusion
+        // stability check and reported a drift that did not exist.
+        const paraStart = mainText.indexOf('Bonferroni');
+        const para = paraStart === -1 ? '' : mainText.slice(paraStart, paraStart + 2000);
+        const claimsWidened = /widens from|interval widens/.test(para);
+        const claimsSame = /same either way|stays at|reported bound is/.test(para);
+        if (widened !== claimsWidened && claimsSame && widened) {
+          failures.push({
+            id: 'MULTIPLICITY_CLAIM_DRIFT',
+            file: 'main/main.tex',
+            message: `prose says the bound does not move, but the correction would move it from ${upperNominal} to ${upperCorrected}`,
+            remediation: 'Recompute the corrected interval from elasticity_profile.json and update the multiplicity paragraph.',
+          });
         }
         if (claimsWidened && !widened) {
           failures.push({

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "phase1.construct_validity_invariance.v1",
-  "generatedAtIso": "2026-11-11T13:43:09.892Z",
+  "generatedAtIso": "2026-11-11T14:55:51.104Z",
   "source": {
     "datasetPath": "/Users/m_ras/Downloads/BE_repo_rev/repo/public/data/panel_canonical_v2.csv",
-    "datasetSha256": "ECF5D041953AF9E07FD72F7AA1739FCC6D0BB8378BE1BFD45F5530A4BA24967A",
-    "nRows": 167,
-    "nCountries": 76,
+    "datasetSha256": "5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9",
+    "nRows": 207,
+    "nCountries": 83,
     "yearMin": 1990,
     "yearMax": 2023,
     "missingColumns": [
@@ -37,7 +37,7 @@
         "Z_violence_justifiable"
       ],
       "sample": {
-        "nRows": 167,
+        "nRows": 207,
         "nCanonicalFinite": 0
       },
       "coverage": {
@@ -164,7 +164,7 @@
         "C_religiosity_index"
       ],
       "sample": {
-        "nRows": 167,
+        "nRows": 207,
         "nCanonicalFinite": 0
       },
       "coverage": {
@@ -279,7 +279,7 @@
         "D_social_trust"
       ],
       "sample": {
-        "nRows": 167,
+        "nRows": 207,
         "nCanonicalFinite": 0
       },
       "coverage": {
@@ -394,7 +394,7 @@
         "S_support_index"
       ],
       "sample": {
-        "nRows": 167,
+        "nRows": 207,
         "nCanonicalFinite": 0
       },
       "coverage": {
@@ -509,7 +509,7 @@
         "M_internet_daily"
       ],
       "sample": {
-        "nRows": 167,
+        "nRows": 207,
         "nCanonicalFinite": 0
       },
       "coverage": {

@@ -1,12 +1,12 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-10T09:24:31.532Z",
+  "generatedAtIso": "2026-11-11T14:20:40.340Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
     "macro": "rawdata/panel_model_data.csv"
   },
-  "rows": 167,
-  "countries": 76,
+  "rows": 207,
+  "countries": 83,
   "yearRange": [
     1990,
     2023
@@ -37,11 +37,11 @@
       "reason": "disposable-income Gini unavailable outside the OECD sample"
     }
   ],
-  "observationsPerParameter": 23.86,
+  "observationsPerParameter": 29.57,
   "attrition": {
     "noIso": 11,
     "noMacro": 8,
-    "missingCovariate": 101,
+    "missingCovariate": 61,
     "missingOutcome": 18
   },
   "backfills": [
@@ -49,49 +49,69 @@
       "covariate": "Y",
       "indicator": "SI.POV.GINI",
       "source": "rawdata/WDICSV.csv",
-      "windowYears": 2,
+      "windowYears": 5,
       "affine": {
         "slope": 0.164028,
         "intercept": -5.413122
       },
-      "cellsRecovered": 79,
-      "exactYear": 0
+      "cellsRecovered": 97,
+      "exactYear": 0,
+      "lagDistribution": {
+        "1": 53,
+        "2": 26,
+        "3": 13,
+        "4": 4,
+        "5": 1
+      }
     },
     {
       "covariate": "E",
       "indicator": "SE.SEC.ENRR",
       "source": "rawdata/WDICSV.csv",
-      "windowYears": 2,
+      "windowYears": 5,
       "affine": {
         "slope": 0.03773538,
         "intercept": -3.6554922
       },
-      "cellsRecovered": 19,
-      "exactYear": 0
+      "cellsRecovered": 51,
+      "exactYear": 0,
+      "lagDistribution": {
+        "1": 9,
+        "2": 13,
+        "3": 9,
+        "4": 14,
+        "5": 6
+      }
     },
     {
       "covariate": "X",
       "indicator": "SP.URB.TOTL.IN.ZS",
       "source": "rawdata/WDICSV.csv",
-      "windowYears": 2,
+      "windowYears": 5,
       "affine": {
         "slope": 0.010573,
         "intercept": -0.0573
       },
       "cellsRecovered": 0,
-      "exactYear": 0
+      "exactYear": 0,
+      "lagDistribution": {}
     },
     {
       "covariate": "M",
       "indicator": "IT.NET.USER.ZS",
       "source": "rawdata/WDICSV.csv",
-      "windowYears": 2,
+      "windowYears": 5,
       "affine": {
         "slope": 0.03122824,
         "intercept": -1.68101806
       },
-      "cellsRecovered": 4,
-      "exactYear": 0
+      "cellsRecovered": 6,
+      "exactYear": 0,
+      "lagDistribution": {
+        "1": 4,
+        "2": 1,
+        "3": 1
+      }
     },
     {
       "covariate": "T",
@@ -102,9 +122,9 @@
         "slope": 0.47927449344280604,
         "intercept": -1.4923026119980618
       },
-      "cellsRecovered": 30,
-      "exactYear": 30,
-      "zeroDeathCells": 29,
+      "cellsRecovered": 36,
+      "exactYear": 36,
+      "zeroDeathCells": 35,
       "isoAliasCells": 1
     }
   ],

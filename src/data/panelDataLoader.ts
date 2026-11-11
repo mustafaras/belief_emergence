@@ -24,7 +24,7 @@ import type { PanelRowCanonical } from '../types/panel';
 export type { PanelRowCanonical } from '../types/panel';
 
 export const CANONICAL_PANEL_CSV_PATH = '/data/panel_canonical_v2.csv';
-export const CANONICAL_PANEL_SHA256 = 'ECF5D041953AF9E07FD72F7AA1739FCC6D0BB8378BE1BFD45F5530A4BA24967A';
+export const CANONICAL_PANEL_SHA256 = '5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9';
 
 /** Columns that the v2 panel declares but cannot populate. */
 export const STRUCTURALLY_UNAVAILABLE = ['C', 'D', 'S'] as const;

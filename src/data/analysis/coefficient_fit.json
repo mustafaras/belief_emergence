@@ -1,21 +1,21 @@
 {
   "schemaVersion": "phase1.coefficient_fit.v1",
-  "generatedAtIso": "2026-11-11T08:28:10.000Z",
+  "generatedAtIso": "2026-11-11T14:30:00.000Z",
   "source": "scripts/fit_coefficients_v2.py",
   "fittedOn": "public/data/panel_canonical_v2.csv",
-  "nRows": 167,
-  "nCountries": 76,
+  "nRows": 207,
+  "nCountries": 83,
   "parameters": {
-    "phi0": 0.5303166905804857,
-    "alpha": 0.050000000053552256,
-    "beta": 0.05000000000505099,
-    "k": 0.9685218921642087,
-    "c_M": 0.0022144202043439254,
-    "c_T": -0.046053108793900344,
-    "c_E": 0.4585938310657889,
-    "c_R": 0.19460408745045066,
-    "c_tr": -0.18610423347841465,
-    "c_yr": 0.6279399061595192
+    "phi0": 3.3430518940908516,
+    "alpha": 0.05000000004100796,
+    "beta": 0.05000000000209442,
+    "k": 14.61634212075696,
+    "c_M": -0.13563040015342476,
+    "c_T": -0.08578230246394702,
+    "c_E": 0.38822152894576467,
+    "c_R": 0.25871933576557815,
+    "c_tr": -0.1668243049602075,
+    "c_yr": 0.632454900494166
   },
   "note": "The fitted coefficients are derived quantities, not licensed data: this file is committed so the manuscript numbers can be checked, while the raw inputs that produce them stay out of the repository."
 }
