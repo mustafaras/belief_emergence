@@ -365,9 +365,18 @@ With an 11-parameter model and 126 cells, the earlier rejection pattern
 (urban journals: insufficient domain contribution; CSS journals: thin support)
 is addressed on the support axis. Reassess targets:
 
+**Submission history.** Two attempts predate the rebuild and their PDFs have been
+deleted. Social Indicators Research, manuscript `SOCI-S-26-01446` (33 pages,
+submitted against the pre-rebuild draft). Social Science Computer Review,
+manuscript `SSCR-26-0390` (67 pages, "For Peer Review", also pre-rebuild). Neither
+described the panel this paper now reports: they predate the construct audit, the
+trauma and Gini backfills, and every number in them is superseded. The identifiers
+are kept here so the earlier correspondence can still be located; the files
+themselves were only ever snapshots of drafts that no longer exist.
+
 | Venue | Fit after rebuild | Note |
 |---|---|---|
-| Social Indicators Research | high | composite-indicator tolerance; current draft already formatted for it (`SOCI-S-26-01446.pdf`) |
+| Social Indicators Research | high | composite-indicator tolerance; current draft already formatted for it |
 | EPJ Data Science | medium | previously tried; only if methodology is foregrounded |
 | Sociological Methods & Research | medium | strong methods fit, but 126 cells is still small for them |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
