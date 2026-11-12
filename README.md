@@ -787,6 +787,27 @@ second `plotly*` package reappears one word away from the one in use.
 
 Verified after removal: the export still produces a 66 kB `%PDF-` download.
 
+#### Surface component
+
+`Surface3DSurface.tsx` was decomposed under Prompt 9 as far as extraction allows:
+
+| module | contents | test |
+|---|---|---|
+| `surface/geometry.ts` | grid construction, slice polylines, nearest-index, numeric coercion | 25 cases |
+| `surface/camera.ts` | four camera presets, documentation axis bounds, logit | pinned values |
+
+`npm run check:surface-snapshot` is the acceptance test the prompt asks for: the surface is
+rendered in a browser and compared **byte-for-byte** against a baseline captured before any
+extraction. It was confirmed to fail by changing one camera component by 0.1 — 44,922 bytes
+to 44,691.
+
+**The component is 4,164 lines, not the 800 the prompt targets, and extraction cannot get
+it there.** What remains is 46 `useState` hooks and 3,781 lines of JSX in one function; the
+dock panel alone is ~1,100 lines of markup driven by ~20 of those hooks, and every handler
+closes over the surface cache refs, camera state and URL serialiser at once. Splitting that
+is a state-management rewrite with its own failure modes, not a move — and Prompt 9 says
+"move code; do not rewrite it". Recorded as a finding rather than worked around.
+
 #### Bundle budget
 
 The landing route loads **699 kB** of JavaScript in one chunk. It used to load 6.6 MB,

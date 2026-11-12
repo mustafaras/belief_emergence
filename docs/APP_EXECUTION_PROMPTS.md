@@ -20,7 +20,7 @@ stop and say so rather than working from a stale premise):
 | largest component | `Surface3DSurface.tsx`, 4,341 lines |
 | first-paint charts / tables | 1 / 1 |
 | sliders / buttons on landing | 12 / 46 |
-| gate checks (`npm run ci:gate`) | 78 |
+| gate checks (`npm run ci:gate`) | 79 |
 | consistency blocks | 28 |
 
 **Corrected 2026-11-12.** Two numbers above were wrong when this file was written. Seven
@@ -391,6 +391,38 @@ right"); and new unit tests cover the extracted geometry functions.
 
 **Done when** the surface renders identically, the component is under 800 lines, and the
 extracted modules have tests.
+
+**PARTIALLY BUILT 2026-11-12 — the line target was not met, and the reason is structural.**
+
+Extracted, verified, tested:
+  `surface/geometry.ts` (168 lines) — grid construction, slice polylines, nearest-index,
+    numeric coercion. 25 unit tests. Prompt 9's instruction to move rather than rewrite was
+    followed: every body is verbatim.
+  `surface/camera.ts` (57 lines) — four camera presets, documentation axis bounds, logit.
+
+Acceptance test built and committed: `npm run check:surface-snapshot` renders the surface in
+a browser and compares the PNG byte-for-byte against `tests/fixtures/surface-baseline.png`,
+captured before any extraction. Confirmed to fail by changing one camera component by 0.1
+(44,922 bytes -> 44,691). The screenshot was verified deterministic across repeated
+captures, which is what makes it usable rather than a flaky test.
+
+**The 800-line target cannot be reached by extraction.** After moving everything that is
+separable the component is 4,164 lines, and what remains is not misplaced helpers:
+
+  - 46 `useState` hooks and 3,781 lines of JSX in one function.
+  - The dock panel alone is ~1,100 lines of markup driven by ~20 of those hooks.
+  - Every handler closes over the surface cache refs, the camera state and the URL
+    serialiser simultaneously.
+
+Splitting that requires threading props and callbacks through new boundaries — a rewrite
+with a different failure mode, not a move. Prompt 9 explicitly says "move code; do not
+rewrite it", so the honest outcome is: the separable part is done and verified, and the
+remaining work is a state-management refactor that this prompt's own constraint forbids
+doing casually.
+
+**Finding, as the prompt asked to report rather than work around:** the component is not
+large because helpers are in the wrong file. It is large because it owns 46 pieces of state
+in one function. Extraction addresses the first problem and cannot address the second.
 
 ---
 

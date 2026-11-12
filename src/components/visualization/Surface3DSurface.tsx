@@ -12,6 +12,30 @@ import { OPTIMIZED_STRUCTURAL_PARAMS } from '../../data/feCoefficients'
 import { useDataContext } from '../../contexts/DataContext'
 import { downloadCsvWithComment } from '../../utils/csv/exportCsv'
 import './Surface3DSurface.css'
+import {
+  DEFAULT_CAMERA,
+  DOC_L_MAX,
+  DOC_L_MIN,
+  DOC_PHI_MAX,
+  DOC_PHI_MIN,
+  FRONT_CAMERA,
+  ISO_CAMERA,
+  TOP_CAMERA,
+  logit,
+  type Camera,
+} from './surface/camera'
+import {
+  clamp,
+  isFiniteNumber,
+  linspace,
+  makePolylineFromGridXSlice,
+  makePolylineFromGridYSlice,
+  nearestIndex,
+  round4,
+  toFiniteNumber,
+  type Polyline3,
+  type SurfacePayload,
+} from './surface/geometry'
 
 const Plot = createPlotlyComponent(Plotly)
 
@@ -233,22 +257,6 @@ function readCssVarHex(varName: string, fallback: string): string {
   return fallback
 }
 
-type Camera = {
-  up?: { x: number; y: number; z: number }
-  center?: { x: number; y: number; z: number }
-  eye?: { x: number; y: number; z: number }
-}
-
-type SurfacePayload = {
-  xVals: number[]
-  yVals: number[]
-  zGrid: Array<Array<number | null>>
-  currentZ: number | null
-  computedAt: number
-  nx: number
-  ny: number
-}
-
 type SurfaceComputeResult = {
   payload: SurfacePayload
   hasValid: boolean
@@ -275,45 +283,7 @@ const EPS_GRID_ABS: Record<'LOW' | 'MED' | 'HIGH', number> = {
   HIGH: 1e-3,
 }
 
-const DEFAULT_CAMERA: Camera = {
-  eye: { x: 1.6, y: 1.6, z: 1.15 },
-  up: { x: 0, y: 0, z: 1 },
-  center: { x: 0, y: 0, z: 0 },
-}
-
-const ISO_CAMERA: Camera = {
-  eye: { x: 1.9, y: 1.35, z: 1.2 },
-  up: { x: 0, y: 0, z: 1 },
-  center: { x: 0, y: 0, z: 0 },
-}
-
-const TOP_CAMERA: Camera = {
-  eye: { x: 0, y: 0, z: 2.6 },
-  up: { x: 0, y: 1, z: 0 },
-  center: { x: 0, y: 0, z: 0 },
-}
-
-const FRONT_CAMERA: Camera = {
-  eye: { x: 0, y: 2.6, z: 0.45 },
-  up: { x: 0, y: 0, z: 1 },
-  center: { x: 0, y: 0, z: 0 },
-}
-
 const EMERGENCE_THRESHOLD_Z = 0.5
-
-// Documentation (paper) axes bounds for (φ, ln(B/k)) visualization.
-// Keep as module-level constants so hooks don't need to depend on them.
-// Must match the canonical domain used for the publication-grade figure.
-// See `paper/scripts/generate_main_function_surface3d.py`.
-const DOC_PHI_MIN = -6
-const DOC_PHI_MAX = 6
-const DOC_L_MIN = -3
-const DOC_L_MAX = 3
-
-function logit(z: number): number {
-  // Inverse logistic (safe enough for our fixed levels).
-  return Math.log(z / (1 - z))
-}
 
 function isOverlayTracePoint(point: unknown): boolean {
   // Plotly click payload: points[0].data/meta is the most stable cross-trace hook.
@@ -333,10 +303,6 @@ class SurfaceCancelledError extends Error {
   }
 }
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value))
-}
-
 function isWebGLAvailable(): boolean {
   if (typeof document === 'undefined') return true
   try {
@@ -346,68 +312,6 @@ function isWebGLAvailable(): boolean {
   } catch {
     return false
   }
-}
-
-function linspace(min: number, max: number, n: number): number[] {
-  if (!Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(n) || n <= 1) {
-    return [min, max]
-  }
-  const step = (max - min) / (n - 1)
-  const out = new Array<number>(n)
-  for (let i = 0; i < n; i += 1) out[i] = min + step * i
-  return out
-}
-
-const monotonicAscendingCache = new WeakMap<number[], boolean>()
-
-function isMonotonicAscending(values: number[]): boolean {
-  const cached = monotonicAscendingCache.get(values)
-  if (cached != null) return cached
-
-  let ok = true
-  for (let i = 1; i < values.length; i += 1) {
-    if (values[i] < values[i - 1]) {
-      ok = false
-      break
-    }
-  }
-  monotonicAscendingCache.set(values, ok)
-  return ok
-}
-
-function nearestIndex(values: number[], target: number): number {
-  if (!values.length) return -1
-
-  if (!isMonotonicAscending(values)) {
-    let bestIdx = 0
-    let bestDist = Math.abs(target - values[0])
-    for (let i = 1; i < values.length; i += 1) {
-      const d = Math.abs(target - values[i])
-      if (d < bestDist) {
-        bestDist = d
-        bestIdx = i
-      }
-    }
-    return bestIdx
-  }
-
-  let lo = 0
-  let hi = values.length - 1
-
-  if (target <= values[lo]) return lo
-  if (target >= values[hi]) return hi
-
-  while (lo + 1 < hi) {
-    const mid = (lo + hi) >> 1
-    const mv = values[mid]
-    if (target === mv) return mid
-    if (target < mv) hi = mid
-    else lo = mid
-  }
-
-  const a = values[lo]
-  const b = values[hi]
-  return Math.abs(target - a) <= Math.abs(target - b) ? lo : hi
 }
 
 function safeZ(nextParams: BeliefParameters, modifiersAreStandardized: boolean): number | null {
@@ -423,12 +327,6 @@ function safeZ(nextParams: BeliefParameters, modifiersAreStandardized: boolean):
   } catch {
     return null
   }
-}
-
-function round4(value: number): string {
-  if (!Number.isFinite(value)) return 'NaN'
-  const snapped = Math.round(value * 10_000) / 10_000
-  return snapped.toFixed(4)
 }
 
 function paramsKey4(params: BeliefParameters): string {
@@ -451,81 +349,6 @@ function paramsKey4(params: BeliefParameters): string {
   return keys.map((k) => `${String(k)}=${round4(params[k])}`).join('|')
 }
 
-function isFiniteNumber(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value)
-}
-
-// Coerce a value to a finite number. Accepts numbers or numeric strings.
-// Returns null for non-finite or non-numeric inputs.
-function toFiniteNumber(value: unknown): number | null {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null
-  if (typeof value === 'string') {
-    const n = Number(value)
-    return Number.isFinite(n) ? n : null
-  }
-  return null
-}
-
-type Polyline3 = {
-  xs: Array<number | null>
-  ys: Array<number | null>
-  zs: Array<number | null>
-}
-
-function makePolylineFromGridXSlice(surface: SurfacePayload, ix: number): Polyline3 {
-  if (!surface.xVals.length || !surface.yVals.length) return { xs: [], ys: [], zs: [] }
-  if (ix < 0 || ix >= surface.xVals.length) return { xs: [], ys: [], zs: [] }
-
-  const x0 = surface.xVals[ix]
-  const xs: Array<number | null> = []
-  const ys: Array<number | null> = []
-  const zs: Array<number | null> = []
-
-  for (let j = 0; j < surface.yVals.length; j += 1) {
-    const y = surface.yVals[j]
-    const z0 = surface.zGrid?.[j]?.[ix]
-
-    if (isFiniteNumber(z0)) {
-      xs.push(x0)
-      ys.push(y)
-      zs.push(z0)
-    } else {
-      // Important: insert null triplets to break the line segment.
-      xs.push(null)
-      ys.push(null)
-      zs.push(null)
-    }
-  }
-
-  return { xs, ys, zs }
-}
-
-function makePolylineFromGridYSlice(surface: SurfacePayload, iy: number): Polyline3 {
-  if (!surface.xVals.length || !surface.yVals.length) return { xs: [], ys: [], zs: [] }
-  if (iy < 0 || iy >= surface.yVals.length) return { xs: [], ys: [], zs: [] }
-
-  const y0 = surface.yVals[iy]
-  const xs: Array<number | null> = []
-  const ys: Array<number | null> = []
-  const zs: Array<number | null> = []
-
-  for (let i = 0; i < surface.xVals.length; i += 1) {
-    const x = surface.xVals[i]
-    const z0 = surface.zGrid?.[iy]?.[i]
-
-    if (isFiniteNumber(z0)) {
-      xs.push(x)
-      ys.push(y0)
-      zs.push(z0)
-    } else {
-      xs.push(null)
-      ys.push(null)
-      zs.push(null)
-    }
-  }
-
-  return { xs, ys, zs }
-}
 
 function buildCacheKey(args: {
   useStd: boolean

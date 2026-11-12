@@ -61,7 +61,8 @@
     "check:support-picture": "tsx scripts/check_support_picture.ts",
     "check:limits": "tsx scripts/check_limits.ts",
     "check:bundle-budget": "tsx scripts/check_bundle_budget.ts",
-    "generate:artifact-facts": "tsx scripts/generate_artifact_facts.ts"
+    "generate:artifact-facts": "tsx scripts/generate_artifact_facts.ts",
+    "check:surface-snapshot": "tsx scripts/check_surface_snapshot.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

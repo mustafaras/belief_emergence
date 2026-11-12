@@ -453,6 +453,9 @@ function phaseValidationChecks(): boolean {
     // The initial payload, measured from the built site rather than inferred from the
     // bundle. Runs after Phase 7's build so dist/ is current.
     { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
+    // The acceptance test for decomposing the surface component: pixel identity against a
+    // committed baseline, not "it looks right".
+    { label: 'Surface snapshot',             cmd: 'npm run check:surface-snapshot', reportSkip: true },
   ];
   let allOk = true;
   for (const c of checks) {
