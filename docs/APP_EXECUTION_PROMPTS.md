@@ -91,6 +91,13 @@ page error, and at least one interactive control. Report the per-route character
 **Done when** every route passes that check and the export serialiser is the only place
 state is encoded.
 
+**Built 2026-11-12.** 12 routes, each rendering 10,000+ characters cold. The route lives in
+the query string (`?v=`), not the path: the app is served from `base: '/belief_emergence/'`,
+so a path-based deep link 404s on static hosting. `urlState.ts` remains the only place state
+is written — audited by grepping for `history.pushState` / `replaceState` outside it, which
+returns nothing. `npm run check:routes` drives every route in a browser and was confirmed to
+fail by doctoring its own thresholds (18 named failures, exit 1).
+
 ---
 
 ## Prompt 2 — An evidence index

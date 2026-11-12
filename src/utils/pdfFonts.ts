@@ -7,6 +7,15 @@ type JsPdfFontHost = {
 };
 
 const fontCache = new Map<string, string>();
+/**
+ * URLs already known to be unavailable.
+ *
+ * Without this, every export re-requests the same four files that are not present — four
+ * 404s per click, forever, for a condition that will not change within a page session. The
+ * fetch is cheap individually and pointless collectively: the fallback is already known to
+ * be the answer.
+ */
+const unavailableFonts = new Set<string>();
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
@@ -22,9 +31,13 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 async function fetchFontBase64(url: string): Promise<string> {
   const cached = fontCache.get(url);
   if (cached) return cached;
+  if (unavailableFonts.has(url)) {
+    throw new Error(`Font already known to be unavailable: ${url}`);
+  }
 
   const res = await fetch(url);
   if (!res.ok) {
+    unavailableFonts.add(url);
     throw new Error(`Failed to fetch font: ${url} (${res.status})`);
   }
   // A single-page-app dev/build server answers an unknown path with index.html and a
@@ -39,7 +52,11 @@ async function fetchFontBase64(url: string): Promise<string> {
     (signature[0] === 0x4f && signature[1] === 0x54 && signature[2] === 0x54 && signature[3] === 0x4f) || // 'OTTO'
     (signature[0] === 0x77 && signature[1] === 0x4f && signature[2] === 0x46 && signature[3] === 0x32); // 'wOF2'
   if (!isTrueType) {
-    throw new Error(`Not a TrueType/OpenType font: ${url} (server returned ${res.headers.get('content-type') ?? 'unknown type'})`);
+    unavailableFonts.add(url);
+    throw new Error(
+      `Not a TrueType/OpenType font: ${url} ` +
+        `(server returned ${res.headers.get('content-type') ?? 'unknown type'})`,
+    );
   }
 
   const b64 = arrayBufferToBase64(buf);
