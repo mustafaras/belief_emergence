@@ -125,7 +125,40 @@ jobs:
       - name: Verify construct audit against item-level data (skips when absent)
         run: npm run verify:constructs
 
+      # The number checks render the app in a real browser and read the text it produces.
+      # Without a browser they exit 0 with a SKIP line, so the gate would report a pass for
+      # a check that examined nothing. Playwright's bundled Chromium is installed here and
+      # pointed at explicitly, and the dev server is started for the run.
+      - name: Install Chromium for the rendered-number checks
+        run: npx playwright-core install --with-deps chromium
+
+      # Resolve the browser once and export it. A glob in an env value is not expanded by
+      # the shell, so the path has to be computed by something that can glob.
+      - name: Resolve the Chromium path
+        run: |
+          CHROME=$(node -e "console.log(require('playwright-core').chromium.executablePath())")
+          echo "Using browser at $CHROME"
+          test -x "$CHROME" || { echo "browser not executable"; exit 1; }
+          echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
+
+      - name: Start the dev server for browser checks
+        run: |
+          npx vite --port 5199 --strictPort > /tmp/vite-ci.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf -o /dev/null http://localhost:5199/belief_emergence/; then
+              echo "dev server up after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "dev server did not start; last log lines:"
+          tail -20 /tmp/vite-ci.log
+          exit 1
+
       - name: Deterministic reproducibility gate
+        env:
+          ROUTE_CHECK_PORT: '5199'
+          RENDER_CHECK_PORT: '5199'
         run: npm run ci:gate
 
       - name: Q1 submission gate

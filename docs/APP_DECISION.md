@@ -17,7 +17,7 @@ recorded before the decision rather than after it.
 
 | claim in `APP_PLAN.md` / `APP_EXECUTION_PROMPTS.md` | measured now | how |
 |---|---|---|
-| 7 of 31 artifacts imported | **5 of 31** | `import … from '…/data/analysis/*.json'` across `src/**/*.ts{,x}` |
+| 7 of 31 artifacts imported | **5 of 31** at the time of writing; **10 of 33** after Prompts 3–5 | `import … from '…/data/analysis/*.json'` across `src/**/*.ts{,x}` |
 | 26 consistency blocks | **28** | `npm run check:manuscript-consistency` |
 | panel is 167 rows / 76 countries | **207 rows / 83 countries** | `public/data/panel_canonical_v2.csv` |
 | 150 rows never in the reserved set | **190** (207 − 17) | panel rows − `nLockboxCells` |

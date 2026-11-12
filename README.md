@@ -882,9 +882,13 @@ Consumption is reported as three states, not two:
 
 | state | count | meaning |
 |---|---|---|
-| imported | 5 | a module imports the JSON and can use its values |
+| imported | 10 | a module imports the JSON and can use its values |
 | named only | 11 | the filename appears in source but the artifact is never imported |
-| untouched | 15 | no module mentions it |
+| untouched | 12 | no module mentions it |
+
+(Prompts 3–5 wired five more artifacts: the construct audit, the item-availability table,
+and the three limit artifacts. The index recomputed the split on its own —
+`check:evidence-index` exists precisely so this table cannot go stale unnoticed.)
 
 The middle state is why the plan said "seven of thirty-one" for two revisions. Three
 artifacts (`reviewer_red_team`, `q1_submission_gate_report`, `data_code_provenance`) are

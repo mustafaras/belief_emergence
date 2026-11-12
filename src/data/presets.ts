@@ -1,10 +1,24 @@
 /**
  * The country preset table.
  *
- * Values are panel means (1990-2023) transcribed by country, then z-scored where the
- * model expects standardized modifiers. They live here rather than inside the modal so
- * that non-React consumers — including the rendered-number check — can read the numbers
- * the interface actually holds, without importing a component and its stylesheet.
+ * PROVENANCE IS NOT ESTABLISHED. This is a hand-maintained table carried forward from
+ * earlier revisions, and its values do not reproduce from the shipped panel:
+ *
+ *   - the scales are mixed. `X` is on the panel's raw scale (Australia 0.85 against a
+ *     panel mean of 0.849), while `M`, `T`, `E` and `R` look standardized (Australia
+ *     `T = -1.57` against a standardised panel mean of -0.44).
+ *   - several values match neither scale. Australia `E = 3.59` is neither the panel mean
+ *     (1.91) nor its z-score (2.52).
+ *
+ * So the table is *not* "panel data averages" in the sense its `description` field claims.
+ * That field is not rendered anywhere — it is declared on the type and never read — so the
+ * stale "167 observations" text was invisible rather than wrong on screen. It is corrected
+ * here anyway: a false provenance statement in the source is what the next reader will
+ * trust, and one of those readers wrote the check that let it stand.
+ *
+ * Recorded here rather than silently corrected because fixing it means deciding what the
+ * presets are for. Until then the honest statement is the one the interface makes: the
+ * values are a starting point for exploration, not measurements.
  */
 
 import type { PresetData } from '../components/sidebar/PresetModal'
@@ -14,7 +28,7 @@ export const presets: PresetData[] = [
     name: "Australia",
     flag: "🇦🇺",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.85,
       C: -0.94,
@@ -32,7 +46,7 @@ export const presets: PresetData[] = [
     name: "Brazil",
     flag: "🇧🇷",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.86,
       C: 1.20,
@@ -50,7 +64,7 @@ export const presets: PresetData[] = [
     name: "Bulgaria",
     flag: "🇧🇬",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.72,
       C: 1.40,
@@ -68,7 +82,7 @@ export const presets: PresetData[] = [
     name: "Canada",
     flag: "🇨🇦",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.82,
       C: -0.50,
@@ -86,7 +100,7 @@ export const presets: PresetData[] = [
     name: "Chile",
     flag: "🇨🇱",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.88,
       C: 0.20,
@@ -104,7 +118,7 @@ export const presets: PresetData[] = [
     name: "Czechia",
     flag: "🇨🇿",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.74,
       C: -0.70,
@@ -122,7 +136,7 @@ export const presets: PresetData[] = [
     name: "Estonia",
     flag: "🇪🇪",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.70,
       C: -0.71,
@@ -140,7 +154,7 @@ export const presets: PresetData[] = [
     name: "Finland",
     flag: "🇫🇮",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.84,
       C: -1.03,
@@ -158,7 +172,7 @@ export const presets: PresetData[] = [
     name: "Germany",
     flag: "🇩🇪",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.76,
       C: -0.65,
@@ -176,7 +190,7 @@ export const presets: PresetData[] = [
     name: "Greece",
     flag: "🇬🇷",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.62,
       C: 0.30,
@@ -194,7 +208,7 @@ export const presets: PresetData[] = [
     name: "Korea",
     flag: "🇰🇷",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.82,
       C: 0.38,
@@ -212,7 +226,7 @@ export const presets: PresetData[] = [
     name: "Mexico",
     flag: "🇲🇽",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.79,
       C: 0.64,
@@ -230,7 +244,7 @@ export const presets: PresetData[] = [
     name: "Netherlands",
     flag: "🇳🇱",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.90,
       C: -1.05,
@@ -248,7 +262,7 @@ export const presets: PresetData[] = [
     name: "Poland",
     flag: "🇵🇱",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.61,
       C: 0.35,
@@ -266,7 +280,7 @@ export const presets: PresetData[] = [
     name: "Romania",
     flag: "🇷🇴",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.55,
       C: 0.41,
@@ -284,7 +298,7 @@ export const presets: PresetData[] = [
     name: "Russia",
     flag: "🇷🇺",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.74,
       C: -0.18,
@@ -302,7 +316,7 @@ export const presets: PresetData[] = [
     name: "Slovak Republic",
     flag: "🇸🇰",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.56,
       C: -0.43,
@@ -320,7 +334,7 @@ export const presets: PresetData[] = [
     name: "Slovenia",
     flag: "🇸🇮",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.52,
       C: -0.68,
@@ -338,7 +352,7 @@ export const presets: PresetData[] = [
     name: "Spain",
     flag: "🇪🇸",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.78,
       C: -0.85,
@@ -356,7 +370,7 @@ export const presets: PresetData[] = [
     name: "Switzerland",
     flag: "🇨🇭",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.74,
       C: -0.59,
@@ -374,7 +388,7 @@ export const presets: PresetData[] = [
     name: "Turkiye",
     flag: "🇹🇷",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.71,
       C: 0.54,
@@ -392,7 +406,7 @@ export const presets: PresetData[] = [
     name: "United Kingdom",
     flag: "🇬🇧",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.83,
       C: -0.65,
@@ -410,7 +424,7 @@ export const presets: PresetData[] = [
     name: "United States",
     flag: "🇺🇸",
     type: "Panel Data Average",
-    description: "Panel data average (1990-2023): 207 observations",
+    description: "Illustrative starting point (hand-maintained; see src/data/presets.ts)",
     values: {
       X: 0.81,
       C: 0.17,

@@ -39,9 +39,17 @@ import {
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
-// The preset table is transcribed panel data (documented at its definition). Reading it
-// from the component keeps the check honest: the rendered number is compared against the
-// table the interface actually holds, not a copy that could drift from it.
+// The preset table.
+//
+// KNOWN LIMITATION, stated rather than hidden: reading the table from the same module the
+// modal renders means a *wrong* preset value passes this check, because it matches itself.
+// The check verifies that the modal renders its data faithfully — not that the data is
+// right. Those are different claims and only the first is automated here.
+//
+// The data cannot be verified automatically until its provenance is settled: the values
+// mix raw and standardized scales and do not reproduce from the shipped panel (see
+// src/data/presets.ts). A check against the panel would fail today for a real reason, so
+// it is recorded as a known gap rather than added as a failing test.
 import { presets as PRESET_TABLE } from '../src/data/presets'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -237,6 +245,24 @@ async function main(): Promise<void> {
   const sources = buildSources()
   const browser = await chromium.launch({ executablePath: chromePath, headless: true })
   const reports: TokenReport[] = []
+
+  // A missing server is a skip, not a crash and not a pass.
+  //
+  // The first route is probed before the loop so an unreachable server reports itself
+  // once instead of throwing from the middle of the scan with an unhandled rejection —
+  // which the gate would have read as a command failure with no diagnostic.
+  const probe = await browser.newPage()
+  try {
+    await probe.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 15000 })
+  } catch (e) {
+    console.log(
+      `SKIP  no server at ${baseUrl} (${(e as Error).message.split('\n')[0].slice(0, 70)}). ` +
+        `Start one with "npm run dev" or pass --url.`,
+    )
+    await browser.close()
+    return
+  }
+  await probe.close()
 
   try {
     for (const route of ROUTES) {

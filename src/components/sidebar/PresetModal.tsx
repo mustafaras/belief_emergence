@@ -36,6 +36,13 @@ export interface PresetData {
   name: string;
   flag: string;
   type: string;
+  /**
+   * NOT RENDERED. Declared and populated for all 23 presets, but no component reads it, so
+   * no text here reaches a reader. It is kept because removing it would touch every entry
+   * for no user-visible gain — but it must not be relied on to state provenance. The
+   * provenance caveat lives in `src/data/presets.ts`, where the check scripts can also see
+   * it.
+   */
   description: string;
   values: {
     X: number;

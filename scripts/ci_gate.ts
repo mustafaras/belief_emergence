@@ -212,9 +212,36 @@ const results: GateResult[] = [];
 
 function record(step: string, pass: boolean, detail: string): void {
   results.push({ step, pass, detail });
-  const icon = pass ? '  PASS' : '  FAIL';
+  // A skip is not a pass. It is reported as such, and printed — a passing line with a
+  // hidden caveat is how a gate comes to certify work it did not examine.
+  const skipped = pass && detail.startsWith('SKIPPED');
+  const icon = pass ? (skipped ? '  SKIP' : '  PASS') : '  FAIL';
   console.log(`${icon}  ${step}`);
-  if (!pass) console.log(`        ${detail}`);
+  if (!pass || skipped) console.log(`        ${detail}`);
+}
+
+/**
+ * Run a gate command and distinguish "passed" from "skipped".
+ *
+ * A check that cannot run must not be reported as a pass. The browser checks exit 0 with
+ * a `SKIP` line when Chrome or a server is absent, which is right for a developer machine
+ * and wrong for CI: the gate used to print `PASS  Rendered numbers` there while no number
+ * had been examined. Returns the output so the caller can say what actually happened.
+ */
+function runCommandWithOutput(
+  label: string,
+  command: string,
+): { ok: boolean; skipped: boolean; output: string } {
+  try {
+    const out = execSync(command, { stdio: 'pipe', cwd: ROOT }).toString();
+    return { ok: true, skipped: /\bSKIP\b/.test(out), output: out };
+  } catch (error) {
+    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
+    const tail = out.split(/\r?\n/).slice(-25).join('\n');
+    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
+    return { ok: false, skipped: false, output: out };
+  }
 }
 
 function runCommand(label: string, command: string): boolean {
@@ -388,7 +415,7 @@ function phaseArtifactFingerprints(): void {
 
 function phaseValidationChecks(): boolean {
   console.log('\n── Phase 6: Validation Checks ──');
-  const checks = [
+  const checks: Array<{ label: string; cmd: string; reportSkip?: boolean }> = [
     { label: 'Manuscript consistency',       cmd: 'npm run check:manuscript-consistency' },
     { label: 'UI agrees with artifacts',     cmd: 'npm run check:ui-artifacts' },
     { label: 'Section references',           cmd: 'npm run check:section-references' },
@@ -401,17 +428,34 @@ function phaseValidationChecks(): boolean {
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },
     // Every number on screen must trace to an artifact, a derivation or the allowlist.
     // Skipped automatically when no browser/server is available.
-    { label: 'Rendered numbers',             cmd: 'npm run check:dom-numbers' },
+    { label: 'Rendered numbers',             cmd: 'npm run check:dom-numbers', reportSkip: true },
     // The paper's central table: row count, the suppressed leftover alpha, and a reason
     // on every withdrawn construct.
-    { label: 'Construct audit table',        cmd: 'npm run check:construct-audit' },
+    { label: 'Construct audit table',        cmd: 'npm run check:construct-audit', reportSkip: true },
     // The attrition cascade: totals, computed utilisation, and no unsupported cause.
-    { label: 'Support picture',              cmd: 'npm run check:support-picture' },
+    { label: 'Support picture',              cmd: 'npm run check:support-picture', reportSkip: true },
     // Every stated limit, and every figure it quotes, re-read from its cited artifact.
     { label: 'Stated limits',                cmd: 'npm run check:limits' },
+    // Reachability and stale-value assertions per route. These were outside the gate
+    // because they need a browser; CI now installs one, and they report SKIP rather than
+    // PASS when it is missing.
+    { label: 'Route reachability',           cmd: 'npm run check:routes', reportSkip: true },
+    { label: 'Render / stale values',        cmd: 'npm run check:render', reportSkip: true },
   ];
   let allOk = true;
   for (const c of checks) {
+    if (c.reportSkip) {
+      const result = runCommandWithOutput(c.label, c.cmd);
+      if (!result.ok) {
+        allOk = false;
+      } else if (result.skipped) {
+        // Reported as a skip, not a pass: this check needs a browser and a server.
+        record(c.label, true, 'SKIPPED: needs a browser and a running server, so nothing was verified');
+      } else {
+        record(c.label, true, 'OK');
+      }
+      continue;
+    }
     const ok = runCommand(c.label, c.cmd);
     if (ok) record(c.label, true, 'OK');
     else allOk = false;
