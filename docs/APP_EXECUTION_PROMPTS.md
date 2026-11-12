@@ -20,7 +20,7 @@ stop and say so rather than working from a stale premise):
 | largest component | `Surface3DSurface.tsx`, 4,341 lines |
 | first-paint charts / tables | 1 / 1 |
 | sliders / buttons on landing | 12 / 46 |
-| gate checks (`npm run ci:gate`) | 74 |
+| gate checks (`npm run ci:gate`) | 78 |
 | consistency blocks | 28 |
 
 **Corrected 2026-11-12.** Two numbers above were wrong when this file was written. Seven
@@ -322,6 +322,25 @@ before and after. Report both numbers.
 
 **Done when** the initial chunk is under 2 MB, no route regressed in the reachability
 check from Prompt 6, and the CI budget is enforced.
+
+**Built 2026-11-12.** 6.6 MB -> **699 kB** in one chunk. `Surface3DOverlay` (4.5 MB of
+Plotly), `InteractiveDocumentation` (KaTeX), `AiInterpreterModal` and the PDF exporter are
+now behind `React.lazy` / dynamic import, and the surface no longer mounts on arrival —
+which was also the last place the interface still led with the 3D view rather than the
+audit.
+
+Two design decisions taken while measuring:
+
+- The budget check **measures the network**, it does not inspect the bundle. Rollup writes
+  every lazy chunk name into a `__vite__mapDeps` table at the top of the entry, so the entry
+  always names Plotly, and `React.lazy(() => import(...))` is byte-identical to an eager
+  import. A static check here produced two false positives before the measurement replaced
+  it.
+- The evidence index no longer reads artifact payloads to print schema, timestamp and row
+  count. That cost 3.3 MB of JSON on the landing route (`cv_kfold.json` alone is 1.8 MB) and
+  by itself exceeded the budget. `scripts/generate_artifact_facts.ts` extracts the three
+  fields at build time into one small module; `check:evidence-index` fails if the table
+  drifts from the artifacts.
 
 ---
 

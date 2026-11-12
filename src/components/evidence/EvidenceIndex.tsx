@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { ARTIFACT_CONSUMPTION } from '../../evidence/artifactConsumption.generated'
+import artifactFacts from '../../data/generated/artifactFacts.json'
 import {
   buildEvidenceIndex,
   formatRowCount,
   formatTimestamp,
-  loadArtifactFacts,
   withFacts,
   type ArtifactFacts,
 } from '../../evidence/evidenceIndex'
 import './EvidenceIndex.css'
-
-type FactsState = Record<string, ArtifactFacts | undefined>
 
 /**
  * The evidence index: every analysis artifact, what it establishes, and whether anything
@@ -23,28 +21,17 @@ type FactsState = Record<string, ArtifactFacts | undefined>
  */
 export default function EvidenceIndex() {
   const baseIndex = useMemo(() => buildEvidenceIndex(ARTIFACT_CONSUMPTION), [])
-  const [facts, setFacts] = useState<FactsState>({})
+  /**
+   * Facts come from a build-time table, not from the artifacts themselves.
+   *
+   * Reading them from the payloads meant the landing route requested 3.3 MB of JSON —
+   * `cv_kfold.json` alone is 1.8 MB — to print three fields per row, which put the initial
+   * payload over budget and made the evidence surface depend on the largest files in the
+   * repository to paint its first screen. `scripts/generate_artifact_facts.ts` extracts the
+   * same three fields once at build time and writes one small module.
+   */
+  const facts = artifactFacts.facts as Record<string, ArtifactFacts | undefined>
   const index = useMemo(() => withFacts(baseIndex, facts), [baseIndex, facts])
-
-  // Facts need a payload read, so they are fetched after first paint rather than
-  // blocking it. `cv_kfold.json` alone is 1.8 MB.
-  useEffect(() => {
-    let cancelled = false
-    void (async () => {
-      const next: FactsState = {}
-      for (const row of baseIndex.rows) {
-        const loaded = await loadArtifactFacts(row.name)
-        if (cancelled) return
-        next[row.name] = loaded
-        // Publish incrementally so rows fill in rather than appearing all at once at
-        // the end of a 3.3 MB read.
-        setFacts({ ...next })
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [baseIndex.rows])
 
   return (
     <section className="evidence-index" aria-labelledby="evidence-index-title">

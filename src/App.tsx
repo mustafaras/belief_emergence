@@ -3,11 +3,27 @@ import './App.css'
 import type { BeliefParameters } from './types'
 import { useDataContext } from './contexts/DataContext'
 import FormulaDisplay from './components/formula/FormulaDisplay'
-import InteractiveDocumentation from './components/documentation/InteractiveDocumentation'
 import ModernSidebar from './components/sidebar/ModernSidebar'
-import AiInterpreterModal from './components/ai/AiInterpreterModal'
 import TopBar from './components/visualization/TopBar'
-import Surface3DOverlay from './components/visualization/Surface3DOverlay'
+import { lazy, Suspense } from 'react'
+
+/**
+ * Four heavyweight modules, split out of the initial bundle.
+ *
+ * `Surface3DOverlay` pulls in Plotly (~4.5 MB of the 6.6 MB chunk). `InteractiveDocumentation`
+ * pulls KaTeX and react-markdown. `AiInterpreterModal` pulls react-markdown and jsPDF's
+ * typings graph. None is needed to paint the landing route, which is the evidence surface:
+ * a reader arriving to check the construct audit should not download a WebGL chart engine
+ * to do it.
+ *
+ * `React.lazy` rather than a manual dynamic import so the Suspense boundary — and therefore
+ * the loading state — is declared in one place per module.
+ */
+const Surface3DOverlay = lazy(() => import('./components/visualization/Surface3DOverlay'))
+const InteractiveDocumentation = lazy(
+  () => import('./components/documentation/InteractiveDocumentation'),
+)
+const AiInterpreterModal = lazy(() => import('./components/ai/AiInterpreterModal'))
 import { FIXED_COEFFICIENTS, OPTIMIZED_STRUCTURAL_PARAMS } from './data/feCoefficients'
 import { getProductionHeadlineMetrics } from './data/modelMetrics'
 import { runValidationTests, logValidationReport } from './utils/modelValidator'
@@ -38,6 +54,34 @@ const DEFAULT_PARAMS: BeliefParameters = {
   E: 0.25, // Education Capacity (panel-scale slider default)
   S: -0.05, // Social Support (panel-scale slider default)
   R: 0.39, // Welfare Capacity (panel-scale slider default)
+}
+
+/**
+ * Loading placeholders for the lazy boundaries.
+ *
+ * Each names what is loading rather than showing a spinner with no context: the reader
+ * has just clicked something, and the message confirms the click registered. They are
+ * cheap — no library imports — because their whole job is to appear before a heavy module
+ * has been fetched.
+ */
+function OverlayLoading({ label }: { label: string }) {
+  return (
+    <div className="lazy-overlay-fallback" role="status" aria-live="polite">
+      Loading {label}…
+    </div>
+  )
+}
+
+/**
+ * The 3D surface is the largest dependency in the bundle (Plotly). Its placeholder covers
+ * the same slot the overlay will occupy so the layout does not jump when it arrives.
+ */
+function SurfaceLoading() {
+  return (
+    <div className="lazy-surface-fallback" role="status" aria-live="polite">
+      Loading the response surface…
+    </div>
+  )
 }
 
 type PanelRange = [number, number]
@@ -435,10 +479,34 @@ function App() {
     setCurrentPresetName(next.presetName);
   }, []);
 
-  const [surface3dEnabled, setSurface3dEnabled] = useState<boolean>(true);
-  const [surface3dMounted, setSurface3dMounted] = useState<boolean>(true);
+  /**
+   * `enabled` is what the toggle reports; `mounted` is whether the module exists.
+   *
+   * They start together — off — so the button says what is true. Turning it on sets both;
+   * turning it off clears `enabled` only, keeping Plotly loaded so a second click costs
+   * nothing.
+   */
+  const [surface3dEnabled, setSurface3dEnabled] = useState<boolean>(false);
+  /**
+   * The 3D surface is not mounted on arrival.
+   *
+   * It used to be: the overlay opened over the landing view and became the first thing a
+   * reader saw, which is the arrangement docs/APP_DECISION.md exists to end. It also meant
+   * Plotly — 4.5 MB, the single largest dependency — was fetched to paint a screen whose
+   * purpose is to show a reliability table.
+   *
+   * Mounting follows the toggle, so the surface is one click away and costs nothing until
+   * then.
+   */
+  const [surface3dMounted, setSurface3dMounted] = useState<boolean>(false);
   const toggleSurface3d = useCallback(() => {
-    setSurface3dEnabled((v) => !v);
+    setSurface3dEnabled((previous) => {
+      const next = !previous;
+      // Turning it on mounts the module; turning it off leaves the module loaded so a
+      // second click does not refetch Plotly from the network.
+      if (next) setSurface3dMounted(true);
+      return next;
+    });
   }, []);
 
   // Route is the source of truth for the two modal routes. Opening follows the route;
@@ -491,14 +559,16 @@ function App() {
       <RouteNav route={route} onNavigate={navigateRoute} />
 
       {surface3dMounted && (
-        <Surface3DOverlay
-          enabled={surface3dEnabled}
-          params={params}
-          presetName={currentPresetName}
-          onApplyScenario={applyScenario}
-          canonicalZ={beliefValue}
-          onExited={() => setSurface3dMounted(false)}
-        />
+        <Suspense fallback={<SurfaceLoading />}>
+          <Surface3DOverlay
+            enabled={surface3dEnabled}
+            params={params}
+            presetName={currentPresetName}
+            onApplyScenario={applyScenario}
+            canonicalZ={beliefValue}
+            onExited={() => setSurface3dMounted(false)}
+          />
+        </Suspense>
       )}
       
       <div className="main-grid">
@@ -560,25 +630,31 @@ function App() {
             >
               ✕
             </button>
-            <InteractiveDocumentation 
-              parameters={params}
-              alpha={params.alpha}
-              beta={params.beta}
-              k={params.k}
-              onClose={() => closeDocumentation()}
-            />
+            <Suspense fallback={<OverlayLoading label="documentation" />}>
+              <InteractiveDocumentation
+                parameters={params}
+                alpha={params.alpha}
+                beta={params.beta}
+                k={params.k}
+                onClose={() => closeDocumentation()}
+              />
+            </Suspense>
           </div>
         </div>
       )}
 
-      <AiInterpreterModal
-        isOpen={showAiInterpreter}
-        onClose={() => {
-          setShowAiInterpreter(false);
-          closeOverlayRoute('ai-interpreter');
-        }}
-        snapshot={aiSnapshot}
-      />
+      {showAiInterpreter ? (
+        <Suspense fallback={<OverlayLoading label="AI interpreter" />}>
+          <AiInterpreterModal
+            isOpen
+            onClose={() => {
+              setShowAiInterpreter(false);
+              closeOverlayRoute('ai-interpreter');
+            }}
+            snapshot={aiSnapshot}
+          />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

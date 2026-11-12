@@ -6,7 +6,9 @@ import type { BeliefParameters } from '../../types';
 import type { PanelRowCanonical } from '../../types/panel';
 import { buildAppUrl } from '../../utils/urlState';
 import { LANDING_ROUTE, isAnalysisRoute, shouldHidePanel, type AppRoute } from '../../router/routes';
-import { exportBehavioralDynamicsReport } from '../../utils/pdf/exportBehavioralDynamicsReport';
+// Imported dynamically inside the export handler. The module pulls jsPDF and html2canvas
+// graphs, neither of which is needed to draw the dashboard; a static import put them in the
+// initial bundle for a button most readers never press.
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 import { downloadCsv } from '../../utils/csv/exportCsv';
 import './TopBar.css';
@@ -373,6 +375,9 @@ const TopBar: React.FC<TopBarProps> = ({
 
     try {
       // Export is text-first and embeds Unicode-capable fonts inside jsPDF (no UI changes).
+      const { exportBehavioralDynamicsReport } = await import(
+        '../../utils/pdf/exportBehavioralDynamicsReport'
+      );
       await exportBehavioralDynamicsReport({
         fileStem: 'TopBar-Export',
         documentSubtitle: 'TOPBAR PDF EXPORT',

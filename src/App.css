@@ -3928,3 +3928,29 @@ body {
   padding-top: 620px;
   background: var(--primary-bg);
 }
+
+/* Loading placeholders for the lazy boundaries. Deliberately plain: they appear before
+   the heavy module has been fetched, so they must not pull anything in themselves. */
+.lazy-overlay-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.lazy-surface-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 13px;
+}

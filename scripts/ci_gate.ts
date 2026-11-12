@@ -149,6 +149,11 @@ function artifactSnapshotPaths(): string[] {
     path.join(METRICS, 'headline_metrics_authoritative.json'),
   ];
   for (const p of csvArtifacts) if (!paths.includes(p)) paths.push(p);
+  // The fact table is derived from the artifacts above, so it is snapshotted with them:
+  // restoring the artifacts while leaving a table that describes the regenerated versions
+  // would leave the tree describing files it no longer contains.
+  const factTable = path.join(ROOT, 'src', 'data', 'generated', 'artifactFacts.json');
+  if (!paths.includes(factTable)) paths.push(factTable);
   return paths.filter((p) => fs.existsSync(p));
 }
 
@@ -291,6 +296,10 @@ function phaseArtifactGeneration(): boolean {
     { label: 'Generate phase-1 validation suite', cmd: 'npm run generate:phase1-validation' },
     { label: 'Generate repeated grouped k-fold validation', cmd: 'npm run generate:kfold' },
     { label: 'Generate functional-form comparison', cmd: 'npm run generate:functional-form' },
+    // Derived *after* the artifacts above, because it summarises them. Regenerating the
+    // analysis rewrites timestamps, so a fact table built before this point describes files
+    // that no longer exist in that form.
+    { label: 'Regenerate artifact fact table', cmd: 'npm run generate:artifact-facts' },
   ];
   for (const s of steps) {
     if (!runCommand(s.label, s.cmd)) return false;
@@ -441,6 +450,9 @@ function phaseValidationChecks(): boolean {
     // PASS when it is missing.
     { label: 'Route reachability',           cmd: 'npm run check:routes', reportSkip: true },
     { label: 'Render / stale values',        cmd: 'npm run check:render', reportSkip: true },
+    // The initial payload, measured from the built site rather than inferred from the
+    // bundle. Runs after Phase 7's build so dist/ is current.
+    { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
   ];
   let allOk = true;
   for (const c of checks) {
@@ -545,6 +557,15 @@ function run(): void {
 
     // Phase 5: Determinism cross-check (regenerate and compare fingerprints)
     phaseArtifactFingerprints();
+
+    // Restore immediately after the phases that rewrite artifacts, not at the very end.
+    //
+    // Phases 1 and 5 regenerate every analysis artifact and the fact table derived from
+    // them. Running the validation checks before restoring meant those checks read files
+    // stamped with the current run instead of the committed ones — so the evidence index
+    // reported its own fact table as stale, which it was, because the gate had just
+    // rewritten the artifacts underneath it.
+    restoreArtifacts(artifactSnapshot);
 
     // Phase 6: Validation checks
     phaseValidationChecks();

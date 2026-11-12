@@ -766,6 +766,29 @@ Related workflow diagram (PDF):
 - Preserves all UI state (parameters + view settings)
 - Route in the query string (`?v=<route>`), so a link restores the view *and* the controls
 
+#### Bundle budget
+
+The landing route loads **699 kB** of JavaScript in one chunk. It used to load 6.6 MB,
+because four heavy modules were imported eagerly for a screen that needs none of them:
+
+| module | why it moved | size |
+|---|---|---|
+| `Surface3DOverlay` | mounts on toggle, not on arrival | 4.5 MB (Plotly) |
+| `InteractiveDocumentation` | opens from the Reference menu | 503 kB (KaTeX) |
+| `AiInterpreterModal` | opens on request | 457 kB |
+| PDF export | imported inside the export handler | 700 kB (jsPDF + html2canvas) |
+
+The 3D surface is also no longer mounted on arrival. It used to open over the landing view
+and become the first thing a reader saw — the arrangement `docs/APP_DECISION.md` exists to
+end — and it meant Plotly was fetched to paint a reliability table.
+
+`npm run check:bundle-budget` enforces a 2 MB budget and fails if any heavy chunk is
+requested by the landing route. It **measures** rather than inspects: Rollup writes every
+lazy chunk name into a `__vite__mapDeps` table at the top of the entry, so the entry always
+*names* Plotly whether or not it loads it, and `React.lazy(() => import(...))` is
+byte-identical to the bug it prevents. The check serves `dist/`, opens the route, and totals
+the scripts a browser actually requests.
+
 #### Routing
 
 Each analysis panel and each sidebar item is addressable. The active view is carried by

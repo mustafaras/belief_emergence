@@ -22,6 +22,7 @@ import { ARTIFACT_DESCRIPTIONS } from '../src/evidence/artifactDescriptions'
 import { listArtifactNames } from '../src/evidence/artifactConsumption'
 import { ARTIFACT_CONSUMPTION } from '../src/evidence/artifactConsumption.generated'
 import { buildConsumptionModule } from './generate_evidence_consumption'
+import { buildFactsTable } from './generate_artifact_facts'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis')
@@ -135,7 +136,59 @@ const PANEL_CSV = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv
   }
 }
 
-/* ---- 6. no duplicate rows ---- */
+/* ---- 6. the committed fact table agrees with the artifacts ---- */
+/*
+ * The index renders schema, timestamp and row count from a build-time table rather than
+ * from the payloads, which is what keeps 3.3 MB of JSON off the landing route. The cost is
+ * that the table can go stale, so it is compared against the artifacts it describes — the
+ * same guarantee the payload-reading version had, without the download.
+ */
+{
+  const factsPath = path.join(REPO_ROOT, 'src', 'data', 'generated', 'artifactFacts.json')
+  if (!fs.existsSync(factsPath)) {
+    failures.push(
+      'src/data/generated/artifactFacts.json is missing — run npm run generate:artifact-facts',
+    )
+  } else {
+    const committed = (
+      JSON.parse(fs.readFileSync(factsPath, 'utf8')) as {
+        facts: Record<string, { schemaVersion?: string; generatedAt?: string; rowCount?: number }>
+      }
+    ).facts
+    const derived = buildFactsTable()
+
+    for (const name of names) {
+      const a = committed[name]
+      const b = derived[name]
+      if (!a) {
+        failures.push(`fact table has no entry for ${name}`)
+        continue
+      }
+      if (a.schemaVersion !== b.schemaVersion) {
+        failures.push(
+          `${name}: fact table says schema "${a.schemaVersion}", artifact says "${b.schemaVersion}"`,
+        )
+      }
+      if (a.generatedAt !== b.generatedAt) {
+        failures.push(
+          `${name}: fact table says generated "${a.generatedAt}", artifact says "${b.generatedAt}"`,
+        )
+      }
+      if (a.rowCount !== b.rowCount) {
+        failures.push(
+          `${name}: fact table says rowCount ${a.rowCount}, artifact declares ${b.rowCount}`,
+        )
+      }
+    }
+
+    const orphans = Object.keys(committed).filter((n) => !names.includes(n))
+    if (orphans.length > 0) {
+      failures.push(`fact table describes artifacts that are not on disk: ${orphans.join(', ')}`)
+    }
+  }
+}
+
+/* ---- 7. no duplicate rows ---- */
 const jsonFiles = readdirSync(ANALYSIS_DIR).filter((f) => f.endsWith('.json'))
 if (new Set(jsonFiles).size !== jsonFiles.length) {
   failures.push('the artifact directory lists a file more than once')
