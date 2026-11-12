@@ -573,6 +573,19 @@ function main(): void {
     observationsPerParameter: Number((rows.length / nParams).toFixed(2)),
     attrition: dropped,
     /**
+     * Which covariate blocked each dropped cell.
+     *
+     * `dropped.missingCovariate` is a single number; it says 61 cells were lost to a
+     * missing covariate but not which one, so a reader cannot tell Gini from trauma. The
+     * counter already existed for the console summary and was thrown away. Writing it
+     * here is what lets the interface say "Gini is the binding constraint" as a derived
+     * fact rather than a claim.
+     *
+     * A cell is counted against the *first* covariate that fails, so these sum to
+     * `dropped.missingCovariate` and a cell that misses several is attributed once.
+     */
+    missingByCovariate: Object.fromEntries([...missingByCovariate.entries()].sort((a, b) => b[1] - a[1])),
+    /**
      * Covariate backfills. Recorded here rather than written by hand: an
      * earlier hand-written block went stale the moment the panel changed, and
      * an audit that lags its subject is worse than none.

@@ -764,6 +764,210 @@ Related workflow diagram (PDF):
 - Backward-compatible URL parsing
 - Copy-to-clipboard functionality
 - Preserves all UI state (parameters + view settings)
+- Route in the query string (`?v=<route>`), so a link restores the view *and* the controls
+
+#### Routing
+
+Each analysis panel and each sidebar item is addressable. The active view is carried by
+`?v=` in the query string rather than the path: the app is served from a fixed sub-path
+(`base: '/belief_emergence/'`), so a path-based deep link would 404 on static hosting.
+| route | view |
+|---|---|
+| *(absent)* | landing — all six analysis panels |
+| `component-analysis` … `model-diagnostics` | one analysis panel, full width |
+| `advanced-parameters`, `phi-contributions` | sidebar drawer, all panels visible |
+| `documentation`, `ai-interpreter`, `presets` | dialog, all panels visible |
+
+Unknown routes fall back to the landing view. The route is encoded by the same
+serialiser as the parameters (`src/utils/urlState.ts`), which is the only place state is
+written to the URL. Legacy `doc=1` links still resolve and are normalised to
+`?v=documentation`.
+
+`npm run check:routes` drives every route in a real browser (cold start, `≥500`
+characters, no page error, at least one visible control) and reports the per-route
+character counts.
+
+#### Construct audit
+
+The landing route opens with the paper's central table: four configured constructs tested
+against a 0.70 reliability floor, of which three fail. The verdict rule lives in
+`src/verification/constructAudit.ts` as a pure function because it has one trap in it:
+
+`S_social_support` carries `cronbachAlpha: 0.753` beside `cellsEmitted: 0` and
+`computable: false`. The alpha is a leftover from a partial run. A renderer that reads the
+alpha field before checking `computable` shows a reliability figure above the floor for a
+construct with **no observations** — which reads as a pass, the opposite of what the paper
+reports. `buildConstructRows` suppresses it, so the component receives `null` and cannot
+print it even by accident; the row says "not computable" and states how many items were
+missing.
+
+`wvs_construct_audit.json` is committed under `src/data/analysis/` rather than left in
+`rawdata/` (which is gitignored). The audit is the artefact the paper's headline result
+rests on, so it belongs with the other evidence and inside the schema gate, not in an
+input directory a clean clone does not have.
+
+The S row states the real shortfall, not an inferred one: four of seven configured items
+are absent from the harmonised source (A101, A106, F185, F186) and three survive where the
+coverage floor requires four, so the composite was never assembled. `itemsUsed` is empty
+because nothing was computed, which is *not* the same as every item being missing; reading
+it as a total shortfall would misreport the audit. Availability lives in
+`construct_item_availability.json` and the coverage floor is derived from
+`config/wvs_items.yaml`, so neither is a literal in the component.
+
+The table audits four constructs while the paper reports "three of eight". Both are
+correct — eight channels were proposed, four are declared but not estimated, three of the
+four testable ones fail — and the audit says so in a scope note, because a reader comparing
+3/4 with 3/8 would otherwise conclude one of the two figures is wrong.
+
+`npm run check:construct-audit` asserts the three things Prompt 3 asks for: row count
+equals construct count, the S row says "not computable" and prints no leftover alpha
+anywhere on the page, and every non-retained construct names a reason. It also fails if the
+S reason stops naming the absent items or the coverage floor.
+
+#### Support picture
+
+The landing route shows how 442,026 respondents become 207 complete cases: the
+construct-bearing country-years, the complete cases, and which covariate blocks the most
+cells. Gini is the binding constraint at 31 of the 61 cells lost to a missing covariate,
+and 67.9% of the scanned frame survives — computed as `207 / 305`, not typed.
+
+The per-covariate attribution required a change to the panel builder. It already counted
+`missingByCovariate` for its console summary and discarded it, leaving
+`missingCovariate: 61` as the only record: 61 cells were lost to *some* covariate. Naming
+Gini from that number would have been invention, so `build_canonical_panel.ts` now writes
+the attribution into the audit. The counts are of *first* failure — a cell short of both
+Gini and education is attributed once — so they sum to 61 exactly.
+
+`npm run check:support-picture` asserts that the totals equal the artifact, that the
+percentage is the arithmetic of the two counts it sits beside, that exactly one binding
+constraint is named and that it is the largest, and that the identity
+`scanned − losses = complete cases` holds. Both failure modes were demonstrated: hardcoding
+54.8% fails with "frame utilisation 0.548 is not 207/305", and naming education as binding
+fails with "binding constraint is E but Y blocks more cells".
+
+#### What this model cannot show
+
+The landing route states four limits, each with the artifact it comes from shown beside
+the figure rather than in a footnote:
+
+| limit | figure | source |
+|---|---|---|
+| the exponents are not identified | profile interval ends at 0.016 | `elasticity_profile.json` |
+| the shipped exponent is outside it | alpha = 0.05 against 0.016 | `feCoefficients.ts` |
+| the lockbox protects cells, not the sample | 17 withheld, 190 rows outside | `lockbox_holdout.json` |
+| R is retained despite the dependence | VIF 9.43 → 2.47 if dropped | `r_collinearity_case.json` |
+
+Two figures in the original prompt were stale and are computed instead: the panel is 207
+rows, so **190** rows were never in the reserved set, not 150. And the prompt attributes
+the R/E dependence to a shared component, which no artifact states; what
+`r_collinearity_case.json` does say is stronger — dropping R would cut maximum VIF from
+9.43 to 2.47 and *raise* grouped k-fold from 0.4164 to 0.4226, and R is retained anyway
+because acting on that after seeing it is the specification selection the paper argues
+against.
+
+`npm run check:limits` re-reads every quoted figure from the artifact it names, one by
+one, and fails if any is absent. It also refuses to emit the "outside the interval" limit
+if the shipped exponent were ever inside it, so the section cannot state a limit that has
+stopped being true.
+
+#### Evidence index
+
+The landing route lists every artifact in `src/data/analysis/` with its schema version,
+generation time, declared row count, what it establishes, and whether anything reads it.
+The list comes from `import.meta.glob(..., { eager: false })`, so a new artifact appears
+without a code change, and the payloads (3.3 MB — `cv_kfold.json` alone is 1.8 MB) stay
+out of the initial bundle and are fetched per row.
+
+Consumption is reported as three states, not two:
+
+| state | count | meaning |
+|---|---|---|
+| imported | 5 | a module imports the JSON and can use its values |
+| named only | 11 | the filename appears in source but the artifact is never imported |
+| untouched | 15 | no module mentions it |
+
+The middle state is why the plan said "seven of thirty-one" for two revisions. Three
+artifacts (`reviewer_red_team`, `q1_submission_gate_report`, `data_code_provenance`) are
+printed as `<code>file.json</code>` inside prose, which looks like wiring and is not.
+
+`npm run check:evidence-index` re-derives the split from the real imports and fails if the
+committed facts (`src/evidence/artifactConsumption.generated.ts`) disagree, if any
+artifact lacks a description, or if a description outlives its artifact. Regenerate the
+facts with `npm run generate:evidence-consumption`.
+
+Row counts are read from whatever the artifact actually declares — top level (`n`,
+`nRows`), nested (`source.nRows`, `frame.canonicalCompleteCases`, `variants[].n`), or
+absent. Ambiguous candidates are never used: a per-fold `nTrain` is not a sample size, and
+a per-window count is not the panel. A missing count renders as `—`, never `0`.
+
+A row whose declared sample disagrees with the majority of the set is marked:
+
+| marker | meaning |
+|---|---|
+| `146 ≠ 207` | stale — generated on an earlier panel and not regenerated |
+| `87 subset` | correct — the artifact analyses its own deliberate sub-sample |
+
+`construct_prevalence` is the known stale case (generated 2026-11-09, still reporting the
+146-row panel). It is pinned in `check_evidence_index.ts` so that regenerating it, or a
+new artifact joining it, is a deliberate change rather than a silent one.
+
+`npm run check:description-numbers` enforces the two rules the index's prose would
+otherwise drift on: every description is exactly one sentence, and every number in one
+has a declared source in `src/evidence/descriptionNumbers.ts` that is recomputed from its
+artifact. Adding a number to a sentence without an entry fails the gate.
+
+#### Rendered numbers
+
+`npm run check:dom-numbers` drives every route in a browser and requires each numeric
+token on screen to resolve by one of four routes:
+
+| class | meaning |
+|---|---|
+| exact | the value is in an artifact, the panel CSV, or its audit |
+| rounded | an artifact value rounds to the token at the token's printed precision |
+| derived | recomputed by the interface's own code — `e^Φ`, a ratio, a percentage, a panel mean |
+| allowlisted | a constant that lives in code, with a stated reason (3 entries) |
+
+Numbers are matched by **value**, never by substring: `35.2` occurring inside `135.2561`
+is not evidence that 35.2 is correct. Signs are kept, so a flipped sign is a different
+token. Coarse tokens (`0.69`) must match exactly; only values printed to three or more
+places may resolve by rounding, because a half-unit window at two places contains
+thousands of unrelated artifact values.
+
+The derived class is computed, not exempted. `src/verification/derivedValues.ts` rebuilds
+every computed value the interface prints, so a wrong `e^Φ` fails while a correct one
+passes without being added to the allowlist.
+
+**Known limitation.** The artifact corpus holds ~75,000 numbers, so a 4-decimal token will
+often sit within a rounding window of *something* unrelated. A deliberate 0.001 shift in
+such a value can therefore still resolve. The check prints how many tokens resolved by
+rounding (673 of 1375 on the current tree) so the strength of the claim is visible rather
+than implied. Coarse and integer values — row counts, years, percentages — are checked
+tightly, which is where a transcription error actually shows up.
+
+`npm run check:render` covers the complementary question on every route: no stale value
+from the pre-207-row era, and no `FAILED` line from the in-app self-tests.
+
+#### Static assets under a sub-path
+
+Files in `public/` are served under Vite's `base`, so they must be resolved rather than
+referenced as absolute paths. `src/utils/publicPath.ts` (`resolvePublicPath`) is the one
+place that does this; `/data/panel_canonical_v2.csv` referenced directly would 404 and
+silently empty every panel statistic.
+
+#### PDF export fonts
+
+The report embeds STIX Two Text and JetBrains Mono from `public/fonts/` so Greek symbols
+(Φ, α, β) render. **Those TTFs are not committed to this repository.** When they are
+absent, `registerPdfFonts` detects it (a font response is validated by its magic number,
+because an SPA server answers a missing font path with `index.html` and a `200`) and
+falls back to jsPDF's built-in Times/Courier: the export still downloads, but Greek
+symbols render as Latin placeholders. Drop the four `.ttf` files into `public/fonts/` to
+restore full fidelity:
+
+```
+STIXTwoText-Regular.ttf  STIXTwoText-Bold.ttf  STIXTwoText-Italic.ttf  JetBrainsMono-Regular.ttf
+```
 
 ---
 

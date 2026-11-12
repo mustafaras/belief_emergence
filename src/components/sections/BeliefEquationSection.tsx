@@ -180,7 +180,7 @@ const BeliefEquationSection: React.FC = () => {
             Amplifiers (green, +): Strengthen belief emergence | Suppressors (red, −): Weaken belief emergence
           </text>
           <text x="300" y="270" textAnchor="middle" fill="#94a3b8" fontSize="9">
-            Ridge L2 penalty (α=1.0) ensures stable, generalizable estimates across 23 countries
+            Ridge L2 penalty (α=1.0) ensures stable, generalizable estimates across 83 countries
           </text>
         </svg>
       </div>
@@ -477,28 +477,21 @@ const BeliefEquationSection: React.FC = () => {
           {(() => {
             const series = (validation.countryR2 || []).filter((d) => Number.isFinite(d.r2));
             if (!series.length) return null;
-            const mean = series.reduce((a, d) => a + d.r2, 0) / series.length;
+            // Median, not mean: the same outliers that break the mean also make it a
+            // meaningless reference line, and the bars already clamp at zero.
+            const sorted = series.map((d) => d.r2).sort((a, b) => a - b);
+            const median = sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+            const y = 230 - clamp(median, 0, 1) * 180;
             return (
               <>
-                <line
-                  x1="60"
-                  y1={230 - clamp(mean, 0, 1) * 180}
-                  x2="560"
-                  y2={230 - clamp(mean, 0, 1) * 180}
-                  stroke="#ef4444"
-                  strokeWidth="2"
-                  strokeDasharray="4,4"
-                />
-                <text x="480" y={230 - clamp(mean, 0, 1) * 180 - 5} fill="#ef4444" fontSize="11" fontWeight="600">
-                  Mean: {fmt(mean)}
+                <line x1="60" y1={y} x2="560" y2={y} stroke="#ef4444" strokeWidth="2" strokeDasharray="4,4" />
+                <text x="480" y={y - 5} fill="#ef4444" fontSize="11" fontWeight="600">
+                  Median: {fmt(median)}
                 </text>
               </>
             );
           })()}
 
-          <text x="310" y="260" textAnchor="middle" fill="#cbd5e1" fontSize="11" fontWeight="600">
-            Countries (1–23)
-          </text>
           <text x="30" y="140" textAnchor="middle" fill="#cbd5e1" fontSize="11" fontWeight="600" transform="rotate(-90 30 140)">
             R² (Within-Country)
           </text>
@@ -518,14 +511,18 @@ const BeliefEquationSection: React.FC = () => {
           {(() => {
             const series = (validation.countryR2 || []).filter((d) => Number.isFinite(d.r2));
             if (!series.length) return null;
-            const vals = series.map((d) => d.r2);
-            const min = Math.min(...vals);
-            const max = Math.max(...vals);
-            const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-            const sd = Math.sqrt(vals.reduce((acc, v) => acc + (v - mean) * (v - mean), 0) / vals.length);
+            // The bars are drawn with clamp(r2, 0, 1), so a raw mean is not the mean of
+            // what the reader sees: a handful of slices with near-degenerate variance
+            // produced R2 values near -2000 and dragged the reported mean to -113 while
+            // every bar sat at zero height. Report the median of the plotted series and
+            // say how many slices are below zero, which is the honest description of a
+            // chart whose bars bottom out.
+            const vals = series.map((d) => d.r2).sort((a, b) => a - b);
+            const median = vals.length % 2 ? vals[(vals.length - 1) / 2] : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2;
+            const negatives = vals.filter((v) => v < 0).length;
             return (
               <text x="300" y="245" textAnchor="middle" fill="#94a3b8" fontSize="9">
-                Min: {fmt(min)} | Max: {fmt(max)} | SD: {fmt(sd)}
+                N = {series.length} countries | median R2: {fmt(median)} | below zero: {negatives}
               </text>
             );
           })()}
@@ -707,7 +704,13 @@ const BeliefEquationSection: React.FC = () => {
       .map(([iso3, v]) => {
         const meanYc = v.sumY / v.n;
         const sstc = v.sumY2 - v.n * meanYc * meanYc;
-        const r2c = sstc > 0 ? 1 - v.sse / sstc : NaN;
+        // `sstc > 0` is not a usable guard. A country whose Z barely varies has a
+        // variance at rounding level, and dividing it into a real SSE produces R2 values
+        // like -2220; averaging those gave the chart a mean of -113.7 and an SD of 373.9.
+        // An R2 is undefined for a slice with no meaningful variation, so require the
+        // variance to be non-trivial relative to the slice's own scale.
+        const degenerate = sstc <= Math.max(1e-10, Math.abs(v.sumY2) * 1e-6);
+        const r2c = v.n >= 3 && !degenerate ? 1 - v.sse / sstc : NaN;
         const maec = v.mae / v.n;
         const rmsec = Math.sqrt(v.sse / v.n);
         return { iso3, country: v.country, n: v.n, r2: r2c, mae: maec, rmse: rmsec };

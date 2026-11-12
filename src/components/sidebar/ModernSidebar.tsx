@@ -1,6 +1,7 @@
 ﻿import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BookOpen, Sparkles, Globe } from 'lucide-react'
+import type { AppRoute } from '../../router/routes'
 import ContributionPanel from '../contributions/ContributionPanel'
 import { computePhiContributions } from '../../utils/contributions'
 import type { BeliefParameters } from '../../types'
@@ -172,6 +173,13 @@ interface ModernSidebarProps {
   onShowDocumentation: () => void;
   onShowAiInterpreter: () => void;
   onPresetSelect?: (presetName: string) => void;
+  /**
+   * The active route. The sidebar's own controls are the five navigation items, so a
+   * route can open the drawer or modal it names; the reverse direction (a control
+   * telling the router where it is) is wired through the callbacks above.
+   */
+  route?: AppRoute;
+  onNavigate?: (route: AppRoute) => void;
 }
 
 type ParamKey = keyof BeliefParameters;
@@ -436,12 +444,22 @@ function SectionShell({ headerClassName, icon, title, titleId, subtitle, rightAc
   );
 }
 
-function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowAiInterpreter, onPresetSelect }: ModernSidebarProps) {
+function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowAiInterpreter, onPresetSelect, route, onNavigate }: ModernSidebarProps) {
   const [isPresetModalOpen, setIsPresetModalOpen] = useState(false);
   const [showAdvancedParameters, setShowAdvancedParameters] = useState(false);
   const [showContributions, setShowContributions] = useState(false);
   const [xyTrail, setXyTrail] = useState<Array<[number, number]>>([]);
   const [motionEnabled, setMotionEnabled] = useState(true);
+
+  // A route can name a drawer or a modal. Opening follows the route so a deep link
+  // lands with the right control expanded; the toggles below still navigate, so the
+  // URL and the interface cannot disagree about what is open.
+  useEffect(() => {
+    if (!route) return;
+    if (route === 'advanced-parameters') setShowAdvancedParameters(true);
+    if (route === 'phi-contributions') setShowContributions(true);
+    if (route === 'presets') setIsPresetModalOpen(true);
+  }, [route]);
 
   const { panelData } = useDataContext();
 
@@ -713,7 +731,11 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
                 className="advanced-toggle-button"
                 isExpanded={showAdvancedParameters}
                 label="Advanced Parameters"
-                onClick={() => setShowAdvancedParameters(!showAdvancedParameters)}
+                onClick={() => {
+                  const next = !showAdvancedParameters;
+                  setShowAdvancedParameters(next);
+                  onNavigate?.(next ? 'advanced-parameters' : 'landing');
+                }}
                 title="Toggle advanced structural parameters (α, β, k)"
                 ariaControls={structuralAdvancedDrawerId}
                 withAriaExpanded
@@ -943,14 +965,18 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               className="advanced-toggle-button"
               isExpanded={showContributions}
               label="Φ Contributions"
-              onClick={() => setShowContributions(!showContributions)}
+              onClick={() => {
+                const next = !showContributions;
+                setShowContributions(next);
+                onNavigate?.(next ? 'phi-contributions' : 'landing');
+              }}
               title="Toggle per-term Φ contributions"
               ariaControls={phiContribDrawerId}
               withAriaExpanded
             />
           </div>
           <div className="modern-parameter-group">
-            {/* Tradition (Cultural Intensity) - Strongest amplifier: c1 = +1.003 */}
+            {/* Cultural Intensity - channel unavailable in v2 (c1 = 0, KI-09) */}
             <SliderRow
               label="Cultural Intensity (C)"
               paramKey="C"
@@ -960,12 +986,12 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.02"
               sliderClassName="modern-slider amplifier"
               ariaLabel="Cultural Intensity parameter"
-              tooltip="STRONGEST AMPLIFIER (c1 = +1.003). Standardized (z-score): 0 = panel mean cultural intensity, +1 = +1σ above mean, -1 = -1σ below. Presets use standardized C (not raw 1.8–3.6). When C increases → Φ increases → Z increases. Typical preset range ≈ [-1.5, 1.5]."
+              tooltip="AMPLIFIER (c1 = 0 in the v2 panel — the culture channel is unavailable, KI-09). Standardized (z-score): 0 = panel mean cultural intensity, +1 = +1σ above mean, -1 = -1σ below. Presets use standardized C (not raw 1.8–3.6). C enters only through the interaction and curvature terms, so its marginal effect here is not a simple increase. Typical preset range ≈ [-1.5, 1.5]."
               decimals={2}
               onParameterChange={onParameterChange}
             />
 
-            {/* Trauma/Shock - Weak amplifier: c3 = +0.068 */}
+            {/* Trauma/Shock - amplifier: c3 = -0.086 */}
             <SliderRow
               label="Trauma / Shock (T)"
               paramKey="T"
@@ -975,12 +1001,12 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.02"
               sliderClassName="modern-slider amplifier"
               ariaLabel="Trauma parameter"
-              tooltip="WEAK AMPLIFIER (c3 = +0.068). Standardized (z-score): -1.5 ≈ 1.5σ below panel mean, 0 = mean, +1.8 ≈ 1.8σ above. When T increases → Φ increases (slightly) → Z increases. Panel: [-1.49, 1.82]"
+              tooltip="AMPLIFIER (c3 = -0.086). Standardized (z-score): -1.5 ≈ 1.5σ below panel mean, 0 = mean, +1.8 ≈ 1.8σ above. When T increases → Φ increases (slightly) → Z increases. Panel: [-1.49, 1.82]"
               decimals={2}
               onParameterChange={onParameterChange}
             />
 
-            {/* Redistribution Capacity - Very weak amplifier: c5 = +0.0227 */}
+            {/* Redistribution Capacity - unavailable outside OECD (c5 = 0; G slider drives no channel) */}
             <SliderRow
               label="Redistribution Capacity (G)"
               paramKey="G"
@@ -990,7 +1016,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.05"
               sliderClassName="modern-slider amplifier"
               ariaLabel="Redistribution Capacity parameter"
-              tooltip="VERY WEAK AMPLIFIER (c5 = +0.0227). Standardized (z-score): negative = below mean redistribution capacity, positive = above mean. When G increases → Φ increases (very slightly) → Z increases. Panel: [-3.98, 1.97]"
+              tooltip="NO AMPLIFICATION (c5 = 0 — redistribution is unavailable outside the OECD sample). Standardized (z-score): negative = below mean redistribution capacity, positive = above mean. G has no main effect in v2; its slider moves no identified channel. Panel: [-3.98, 1.97]"
               decimals={2}
               onParameterChange={onParameterChange}
             />
@@ -1029,7 +1055,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
           subtitle="Negative coefficients that weaken belief"
         >
           <div className="modern-parameter-group">
-            {/* Media Environment - Moderate suppressor: c2 = -0.219 */}
+            {/* Media Environment - suppressor: c2 = -0.136 */}
             <SliderRow
               label="Media Environment (M)"
               paramKey="M"
@@ -1039,12 +1065,12 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.01"
               sliderClassName="modern-slider suppressor"
               ariaLabel="Media Environment parameter"
-              tooltip="MODERATE SUPPRESSOR (c2 = -0.219). Standardized (z-score): negative = below mean, positive = above mean. When M increases → Φ decreases → Z decreases. Panel: [-0.84, 1.32]"
+              tooltip="SUPPRESSOR (c2 = -0.136). Standardized (z-score): negative = below mean, positive = above mean. When M increases → Φ decreases → Z decreases. Panel: [-0.84, 1.32]"
               decimals={2}
               onParameterChange={onParameterChange}
             />
 
-            {/* Social Atomization (Loneliness) - STRONGEST suppressor: c4 = -0.635 */}
+            {/* Social Atomization - unavailable in v2 (c4 = 0, KI-10) */}
             <SliderRow
               label="Social Atomization (D)"
               paramKey="D"
@@ -1054,12 +1080,12 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.02"
               sliderClassName="modern-slider suppressor"
               ariaLabel="Social Atomization parameter"
-              tooltip="STRONGEST SUPPRESSOR (c4 = -0.635). Standardized (z-score): negative ≈ lower atomization (stronger bonds) vs mean; positive ≈ higher atomization/loneliness vs mean. When D increases → Φ decreases strongly → Z decreases. Panel: [-1.65, 1.51]"
+              tooltip="NO EFFECT (c4 = 0 — atomization is unavailable, KI-10). Standardized (z-score): negative ≈ lower atomization (stronger bonds) vs mean; positive ≈ higher atomization/loneliness vs mean. D has no main effect in v2; its slider moves no identified channel. Panel: [-1.65, 1.51]"
               decimals={2}
               onParameterChange={onParameterChange}
             />
 
-            {/* Social Support - Moderate suppressor: c7 = -0.393 */}
+            {/* Social Support - unavailable in v2 (c7 = 0, KI-11) */}
             <SliderRow
               label="Social Support (S)"
               paramKey="S"
@@ -1069,7 +1095,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.02"
               sliderClassName="modern-slider suppressor"
               ariaLabel="Social Support parameter"
-              tooltip="MODERATE SUPPRESSOR (c7 = -0.393). Standardized (z-score): negative = below mean support, positive = above mean. When S increases → Φ decreases → Z decreases. Panel: [-1.51, 1.65]"
+              tooltip="NO EFFECT (c7 = 0 — social support is unavailable, KI-11). Standardized (z-score): negative = below mean support, positive = above mean. S has no main effect in v2; its slider moves no identified channel. Panel: [-1.51, 1.65]"
               decimals={2}
               onParameterChange={onParameterChange}
             />
@@ -1084,7 +1110,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.01"
               sliderClassName="modern-slider suppressor"
               ariaLabel="Education Capacity parameter"
-              tooltip="MODERATE SUPPRESSOR (c6 = -0.382). Standardized (z-score): negative = below mean education capacity, positive = above mean. When E increases → Φ decreases → Z decreases. Panel: [-0.39, 1.48]. Note: E×S interaction can partially offset when both are high."
+              tooltip="AMPLIFIER (c6 = +0.388). Standardized (z-score): negative = below mean education capacity, positive = above mean. When E increases → Φ increases → Z increases. Panel: [-0.39, 1.48]. Note: E×S interaction can partially offset when both are high."
               decimals={2}
               onParameterChange={onParameterChange}
             />
@@ -1097,7 +1123,10 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
         <div className="footer-buttons">
           <button 
             className="modern-doc-button"
-            onClick={onShowDocumentation}
+            onClick={() => {
+              onNavigate?.('documentation');
+              onShowDocumentation();
+            }}
             title="Open Interactive Documentation"
           >
             <BookOpen size={16} strokeWidth={2.2} />
@@ -1105,7 +1134,10 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
           </button>
           <button
             className="modern-ai-button"
-            onClick={onShowAiInterpreter}
+            onClick={() => {
+              onNavigate?.('ai-interpreter');
+              onShowAiInterpreter();
+            }}
             title="AI Interpreter: explain current panel state"
           >
             <Sparkles size={16} strokeWidth={2.2} />
@@ -1114,7 +1146,10 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
           <button 
             className="modern-preset-button"
             ref={presetButtonRef}
-            onClick={() => setIsPresetModalOpen(true)}
+            onClick={() => {
+              onNavigate?.('presets');
+              setIsPresetModalOpen(true);
+            }}
             title="Load country presets for settlement, inequality, and modifiers"
           >
             <Globe size={16} strokeWidth={2.2} />
@@ -1126,7 +1161,11 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
       {/* Preset Modal */}
       <PresetModal
         isOpen={isPresetModalOpen}
-        onClose={() => setIsPresetModalOpen(false)}
+        onClose={() => {
+          setIsPresetModalOpen(false);
+          // Closing the modal must not leave ?v=presets pointing at a closed dialog.
+          if (route === 'presets') onNavigate?.('landing');
+        }}
         onSelectPreset={handlePresetSelect}
       />
     </aside>

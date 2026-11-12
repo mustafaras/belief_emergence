@@ -1,0 +1,93 @@
+@import '../../styles/tokens.css';
+
+/* Route strip: the visible sitemap.
+   Fixed rather than in-flow: `.main-grid` is `height: 100vh` with `overflow: hidden`,
+   so an element inserted into that flow would push the page past the viewport. It sits
+   in the gap between the fixed TopBar (top 35px + 550px tall) and the FormulaDisplay
+   block (offset 890px), matching the layout constants the rest of the shell already uses. */
+.route-nav {
+  position: fixed;
+  top: 585px;
+  left: 480px;
+  width: calc(100vw - 480px);
+  z-index: 1002;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  padding: 6px 20px;
+  background: var(--secondary-bg);
+  border-bottom: 1px solid var(--glass-border);
+  font-family: var(--font-primary);
+}
+
+.route-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.route-nav-group-label {
+  font-size: var(--type-small, 11px);
+  letter-spacing: var(--tracking-wide, 0.08em);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.route-nav-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.route-nav-item {
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius, 6px);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--type-small, 12px);
+  line-height: var(--leading-snug, 1.25);
+  padding: 4px 9px;
+  transition: var(--transition-fast, background-color 120ms ease);
+  white-space: nowrap;
+}
+
+.route-nav-item:hover {
+  background: var(--glass-hover);
+  color: var(--text-color);
+}
+
+.route-nav-item:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--accent-primary));
+  outline-offset: 2px;
+}
+
+.route-nav-item.is-active {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .route-nav {
+    gap: 10px;
+    padding: 8px 12px;
+  }
+
+  .route-nav-group-label {
+    display: none;
+  }
+}
+
+/* The return path. Without this an isolated panel is a dead end: the strip's own
+   items are all other panels, so there is no way back to the six-panel overview. */
+.route-nav-landing {
+  border-color: var(--glass-border);
+  color: var(--text-color);
+}

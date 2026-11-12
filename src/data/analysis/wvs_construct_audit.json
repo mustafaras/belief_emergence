@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "wvs.construct_audit/1.0",
+  "generatedAtIso": "2026-11-07T14:11:17.960Z",
+  "source": "rawdata/wvs_trend_all_items.csv",
+  "config": "config/wvs_items.yaml",
+  "rules": {
+    "normalisation": "zscore",
+    "missing_codes": [
+      -1,
+      -2,
+      -3,
+      -4,
+      -5,
+      98,
+      99,
+      999
+    ],
+    "aggregation_method": "mean",
+    "min_observations": 30,
+    "min_item_coverage": 0.5
+  },
+  "respondentsScanned": 442026,
+  "countryYears": 305,
+  "constructs": {
+    "Z_belief_outcome": {
+      "label": "Belief outcome",
+      "itemsConfigured": 6,
+      "itemsUsed": [
+        "A006",
+        "F028",
+        "F050",
+        "F051",
+        "F053",
+        "F063"
+      ],
+      "cellsEmitted": 287,
+      "cellsRejected": 18,
+      "computable": true,
+      "cronbachAlpha": 0.818715691617005,
+      "unidimensional": true
+    },
+    "C_cultural_intensity": {
+      "label": "Cultural intensity",
+      "itemsConfigured": 6,
+      "itemsUsed": [
+        "A008",
+        "A009",
+        "E018",
+        "E012",
+        "E015",
+        "E035"
+      ],
+      "cellsEmitted": 303,
+      "cellsRejected": 2,
+      "computable": true,
+      "cronbachAlpha": 0.3481590618313876,
+      "unidimensional": false
+    },
+    "D_social_atomization": {
+      "label": "Social atomization",
+      "itemsConfigured": 5,
+      "itemsUsed": [
+        "A165",
+        "A168",
+        "A170",
+        "A173"
+      ],
+      "cellsEmitted": 296,
+      "cellsRejected": 9,
+      "computable": true,
+      "cronbachAlpha": -1.2284774929408622,
+      "unidimensional": false
+    },
+    "S_social_support": {
+      "label": "Social support",
+      "itemsConfigured": 7,
+      "itemsUsed": [],
+      "cellsEmitted": 0,
+      "cellsRejected": 305,
+      "computable": false,
+      "cronbachAlpha": 0.7530436198636796,
+      "unidimensional": true
+    }
+  },
+  "collinearityAuditPassed": true,
+  "itemOverlaps": [
+    {
+      "between": [
+        "C_cultural_intensity",
+        "S_social_support"
+      ],
+      "items": [
+        "A008",
+        "A009"
+      ],
+      "declared": true
+    }
+  ]
+}

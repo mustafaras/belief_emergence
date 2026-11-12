@@ -5,9 +5,15 @@
  * ---------------
  * `construct_prevalence.json` was written by hand once, which makes it exactly
  * the kind of document this paper argues against: a claim with no generator.
- * This script derives it from `rawdata/wvs_construct_audit.json`, so the
- * headline numbers in the abstract ("three of four constructs fail", "41.3% of
- * the frame survives") are reproducible rather than typed.
+ * This script derives it from `rawdata/wvs_construct_audit.json` and the canonical
+ * panel CSV, so the headline numbers in the abstract ("three of four constructs
+ * fail", "67.9% of the scanned frame survives") are reproducible rather than typed.
+ * Both sides are read at run time: the frame utilisation is panelRows / countryYears,
+ * so it moves with the panel and cannot be left behind by a data change.
+ *
+ * NOTE: nothing in `npm run ci:gate` calls this. The artifact was last regenerated on
+ * the 146-row panel and then went stale for two panel widenings, which is why it has to
+ * be re-run alongside `build:panel`, not remembered separately.
  *
  * The artefact answers a question the construct audit does not: not "does Z
  * measure belief?" but "how much of a typical multi-composite pipeline survives

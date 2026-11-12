@@ -8,6 +8,11 @@
  *
  * Requires a dev server on PORT (default 5199) and a local Chrome. Exits 2 when
  * either is unavailable, so a machine without a browser skips rather than fails.
+ *
+ * Extended for Prompt 6: it now visits every route rather than one page load, keeping the
+ * original forbidden-value and self-test assertions on the landing route (where they were
+ * found) and adding them everywhere. `scripts/route_check.cjs` covers reachability and
+ * character counts; this covers "no stale value and no failed self-test on any route".
  */
 const { chromium } = require('playwright-core');
 const fs = require('fs');
@@ -16,6 +21,23 @@ const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Conte
 
 // Values from before the panel reached 167 rows. None may appear on screen.
 const FORBIDDEN = [/0\.948/, /\b630\b/, /23 countr/, /2000[-\u2013]2022/, /\b1\.307\b/];
+
+// Every route the router produces, mirroring src/router/routes.ts. Duplicated on purpose:
+// a route added to the taxonomy but never checked here is the gap this guards.
+const ROUTES = [
+  '',
+  'component-analysis',
+  'field-dynamics',
+  'statistical-analysis',
+  'sensitivity-analysis',
+  'emergence-analysis',
+  'model-diagnostics',
+  'advanced-parameters',
+  'phi-contributions',
+  'documentation',
+  'ai-interpreter',
+  'presets',
+];
 
 (async () => {
   if (!fs.existsSync(CHROME)) {
@@ -29,43 +51,61 @@ const FORBIDDEN = [/0\.948/, /\b630\b/, /23 countr/, /2000[-\u2013]2022/, /\b1\.
     console.log('SKIP  could not launch Chrome: ' + e.message.slice(0, 120));
     process.exit(0);
   }
-  const page = await browser.newPage();
-  const consoleErrors = [];
-  page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
-
+  // One probe so a missing server costs one timeout rather than twelve.
+  const probe = await browser.newPage();
   try {
-    await page.goto('http://localhost:' + PORT + '/belief_emergence/', {
-      waitUntil: 'domcontentloaded', timeout: 90000,
+    await probe.goto('http://localhost:' + PORT + '/belief_emergence/', {
+      waitUntil: 'domcontentloaded', timeout: 15000,
     });
   } catch (e) {
     console.log('SKIP  no dev server on port ' + PORT + ' (' + e.message.split('\n')[0].slice(0, 80) + ')');
     await browser.close();
     process.exit(0);
   }
-  await page.waitForTimeout(8000);
-  const text = await page.evaluate(() => document.body.innerText);
-  await browser.close();
-
-  if (text.length < 500) {
-    console.error('FAIL  the page rendered ' + text.length + ' characters; the app did not mount');
-    console.error(consoleErrors.slice(0, 5).join('\n'));
-    process.exit(1);
-  }
+  await probe.close();
 
   const failures = [];
-  for (const pattern of FORBIDDEN) {
-    const hit = text.match(pattern);
-    if (hit) failures.push('renders a stale value: ' + hit[0]);
+  const rendered = [];
+
+  for (const route of ROUTES) {
+    const label = route || 'landing';
+    const page = await browser.newPage();
+    const consoleErrors = [];
+    page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
+    page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
+
+    const url = 'http://localhost:' + PORT + '/belief_emergence/' + (route ? '?v=' + route : '');
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
+    await page.waitForTimeout(7000);
+    const text = await page.evaluate(() => document.body.innerText);
+    await page.close();
+
+    rendered.push({ label, chars: text.length });
+
+    if (text.length < 500) {
+      failures.push(label + ': rendered ' + text.length + ' characters; the app did not mount');
+      continue;
+    }
+
+    for (const pattern of FORBIDDEN) {
+      const hit = text.match(pattern);
+      if (hit) failures.push(label + ': renders a stale value: ' + hit[0]);
+    }
+    const failedTests = text.split('\n').filter((l) => l.includes('FAILED'));
+    if (failedTests.length) {
+      failures.push(label + ': ' + failedTests.length + ' in-app self-test(s) FAILED: ' + failedTests[0].slice(0, 80));
+    }
+    const pageErrors = consoleErrors.filter((e) => e.startsWith('pageerror:'));
+    if (pageErrors.length) failures.push(label + ': runtime error on the page: ' + pageErrors[0]);
   }
-  // The in-app validator prints its own pass/fail lines; a FAILED line is a failure.
-  const failedTests = text.split('\n').filter((l) => l.includes('FAILED'));
-  if (failedTests.length) failures.push(failedTests.length + ' in-app self-test(s) FAILED: ' + failedTests[0].slice(0, 80));
-  const pageErrors = consoleErrors.filter((e) => e.startsWith('pageerror:'));
-  if (pageErrors.length) failures.push('runtime error on the page: ' + pageErrors[0]);
+
+  await browser.close();
+
+  console.log('\nPer-route render:');
+  for (const r of rendered) console.log('  ' + r.label.padEnd(24) + String(r.chars).padStart(8) + ' chars');
 
   if (failures.length === 0) {
-    console.log('RENDER OK  ' + text.length + ' characters rendered, no stale values, no failed self-tests');
+    console.log('RENDER OK  ' + rendered.length + ' routes rendered, no stale values, no failed self-tests');
     process.exit(0);
   }
   console.error('RENDER FAILURES (' + failures.length + '):');

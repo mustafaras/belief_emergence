@@ -16,6 +16,13 @@ import { uiToModelParams } from './utils/uiToModelTransform'
 import { logParams } from './utils/paramLogger'
 import { PANEL_X_MAX, PANEL_X_MIN, PANEL_Y_MAX, PANEL_Y_MIN, STRUCTURAL_MAX, STRUCTURAL_MIN } from './utils/modelContract'
 import { readAppStateFromUrl, writeAppStateToUrl } from './utils/urlState'
+import { useAppRoute } from './router/useAppRoute'
+import RouteNav from './components/router/RouteNav'
+import EvidenceIndex from './components/evidence/EvidenceIndex'
+import ConstructAudit from './components/audit/ConstructAudit'
+import SupportPicture from './components/support/SupportPicture'
+import LimitsSection from './components/limits/LimitsSection'
+import { LANDING_ROUTE, type AppRoute } from './router/routes'
 
 const DEFAULT_PARAMS: BeliefParameters = {
   X: 0.73, // Neutral: panel-scale urbanization mean (UI slider space)
@@ -56,8 +63,11 @@ function App() {
 
   const [params, setParams] = useState<BeliefParameters>(initialUrlState.params);
   const [currentPresetName, setCurrentPresetName] = useState<string | undefined>(initialUrlState.presetName);
+  const { route, navigate } = useAppRoute();
+  // The documentation modal is route-driven, so a deep link to ?v=documentation opens
+  // it. Local state is retained for the existing call sites that close it directly.
   const [showDocumentation, setShowDocumentation] = useState(initialUrlState.showDocumentation);
-  const [showAiInterpreter, setShowAiInterpreter] = useState(false);
+  const [showAiInterpreter, setShowAiInterpreter] = useState(initialUrlState.route === 'ai-interpreter');
 
   // Coefficients - used for validation test suite
   const coefficients = Object.freeze(FIXED_COEFFICIENTS);
@@ -197,11 +207,14 @@ function App() {
     }
 
     urlWriteTimerRef.current = window.setTimeout(() => {
+      // `route` alone decides whether the documentation is open: the serialiser
+      // normalises the legacy `doc` flag from it, so there is one encoder.
       writeAppStateToUrl(
         {
           params,
           presetName: currentPresetName,
-          showDocumentation,
+          showDocumentation: route === 'documentation',
+          route,
         },
         { replace: true },
       );
@@ -212,7 +225,7 @@ function App() {
         window.clearTimeout(urlWriteTimerRef.current);
       }
     };
-  }, [params, currentPresetName, showDocumentation]);
+  }, [params, currentPresetName, route]);
 
   // Generate interpretation for TopBar
   const getInterpretation = useCallback((zValue: number) => {
@@ -428,6 +441,31 @@ function App() {
     setSurface3dEnabled((v) => !v);
   }, []);
 
+  // Route is the source of truth for the two modal routes. Opening follows the route;
+  // closing navigates back, so the address bar never claims a closed dialog is open.
+  useEffect(() => {
+    setShowDocumentation(route === 'documentation');
+    setShowAiInterpreter(route === 'ai-interpreter');
+  }, [route]);
+
+  const navigateRoute = useCallback((next: AppRoute) => {
+    navigate(next);
+  }, [navigate]);
+
+  const closeOverlayRoute = useCallback(
+    (overlay: 'documentation' | 'ai-interpreter') => {
+      // Closing a dialog that a route owns must also clear the route, or a refresh
+      // reopens what the reader just dismissed.
+      if (route === overlay) navigate(LANDING_ROUTE);
+    },
+    [navigate, route],
+  );
+
+  const closeDocumentation = useCallback(() => {
+    setShowDocumentation(false);
+    closeOverlayRoute('documentation');
+  }, [closeOverlayRoute]);
+
   return (
     <div className="app">
       {/* TopBar - Fixed position at top */}
@@ -447,7 +485,10 @@ function App() {
         panelData={panelData}
         surface3dEnabled={surface3dEnabled}
         onToggleSurface3d={toggleSurface3d}
+        route={route}
       />
+
+      <RouteNav route={route} onNavigate={navigateRoute} />
 
       {surface3dMounted && (
         <Surface3DOverlay
@@ -469,23 +510,40 @@ function App() {
           onShowDocumentation={() => setShowDocumentation(true)}
           onShowAiInterpreter={() => setShowAiInterpreter(true)}
           onPresetSelect={handlePresetSelect}
+          route={route}
+          onNavigate={navigateRoute}
         />
 
         {/* Right Panel: Compact Scientific Layout */}
         <section className="right-panel">
-          {/* Bottom Formula Section - Full Scientific Analysis */}
-          <div className="detailed-formula-section">
-            <FormulaDisplay 
-              params={params}
-              coefficients={coefficients}
-              alpha={params.alpha}
-              beta={params.beta}
-              k={params.k}
-              modelResult={modelResult}
-              structuralBase={structuralBase}
-              presetName={currentPresetName}
-            />
-          </div>
+          {/*
+            On the landing route the content is evidence, in the order a reader needs it:
+            first whether the measurement worked at all, then the map of what was
+            produced. The audit comes first because it is the paper's central finding and
+            because everything below it is conditional on the constructs that survived.
+          */}
+          {route === LANDING_ROUTE ? (
+            <div className="evidence-surface">
+              <ConstructAudit />
+              <SupportPicture />
+              <LimitsSection />
+              <EvidenceIndex />
+            </div>
+          ) : (
+            /* Bottom Formula Section - Full Scientific Analysis */
+            <div className="detailed-formula-section">
+              <FormulaDisplay 
+                params={params}
+                coefficients={coefficients}
+                alpha={params.alpha}
+                beta={params.beta}
+                k={params.k}
+                modelResult={modelResult}
+                structuralBase={structuralBase}
+                presetName={currentPresetName}
+              />
+            </div>
+          )}
         </section>
 
       </div>
@@ -493,11 +551,11 @@ function App() {
       {/* Interactive Documentation Modal */}
       {showDocumentation && (
         <div className="documentation-modal">
-          <div className="modal-backdrop" onClick={() => setShowDocumentation(false)} />
+          <div className="modal-backdrop" onClick={() => closeDocumentation()} />
           <div className="modal-content">
             <button 
               className="modal-close"
-              onClick={() => setShowDocumentation(false)}
+              onClick={() => closeDocumentation()}
               title="Close Documentation"
             >
               ✕
@@ -507,7 +565,7 @@ function App() {
               alpha={params.alpha}
               beta={params.beta}
               k={params.k}
-              onClose={() => setShowDocumentation(false)}
+              onClose={() => closeDocumentation()}
             />
           </div>
         </div>
@@ -515,7 +573,10 @@ function App() {
 
       <AiInterpreterModal
         isOpen={showAiInterpreter}
-        onClose={() => setShowAiInterpreter(false)}
+        onClose={() => {
+          setShowAiInterpreter(false);
+          closeOverlayRoute('ai-interpreter');
+        }}
         snapshot={aiSnapshot}
       />
     </div>

@@ -137,6 +137,57 @@ function sha256(content: string): string {
 }
 
 /**
+ * The artifacts this gate owns, relative to the repo root.
+ *
+ * The gate regenerates these and compares fingerprints; restoring them afterwards is
+ * what keeps `npm run ci:gate` a read-only operation on the working tree.
+ */
+function artifactSnapshotPaths(): string[] {
+  const paths = [...REQUIRED_ARTIFACTS];
+  const csvArtifacts = [
+    path.join(ANALYSIS, 'observed_vs_predicted_authoritative.csv'),
+    path.join(METRICS, 'headline_metrics_authoritative.json'),
+  ];
+  for (const p of csvArtifacts) if (!paths.includes(p)) paths.push(p);
+  return paths.filter((p) => fs.existsSync(p));
+}
+
+/**
+ * Snapshot the artifact bytes before generation.
+ *
+ * Phase 1 and Phase 5 both regenerate artifacts, and every generator stamps a fresh
+ * `generatedAtIso`. Left in place, that turns a passing gate into a dirty working tree
+ * — twelve files of timestamp-only diff on every run — which trains people to
+ * `git checkout` reflexively and can carry a real artifact change into an unrelated
+ * commit. The gate verifies the artifacts; it should not modify them.
+ */
+function snapshotArtifacts(): Map<string, Buffer> {
+  const snapshot = new Map<string, Buffer>();
+  for (const p of artifactSnapshotPaths()) {
+    snapshot.set(p, fs.readFileSync(p));
+  }
+  return snapshot;
+}
+
+function restoreArtifacts(snapshot: Map<string, Buffer>): void {
+  let restored = 0;
+  for (const [p, original] of snapshot) {
+    let current: Buffer | null = null;
+    try {
+      current = fs.readFileSync(p);
+    } catch {
+      current = null;
+    }
+    if (current && current.equals(original)) continue;
+    fs.writeFileSync(p, original);
+    restored += 1;
+  }
+  if (restored > 0) {
+    console.log(`       Restored ${restored} artifact(s) to their committed state (gate is read-only)`);
+  }
+}
+
+/**
  * Strip volatile fields (timestamps) from JSON text so fingerprints
  * are deterministic across runs.
  */
@@ -342,6 +393,22 @@ function phaseValidationChecks(): boolean {
     { label: 'UI agrees with artifacts',     cmd: 'npm run check:ui-artifacts' },
     { label: 'Section references',           cmd: 'npm run check:section-references' },
     { label: 'No hardcoded headline metrics', cmd: 'npm run check:no-hardcoded-headline' },
+    // The evidence index prints a schema, timestamp and row count for every artifact.
+    // This keeps that committed consumption list honest against the real imports.
+    { label: 'Evidence index matches tree',  cmd: 'npm run check:evidence-index' },
+    // Descriptions are hand-written prose shown to the reader. One sentence each, and no
+    // number in them without an artifact behind it.
+    { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },
+    // Every number on screen must trace to an artifact, a derivation or the allowlist.
+    // Skipped automatically when no browser/server is available.
+    { label: 'Rendered numbers',             cmd: 'npm run check:dom-numbers' },
+    // The paper's central table: row count, the suppressed leftover alpha, and a reason
+    // on every withdrawn construct.
+    { label: 'Construct audit table',        cmd: 'npm run check:construct-audit' },
+    // The attrition cascade: totals, computed utilisation, and no unsupported cause.
+    { label: 'Support picture',              cmd: 'npm run check:support-picture' },
+    // Every stated limit, and every figure it quotes, re-read from its cited artifact.
+    { label: 'Stated limits',                cmd: 'npm run check:limits' },
   ];
   let allOk = true;
   for (const c of checks) {
@@ -407,34 +474,42 @@ function run(): void {
 
   const t0 = Date.now();
 
-  // Phase 0: Canonical data fingerprint (before any generation)
-  console.log('── Phase 0: Canonical Data Fingerprint ──');
-  phaseCanonicalDataFingerprint();
+  // The gate regenerates artifacts to prove they are reproducible. Capture the
+  // committed bytes first so the verification leaves the working tree as it found it.
+  const artifactSnapshot = snapshotArtifacts();
 
-  // Phase 1: Generate all artifacts
-  const genOk = phaseArtifactGeneration();
-  if (!genOk) {
-    emitSummary();
-    process.exit(1);
+  try {
+    // Phase 0: Canonical data fingerprint (before any generation)
+    console.log('── Phase 0: Canonical Data Fingerprint ──');
+    phaseCanonicalDataFingerprint();
+
+    // Phase 1: Generate all artifacts
+    const genOk = phaseArtifactGeneration();
+    if (!genOk) {
+      emitSummary();
+      process.exit(1);
+    }
+
+    // Phase 2: Verify artifact presence
+    phaseArtifactPresence();
+
+    // Phase 3: Verify schema versions
+    phaseSchemaVersions();
+
+    // Phase 4: Verify canonical metric values
+    phaseCanonicalMetrics();
+
+    // Phase 5: Determinism cross-check (regenerate and compare fingerprints)
+    phaseArtifactFingerprints();
+
+    // Phase 6: Validation checks
+    phaseValidationChecks();
+
+    // Phase 7: Code quality
+    phaseCodeQuality();
+  } finally {
+    restoreArtifacts(artifactSnapshot);
   }
-
-  // Phase 2: Verify artifact presence
-  phaseArtifactPresence();
-
-  // Phase 3: Verify schema versions
-  phaseSchemaVersions();
-
-  // Phase 4: Verify canonical metric values
-  phaseCanonicalMetrics();
-
-  // Phase 5: Determinism cross-check (regenerate and compare fingerprints)
-  phaseArtifactFingerprints();
-
-  // Phase 6: Validation checks
-  phaseValidationChecks();
-
-  // Phase 7: Code quality
-  phaseCodeQuality();
 
   const totalTime = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n  Total gate time: ${totalTime}s`);

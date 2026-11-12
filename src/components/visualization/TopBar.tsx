@@ -5,6 +5,7 @@ import { STRUCTURAL_MAX, STRUCTURAL_MIN } from '../../utils/modelContract';
 import type { BeliefParameters } from '../../types';
 import type { PanelRowCanonical } from '../../types/panel';
 import { buildAppUrl } from '../../utils/urlState';
+import { LANDING_ROUTE, isAnalysisRoute, shouldHidePanel, type AppRoute } from '../../router/routes';
 import { exportBehavioralDynamicsReport } from '../../utils/pdf/exportBehavioralDynamicsReport';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 import { downloadCsv } from '../../utils/csv/exportCsv';
@@ -70,6 +71,16 @@ interface TopBarProps {
 
   surface3dEnabled?: boolean;
   onToggleSurface3d?: () => void;
+
+  /**
+   * The active analysis route, or `landing` when the reader has not chosen a panel.
+   *
+   * On `landing` every panel stays visible, exactly as before routing existed. On a
+   * specific route the other five are hidden but *still mounted* — the PDF export
+   * captures `.belief-emergence-top-bar` as its figure, so unmounting them would
+   * silently shrink the exported report.
+   */
+  route?: AppRoute;
 }
 
 type ScenarioSnapshot = {
@@ -96,9 +107,20 @@ const TopBar: React.FC<TopBarProps> = ({
   panelData,
   surface3dEnabled = true,
   onToggleSurface3d,
+  route = LANDING_ROUTE,
 }) => {
   const { rovingTabindex, toggleRovingTabindex } = useAccessibility();
   const structuralBandLabel = `[${STRUCTURAL_MIN.toFixed(4)}, ${STRUCTURAL_MAX.toFixed(4)}]`;
+
+  /**
+   * Hide a panel without unmounting it.
+   *
+   * Only an *analysis* route isolates a single panel; see `shouldHidePanel`.
+   * `display: none` removes the panel from the accessibility tree and hit-testing
+   * while leaving the DOM intact for the PDF figure capture.
+   */
+  const panelClass = (panelRoute: AppRoute, baseClass: string) =>
+    shouldHidePanel(route, panelRoute) ? `${baseClass} is-route-hidden` : baseClass;
   const [opacity, setOpacity] = useState(1); // Opacity state for transparency toggle
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const topBarContentRef = useRef<HTMLDivElement | null>(null);
@@ -339,6 +361,16 @@ const TopBar: React.FC<TopBarProps> = ({
   const exportToPDF = async () => {
     if (isExportingPdf) return;
     setIsExportingPdf(true);
+
+    // When a single analysis route is open the other five panels are `display: none`.
+    // The report embeds a figure captured from this element, so revealing them for the
+    // duration of the capture keeps the export identical to the landing view.
+    const rootRef = topBarContentRef.current?.closest('.belief-emergence-top-bar');
+    const revealedForExport = route !== LANDING_ROUTE;
+    if (revealedForExport && rootRef instanceof HTMLElement) {
+      rootRef.classList.add('is-exporting');
+    }
+
     try {
       // Export is text-first and embeds Unicode-capable fonts inside jsPDF (no UI changes).
       await exportBehavioralDynamicsReport({
@@ -376,6 +408,9 @@ const TopBar: React.FC<TopBarProps> = ({
       const message = error instanceof Error ? error.message : String(error);
       alert(`PDF export failed. ${message}`);
     } finally {
+      if (revealedForExport && rootRef instanceof HTMLElement) {
+        rootRef.classList.remove('is-exporting');
+      }
       setIsExportingPdf(false);
     }
   };
@@ -688,10 +723,14 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-      <div className="top-bar-content" ref={topBarContentRef}>
+      <div
+        className={`top-bar-content${isAnalysisRoute(route) ? ' is-routed' : ''}`}
+        ref={topBarContentRef}
+        data-route={route}
+      >
         
         {/* SECTION 1: COMPONENT ANALYSIS */}
-        <div className="component-analysis-panel">
+        <div className={panelClass('component-analysis', 'component-analysis-panel')}>
           <div className="panel-header">
             <h3>COMPONENT ANALYSIS</h3>
             <div className="model-fit-indicator">
@@ -847,7 +886,7 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* SECTION 2: FIELD DYNAMICS ANALYSIS */}
-        <div className="field-dynamics-panel">
+        <div className={panelClass('field-dynamics', 'field-dynamics-panel')}>
           <div className="panel-header">
             <h3>Φ FIELD DYNAMICS</h3>
             <div className="field-vector-display">
@@ -891,7 +930,7 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* SECTION 3: STATISTICAL ANALYSIS TABLE */}
-        <div className="statistical-analysis-panel">
+        <div className={panelClass('statistical-analysis', 'statistical-analysis-panel')}>
           <div className="panel-header">
             <h3>STATISTICAL ANALYSIS</h3>
             <div className="z-value-indicator">{formatNumeric(zValue, 4)}</div>
@@ -951,7 +990,7 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* SECTION 4: SENSITIVITY ANALYSIS */}
-        <div className="surface-analysis-panel">
+        <div className={panelClass('sensitivity-analysis', 'surface-analysis-panel')}>
           <div className="panel-header">
             <h3>SENSITIVITY ANALYSIS</h3>
             <div className="gradient-display">
@@ -1019,7 +1058,7 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* SECTION 5: EMERGENCE & INFORMATION THEORY */}
-        <div className="emergence-panel">
+        <div className={panelClass('emergence-analysis', 'emergence-panel')}>
           <div className="panel-header">
             <h3>EMERGENCE ANALYSIS</h3>
             <div className="emergence-index">EI = {formatNumeric(emergenceIndex, 3)}</div>
@@ -1086,7 +1125,7 @@ const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* SECTION 6: MODEL PERFORMANCE & DIAGNOSTICS */}
-        <div className="model-performance-panel">
+        <div className={panelClass('model-diagnostics', 'model-performance-panel')}>
           <div className="panel-header">
             <h3>MODEL DIAGNOSTICS</h3>
             <div className="performance-status">

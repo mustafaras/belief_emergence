@@ -3915,3 +3915,16 @@ body {
     font-size: 0.9rem;
   }
 }
+
+/* Evidence surface — the landing route's content.
+   `.main-grid` is a 100vh grid with `overflow: hidden`, so this pane scrolls on its own
+   rather than growing the page. Top padding clears the fixed TopBar (35px + 550px) and
+   the route strip below it (585px). */
+.evidence-surface {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  padding-top: 620px;
+  background: var(--primary-bg);
+}

@@ -1,8 +1,9 @@
 /**
  * Canonical panel dataset loader (single source of truth).
  *
- * Canonical runtime CSV path (served from public/):
- *   /data/panel_canonical_v2.csv
+ * Canonical runtime CSV path (served from public/, resolved against Vite's base):
+ *   <base>/data/panel_canonical_v2.csv
+ * The path is computed rather than hard-coded so a sub-path deployment does not 404.
  *
  * v2 replaces the shipped v1 panel, which was unsubmittable: in v1 the
  * predictor C_cultural_intensity was an exact rescaling of the outcome
@@ -21,9 +22,12 @@
 import Papa from 'papaparse';
 
 import type { PanelRowCanonical } from '../types/panel';
+import { resolvePublicPath } from '../utils/publicPath';
+
+export { resolvePublicPath };
 export type { PanelRowCanonical } from '../types/panel';
 
-export const CANONICAL_PANEL_CSV_PATH = '/data/panel_canonical_v2.csv';
+export const CANONICAL_PANEL_CSV_PATH = resolvePublicPath('/data/panel_canonical_v2.csv');
 export const CANONICAL_PANEL_SHA256 = '5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9';
 
 /** Columns that the v2 panel declares but cannot populate. */

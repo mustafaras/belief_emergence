@@ -347,7 +347,14 @@ const SuppressorsSection: React.FC = () => {
       .map(([iso3, v]) => {
         const meanYc = v.sumY / v.n;
         const sstc = v.sumY2 - v.n * meanYc * meanYc;
-        const r2c = v.n >= 3 && sstc > SST_EPS ? 1 - v.sse / sstc : NaN;
+        // A per-country R2 is only meaningful when that country's outcome actually
+        // varies. `sstc > SST_EPS` (1e-10) let through near-degenerate slices where a
+        // rounding-level variance divided into a real SSE, producing values like -2220
+        // and a chart mean of -113. Requiring the slice's variance to be a non-trivial
+        // fraction of its scale keeps the statistic interpretable, and NaN is the honest
+        // answer for a country whose Z barely moves: an R2 is undefined there.
+        const degenerate = sstc <= Math.max(SST_EPS, Math.abs(v.sumY2) * 1e-6);
+        const r2c = v.n >= 3 && !degenerate ? 1 - v.sse / sstc : NaN;
         const maec = v.mae / v.n;
         const rmsec = Math.sqrt(v.sse / v.n);
         return { iso3, country: v.country, n: v.n, r2: r2c, mae: maec, rmse: rmsec };

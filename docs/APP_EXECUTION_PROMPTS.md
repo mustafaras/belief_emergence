@@ -10,8 +10,9 @@ stop and say so rather than working from a stale premise):
 
 | quantity | value |
 |---|---|
-| analysis artifacts in `src/data/analysis/` | 31 |
-| artifacts imported by any module | 7 |
+| analysis artifacts in `src/data/analysis/` | 33 |
+| artifacts imported by any module | 10 |
+| artifacts named in source but never imported | 11 |
 | artifacts whose content appears on first paint | 0 |
 | `.tsx` components under `src/components/` | 22 |
 | test files under `tests/` | 24 |
@@ -19,8 +20,15 @@ stop and say so rather than working from a stale premise):
 | largest component | `Surface3DSurface.tsx`, 4,341 lines |
 | first-paint charts / tables | 1 / 1 |
 | sliders / buttons on landing | 12 / 46 |
-| gate checks (`npm run ci:gate`) | 68 |
-| consistency blocks | 26 |
+| gate checks (`npm run ci:gate`) | 74 |
+| consistency blocks | 28 |
+
+**Corrected 2026-11-12.** Two numbers above were wrong when this file was written. Seven
+was never the import count: three of the seven (`reviewer_red_team`,
+`q1_submission_gate_report`, `data_code_provenance`) are only *named* in prose inside
+`MathematicalAnalysisSection.tsx` and are never imported, so **5 of 31** is the real
+figure. A further 11 are named without being imported. The consistency-block count is 28,
+not 26. `npm run check:evidence-index` now derives both from the tree.
 
 **Standing rules for every prompt.** Do not touch `paper/`. Do not weaken a check to
 make it pass. Run `npm run lint && npm run build && npm run ci:gate && npm run
@@ -94,9 +102,14 @@ one-sentence description of what the artifact establishes.
 Do not hardcode the list. Read the directory at build time (Vite `import.meta.glob` with
 `eager: false` is the idiomatic form) so a new artifact appears without a code change.
 
-For each artifact, also state whether any component currently consumes it. Seven of 31
-do. The other 24 are the gap this whole plan exists to close, and the index should say
-so plainly rather than implying the artifact set is fully wired.
+For each artifact, also state whether any component currently consumes it. **5 of 31
+do** (this prompt originally said seven; see the correction in the baseline table). A
+further 11 are only named in prose, which looks like wiring and is not. The other 24 are
+the gap this whole plan exists to close, and the index should say so plainly rather than
+implying the artifact set is fully wired.
+
+Three states are therefore required, not two: *imported*, *named only*, *untouched*.
+Collapsing the middle case into "consumed" is the error that produced the seven.
 
 **Verify** by rendering the index and counting rows against `ls src/data/analysis/*.json
 | wc -l`. They must be equal. Also assert that no artifact is listed twice and that the
@@ -104,6 +117,24 @@ consumed/unconsumed split sums to 31.
 
 **Done when** the index renders 31 rows, the split is visible, and adding a file to the
 directory adds a row without touching the component.
+
+**Built 2026-11-12.** `npm run check:evidence-index` derives the split from real imports
+and fails if it drifts from the committed facts; the landing route renders the index and
+`npm run check:routes` asserts one row per artifact on disk.
+
+Two rules in this prompt had no enforcement and therefore decayed, so both are now
+mechanical rather than advisory:
+
+- **"a one-sentence description"** — seven of the first thirty-one were two sentences.
+  `npm run check:description-numbers` counts sentences per description.
+- **numbers inside a description** — "maximum VIF of 9.43" is a displayed number, so it
+  needs an artifact behind it like any other. That check recomputes each one from the
+  artifact it cites and fails on drift. Adding a number without declaring its source
+  fails; so does keeping a declaration whose artifact changed shape.
+
+Also fixed while auditing this prompt: descriptions were written with JSON-style `\u2019`
+escapes inside TypeScript string literals, so they reached the page as literal `\u2019`
+and leaked the digits `2019` into the rendered row.
 
 ---
 
@@ -131,6 +162,30 @@ anywhere in its cells; and every withdrawn construct names a reason.
 **Done when** the table is on the landing route, the three assertions pass, and a reader
 who knows nothing about the paper can tell which constructs survived.
 
+**Built 2026-11-12.** The table opens the landing route, above the evidence index.
+`npm run check:construct-audit` asserts all three conditions against the artifact and the
+rendered DOM, and it was tested by removing the `computable` guard: the check then reports
+`S_social_support verdict is "retained", expected "uncomputable"` and exits 1, which is the
+exact defect the prompt warns about.
+
+The artifact moved from `rawdata/wvs_construct_audit.json` (gitignored) to
+`src/data/analysis/`, resolving the blocking question recorded in `docs/APP_DECISION.md`:
+the audit is evidence, not an input. That decision raises the artifact count to 32 and the
+imported count to 6, and the evidence index picked up the new file without a code change.
+
+**Two corrections made 2026-11-12 after review.**
+
+1. The S row said "7 of 7 configured items are unavailable", reading the empty `itemsUsed`
+   list as a total shortfall. Four of seven items are absent (A101, A106, F185, F186) and
+   three survive where the coverage floor requires four, so the composite was never
+   assembled. That is what the paper states and what the row now says. The availability is
+   recorded in `construct_item_availability.json` rather than inferred from an empty array,
+   and `check:construct-audit` fails if the reason stops naming the absent items.
+2. The table audits four constructs while the paper reports "three of eight". Both counts
+   are correct: eight channels were proposed, four are declared but not estimated, and
+   three of the four testable ones fail. The audit now says so explicitly in a scope note,
+   because otherwise a reader comparing 3/4 with 3/8 concludes one of the two is wrong.
+
 ---
 
 ## Prompt 4 — Render the support picture
@@ -152,6 +207,19 @@ must equal `panel_rows / 305` computed at render time rather than typed; and the
 must not claim a cause the artifacts do not support.
 
 **Done when** Gini is visibly the largest blocker and the 54.8% is computed, not written.
+
+**Built 2026-11-12, with the premise corrected.** This prompt was written for a 167-row
+panel, so its figures are stale: 167 is now 207, 54.8% is now **67.9%**, and the
+per-covariate counts it lists (Gini 94, education 82, no-macro 22, …) appear in no
+artifact and sum to 257 against a recorded total of 61 for covariate losses. They are not
+reproduced.
+
+The audit did not attribute covariate losses at all before this prompt. `build_canonical_panel.ts`
+counted `missingByCovariate` for a console line and dropped it, so the only recorded fact
+was `missingCovariate: 61`. The builder now writes the attribution, which makes the
+binding constraint a derived fact rather than a claim: **Y (Gini) 31, E 23, X 4, R 3**,
+summing to 61. The counts are of first failure, so a cell missing several covariates is
+attributed once.
 
 ---
 
@@ -178,6 +246,21 @@ against the JSON, not by eyeballing.
 
 **Done when** a reader can see all four limits without leaving the landing route.
 
+**Built 2026-11-12, with two premises corrected.** The prompt was written for a 167-row
+panel: the rows outside the reserved set are **190**, not 150. And the fourth limit
+attributes the dependence to a shared R/E component, which no artifact states —
+`collinearity_diagnostics.json` holds only the VIF table. What `r_collinearity_case.json`
+does say is stronger and is what the section reports: dropping R cuts maximum VIF from
+9.43 to 2.47 and raises grouped k-fold from 0.4164 to 0.4226, and R is retained anyway to
+avoid post-hoc specification selection.
+
+`npm run check:limits` performs the verification the prompt asks for — every figure
+re-read from its cited artifact, one by one. It was tested by quoting a VIF of 8.74 (fails,
+"absent from collinearity_diagnostics.json") and by claiming the exponent sits inside the
+interval (fails, "the 'outside the interval' limit is not true and must not be stated").
+Wiring this section also raised the consumed-artifact count from 7 to 10, and
+`check:evidence-index` caught the stale ledger immediately.
+
 ---
 
 ## Prompt 6 — Make every displayed number checkable
@@ -201,6 +284,23 @@ offending value. A check that cannot be made to fail has not been tested.
 
 **Done when** both checks fail on a deliberately wrong number and pass on the real tree,
 and the allowlist is under 10 entries.
+
+**Built 2026-11-12.** `npm run check:dom-numbers` scans every route and resolves each
+token by exact value, artifact rounding, recomputation, or a 3-entry allowlist; 1375
+distinct numbers across 11 routes. `npm run check:render` now visits all 12 routes.
+
+Four real defects were found and fixed while building it, which is the point of the
+exercise: `c1`/`c4`/`c5`/`c7` tooltips claimed coefficients of `+1.003`, `-0.635`,
+`+0.0227` and `-0.393` while the module holds `0` for four channels that are structurally
+unavailable; the preset table said "167 observations" in all 23 rows; two sections said
+"23 countries"; and the country-fit chart averaged R2 values it was drawing clamped at
+zero, reporting a mean of -113.7 while every bar sat at zero height.
+
+**The allowlist is exact and capped.** An earlier version matched by rounding, which let a
+deliberate 0.001 shift through because an artifact happened to contain a nearby number.
+Deriving values (`src/verification/derivedValues.ts`) is the escape hatch, not extending
+the list — it started at twelve entries and is now three, because slider extents and panel
+ranges are read from the markup instead of exempted.
 
 ---
 

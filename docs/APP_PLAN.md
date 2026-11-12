@@ -19,7 +19,7 @@ useful as a tool second. Every claim is followed by the measurement that produce
 | # | measurement | value | source |
 |---|---|---|---|
 | 1 | Analysis artifacts in the tree | **31** | `src/data/analysis/*.json` |
-| 2 | Artifacts imported by any module | **7 of 31** | grep of all `analysis/*.json` imports |
+| 2 | Artifacts imported by any module | **5 of 31** | grep of all `analysis/*.json` imports |
 | 3 | Artifacts whose content is visible on first paint | **0 of 7** | DOM text search for each artifact's signature terms |
 | 4 | Charts on first paint | **1** Plotly surface | `document.querySelectorAll('.js-plotly-plot')` |
 | 5 | Tables on first paint | **1** | `querySelectorAll('table')` |

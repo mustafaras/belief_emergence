@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "phase1.construct_item_availability.v1",
+  "generatedAtIso": "2026-11-12T00:00:00.000Z",
+  "purpose": "Which of each construct's configured items exist in the harmonised source, and why a construct below the coverage floor emits no cells. Recorded so the interface can state the real reason for an uncomputable construct instead of inferring one from an empty itemsUsed list.",
+  "source": {
+    "config": "config/wvs_items.yaml",
+    "harmonisedFile": "EVS_WVS_Joint_Csv_v5_0.csv",
+    "documentedIn": "docs/KNOWN_ISSUES.md KI-11"
+  },
+  "minItemCoverage": 0.5,
+  "constructs": {
+    "Z_belief_outcome": {
+      "configuredItems": [
+        "A006",
+        "F028",
+        "F050",
+        "F051",
+        "F053",
+        "F063"
+      ],
+      "availableItems": [
+        "A006",
+        "F028",
+        "F050",
+        "F051",
+        "F053",
+        "F063"
+      ],
+      "absentItems": []
+    },
+    "C_cultural_intensity": {
+      "configuredItems": [
+        "A008",
+        "A009",
+        "E012",
+        "E015",
+        "E018",
+        "E035"
+      ],
+      "availableItems": [
+        "A008",
+        "A009",
+        "E012",
+        "E015",
+        "E018",
+        "E035"
+      ],
+      "absentItems": []
+    },
+    "D_social_atomization": {
+      "configuredItems": [
+        "A165",
+        "A168",
+        "A170",
+        "A173",
+        "A174"
+      ],
+      "availableItems": [
+        "A165",
+        "A168",
+        "A170",
+        "A173",
+        "A174"
+      ],
+      "absentItems": []
+    },
+    "S_social_support": {
+      "configuredItems": [
+        "A008",
+        "A009",
+        "A101",
+        "A106",
+        "F185",
+        "F186",
+        "G006"
+      ],
+      "availableItems": [
+        "A008",
+        "A009",
+        "G006"
+      ],
+      "absentItems": [
+        "A101",
+        "A106",
+        "F185",
+        "F186"
+      ]
+    }
+  }
+}

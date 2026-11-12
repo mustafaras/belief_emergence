@@ -1,6 +1,8 @@
 import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 import Papa from 'papaparse'
-import { describe, expect, it } from 'vitest'
+import { afterAll, describe, expect, it } from 'vitest'
 
 import {
   AUTHORITATIVE_CSV_PATH,
@@ -10,12 +12,26 @@ import {
 import { BIAS_DEFINITION_PHRASE } from '../src/utils/metrics'
 import { STRUCTURAL_MAX, STRUCTURAL_MIN } from '../src/utils/modelContract'
 
+// Generate into a scratch directory. This test used to write straight to the committed
+// artifacts, so `npm run test:run` alone republished `metrics_authoritative.json` with a
+// new timestamp and left the working tree dirty on every run.
+const scratchDir = fs.mkdtempSync(path.join(os.tmpdir(), 'authoritative-'))
+const scratchCsvPath = path.join(scratchDir, 'observed_vs_predicted_authoritative.csv')
+const scratchJsonPath = path.join(scratchDir, 'metrics_authoritative.json')
+
+afterAll(() => {
+  fs.rmSync(scratchDir, { recursive: true, force: true })
+})
+
 describe('authoritative observed-vs-predicted generator', () => {
   it('produces canonical outputs and reasonable metrics', async () => {
-    const metrics = await generateAuthoritativeAnalysis()
+    const metrics = await generateAuthoritativeAnalysis({
+      csvPath: scratchCsvPath,
+      jsonPath: scratchJsonPath,
+    })
 
-    expect(fs.existsSync(AUTHORITATIVE_CSV_PATH)).toBe(true)
-    expect(fs.existsSync(AUTHORITATIVE_JSON_PATH)).toBe(true)
+    expect(fs.existsSync(scratchCsvPath)).toBe(true)
+    expect(fs.existsSync(scratchJsonPath)).toBe(true)
     expect(metrics.n).toBeGreaterThan(0)
     expect(metrics.bias_definition).toContain(BIAS_DEFINITION_PHRASE)
 
@@ -34,7 +50,7 @@ describe('authoritative observed-vs-predicted generator', () => {
     expect(metrics.bias).toBeGreaterThan(-0.1)
     expect(metrics.bias).toBeLessThan(0.1)
 
-    const csv = fs.readFileSync(AUTHORITATIVE_CSV_PATH, 'utf8')
+    const csv = fs.readFileSync(scratchCsvPath, 'utf8')
     const parsed = Papa.parse<Record<string, string>>(csv, { header: true, skipEmptyLines: true })
     const rows = parsed.data
     expect(rows.length).toBe(metrics.n)
@@ -49,5 +65,12 @@ describe('authoritative observed-vs-predicted generator', () => {
       expect(pred).toBeGreaterThanOrEqual(STRUCTURAL_MIN)
       expect(pred).toBeLessThanOrEqual(STRUCTURAL_MAX)
     }
+  })
+
+  it('does not touch the committed artifacts', () => {
+    // The regression this guards: the suite rewriting a tracked artifact.
+    expect(AUTHORITATIVE_CSV_PATH).not.toBe(scratchCsvPath)
+    expect(AUTHORITATIVE_JSON_PATH).not.toBe(scratchJsonPath)
+    expect(fs.existsSync(AUTHORITATIVE_JSON_PATH)).toBe(true)
   })
 })

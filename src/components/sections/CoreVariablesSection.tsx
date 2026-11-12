@@ -583,7 +583,7 @@ const CoreVariablesSection: React.FC = () => {
                 <h4>Workflow (no commands implied)</h4>
                 <ul>
                   <li>
-                    <strong>Data:</strong> <span className="formula">public/data/panel_canonical_v2.csv</span> (canonical 23-country panel).
+                    <strong>Data:</strong> <span className="formula">public/data/panel_canonical_v2.csv</span> (canonical 83-country panel, 207 complete-case country-years).
                   </li>
                   <li>
                     <strong>Loader:</strong> <span className="formula">src/contexts/DataContext.tsx</span> + <span className="formula">src/data/panelDataLoader.ts</span>{' '}

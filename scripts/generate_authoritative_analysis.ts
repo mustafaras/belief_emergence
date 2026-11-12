@@ -148,18 +148,31 @@ function computeMetrics(observed: number[], predicted: number[]): Metrics {
   };
 }
 
-function writeCsv(rows: Array<Record<string, string | number>>): void {
+function writeCsv(rows: Array<Record<string, string | number>>, csvPath: string): void {
   const csv = Papa.unparse(rows, { newline: '\n' });
-  fs.mkdirSync(path.dirname(AUTHORITATIVE_CSV_PATH), { recursive: true });
-  fs.writeFileSync(AUTHORITATIVE_CSV_PATH, `${csv}\n`, 'utf8');
+  fs.mkdirSync(path.dirname(csvPath), { recursive: true });
+  fs.writeFileSync(csvPath, `${csv}\n`, 'utf8');
 }
 
-function writeJson(metrics: Metrics): void {
-  fs.mkdirSync(path.dirname(AUTHORITATIVE_JSON_PATH), { recursive: true });
-  fs.writeFileSync(AUTHORITATIVE_JSON_PATH, `${JSON.stringify(metrics, null, 2)}\n`, 'utf8');
+function writeJson(metrics: Metrics, jsonPath: string): void {
+  fs.mkdirSync(path.dirname(jsonPath), { recursive: true });
+  fs.writeFileSync(jsonPath, `${JSON.stringify(metrics, null, 2)}\n`, 'utf8');
 }
 
-export async function generateAuthoritativeAnalysis(): Promise<Metrics> {
+/**
+ * Generate the observed-vs-predicted artifacts.
+ *
+ * `outputPaths` exists so the test suite can exercise the real generator without
+ * overwriting the committed artifacts. Before this, `npm run test:run` alone rewrote
+ * `metrics_authoritative.json` with a fresh `timestamp`, so every test run left a
+ * dirty working tree — which is how a genuine artifact change gets swept into an
+ * unrelated commit. Production callers pass nothing and get the tracked paths.
+ */
+export async function generateAuthoritativeAnalysis(
+  outputPaths: { csvPath?: string; jsonPath?: string } = {},
+): Promise<Metrics> {
+  const csvPath = outputPaths.csvPath ?? AUTHORITATIVE_CSV_PATH;
+  const jsonPath = outputPaths.jsonPath ?? AUTHORITATIVE_JSON_PATH;
   const csvText = fs.readFileSync(CANONICAL_DATASET_PATH, 'utf8');
   const hash = computeSha256(csvText);
   if (hash !== CANONICAL_PANEL_SHA256) {
@@ -206,17 +219,17 @@ export async function generateAuthoritativeAnalysis(): Promise<Metrics> {
   const finite = results.filter((r) => Number.isFinite(r.observed_Z) && Number.isFinite(r.predicted_Z));
   const sorted = [...finite].sort((a, b) => (a.country === b.country ? a.year - b.year : a.country.localeCompare(b.country)));
 
-  writeCsv(sorted);
+  writeCsv(sorted, csvPath);
 
   const metrics = computeMetrics(
     sorted.map((r) => r.observed_Z),
     sorted.map((r) => r.predicted_Z),
   );
 
-  writeJson(metrics);
+  writeJson(metrics, jsonPath);
 
-  console.log(`✅ Wrote ${sorted.length} rows to ${path.relative(REPO_ROOT, AUTHORITATIVE_CSV_PATH)}`);
-  console.log(`✅ Metrics -> ${path.relative(REPO_ROOT, AUTHORITATIVE_JSON_PATH)}`);
+  console.log(`✅ Wrote ${sorted.length} rows to ${path.relative(REPO_ROOT, csvPath)}`);
+  console.log(`✅ Metrics -> ${path.relative(REPO_ROOT, jsonPath)}`);
   console.log(
     `   R²=${metrics.r2.toFixed(4)} | Corr=${metrics.corr.toFixed(4)} | MAE=${metrics.mae.toFixed(4)} | RMSE=${metrics.rmse.toFixed(4)} | Bias=${metrics.bias.toFixed(4)}`,
   );

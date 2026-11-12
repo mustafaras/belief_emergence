@@ -36,7 +36,7 @@
     "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run",
     "verify:constructs": "tsx scripts/verify_constructs.ts",
     "generate:kfold": "tsx scripts/generate_kfold_validation.ts",
-    "build:panel": "tsx scripts/build_canonical_panel.ts",
+    "build:panel": "tsx scripts/build_canonical_panel.ts && tsx scripts/generate_construct_prevalence.ts",
     "build:panel:dry": "tsx scripts/build_canonical_panel.ts --dry-run",
     "generate:functional-form": "tsx scripts/generate_functional_form_comparison.ts",
     "generate:figures": "python3 scripts/make_fig_eval_pair.py && python3 scripts/make_fig_resid_pair.py",
@@ -51,7 +51,15 @@
     "generate:elasticity-bound": "tsx scripts/generate_elasticity_bound_sensitivity.ts",
     "generate:elasticity-profile": "python3 scripts/profile_elasticity.py",
     "check:ui-artifacts": "tsx scripts/check_ui_agrees_with_artifacts.ts",
-    "check:render": "node scripts/render_check.cjs"
+    "check:render": "node scripts/render_check.cjs",
+    "check:routes": "node scripts/route_check.cjs",
+    "check:evidence-index": "tsx scripts/check_evidence_index.ts",
+    "check:description-numbers": "tsx scripts/check_description_numbers.ts",
+    "check:dom-numbers": "tsx scripts/check_dom_numbers.ts",
+    "generate:evidence-consumption": "tsx scripts/generate_evidence_consumption.ts",
+    "check:construct-audit": "tsx scripts/check_construct_audit.ts",
+    "check:support-picture": "tsx scripts/check_support_picture.ts",
+    "check:limits": "tsx scripts/check_limits.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

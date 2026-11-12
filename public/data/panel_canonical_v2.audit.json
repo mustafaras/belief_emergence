@@ -1,6 +1,6 @@
 {
   "schemaVersion": "canonical.panel.v2",
-  "generatedAtIso": "2026-11-11T14:20:40.340Z",
+  "generatedAtIso": "2026-11-12T10:08:38.263Z",
   "sources": {
     "constructs": "rawdata/wvs_combined.csv",
     "macro": "rawdata/panel_model_data.csv"
@@ -43,6 +43,12 @@
     "noMacro": 8,
     "missingCovariate": 61,
     "missingOutcome": 18
+  },
+  "missingByCovariate": {
+    "Y": 31,
+    "E": 23,
+    "X": 4,
+    "R": 3
   },
   "backfills": [
     {

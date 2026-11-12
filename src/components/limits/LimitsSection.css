@@ -1,0 +1,135 @@
+@import '../../styles/tokens.css';
+
+/* What this model cannot show. Styled to read as specification, not as apology: no
+   warning banners, no red, just the limits stated plainly with their sources. */
+
+.limits-section {
+  padding: 24px 0 8px;
+  color: var(--text-color);
+  font-family: var(--font-primary);
+}
+
+.limits-header h3 {
+  margin: 0 0 6px;
+  font-size: var(--type-h3, 16px);
+  letter-spacing: var(--tracking-tight, -0.01em);
+}
+
+.limits-lead {
+  margin: 0 0 16px;
+  max-width: 820px;
+  color: var(--text-secondary);
+  font-size: var(--type-body, 14px);
+  line-height: var(--leading-normal, 1.5);
+}
+
+.limits-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: limit;
+}
+
+.limit-item {
+  position: relative;
+  padding: 14px 16px 14px 44px;
+  background: var(--secondary-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius, 8px);
+  counter-increment: limit;
+}
+
+.limit-item::before {
+  content: counter(limit);
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tertiary-bg);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.limit-statement {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: var(--leading-normal, 1.5);
+}
+
+.limit-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px 16px;
+  margin: 0 0 10px;
+}
+
+.limit-figure dt {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.limit-figure dd {
+  margin: 1px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.limit-value {
+  color: var(--text-color);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.limit-source {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-style: normal;
+}
+
+.limit-source::before {
+  content: 'from ';
+  font-style: italic;
+}
+
+.limit-consequence {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: var(--leading-normal, 1.5);
+}
+
+.limits-pending {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+/* Only shown when a quoted figure is absent from the artifact it names, which means the
+   section is making a claim it cannot support. */
+.limits-unsourced {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  background: var(--secondary-bg);
+  border-left: 3px solid var(--accent-error);
+  border-radius: var(--radius, 6px);
+  color: var(--accent-error);
+  font-size: 12.5px;
+  line-height: var(--leading-normal, 1.5);
+}
