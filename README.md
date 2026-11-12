@@ -766,6 +766,27 @@ Related workflow diagram (PDF):
 - Preserves all UI state (parameters + view settings)
 - Route in the query string (`?v=<route>`), so a link restores the view *and* the controls
 
+#### Dependencies
+
+Dead packages removed, and one that only *looks* dead kept:
+
+| package | state | evidence |
+|---|---|---|
+| `plotly.js-basic-dist-min` | **removed** | no static or dynamic import anywhere |
+| `three` | **removed** | no static or dynamic import anywhere |
+| `@types/three` | **removed** | orphaned with `three` |
+| `html2canvas` | **kept** | no static import, but loaded by `await import(...)` in the PDF exporter |
+
+`html2canvas` is the trap. A dependency audit reports it unused because nothing imports it
+at the top of a module; it loads when a reader presses Export PDF. Removing it breaks the
+export at runtime while passing every test that does not drive the button. The warning is
+written at the import site in
+[exportBehavioralDynamicsReport.ts](./src/utils/pdf/exportBehavioralDynamicsReport.ts), and
+`tests/dependencies.hygiene.test.ts` fails if either mistake is repeated — including if a
+second `plotly*` package reappears one word away from the one in use.
+
+Verified after removal: the export still produces a 66 kB `%PDF-` download.
+
 #### Bundle budget
 
 The landing route loads **699 kB** of JavaScript in one chunk. It used to load 6.6 MB,

@@ -361,6 +361,14 @@ the browser and assert a non-zero download), and no test regresses.
 **Done when** both dead packages are gone, export still works, and the reason
 `html2canvas` stays is recorded in a comment where the next person will look.
 
+**Built 2026-11-12.** `plotly.js-basic-dist-min`, `three` and the orphaned `@types/three`
+removed; no static or dynamic import for any of the three. Export verified before and
+after against the built site: 66,031 bytes before, 66,017 after, both `%PDF-`, no dialog.
+
+`html2canvas` is kept, with the reason written at the import site rather than in a
+changelog, and `tests/dependencies.hygiene.test.ts` now fails if it is removed — the test
+was confirmed by deleting the dependency and watching it fail.
+
 ---
 
 ## Prompt 9 — Decompose the largest component

@@ -122,6 +122,12 @@ const ROUTES = ['', ...ANALYSIS_ROUTES, ...MENU_AND_MODAL_ROUTES];
         activeRoute: document.querySelector('.top-bar-content')?.getAttribute('data-route'),
         // The landing route's content is the evidence index, not the analysis panels.
         evidenceRows: document.querySelectorAll('.evidence-table tbody tr').length,
+        // A lazy boundary that never resolves still renders 500+ characters — the
+        // placeholder text alone qualifies. These modules are code-split, so "did it
+        // arrive" has to be asserted rather than inferred from length.
+        stuckLoading: /Loading (the response surface|documentation|AI interpreter)/.test(
+          document.body.innerText,
+        ),
       };
     });
 
@@ -144,6 +150,11 @@ const ROUTES = ['', ...ANALYSIS_ROUTES, ...MENU_AND_MODAL_ROUTES];
     }
     if (m.controls < 1) {
       failures.push(label + ': no visible interactive control');
+    }
+    // A code-split module that fails to load leaves its placeholder on screen, which
+    // satisfies every other assertion here.
+    if (m.stuckLoading) {
+      failures.push(label + ': a lazy module never resolved (placeholder still visible)');
     }
     // The URL must agree with what the app thinks is active.
     if ((m.activeRoute || 'landing') !== label) {

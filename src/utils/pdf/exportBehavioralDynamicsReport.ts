@@ -141,6 +141,17 @@ async function loadJsPdfCtor(): Promise<JsPdfNewable> {
   return JsPDFCtor as unknown as JsPdfNewable;
 }
 
+/**
+ * DO NOT REMOVE the `html2canvas` dependency on grep evidence.
+ *
+ * It has no static import anywhere in `src/`, so a dependency audit reports it as unused
+ * and removing it looks safe. It loads here, through `await import(...)`, and only when a
+ * reader presses Export PDF. Deleting it breaks the export at runtime while passing every
+ * test that does not drive the button — which is most of them.
+ *
+ * Verified after removal of the genuinely dead packages (Prompt 8): the live export
+ * produces a 66 kB `%PDF-` download, before and after.
+ */
 async function loadHtml2Canvas(): Promise<(element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>> {
   const html2canvasModule = await import('html2canvas');
   const html2canvas = (html2canvasModule as unknown as { default?: unknown }).default
