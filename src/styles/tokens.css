@@ -39,6 +39,7 @@ Typography source-of-truth
   --primary-bg: #0f1419;
   --secondary-bg: #1a1f2e;
   --tertiary-bg: #252d3d;
+  --ds-color-bg-0: var(--primary-bg);
   
   --text-color: #e8eaed;
   --text-secondary: #9ca3af;
@@ -53,6 +54,104 @@ Typography source-of-truth
   
   /* Spacing & Sizing */
   --radius: 12px;
+
+  /* Measured layout values used across the existing section styles.
+     Unit-specific names keep the current px/rem behavior unchanged. */
+  --ds-space-px-2: 2px;
+  --ds-space-px-3: 3px;
+  --ds-space-px-4: 4px;
+  --ds-space-px-6: 6px;
+  --ds-space-px-8: 8px;
+  --ds-space-px-10: 10px;
+  --ds-space-px-12: 12px;
+  --ds-space-px-14: 14px;
+  --ds-space-px-16: 16px;
+  --ds-space-px-20: 20px;
+  --ds-space-px-24: 24px;
+  --ds-space-rem-0-25: 0.25rem;
+  --ds-space-rem-0-3: 0.3rem;
+  --ds-space-rem-0-35: 0.35rem;
+  --ds-space-rem-0-4: 0.4rem;
+  --ds-space-rem-0-45: 0.45rem;
+  --ds-space-rem-0-1: 0.1rem;
+  --ds-space-rem-0-5: 0.5rem;
+  --ds-space-rem-0-6: 0.6rem;
+  --ds-space-rem-0-65: 0.65rem;
+  --ds-space-rem-0-75: 0.75rem;
+  --ds-space-rem-0-85: 0.85rem;
+  --ds-space-rem-0-9: 0.9rem;
+  --ds-space-rem-1: 1rem;
+  --ds-space-rem-1-25: 1.25rem;
+  --ds-space-rem-1-5: 1.5rem;
+  --ds-space-rem-2: 2rem;
+
+  /* Repeated border radii and motion durations measured across the stylesheets. */
+  --ds-radius-2: 2px;
+  --ds-radius-3: 3px;
+  --ds-radius-4: 4px;
+  --ds-radius-5: 5px;
+  --ds-radius-6: 6px;
+  --ds-radius-8: 8px;
+  --ds-radius-10: 10px;
+  --ds-radius-12: 12px;
+  --ds-radius-16: 16px;
+  --ds-radius-full: 999px;
+  --ds-duration-150ms: 150ms;
+  --ds-duration-200ms: 0.2s;
+  --ds-duration-250ms: 0.25s;
+  --ds-duration-300ms: 0.3s;
+  --ds-duration-400ms: 0.4s;
+  --ds-duration-600ms: 0.6s;
+  --ds-duration-1s: 1s;
+  --ds-duration-2s: 2s;
+  --ds-duration-3s: 3s;
+
+  /* Frequently repeated color literals measured in the component styles.
+     These fixed values are separate from theme-adaptive legacy aliases below. */
+  --ds-color-white: #ffffff;
+  --ds-color-black: #000000;
+  --ds-color-white-smoke: #f8fafc;
+  --ds-color-text-bright: #f1f5f9;
+  --ds-color-text-soft: #cbd5e1;
+  --ds-color-gold: #f4d03f;
+  --ds-color-amber: #fbbf24;
+  --ds-color-slate: #94a3b8;
+  --ds-color-cyan: #06b6d4;
+  --ds-color-success: #10b981;
+  --ds-color-danger: #ef4444;
+  --ds-color-white-02: rgba(255, 255, 255, 0.02);
+  --ds-color-white-03: rgba(255, 255, 255, 0.03);
+  --ds-color-white-04: rgba(255, 255, 255, 0.04);
+  --ds-color-white-05: rgba(255, 255, 255, 0.05);
+  --ds-color-white-06: rgba(255, 255, 255, 0.06);
+  --ds-color-white-08: rgba(255, 255, 255, 0.08);
+  --ds-color-white-10: rgba(255, 255, 255, 0.10);
+  --ds-color-white-12: rgba(255, 255, 255, 0.12);
+  --ds-color-white-20: rgba(255, 255, 255, 0.2);
+  --ds-color-white-85: rgba(255, 255, 255, 0.85);
+  --ds-color-white-90: rgba(255, 255, 255, 0.9);
+  --ds-color-black-20: rgba(0, 0, 0, 0.2);
+  --ds-color-black-30: rgba(0, 0, 0, 0.3);
+  --ds-color-gold-08: rgba(244, 208, 63, 0.08);
+  --ds-color-gold-10: rgba(244, 208, 63, 0.1);
+  --ds-color-gold-12: rgba(244, 208, 63, 0.12);
+  --ds-color-gold-15: rgba(244, 208, 63, 0.15);
+  --ds-color-gold-20: rgba(244, 208, 63, 0.2);
+  --ds-color-gold-30: rgba(244, 208, 63, 0.3);
+  --ds-color-gold-70: rgba(244, 208, 63, 0.7);
+  --ds-color-gold-85: rgba(244, 208, 63, 0.85);
+
+  /* Legacy glossary fallbacks retained as named palette tokens. */
+  --ds-color-glossary-border: #3a3f5c;
+  --ds-color-glossary-border-soft: #2a2e4a;
+  --ds-color-glossary-surface: #1e2140;
+  --ds-color-glossary-surface-raised: #262a4a;
+  --ds-color-glossary-surface-hover: #2e3358;
+  --ds-color-glossary-text: #e0e0e0;
+  --ds-color-glossary-muted: #888;
+  --ds-color-glossary-subtle: #aaa;
+  --ds-color-glossary-accent: #6c63ff;
+  --ds-color-glossary-accent-soft: rgba(108, 99, 255, 0.08);
   
   /* Shadows */
   --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);

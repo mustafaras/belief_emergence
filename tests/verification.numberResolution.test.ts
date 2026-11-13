@@ -60,6 +60,10 @@ describe('roundsToToken', () => {
 })
 
 describe('resolveToken', () => {
+  it('can require exact artifact membership when a corpus is too broad to provide provenance', () => {
+    const corpus = buildCorpus([{ unrelatedMeasurement: 0.7294 }])
+    expect(resolveToken('0.729', corpus, 'exact')).toEqual({ status: 'unresolved' })
+  })
   const corpus = buildCorpus([{ a: 0.08553902592545931, b: 207, c: 'ratio 0.6787' }])
 
   it('resolves an exact value', () => {

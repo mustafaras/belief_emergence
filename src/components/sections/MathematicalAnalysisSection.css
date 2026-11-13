@@ -7,29 +7,29 @@
 
 .ma-small-muted {
   font-size: 0.85em;
-  color: #94a3b8;
+  color: var(--ds-color-slate);
 }
 
 .ma-small-error {
   font-size: 0.85em;
-  color: #ef4444;
+  color: var(--ds-color-danger);
 }
 
 .ma-small-body {
   font-size: 0.85em;
-  color: #cbd5e1;
+  color: var(--ds-color-text-soft);
 }
 
 .ma-mt-05 {
-  margin-top: 0.5rem;
+  margin-top: var(--ds-space-rem-0-5);
 }
 
 .ma-mt-075 {
-  margin-top: 0.75rem;
+  margin-top: var(--ds-space-rem-0-75);
 }
 
 .ma-mb-075 {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--ds-space-rem-0-75);
 }
 
 .ma-svg-font {
@@ -41,15 +41,15 @@
    -------------------------------------------------------------------------- */
 
 .ma-corr-panel {
-  margin-top: 0.5rem;
+  margin-top: var(--ds-space-rem-0-5);
 }
 
 .ma-corr-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: var(--ds-space-rem-0-75);
+  margin-bottom: var(--ds-space-rem-0-5);
 }
 
 .ma-corr-title {
@@ -62,7 +62,7 @@
 .ma-corr-subtitle {
   margin-top: 0.15rem;
   font-size: 0.82em;
-  color: #94a3b8;
+  color: var(--ds-color-slate);
   line-height: 1.35;
 }
 
@@ -70,10 +70,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1rem;
-  margin-top: 0.5rem;
+  gap: var(--ds-space-rem-0-75) var(--ds-space-rem-1);
+  margin-top: var(--ds-space-rem-0-5);
   padding: 0.55rem 0.65rem;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-12);
   background: rgba(2, 6, 23, 0.35);
   border: 1px solid rgba(148, 163, 184, 0.14);
 }
@@ -82,12 +82,12 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--ds-space-rem-0-5);
 }
 
 .ma-corr-control-label {
   font-size: 0.82em;
-  color: #94a3b8;
+  color: var(--ds-color-slate);
   font-weight: 600;
 }
 
@@ -97,7 +97,7 @@
   align-items: center;
   gap: 0.45rem;
   font-size: 0.86em;
-  color: #cbd5e1;
+  color: var(--ds-color-text-soft);
 }
 
 .ma-corr-radio input,
@@ -108,19 +108,19 @@
 
 .ma-corr-radio input,
 .ma-corr-checkbox input {
-  accent-color: #10b981;
+  accent-color: var(--ds-color-success);
 }
 
 .ma-corr-scroll {
-  margin-top: 0.6rem;
+  margin-top: var(--ds-space-rem-0-6);
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.6rem 0.6rem 0.35rem;
+  padding: var(--ds-space-rem-0-6) var(--ds-space-rem-0-6) 0.35rem;
   border-radius: 14px;
   background: rgba(2, 6, 23, 0.28);
   border: 1px solid rgba(148, 163, 184, 0.12);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 1px 0 var(--ds-color-white-04) inset,
     0 10px 24px rgba(0, 0, 0, 0.25);
 }
 
@@ -131,7 +131,7 @@
 }
 
 .ma-corr-axis {
-  fill: #cbd5e1;
+  fill: var(--ds-color-text-soft);
   font-size: 11px;
   font-weight: 700;
 }
@@ -143,7 +143,7 @@
 }
 
 .ma-corr-legend {
-  fill: #94a3b8;
+  fill: var(--ds-color-slate);
   font-size: 9px;
   font-weight: 600;
 }
@@ -152,9 +152,9 @@
   margin-top: 0.65rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem 0.75rem;
-  padding: 0.6rem 0.65rem;
-  border-radius: 12px;
+  gap: 0.35rem var(--ds-space-rem-0-75);
+  padding: var(--ds-space-rem-0-6) 0.65rem;
+  border-radius: var(--ds-radius-12);
   background: rgba(2, 6, 23, 0.22);
   border: 1px solid rgba(148, 163, 184, 0.10);
 }
@@ -182,7 +182,7 @@
 
 .ma-corr-var-label {
   font-size: 0.82em;
-  color: #cbd5e1;
+  color: var(--ds-color-text-soft);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -198,13 +198,13 @@
 .ma-status-chip {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full);
   border: 1px solid rgba(148, 163, 184, 0.28);
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem var(--ds-space-rem-0-6);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: #cbd5e1;
+  color: var(--ds-color-text-soft);
   background: rgba(15, 23, 42, 0.42);
 }
 
@@ -228,7 +228,7 @@
 
 .ma-status-chip-neutral {
   border-color: rgba(148, 163, 184, 0.32);
-  color: #cbd5e1;
+  color: var(--ds-color-text-soft);
   background: rgba(2, 6, 23, 0.35);
 }
 
@@ -239,10 +239,10 @@
 }
 
 .ma-method-delta-item {
-  border-radius: 10px;
+  border-radius: var(--ds-radius-10);
   border: 1px solid rgba(148, 163, 184, 0.2);
   background: rgba(2, 6, 23, 0.28);
-  padding: 0.45rem 0.6rem;
+  padding: 0.45rem var(--ds-space-rem-0-6);
 }
 
 .ma-method-delta-tier {
@@ -254,7 +254,7 @@
 .ma-method-delta-value {
   margin-top: 0.2rem;
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--ds-color-slate);
 }
 
 .ma-support-tier-cell {

@@ -2,7 +2,7 @@
 .core-variables-content {
   max-width: 100%;
   margin: 0 auto;
-  color: #ffffff;
+  color: var(--ds-color-white);
   font-family: inherit;
 
   /* Chart color tokens (SVG uses these via var()). */
@@ -13,7 +13,7 @@
 
 /* PDF export mode: light, print-friendly charts (white background, dark labels) */
 html[data-pdf-export='true'] .core-variables-content {
-  --corevars-plot-bg: #ffffff;
+  --corevars-plot-bg: var(--ds-color-white);
   --corevars-plot-axis: rgba(0, 0, 0, 0.18);
   --corevars-plot-label: rgba(15, 15, 15, 0.85);
 }
@@ -40,24 +40,24 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .abstract-title {
   font-size: 2rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.5rem 0 !important;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-5) 0 !important;
   line-height: 1.3;
 }
 
 .abstract-content {
   max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0.3rem;
+  margin: var(--ds-space-rem-2) auto;
+  padding: var(--ds-space-rem-0-3);
   background: rgba(244, 208, 63, 0.05);
-  border-radius: 12px;
-  border-left: 4px solid #000000;
+  border-radius: var(--ds-radius-12);
+  border-left: 4px solid var(--ds-color-black);
 }
 
 .abstract-text {
   font-size: 1.05rem;
   line-height: 1.7;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   margin: 0;
   text-align: left;
@@ -67,7 +67,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .academic-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--ds-space-rem-2);
   margin-top: 3rem;
 }
 
@@ -75,7 +75,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .models-column {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--ds-space-rem-1-5);
   min-height: 0;
 }
 
@@ -86,10 +86,10 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .detail-card,
 .threshold-card,
 .summary-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(244, 208, 63, 0.15);
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: var(--ds-color-white-02);
+  border: 1px solid var(--ds-color-gold-15);
+  border-radius: var(--ds-radius-12);
+  padding: var(--ds-space-rem-1-5);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   position: relative;
@@ -99,38 +99,38 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 
 /* Variables Framework Card - New Design */
 .variables-framework-card {
-  background: linear-gradient(135deg, rgba(244, 208, 63, 0.08), rgba(244, 208, 63, 0.03));
-  border: 2px solid rgba(244, 208, 63, 0.2);
+  background: linear-gradient(135deg, var(--ds-color-gold-08), rgba(244, 208, 63, 0.03));
+  border: 2px solid var(--ds-color-gold-20);
 }
 
 .independent-variable-section {
-  margin: 1.5rem 0;
-  padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  margin: var(--ds-space-rem-1-5) 0;
+  padding: var(--ds-space-rem-1-25);
+  background: var(--ds-color-white-03);
+  border-radius: var(--ds-radius-10);
   border-left: 4px solid rgba(244, 208, 63, 0.4);
 }
 
 .variable-designation {
   display: flex;
   align-items: flex-start;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
+  gap: var(--ds-space-rem-1-25);
+  margin-bottom: var(--ds-space-rem-1-25);
 }
 
 .variable-symbol-independent {
   font-size: 2.5rem;
   font-weight: 700;
   color: #000;
-  background: linear-gradient(135deg, #f4d03f, #e8c547);
+  background: linear-gradient(135deg, var(--ds-color-gold), #e8c547);
   width: 70px;
   height: 70px;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-12);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 15px rgba(244, 208, 63, 0.3);
+  box-shadow: 0 4px 15px var(--ds-color-gold-30);
   border: 2px solid rgba(244, 208, 63, 0.5);
 }
 
@@ -141,43 +141,43 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .variable-name {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.5rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-5) 0;
 }
 
 .variable-definition {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   margin: 0;
 }
 
 .measurement-components {
-  margin-top: 1rem;
+  margin-top: var(--ds-space-rem-1);
 }
 
 .measurement-components h5 {
   font-size: 1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.75rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-75) 0;
 }
 
 .components-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: var(--ds-space-rem-0-75);
 }
 
 .component-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: rgba(244, 208, 63, 0.08);
-  border-radius: 6px;
-  border: 1px solid rgba(244, 208, 63, 0.15);
+  gap: var(--ds-space-rem-0-5);
+  padding: var(--ds-space-rem-0-5);
+  background: var(--ds-color-gold-08);
+  border-radius: var(--ds-radius-6);
+  border: 1px solid var(--ds-color-gold-15);
 }
 
 .component-icon {
@@ -187,7 +187,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 
 .component-text {
   font-size: 0.85rem;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   font-weight: 500;
 }
@@ -199,28 +199,28 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .relationship-explanation {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--ds-space-rem-1-5);
 }
 
 .model-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--ds-space-rem-1) 0;
 }
 
 .core-variables-content .formula-container {
   display: flex;
   justify-content: center;
-  margin: 1.5rem 0;
+  margin: var(--ds-space-rem-1-5) 0;
 }
 
 .main-equation {
   background: rgba(0, 0, 0, 0.4);
   border: 2px solid #2196f3;
-  border-radius: 12px;
-  padding: 1.25rem 2rem;
+  border-radius: var(--ds-radius-12);
+  padding: var(--ds-space-rem-1-25) var(--ds-space-rem-2);
   text-align: center;
   box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
 }
@@ -239,36 +239,36 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .relationship-principles {
-  margin-top: 1.5rem;
+  margin-top: var(--ds-space-rem-1-5);
 }
 
 .principles-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 1rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-1) 0;
   text-align: center;
 }
 
 .principles-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--ds-space-rem-1);
 }
 
 .principle-item {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
+  gap: var(--ds-space-rem-1);
+  padding: var(--ds-space-rem-1);
+  background: var(--ds-color-white-03);
+  border-radius: var(--ds-radius-8);
   border-left: 3px solid rgba(33, 150, 243, 0.4);
 }
 
 .principle-number {
   background: linear-gradient(135deg, #2196f3, #1976d2);
-  color: #ffffff;
+  color: var(--ds-color-white);
   font-weight: 700;
   font-size: 0.9rem;
   width: 28px;
@@ -284,7 +284,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .principle-content {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: var(--ds-space-rem-0-75);
   flex: 1;
 }
 
@@ -296,7 +296,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .principle-content p {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   margin: 0;
 }
@@ -304,31 +304,31 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .core-variables-content .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 1rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-1) 0;
   line-height: 1.3;
 }
 
 /* Variable Definition Academic Style */
 .variable-definition-academic {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--ds-space-rem-1-5);
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--ds-space-rem-1-5);
 }
 
 .variable-symbol-large {
   font-size: 3rem;
   font-weight: 700;
-  color: #f4d03f;
-  background: rgba(244, 208, 63, 0.1);
+  color: var(--ds-color-gold);
+  background: var(--ds-color-gold-10);
   width: 80px;
   height: 80px;
-  border-radius: 12px;
+  border-radius: var(--ds-radius-12);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(244, 208, 63, 0.3);
+  border: 2px solid var(--ds-color-gold-30);
   flex-shrink: 0;
 }
 
@@ -339,32 +339,32 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .variable-definition-text {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--ds-space-rem-1) 0;
 }
 
 .variable-definition-text strong {
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   font-weight: 600;
 }
 
 .operationalization h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.5rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-5) 0;
 }
 
 .operationalization ul {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: var(--ds-space-rem-1-25);
   list-style-type: disc;
 }
 
 .operationalization li {
   font-size: 0.9rem;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.8;
   margin-bottom: 0.25rem;
 }
@@ -373,21 +373,21 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .interpretation-academic {
   background: rgba(76, 175, 80, 0.08);
   border-left: 3px solid #4caf50;
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: var(--ds-radius-8);
+  padding: var(--ds-space-rem-1);
 }
 
 .interpretation-academic h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.75rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-75) 0;
 }
 
 .interpretation-academic p {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   margin: 0;
 }
@@ -404,27 +404,27 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .theoretical-framework h4 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 1rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-1) 0;
 }
 
 .mechanism-grid,
 .function-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin: 1rem 0;
+  gap: var(--ds-space-rem-0-75);
+  margin: var(--ds-space-rem-1) 0;
 }
 
 .mechanism,
 .social-function {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem;
+  gap: var(--ds-space-rem-0-75);
+  padding: var(--ds-space-rem-0-75);
   background: rgba(244, 208, 63, 0.05);
-  border-radius: 6px;
-  border-left: 3px solid rgba(244, 208, 63, 0.3);
+  border-radius: var(--ds-radius-6);
+  border-left: 3px solid var(--ds-color-gold-30);
 }
 
 .mechanism-icon,
@@ -437,7 +437,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .function-content h5 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   margin: 0 0 0.25rem 0;
 }
 
@@ -445,33 +445,33 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .function-content p {
   font-size: 0.85rem;
   line-height: 1.4;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.85;
   margin: 0;
 }
 
 .empirical-example,
 .historical-insight {
-  margin-top: 1rem;
-  padding: 1rem;
+  margin-top: var(--ds-space-rem-1);
+  padding: var(--ds-space-rem-1);
   background: rgba(76, 175, 80, 0.08);
   border-left: 3px solid #4caf50;
-  border-radius: 6px;
+  border-radius: var(--ds-radius-6);
 }
 
 .empirical-example h5,
 .historical-insight h5 {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 0 0 0.5rem 0;
+  color: var(--ds-color-gold);
+  margin: 0 0 var(--ds-space-rem-0-5) 0;
 }
 
 .empirical-example p,
 .historical-insight p {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
   margin: 0;
 }
@@ -480,17 +480,17 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .threshold-content {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.9;
 }
 
 .saturation-model {
-  margin: 1rem 0;
+  margin: var(--ds-space-rem-1) 0;
 }
 
 .equation-showcase {
   text-align: center;
-  margin: 1rem 0;
+  margin: var(--ds-space-rem-1) 0;
   padding: 0;
   background: transparent;
   border-radius: 0;
@@ -500,15 +500,15 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .equation-showcase .formula {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   font-family: 'Courier New', monospace;
 }
 
 .formula-description {
   font-size: 0.85rem;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.75;
-  margin: 0.5rem 0 0 0;
+  margin: var(--ds-space-rem-0-5) 0 0 0;
   font-style: italic;
   text-align: center;
 }
@@ -516,50 +516,50 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .empirical-findings h4 {
   font-size: 1rem;
   font-weight: 600;
-  color: #f4d03f;
-  margin: 1rem 0 0.5rem 0;
+  color: var(--ds-color-gold);
+  margin: var(--ds-space-rem-1) 0 var(--ds-space-rem-0-5) 0;
 }
 
 .empirical-findings ul {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: var(--ds-space-rem-1-25);
 }
 
 .empirical-findings li {
   font-size: 0.9rem;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.85;
   margin-bottom: 0.25rem;
 }
 
 /* Summary Table Academic */
 .summary-table-academic {
-  margin: 1rem 0;
+  margin: var(--ds-space-rem-1) 0;
   overflow-x: auto;
 }
 
 .summary-table-academic table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
+  background: var(--ds-color-white-02);
+  border-radius: var(--ds-radius-8);
   overflow: hidden;
 }
 
 .summary-table-academic th {
-  background: rgba(244, 208, 63, 0.15);
-  color: #f4d03f;
+  background: var(--ds-color-gold-15);
+  color: var(--ds-color-gold);
   font-weight: 600;
   font-size: 0.9rem;
-  padding: 0.75rem;
+  padding: var(--ds-space-rem-0-75);
   text-align: left;
-  border-bottom: 2px solid rgba(244, 208, 63, 0.3);
+  border-bottom: 2px solid var(--ds-color-gold-30);
 }
 
 .summary-table-academic td {
-  padding: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  padding: var(--ds-space-rem-0-75);
+  border-bottom: 1px solid var(--ds-color-white-10);
+  color: var(--ds-color-white);
   opacity: 0.9;
   font-size: 0.85rem;
   vertical-align: top;
@@ -567,7 +567,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 
 .core-variables-content .table-symbol {
   font-weight: 700;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   font-size: 1.1rem;
 }
 
@@ -582,10 +582,10 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 /* Takeaway Academic */
 .takeaway-academic {
   margin-top: 3rem;
-  padding: 2rem;
-  background: rgba(244, 208, 63, 0.08);
-  border-radius: 12px;
-  border: 2px solid rgba(244, 208, 63, 0.2);
+  padding: var(--ds-space-rem-2);
+  background: var(--ds-color-gold-08);
+  border-radius: var(--ds-radius-12);
+  border: 2px solid var(--ds-color-gold-20);
   text-align: center;
 }
 
@@ -593,8 +593,8 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: var(--ds-space-rem-0-75);
+  margin-bottom: var(--ds-space-rem-1);
 }
 
 .takeaway-icon {
@@ -604,14 +604,14 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .takeaway-header h3 {
   font-size: 1.375rem;
   font-weight: 600;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   margin: 0;
 }
 
 .takeaway-text {
   font-size: 1rem;
   line-height: 1.7;
-  color: #ffffff;
+  color: var(--ds-color-white);
   opacity: 0.95;
   margin: 0;
   max-width: 800px;
@@ -625,7 +625,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   align-items: center;
   justify-content: center;
   margin: 5rem 0 3rem 0;
-  gap: 2rem;
+  gap: var(--ds-space-rem-2);
 }
 
 .end-line {
@@ -635,14 +635,14 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .end-badge {
-  background: linear-gradient(135deg, rgba(244, 208, 63, 0.15), rgba(244, 208, 63, 0.08));
-  border: 2px solid rgba(244, 208, 63, 0.3);
+  background: linear-gradient(135deg, var(--ds-color-gold-15), var(--ds-color-gold-08));
+  border: 2px solid var(--ds-color-gold-30);
   border-radius: 50px;
-  padding: 1rem 2rem;
+  padding: var(--ds-space-rem-1) var(--ds-space-rem-2);
   text-align: center;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(244, 208, 63, 0.15);
+  box-shadow: 0 8px 32px var(--ds-color-gold-15);
   position: relative;
   overflow: hidden;
 }
@@ -654,8 +654,8 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(244, 208, 63, 0.2), transparent);
-  animation: shimmer 3s infinite;
+  background: linear-gradient(90deg, transparent, var(--ds-color-gold-20), transparent);
+  animation: shimmer var(--ds-duration-3s) infinite;
 }
 
 @keyframes shimmer {
@@ -664,34 +664,34 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .end-text {
-  color: #f4d03f;
+  color: var(--ds-color-gold);
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.5px;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--ds-space-rem-0-5);
 }
 
 .end-dots {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--ds-space-rem-0-5);
 }
 
 .end-dots span {
   width: 8px;
   height: 8px;
-  background: #f4d03f;
+  background: var(--ds-color-gold);
   border-radius: 50%;
-  animation: pulse 2s infinite;
+  animation: pulse var(--ds-duration-2s) infinite;
 }
 
 .end-dots span:nth-child(2) {
-  animation-delay: 0.3s;
+  animation-delay: var(--ds-duration-300ms);
 }
 
 .end-dots span:nth-child(3) {
-  animation-delay: 0.6s;
+  animation-delay: var(--ds-duration-600ms);
 }
 
 @keyframes pulse {
@@ -704,7 +704,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   .academic-layout {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--ds-space-rem-1-5);
   }
   
   .theory-column,
@@ -736,7 +736,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   }
   
   .academic-abstract {
-    margin-bottom: 2rem;
+    margin-bottom: var(--ds-space-rem-2);
   }
   
   .abstract-title {
@@ -744,7 +744,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   }
   
   .abstract-content {
-    padding: 1.5rem;
+    padding: var(--ds-space-rem-1-5);
   }
   
   .abstract-text {
@@ -757,7 +757,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   .detail-card,
   .threshold-card,
   .summary-card {
-    padding: 1.25rem;
+    padding: var(--ds-space-rem-1-25);
     margin-bottom: 0;
   }
   
@@ -765,7 +765,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1rem;
+    gap: var(--ds-space-rem-1);
   }
   
   .variable-symbol-independent {
@@ -776,7 +776,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   
   .components-grid {
     grid-template-columns: 1fr;
-    gap: 0.5rem;
+    gap: var(--ds-space-rem-0-5);
   }
   
   .equation-text {
@@ -786,16 +786,16 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   .principle-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--ds-space-rem-0-75);
   }
   
   .principle-content {
-    gap: 0.5rem;
+    gap: var(--ds-space-rem-0-5);
   }
   
   .takeaway-academic {
-    padding: 1.5rem;
-    margin-top: 2rem;
+    padding: var(--ds-space-rem-1-5);
+    margin-top: var(--ds-space-rem-2);
   }
 }
 
@@ -805,7 +805,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   }
   
   .abstract-content {
-    padding: 1.25rem;
+    padding: var(--ds-space-rem-1-25);
   }
   
   .definition-card,
@@ -814,7 +814,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   .detail-card,
   .threshold-card,
   .summary-card {
-    padding: 1rem;
+    padding: var(--ds-space-rem-1);
   }
   
   .variable-symbol-independent {
@@ -832,7 +832,7 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   }
   
   .main-equation {
-    padding: 1rem 1.5rem;
+    padding: var(--ds-space-rem-1) var(--ds-space-rem-1-5);
   }
   
   .component-item {
@@ -855,13 +855,13 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   
   .summary-table-academic th,
   .summary-table-academic td {
-    padding: 0.5rem;
+    padding: var(--ds-space-rem-0-5);
     font-size: 0.75rem;
   }
   
   .takeaway-header {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--ds-space-rem-0-5);
   }
   
   .takeaway-text {
@@ -873,12 +873,12 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .core-variables-content .corevars-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0.75rem 0 1rem;
+  gap: var(--ds-space-rem-0-75);
+  margin: var(--ds-space-rem-0-75) 0 var(--ds-space-rem-1);
 }
 
 .core-variables-content .corevars-stats-grid--compact {
-  margin-top: 0.75rem;
+  margin-top: var(--ds-space-rem-0-75);
   margin-bottom: 0.25rem;
 }
 
@@ -897,8 +897,8 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .core-variables-content .corevars-stat {
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid rgba(244, 208, 63, 0.14);
-  border-radius: 12px;
-  padding: 0.75rem;
+  border-radius: var(--ds-radius-12);
+  padding: var(--ds-space-rem-0-75);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
@@ -918,8 +918,8 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .core-variables-content .corevars-charts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0.75rem 0 0.5rem;
+  gap: var(--ds-space-rem-0-75);
+  margin: var(--ds-space-rem-0-75) 0 var(--ds-space-rem-0-5);
 }
 
 @media (max-width: 900px) {
@@ -929,9 +929,9 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .core-variables-content .corevars-chart-title {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--ds-color-white-85);
   font-size: 0.85rem;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--ds-space-rem-0-5);
 }
 
 .core-variables-content .corevars-svg {
@@ -944,8 +944,8 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 .core-variables-content .corevars-pairs-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0.75rem 0 0.5rem;
+  gap: var(--ds-space-rem-0-75);
+  margin: var(--ds-space-rem-0-75) 0 var(--ds-space-rem-0-5);
 }
 
 @media (max-width: 900px) {
@@ -955,23 +955,23 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .core-variables-content .corevars-note {
-  margin-top: 0.75rem;
+  margin-top: var(--ds-space-rem-0-75);
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.8rem;
   line-height: 1.5;
 }
 
 .core-variables-content .corevars-validity-grid {
-  margin-top: 1rem;
+  margin-top: var(--ds-space-rem-1);
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.85rem;
 }
 
 .core-variables-content .corevars-validity-card {
-  border-radius: 12px;
-  border: 1px solid rgba(244, 208, 63, 0.2);
-  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--ds-radius-12);
+  border: 1px solid var(--ds-color-gold-20);
+  background: var(--ds-color-black-20);
   padding: 0.85rem;
 }
 
@@ -979,14 +979,14 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 0.6rem;
+  gap: var(--ds-space-rem-0-6);
   flex-wrap: wrap;
 }
 
 .core-variables-content .corevars-validity-header h4 {
   margin: 0;
   font-size: 0.95rem;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
 }
 
 .core-variables-content .corevars-validity-meta {
@@ -995,16 +995,16 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
 }
 
 .core-variables-content .corevars-validity-table {
-  margin-top: 0.6rem;
+  margin-top: var(--ds-space-rem-0-6);
 }
 
 .core-variables-content .corevars-severity-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full);
   padding: 0.12rem 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--ds-color-white-20);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -1032,18 +1032,18 @@ html[data-pdf-export='true'] .core-variables-content .corevars-chart-title {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
-  margin-top: 0.75rem;
+  margin-top: var(--ds-space-rem-0-75);
 }
 
 .core-variables-content .corevars-validity-two-col h5 {
   margin: 0 0 0.35rem;
   font-size: 0.84rem;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
 }
 
 .core-variables-content .corevars-flag-list {
   margin: 0;
-  padding-left: 1rem;
+  padding-left: var(--ds-space-rem-1);
 }
 
 .core-variables-content .corevars-flag-list li {

@@ -91,6 +91,16 @@ const ROUTES = ['', ...ANALYSIS_ROUTES, ...MENU_AND_MODAL_ROUTES];
 
   for (const route of ROUTES) {
     const page = await browser.newPage();
+    if (route === 'ai-interpreter') {
+      // Opening the modal auto-submits a starter prompt; route checks stay offline.
+      await page.route('**/api/ai/interpret', (request) =>
+        request.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
+        }),
+      );
+    }
     const pageErrors = [];
     page.on('pageerror', (e) => pageErrors.push(e.message));
 

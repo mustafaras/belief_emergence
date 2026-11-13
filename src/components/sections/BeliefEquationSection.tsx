@@ -341,10 +341,12 @@ const BeliefEquationSection: React.FC = () => {
           />
         </div>
         <div className="methodology-note">
-          <strong>Parameters:</strong> α=1.19 (ceiling), β=0.38 (floor), k=2.50 (steepness). Sigmoid prevents unphysical
-          outputs outside (0,1); we additionally clip Z to the canonical interior band [0.0001, 0.9999] so it is never exactly 0 or 1.
-          This captures diminishing returns at extremes. Inflection at Φ=0 represents the critical
-          transition point where belief emergence accelerates most rapidly.
+          <strong>Parameters:</strong> the sigmoid's ceiling and floor are fixed at 1 and 0, and its
+          steepness is <span className="formula">k = {OPTIMIZED_STRUCTURAL_PARAMS.k.toFixed(2)}</span>.
+          The structural exponents are <span className="formula">α = {OPTIMIZED_STRUCTURAL_PARAMS.alpha.toFixed(3)}</span> and{' '}
+          <span className="formula">β = {OPTIMIZED_STRUCTURAL_PARAMS.beta.toFixed(3)}</span>, both at the lower
+          estimation bound — the panel does not identify them (see &ldquo;What this model cannot show&rdquo;).
+          Z is clipped to the canonical interior band [0.0001, 0.9999] so it is never exactly 0 or 1.
         </div>
       </div>
 
