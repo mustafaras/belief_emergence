@@ -196,25 +196,7 @@ async function main(): Promise<void> {
       process.exit(1)
     }
 
-    // The graph's responsive parent can land on adjacent fractional CSS heights on macOS
-    // and Linux. Fix the graph element to the recorded pixel dimensions before capture so
-    // both browsers rasterize the same viewport rather than rounding 420.5px differently.
-    await page.evaluate(({ width, height }) => {
-      const graph = document.querySelector('.js-plotly-plot') as HTMLElement | null
-      if (!graph) throw new Error('3D surface disappeared before sizing the snapshot')
-      graph.style.width = `${width}px`
-      graph.style.height = `${height}px`
-      window.dispatchEvent(new Event('resize'))
-    }, { width: expectedPixels.width, height: expectedPixels.height })
-    await page.waitForTimeout(500)
-
-    const normalizedBox = await plot.boundingBox()
-    if (!normalizedBox) {
-      console.error('FAIL  the resized 3D surface has no bounding box')
-      await browser.close()
-      process.exit(1)
-    }
-    captured = await page.screenshot({ clip: normalizedBox })
+    captured = await page.screenshot({ clip: box })
   } finally {
     await browser.close()
   }
