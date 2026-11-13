@@ -14,9 +14,8 @@
  * file; the comparison decodes PNG scanlines and compares their pixels, so platform-specific
  * PNG compression does not affect the result.
  *
- * The screenshot is deterministic here — captured twice from the same build, byte-identical
- * — which is what makes it usable as an acceptance test rather than a source of flaky
- * failures.
+ * The screenshot is deterministic here — captured twice from the same build, pixel-identical
+ * — which is what makes it usable as an acceptance test rather than a source of flaky failures.
  *
  * Skips (exit 0 with a SKIP line) when no browser or server is available, the same contract
  * as the other browser checks. In CI the browser is installed by the workflow and `ci:gate`
@@ -147,6 +146,9 @@ async function main(): Promise<void> {
     return
   }
 
+  const expected = fs.readFileSync(BASELINE)
+  const expectedPixels = decodePng(expected)
+
   const browser = await chromium.launch({ executablePath: chromePath, headless: true })
   let captured: Buffer
 
@@ -194,15 +196,31 @@ async function main(): Promise<void> {
       process.exit(1)
     }
 
-    captured = await page.screenshot({ clip: box })
+    // The graph's responsive parent can land on adjacent fractional CSS heights on macOS
+    // and Linux. Fix the graph element to the recorded pixel dimensions before capture so
+    // both browsers rasterize the same viewport rather than rounding 420.5px differently.
+    await page.evaluate(({ width, height }) => {
+      const graph = document.querySelector('.js-plotly-plot') as HTMLElement | null
+      if (!graph) throw new Error('3D surface disappeared before sizing the snapshot')
+      graph.style.width = `${width}px`
+      graph.style.height = `${height}px`
+      window.dispatchEvent(new Event('resize'))
+    }, { width: expectedPixels.width, height: expectedPixels.height })
+    await page.waitForTimeout(500)
+
+    const normalizedBox = await plot.boundingBox()
+    if (!normalizedBox) {
+      console.error('FAIL  the resized 3D surface has no bounding box')
+      await browser.close()
+      process.exit(1)
+    }
+    captured = await page.screenshot({ clip: normalizedBox })
   } finally {
     await browser.close()
   }
 
-  const expected = fs.readFileSync(BASELINE)
   const hash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex').slice(0, 16)
 
-  const expectedPixels = decodePng(expected)
   const capturedPixels = decodePng(captured)
   const pixelIdentical =
     expectedPixels.width === capturedPixels.width &&
