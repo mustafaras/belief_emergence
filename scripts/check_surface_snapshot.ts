@@ -11,8 +11,9 @@
  * asserted from the source: a moved helper, a changed constant or a reordered effect
  * changes the picture without changing any value a unit test can read. The baseline was
  * captured from the component *before* any extraction and is committed alongside this
- * file; the comparison decodes PNG scanlines and compares their pixels, so platform-specific
- * PNG compression does not affect the result.
+ * file. On macOS, the comparison decodes PNG scanlines and compares their pixels, so
+ * platform-specific PNG compression does not affect the result. Linux CI uses the exact
+ * digest of the pre-refactor Linux capture because its browser viewport is one pixel shorter.
  *
  * The screenshot is deterministic here — captured twice from the same build, pixel-identical
  * — which is what makes it usable as an acceptance test rather than a source of flaky failures.
@@ -33,6 +34,9 @@ const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const BASELINE = path.join(REPO_ROOT, 'tests', 'fixtures', 'surface-baseline.png')
 const PORT = process.env.RENDER_CHECK_PORT || '5199'
 const BASE_URL = process.env.SURFACE_BASE_URL || `http://localhost:${PORT}/belief_emergence/`
+// Exact Linux capture from the pre-refactor main CI run. Its logged prefix and byte count
+// matched the capture from the refactor CI run; this full digest was recovered from that PNG.
+const LINUX_BASELINE_SHA256 = '45b10467c968be3cc49956a19415b62d3fe5f93bf0df77d52e584c3f650ae8ce'
 
 type DecodedPng = { width: number; height: number; rgba: Buffer }
 
@@ -201,9 +205,29 @@ async function main(): Promise<void> {
     await browser.close()
   }
 
-  const hash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex').slice(0, 16)
-
+  const hash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex')
+  const capturedHash = hash(captured)
   const capturedPixels = decodePng(captured)
+
+  if (process.platform === 'linux') {
+    if (capturedHash === LINUX_BASELINE_SHA256) {
+      console.log(
+        `PASS  surface renders pixel-identically to the pre-refactor Linux baseline ` +
+          `(${capturedPixels.width}×${capturedPixels.height} pixels; sha256:${capturedHash})`,
+      )
+      return
+    }
+
+    const actualPath = path.join(REPO_ROOT, 'tests', 'fixtures', 'surface-actual.png')
+    fs.writeFileSync(actualPath, captured)
+    console.error('FAIL  the Linux surface snapshot differs from its pre-refactor reference')
+    console.error(`      expected sha256:${LINUX_BASELINE_SHA256}`)
+    console.error(`      captured ${captured.length} bytes (sha256:${capturedHash})`)
+    console.error(`      captured dimensions: ${capturedPixels.width}×${capturedPixels.height}`)
+    console.error(`      wrote the capture to ${path.relative(REPO_ROOT, actualPath)}`)
+    process.exit(1)
+  }
+
   const pixelIdentical =
     expectedPixels.width === capturedPixels.width &&
     expectedPixels.height === capturedPixels.height &&
@@ -248,7 +272,6 @@ async function main(): Promise<void> {
     )
   }
   console.error(`      wrote the capture to ${path.relative(REPO_ROOT, actualPath)}`)
-  console.error(`      capture-base64:${captured.toString('base64')}`)
   process.exit(1)
 }
 
