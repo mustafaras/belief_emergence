@@ -4,19 +4,19 @@
    dense, aligned, and with the verdict carrying the colour rather than the alpha. */
 
 .construct-audit {
-  padding: 20px 0 8px;
+  padding: var(--ds-space-px-20) 0 var(--ds-space-px-8);
   color: var(--text-color);
   font-family: var(--font-primary);
 }
 
 .construct-audit-header h3 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--ds-space-px-6);
   font-size: var(--type-h3, 16px);
   letter-spacing: var(--tracking-tight, -0.01em);
 }
 
 .construct-audit-lead {
-  margin: 0 0 14px;
+  margin: 0 0 var(--ds-space-px-14);
   max-width: 820px;
   color: var(--text-secondary);
   font-size: var(--type-body, 14px);
@@ -26,7 +26,7 @@
 .construct-audit-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius, 8px);
+  border-radius: var(--radius, var(--ds-radius-8));
 }
 
 .construct-audit-table {
@@ -47,7 +47,7 @@
 
 .construct-audit-table th,
 .construct-audit-table td {
-  padding: 10px 12px;
+  padding: var(--ds-space-px-10) var(--ds-space-px-12);
   border-bottom: 1px solid var(--glass-border);
   text-align: left;
   vertical-align: top;
@@ -82,7 +82,7 @@
 .construct-name {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--ds-space-px-2);
   min-width: 170px;
 }
 
@@ -109,7 +109,7 @@
 
 .construct-alpha-suppressed {
   display: block;
-  margin-top: 2px;
+  margin-top: var(--ds-space-px-2);
   color: var(--text-tertiary);
   font-size: 10.5px;
   font-style: normal;
@@ -118,9 +118,9 @@
 
 .construct-verdict {
   display: inline-block;
-  padding: 2px 9px;
+  padding: var(--ds-space-px-2) 9px;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -150,7 +150,7 @@
 }
 
 .construct-audit-foot {
-  margin: 12px 0 0;
+  margin: var(--ds-space-px-12) 0 0;
   color: var(--text-secondary);
   font-size: 13px;
 }
@@ -165,15 +165,15 @@
    reports "three of eight": the narrowing from eight proposed channels to four testable
    ones is part of the finding, not a presentational choice. */
 .construct-audit-scope {
-  margin-top: 16px;
-  padding: 12px 14px;
+  margin-top: var(--ds-space-px-16);
+  padding: var(--ds-space-px-12) var(--ds-space-px-14);
   background: var(--secondary-bg);
   border-left: 3px solid var(--glass-border);
-  border-radius: var(--radius, 6px);
+  border-radius: var(--radius, var(--ds-radius-6));
 }
 
 .construct-audit-scope h4 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--ds-space-px-6);
   color: var(--text-secondary);
   font-size: var(--type-small, 11px);
   font-weight: 600;
@@ -182,7 +182,7 @@
 }
 
 .construct-audit-scope p {
-  margin: 0 0 8px;
+  margin: 0 0 var(--ds-space-px-8);
   color: var(--text-secondary);
   font-size: 13px;
   line-height: var(--leading-normal, 1.5);

@@ -91,12 +91,30 @@ page error, and at least one interactive control. Report the per-route character
 **Done when** every route passes that check and the export serialiser is the only place
 state is encoded.
 
-**Built 2026-11-12.** 12 routes, each rendering 10,000+ characters cold. The route lives in
-the query string (`?v=`), not the path: the app is served from `base: '/belief_emergence/'`,
-so a path-based deep link 404s on static hosting. `urlState.ts` remains the only place state
-is written — audited by grepping for `history.pushState` / `replaceState` outside it, which
-returns nothing. `npm run check:routes` drives every route in a browser and was confirmed to
-fail by doctoring its own thresholds (18 named failures, exit 1).
+**Built 2026-11-12; rechecked 2026-11-13.** `npm run check:routes` opened all 12 routes
+cold, with no route errors, at least one visible control per route, and 500+ characters on
+each. The live per-route counts were:
+
+| route | characters |
+|---|---:|
+| landing | 19,869 |
+| component-analysis | 10,402 |
+| field-dynamics | 9,826 |
+| statistical-analysis | 9,984 |
+| sensitivity-analysis | 9,937 |
+| emergence-analysis | 9,944 |
+| model-diagnostics | 9,882 |
+| advanced-parameters | 12,057 |
+| phi-contributions | 12,012 |
+| documentation | 22,114 |
+| ai-interpreter | 11,910 |
+| presets | 14,352 |
+
+The route lives in the query string (`?v=`), not the path: the app is served from
+`base: '/belief_emergence/'`, so a path-based deep link 404s on static hosting. `urlState.ts`
+remains the only place state is written — audited by grepping for `history.pushState` /
+`replaceState` outside it, which returns nothing. The deliberate threshold mutation produced
+18 named failures and exit 1.
 
 ---
 
@@ -142,6 +160,11 @@ mechanical rather than advisory:
 Also fixed while auditing this prompt: descriptions were written with JSON-style `\u2019`
 escapes inside TypeScript string literals, so they reached the page as literal `\u2019`
 and leaked the digits `2019` into the rendered row.
+
+**Current-tree reconciliation (2026-11-13).** The index now has 33 artifacts: 10 imported,
+11 referenced only in prose, and 12 untouched. The earlier 31/32 counts above describe the
+tree at their respective points in this sequence; `npm run check:evidence-index` confirms
+the current split and that all 33 are described.
 
 ---
 
@@ -292,9 +315,20 @@ offending value. A check that cannot be made to fail has not been tested.
 **Done when** both checks fail on a deliberately wrong number and pass on the real tree,
 and the allowlist is under 10 entries.
 
-**Built 2026-11-12.** `npm run check:dom-numbers` scans every route and resolves each
-token by exact value, artifact rounding, recomputation, or a 3-entry allowlist; 1375
-distinct numbers across 11 routes. `npm run check:render` now visits all 12 routes.
+**Built 2026-11-13; rechecked 2026-11-13.** `npm run check:dom-numbers` now scans the
+router sitemap, including `ai-interpreter`: 1,526 distinct route-number pairs across all 12
+routes resolved, with a 3-entry allowlist. The AI modal's initial `589` token estimate is
+derived from the same default system prompt and starter question used by the UI; automated
+browser checks answer the AI endpoint locally with a 503, so opening this route cannot call
+an external model. `npm run check:render` also covers all 12 routes. Temporary negative
+mutations were rejected: changing X from 0.730 to 0.729 failed with the expected source
+named, and changing the panel count to 630 failed the render check. Both source files were
+restored.
+
+The follow-up source-binding pass removed that ambiguity. The latest run resolves all 1,526
+distinct rendered numbers on all 12 routes, with 0 unresolved and 0 source-independent
+artifact-rounding matches. The three allowlisted constants remain the only listed values;
+240 rounded displays are checked against their named UI or data source.
 
 Four real defects were found and fixed while building it, which is the point of the
 exercise: `c1`/`c4`/`c5`/`c7` tooltips claimed coefficients of `+1.003`, `-0.635`,
@@ -330,11 +364,20 @@ before and after. Report both numbers.
 **Done when** the initial chunk is under 2 MB, no route regressed in the reachability
 check from Prompt 6, and the CI budget is enforced.
 
-**Built 2026-11-12.** 6.6 MB -> **699 kB** in one chunk. `Surface3DOverlay` (4.5 MB of
+**Built 2026-11-12; rechecked 2026-11-13.** The initial payload fell from 6.6 MB to
+**700 kB** in one chunk. `Surface3DOverlay` (4.5 MB of
 Plotly), `InteractiveDocumentation` (KaTeX), `AiInterpreterModal` and the PDF exporter are
 now behind `React.lazy` / dynamic import, and the surface no longer mounts on arrival —
 which was also the last place the interface still led with the 3D view rather than the
 audit.
+
+The missing `domContentLoadedEventEnd` comparison was measured against commit `04f751d`
+(immediately before this bundle split) and Prompt 7's commit `5f38245` in local headless
+Chrome, seven cold navigations per build: median **647.8 ms before**, **291.5 ms after**
+(55.0% lower). The current tree measured 306.7 ms; that figure includes later prompt changes
+and is not used for the before/after comparison. `npm run check:bundle-budget`
+independently measured 700 kB requested by the landing route, under the 2 MB budget, with
+four heavy modules deferred.
 
 Two design decisions taken while measuring:
 
@@ -399,37 +442,28 @@ right"); and new unit tests cover the extracted geometry functions.
 **Done when** the surface renders identically, the component is under 800 lines, and the
 extracted modules have tests.
 
-**PARTIALLY BUILT 2026-11-12 — the line target was not met, and the reason is structural.**
+**Built and verified 2026-11-13.** The original public props still pass through unchanged.
+The public `Surface3DSurface.tsx` is now a 7-line facade; its rendered view and tools dock
+are separate 668- and 724-line components. The state/data controller hook remains separate
+from rendering (2,584 lines); the largest rendered component module is the 724-line dock.
 
-Extracted, verified, tested:
-  `surface/geometry.ts` (168 lines) — grid construction, slice polylines, nearest-index,
-    numeric coercion. 25 unit tests. Prompt 9's instruction to move rather than rewrite was
-    followed: every body is verbatim.
-  `surface/camera.ts` (57 lines) — four camera presets, documentation axis bounds, logit.
+The four requested areas now have dedicated modules and focused tests:
 
-Acceptance test built and committed: `npm run check:surface-snapshot` renders the surface in
-a browser and compares the PNG byte-for-byte against `tests/fixtures/surface-baseline.png`,
-captured before any extraction. Confirmed to fail by changing one camera component by 0.1
-(44,922 bytes -> 44,691). The screenshot was verified deterministic across repeated
-captures, which is what makes it usable rather than a flaky test.
+  - `surface/geometry.ts` and `surface/camera.ts` hold geometry and camera primitives;
+    `tests/surface.geometry.test.ts` has 25 cases.
+  - `surface/useSurface3DViewState.ts` owns camera state, URL initialization/write-back,
+    and view/resolution state; `tests/surface.viewState.test.ts` checks camera tolerance.
+  - `surface/colorScale.ts`, `surface/plotLegend.ts`,
+    `surface/useSurfaceColorScale.ts`, and `Surface3DColorScaleControls.tsx` isolate palette
+    construction, Plotly colorbar options, and the palette controls; the focused suite has
+    3 cases.
+  - `surface/useSurface3DExport.ts` owns snapshot state and export effects; its focused
+    suite checks accepted and rejected image data URLs.
 
-**The 800-line target cannot be reached by extraction.** After moving everything that is
-separable the component is 4,164 lines, and what remains is not misplaced helpers:
-
-  - 46 `useState` hooks and 3,781 lines of JSX in one function.
-  - The dock panel alone is ~1,100 lines of markup driven by ~20 of those hooks.
-  - Every handler closes over the surface cache refs, the camera state and the URL
-    serialiser simultaneously.
-
-Splitting that requires threading props and callbacks through new boundaries — a rewrite
-with a different failure mode, not a move. Prompt 9 explicitly says "move code; do not
-rewrite it", so the honest outcome is: the separable part is done and verified, and the
-remaining work is a state-management refactor that this prompt's own constraint forbids
-doing casually.
-
-**Finding, as the prompt asked to report rather than work around:** the component is not
-large because helpers are in the wrong file. It is large because it owns 46 pieces of state
-in one function. Extraction addresses the first problem and cannot address the second.
+`npm run check:surface-snapshot` passes against the pre-extraction PNG byte-for-byte
+(44,922 bytes, sha256 `2cd58694f37190c3`). Focused tests pass (52/52), `npx tsc -b`
+passes, and `npm run build` succeeds. The full `npm run ci:gate` also passes 80/80 checks.
+Prompt 9 is closed; Prompt 11 remains the next prompt and has not been started.
 
 ---
 
@@ -452,6 +486,21 @@ replaced them.
 
 **Done when** the tokens are used by every section component and the rendered output is
 visually unchanged.
+
+**Built 2026-11-13.** Correcting the prompt's stale starting point, the committed baseline
+has 25 CSS files and 25,020 lines. Its measured stylesheet values include 100 distinct
+spacing dimensions (1,654 uses) and 719 distinct color literals (2,579 uses). The shared
+layer in `src/styles/tokens.css` now defines 89 measured tokens: 27 spacing, 43 color, 10
+radius and 9 duration tokens. The 89 definitions are all referenced, across 1,319 CSS
+`var()` uses. Each of the six `src/components/sections/*.css` files uses the shared layer;
+additional migrations cover `App.css`, formula, audit, evidence, limits and support styles.
+
+Every file was migrated incrementally with its original values preserved. Pixel comparison
+was exact on the ten stable routes and the documentation route after its entrance animation;
+the AI interpreter route is asynchronous and therefore excluded from byte-for-byte image
+comparison. `ci:gate` rendered all 12 routes and passed 80/80 checks. The production build
+passed, with existing large-chunk and mixed static/dynamic import warnings; lint had zero
+errors and two existing warnings.
 
 ---
 

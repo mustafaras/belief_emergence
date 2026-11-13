@@ -70,6 +70,16 @@ const ROUTES = [
   for (const route of ROUTES) {
     const label = route || 'landing';
     const page = await browser.newPage();
+    if (route === 'ai-interpreter') {
+      // Opening the modal auto-submits a starter prompt; route checks stay offline.
+      await page.route('**/api/ai/interpret', (request) =>
+        request.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
+        }),
+      );
+    }
     const consoleErrors = [];
     page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
     page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });

@@ -62,7 +62,7 @@ export function buildCorpus(sources: unknown[]): Corpus {
  * there is safe at any precision, and needed, because the interface prints derived values
  * at one or two places.
  */
-export type RoundingPolicy = 'strict' | 'permissive'
+export type RoundingPolicy = 'strict' | 'permissive' | 'exact'
 
 /**
  * A two-place token may still round, but only from a value that is itself far more
@@ -153,6 +153,11 @@ export function resolveToken(
   if (!Number.isFinite(target)) return { status: 'unresolved' }
 
   if (corpus.values.has(target)) return { status: 'resolved', how: 'exact' }
+
+  // Artifact-wide rounding is not provenance: over a large corpus, an unrelated value
+  // can fall inside the token's rounding window. DOM audits use `exact` and must derive
+  // rounded display values from the specific code/data source that produced them.
+  if (policy === 'exact') return { status: 'unresolved' }
 
   for (const value of corpus.values) {
     if (roundsToToken(value, token, policy)) return { status: 'resolved', how: 'rounded' }

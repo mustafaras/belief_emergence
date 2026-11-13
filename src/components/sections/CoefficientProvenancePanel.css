@@ -1,126 +1,126 @@
 .coeff-provenance-panel {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(244, 208, 63, 0.12);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 24px;
+  background: var(--ds-color-white-02);
+  border: 1px solid var(--ds-color-gold-12);
+  border-radius: var(--ds-radius-12);
+  padding: var(--ds-space-rem-1-5);
+  margin-bottom: var(--ds-space-px-24);
   font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.5;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  transition: all 0.3s ease;
+  transition: all var(--ds-duration-300ms) ease;
 }
 
 .coeff-provenance-title {
-  margin: 0 0 16px 0;
+  margin: 0 0 var(--ds-space-px-16) 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #f4d03f;
-  border-bottom: 1px solid rgba(244, 208, 63, 0.15);
-  padding-bottom: 0.5rem;
+  color: var(--ds-color-gold);
+  border-bottom: 1px solid var(--ds-color-gold-15);
+  padding-bottom: var(--ds-space-rem-0-5);
 }
 
 .coeff-provenance-subtitle {
-  margin: 12px 0 8px 0;
+  margin: var(--ds-space-px-12) 0 var(--ds-space-px-8) 0;
   font-size: 14px;
   font-weight: 600;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
 }
 
 .coeff-provenance-section {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(244, 208, 63, 0.1);
+  margin-bottom: var(--ds-space-px-16);
+  padding-bottom: var(--ds-space-px-16);
+  border-bottom: 1px solid var(--ds-color-gold-10);
 }
 
 .coeff-provenance-status-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: var(--ds-space-px-12);
+  margin-bottom: var(--ds-space-px-12);
 }
 
 .coeff-provenance-label {
   font-weight: 500;
-  color: rgba(244, 208, 63, 0.7);
+  color: var(--ds-color-gold-70);
   min-width: 120px;
 }
 
 .coeff-provenance-status-builtin {
   display: inline-block;
-  background-color: rgba(244, 208, 63, 0.15);
-  color: #f4d03f;
-  padding: 4px 8px;
-  border-radius: 4px;
+  background-color: var(--ds-color-gold-15);
+  color: var(--ds-color-gold);
+  padding: var(--ds-space-px-4) var(--ds-space-px-8);
+  border-radius: var(--ds-radius-4);
   font-weight: 500;
   font-size: 13px;
-  border: 1px solid rgba(244, 208, 63, 0.3);
+  border: 1px solid var(--ds-color-gold-30);
 }
 
 .coeff-provenance-status-estimated {
   display: inline-block;
   background-color: rgba(120, 200, 255, 0.15);
   color: #78c8ff;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--ds-space-px-4) var(--ds-space-px-8);
+  border-radius: var(--ds-radius-4);
   font-weight: 500;
   font-size: 13px;
   border: 1px solid rgba(120, 200, 255, 0.3);
 }
 
 .coeff-provenance-fingerprint {
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(244, 208, 63, 0.15);
-  border-radius: 4px;
-  padding: 10px 12px;
-  margin-top: 8px;
+  background-color: var(--ds-color-white-02);
+  border: 1px solid var(--ds-color-gold-15);
+  border-radius: var(--ds-radius-4);
+  padding: var(--ds-space-px-10) var(--ds-space-px-12);
+  margin-top: var(--ds-space-px-8);
 }
 
 .coeff-provenance-fp-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: var(--ds-space-px-4) 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--ds-color-white-85);
 }
 
 .coeff-provenance-fp-label {
   font-weight: 500;
-  color: rgba(244, 208, 63, 0.7);
+  color: var(--ds-color-gold-70);
 }
 
 .coeff-provenance-metadata-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 0;
+  padding: var(--ds-space-px-6) 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--ds-color-white-85);
 }
 
 .coeff-provenance-data-fp {
-  margin-top: 8px;
+  margin-top: var(--ds-space-px-8);
 }
 
 .coeff-provenance-data-fp-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin-top: 4px;
+  gap: var(--ds-space-px-8);
+  margin-top: var(--ds-space-px-4);
   font-size: 13px;
 }
 
 .coeff-provenance-fit-metrics {
-  margin-top: 8px;
+  margin-top: var(--ds-space-px-8);
 }
 
 .coeff-provenance-fit-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-  margin-top: 4px;
+  gap: var(--ds-space-px-8);
+  margin-top: var(--ds-space-px-4);
   font-size: 13px;
 }
 
@@ -128,50 +128,50 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(244, 208, 63, 0.15);
-  border-radius: 4px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.85);
+  background-color: var(--ds-color-white-02);
+  border: 1px solid var(--ds-color-gold-15);
+  border-radius: var(--ds-radius-4);
+  padding: var(--ds-space-px-6) var(--ds-space-px-8);
+  color: var(--ds-color-white-85);
 }
 
 .coeff-provenance-fit-key {
   font-weight: 500;
-  color: rgba(244, 208, 63, 0.7);
+  color: var(--ds-color-gold-70);
 }
 
 .coeff-provenance-fit-value {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--ds-color-white-90);
 }
 
 .coeff-provenance-coeff-table {
-  margin-top: 12px;
+  margin-top: var(--ds-space-px-12);
 }
 
 .coeff-provenance-expand-button {
   width: 100%;
-  padding: 10px 12px;
-  background-color: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(244, 208, 63, 0.2);
-  border-radius: 4px;
+  padding: var(--ds-space-px-10) var(--ds-space-px-12);
+  background-color: var(--ds-color-white-02);
+  border: 1px solid var(--ds-color-gold-20);
+  border-radius: var(--ds-radius-4);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(244, 208, 63, 0.85);
+  color: var(--ds-color-gold-85);
   text-align: left;
-  transition: all 0.2s;
+  transition: all var(--ds-duration-200ms);
 }
 
 .coeff-provenance-expand-button:hover {
-  background-color: rgba(244, 208, 63, 0.08);
-  border-color: rgba(244, 208, 63, 0.3);
+  background-color: var(--ds-color-gold-08);
+  border-color: var(--ds-color-gold-30);
 }
 
 .coeff-provenance-table-wrapper {
-  margin-top: 8px;
+  margin-top: var(--ds-space-px-8);
   overflow-x: auto;
-  border: 1px solid rgba(244, 208, 63, 0.15);
-  border-radius: 4px;
+  border: 1px solid var(--ds-color-gold-15);
+  border-radius: var(--ds-radius-4);
 }
 
 .coeff-provenance-table {
@@ -181,16 +181,16 @@
 }
 
 .coeff-provenance-table-header {
-  background-color: rgba(244, 208, 63, 0.08);
-  border-bottom: 2px solid rgba(244, 208, 63, 0.15);
+  background-color: var(--ds-color-gold-08);
+  border-bottom: 2px solid var(--ds-color-gold-15);
 }
 
 .coeff-provenance-th {
-  padding: 8px;
+  padding: var(--ds-space-px-8);
   text-align: center;
   font-weight: 600;
   font-size: 12px;
-  color: #f4d03f;
+  color: var(--ds-color-gold);
 }
 
 .coeff-provenance-th-key {
@@ -202,14 +202,14 @@
 }
 
 .coeff-provenance-table-row {
-  border-bottom: 1px solid rgba(244, 208, 63, 0.08);
+  border-bottom: 1px solid var(--ds-color-gold-08);
 }
 
 .coeff-provenance-td {
-  padding: 8px;
+  padding: var(--ds-space-px-8);
   text-align: center;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--ds-color-white-85);
 }
 
 .coeff-provenance-td-key {
@@ -224,25 +224,25 @@
 .coeff-provenance-error-box {
   background-color: rgba(255, 100, 100, 0.12);
   border: 1px solid rgba(255, 100, 100, 0.3);
-  border-radius: 4px;
-  padding: 10px 12px;
-  margin-bottom: 12px;
+  border-radius: var(--ds-radius-4);
+  padding: var(--ds-space-px-10) var(--ds-space-px-12);
+  margin-bottom: var(--ds-space-px-12);
   font-size: 13px;
   color: #ff8888;
 }
 
 .coeff-provenance-dev-controls {
-  background-color: rgba(244, 208, 63, 0.08);
+  background-color: var(--ds-color-gold-08);
   border: 1px solid rgba(244, 208, 63, 0.25);
-  border-radius: 4px;
-  padding: 12px;
-  margin-top: 16px;
+  border-radius: var(--ds-radius-4);
+  padding: var(--ds-space-px-12);
+  margin-top: var(--ds-space-px-16);
 }
 
 .coeff-provenance-control-row {
-  margin-bottom: 10px;
+  margin-bottom: var(--ds-space-px-10);
   display: flex;
-  gap: 10px;
+  gap: var(--ds-space-px-10);
   align-items: center;
   flex-wrap: wrap;
 }
@@ -250,11 +250,11 @@
 .coeff-provenance-file-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--ds-space-px-6);
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(244, 208, 63, 0.85);
+  color: var(--ds-color-gold-85);
 }
 
 .coeff-provenance-file-input {
@@ -263,24 +263,24 @@
 }
 
 .coeff-provenance-button {
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: var(--ds-space-px-8) var(--ds-space-px-12);
+  border-radius: var(--ds-radius-4);
   border: none;
   cursor: pointer;
   font-size: 12px;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all var(--ds-duration-200ms);
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 .coeff-provenance-toggle-button {
-  background-color: rgba(244, 208, 63, 0.12);
-  color: #f4d03f;
+  background-color: var(--ds-color-gold-12);
+  color: var(--ds-color-gold);
   border: 1px solid rgba(244, 208, 63, 0.25);
 }
 
 .coeff-provenance-toggle-button:hover {
-  background-color: rgba(244, 208, 63, 0.2);
+  background-color: var(--ds-color-gold-20);
   border-color: rgba(244, 208, 63, 0.35);
 }
 
@@ -308,13 +308,13 @@
 
 .ma-divider {
   border-top: 1px solid rgba(0,0,0,0.08);
-  padding-top: 0.75rem;
+  padding-top: var(--ds-space-rem-0-75);
 }
 
 .ma-export-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--ds-space-rem-1);
   flex-wrap: wrap;
 }
 
@@ -324,9 +324,9 @@
   font-weight: 500;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--ds-radius-4);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color var(--ds-duration-200ms);
 }
 
 .ma-export-button-enabled {

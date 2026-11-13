@@ -4,24 +4,24 @@
    comparison: what is this artifact, and is anything reading it. */
 
 .evidence-index {
-  padding: 24px 32px 48px;
+  padding: var(--ds-space-px-24) 32px 48px;
   color: var(--text-color);
   font-family: var(--font-primary);
 }
 
 .evidence-header {
   max-width: 980px;
-  margin-bottom: 20px;
+  margin-bottom: var(--ds-space-px-20);
 }
 
 .evidence-header h2 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--ds-space-px-6);
   font-size: var(--type-h2, 20px);
   letter-spacing: var(--tracking-tight, -0.01em);
 }
 
 .evidence-subtitle {
-  margin: 0 0 16px;
+  margin: 0 0 var(--ds-space-px-16);
   color: var(--text-secondary);
   font-size: var(--type-body, 14px);
   line-height: var(--leading-normal, 1.5);
@@ -30,20 +30,20 @@
 .evidence-tally {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 0 0 16px;
+  gap: var(--ds-space-px-10);
+  margin: 0 0 var(--ds-space-px-16);
   padding: 0;
 }
 
 .evidence-tally-item {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--ds-space-px-2);
   min-width: 92px;
-  padding: 8px 12px;
+  padding: var(--ds-space-px-8) var(--ds-space-px-12);
   background: var(--secondary-bg);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius, 6px);
+  border-radius: var(--radius, var(--ds-radius-6));
 }
 
 .evidence-tally-item dt {
@@ -74,10 +74,10 @@
 
 .evidence-claim {
   margin: 0;
-  padding: 12px 14px;
+  padding: var(--ds-space-px-12) var(--ds-space-px-14);
   background: var(--secondary-bg);
   border-left: 3px solid var(--accent-warning);
-  border-radius: var(--radius, 6px);
+  border-radius: var(--radius, var(--ds-radius-6));
   color: var(--text-color);
   font-size: var(--type-body, 14px);
   line-height: var(--leading-normal, 1.5);
@@ -86,7 +86,7 @@
 .evidence-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius, 8px);
+  border-radius: var(--radius, var(--ds-radius-8));
 }
 
 .evidence-table {
@@ -97,7 +97,7 @@
 
 .evidence-table th,
 .evidence-table td {
-  padding: 9px 12px;
+  padding: 9px var(--ds-space-px-12);
   border-bottom: 1px solid var(--glass-border);
   text-align: left;
   vertical-align: top;
@@ -145,9 +145,9 @@
 
 .evidence-status {
   display: inline-block;
-  padding: 2px 8px;
+  padding: var(--ds-space-px-2) var(--ds-space-px-8);
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -189,7 +189,7 @@
 
 @media (max-width: 900px) {
   .evidence-index {
-    padding: 16px 14px 32px;
+    padding: var(--ds-space-px-16) var(--ds-space-px-14) 32px;
   }
 
   .evidence-description {
@@ -200,7 +200,7 @@
 /* A row whose declared sample disagrees with the rest of the set. Rendered beside the
    count rather than as a row-level badge so the reader sees both numbers at once. */
 .evidence-stale {
-  margin-left: 4px;
+  margin-left: var(--ds-space-px-4);
   color: var(--accent-warning);
   cursor: help;
   font-weight: 600;
@@ -210,7 +210,7 @@
    sub-sample. Deliberately muted: it is not a problem, and styling it like the stale
    marker would teach the reader to ignore both. */
 .evidence-subset {
-  margin-left: 4px;
+  margin-left: var(--ds-space-px-4);
   color: var(--text-tertiary);
   cursor: help;
   font-size: 11px;

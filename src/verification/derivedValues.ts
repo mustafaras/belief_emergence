@@ -18,6 +18,10 @@
  * allowlist records that fact separately.
  */
 import { calculateModel, computeStructuralBase } from '../utils/calculateModel'
+import { computePhiContributions } from '../utils/contributions'
+import { predictFromPanelRow } from '../utils/validation/panelPredict'
+import { INTERACTION_TERMS, OPTIMIZED_SIGMOID_COEFFICIENTS } from '../data/feCoefficients'
+import type { PanelRowCanonical } from '../data/panelDataLoader'
 import {
   normalizePanelXToStructural,
   normalizePanelYToStructural,
@@ -25,10 +29,17 @@ import {
   PANEL_X_MIN,
   PANEL_Y_MAX,
   PANEL_Y_MIN,
+  STRUCTURAL_MAX,
+  STRUCTURAL_MIN,
 } from '../utils/modelContract'
 import { computeTopBarAnalytics } from '../utils/topBarAnalytics'
 import { OPTIMIZED_STRUCTURAL_PARAMS } from '../data/feCoefficients'
 import type { BeliefParameters } from '../types'
+import {
+  DEFAULT_SYSTEM_PROMPT,
+  estimateAiTokens,
+  INITIAL_INTERPRETATION_PROMPT,
+} from '../components/ai/tokenEstimate'
 
 /**
  * The parameter set the interface opens with.
@@ -59,6 +70,26 @@ export const DEFAULT_UI_PARAMS: BeliefParameters = {
  * Recomputed on demand rather than cached, so a change to the model surfaces here instead
  * of going stale in a constant.
  */
+/**
+ * The default parameter values themselves.
+ *
+ * These are the numbers the sliders show on arrival, and they are constants in
+ * `src/App.tsx`, not measurements. They were previously resolved by accident: `0.42`
+ * matched a CV fold metric to four places, `0.04` matched another, and the check reported
+ * them as verified against an artifact the application never reads. Deriving them here
+ * makes the provenance explicit — a code constant, checked against the code.
+ */
+export function deriveDefaultParams(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
+  return Object.values(params).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
+}
+
+/** The AI Interpreter's initial token estimate is ceil(system prompt characters / 4). */
+export function deriveAiTokenCount(): number[] {
+  return [
+    estimateAiTokens(DEFAULT_SYSTEM_PROMPT, [{ content: INITIAL_INTERPRETATION_PROMPT }]),
+  ]
+}
+
 export function deriveComputedValues(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
   const model = calculateModel(params, {
     inputsAreStandardized: false,
@@ -310,4 +341,91 @@ export function deriveLimitArithmetic(input: {
     ...input.profileGrid,
   ]
   return out.filter((n) => Number.isFinite(n))
+}
+
+/**
+ * Per-term Φ contributions, as the sidebar's contribution panel prints them.
+ *
+ * `computePhiContributions` is deterministic and takes only the parameter set, so the
+ * numbers it produces are derivable rather than transcribed. They were previously
+ * unresolved: `0.1009`, `0.0971`, `-0.0570` and the rest matched nothing, because they are
+ * arithmetic on the fitted coefficients rather than values stored in an artifact.
+ */
+export function derivePhiContributions(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
+  const { terms, totalPhi } = computePhiContributions(params)
+  const out: number[] = [totalPhi]
+  for (const term of terms) {
+    if (typeof term.value === 'number' && Number.isFinite(term.value)) out.push(term.value)
+  }
+  return out.filter((n) => Number.isFinite(n))
+}
+
+/**
+ * Values the panels print that are constants or coefficients rather than measurements.
+ *
+ * The panel-space slider bounds come from the model contract. The fitted interaction
+ * coefficients (including their displayed magnitudes) come from the coefficient module.
+ * None is an artifact measurement, and all are derived from the modules that define them.
+ */
+export function derivePanelConstants(): number[] {
+  const out: number[] = [
+    STRUCTURAL_MIN,
+    STRUCTURAL_MAX,
+    PANEL_X_MIN,
+    PANEL_X_MAX,
+    PANEL_Y_MIN,
+    PANEL_Y_MAX,
+  ]
+  for (const value of Object.values(OPTIMIZED_SIGMOID_COEFFICIENTS)) {
+    if (typeof value === 'number' && Number.isFinite(value)) out.push(value)
+  }
+  for (const value of Object.values(INTERACTION_TERMS)) {
+    if (typeof value === 'number' && Number.isFinite(value)) out.push(value, Math.abs(value))
+  }
+  return out
+}
+
+/**
+ * FormulaDisplay's E effect figures, derived from the same fixed coefficients and
+ * parameter values used by its interaction panel.
+ */
+export function deriveFormulaEffectEstimates(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
+  const eMain = OPTIMIZED_SIGMOID_COEFFICIENTS.c6 * (params.E || 0) * 0.1
+  const eInteraction = INTERACTION_TERMS.c_es * (params.E || 0) * (params.S || 0) * 0.01
+  return [Math.abs(eMain), Math.abs(eInteraction), Math.abs(eMain + eInteraction)]
+}
+
+/**
+ * The country-level median R² printed by BeliefEquationSection, recomputed from the
+ * canonical panel with the same row predictor and degenerate-country guard as the UI.
+ */
+export function deriveCountryR2Median(rows: PanelRowCanonical[]): number[] {
+  const groups = new Map<string, { n: number; sumY: number; sumY2: number; sse: number }>()
+
+  for (const row of rows) {
+    const { zPred, zObs } = predictFromPanelRow(row)
+    if (!Number.isFinite(zPred) || !Number.isFinite(zObs)) continue
+    const group = groups.get(row.iso3) ?? { n: 0, sumY: 0, sumY2: 0, sse: 0 }
+    const error = zObs - zPred
+    group.n += 1
+    group.sumY += zObs
+    group.sumY2 += zObs * zObs
+    group.sse += error * error
+    groups.set(row.iso3, group)
+  }
+
+  const values = [...groups.values()]
+    .map(({ n, sumY, sumY2, sse }) => {
+      const mean = sumY / n
+      const total = sumY2 - n * mean * mean
+      const degenerate = total <= Math.max(1e-10, Math.abs(sumY2) * 1e-6)
+      return n >= 3 && !degenerate ? 1 - sse / total : Number.NaN
+    })
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b)
+
+  if (values.length === 0) return []
+  const middle = Math.floor(values.length / 2)
+  const median = values.length % 2 === 1 ? values[middle] : (values[middle - 1] + values[middle]) / 2
+  return [median]
 }

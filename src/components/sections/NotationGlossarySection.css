@@ -3,57 +3,57 @@
 .ng-search-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: var(--ds-space-rem-0-5);
+  margin-bottom: var(--ds-space-rem-1-25);
 }
 
 .ng-search-input {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--border-primary, #3a3f5c);
-  border-radius: 6px;
-  background: var(--surface-secondary, #1e2140);
-  color: var(--text-primary, #e0e0e0);
+  padding: var(--ds-space-rem-0-5) var(--ds-space-rem-0-75);
+  border: 1px solid var(--border-primary, var(--ds-color-glossary-border));
+  border-radius: var(--ds-radius-6);
+  background: var(--surface-secondary, var(--ds-color-glossary-surface));
+  color: var(--text-primary, var(--ds-color-glossary-text));
   font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color var(--ds-duration-200ms);
 }
 
 .ng-search-input:focus {
-  border-color: var(--accent-primary, #6c63ff);
+  border-color: var(--accent-primary, var(--ds-color-glossary-accent));
 }
 
 .ng-search-input::placeholder {
-  color: var(--text-tertiary, #888);
+  color: var(--text-tertiary, var(--ds-color-glossary-muted));
 }
 
 .ng-search-clear {
   background: none;
   border: none;
-  color: var(--text-secondary, #aaa);
+  color: var(--text-secondary, var(--ds-color-glossary-subtle));
   font-size: 1rem;
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  padding: var(--ds-space-rem-0-25) var(--ds-space-rem-0-5);
 }
 
 /* collapsible */
 .ng-collapsible {
-  margin-bottom: 1rem;
-  border: 1px solid var(--border-primary, #3a3f5c);
-  border-radius: 8px;
+  margin-bottom: var(--ds-space-rem-1);
+  border: 1px solid var(--border-primary, var(--ds-color-glossary-border));
+  border-radius: var(--ds-radius-8);
   overflow: hidden;
-  background: var(--surface-secondary, #1e2140);
+  background: var(--surface-secondary, var(--ds-color-glossary-surface));
 }
 
 .ng-collapsible-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--ds-space-rem-0-5);
   width: 100%;
-  padding: 0.65rem 0.85rem;
+  padding: var(--ds-space-rem-0-65) var(--ds-space-rem-0-85);
   border: none;
-  background: var(--surface-tertiary, #262a4a);
-  color: var(--text-primary, #e0e0e0);
+  background: var(--surface-tertiary, var(--ds-color-glossary-surface-raised));
+  color: var(--text-primary, var(--ds-color-glossary-text));
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -61,7 +61,7 @@
 }
 
 .ng-collapsible-header:hover {
-  background: var(--surface-hover, #2e3358);
+  background: var(--surface-hover, var(--ds-color-glossary-surface-hover));
 }
 
 .ng-chevron {
@@ -75,7 +75,7 @@
 }
 
 .ng-collapsible-body {
-  padding: 0.5rem;
+  padding: var(--ds-space-rem-0-5);
 }
 
 /* tables */
@@ -92,22 +92,22 @@
 
 .ng-table th {
   text-align: left;
-  padding: 0.45rem 0.6rem;
-  border-bottom: 2px solid var(--border-primary, #3a3f5c);
-  color: var(--text-secondary, #aaa);
+  padding: var(--ds-space-rem-0-45) var(--ds-space-rem-0-6);
+  border-bottom: 2px solid var(--border-primary, var(--ds-color-glossary-border));
+  color: var(--text-secondary, var(--ds-color-glossary-subtle));
   font-weight: 600;
   white-space: nowrap;
 }
 
 .ng-table td {
-  padding: 0.4rem 0.6rem;
-  border-bottom: 1px solid var(--border-primary, #2a2e4a);
-  color: var(--text-primary, #e0e0e0);
+  padding: var(--ds-space-rem-0-4) var(--ds-space-rem-0-6);
+  border-bottom: 1px solid var(--border-primary, var(--ds-color-glossary-border-soft));
+  color: var(--text-primary, var(--ds-color-glossary-text));
   vertical-align: top;
 }
 
 .ng-table tbody tr:hover {
-  background: var(--surface-hover, #2e3358);
+  background: var(--surface-hover, var(--ds-color-glossary-surface-hover));
 }
 
 .ng-sym {
@@ -122,15 +122,15 @@
 .ng-table code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.82rem;
-  background: rgba(108, 99, 255, 0.08);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
+  background: var(--ds-color-glossary-accent-soft);
+  padding: var(--ds-space-rem-0-1) var(--ds-space-rem-0-3);
+  border-radius: var(--ds-radius-3);
 }
 
 .ng-no-results {
   text-align: center;
-  color: var(--text-tertiary, #888);
-  padding: 2rem 0;
+  color: var(--text-tertiary, var(--ds-color-glossary-muted));
+  padding: var(--ds-space-rem-2) 0;
   font-style: italic;
 }
 
@@ -138,18 +138,18 @@
 .ng-crosslink {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.6rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid var(--border-primary, #3a3f5c);
-  border-radius: 5px;
-  background: var(--surface-secondary, #1e2140);
-  color: var(--accent-primary, #6c63ff);
+  gap: var(--ds-space-rem-0-35);
+  padding: var(--ds-space-rem-0-25) var(--ds-space-rem-0-6);
+  margin-bottom: var(--ds-space-rem-0-75);
+  border: 1px solid var(--border-primary, var(--ds-color-glossary-border));
+  border-radius: var(--ds-radius-5);
+  background: var(--surface-secondary, var(--ds-color-glossary-surface));
+  color: var(--accent-primary, var(--ds-color-glossary-accent));
   font-size: 0.8rem;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background var(--ds-duration-150ms);
 }
 
 .ng-crosslink:hover {
-  background: var(--surface-hover, #2e3358);
+  background: var(--surface-hover, var(--ds-color-glossary-surface-hover));
 }

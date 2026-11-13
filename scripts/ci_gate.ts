@@ -210,17 +210,18 @@ function stripVolatileFields(jsonText: string): string {
 interface GateResult {
   step: string;
   pass: boolean;
+  skipped: boolean;
   detail: string;
 }
 
 const results: GateResult[] = [];
 
 function record(step: string, pass: boolean, detail: string): void {
-  results.push({ step, pass, detail });
-  // A skip is not a pass. It is reported as such, and printed — a passing line with a
-  // hidden caveat is how a gate comes to certify work it did not examine.
-  const skipped = pass && detail.startsWith('SKIPPED');
-  const icon = pass ? (skipped ? '  SKIP' : '  PASS') : '  FAIL';
+  // A skipped browser check must fail the enclosing gate. Reporting it as a separate
+  // status prevents a missing browser from being counted as a successful verification.
+  const skipped = detail.startsWith('SKIPPED:');
+  results.push({ step, pass: pass && !skipped, skipped, detail });
+  const icon = skipped ? '  SKIP' : pass ? '  PASS' : '  FAIL';
   console.log(`${icon}  ${step}`);
   if (!pass || skipped) console.log(`        ${detail}`);
 }
@@ -469,6 +470,7 @@ function phaseValidationChecks(): boolean {
       } else if (result.skipped) {
         // Reported as a skip, not a pass: this check needs a browser and a server.
         record(c.label, true, 'SKIPPED: needs a browser and a running server, so nothing was verified');
+        allOk = false;
       } else {
         record(c.label, true, 'OK');
       }
@@ -503,22 +505,28 @@ function phaseCodeQuality(): boolean {
 
 function emitSummary(): boolean {
   const totalChecks = results.length;
-  const passed = results.filter(r => r.pass).length;
-  const failed = results.filter(r => !r.pass);
-  const allPass = failed.length === 0;
+  const passed = results.filter(r => r.pass && !r.skipped).length;
+  const skipped = results.filter(r => r.skipped);
+  const failed = results.filter(r => !r.pass && !r.skipped);
+  const allPass = failed.length === 0 && skipped.length === 0;
 
   console.log(`\n${'═'.repeat(64)}`);
   console.log(allPass
     ? '  CI GATE: PASS — Release candidate is reproducible'
     : '  CI GATE: FAIL — Reproducibility regression detected');
   console.log(`${'═'.repeat(64)}`);
-  console.log(`  ${passed}/${totalChecks} checks passed`);
+  console.log(`  ${passed}/${totalChecks} checks passed${skipped.length ? `; ${skipped.length} skipped` : ''}`);
 
   if (failed.length > 0) {
     console.log('\n  Failed checks:');
     for (const f of failed) {
       console.log(`    ✗ ${f.step}: ${f.detail}`);
     }
+  }
+
+  if (skipped.length > 0) {
+    console.log('\n  Skipped checks (gate is not green):');
+    for (const result of skipped) console.log(`    ! ${result.step}: ${result.detail}`);
   }
 
   console.log('');
@@ -572,6 +580,15 @@ function run(): void {
     // reported its own fact table as stale, which it was, because the gate had just
     // rewritten the artifacts underneath it.
     restoreArtifacts(artifactSnapshot);
+
+    // The hosted verification workflow generates analysis artifacts before starting this
+    // gate. Those timestamps are newer than the checked-in fact projection even though
+    // the checked-in projection matches the checked-in artifacts. Refresh the derived
+    // table against the restored inputs for validation; the finally block restores its
+    // original bytes so the gate remains read-only.
+    if (runCommand('Refresh artifact facts for validation', 'npm run generate:artifact-facts')) {
+      record('Refresh artifact facts for validation', true, 'OK');
+    }
 
     // Phase 6: Validation checks
     phaseValidationChecks();
