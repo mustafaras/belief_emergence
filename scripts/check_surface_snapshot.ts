@@ -266,6 +266,7 @@ async function main(): Promise<void> {
     )
   }
   console.error(`      wrote the capture to ${path.relative(REPO_ROOT, actualPath)}`)
+  console.error(`      capture-base64:${captured.toString('base64')}`)
   process.exit(1)
 }
 
