@@ -1,4 +1,4 @@
-import{N as Ye,g as el,j as C,c as me,K as ot}from"./index-r96DFpjM.js";import{E as ho}from"./jspdf.es.min-CEY7zuky.js";/**
+import{N as Ye,g as el,j as C,c as me,K as ot}from"./index-B3k1dCIv.js";import{E as ho}from"./jspdf.es.min-B7oleXOn.js";/**
  * @license lucide-react v0.525.0 - ISC
  *
  * This source code is licensed under the ISC license.
