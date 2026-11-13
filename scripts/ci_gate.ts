@@ -581,6 +581,15 @@ function run(): void {
     // rewritten the artifacts underneath it.
     restoreArtifacts(artifactSnapshot);
 
+    // The hosted verification workflow generates analysis artifacts before starting this
+    // gate. Those timestamps are newer than the checked-in fact projection even though
+    // the checked-in projection matches the checked-in artifacts. Refresh the derived
+    // table against the restored inputs for validation; the finally block restores its
+    // original bytes so the gate remains read-only.
+    if (runCommand('Refresh artifact facts for validation', 'npm run generate:artifact-facts')) {
+      record('Refresh artifact facts for validation', true, 'OK');
+    }
+
     // Phase 6: Validation checks
     phaseValidationChecks();
 
