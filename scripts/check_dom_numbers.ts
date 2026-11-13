@@ -39,18 +39,13 @@ import {
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
-// The preset table.
+// The preset table, now generated from the canonical panel.
 //
-// KNOWN LIMITATION, stated rather than hidden: reading the table from the same module the
-// modal renders means a *wrong* preset value passes this check, because it matches itself.
-// The check verifies that the modal renders its data faithfully — not that the data is
-// right. Those are different claims and only the first is automated here.
-//
-// The data cannot be verified automatically until its provenance is settled: the values
-// mix raw and standardized scales and do not reproduce from the shipped panel (see
-// src/data/presets.ts). A check against the panel would fail today for a real reason, so
-// it is recorded as a known gap rather than added as a failing test.
-import { presets as PRESET_TABLE } from '../src/data/presets'
+// It used to be hand-maintained, which made this check circular: reading the table from the
+// module the modal renders meant a wrong value matched itself. The table is derived by
+// `scripts/generate_presets.ts` and `check:presets` re-derives it, so the values are
+// verified against the panel rather than against their own copy.
+import { GENERATED_PRESETS as PRESET_TABLE } from '../src/data/presets.generated'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis')
@@ -158,7 +153,7 @@ export function buildSources(): { corpus: ReturnType<typeof buildCorpus>; derive
       deriveSliderBounds(
         fs.readFileSync(path.join(REPO_ROOT, 'src', 'components', 'sidebar', 'ModernSidebar.tsx'), 'utf8'),
       ),
-      Object.values(PRESET_TABLE).flatMap((p) => Object.values(p.values)),
+      PRESET_TABLE.flatMap((p) => Object.values(p.values)),
       alignment.flatMap((row) => [row.successPct, row.mae, row.meanObservedZ, row.meanPredictedZ]),
     ]),
   }

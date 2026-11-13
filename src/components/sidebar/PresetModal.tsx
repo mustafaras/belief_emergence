@@ -1,5 +1,35 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { presets } from '../../data/presets'
+import { GENERATED_PRESETS } from '../../data/presets.generated'
+
+/**
+ * The preset table, generated from the canonical panel.
+ *
+ * It used to be hand-maintained, and an audit found 113 of 115 checkable values did not
+ * reproduce from the shipped panel: the scales were mixed and several values matched
+ * neither the raw mean nor its z-score. `npm run generate:presets` now derives the table
+ * with the convention this file's header states, and `check:presets` fails on drift.
+ *
+ * `description` is kept on the type because the modal declares it, but nothing renders it;
+ * the provenance that matters is in the generated module.
+ */
+const presets: PresetData[] = GENERATED_PRESETS.map((preset) => ({
+  name: preset.name,
+  flag: preset.flag,
+  type: 'Panel Data Average',
+  description: `Panel mean over ${preset.observations} observation${preset.observations === 1 ? '' : 's'}`,
+  values: {
+    X: preset.values.X ?? 0,
+    C: preset.values.C ?? 0,
+    M: preset.values.M ?? 0,
+    T: preset.values.T ?? 0,
+    D: preset.values.D ?? 0,
+    G: preset.values.G ?? 0,
+    Gini: preset.values.Gini ?? 0,
+    E: preset.values.E ?? 0,
+    S: preset.values.S ?? 0,
+    R: preset.values.R ?? 0,
+  },
+}))
 import './PresetModal.css';
 import { formatNumeric } from '../../utils/formatNumeric';
 import { useDataContext } from '../../contexts/DataContext';

@@ -766,6 +766,32 @@ Related workflow diagram (PDF):
 - Preserves all UI state (parameters + view settings)
 - Route in the query string (`?v=<route>`), so a link restores the view *and* the controls
 
+#### Presets
+
+The country preset table is generated from the canonical panel:
+
+```bash
+npm run generate:presets   # writes src/data/presets.generated.ts
+npm run check:presets      # re-derives and fails on drift
+```
+
+It was hand-maintained for two revisions and had drifted badly. Of 115 values checkable
+against the shipped panel, **113 did not reproduce**: the scales were mixed (Australia
+`X = 0.85` matched the raw panel mean while `T = -1.57` was standardised) and several
+values matched neither the mean nor its z-score. The observation count printed beside each
+row had been changed from 167 to 207 without re-deriving anything, which turned a stale
+claim into a false one.
+
+The generator applies the convention the component header states —
+`StandardScaler.fit_transform()` over all features, then the country mean — with one
+exception: `X` stays on the panel's raw scale because the slider is labelled in panel
+units.
+
+`C`, `D`, `S` and `G` are structurally unavailable in the v2 panel; their columns are `NA`
+in every row. They are written as `0` — the standardised mean the model neutralises them
+to — and listed in each preset's `unavailable` array. A zero that is not declared reads as
+a measurement, so `check:presets` fails if the declaration is missing.
+
 #### Dependencies
 
 Dead packages removed, and one that only *looks* dead kept:

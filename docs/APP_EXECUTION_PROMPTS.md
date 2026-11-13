@@ -20,7 +20,7 @@ stop and say so rather than working from a stale premise):
 | largest component | `Surface3DSurface.tsx`, 4,341 lines |
 | first-paint charts / tables | 1 / 1 |
 | sliders / buttons on landing | 12 / 46 |
-| gate checks (`npm run ci:gate`) | 79 |
+| gate checks (`npm run ci:gate`) | 80 |
 | consistency blocks | 28 |
 
 **Corrected 2026-11-12.** Two numbers above were wrong when this file was written. Seven

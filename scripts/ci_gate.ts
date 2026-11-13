@@ -435,6 +435,9 @@ function phaseValidationChecks(): boolean {
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },
+    // The preset table was hand-maintained and 113 of 115 values did not reproduce from
+    // the panel. It is generated now, and this re-derives it.
+    { label: 'Presets reproduce',            cmd: 'npm run check:presets' },
     // Every number on screen must trace to an artifact, a derivation or the allowlist.
     // Skipped automatically when no browser/server is available.
     { label: 'Rendered numbers',             cmd: 'npm run check:dom-numbers', reportSkip: true },
