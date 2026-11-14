@@ -163,13 +163,33 @@ jobs:
           FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: npm run ci:gate
 
-      - name: Accessibility gate across routes and themes
+      - name: Accessibility and Q1 submission gates
         env:
+          A11Y_CHECK_PORT: '5199'
           A11Y_CHECK_SURFACE: '1'
-        run: npm run check:a11y
-
-      - name: Q1 submission gate
-        run: npm run q1:gate
+          ROUTE_CHECK_PORT: '5199'
+          RENDER_CHECK_PORT: '5199'
+          BUNDLE_CHECK_PORT: '5200'
+          INITIAL_CHUNK_BUDGET_KIB: '2048'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
+        run: |
+          ./node_modules/.bin/vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-accessibility-ci.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
+              echo "dev server up after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+          if ! curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
+            echo "dev server did not start; last log lines:"
+            tail -20 /tmp/vite-accessibility-ci.log
+            exit 1
+          fi
+          npm run check:a11y
+          npm run q1:gate
 
   visual-baselines:
     name: Route visual baselines
