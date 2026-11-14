@@ -27,6 +27,7 @@ const PANEL_AUDIT_PATH = resolvePublicPath('/data/panel_canonical_v2.audit.json'
  */
 export default function LimitsSection() {
   const [panelRows, setPanelRows] = useState<number | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -35,11 +36,14 @@ export default function LimitsSection() {
         const response = await fetch(PANEL_AUDIT_PATH)
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
         const parsed = (await response.json()) as { rows?: number }
-        if (!cancelled && typeof parsed.rows === 'number') setPanelRows(parsed.rows)
+        if (!Number.isFinite(parsed.rows) || (parsed.rows as number) < 0) {
+          throw new Error('missing or invalid required field: rows')
+        }
+        if (!cancelled) setPanelRows(parsed.rows as number)
       } catch {
         // The section still renders; the lockbox limit is simply withheld, because its
         // headline figure is computed from the panel and cannot be guessed.
-        if (!cancelled) setPanelRows(null)
+        if (!cancelled) setLoadError('the panel audit is incomplete or unavailable')
       }
     })()
     return () => {
@@ -74,7 +78,13 @@ export default function LimitsSection() {
       </header>
 
       {report === null ? (
-        <p className="limits-pending">Loading the panel audit…</p>
+        loadError ? (
+          <p className="limits-unavailable" role="status">
+            Limit figures are unavailable because {loadError}; no values are inferred.
+          </p>
+        ) : (
+          <p className="limits-pending" role="status">Loading the panel audit…</p>
+        )
       ) : (
         <>
           <ol className="limits-list">

@@ -368,7 +368,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
           <div className="belief-row-label" title={`${row.label} (${row.symbol})`}>
             {row.label} <span className="belief-row-symbol">({row.symbol})</span>
           </div>
-          <div className="belief-row-value" aria-label={`${row.symbol} value ${formatNumeric(row.value, row.decimals)}`}>
+          <div className="belief-row-value">
             {formatNumeric(row.value, row.decimals)}
           </div>
         </div>
@@ -385,14 +385,14 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
   return (
     <div className="formula-display-layout">
       {/* LEFT SECTION - Formula and Explanations */}
-      <div className="left-section">
+      <div className="left-section" role="region" aria-label="Model formulas and explanations" tabIndex={0}>
         {/* Main Formula */}
         <div className="main-formula-container">
           <BlockMath 
             math={"Z = \\frac{X^{\\alpha} Y^{\\beta} e^{\\Phi}}{X^{\\alpha} Y^{\\beta} e^{\\Phi} + k}"}
             renderError={() => <span className="formula-error">Formula Error</span>}
           />
-          <div className="phi-formula-small">
+          <div className="phi-formula-small" role="region" aria-label="Phi component equations" tabIndex={0}>
             <BlockMath
               math={
                 "\\Phi = \\varphi_0 + \\underbrace{\\sum_{i=1}^{8} c_i\\,M_{i,\\mathrm{std}}}_{\\text{main}} + \\underbrace{\\sum_{j=1}^{7} I_j}_{\\text{interactions}} + \\underbrace{\\sum_{k=1}^{4} Q_k}_{\\text{quadratic}}"
@@ -469,22 +469,22 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
       <div className="center-section">
         {/* Preset Indicator */}
         {presetName && (
-          <div className="state-banner" aria-label="Preset configuration">
+          <div className="state-banner" role="group" aria-label="Preset configuration">
             <div className="state-banner-label">PRESET</div>
             <div className="state-banner-name">{presetName}</div>
             <div className="state-banner-status">Active Profile</div>
           </div>
         )}
         
-        <div className="center-state-grid" aria-label="Current state and analysis">
-        <section className="state-section" aria-label="Current state calculation">
+        <div className="center-state-grid">
+        <section className="state-section" aria-label="Current state calculation" tabIndex={0}>
           <header className="state-card-header">
             <div className="state-card-title">CURRENT STATE CALCULATION</div>
             <div className="state-card-subtitle">Sigmoidal cooperative binding</div>
           </header>
 
           <div className="state-card-body">
-            <div className="state-math" aria-label="Model formula">
+            <div className="state-math" role="region" aria-label="Model formula" tabIndex={0}>
               <BlockMath
                 math={
                   'Z = \\frac{S\\,e^{\\Phi_c}}{S\\,e^{\\Phi_c} + k}'
@@ -495,14 +495,14 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
               </div>
             </div>
 
-            <div className="state-hero" aria-label="Key outputs">
+            <div className="state-hero" role="group" aria-label="Key outputs">
               <div className="hero-primary">
                 <div className="hero-k">Z</div>
                 <div className="hero-v" ref={zValueRef}>{formatNumeric(zValue, 4)}</div>
                 <div className="hero-caption">Output probability (clipped to {structuralBandLabel})</div>
               </div>
 
-              <div className="state-summary" aria-label="Core components">
+              <div className="state-summary" role="group" aria-label="Core components">
                 <div className="summary-row">
                   <div className="summary-k">Φ</div>
                   <div className="summary-v">{formatNumeric(phiValue, 4)}</div>
@@ -526,27 +526,27 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
                 )}
               </div>
             </div>
-            <div className="state-foot" aria-label="Derived inputs">
+            <div className="state-foot" role="group" aria-label="Derived inputs">
               X_safe={formatNumeric(xSafe, 4)} · Y_safe={formatNumeric(ySafe, 4)} · band={structuralBandLabel}
             </div>
           </div>
         </section>
 
-        <section className="state-section" aria-label="Dynamic system analysis">
+        <section className="state-section" aria-label="Dynamic system analysis" tabIndex={0}>
           <header className="state-card-header">
             <div className="state-card-title">DYNAMIC SYSTEM ANALYSIS</div>
             <div className="state-card-subtitle">Field decomposition • regime readout</div>
           </header>
 
           <div className="state-card-body">
-            <div className="state-textlines" aria-label="System status">
+            <div className="state-textlines" role="group" aria-label="System status">
               <div className="textline" data-tone={getStabilityClass(zValue)}>{getStabilityTitle(zValue)}</div>
               <div className="textline">{phaseState}</div>
               <div className="textline">{regime}</div>
               <div className="textline" data-tone={`risk-${riskLevel.toLowerCase()}`}>RISK: {riskLevel}</div>
             </div>
 
-            <div className="state-textgrid" aria-label="Core metrics">
+            <div className="state-textgrid" role="group" aria-label="Core metrics">
               <div className="textrow">
                 <span>Amplifier dominance</span>
                 <strong>{formatNumeric(ampShare * 100, 1)}%</strong>
@@ -580,7 +580,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
       </div>
 
       {/* RIGHT SECTION - Scientific Parameters Vertical Columns */}
-      <div className="right-section">
+      <div className="right-section" role="region" aria-label="Scientific parameter analysis" tabIndex={0}>
         <div className="belief-panels">
           <section className="belief-panel tone-amp" aria-label="Belief amplifiers">
             <header className="belief-panel-header">
@@ -615,7 +615,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
       </div>
 
       {/* FAR RIGHT - Panel Comparison Display (cardless, clean) */}
-      <div className="result-section" aria-label="Panel comparison and stability">
+      <div className="result-section" role="group" aria-label="Panel comparison and stability">
         <div className="formula-pdf-export-container">
           <button
             className="pdf-export-button"
@@ -823,7 +823,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
           <div className="result-sticky-head">
             <div className="result-block result-block--model">
               <div className="result-title">MODEL Z (CURRENT INPUTS)</div>
-              <div className="result-value" aria-label="Current model Z">
+              <div className="result-value" role="group" aria-label="Current model Z">
                 {formatNumeric(zValue, 4)}
               </div>
               <div className="result-caption">Z_model = S · e^Φ_c / (S · e^Φ_c + k)</div>
@@ -833,7 +833,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
             <div className="result-block result-block--panel">
               <div className="result-title">PANEL Z (PRESET)</div>
               {presetName && panelVerdictLabel && (
-                <div className="result-verdict" aria-label="Panel fit verdict">
+                <div className="result-verdict" role="group" aria-label="Panel fit verdict">
                   <span className="result-verdict-label">Verdict</span>
                   <span
                     className={`result-verdict-badge result-verdict-badge--${panelSummary?.panelVerdictClass ?? 'unknown'}`}
@@ -841,7 +841,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
                     {panelVerdictLabel}
                   </span>
                   {panelSummary?.panelSuccessPct != null && (
-                    <span className="result-verdict-badge result-verdict-badge--success" aria-label="Model success percentage">
+                    <span className="result-verdict-badge result-verdict-badge--success" role="group" aria-label="Model success percentage">
                       Success {formatNumeric(panelSummary.panelSuccessPct, 1)}%
                     </span>
                   )}
@@ -849,6 +849,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
               )}
               <div
                 className={`result-value ${presetName && panelSummary?.measuredZ != null ? '' : 'result-value--muted'}`}
+                role="group"
                 aria-label="Panel measured Z reference"
               >
                 {!presetName
@@ -866,7 +867,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
             </div>
           </div>
 
-          <div className="result-panel" aria-label="Model vs data chart">
+          <div className="result-panel" role="group" aria-label="Model vs data chart">
             <div className="result-title">MODEL–DATA CHART</div>
             <CountriesZValuesPanel
               selectedCountryName={presetName}
@@ -923,7 +924,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
             <div className="result-note">S mitigates E suppression when interaction is positive.</div>
           </div>
 
-          <div className="result-grid result-grid--metrics" aria-label="Key metrics">
+          <div className="result-grid result-grid--metrics" role="group" aria-label="Key metrics">
             <div className="result-grid-row">
               <span>Structural base (S)</span>
               <strong>{formatNumeric(structuralBase, 4)}</strong>

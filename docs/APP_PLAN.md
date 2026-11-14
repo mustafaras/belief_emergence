@@ -139,16 +139,31 @@ colour decision is local, so consistency is maintained by memory.
 
 ## Phase 4 — Quality the app has never had
 
-**4.1 Component tests** for the ten components that carry displayed numbers. Today
-zero of twenty-two are tested, and every UI regression was found by hand.
+**4.1 Component tests — complete 2026-11-13.** Ten components that carry displayed
+numbers are covered by 17 rendered-component cases. The full suite passes 315 tests
+across 42 files; missing artifact fields have explicit fallback assertions.
 
-**4.2 Accessibility to WCAG 2.2 AA.** Twenty-five attributes across six panels is not
-conformance. Every chart needs an accessible name and a data-table alternative; every
-control a visible focus state; the preset modal and theme toggle need keyboard traps
-removed.
+**4.2 Accessibility to WCAG 2.2 AA — acceptance gate complete; audited 2026-11-14.**
+axe-core ran over all 12 routes in dark and light themes: before, each theme had 0 critical,
+47 serious, 30 moderate, and 2 minor violations; after, all 24 route/theme scans and two
+additional open Surface 3D states had zero violations at every impact level. The Plotly
+surface has a named text alternative and an 11×11 sampled data-table fallback; visible
+focus, modal keyboard operation, and theme-toggle keyboard operation were checked in
+Chromium. Manual contrast review scoped light-canvas text colors to the light landing route
+and raised the mathematical group heading on dark panels to 9.55:1. Axe retains inconclusive
+color checks for gradients and overlapping layers, so this records the completed acceptance
+gate without claiming full WCAG conformance. Methods and per-theme counts are in
+`APP_EXECUTION_PROMPTS.md` Prompt 12.
 
-**4.3 Performance budget in CI.** Fail the build when the initial chunk exceeds 2 MB,
-so the 6.9 MB does not creep back.
+**4.3 Performance and visual budgets — implemented and locally verified 2026-11-14; hosted
+workflow run pending.** CI enforces a 2048 KiB initial-JavaScript limit and a 2500 ms
+median cold-navigation FCP limit. It also compares one 1600×1000 screenshot baseline for
+each of the 12 routes, allowing at most 5000 pixels to differ by more than 20 per channel.
+Local measurements were 705 KiB and 568 ms median FCP; all 12 visual baselines matched
+exactly on rerun. Lowered performance limits failed both checks, and a changed route label
+failed the screenshot check with the affected route named. Details and evidence are in
+`APP_EXECUTION_PROMPTS.md` Prompt 13. The GitHub Actions run has not occurred because this
+work remains unpushed. The complete local `npm run ci:gate` passed 81/81 checks.
 
 ## Order, and what each step unblocks
 

@@ -79,7 +79,7 @@ const BeliefEquationSection: React.FC = () => {
       {/* Coefficient Visualization */}
       <div className="coefficients-visualization-card">
         <h3 className="card-title">1.4.1 Coefficient Magnitude &amp; Direction</h3>
-        <svg viewBox="0 0 600 300" className="coeff-chart">
+        <svg viewBox="0 0 600 300" className="coeff-chart" role="img" aria-label="Belief equation coefficient contributions chart" focusable="false">
           <defs>
             <linearGradient id="ampGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
@@ -189,7 +189,7 @@ const BeliefEquationSection: React.FC = () => {
       <div className="coefficients-visualization-card">
         <h4 className="viz-title">1.4.2 Model Fit: Production vs Runtime</h4>
         <p className="viz-subtitle">Production headline (canonical panel-fit) compared to metrics computed in-browser on the loaded canonical panel</p>
-        <svg viewBox="0 0 600 280" className="evolution-chart">
+        <svg viewBox="0 0 600 280" className="evolution-chart" role="img" aria-label="Belief emergence over time chart" focusable="false">
           <defs>
             <linearGradient id="evGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
@@ -260,7 +260,7 @@ const BeliefEquationSection: React.FC = () => {
       <div className="coefficients-visualization-card">
         <h4 className="viz-title">1.4.3 Saturation Dynamics (Z vs Φ)</h4>
         <p className="viz-subtitle">Canonical mapping used by calculateModel(): Z = (B·e^Φ)/(B·e^Φ + k), clipped to [0.0001, 0.9999]</p>
-        <svg viewBox="0 0 600 300" className="sigmoid-chart">
+        <svg viewBox="0 0 600 300" className="sigmoid-chart" role="img" aria-label="Sigmoid response curve chart" focusable="false">
           <defs>
             <linearGradient id="sigmoidGrad" x1="0%" y1="100%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
@@ -354,7 +354,7 @@ const BeliefEquationSection: React.FC = () => {
       <div className="coefficients-visualization-card">
         <h4 className="viz-title">1.4.4 Φ Field Term Composition</h4>
         <p className="viz-subtitle">Relative contribution of linear, interaction, and quadratic components</p>
-        <svg viewBox="0 0 600 280" className="phi-composition-chart">
+        <svg viewBox="0 0 600 280" className="phi-composition-chart" role="img" aria-label="Phi component composition chart" focusable="false">
           <defs>
             <filter id="shadow">
               <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3" />
@@ -457,7 +457,7 @@ const BeliefEquationSection: React.FC = () => {
       <div className="coefficients-visualization-card">
         <h4 className="viz-title">1.4.5 Country-Level Evaluation (Fixed Coefficients, In-Sample)</h4>
         <p className="viz-subtitle">Per-country R² computed from canonical panel data using calculateModel() predictions (fixed coefficients; no refit)</p>
-        <svg viewBox="0 0 600 280" className="country-slice-chart">
+        <svg viewBox="0 0 600 280" className="country-slice-chart" role="img" aria-label="Country-level predicted response slices chart" focusable="false">
           <line x1="60" y1="50" x2="60" y2="230" stroke="#334155" strokeWidth="2" />
           <line x1="60" y1="230" x2="560" y2="230" stroke="#334155" strokeWidth="2" />
 
@@ -943,7 +943,7 @@ const BeliefEquationSection: React.FC = () => {
             <p className="viz-subtitle">
               Scatter with y=x reference (Z normalized into [0.0001, 0.9999]) — Production headline (canonical panel-fit): R² = {fmt(headline.r2)}
             </p>
-            <svg viewBox="0 0 520 340" className="validation-chart">
+            <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Belief model validation chart" focusable="false">
               {/* Axes */}
               <line x1="70" y1="280" x2="470" y2="280" stroke="#334155" strokeWidth="2" />
               <line x1="70" y1="60" x2="70" y2="280" stroke="#334155" strokeWidth="2" />
@@ -1013,7 +1013,7 @@ const BeliefEquationSection: React.FC = () => {
           <div className="coefficients-visualization-card">
             <h4 className="viz-title">Residual Distribution</h4>
             <p className="viz-subtitle">Histogram of residuals (observed − predicted)</p>
-            <svg viewBox="0 0 520 340" className="validation-chart">
+            <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Belief model calibration chart" focusable="false">
               <line x1="60" y1="260" x2="460" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="40" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
               {(() => {
@@ -1061,7 +1061,7 @@ const BeliefEquationSection: React.FC = () => {
           <div className="coefficients-visualization-card">
             <h4 className="viz-title">Residuals vs Predicted</h4>
             <p className="viz-subtitle">Checks systematic bias and heteroskedasticity</p>
-            <svg viewBox="0 0 520 340" className="validation-chart">
+            <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Belief model residual distribution chart" focusable="false">
               {(() => {
                 const e = validation.residuals;
                 const pts = validation.points;
@@ -1102,7 +1102,7 @@ const BeliefEquationSection: React.FC = () => {
           <div className="coefficients-visualization-card">
             <h4 className="viz-title">Calibration Curve</h4>
             <p className="viz-subtitle">Binned mean observed vs mean predicted</p>
-            <svg viewBox="0 0 520 340" className="validation-chart">
+            <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Belief model observed and predicted values chart" focusable="false">
               <line x1="60" y1="260" x2="460" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="40" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="260" x2="460" y2="60" stroke="#64748b" strokeDasharray="4,4" />

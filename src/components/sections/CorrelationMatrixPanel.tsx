@@ -30,6 +30,7 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const fmtCorr = (r: number) => (Number.isFinite(r) ? r.toFixed(2) : '—');
 
 type Rgb = { r: number; g: number; b: number };
+type CorrelationCell = { value: number; n: number };
 
 const hexToRgb = (hex: string): Rgb => {
   const h = hex.replace('#', '').trim();
@@ -131,9 +132,9 @@ const computeCorr = (
   withinMeans: Map<string, number[]> | null,
   idxA: number,
   idxB: number,
-) => {
+): CorrelationCell => {
   const n = rows.length;
-  if (n < 2) return NaN;
+  if (n < 2) return { value: NaN, n: 0 };
 
   let sumX = 0;
   let sumY = 0;
@@ -162,15 +163,15 @@ const computeCorr = (
     used += 1;
   }
 
-  if (used < 2) return NaN;
+  if (used < 2) return { value: NaN, n: used };
 
   const cov = sumXY - (sumX * sumY) / used;
   const varX = sumXX - (sumX * sumX) / used;
   const varY = sumYY - (sumY * sumY) / used;
 
-  if (varX <= 0 || varY <= 0) return NaN;
+  if (varX <= 0 || varY <= 0) return { value: NaN, n: used };
 
-  return cov / Math.sqrt(varX * varY);
+  return { value: cov / Math.sqrt(varX * varY), n: used };
 };
 
 export interface CorrelationMatrixPanelProps {
@@ -193,25 +194,28 @@ const CorrelationMatrixPanel: React.FC<CorrelationMatrixPanelProps> = ({ panelDa
     if (!panelData || panelData.length === 0) {
       return {
         nTotal: 0,
-        nUsed: 0,
-        matrix: [] as number[][],
+        matrix: [] as CorrelationCell[][],
       };
     }
 
-    // DataContext guarantees finite numeric fields, but we defensively keep the filter.
-    const rows = panelData.filter((r) => vars.every((v) => Number.isFinite(r[v.key])));
+    // Use pairwise complete observations. Several constructs are intentionally null in
+    // the canonical panel; a missing value in one variable must not discard every row.
+    const rows = panelData;
     const withinMeans = mode === 'within' ? buildWithinMeans(rows, vars) : null;
 
     const size = vars.length;
-    const matrix: number[][] = new Array(size);
+    const matrix: CorrelationCell[][] = new Array(size);
     for (let i = 0; i < size; i += 1) {
-      matrix[i] = new Array(size).fill(NaN);
+      matrix[i] = new Array(size).fill(null).map(() => ({ value: NaN, n: 0 }));
     }
 
     for (let i = 0; i < size; i += 1) {
       for (let j = 0; j < size; j += 1) {
         if (i === j) {
-          matrix[i][j] = 1;
+          matrix[i][j] = {
+            value: 1,
+            n: rows.filter((row) => Number.isFinite(row[vars[i].key])).length,
+          };
           continue;
         }
         matrix[i][j] = computeCorr(rows, vars[i].key, vars[j].key, withinMeans, i, j);
@@ -220,7 +224,6 @@ const CorrelationMatrixPanel: React.FC<CorrelationMatrixPanelProps> = ({ panelDa
 
     return {
       nTotal: panelData.length,
-      nUsed: rows.length,
       matrix,
     };
   }, [panelData, vars, mode]);
@@ -280,10 +283,10 @@ const CorrelationMatrixPanel: React.FC<CorrelationMatrixPanelProps> = ({ panelDa
             {/* Cells */}
             {vars.map((rowVar, i) =>
               vars.map((colVar, j) => {
-                const r = computed.matrix[i]?.[j] ?? NaN;
+                const cellValue = computed.matrix[i]?.[j] ?? { value: NaN, n: 0 };
                 const x = pad + j * cell;
                 const y = topPad + i * cell;
-                const { fill, text, textFill } = correlationFill(r);
+                const { fill, text, textFill } = correlationFill(cellValue.value);
                 const label = text;
                 const isDiag = i === j;
 
@@ -302,7 +305,7 @@ const CorrelationMatrixPanel: React.FC<CorrelationMatrixPanelProps> = ({ panelDa
                     >
                       <title>
                         {`${rowVar.symbol} (${rowVar.label}) vs ${colVar.symbol} (${colVar.label})\n`}
-                        {`r=${label} • ${mode === 'within' ? 'within-country (demeaned)' : 'raw'} • n=${computed.nUsed}`}
+                        {`r=${label} • ${mode === 'within' ? 'within-country (demeaned)' : 'raw'} • n=${cellValue.n}`}
                       </title>
                     </rect>
                     {showValues && (
@@ -407,7 +410,7 @@ const CorrelationMatrixPanel: React.FC<CorrelationMatrixPanelProps> = ({ panelDa
       </div>
 
       <p className="ma-small-muted ma-mt-05">
-        Rows used: {computed.nUsed} / {computed.nTotal}{loading ? ' (loading…)': ''}
+        Panel rows: {computed.nTotal}{loading ? ' (loading…)': ''}
         {error ? ` — ${error}` : ''}
       </p>
 

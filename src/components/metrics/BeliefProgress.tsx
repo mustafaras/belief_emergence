@@ -4,7 +4,7 @@ import { formatNumeric } from '../../utils/formatNumeric';
 import './BeliefProgress.css';
 
 interface BeliefProgressProps {
-  value: number; // Value between 0 and 1
+  value?: number; // Value between 0 and 1; omitted when the source artifact has no value.
   showTooltip?: boolean;
   className?: string;
   variant?: 'default' | 'sidebar';
@@ -21,8 +21,9 @@ const BeliefProgress: React.FC<BeliefProgressProps> = ({
   const fillAnimation = useAnimation();
   
   // Ensure value is between 0 and 1
-  const clampedValue = Math.max(0, Math.min(1, value));
-  const percentage = Math.round(clampedValue * 100);
+  const hasValue = typeof value === 'number' && Number.isFinite(value);
+  const clampedValue = hasValue ? Math.max(0, Math.min(1, value)) : 0;
+  const percentage = hasValue ? Math.round(clampedValue * 100) : 0;
 
   // Calculate dynamic colors based on percentage - Simple blue to yellow to red
   const getProgressColor = (percent: number) => {
@@ -104,8 +105,11 @@ const BeliefProgress: React.FC<BeliefProgressProps> = ({
       className={`belief-progress-circular ${variant === 'sidebar' ? 'belief-progress--sidebar' : ''} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      role="progressbar"
-      aria-label={`Belief emergence at ${percentage} percent`}
+      role={hasValue ? 'progressbar' : 'status'}
+      aria-label={hasValue ? `Belief emergence at ${percentage} percent` : 'Belief emergence unavailable'}
+      aria-valuenow={hasValue ? percentage : undefined}
+      aria-valuemin={hasValue ? 0 : undefined}
+      aria-valuemax={hasValue ? 100 : undefined}
     >
       {/* Header */}
       <div className="belief-progress-header">
@@ -126,6 +130,8 @@ const BeliefProgress: React.FC<BeliefProgressProps> = ({
             className="circular-progress-svg" 
             width="120" 
             height="120"
+            aria-hidden="true"
+            focusable="false"
           >
             {/* Background Circle */}
             <circle
@@ -182,12 +188,12 @@ const BeliefProgress: React.FC<BeliefProgressProps> = ({
               animate={{ color: colors.primary }}
               transition={{ duration: 0.5 }}
             >
-              {displayValue}%
+              {hasValue ? `${displayValue}%` : '—'}
             </motion.div>
             <div className="belief-progress-notation-small">
               <span className="belief-progress-variable">Z</span>
               <span className="belief-progress-equals">=</span>
-              <span className="belief-progress-decimal">{formatNumeric(clampedValue, 3)}</span>
+              <span className="belief-progress-decimal">{hasValue ? formatNumeric(clampedValue, 3) : '—'}</span>
             </div>
           </div>
         </motion.div>
@@ -227,7 +233,7 @@ const BeliefProgress: React.FC<BeliefProgressProps> = ({
       )}
 
       {/* Trend Indicator */}
-      {variant !== 'sidebar' && (
+      {variant !== 'sidebar' && hasValue && (
         <div className="belief-progress-trend">
           <motion.div 
             className="trend-indicator"

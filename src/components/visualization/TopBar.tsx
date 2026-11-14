@@ -494,7 +494,7 @@ const TopBar: React.FC<TopBarProps> = ({
   });
 
   return (
-    <>
+    <header className="app-banner" role="banner">
       {/* BOTTOM LEFT TITLE - OUTSIDE OF TOPBAR CONTAINER */}
       <div className="topbar-bottom-title">
         <div className="topbar-bottom-title-text">
@@ -506,7 +506,7 @@ const TopBar: React.FC<TopBarProps> = ({
       <div className="belief-emergence-top-bar">
         {/* TOPBAR TITLE - LEFT ALIGNED ABOVE RAINBOW */}
         <div className="topbar-title">
-          <div className="topbar-title-text">{TOPBAR_APP_TITLE}</div>
+          <h1 className="topbar-title-text">{TOPBAR_APP_TITLE}</h1>
 
           {onToggleSurface3d && (
             <button
@@ -514,7 +514,6 @@ const TopBar: React.FC<TopBarProps> = ({
               type="button"
               onClick={onToggleSurface3d}
               {...surfaceToggleAria}
-              aria-label="Toggle 3D response surface"
               title="Toggle 3D response surface"
             >
               <span className="topbar-surface3d-toggle-label">3D SURFACE</span>
@@ -566,7 +565,7 @@ const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* SHARE + SCENARIO COMPARE (A/B) */}
-      <div className="scenario-compare-container" aria-label="Scenario compare controls">
+      <div className="scenario-compare-container" role="group" aria-label="Scenario compare controls">
         <button className="scenario-btn" onClick={copyShareLink} title="Copy shareable link to clipboard">
           <span>🔗</span> LINK
         </button>
@@ -608,7 +607,7 @@ const TopBar: React.FC<TopBarProps> = ({
           <span>📊</span> COMPARE
         </button>
 
-        <div className="scenario-metrics" aria-label="Scenario deltas">
+        <div className="scenario-metrics" role="group" aria-label="Scenario deltas">
           <div className="scenario-metric">
             <span className="scenario-metric-label">ΔZ</span>
             <span className="scenario-metric-value">
@@ -735,9 +734,14 @@ const TopBar: React.FC<TopBarProps> = ({
       >
         
         {/* SECTION 1: COMPONENT ANALYSIS */}
-        <div className={panelClass('component-analysis', 'component-analysis-panel')}>
+        <div
+          className={panelClass('component-analysis', 'component-analysis-panel')}
+          role="region"
+          aria-label="Component analysis panel"
+          tabIndex={0}
+        >
           <div className="panel-header">
-            <h3>COMPONENT ANALYSIS</h3>
+            <h2>COMPONENT ANALYSIS</h2>
             <div className="model-fit-indicator">
               <span>
                 {panelStats
@@ -893,7 +897,7 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* SECTION 2: FIELD DYNAMICS ANALYSIS */}
         <div className={panelClass('field-dynamics', 'field-dynamics-panel')}>
           <div className="panel-header">
-            <h3>Φ FIELD DYNAMICS</h3>
+            <h2>Φ FIELD DYNAMICS</h2>
             <div className="field-vector-display">
               <div className="vector-magnitude">{formatNumeric(phiValue, 3)}</div>
               <div className="vector-angle">net effect {formatNumeric(netEffect, 3)}</div>
@@ -937,7 +941,7 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* SECTION 3: STATISTICAL ANALYSIS TABLE */}
         <div className={panelClass('statistical-analysis', 'statistical-analysis-panel')}>
           <div className="panel-header">
-            <h3>STATISTICAL ANALYSIS</h3>
+            <h2>STATISTICAL ANALYSIS</h2>
             <div className="z-value-indicator">{formatNumeric(zValue, 4)}</div>
           </div>
           
@@ -997,7 +1001,7 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* SECTION 4: SENSITIVITY ANALYSIS */}
         <div className={panelClass('sensitivity-analysis', 'surface-analysis-panel')}>
           <div className="panel-header">
-            <h3>SENSITIVITY ANALYSIS</h3>
+            <h2>SENSITIVITY ANALYSIS</h2>
             <div className="gradient-display">
               <span>Sensitivity norm = {formatNumeric(sensitivityNorm, 4)}</span>
             </div>
@@ -1037,7 +1041,7 @@ const TopBar: React.FC<TopBarProps> = ({
           </div>
           
           <div className="gradient-summary">
-            <h4>SENSITIVITY SUMMARY</h4>
+            <h3>SENSITIVITY SUMMARY</h3>
             <div className="gradient-item">
               <span className="gradient-label">Structural (max)</span>
               <div className="gradient-bar">
@@ -1065,7 +1069,7 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* SECTION 5: EMERGENCE & INFORMATION THEORY */}
         <div className={panelClass('emergence-analysis', 'emergence-panel')}>
           <div className="panel-header">
-            <h3>EMERGENCE ANALYSIS</h3>
+            <h2>EMERGENCE ANALYSIS</h2>
             <div className="emergence-index">EI = {formatNumeric(emergenceIndex, 3)}</div>
           </div>
 
@@ -1097,7 +1101,7 @@ const TopBar: React.FC<TopBarProps> = ({
           </div>
           
           <div className="gradient-summary">
-            <h4>EMERGENCE COMPONENTS</h4>
+            <h3>EMERGENCE COMPONENTS</h3>
             <div className="gradient-item">
               <span className="gradient-label">Local Entropy</span>
               <div className="gradient-bar">
@@ -1132,7 +1136,7 @@ const TopBar: React.FC<TopBarProps> = ({
         {/* SECTION 6: MODEL PERFORMANCE & DIAGNOSTICS */}
         <div className={panelClass('model-diagnostics', 'model-performance-panel')}>
           <div className="panel-header">
-            <h3>MODEL DIAGNOSTICS</h3>
+            <h2>MODEL DIAGNOSTICS</h2>
             <div className="performance-status">
               <span className={diagnosticsStatus === 'good' ? 'status-good' : diagnosticsStatus === 'warning' ? 'status-warning' : 'status-poor'}>
                 {diagnosticsStatus === 'good' ? 'IN-RANGE' : diagnosticsStatus === 'warning' ? 'EXTRAPOLATING' : 'UNSTABLE'}
@@ -1192,7 +1196,7 @@ const TopBar: React.FC<TopBarProps> = ({
 
       </div>
     </div>
-    </>
+    </header>
   );
 };
 

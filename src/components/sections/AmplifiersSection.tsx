@@ -220,7 +220,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.2 Main-Effect Coefficients (Ridge L2, α=1.0)</h4>
         <p className="viz-subtitle">Signed amplification/suppression magnitudes from canonical panel fit</p>
         
-          <svg viewBox="0 0 700 450" className="coefficients-chart amp-svg-maxh-420">
+          <svg viewBox="0 0 700 450" className="coefficients-chart amp-svg-maxh-420" role="img" aria-label="Amplifier coefficient contributions chart" focusable="false">
           <defs>
             <linearGradient id="ampGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.7" />
@@ -321,7 +321,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.3 Nonlinear Sensitivity: ∂Z/∂Φ = Z(1−Z)</h4>
         <p className="viz-subtitle">Responsiveness of belief emergence to symbolic field changes</p>
         
-        <svg viewBox="0 0 750 420" className="sensitivity-chart amp-svg-maxh-400">
+        <svg viewBox="0 0 750 420" className="sensitivity-chart amp-svg-maxh-400" role="img" aria-label="Amplifier sensitivity chart" focusable="false">
           <defs>
             <linearGradient id="sensitivityGrad" x1="0%" y1="100%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
@@ -472,7 +472,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.5 Empirical Validation: Observed vs Predicted</h4>
         <p className="viz-subtitle">Scatter plot with canonical panel data ({validation.points.length} observations, {dataset.countries} countries)</p>
         
-        <svg viewBox="0 0 500 260" className="validation-chart amp-svg-maxh-240">
+        <svg viewBox="0 0 500 260" className="validation-chart amp-svg-maxh-240" role="img" aria-label="Amplifier validation chart" focusable="false">
           {/* Axes */}
           <line x1="70" y1="280" x2="470" y2="280" stroke="#334155" strokeWidth="2" />
           <line x1="70" y1="60" x2="70" y2="280" stroke="#334155" strokeWidth="2" />
@@ -539,7 +539,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.6 Calibration Curve: Decile Bins</h4>
         <p className="viz-subtitle">Binned mean observed vs mean predicted—ideal calibration lies on diagonal</p>
         
-        <svg viewBox="0 0 500 260" className="validation-chart amp-svg-maxh-240">
+        <svg viewBox="0 0 500 260" className="validation-chart amp-svg-maxh-240" role="img" aria-label="Amplifier interaction validation chart" focusable="false">
           {/* Axes */}
           <line x1="70" y1="280" x2="470" y2="280" stroke="#334155" strokeWidth="2" />
           <line x1="70" y1="60" x2="70" y2="280" stroke="#334155" strokeWidth="2" />
@@ -614,7 +614,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.7a Main-Effect Coefficient Magnitudes</h4>
         <p className="viz-subtitle">Signed amplification/suppression with domain classification</p>
         
-        <svg viewBox="0 0 500 480" className="comprehensive-amplifier-chart">
+        <svg viewBox="0 0 500 480" className="comprehensive-amplifier-chart" role="img" aria-label="Comprehensive amplifier contributions chart" focusable="false">
           <defs>
             <linearGradient id="ampGradComp" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.7" />
@@ -703,7 +703,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.7b Marginal Effect Sensitivity Matrix</h4>
         <p className="viz-subtitle">∂Z/∂mᵢ = cᵢ · Z(1−Z) across belief states</p>
         
-        <svg viewBox="0 0 620 480" className="sensitivity-matrix-chart">
+        <svg viewBox="0 0 620 480" className="sensitivity-matrix-chart" role="img" aria-label="Amplifier sensitivity matrix chart" focusable="false">
           <defs>
             <linearGradient id="ampGradComp" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.7" />
@@ -803,7 +803,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.7c Key Interaction Terms</h4>
         <p className="viz-subtitle">Non-additive cross-factor effects</p>
         
-        <svg viewBox="0 0 560 280" className="interaction-chart">
+        <svg viewBox="0 0 560 280" className="interaction-chart" role="img" aria-label="Amplifier interaction chart" focusable="false">
           <g transform="translate(20, 20)">
             {(() => {
               const interactions = [
@@ -885,7 +885,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.8 Synergistic Phase Transitions</h4>
         <p className="viz-subtitle">Threshold effects and tipping points</p>
         
-        <svg viewBox="0 0 520 280" className="phase-chart">
+        <svg viewBox="0 0 520 280" className="phase-chart" role="img" aria-label="Amplifier phase chart" focusable="false">
           <defs>
             <linearGradient id="phaseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
@@ -955,7 +955,7 @@ const AmplifiersSection: React.FC = () => {
         <h4 className="viz-title">3.9 Synthesis: Amplifiers as Energy Fields</h4>
         <p className="viz-subtitle">Unifying interpretation of exponential modulation</p>
         
-        <svg viewBox="0 0 700 350" className="energy-field-chart amp-svg-maxh-330">
+        <svg viewBox="0 0 700 350" className="energy-field-chart amp-svg-maxh-330" role="img" aria-label="Amplifier energy field chart" focusable="false">
           <defs>
             <linearGradient id="potentialGrad" x1="0%" y1="100%" x2="0%" y2="0%">
               <stop offset="0%" stopColor="#1e3a8a" stopOpacity="0.3" />

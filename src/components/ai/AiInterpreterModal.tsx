@@ -663,7 +663,7 @@ export default function AiInterpreterModal({ isOpen, onClose, snapshot }: AiInte
                 onClick={onClose}
                 aria-label="Close AI interpreter"
               >
-                ×
+                <X size={20} aria-hidden="true" focusable="false" />
               </button>
             </div>
           </div>
@@ -958,7 +958,7 @@ export default function AiInterpreterModal({ isOpen, onClose, snapshot }: AiInte
 
           {/* Right Column: Chat */}
           <div className="ai-modal-chat-column">
-          <div className="ai-chat" aria-label="AI chat">
+          <div className="ai-chat" role="log" aria-label="AI chat">
             {messages.map((m, idx) => (
               <div
                 key={m.id}
@@ -1092,7 +1092,7 @@ export default function AiInterpreterModal({ isOpen, onClose, snapshot }: AiInte
 
         {/* Footer: Parameter snapshot */}
         <div className="ai-modal-footer">
-          <div className="ai-modal-kv" aria-label="Panel values snapshot">
+          <div className="ai-modal-kv" role="group" aria-label="Panel values snapshot">
             <span>C={brief.C}</span>
             <span>T={brief.T}</span>
             <span>G={brief.G}</span>

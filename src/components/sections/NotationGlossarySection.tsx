@@ -61,7 +61,7 @@ const NotationGlossarySection: React.FC = () => {
 
   const filteredVars = useMemo(
     () =>
-      glossary.model_variables.filter((v) =>
+      (glossary.model_variables ?? []).filter((v) =>
         matchesQuery(search, v.symbol, v.name, v.type, v.source)
       ),
     [search]
@@ -69,7 +69,7 @@ const NotationGlossarySection: React.FC = () => {
 
   const filteredGreek = useMemo(
     () =>
-      glossary.greek_letters.filter((g) =>
+      (glossary.greek_letters ?? []).filter((g) =>
         matchesQuery(search, g.symbol, g.name, g.definition, g.domain)
       ),
     [search]
@@ -77,7 +77,7 @@ const NotationGlossarySection: React.FC = () => {
 
   const filteredHyper = useMemo(
     () =>
-      glossary.hyperparameters.filter((h) =>
+      (glossary.hyperparameters ?? []).filter((h) =>
         matchesQuery(search, h.symbol, h.name, h.role)
       ),
     [search]
@@ -85,7 +85,7 @@ const NotationGlossarySection: React.FC = () => {
 
   const filteredRegimes = useMemo(
     () =>
-      glossary.regime_definitions.filter((r) =>
+      (glossary.regime_definitions ?? []).filter((r) =>
         matchesQuery(search, r.label, r.formal_definition, r.empirical_characterization)
       ),
     [search]

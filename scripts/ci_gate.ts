@@ -472,6 +472,12 @@ function phaseValidationChecks(): boolean {
         record(c.label, true, 'SKIPPED: needs a browser and a running server, so nothing was verified');
         allOk = false;
       } else {
+        if (c.label === 'Bundle budget') {
+          const measurements = result.output
+            .split(/\r?\n/)
+            .filter((line) => /First contentful paint|^\s+total\s|^PASS\s+landing route/.test(line))
+          if (measurements.length) console.log(measurements.map((line) => `        ${line.trim()}`).join('\n'))
+        }
         record(c.label, true, 'OK');
       }
       continue;

@@ -39,6 +39,7 @@ import ConstructAudit from './components/audit/ConstructAudit'
 import SupportPicture from './components/support/SupportPicture'
 import LimitsSection from './components/limits/LimitsSection'
 import { LANDING_ROUTE, type AppRoute } from './router/routes'
+import './styles/accessibility.css'
 
 const DEFAULT_PARAMS: BeliefParameters = {
   X: 0.73, // Neutral: panel-scale urbanization mean (UI slider space)
@@ -585,7 +586,7 @@ function App() {
         />
 
         {/* Right Panel: Compact Scientific Layout */}
-        <section className="right-panel">
+        <main className="right-panel">
           {/*
             On the landing route the content is evidence, in the order a reader needs it:
             first whether the measurement worked at all, then the map of what was
@@ -593,7 +594,7 @@ function App() {
             because everything below it is conditional on the constructs that survived.
           */}
           {route === LANDING_ROUTE ? (
-            <div className="evidence-surface">
+            <div className="evidence-surface" role="region" aria-label="Research evidence and limitations" tabIndex={0}>
               <ConstructAudit />
               <SupportPicture />
               <LimitsSection />
@@ -614,7 +615,7 @@ function App() {
               />
             </div>
           )}
-        </section>
+        </main>
 
       </div>
       

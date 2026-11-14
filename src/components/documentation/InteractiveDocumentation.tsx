@@ -1907,18 +1907,18 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
   const progressValueMax = 100;
 
   return (
-    <div className="interactive-documentation">
+    <div className="interactive-documentation" role="region" aria-label="Interactive documentation">
       {/* ARIA live region for accessibility announcements */}
       <div aria-live="polite" aria-atomic="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
         {a11yAnnouncement}
       </div>
       {/* Academic Header */}
-      <header className={["academic-header", isCondensed ? "is-condensed" : ""].filter(Boolean).join(" ")} aria-label="Documentation header">
+      <div className={["academic-header", isCondensed ? "is-condensed" : ""].filter(Boolean).join(" ")}>
         <div className="header-content">
           {/* Header Left Zone — Section Info (Badge + Breadcrumb + Descriptor) */}
-          <div className="header-left" aria-label="Document identity">
+          <div className="header-left" role="group" aria-label="Document identity">
             <div className="left-section-info">
-              <span className="section-badge" aria-label={`Current section: ${sectionBadgeText}`}>{sectionBadgeText}</span>
+              <span className="section-badge">{sectionBadgeText}</span>
               <span className="section-breadcrumb">{breadcrumbText}</span>
               {descriptorText && <span className="section-descriptor">{descriptorText}</span>}
             </div>
@@ -1930,7 +1930,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
           </div>
           
           {/* Header Center Zone — Main Title Only */}
-          <div className="header-center" aria-label="Current section context">
+          <div className="header-center">
             <h1 className="main-title">
               Bounded Nonlinear Response Surfaces for Macro-Urban Belief Emergence:
               <br />
@@ -1940,10 +1940,10 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
           </div>
           
           {/* Header Right Zone — Status + Actions */}
-          <div className="header-right" aria-label="Navigation status and controls">
+          <div className="header-right" role="group" aria-label="Navigation status and controls">
             <div className="right-content-wrapper">
               {/* Status Section — Instrument Cluster */}
-              <div className="status-container" aria-label="Navigation progress and mode">
+              <div className="status-container" role="group" aria-label="Navigation progress and mode">
                 {/* Progress Row */}
                 <div className="progress-info">
                   <span className="progress-label">Visited {progressMetrics.visited}/{progressMetrics.total}</span>
@@ -1967,13 +1967,13 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
                 </div>
                 
                 {/* Pin Mode Label */}
-                <div className="pin-state-indicator" aria-label={`Navigation mode: ${pinModeLabel}`}>
+                <div className="pin-state-indicator">
                   {pinModeLabel.toUpperCase()}
                 </div>
                 
                 {/* Micro Readouts (Optional Z/Φ Chips) — Phase 5 */}
                 {(zReadout !== null || phiReadout !== null) && (
-                  <div className="micro-readouts" aria-label="Computed model parameters">
+                  <div className="micro-readouts" role="group" aria-label="Computed model parameters">
                     {zReadout !== null && (
                       <span className="mini-chip" title={`Z parameter: ${zReadout}`}>Z: {zReadout}</span>
                     )}
@@ -1985,13 +1985,13 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
               </div>
 
               {/* Actions Section */}
-              <div className="nav-actions" aria-label="Section navigation controls">
+              <div className="nav-actions" role="group" aria-label="Section navigation controls">
                 <button
                   type="button"
                   className="nav-button nav-button-prev"
                   onClick={handlePrevSection}
                   disabled={prevSectionId === null}
-                  aria-label="Previous section"
+                  aria-label="Prev, previous section"
                   aria-keyshortcuts="Alt+ArrowLeft"
                   title={prevSectionId ? `Previous: ${sections.find(s => s.id === prevSectionId)?.title ?? 'Section'} (Alt+Left)` : 'No previous section'}
                 >
@@ -2024,7 +2024,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
                   type="button"
                   className="nav-button nav-button-export"
                   onClick={handleExportPDF}
-                  aria-label="Export selected section as PDF"
+                  aria-label="Export PDF, selected section"
                   aria-keyshortcuts="Control+p Meta+p"
                   title="Export this section as PDF (Ctrl+P)"
                 >
@@ -2038,7 +2038,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
                   aria-label="Close documentation"
                   title="Close"
                 >
-                  X
+                  <span aria-hidden="true">X</span>
                 </button>
               </div>
 
@@ -2089,7 +2089,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
           </div>
         </div>
         <div className="header-divider" aria-hidden="true"></div>
-      </header>
+      </div>
 
       <div className="documentation-container">
         {/* Left Sidebar Navigation */}
@@ -2103,7 +2103,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
           <div className="sidebar-layout">
             <header className="sidebar-header">
               <div className="sidebar-header-top">
-                <h2 className="sidebar-title">
+                <div className="sidebar-title">
                   <span className="sidebar-title-icon" aria-hidden="true">🧭</span>
                   <span className="sidebar-title-text">DOCUMENTATION NAVIGATION</span>
                   {sidebarExpanded && (
@@ -2111,7 +2111,7 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
                       {globalProgress.visited}/{globalProgress.total}
                     </span>
                   )}
-                </h2>
+                </div>
                 {isPinned ? (
                   <button
                     type="button"
@@ -2444,7 +2444,13 @@ const InteractiveDocumentation: React.FC<InteractiveDocumentationProps> = ({
         </aside>
 
         {/* Main Content Area */}
-        <div ref={mainContentRef} className={`main-content ${sidebarExpanded ? 'sidebar-expanded' : ''}`}>
+        <div
+          ref={mainContentRef}
+          className={`main-content ${sidebarExpanded ? 'sidebar-expanded' : ''}`}
+          role="region"
+          aria-label="Documentation content"
+          tabIndex={0}
+        >
           <AnimatePresence mode="wait">
             {renderContent()}
           </AnimatePresence>
