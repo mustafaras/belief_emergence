@@ -159,10 +159,43 @@ jobs:
         env:
           ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
+          INITIAL_CHUNK_BUDGET_KIB: '2048'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: npm run ci:gate
+
+      - name: Accessibility gate across routes and themes
+        env:
+          A11Y_CHECK_SURFACE: '1'
+        run: npm run check:a11y
 
       - name: Q1 submission gate
         run: npm run q1:gate
+
+  visual-baselines:
+    name: Route visual baselines
+    needs: verify-app
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install the lockfile-pinned Chromium build
+        run: npx playwright-core install chromium
+
+      - name: Compare all route screenshots
+        env:
+          VISUAL_CHECK_PORT: '5199'
+          VISUAL_CHANNEL_TOLERANCE: '20'
+          VISUAL_MAX_CHANGED_PIXELS: '5000'
+        run: npm run check:visual-baselines
 
   build-paper:
     name: Compile manuscript and supplement

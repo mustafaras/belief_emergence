@@ -1,0 +1,209 @@
+/* Shared accessibility rules are imported after app components so every control gets
+   the same keyboard-visible indicator, including controls with legacy focus resets. */
+:root[data-theme='dark'] {
+  --focus-ring: #ffe066;
+}
+
+:root[data-theme='light'] {
+  --focus-ring: #005fcc;
+}
+
+:where(button, a, input, select, textarea, summary, [role='button'], [tabindex='0']):focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 2px var(--primary-bg), 0 0 0 5px var(--focus-ring) !important;
+}
+
+.topbar-title-text {
+  margin: 0;
+}
+
+.phi-formula-small {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.phi-formula-small .katex-display,
+.state-math .katex-display {
+  overflow: visible;
+}
+
+.sidebar-theme-toggle {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  font: 700 0.73rem var(--font-code);
+  cursor: pointer;
+}
+
+.sidebar-theme-toggle:hover {
+  background: var(--tertiary-bg);
+}
+
+/* Keep canvas-specific colours on the light landing route only. Other routes use
+   dark glass panels and retain their light-on-dark component palette. */
+:root[data-theme='light'] .z-value-indicator {
+  color: #3f2d00 !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .panel-header :is(h2, h3),
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .model-fit-indicator > span,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .component-group .group-mean,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .component-analysis-panel .component-group .group-header,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .component-analysis-panel .component-item,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .component-analysis-panel .component-item > span,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .field-metrics-grid .metric-label,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .field-metrics-grid .metric-value,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .surface-metrics-grid .metric-label,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .surface-metrics-grid .metric-value,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .information-metrics-grid .metric-label,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .information-metrics-grid .metric-value,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .stats-table thead th,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .stats-table td,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .diagnostic-card .card-header,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .diagnostic-card .card-value,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .snapshot-label,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .snapshot-values {
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .vector-magnitude,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .vector-angle {
+  color: #b42318 !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .gradient-display,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .panel-header .gradient-display > span,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .emergence-panel .gradient-display > span {
+  color: #5b21b6 !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .surface-analysis-panel .gradient-summary h3 {
+  color: #6b4f00 !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .emergence-index,
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .status-good {
+  color: #047857 !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .status-warning {
+  color: #92400e !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route='landing'] .status-poor {
+  color: #b42318 !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route]:not([data-route='landing']) .z-value-indicator {
+  color: #fff7d8 !important;
+}
+
+:root[data-theme='light'] .top-bar-content[data-route]:not([data-route='landing'])
+  .component-analysis-panel .component-group.mathematical .group-header {
+  color: #c4b5fd !important;
+}
+
+:root[data-theme='light'] .modern-sidebar .cover-tag,
+:root[data-theme='light'] .modern-sidebar .modern-doc-button,
+:root[data-theme='light'] .modern-sidebar .modern-ai-button,
+:root[data-theme='light'] .modern-sidebar .modern-preset-button {
+  color: #f8fafc !important;
+}
+
+:root[data-theme='light'] .modern-sidebar .modern-doc-button > span,
+:root[data-theme='light'] .modern-sidebar .modern-ai-button > span,
+:root[data-theme='light'] .modern-sidebar .modern-preset-button > span {
+  color: #f8fafc !important;
+}
+
+:root[data-theme='light'] .modern-sidebar .sidebar-theme-toggle {
+  color: #1f2937 !important;
+}
+
+:root[data-theme='light'] .ai-bubble-content p {
+  color: #f8fafc !important;
+}
+
+:root[data-theme='dark'] .component-analysis-panel .component-group.mathematical .group-header,
+:root[data-theme='dark'] .component-analysis-panel .mathematical .group-header {
+  color: #c4b5fd !important;
+}
+
+:root[data-theme='dark'] .gradient-display,
+:root[data-theme='dark'] .panel-header .gradient-display > span,
+:root[data-theme='dark'] .emergence-panel .gradient-display > span {
+  color: #c4b5fd !important;
+  text-shadow: none !important;
+}
+
+/* Light-canvas overrides for legacy gold and white toolbar text. */
+:root[data-theme='light'] .topbar-title-text {
+  background: none !important;
+  background-image: none !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+  text-shadow: none !important;
+}
+
+:root[data-theme='light'] .topbar-surface3d-toggle,
+:root[data-theme='light'] .pdf-export-button,
+:root[data-theme='light'] .scenario-btn {
+  background: #f9fafb !important;
+  border: 1px solid #64748b !important;
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+:root[data-theme='light'] .topbar-surface3d-toggle-label,
+:root[data-theme='light'] .topbar-surface3d-toggle-state,
+:root[data-theme='light'] .scenario-metric-value {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+:root[data-theme='light'] .topbar-surface3d-toggle.is-off {
+  opacity: 1;
+}
+
+:root[data-theme='light'] .topbar-surface3d-toggle-state {
+  opacity: 1 !important;
+}
+
+:root[data-theme='light'] .scenario-btn:disabled,
+:root[data-theme='light'] .pdf-export-button:disabled {
+  opacity: 0.78;
+}
+
+:root[data-theme='light'] .scenario-metric-label {
+  color: #4b5563 !important;
+  -webkit-text-fill-color: #4b5563 !important;
+}
+
+:root[data-theme='light'] .modern-sidebar .abstract-title {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+.interactive-documentation .academic-header .meta-tag,
+.interactive-documentation .academic-header .progress-label,
+.interactive-documentation .academic-header .pin-state-indicator {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  opacity: 1 !important;
+}

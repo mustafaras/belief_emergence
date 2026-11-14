@@ -30,7 +30,12 @@ export default function EvidenceIndex() {
    * repository to paint its first screen. `scripts/generate_artifact_facts.ts` extracts the
    * same three fields once at build time and writes one small module.
    */
-  const facts = artifactFacts.facts as Record<string, ArtifactFacts | undefined>
+  const facts = useMemo(() => (
+    artifactFacts && typeof artifactFacts === 'object' &&
+    'facts' in artifactFacts && artifactFacts.facts && typeof artifactFacts.facts === 'object'
+      ? artifactFacts.facts as Record<string, ArtifactFacts | undefined>
+      : {}
+  ), [])
   const index = useMemo(() => withFacts(baseIndex, facts), [baseIndex, facts])
 
   return (

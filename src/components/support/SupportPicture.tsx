@@ -11,6 +11,31 @@ import './SupportPicture.css'
  */
 const PANEL_AUDIT_PATH = resolvePublicPath('/data/panel_canonical_v2.audit.json')
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function parsePanelAudit(value: unknown): PanelAudit | null {
+  if (!isRecord(value)) return null
+  if (!Number.isFinite(value.rows) || (value.rows as number) < 0) return null
+  if (!Number.isFinite(value.countries) || (value.countries as number) < 0) return null
+
+  if (value.attrition !== undefined) {
+    if (!isRecord(value.attrition)) return null
+    for (const count of Object.values(value.attrition)) {
+      if (!Number.isFinite(count) || (count as number) < 0) return null
+    }
+  }
+  if (value.missingByCovariate !== undefined) {
+    if (!isRecord(value.missingByCovariate)) return null
+    for (const count of Object.values(value.missingByCovariate)) {
+      if (!Number.isFinite(count) || (count as number) < 0) return null
+    }
+  }
+
+  return value as unknown as PanelAudit
+}
+
 /**
  * How 442,026 respondents became 207 complete cases.
  *
@@ -33,7 +58,8 @@ export default function SupportPicture() {
       try {
         const response = await fetch(PANEL_AUDIT_PATH)
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const parsed = (await response.json()) as PanelAudit
+        const parsed = parsePanelAudit(await response.json())
+        if (!parsed) throw new Error('missing or invalid required audit fields')
         if (!cancelled) setPanel(parsed)
       } catch (error) {
         if (!cancelled) {
@@ -74,7 +100,7 @@ export default function SupportPicture() {
         </header>
         <p className="support-unavailable">
           {loadError
-            ? `The panel audit could not be loaded (${loadError}), so the attrition figures are not shown.`
+            ? `The panel audit is incomplete or could not be loaded (${loadError}), so the attrition figures are not shown.`
             : 'Loading the panel audit…'}
         </p>
       </section>
@@ -141,7 +167,7 @@ export default function SupportPicture() {
                 <th scope="col">Covariate</th>
                 <th scope="col" className="is-numeric">Cells lost</th>
                 <th scope="col" className="is-numeric">Share</th>
-                <th scope="col" />
+                <th scope="col"><span className="sr-only">Relative dropout volume</span></th>
               </tr>
             </thead>
             <tbody>
@@ -163,7 +189,8 @@ export default function SupportPicture() {
                     <span
                       className="support-bar"
                       data-share={Math.max(0.1, Math.round(blocker.share * 10) / 10)}
-                      aria-hidden="true"
+                      role="img"
+                      aria-label={`${Math.round(blocker.share * 100)} percent of attributed dropouts`}
                     />
                   </td>
                 </tr>

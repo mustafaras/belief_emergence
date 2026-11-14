@@ -10,15 +10,27 @@ import Plotly from 'plotly.js-dist-min'
 
 const Plot = createPlotlyComponent(Plotly)
 
+function sampleGridIndices(length: number, maxSamples = 11): number[] {
+  if (length <= maxSamples) return Array.from({ length }, (_, index) => index)
+  return Array.from({ length: maxSamples }, (_, index) =>
+    Math.round((index * (length - 1)) / (maxSamples - 1)),
+  )
+}
+
 export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfaceModel }) {
   const { DiagRow, EPS_MARKER_ABS, addPinFromHover, announce, applyCamera, ariaAnnouncement, axisMode, clampIsValid, clampMaxNum, clampMinNum, className, colorScale, config, consistency, contoursOn, data, diagnosticsOpen, displayedQuality, dockOpen, dockTab, enqueueHoverUpdate, formatNumber, graphDivRef, handleClick, handleRelayout, hasCi95, hoverReadout, isComputing, isDevBuild, lastGraphDivRef, layout, markerZ, nearestGrid, onGraphReady, onPlotPointerCancel, onPlotPointerDown, onPlotPointerUp, params, paramsKey4, pins, plotDivRef, plotHostRef, plotView, presetBadge, presetName, qualityLabel, resolutionMode, reverseScale, setContoursOn, setDiagnosticsOpen, setPlotView, setResolutionMode, setShowCiBands, setSurfaceOpacity, showCiBands, showColorbar, snapshotActive, snapshotInFlight, snapshotUrl, surface, surfaceError, surfaceKey, surfaceOpacity, useStd, viewMode, xSliceIx, xSliceOn, xSliceX0, ySliceIy, ySliceOn, ySliceY0, zCanonical, zClampEnabled, zMaxEff, zMinEff, zRangeRaw } = model
+  const xSampleIndices = surface ? sampleGridIndices(surface.xVals.length) : []
+  const ySampleIndices = surface ? sampleGridIndices(surface.yVals.length) : []
+  const chartDescription = axisMode === 'DOC'
+    ? 'Response surface of predicted Z across Phi and log(B/k). A sampled data table is available from the Data table disclosure.'
+    : 'Response surface of predicted Z across settlement X and inequality Y. A sampled data table is available from the Data table disclosure.'
   return (
     <div className={`surface3d-surface-root ${className ?? ''}`.trim()}>
       <div
         className="surface3d-instrument"
         role="region"
-        aria-label="3D response surface instrument"
-        aria-describedby="surface3d-shortcuts"
+        aria-labelledby="surface3d-title"
+        aria-describedby="surface3d-description surface3d-shortcuts"
         tabIndex={0}
         onKeyDown={(e) => {
           // Keyboard shortcuts apply only when this panel is focused.
@@ -66,6 +78,9 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
         <div id="surface3d-shortcuts" className="surface3d-visually-hidden">
           Keyboard shortcuts: R reset camera, I isometric, T top, F front, C toggle contours, 2 for 2D view, 3 for 3D view, Q cycle resolution.
         </div>
+        <div id="surface3d-description" className="surface3d-visually-hidden">
+          {chartDescription} A sampled data table is available below the plot.
+        </div>
         <div className="surface3d-visually-hidden" aria-live="polite">
           {ariaAnnouncement}
         </div>
@@ -74,8 +89,8 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
         </div>
         <div className="surface3d-instrument-header">
           <div className="surface3d-instrument-left">
-            <div className="surface3d-instrument-title-row">
-              <div className="surface3d-instrument-title">{axisMode === 'DOC' ? '3D Response Surface: Z(φ, ln(B/k))' : '3D Response Surface: Z(X,Y)'} </div>
+      <div className="surface3d-instrument-title-row">
+              <div id="surface3d-title" className="surface3d-instrument-title">{axisMode === 'DOC' ? '3D Response Surface: Z(φ, ln(B/k))' : '3D Response Surface: Z(X,Y)'} </div>
 
               <Surface3DSurfaceDock model={model} />
             </div>
@@ -178,7 +193,7 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
                   type="button"
                   className="surface3d-chip is-active"
                   onClick={() => applyCamera(ISO_CAMERA, 'ISO')}
-                  aria-label="View: Isometric"
+                  aria-label="ISO: Isometric view"
                   aria-pressed="true"
                 >
                   ISO
@@ -188,7 +203,7 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
                   type="button"
                   className="surface3d-chip"
                   onClick={() => applyCamera(ISO_CAMERA, 'ISO')}
-                  aria-label="View: Isometric"
+                  aria-label="ISO: Isometric view"
                   aria-pressed="false"
                 >
                   ISO
@@ -271,7 +286,7 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
                 className={`surface3d-chip${showCiBands ? ' is-active' : ''}`}
                 onClick={() => setShowCiBands((v) => !v)}
                 disabled={!hasCi95}
-                aria-label="Toggle 95% confidence interval bands"
+                aria-label="95 % CI confidence interval bands"
                 aria-pressed={showCiBands}
                 title={hasCi95 ? '95 % confidence interval bands' : 'CI data not available – load estimated coefficients with ci95'}
               >
@@ -337,7 +352,7 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
               </div>
             )}
 
-            <div className="surface3d-status" aria-label="Status">
+            <div className="surface3d-status" role="group" aria-label="Surface status">
               <div
                 className={`surface3d-consistency surface3d-consistency--${consistency.kind}`}
                 title={`Marker tolerance=${EPS_MARKER_ABS}. Grid tolerance=${consistency.epsGridAbs} (${consistency.effectiveTier}).`}
@@ -383,6 +398,39 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
                 )
               )}
             </div>
+            {surface && (
+              <details className="surface3d-data-table-details">
+                <summary aria-label="Show response surface data table">Data table</summary>
+                <p className="surface3d-data-table-description">
+                  Sampled rows and columns from the computed surface grid. Use the full plot for
+                  interactive exploration.
+                </p>
+                <div className="surface3d-data-table-scroll" role="region" aria-label="Response surface data table" tabIndex={0}>
+                  <table className="surface3d-data-table">
+                    <caption>Predicted Z by {axisMode === 'DOC' ? 'Phi and log(B/k)' : 'settlement X and inequality Y'}</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Y \ X</th>
+                        {xSampleIndices.map((index) => (
+                          <th scope="col" key={index}>{formatNumber(surface.xVals[index], 3)}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ySampleIndices.map((yIndex) => (
+                        <tr key={yIndex}>
+                          <th scope="row">{formatNumber(surface.yVals[yIndex], 3)}</th>
+                          {xSampleIndices.map((xIndex) => {
+                            const value = surface.zGrid[yIndex]?.[xIndex]
+                            return <td key={xIndex}>{isFiniteNumber(value) ? formatNumber(value, 4) : '—'}</td>
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+            )}
           </div>
         </div>
 
@@ -395,7 +443,12 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
               onPointerUp={onPlotPointerUp}
               onPointerCancel={onPlotPointerCancel}
             >
-              <div className={`surface3d-plot-layer ${snapshotActive ? 'is-hidden' : ''}`.trim()}>
+              <div
+                className={`surface3d-plot-layer ${snapshotActive ? 'is-hidden' : ''}`.trim()}
+                role="img"
+                aria-label={chartDescription}
+                aria-describedby="surface3d-description"
+              >
                 <Plot
                   className="surface3d-plot"
                   data={data}
@@ -662,6 +715,7 @@ export default function Surface3DSurfaceView({ model }: { model: Surface3DSurfac
             </div>
           )}
         </div>
+
       </div>
     </div>
   )

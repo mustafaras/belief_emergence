@@ -455,7 +455,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
               </p>
             </div>
 
-            <svg viewBox="0 0 520 340" className="validation-chart">
+            <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Suppressor validation chart" focusable="false">
               <line x1="60" y1="260" x2="460" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="40" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="260" x2="460" y2="60" stroke="#f59e0b" strokeDasharray="4,4" />
@@ -544,7 +544,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
               <div className="validation-status">{loading ? 'Loading panel data…' : 'Data unavailable for runtime derivative summary.'}</div>
             ) : (
               <>
-                <svg viewBox="0 0 560 240" className="sensitivity-chart">
+                <svg viewBox="0 0 560 240" className="sensitivity-chart" role="img" aria-label="Suppressor sensitivity chart" focusable="false">
                   {(() => {
                     const rows = [
                       { key: 'E', label: 'dZ/dE', s: marginal.summary.E, color: '#ef4444' },
@@ -619,7 +619,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
             <h4 className="viz-title">Country-Level Fit Summary</h4>
             <p className="viz-subtitle">Within-country R² is reported only when within-country variance is non-degenerate</p>
 
-            <svg viewBox="0 0 600 320" className="country-slice-chart">
+            <svg viewBox="0 0 600 320" className="country-slice-chart" role="img" aria-label="Country-level suppressor response slices chart" focusable="false">
               <line x1="60" y1="50" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
               <line x1="60" y1="260" x2="560" y2="260" stroke="#334155" strokeWidth="2" />
 
@@ -714,7 +714,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
             <h4 className="viz-title">4.2 Coefficient Anatomy (Suppressor-Related Terms)</h4>
             <p className="viz-subtitle">Signed main effects + suppressor-relevant interactions/quadratic (Ridge L2, α=1.0)</p>
 
-            <svg viewBox="0 0 720 320" className="coeff-chart">
+            <svg viewBox="0 0 720 320" className="coeff-chart" role="img" aria-label="Suppressor coefficient contributions chart" focusable="false">
           <defs>
             <linearGradient id="suppNeg" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ef4444" stopOpacity="0.85" />
@@ -874,7 +874,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
             </div>
           </div>
 
-          <svg viewBox="0 0 520 340" className="validation-chart">
+          <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Suppressor model validation chart" focusable="false">
             <line x1="60" y1="260" x2="460" y2="260" stroke="#334155" strokeWidth="2" />
             <line x1="60" y1="40" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
 
@@ -969,7 +969,7 @@ B &= X_{\\mathrm{safe}}^{\\alpha}\\,Y_{\\mathrm{safe}}^{\\beta}
           <h4 className="viz-title">Residual Diagnostics</h4>
           <p className="viz-subtitle">Distribution of residuals (observed − predicted): bias and dispersion</p>
 
-          <svg viewBox="0 0 520 340" className="validation-chart">
+          <svg viewBox="0 0 520 340" className="validation-chart" role="img" aria-label="Suppressor sensitivity validation chart" focusable="false">
             <line x1="60" y1="260" x2="460" y2="260" stroke="#334155" strokeWidth="2" />
             <line x1="60" y1="40" x2="60" y2="260" stroke="#334155" strokeWidth="2" />
 

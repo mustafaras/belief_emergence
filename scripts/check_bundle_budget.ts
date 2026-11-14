@@ -29,8 +29,21 @@ const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const ASSETS = path.join(REPO_ROOT, 'dist', 'assets')
 const PORT = process.env.BUNDLE_CHECK_PORT || '5401'
 
-/** Prompt 7's target, stated as a number so the budget is enforceable. */
-const INITIAL_BUDGET_BYTES = 2 * 1024 * 1024
+function readPositiveInteger(name: string, fallback: number): number {
+  const raw = process.env[name]
+  if (raw == null || raw.trim() === '') return fallback
+  const value = Number(raw)
+  if (!Number.isSafeInteger(value) || value <= 0) {
+    throw new Error(`${name} must be a positive integer; received ${JSON.stringify(raw)}`)
+  }
+  return value
+}
+
+/** Workflow values are numeric and explicit; defaults keep the local command usable. */
+const INITIAL_BUDGET_KIB = readPositiveInteger('INITIAL_CHUNK_BUDGET_KIB', 2048)
+const INITIAL_BUDGET_BYTES = INITIAL_BUDGET_KIB * 1024
+const FIRST_CONTENTFUL_PAINT_BUDGET_MS = readPositiveInteger('FIRST_CONTENTFUL_PAINT_BUDGET_MS', 2500)
+const PAINT_SAMPLES = 3
 
 /** Chunks that must never be requested to paint the landing route. */
 const FORBIDDEN_CHUNKS = [
@@ -47,13 +60,15 @@ if (!fs.existsSync(ASSETS)) {
 
 const failures: string[] = []
 
-/** Serve dist/ and total the scripts the landing route requests. */
-async function measureInitialPayload(): Promise<{ bytes: number; files: string[] }> {
+/** Serve dist/, total the initial JavaScript, and measure cold landing-route FCP. */
+async function measureInitialPayload(): Promise<{ files: string[]; firstContentfulPaintMs: number[] }> {
   const { chromium } = (await import('playwright-core')) as typeof import('playwright-core')
-  const chromePath =
-    process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+  const chromePath = process.env.CHROME_PATH || chromium.executablePath()
 
-  const server = spawn('npx', ['vite', 'preview', '--port', PORT, '--strictPort'], {
+  const server = spawn(process.execPath, [
+    path.join(REPO_ROOT, 'node_modules', 'vite', 'bin', 'vite.js'),
+    'preview', '--host', '127.0.0.1', '--port', PORT, '--strictPort',
+  ], {
     cwd: REPO_ROOT,
     stdio: 'ignore',
   })
@@ -63,7 +78,7 @@ async function measureInitialPayload(): Promise<{ bytes: number; files: string[]
     let up = false
     for (let attempt = 0; attempt < 60 && !up; attempt += 1) {
       try {
-        const response = await fetch(`http://localhost:${PORT}/belief_emergence/`)
+        const response = await fetch(`http://127.0.0.1:${PORT}/belief_emergence/`)
         up = response.ok
       } catch {
         // Not listening yet.
@@ -74,21 +89,39 @@ async function measureInitialPayload(): Promise<{ bytes: number; files: string[]
 
     const browser = await chromium.launch({ executablePath: chromePath, headless: true })
     try {
-      const page = await browser.newPage()
-      const requested: string[] = []
-      page.on('response', (response) => {
-        const url = response.url()
-        if (url.includes('/assets/') && url.endsWith('.js')) {
-          requested.push(url.split('/assets/')[1])
+      const requested = new Set<string>()
+      const firstContentfulPaintMs: number[] = []
+      for (let sample = 0; sample < PAINT_SAMPLES; sample += 1) {
+        const context = await browser.newContext({
+          viewport: { width: 1600, height: 1000 },
+          deviceScaleFactor: 1,
+          reducedMotion: 'reduce',
+        })
+        try {
+          const page = await context.newPage()
+          page.on('response', (response) => {
+            const url = response.url()
+            if (url.includes('/assets/') && url.endsWith('.js')) {
+              requested.add(url.split('/assets/')[1])
+            }
+          })
+          await page.goto(`http://127.0.0.1:${PORT}/belief_emergence/`, {
+            waitUntil: 'networkidle',
+            timeout: 60000,
+          })
+          const paintTime = await page.evaluate(() =>
+            performance.getEntriesByType('paint')
+              .find((entry) => entry.name === 'first-contentful-paint')?.startTime ?? null,
+          )
+          if (typeof paintTime !== 'number' || !Number.isFinite(paintTime)) {
+            throw new Error(`browser did not report first-contentful-paint on sample ${sample + 1}`)
+          }
+          firstContentfulPaintMs.push(paintTime)
+        } finally {
+          await context.close()
         }
-      })
-      await page.goto(`http://localhost:${PORT}/belief_emergence/`, {
-        waitUntil: 'networkidle',
-        timeout: 60000,
-      })
-      // Let any post-paint fetch settle before closing the request set.
-      await page.waitForTimeout(4000)
-      return { bytes: 0, files: [...new Set(requested)] }
+      }
+      return { files: [...requested], firstContentfulPaintMs }
     } finally {
       await browser.close()
     }
@@ -104,12 +137,24 @@ async function measureInitialPayload(): Promise<{ bytes: number; files: string[]
 async function main(): Promise<void> {
   let measured: { bytes: number; files: string[] }
   try {
-    measured = await measureInitialPayload()
-  } catch (error) {
+    const rawMeasurement = await measureInitialPayload()
+    measured = { bytes: 0, files: rawMeasurement.files }
+    const sortedPaintTimes = [...rawMeasurement.firstContentfulPaintMs].sort((a, b) => a - b)
+    const medianPaintMs = sortedPaintTimes[Math.floor(sortedPaintTimes.length / 2)]
     console.log(
-      `SKIP  could not measure the built payload (${(error as Error).message.slice(0, 90)})`,
+      `First contentful paint (cold landing, ${PAINT_SAMPLES} runs): ` +
+        `${rawMeasurement.firstContentfulPaintMs.map((ms) => ms.toFixed(0)).join(', ')} ms; ` +
+        `median ${medianPaintMs.toFixed(0)} ms (budget ${FIRST_CONTENTFUL_PAINT_BUDGET_MS} ms)`,
     )
-    return
+    if (medianPaintMs > FIRST_CONTENTFUL_PAINT_BUDGET_MS) {
+      failures.push(
+        `median first contentful paint is ${medianPaintMs.toFixed(0)} ms, over the ` +
+          `${FIRST_CONTENTFUL_PAINT_BUDGET_MS} ms budget`,
+      )
+    }
+  } catch (error) {
+    console.error(`FAIL  could not measure built payload/performance: ${(error as Error).message}`)
+    process.exit(1)
   }
 
   const sizes = new Map<string, number>()
@@ -123,17 +168,17 @@ async function main(): Promise<void> {
 
   console.log('\nJavaScript requested to paint the landing route:')
   for (const [file, size] of sorted) {
-    console.log(`  ${file.padEnd(44)} ${(size / 1024).toFixed(0).padStart(6)} kB`)
+      console.log(`  ${file.padEnd(44)} ${(size / 1024).toFixed(0).padStart(6)} KiB`)
   }
   console.log(
-    `  ${'total'.padEnd(44)} ${(bytes / 1024).toFixed(0).padStart(6)} kB ` +
-      `(budget ${(INITIAL_BUDGET_BYTES / 1024).toFixed(0)} kB)`,
+    `  ${'total'.padEnd(44)} ${(bytes / 1024).toFixed(0).padStart(6)} KiB ` +
+      `(budget ${INITIAL_BUDGET_KIB} KiB)`,
   )
 
   if (bytes > INITIAL_BUDGET_BYTES) {
     failures.push(
-      `initial payload is ${(bytes / 1048576).toFixed(2)} MB, over the ` +
-        `${(INITIAL_BUDGET_BYTES / 1048576).toFixed(0)} MB budget`,
+      `initial payload is ${(bytes / 1048576).toFixed(2)} MiB, over the ` +
+        `${INITIAL_BUDGET_KIB} KiB budget`,
     )
   }
 
@@ -165,9 +210,10 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `\nPASS  landing route loads ${(bytes / 1024).toFixed(0)} kB of JavaScript in ` +
-      `${measured.files.length} chunk(s), under the ${(INITIAL_BUDGET_BYTES / 1048576).toFixed(0)} MB budget; ` +
-      `${FORBIDDEN_CHUNKS.length} heavy modules deferred`,
+    `\nPASS  landing route loads ${(bytes / 1024).toFixed(0)} KiB of JavaScript in ` +
+      `${measured.files.length} chunk(s), under the ${INITIAL_BUDGET_KIB} KiB budget; ` +
+      `${FORBIDDEN_CHUNKS.length} heavy modules deferred; ` +
+      `median FCP is within ${FIRST_CONTENTFUL_PAINT_BUDGET_MS} ms`,
   )
 }
 

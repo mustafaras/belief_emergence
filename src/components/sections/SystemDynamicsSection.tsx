@@ -739,7 +739,7 @@ const SystemDynamicsSection: React.FC = () => {
             <h4 className="viz-title">6.1b Main Function Surface (Explicit Heatmap + Curves)</h4>
             <p className="viz-subtitle">Heatmap: Z over Φ (x-axis) and ln(B/k) (y-axis). Right panel: Z(Φ) curves for weak/typical/strong structural base.</p>
 
-            <svg viewBox="0 0 720 300" className="validation-chart sd-svg sd-svg--h290">
+            <svg viewBox="0 0 720 300" className="validation-chart sd-svg sd-svg--h290" role="img" aria-label="System dynamics validation surface chart" focusable="false">
               {(() => {
                 const {
                   phiMin,
@@ -1005,7 +1005,7 @@ const SystemDynamicsSection: React.FC = () => {
             <h4 className="viz-title">6.1c Main Function (Isometric Surface; SVG)</h4>
             <p className="viz-subtitle">Same rendering method as other charts: computed surface + isometric projection + ridge/baseline overlays</p>
 
-            <svg viewBox="0 0 720 440" className="validation-chart sd-svg sd-svg--h460">
+            <svg viewBox="0 0 720 440" className="validation-chart sd-svg sd-svg--h460" role="img" aria-label="System dynamics three-dimensional response surface chart" focusable="false">
               {(() => {
                 const { phiMin, phiMax, sMin, sMax, nPhi, nS, phis, shifts, grid, baseShift } = mainFunctionSurface3D;
 
@@ -1374,7 +1374,7 @@ const SystemDynamicsSection: React.FC = () => {
               Bottom: the local sensitivity dZ/dΦ, which shows where changes in Φ have the most leverage on Z.
             </p>
 
-            <svg viewBox="0 0 720 360" className="validation-chart sd-svg sd-svg--h320">
+            <svg viewBox="0 0 720 360" className="validation-chart sd-svg sd-svg--h320" role="img" aria-label="Belief phase portrait of Z and its derivative" focusable="false">
               <text x="360" y="18" textAnchor="middle" fill="#f1f5f9" fontSize="12" fontWeight={700}>
                 Phase portrait (dimensionless): Z(Φ) and dZ/dΦ
               </text>
@@ -1522,7 +1522,7 @@ const SystemDynamicsSection: React.FC = () => {
             <p className="viz-subtitle">Structural regime as Z(X_safe) slices at Y_safe quantiles, plus ΔZ slices (shock/buffer)</p>
 
             {/* Structural slices */}
-            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290">
+            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290" role="img" aria-label="Structural regime slices across settlement quantiles" focusable="false">
               <text x="360" y="18" textAnchor="middle" fill="#f1f5f9" fontSize="12" fontWeight={700}>
                 Structural regime slices: Z vs X_safe at Y_safe quantiles
               </text>
@@ -1596,7 +1596,7 @@ const SystemDynamicsSection: React.FC = () => {
             </svg>
 
             {/* ΔZ slices */}
-            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290">
+            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290" role="img" aria-label="Scenario change in Z across settlement quantiles" focusable="false">
               <text x="360" y="18" textAnchor="middle" fill="#f1f5f9" fontSize="12" fontWeight={700}>
                 ΔZ slices (scenario − baseline) across X_safe at Y_safe quantiles
               </text>
@@ -1700,7 +1700,7 @@ const SystemDynamicsSection: React.FC = () => {
             {hasEmpirical && (
               <>
                 {/* (A) Observed vs Predicted scatter */}
-                <svg viewBox="0 0 500 260" className="validation-chart sd-svg sd-svg--h240">
+                <svg viewBox="0 0 500 260" className="validation-chart sd-svg sd-svg--h240" role="img" aria-label="Structural parameter sensitivity chart" focusable="false">
                   <line x1="70" y1="280" x2="470" y2="280" stroke="#334155" strokeWidth="2" />
                   <line x1="70" y1="60" x2="70" y2="280" stroke="#334155" strokeWidth="2" />
 
@@ -1772,7 +1772,7 @@ const SystemDynamicsSection: React.FC = () => {
                 </svg>
 
                 {/* (B) Calibration curve with IQR */}
-                <svg viewBox="0 0 500 280" className="validation-chart sd-svg sd-svg--h240">
+                <svg viewBox="0 0 500 280" className="validation-chart sd-svg sd-svg--h240" role="img" aria-label="Observed and predicted outcome comparison chart" focusable="false">
                   <line x1="70" y1="260" x2="470" y2="260" stroke="#334155" strokeWidth="2" />
                   <line x1="70" y1="60" x2="70" y2="260" stroke="#334155" strokeWidth="2" />
 
@@ -1807,7 +1807,7 @@ const SystemDynamicsSection: React.FC = () => {
                 </svg>
 
                 {/* (C) Residual diagnostic: residual vs predicted */}
-                <svg viewBox="0 0 500 260" className="validation-chart sd-svg sd-svg--h240">
+                <svg viewBox="0 0 500 260" className="validation-chart sd-svg sd-svg--h240" role="img" aria-label="System dynamics residual diagnostic chart" focusable="false">
                   <line x1="70" y1="200" x2="470" y2="200" stroke="#334155" strokeWidth="2" />
                   <line x1="70" y1="60" x2="70" y2="240" stroke="#334155" strokeWidth="2" />
                   <line x1="70" y1="150" x2="470" y2="150" stroke="#f59e0b" strokeWidth="1.5" strokeDasharray="4,4" opacity={0.8} />
@@ -1922,7 +1922,7 @@ const SystemDynamicsSection: React.FC = () => {
             <h4 className="viz-title">6.5 Model-Implied Sensitivity Scenarios</h4>
             <p className="viz-subtitle">Illustrative model-implied behavior: Z vs E_std for selected S_std levels (exploratory scenario)</p>
 
-            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290">
+            <svg viewBox="0 0 720 320" className="validation-chart sd-svg sd-svg--h290" role="img" aria-label="Illustrative Z sensitivity to education and social support" focusable="false">
               <text x="360" y="18" textAnchor="middle" fill="#f1f5f9" fontSize="12" fontWeight={700}>
                 Model-implied scenario: Z sensitivity to E_std at varying S_std levels (illustrative)
               </text>
@@ -2034,7 +2034,7 @@ const SystemDynamicsSection: React.FC = () => {
             <h4 className="viz-title">6.6b Summary View (Isometric Surface; Reverse Angle)</h4>
             <p className="viz-subtitle">Same surface as 6.1c, rendered from the opposite side for readability</p>
 
-            <svg viewBox="0 0 720 440" className="validation-chart sd-svg sd-svg--h460">
+            <svg viewBox="0 0 720 440" className="validation-chart sd-svg sd-svg--h460" role="img" aria-label="System dynamics sensitivity surface chart" focusable="false">
               {(() => {
                 const { phiMin, phiMax, sMin, sMax, nPhi, nS, phis, shifts, grid, baseShift } = mainFunctionSurface3D;
 

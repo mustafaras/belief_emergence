@@ -893,7 +893,7 @@
   padding: 6px 8px;
 }
 
-.surface-analysis-panel .gradient-summary h4 {
+.surface-analysis-panel .gradient-summary h3 {
   margin-bottom: 6px;
 }
 
@@ -929,7 +929,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.panel-header h3 {
+.panel-header :is(h2, h3) {
   font-size: 10px;
   font-weight: 900;
   color: rgba(255, 247, 214, 0.90);
@@ -942,12 +942,12 @@
 
 /* Reduce neon variance: keep a coherent gold header system.
    (Semantic status colors remain via badges/values below.) */
-.statistical-analysis-panel .panel-header h3,
-.field-dynamics-panel .panel-header h3,
-.component-analysis-panel .panel-header h3,
-.surface-analysis-panel .panel-header h3,
-.emergence-panel .panel-header h3,
-.model-performance-panel .panel-header h3 {
+.statistical-analysis-panel .panel-header :is(h2, h3),
+.field-dynamics-panel .panel-header :is(h2, h3),
+.component-analysis-panel .panel-header :is(h2, h3),
+.surface-analysis-panel .panel-header :is(h2, h3),
+.emergence-panel .panel-header :is(h2, h3),
+.model-performance-panel .panel-header :is(h2, h3) {
   color: rgba(255, 247, 214, 0.90);
 }
 
@@ -2302,7 +2302,7 @@
   padding: 8px;
 }
 
-.gradient-summary h4 {
+.gradient-summary h3 {
   color: #e6c965;
   font-size: 9px;
   font-weight: 600;

@@ -463,7 +463,7 @@ The four requested areas now have dedicated modules and focused tests:
 `npm run check:surface-snapshot` passes against the pre-extraction PNG byte-for-byte
 (44,922 bytes, sha256 `2cd58694f37190c3`). Focused tests pass (52/52), `npx tsc -b`
 passes, and `npm run build` succeeds. The full `npm run ci:gate` also passes 80/80 checks.
-Prompt 9 is closed; Prompt 11 remains the next prompt and has not been started.
+Prompt 9 is closed. Prompt 10 is recorded next; Prompt 11 follows it in the sequence.
 
 ---
 
@@ -524,6 +524,16 @@ broken data is decoration.
 **Done when** the ten components are covered and at least one test per component asserts
 graceful behaviour on incomplete artifact data.
 
+**Completed 2026-11-13.** `tests/components.numericPanels.test.tsx` covers BeliefProgress,
+CoefficientProvenancePanel, ConstructAudit, SupportPicture, LimitsSection, EvidenceIndex,
+CorrelationMatrixPanel, ContributionPanel, CountriesZValuesPanel and
+NotationGlossarySection with 17 rendered-component cases. The fixtures include missing
+`computable`, `rows`, `facts`, `Z`, metric and contribution fields, each with a visible
+fallback assertion. Removing `rows` from the support-audit fixture made its valid-data
+render test fail as expected; the fixture was restored afterwards. The full suite passes
+42 files / 315 tests, lint has zero errors, and the production build succeeds. Prompt 11
+is closed; Prompt 12 is next.
+
 ---
 
 ## Prompt 12 — Accessibility to WCAG 2.2 AA
@@ -541,6 +551,51 @@ verified — axe-core output, a keyboard walkthrough, or a measured contrast rat
 
 **Verify**: run axe-core against every route and report violation counts by impact level
 before and after. Do not suppress rules to reach zero.
+
+**Audited and corrected 2026-11-14.** axe-core 4.14.0 in Chrome 156.0.8078.82 scanned all
+12 routes in both dark and light themes (24 route/theme scans). A further two scans
+opened the Surface 3D controls and keyboard-opened data table in each theme. Counts below
+are axe violations, aggregated within each 12-route theme set; no rules or routes were
+suppressed.
+
+| Theme and pass | Scans | Critical | Serious | Moderate | Minor |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Dark, before | 12 | 0 | 47 | 30 | 2 |
+| Dark, after | 12 | 0 | 0 | 0 | 0 |
+| Light, before | 12 | 0 | 47 | 30 | 2 |
+| Light, after | 12 | 0 | 0 | 0 | 0 |
+
+Verification methods and results:
+
+- `npm run check:a11y` scans landing, component-analysis, field-dynamics,
+  statistical-analysis, sensitivity-analysis, emergence-analysis, model-diagnostics,
+  advanced-parameters, phi-contributions, documentation, ai-interpreter, and presets.
+  Across 26 tested states, axe found zero violations at every impact level, zero unnamed
+  charts, zero unsupported ARIA attributes, and no remaining 1:1 contrast candidates.
+- The audit found and fixed white text on the light landing canvas in the statistics table
+  and parameter snapshot. Their replacement colour (`#374151`) measures 10.31:1 against
+  white. Manual review found that a broad light-theme override also darkened text on the
+  app's dark glass panels; those rules are now limited to the light landing canvas. The
+  mathematical component heading on dark panels uses `#c4b5fd` (9.55:1 against `#1d1900`).
+  The top toolbar title and controls use dark text on light surfaces, while the lower
+  formula title retains its gold gradient over the dark hero panel. Axe's remaining
+  `color-contrast` incomplete checks cannot calculate text over gradients, pseudo-elements,
+  or overlapping layers; they are not reported as violations.
+- The browser audit checked 1,654 visible focus targets across the 24 route/theme scans;
+  every target had a visible outline at least 2 CSS pixels wide. A real Tab walk reached
+  all 58/58 sequential stops on the landing route. Theme toggle passed Space and Enter.
+- The Preset modal passed Tab and Shift+Tab wrapping, Escape close, and focus restoration
+  to its opener.
+- Every visible SVG chart at least 150×100 CSS pixels had an accessible name. The Plotly
+  surface exposes a named image with a text description and keyboard shortcuts; opening
+  its data-table fallback by keyboard rendered 11 sampled rows × 11 X values in both
+  themes. The dynamic surface state also passed axe and the visible-focus check.
+- `npm run ci:gate` passed 81/81 checks, including the existing 1076×421 surface image
+  snapshot; the accessible table control does not alter the rendered plot baseline.
+- The audit corrected invalid `aria-label` use on generic elements and aligned the Surface
+  3D button names with their visible labels. Only `color-contrast` remains in axe's
+  incomplete results, due to backgrounds the automated checker cannot resolve. This
+  evidence does not claim complete WCAG conformance.
 
 **Done when** axe reports no critical or serious violations on any route, and the
 verification method for each fix is recorded.
@@ -563,6 +618,24 @@ regression the day it landed, rather than the week a human finally opened a brow
 
 **Verify**: deliberately change one rendered string and confirm the visual check fails
 with the route named. Then revert.
+
+**Implemented and locally verified 2026-11-14; hosted workflow run pending.** The CI
+workflow sets the initial JavaScript limit to **2048 KiB** and the median cold-navigation
+First Contentful Paint limit to **2500 ms**. `check:bundle-budget` measures three fresh
+browser contexts against the built landing route and reports both measurements in the CI
+log. The final local production measurement was 705 KiB; the full gate reported FCP
+samples of 568, 592, and 436 ms (median 568 ms). Lowering both limits to 1 KiB and
+1 ms made the check fail for both regressions.
+
+`tests/visual-baselines/` contains one 1600×1000 dark-theme PNG baseline for each of the
+12 routes. The capture harness uses `buildAppUrl`, waits for each route and modal to render,
+stubs the AI response, and fixes locale, timezone, motion, and device scale. CI installs
+the lockfile-pinned Chromium build on macOS and enforces a 5000 changed-pixel ceiling
+after ignoring per-channel differences of 20 or less. A repeat local run changed 0 pixels
+on all 12 routes. Changing the visible “Component Analysis” label produced 76,953 changed
+pixels and failed with `landing` named in the error; the source was restored and the
+baseline check passed again. The screenshot set and workflow are local changes, so the
+hosted Actions result remains to be observed after the branch is published.
 
 **Done when** both budgets are enforced in CI and both have been proven to fail on a
 deliberate regression.

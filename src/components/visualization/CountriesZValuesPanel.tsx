@@ -210,7 +210,7 @@ export const CountriesZValuesPanel: React.FC<CountriesZValuesPanelProps> = ({
   }, [country, metrics, onCountrySummary, selectedCountryName]);
 
   return (
-    <div className="countries-z-panel" aria-label="Measured panel Z values">
+    <div className="countries-z-panel" role="group" aria-label="Measured panel Z values">
       <div className="countries-z-header">
         <div className="countries-z-title">MODEL VS DATA (PANEL)</div>
         <div className="countries-z-subtitle">Predicted Z comes from the current model inputs; measured Z comes from the panel outcome.</div>
@@ -249,7 +249,7 @@ export const CountriesZValuesPanel: React.FC<CountriesZValuesPanelProps> = ({
 
       <div className="z-stack">
         {currentModelZ !== undefined && (
-          <div className="z-card model" aria-label="Model-predicted Z (current inputs)">
+          <div className="z-card model" role="group" aria-label="Model-predicted Z (current inputs)">
             <div className="z-card-label-row">
               <div className="z-card-label">PREDICTED Z (CURRENT INPUTS)</div>
               <span className="z-band-tag">Z ∈ (0,1), clipped to {structuralBandLabel}</span>
@@ -271,7 +271,7 @@ export const CountriesZValuesPanel: React.FC<CountriesZValuesPanelProps> = ({
         )}
 
         {metrics && (
-          <div className="z-card measured" aria-label="Panel measured vs model">
+          <div className="z-card measured" role="group" aria-label="Panel measured vs model">
             <div className="z-card-label-row">
               <div className="z-card-label">MEASURED Z (PANEL)</div>
               <span className="z-band-tag">band: {structuralBandLabel} (panel norm)</span>

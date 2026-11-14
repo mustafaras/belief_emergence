@@ -1,6 +1,6 @@
 ﻿import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { BookOpen, Sparkles, Globe } from 'lucide-react'
+import { BookOpen, Sparkles, Globe, Sun, Moon } from 'lucide-react'
 import type { AppRoute } from '../../router/routes'
 import ContributionPanel from '../contributions/ContributionPanel'
 import { computePhiContributions } from '../../utils/contributions'
@@ -39,6 +39,19 @@ function normalizeCountryName(value: string): string {
 }
 
 const PRESET_KEYS = ['X', 'Y', 'C', 'M', 'T', 'D', 'G', 'E', 'S', 'R'] as const;
+
+type ColorScheme = 'dark' | 'light';
+
+function getInitialColorScheme(): ColorScheme {
+  if (typeof window === 'undefined') return 'dark';
+  try {
+    const saved = window.localStorage.getItem('belief-emergence-theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+  } catch {
+    // Continue with the operating system preference when storage is unavailable.
+  }
+  return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
 
 /**
  * Mean covariate values for a preset country.
@@ -446,10 +459,14 @@ function SectionShell({ headerClassName, icon, title, titleId, subtitle, rightAc
 
 function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowAiInterpreter, onPresetSelect, route, onNavigate }: ModernSidebarProps) {
   const [isPresetModalOpen, setIsPresetModalOpen] = useState(false);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(getInitialColorScheme);
   const [showAdvancedParameters, setShowAdvancedParameters] = useState(false);
   const [showContributions, setShowContributions] = useState(false);
   const [xyTrail, setXyTrail] = useState<Array<[number, number]>>([]);
   const [motionEnabled, setMotionEnabled] = useState(true);
+  const presetButtonRef = useRef<HTMLButtonElement | null>(null);
+  const openerFocusRef = useRef<HTMLElement | null>(null);
+  const presetModalWasOpenRef = useRef(false);
 
   // A route can name a drawer or a modal. Opening follows the route so a deep link
   // lands with the right control expanded; the toggles below still navigate, so the
@@ -458,7 +475,11 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
     if (!route) return;
     if (route === 'advanced-parameters') setShowAdvancedParameters(true);
     if (route === 'phi-contributions') setShowContributions(true);
-    if (route === 'presets') setIsPresetModalOpen(true);
+    if (route === 'presets') {
+      const active = document.activeElement as HTMLElement | null;
+      openerFocusRef.current = active && active !== document.body ? active : presetButtonRef.current;
+      setIsPresetModalOpen(true);
+    }
   }, [route]);
 
   const { panelData } = useDataContext();
@@ -467,8 +488,14 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
   const panelXRangeLabel = `[${PANEL_X_MIN.toFixed(2)}, ${PANEL_X_MAX.toFixed(2)}]`;
   const panelYRangeLabel = `[${PANEL_Y_MIN.toFixed(2)}, ${PANEL_Y_MAX.toFixed(2)}]`;
 
-  const presetButtonRef = useRef<HTMLButtonElement | null>(null);
-  const openerFocusRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    document.documentElement.dataset.theme = colorScheme;
+    try {
+      window.localStorage.setItem('belief-emergence-theme', colorScheme);
+    } catch {
+      // The theme remains active for this session if storage is unavailable.
+    }
+  }, [colorScheme]);
 
   const structuralAdvancedDrawerId = 'sb-struct-advanced-drawer';
   const clamp01 = useCallback((n: number) => Math.min(1, Math.max(0, n)), []);
@@ -611,11 +638,17 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
 
   useEffect(() => {
     if (isPresetModalOpen) {
-      openerFocusRef.current = (document.activeElement as HTMLElement | null) ?? null;
-    } else {
-      // Return focus to the preset opener for predictable keyboard UX.
-      presetButtonRef.current?.focus();
+      presetModalWasOpenRef.current = true;
+      return;
     }
+    if (!presetModalWasOpenRef.current) return;
+    presetModalWasOpenRef.current = false;
+    // Restore the actual opener (route navigation or button), with a stable fallback
+    // for direct links that opened the dialog before a control had focus.
+    const opener = openerFocusRef.current;
+    openerFocusRef.current = null;
+    const focusTarget = opener?.isConnected ? opener : presetButtonRef.current;
+    focusTarget?.focus();
   }, [isPresetModalOpen]);
 
   return (
@@ -627,11 +660,11 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
           A Support-Aware Visual Analytics Framework
         </div>
 
-        <div className="cover-meta" aria-hidden="true">
+        <div className="cover-meta">
           <span className="cover-kicker">Spatial Macro-Social Dynamics</span>
-          <span className="cover-sep">•</span>
+          <span className="cover-sep" aria-hidden="true">•</span>
           <span className="cover-tag">Settlement × Inequality</span>
-          <span className="cover-sep">•</span>
+          <span className="cover-sep" aria-hidden="true">•</span>
           <span className="cover-tag">Belief as an emergent signal</span>
         </div>
 
@@ -1121,6 +1154,16 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
       {/* Footer with Documentation and Presets Buttons */}
       <div className="modern-sidebar-footer">
         <div className="footer-buttons">
+          <button
+            className="sidebar-theme-toggle"
+            type="button"
+            aria-pressed={colorScheme === 'dark'}
+            title={colorScheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+            onClick={() => setColorScheme((current) => current === 'dark' ? 'light' : 'dark')}
+          >
+            {colorScheme === 'dark' ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
+            <span>Theme: {colorScheme === 'dark' ? 'Dark' : 'Light'}</span>
+          </button>
           <button 
             className="modern-doc-button"
             onClick={() => {
@@ -1147,6 +1190,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
             className="modern-preset-button"
             ref={presetButtonRef}
             onClick={() => {
+              openerFocusRef.current = document.activeElement as HTMLElement | null;
               onNavigate?.('presets');
               setIsPresetModalOpen(true);
             }}

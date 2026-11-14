@@ -203,7 +203,7 @@ const PresetModal: React.FC<PresetModalProps> = ({ isOpen, onClose, onSelectPres
 
     // Focus a predictable control on open.
     closeButtonRef.current?.focus();
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
