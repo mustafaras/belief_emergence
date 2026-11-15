@@ -80,7 +80,7 @@
 }
 \newcommand{\TableNoteStyle}{\footnotesize}
 \graphicspath{{./}}
-\addbibresource{references.bib}
+\addbibresource{../main/references.bib}
 \newcommand{\X}{\ensuremath{X}}
 \newcommand{\Y}{\ensuremath{Y}}
 \newcommand{\Z}{\ensuremath{Z}}
@@ -130,10 +130,10 @@ The canonical panel is rebuilt and re-pinned: \textbf{207 complete-case country-
 \begin{center}
 \texttt{5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9}
 \end{center}
-and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.2516$ on 167 rows, not $0.85$; pooled fixed-coefficient country-out validation is positive in every tier (Tier~A \num{0.2825}, Tier~B \num{0.3731}, Tier~C \num{0.2516}) while the degenerate per-fold median remains negative ($-2.46$/$-1.39$/$-1.41$) because 44 of 76 folds hold fewer than three rows; and, on identical rows and folds, the saturating form and an ordinary linear regression are statistically indistinguishable ($R^2$ \num{0.4063} against \num{0.4006} under grouped $k$-fold; the linear baseline is ahead in sample, \num{0.4556} against \num{0.2516}). An earlier draft reported a decisive linear win (0.10 against 0.20); that comparison could not be regenerated and is withdrawn.
+and every generator verifies it before writing output. Headline in-sample fit is $R^2 = 0.3461$ on 207 rows, not $0.85$; pooled fixed-coefficient country-out validation is positive in every tier (Tier~A \num{0.2263}, Tier~B \num{0.3461}, Tier~C \num{0.3461}) while the degenerate per-fold median remains negative ($-3.60$/$-2.38$/$-2.38$) because 48 of 83 folds hold fewer than three rows; and, on identical rows and folds, the saturating form and an ordinary linear regression are close out of sample ($R^2$ \num{0.4207} against \num{0.3976} under grouped $k$-fold, with the saturating form ahead on 75 of 100 identical folds by a median of \num{0.0146}); the linear baseline is ahead in sample, \num{0.4564} against \num{0.3461}. An earlier draft reported a decisive linear win (0.10 against 0.20); that comparison could not be regenerated and is withdrawn.
 
 \noindent\justifying
-\textbf{What did not change, and is not claimed to have changed.} The design is still observational and no causal claim is made. Support has improved but is still uneven: 167 country-years carry an 11-parameter Tier~A model at 23.86 observations per parameter, and Tier~C at 12.85 remains designated exploratory and excluded from headline inference. The WVS microdata remain redistribution-restricted, so a replicator must download them; what this supplement provides is the manifest, the construct rules, and an independent verification script that re-derives every audit number from the raw files.
+\textbf{What did not change, and is not claimed to have changed.} The design is still observational and no causal claim is made. Support has improved but is still uneven: 207 country-years carry an 11-parameter Tier~A model at 18.82 observations per parameter, and Tier~C at 9.41 remains designated exploratory and excluded from headline inference. The WVS microdata remain redistribution-restricted, so a replicator must download them; what this supplement provides is the manifest, the construct rules, and an independent verification script that re-derives every audit number from the raw files.
 
 \noindent\justifying
 \textbf{Why this note is included rather than omitted.} A reviewer who reconstructs the earlier numbers will find the discrepancy regardless. Stating it first converts the largest liability in the project into evidence that the audit works: the same gates that now pass on the rebuilt panel each fail on the original one, which is precisely what a validity gate is for.
@@ -172,25 +172,25 @@ Every major claim in the main manuscript is mapped below to its supporting artif
 
 Tier A/B refit OOS evidence supports protocol-bounded comparative regularities (Abstract, Results intro) & Tier A/B & \path{cv_kfold.json} (primary) + \path{cv_country_out.json} (stress test) + \path{cv_rolling_origin.json} & Grouped $k$-fold: 100 evaluations, median OOS $R^2$ Tier A/B/C 0.4063/\allowbreak 0.4767/\allowbreak 0.4802; LOO 76 folds (pooled $R^2$ 0.4056/\allowbreak 0.4629/\allowbreak 0.4420); rolling 25 folds (RMSE 0.1296/\allowbreak 0.1419/\allowbreak 0.1543) & Primary claims prioritize Tier A/B and remain conditioned on thin support (87 unique country-years). Tier B parameter stability $\geq 0.80$. \\
 
-Frozen lockbox confirmation for final release claims (Results: key findings 0) & Tier A/B confirmation layer & \path{lockbox_holdout.json} & One-time release-cycle holdout (7/34 country-year cells; 72 rows; fingerprint \texttt{fnv1a32:f9c9c677};\allowbreak cycle \texttt{2026Q1-R1}); lockbox RMSE Tier A/B/C: 0.1082/\allowbreak 0.000016/\allowbreak 0.000014 & Lockbox is anti-peeking confirmation, not a tuning loop. Development CV and lockbox evidence are interpreted separately. \\
+Frozen lockbox confirmation for final release claims (Results: key findings 0) & Tier A/B confirmation layer & \path{lockbox_holdout.json} & One-time release-cycle holdout (17/87 country-year cells drawn before the panel widened; fingerprint \texttt{fnv1a32:1b703d05};\allowbreak cycle \texttt{2026Q4-R4}); lockbox RMSE Tier A/B/C: 0.2688/\allowbreak 0.2546/\allowbreak 0.2418 & Lockbox is anti-peeking confirmation, not a tuning loop; reported as a held-out descriptive check on a thin set, and no claim in the paper rests on it. \\\\
 
-Tier C (full complexity) is exploratory (Abstract, Results subsection) & Tier C & \path{model_ladder_metrics.json} (Tier C exploratory=true) & Tier C pooled median sign consistency 0.907 (threshold 0.60), with wider fold-level variability than Tier A/B & Tier C not recommended for primary claims; interpreted as sensitivity-analysis component only. \\
+Tier C (full complexity) is exploratory (Abstract, Results subsection) & Tier C & \path{cv_kfold.json}; \path{collinearity_ablation.json}; \path{parameter_stability.json} & Tier C median held-out $R^2$ 0.5038 is below Tier B 0.5239 (median difference -0.0201); pooled median sign consistency 1.000 (threshold 0.60) & Tier C not recommended for primary claims; interpreted as a sensitivity-analysis component only. \\\\
 
-Cultural-intensity main effect is positive in the fitted map (Results: key findings I) & Tier A/B & \path{parameter_stability.json} (linear coef sign consistency $\geq 0.70$) & LOO + rolling-origin sign consistency metric & Causal mechanism not estimated; describes association under fitted model. \\
+Three of the four configured constructs fail the reliability floor (Abstract; Section~4) & Tier 0 (Measurement) & \path{wvs_construct_audit.json}; \path{construct_item_availability.json} & Cronbach $\alpha$: $C$ 0.348, $D$ $-1.228$; $S$ not computable (3 of 7 configured items available) & Aggregate-level proxy, not a respondent-level psychometric estimate. \\
 
-Welfare/safety-net main effect is positive in the fitted map (Results: key findings I) & Tier A/B & \path{parameter_stability.json} (main effects, sign consistent) & LOO median sign consistency across folds & Contingent on thin support in weak-welfare regimes; interval width sensitive to saturation. \\
+Education capacity carries the largest main effect, and only $c_E$ and $c_{yr}$ have bootstrap intervals that exclude zero (Results: Coefficient estimates) & Tier 0 (Production fit) & \path{coefficient_bootstrap.json}; \path{coefficient_fit.json} & Country-level cluster bootstrap, 300 draws: $c_E$ [+0.10, +0.76], $c_{yr}$ [+0.10, +1.15] & Intervals are local refits conditional on the shipped basin; $R$ and $E$ share variance (VIF 9.43, 4.83); no causal reading. \\
 
-Education effect shows curvature at high levels (Results: key findings II) & Tier C & \path{model_ladder_metrics.json} (quadratic term, exploratory) & Quadratic term present in Tier C; stability depends on covariate density & Exploratory only; curvature direction dependent on interaction structure. \\
+The bounded and linear forms are close out of sample, and the linear form leads in sample (Abstract; Results: functional form) & Tier A & \path{functional_form_comparison.json} & Grouped $k$-fold median $R^2$ 0.4207 vs 0.3976; bounded leads on 75 of 100 identical folds by a median of 0.0146; in sample 0.3461 vs 0.4564 & No significance test is attached (folds are not independent); a near-tie in magnitude, not a statistical equivalence. \\
 
-Culture--media coupling is the most stable Tier B interaction (Results: key findings II) & Tier B & \path{parameter_stability.json} (interaction term, $\geq 0.80$ consistency) & Rolling-origin fold stability for $c_{\mathrm{cm}}$ term & Narrower bootstrap intervals than other interactions; most stable higher-order pattern. \\
+The structural exponents are not identified and sit on their lower bound (Results: Key findings I) & Tier A & \path{elasticity_profile.json}; \path{elasticity_bound_sensitivity.json}; \path{structural_window_sensitivity.json} & Profile interval $[0,\,0.016]$ (Bonferroni 0.032); a refit without clamping leaves $\alpha,\beta$ on the bound & The fitting and evaluation windows differ (KI-18); only $\phi_0-\ln k$ is identified. \\
 
-Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.2516$, Corr=0.5772 on the 167-row panel & Ridge is a fitted-model feature, not a causal boundary; extrapolation outside $(x_{\min}, x_{\max}) \times (y_{\min}, y_{\max})$ is clipped. \\
+Regime transition occurs at $Z\approx 0.5$ (Discussion, regime-aware inference) & Tier A & Saturation equation (Eq.~\eqref{eq:saturation}) + in-sample fit diagnostics & Bounded-scale fit: $R^2=0.3461$, Corr=0.6150 on the 207-row panel & Ridge is a fitted-model feature, not a causal boundary; inputs outside the evaluation windows are clipped. \\
 
 Prediction intervals via resampling (Section 6, uncertainty quantification) & Tier A/B & \path{prediction_interval_coverage.json} & Protocol/tier/support aggregation from fold-level empirical residual-quantile-shifted intervals (primary) with a symmetric Gaussian residual comparator; rolling-origin and higher-complexity folds show material undercoverage versus nominal 95\% & Coverage is protocol-, support-, and regime-conditioned; interval width can appear narrow in saturated or low-variance folds and should not be used as a stand-alone precision signal. \\
 
-In-sample fit on the canonical panel is modest, not high (Results headline) & Tier A & In-sample fit on canonical panel (167 rows) & Training: $R^2=0.2516$, RMSE=0.2268, Bias=+0.0458 & Positive bias means the model under-predicts on average; with $R^2$ well below unity this is descriptive context only, not evidence about the belief mechanism. \\
+In-sample fit on the canonical panel is modest, not high (Results headline) & Tier A & In-sample fit on canonical panel (207 rows) & Training: $R^2=0.3461$, RMSE=0.2089, Bias=-0.0440 & Negative bias (mean observed minus predicted) means the model over-predicts on average; with $R^2$ well below unity this is descriptive context only, not evidence about the belief mechanism. \\
 
-Support is 167 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); panel: \path{public/data/panel_canonical_v2.csv} & 83 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,M,T,E,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
+Support is 207 unique country-years under complete-case & Tier 0 (Data structure) & Table S2 (panel support summary); panel: \path{public/data/panel_canonical_v2.csv} & 83 countries $\times$ uneven year coverage $\times$ complete-case $X,Y,Z,M,T,E,R$ & Thin support confines credible interpretation to empirically supported regimes; extrapolation risk elevated everywhere outside core cluster. \\
 
 Ecological inference limits: no individual-level claims & Tier 0 (Study design) & Limitations section (manuscript, Discussion) & Country--year unit; WVS-aggregated outcomes & Claims describe macro-level fitted-model geometry; gap between aggregate associations and individual mechanisms unresolved. \\
 
@@ -210,7 +210,7 @@ No causal identification (Explicit inferential boundaries) & Tier 0 (Study desig
 
 \medskip
 
-This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 167 rows across 83 countries a country-out fold holds out one to five rows, and $R^2$ is undefined below three pairs, so 43 of the 70 country-out folds carry no $R^2$ and the per-fold median describes twenty-five degenerate folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out cross-validation serves as the primary spatial validation pathway for Tier A/B inferential claims in the main text, while rolling-origin temporal evaluation serves as a temporal scope diagnostic that reveals the boundary of forward extrapolation under current temporal sample depth.
+This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 207 rows across 83 countries a country-out fold holds out one to six rows, and $R^2$ is undefined below three pairs, so 48 of the 83 country-out folds carry no $R^2$ and the per-fold median describes the 35 remaining folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out cross-validation serves as the primary spatial validation pathway for Tier A/B inferential claims in the main text, while rolling-origin temporal evaluation serves as a temporal scope diagnostic that reveals the boundary of forward extrapolation under current temporal sample depth.
 Artifact ownership for this section is fixed as follows. Fold metrics are stored in \path{cv_country_out.json} and \path{cv_rolling_origin.json}. Term-stability summaries are stored in \path{parameter_stability.json}, coverage diagnostics in \path{prediction_interval_coverage.json}, construct-validity and slice-invariance diagnostics in \path{construct_validity_invariance.json}, and release-gated holdout confirmation in \path{lockbox_holdout.json}. These files are treated as the authoritative Gate-3 evidence objects for reproducibility checks.
 Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{testMetricsRefit} and \texttt{aggregatesRefit}, plus their support-collapsed counterparts) are primary inferential evidence. Canonical fixed-model outputs (\texttt{testMetricsCanonical} and \texttt{aggregatesCanonical}, plus their support-collapsed counterparts) are diagnostic contrasts only. Lockbox outputs (\texttt{lockboxEvaluation.byTier.*.}\allowbreak\texttt{testMetricsRefit}) are release-time anti-peeking confirmation metrics.
 
@@ -224,27 +224,27 @@ Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{t
 \toprule
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
-Median OOS $R^2$ (refit) & 0.4063 & 0.4767 & 0.4802 & Held-out \\
-IQR ($R^2$) & 0.117--0.512 & 0.104--0.545 & 0.099--0.528 & \\
-Median OOS $R^2$ (canonical) & 0.2407 & 0.3066 & 0.2523 & Fixed coefficients \\
-IQR ($R^2$, canonical) & 0.104--0.322 & 0.213--0.470 & 0.186--0.470 & \\
-Median OOS RMSE & 0.1913 & 0.1793 & 0.1806 & Bounded $Z$ scale \\
-IQR (RMSE) & 0.1680--0.2227 & 0.1640--0.2148 & 0.1620--0.2332 & \\
-In-sample $R^2$ for comparison & 0.4569 & 0.5213 & 0.5678 & Full sample \\
+Median OOS $R^2$ (refit) & 0.4207 & 0.5239 & 0.5038 & Held-out \\
+IQR ($R^2$) & 0.228--0.539 & 0.334--0.610 & 0.256--0.601 & \\
+Median OOS $R^2$ (canonical) & 0.2220 & 0.3256 & 0.3256 & Fixed coefficients \\
+IQR ($R^2$, canonical) & 0.030--0.331 & 0.200--0.448 & 0.200--0.448 & \\
+Median OOS RMSE & 0.1907 & 0.1740 & 0.1801 & Bounded $Z$ scale \\
+IQR (RMSE) & 0.1743--0.2140 & 0.1557--0.1966 & 0.1536--0.2066 & \\
+In-sample $R^2$ for comparison & 0.4654 & 0.5599 & 0.5658 & Refit, full sample \\
 $R^2$ defined in & 100\% & 100\% & 100\% & of 100 folds \\
-Minimum test rows per fold & 12 & 12 & 12 & \\
+Minimum test rows per fold & 33 & 33 & 33 & \\
 \bottomrule
 \end{tabularx}
 }
 \end{center}
 
-\noindent\textit{Interpretation.} Held-out performance now matches or exceeds in-sample fit, and the fold-to-fold dispersion is markedly narrower than on the 87-cell panel. The tier ordering does not survive: Tier C exceeds Tier A in sample (0.5642 against 0.4728), but the out-of-sample gain over Tier B is +0.0035 against +0.0914 in sample, so added complexity buys almost no transfer. The canonical family behaves differently from the refit family---weakest at Tier A (0.2520, lower quartile now positive at 0.123), stronger at Tiers B and C---which means the production coefficients are not the fold-refit optimum, and the gap is largest where the model is simplest.
+\noindent\textit{Interpretation.} Held-out performance is modestly below refit in-sample fit (by 0.045/0.036/0.062 for Tier A/B/C). Tier~B improves on Tier~A out of sample (+0.1032, with overlapping interquartile ranges), but Tier~C does not improve on Tier~B (-0.0201; Tier~C is ahead in 9 of 20 repeats), which is why Tier~C is reported as exploratory. Canonical (fixed-coefficient) values are descriptive only.
 
 \medskip
 
 {\small\textbf{Leave-One-Country-Out Cross-Validation (spatial stress test, not primary evidence):}}
 
-\noindent Across 83 folds (one country held out per fold). Because 19 of 83 countries contribute a single observation, 44 of the 69 folds hold out fewer than three rows and therefore carry no $R^2$. The per-fold median is reported for completeness only; the pooled held-out series is the interpretable statistic.
+\noindent Across 83 folds (one country held out per fold). Because 19 of 83 countries contribute a single observation, 48 of the 83 folds hold out fewer than three rows and therefore carry no $R^2$. The per-fold median is reported for completeness only; the pooled held-out series is the interpretable statistic.
 
 \begin{center}
 {\footnotesize
@@ -253,24 +253,24 @@ Minimum test rows per fold & 12 & 12 & 12 & \\
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
 Median OOS RMSE & 0.1501 & 0.1325 & 0.1366 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.0886--0.2225 & 0.0885--0.2188 & 0.0861--0.212 & \\
-Median per-fold $R^2$ & $-2.1278$ & $-1.1092$ & $-0.8057$ & 32 of 76 folds (R$^2$ undefined in 44) \\
-Pooled OOS $R^2$ (refit) & 0.4056 & 0.4629 & 0.4420 & All 207 rows \\
-Pooled OOS $R^2$ (canonical) & 0.2601 & 0.3239 & 0.2516 & All 207 rows \\
-Pooled OOS RMSE (refit) & 0.2069 & 0.2002 & 0.2089 & Bounded $Z$ scale \\
-Folds carrying $R^2$ & 25 of 69 & 25 of 69 & 25 of 69 & \\
+IQR (RMSE range) & 0.0886--0.2225 & 0.0885--0.2188 & 0.0861--0.2120 & \\
+Median per-fold $R^2$ & $-1.6668$ & $-1.5706$ & $-0.9189$ & 35 of 83 folds (R$^2$ undefined in 48) \\\\
+Pooled OOS $R^2$ (refit) & 0.4117 & 0.4945 & 0.4827 & All 207 rows \\
+Pooled OOS $R^2$ (canonical) & 0.2263 & 0.3461 & 0.3461 & All 207 rows \\
+Pooled OOS RMSE (refit) & 0.1982 & 0.1837 & 0.1858 & Bounded $Z$ scale \\
+Folds carrying $R^2$ & 35 of 83 & 35 of 83 & 35 of 83 & \\
 \bottomrule
 \end{tabularx}
 }
 \end{center}
 
-\noindent\textit{Why the per-fold median is negative and the pooled value is positive.} A per-fold $R^2$ is a variance ratio computed on that fold's own test rows. With one to four points the denominator is either exactly zero (one point) or dominated by whichever single point sits closest to the mean (two points), so the statistic can reach large negative values without saying anything about the model. Concatenating every fold's held-out predictions reconstructs a single 167-row out-of-sample series in which each row is predicted exactly once by a model that never saw its country; computed on that series, $R^2$ is positive in all six tier-family combinations. The negative per-fold median is an artefact of the evaluation geometry, not a finding about the model.
+\noindent\textit{Why the per-fold median is negative and the pooled value is positive.} A per-fold $R^2$ is a variance ratio computed on that fold's own test rows. With one to six points the denominator is either exactly zero (one point) or dominated by whichever single point sits closest to the mean (two points), so the statistic can reach large negative values without saying anything about the model. Concatenating every fold's held-out predictions reconstructs a single 207-row out-of-sample series in which each row is predicted exactly once by a model that never saw its country; computed on that series, $R^2$ is positive in all six tier-family combinations. The negative per-fold median is an artefact of the evaluation geometry, not a finding about the model.
 
-\noindent\textit{Interpretation.} LOO OOS median RMSE is 0.1506/\allowbreak 0.1449/\allowbreak 0.1369 (Tier A/B/C), and Tier B sign consistency remains $\geq 0.80$ for primary terms under refit. Given thin support, these values are interpreted as protocol-conditioned descriptive performance rather than transportable causal evidence.
+\noindent\textit{Interpretation.} LOO OOS median RMSE is 0.1501/\allowbreak 0.1325/\allowbreak 0.1366 (Tier A/B/C). Tier~B sign consistency is at least 0.747 for every term and falls below the 0.80 threshold only for the x\_safe : y\_safe interaction. Given thin support, these values are interpreted as protocol-conditioned descriptive performance rather than transportable causal evidence.
 
 {\small\textbf{Rolling-Origin Temporal Scope Diagnostic:}}
 
-\noindent Across 12 temporal folds (forward-chaining: expanding training window, next survey year held out):
+\noindent Across 25 temporal folds (forward-chaining: expanding training window, next survey year held out):
 
 \begin{center}
 {\footnotesize
@@ -279,9 +279,9 @@ Folds carrying $R^2$ & 25 of 69 & 25 of 69 & 25 of 69 & \\
 Statistic & Tier A & Tier B & Tier C & Unit \\
 \midrule
 Median OOS RMSE & 0.1567 & 0.1602 & 0.1667 & Bounded $Z$ scale \\
-IQR (RMSE range) & 0.114--0.2209 & 0.1039--0.2475 & 0.1144--0.2455 & \\
-Median per-fold $R^2$ & $-0.0587$ & $-0.0639$ & 0.0772 & Few test rows per fold \\
-\% folds converged & 100\% (12/12) & 100\% (12/12) & 100\% (12/12) & Convergence check \\
+IQR (RMSE range) & 0.1140--0.2209 & 0.1039--0.2475 & 0.1144--0.2455 & \\
+Median per-fold $R^2$ & $0.3046$ & $0.2827$ & $0.1721$ & Few test rows per fold ($R^2$ defined in 17/17/17 of 25) \\\\
+\% folds converged & 100\% (25/25) & 100\% (25/25) & 100\% (25/25) & Convergence check \\
 Temporal monotonicity & Pass & Pass & Pass & Test year $>$ max train year \\
 \bottomrule
 \end{tabularx}
@@ -290,7 +290,7 @@ Temporal monotonicity & Pass & Pass & Pass & Test year $>$ max train year \\
 
 \noindent\textit{Interpretation.} Rolling-origin RMSE medians are comparable to the grouped $k$-fold errors, which is the useful part: the model does not degrade catastrophically when the held-out unit is a year rather than a country. The per-fold $R^2$ values are again computed on small test sets (a single survey year), so they are reported for completeness and not used to rank tiers. Strict temporal forward-chaining is enforced, so no fold sees data from after its own cut point.
 
-\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.1345/\allowbreak 0.2675/\allowbreak 0.2530 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is materially below target (Tier A~=~57\%, Tier B~=~31\%, Tier C~=~24\%), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (9 origin-folds, 2--3 country-years per fold). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains leave-one-country-out cross-validation (Tier A coverage~=~84\%), where Tier A/B performance supports protocol-bounded inference. Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
+\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.1567/\allowbreak 0.1602/\allowbreak 0.1667 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is below target (mean coverage 0.84/0.86/0.79 for Tier A/B/C; 44\%/44\%/56\% of folds fall short of nominal), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (25 origin-folds). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains repeated grouped $k$-fold cross-validation, with leave-one-country-out as a stress test (Tier A mean coverage 0.91). Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
 
 {\small\textbf{Frozen Lockbox Holdout Summary:}}
 
@@ -302,15 +302,16 @@ Temporal monotonicity & Pass & Pass & Pass & Test year $>$ max train year \\
 \toprule
 Statistic & Tier A & Tier B & Tier C \\
 \midrule
-Lockbox RMSE & 0.1082 & 0.000016 & 0.000014 \\
-Lockbox 95\% coverage (empirical) & 0.750 & 0.500 & 0.500 \\
+Lockbox RMSE & 0.2688 & 0.2546 & 0.2418 \\
+Lockbox $R^2$ & 0.055 & 0.152 & 0.235 \\
+Lockbox 95\% coverage (empirical) & 0.765 & 0.824 & 0.824 \\
 Convergence status & Pass & Pass & Pass \\
 \bottomrule
 \end{tabular}
 }
 \end{center}
 
-\noindent\textit{Protocol notes.} Frozen split size is 17/87 unique country-year cells (70 development rows held back), with fingerprint \texttt{fnv1a32:1b703d05} and release cycle \texttt{2026Q4-R4}. Overlap, size, and release-cycle guard checks pass; protocol violation flags are empty in \path{lockbox_holdout.json}.
+\noindent\textit{Protocol notes.} Frozen split size is 17/87 unique country-year cells (70 development rows held back), drawn before the panel widened to 207 rows, with fingerprint \texttt{fnv1a32:1b703d05} and release cycle \texttt{2026Q4-R4}; the 17 reserved cells remain reserved, and the 120 later cells are not lockbox-protected (main text, Results). Overlap, size, and release-cycle guard checks pass; protocol violation flags are empty in \path{lockbox_holdout.json}.
 
 \vspace{0.3em}
 
@@ -377,10 +378,10 @@ Ridge-adjacent ($0.45 \le Z \le 0.55$) & 6 & 17.6\% \\
 Funnel stage & Quantified scope and interpretive role \\
 \midrule
 Upstream integrated breadth & \path{rawdata/panel_model_data.json} reports 22,096 rows across 288 countries (1990--2023). This stage documents source coverage, not inferential claim strength. \\
-Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 167 rows for 83 countries (1990--2023), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
-Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 167, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
+Canonical estimation rows & \path{public/data/panel_canonical_v2.csv} contains 207 rows for 83 countries (1990--2023), one row per $(\mathrm{iso3},\mathrm{year})$. There is no scenario replication. \\
+Effective complete-case support & Rows and unique $(\mathrm{iso3},\mathrm{year})$ pairs coincide at 207, so the row count is the inferential support envelope. The earlier 630-row scenario panel collapsed to 34 unique cells and is retired. \\
 Construct validity / invariance envelope & \path{src/data/analysis/construct_validity_invariance.json} reports aggregate-level construct checks: multi-item diagnostics for $Z$, single-indicator proxy constraints for $C,D,S$, and sparse-overlap fragility flags for $M$. These diagnostics bound cross-slice transport claims. \\
-Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 15.18), Tier B 18 (9.28), Tier C 22 (7.59). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
+Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}: Tier A has 11 parameters (support-per-parameter 18.82), Tier B 18 (11.50), Tier C 22 (9.41). Primary claims are tied to Tier A/B OOS evidence; Tier C remains exploratory. \\
 \bottomrule
 \end{tabularx}
 }
@@ -414,10 +415,7 @@ before dense figure/table blocks. These notes are drawn from the manuscript narr
 \begingroup
 
 \noindent\justifying
-\textit{Context.} The contribution sits at the intersection of bounded nonlinear modeling and diagnostic visual
-analytics. Table~\ref{tab:related_work_summary} is included here because the downstream interpretation depends on a
-disciplined separation between (a) descriptive surface geometry and (b) causal claims: the evidence bundle is meant
-to support regime-aware reasoning, uncertainty communication, and reproducible auditing of a fitted mapping.
+\textit{Context.} The paper's contribution is the construct audit (main text, Section~4); the bounded nonlinear model and its diagnostic visual layer are the object audited. Table~\ref{tab:related_work_summary} organizes the background that motivated the checks that were applied, and keeps a disciplined separation between (a) descriptive surface geometry and (b) causal claims: the evidence bundle is meant to support reproducible auditing of a fitted mapping.
 \begin{table}[t]
     \centering
     \small
@@ -445,27 +443,57 @@ semantics used throughout estimation, evaluation, and UI parity.
 \begin{table}[!t]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} canonical panel support after collapsing scenario replication. For country $i$, $n_i = |\{t : \exists s\; (i,t,s)\in\mathcal{D}_{\mathrm{canonical}}\}|$. \textbf{Method context:} these counts define the effective support envelope used to read both in-sample diagnostics and refit OOS protocol summaries. \textbf{Interpretation boundary:} total unique country--year support is 34, and the table does not by itself provide effect-size, causal, or policy-intervention evidence.}
+\caption{\textbf{Data scope:} canonical panel support after collapsing scenario replication. For country $i$, $n_i = |\{t : \exists s\; (i,t,s)\in\mathcal{D}_{\mathrm{canonical}}\}|$. \textbf{Method context:} these counts define the effective support envelope used to read both in-sample diagnostics and refit OOS protocol summaries. \textbf{Interpretation boundary:} total unique country--year support is 207 across 83 countries, and the table does not by itself provide effect-size, causal, or policy-intervention evidence.}
 \label{tab:panel-support}
 
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrr@{\hspace{1.5em}}lrrr@{}}
 \csname toprule\endcsname
 ISO3 & First & Last & $n_i$ & ISO3 & First & Last & $n_i$ \\
 \midrule
-AUS & 2018 & 2018 & 1 & GRC & 2017 & 2017 & 1 \\
-BGR & 2006 & 2006 & 1 & KOR & 2010 & 2018 & 2 \\
-BRA & 2018 & 2018 & 1 & MEX & 2012 & 2018 & 2 \\
-CAN & 2000 & 2020 & 3 & NLD & 2006 & 2012 & 2 \\
-CHE & 2007 & 2007 & 1 & POL & 2005 & 2012 & 2 \\
-CHL & 2006 & 2006 & 1 & ROU & 2012 & 2018 & 2 \\
-CZE & 2022 & 2022 & 1 & RUS & 2011 & 2017 & 2 \\
-DEU & 2013 & 2018 & 2 & SVK & 2022 & 2022 & 1 \\
-ESP & 2007 & 2011 & 2 & SVN & 2005 & 2005 & 1 \\
-EST & 2011 & 2011 & 1 & TUR & 2011 & 2018 & 2 \\
-FIN & 2005 & 2005 & 1 & USA & 2017 & 2017 & 1 \\
-GBR & 2005 & 2005 & 1 & \multicolumn{4}{c}{} \\
+ALB & 1998 & 2002 & 2 & LBN & 2013 & 2018 & 2 \\
+ARG & 1991 & 2017 & 6 & LTU & 1997 & 1997 & 1 \\
+ARM & 1997 & 2021 & 3 & LVA & 1996 & 1996 & 1 \\
+AUS & 2012 & 2018 & 2 & MAR & 2001 & 2011 & 3 \\
+BGD & 1996 & 2018 & 3 & MDV & 2021 & 2021 & 1 \\
+BGR & 1997 & 2006 & 2 & MEX & 1996 & 2018 & 5 \\
+BLR & 1996 & 2011 & 2 & MKD & 1998 & 2001 & 2 \\
+BOL & 2017 & 2017 & 1 & MLI & 2007 & 2007 & 1 \\
+BRA & 2014 & 2018 & 2 & MMR & 2020 & 2020 & 1 \\
+CAN & 2000 & 2020 & 3 & MNG & 2020 & 2020 & 1 \\
+CHE & 1996 & 2007 & 2 & MYS & 2006 & 2018 & 3 \\
+CHL & 1996 & 2018 & 5 & NGA & 1990 & 2018 & 5 \\
+CHN & 1990 & 2013 & 3 & NLD & 2006 & 2022 & 3 \\
+COL & 1998 & 2018 & 3 & NOR & 1996 & 2007 & 2 \\
+CYP & 2006 & 2019 & 3 & PAK & 1997 & 2018 & 4 \\
+CZE & 1998 & 2022 & 2 & PER & 1996 & 2018 & 5 \\
+DEU & 1997 & 2018 & 4 & PHL & 1996 & 2019 & 4 \\
+ECU & 2013 & 2018 & 2 & POL & 2005 & 2012 & 2 \\
+EGY & 2001 & 2018 & 3 & PSE & 2013 & 2013 & 1 \\
+ESP & 1995 & 2011 & 4 & ROU & 1998 & 2018 & 4 \\
+EST & 1996 & 2011 & 2 & RUS & 2006 & 2017 & 3 \\
+ETH & 2007 & 2020 & 2 & RWA & 2007 & 2012 & 2 \\
+FIN & 1996 & 2005 & 2 & SRB & 2001 & 2017 & 3 \\
+FRA & 2006 & 2006 & 1 & SVK & 1998 & 2022 & 2 \\
+GBR & 2005 & 2022 & 2 & SVN & 1995 & 2011 & 3 \\
+GEO & 2009 & 2014 & 2 & SWE & 1996 & 2011 & 3 \\
+GHA & 2007 & 2012 & 2 & THA & 2007 & 2018 & 3 \\
+GRC & 2017 & 2017 & 1 & TJK & 2020 & 2020 & 1 \\
+GTM & 2004 & 2020 & 2 & TUN & 2013 & 2019 & 2 \\
+HRV & 1996 & 1996 & 1 & TUR & 1996 & 2018 & 5 \\
+HUN & 1998 & 2009 & 2 & TZA & 2001 & 2001 & 1 \\
+IDN & 2001 & 2018 & 3 & UGA & 2001 & 2001 & 1 \\
+IND & 1995 & 2023 & 5 & UKR & 1996 & 2020 & 4 \\
+IRN & 2000 & 2020 & 3 & URY & 1996 & 2022 & 4 \\
+IRQ & 2004 & 2006 & 2 & USA & 2006 & 2017 & 3 \\
+ITA & 2005 & 2005 & 1 & UZB & 2022 & 2022 & 1 \\
+JOR & 2001 & 2014 & 2 & VEN & 1996 & 2000 & 2 \\
+JPN & 2010 & 2019 & 2 & VNM & 2001 & 2020 & 2 \\
+KAZ & 2011 & 2018 & 2 & YEM & 2014 & 2014 & 1 \\
+KEN & 2021 & 2021 & 1 & ZAF & 1990 & 2013 & 5 \\
+KGZ & 2003 & 2020 & 3 & ZWE & 2012 & 2012 & 1 \\
+KOR & 2001 & 2018 & 4 & \multicolumn{4}{c}{} \\
 \midrule
-\multicolumn{8}{@{}r@{}}{Total unique $(i,t)$ support: $N=\sum_i n_i = 34$.} \\
+\multicolumn{8}{@{}r@{}}{Total unique $(i,t)$ support: $N=\sum_i n_i = 207$.} \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -478,23 +506,23 @@ GBR & 2005 & 2005 & 1 & \multicolumn{4}{c}{} \\
 \hline
 Symbol & CSV column & Scale / units (as encoded) & Transformation used in modeling & Missingness handling \\
 \midrule
-$X$ & \path{X_urbanization} & Fractional panel variable (empirical range in \path{public/data/panel_canonical_v2.csv} within the contract bounds) & Structural safe mapping to the interior band using \texttt{PANEL\_X\_MIN}=0.4, \texttt{PANEL\_X\_MAX}=0.9 and \texttt{STRUCTURAL\_\allowbreak MIN}=$10^{-4}$, \texttt{STRUCTURAL\_\allowbreak MAX}=1.0 (linear map with clipping) & Complete-case (required columns) \\
-$Y$ & \path{Y_gini} & Panel-scale inequality index (empirical range within the contract bounds) & Structural safe mapping to the interior band using \texttt{PANEL\_Y\_MIN}=-1.5, \texttt{PANEL\_Y\_MAX}=3.5 and \texttt{STRUCTURAL\_\allowbreak MIN}/\texttt{STRUCTURAL\_\allowbreak MAX} (linear map with clipping) & Complete-case (required columns) \\
-$Z$ & \path{Z_belief_outcome} & Raw outcome index scale (bounds defined by \texttt{Z\_NORMALIZATION} in \nolinkurl{src/data/feCoefficients.ts}) & For diagnostic comparisons to model-predicted $Z\in(0,1)$, observed $Z$ is normalized into the interior band using \texttt{Z\_NORMALIZATION} and \texttt{STRUCTURAL\_\allowbreak MIN}/\texttt{STRUCTURAL\_\allowbreak MAX}; predicted $Z$ is clamped to the same interior band in \nolinkurl{src/utils/calculateModel.ts} & Complete-case (required columns) \\
-$C$ & \path{C_cultural_intensity} & Raw construct scale (not standardized in the CSV) & Z-score with fixed constants from \path{src/data/feCoefficients.ts}: $C_{\mathrm{std}}=(C-2.613602)/0.542138$ & Complete-case (required columns) \\
-$M$ & \path{M_media_environment} & Standardized modifier (mean\,$\approx 0$, sd\,$\approx 1$ in canonical preprocessing contract) & Used as-is (no re-standardization) & Complete-case (required columns) \\
-$T$ & \path{T_trauma_shock} & Standardized modifier & Used as-is & Complete-case (required columns) \\
-$D$ & \path{D_social_atomization} & Standardized modifier & Used as-is & Complete-case (required columns) \\
-$G$ & \path{G_redistribution_capacity} & Standardized modifier; may vary across redistribution-related scenario rows within a country--year & Used as-is & Complete-case (required columns) \\
-$E$ & \path{E_education_capacity} & Standardized modifier & Used as-is & Complete-case (required columns) \\
-$S$ & \path{S_social_support} & Standardized modifier & Used as-is & Complete-case (required columns) \\
-$R$ & \path{R_welfare_capacity} & Standardized modifier & Used as-is & Complete-case (required columns) \\
+$X$ & \path{X} (upstream \path{X_urbanization}) & Fractional urban population share; realised range $[0.103,0.954]$ & Structural safe mapping: clipped min--max into the interior band with the fitting window $(0.2223,0.9544)$ in the fitting script and the evaluation window $(0.3304,0.9544)$ in the model contract (main text, Structural window) & Complete-case (required column) \\
+$Y$ & \path{Y} (upstream \path{Y_gini}) & Panel-scale inequality index (World Bank Gini under an exact affine map); realised range $[-1.558,5.216]$ & Structural safe mapping with the fitting window $(-1.4601,3.4280)$ and the evaluation window $(-1.6078,3.4280)$ & Complete-case; recovered within $\pm5$ years where the exact year is absent \\
+$Z$ & \path{Z} (upstream \path{Z_belief_outcome}) & Raw outcome index (six-item WVS composite); realised range $[-2.656,3.369]$ & Evaluation normalises $Z$ with \texttt{Z\_NORMALIZATION} in \nolinkurl{src/data/feCoefficients.ts}; the fitting script anchors its target at the 1st and 99th percentiles of the current panel & Complete-case (required column) \\
+$C$ & \path{C} (upstream \path{C_cultural_intensity}) & Withdrawn channel: \texttt{NA} in every row of the canonical panel & Neutralised to zero (the standardised mean); no coefficient is estimated & Not observed; not part of the complete-case requirement \\
+$M$ & \path{M} (upstream \path{M_media_environment}) & Standardized modifier (mean $\approx 0$, sd $\approx 1$) & Used as-is (no re-standardization) & Complete-case (required column) \\
+$T$ & \path{T} (upstream \path{T_trauma_shock}) & Standardized modifier (mean $\approx 0$, sd $\approx 1$) & Used as-is (no re-standardization) & Complete-case (required column) \\
+$D$ & \path{D} (upstream \path{D_social_atomization}) & Withdrawn channel: \texttt{NA} in every row of the canonical panel & Neutralised to zero (the standardised mean); no coefficient is estimated & Not observed; not part of the complete-case requirement \\
+$G$ & \path{G} (upstream \path{G_redistribution_capacity}) & Withdrawn channel: \texttt{NA} in every row of the canonical panel & Neutralised to zero (the standardised mean); no coefficient is estimated & Not observed; not part of the complete-case requirement \\
+$E$ & \path{E} (upstream \path{E_education_capacity}) & Standardized modifier (mean $\approx 0$, sd $\approx 1$) & Used as-is (no re-standardization) & Complete-case (required column) \\
+$S$ & \path{S} (upstream \path{S_social_support}) & Withdrawn channel: \texttt{NA} in every row of the canonical panel & Neutralised to zero (the standardised mean); no coefficient is estimated & Not observed; not part of the complete-case requirement \\
+$R$ & \path{R} (upstream \path{R_welfare_capacity}) & Standardized modifier (mean $\approx 0$, sd $\approx 1$) & Used as-is (no re-standardization) & Complete-case (required column) \\
 \bottomrule
 \end{tabularx}
 
 \vspace{0.25em}
 \TableNoteStyle
-\emph{Note.} Complete-case filtering is enforced in the canonical panel construction: rows in \nolinkurl{public/data/panel_canonical_v2.csv} are intended to be non-missing for the full modeled block $X,Y,Z,C,M,T,D,G,E,S,R$.
+\emph{Note.} Complete-case filtering is enforced in the canonical panel construction: rows in \nolinkurl{public/data/panel_canonical_v2.csv} are non-missing for the retained block $X,Y,Z,M,T,E,R$; $C,D,G,S$ are \texttt{NA} in every row (withdrawn; Section~4 of the main text).
 \end{table}
 \noindent\justifying
 \textit{Reading note.} The availability diagnostic in Table~\ref{tab:missingness} is intentionally computed after collapsing to unique (iso3, year) pairs.
@@ -507,13 +535,14 @@ Construct-validity limits follow the same discipline: \nolinkurl{src/data/analys
 \begin{table}[!t]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} post-collapse data-availability diagnostics on unique (iso3, year) pairs. \textbf{Method context:} availability summaries are computed after collapsing scenario replication so the reported coverage matches the effective panel support used in estimation and evaluation. \textbf{Interpretation boundary:} this table defines support constraints only; it does not, by itself, establish effect sizes, evidence tiers, or causal patterns.}
+\caption{\textbf{Data scope:} post-collapse data-availability diagnostics on unique (iso3, year) pairs. \textbf{Method context:} availability summaries are computed after collapsing scenario replication so the reported coverage matches the effective panel support used in estimation and evaluation. \textbf{Interpretation boundary:} the auxiliary rows describe upstream columns of a raw macro table that is not versioned and are not reproduced from committed data; this table defines support constraints only; it does not, by itself, establish effect sizes, evidence tiers, or causal patterns.}
 \label{tab:missingness}
 \begin{tabularx}{\linewidth}{@{}lXrrr@{}}
 \toprule
 Block & Column(s) & $\bar a_v$ & $\min_i a_{iv}$ & $\max_i a_{iv}$ \\
 \midrule
-Modeled variables & $X,Y,Z,C,M,T,D,G,E,S,R$ (see Table~\ref{tab:vardict}) & 1.000 & 1.000 & 1.000 \\
+Retained variables & $X,Y,Z,M,T,E,R$ (see Table~\ref{tab:vardict}) & 1.000 & 1.000 & 1.000 \\
+Withdrawn channels & $C,D,G,S$ (see Table~\ref{tab:vardict}) & 0.000 & 0.000 & 0.000 \\
 Auxiliary & \path{socx_public_social_spending_gdp} & 0.853 & 0.000 & 1.000 \\
 Auxiliary & \path{total_battle_deaths} & 0.265 & 0.000 & 1.000 \\
 Auxiliary & \path{M_internet_daily} & 0.029 & 0.000 & 1.000 \\
@@ -597,10 +626,10 @@ therefore treated as a parameter-diagnostic complement to the scenario-based eff
       \includegraphics[width=\linewidth]{figure_3c_coefficients_forest_quadratics.pdf}%
     }%
     \vspace{2pt}
-    {\small\textbf{Quadratics}}
+    {\small\textbf{Structural parameters}}
   \end{minipage}
   
-  \caption{\textbf{Data scope:} fitted coefficients for the contextual field $\Phi$ (Eq.~\eqref{eq:phi}) across main, interaction, and quadratic terms. \textbf{Method context:} this is a parameter-diagnostic view under the production-pinned coefficient contract encoded in \nolinkurl{src/data/feCoefficients.ts}; the left, center, and right panels report main effects, interactions, and quadratics respectively. \textbf{Interpretation boundary:} coefficient signs and intervals inform fitted-map geometry only; primary inferential evidence remains Tier A/B refit OOS results, while higher-order terms are support-constrained and non-causal.}
+  \caption{\textbf{Data scope:} fitted parameters of the production map with country-level cluster-bootstrap intervals. \textbf{Method context:} the left, center, and right panels report main effects, interactions, and the structural block: the identified combination $\phi_0-\ln k$ (with $\alpha$ and $\beta$ on their bound the structural base is close to one, so $\phi_0$ and $k$ are not separately identified) and the exponents $\alpha$ and $\beta$. Intervals are percentile intervals of 300 country-level resamples, each refitted by bounded L-BFGS-B from the shipped optimum, so they are conditional on the shipped basin (\nolinkurl{src/data/analysis/coefficient_bootstrap.json}; \nolinkurl{scripts/bootstrap_coefficients.py}). Filled markers have intervals that exclude zero; open markers do not; $C$, $D$, $G$, $S$ and the interactions and quadratic terms that involve them are withdrawn or not estimated and carry no interval; $\alpha$ and $\beta$ sit on their lower bound in every draw. \textbf{Interpretation boundary:} coefficient signs and intervals inform fitted-map geometry only; primary inferential evidence remains Tier A/B refit OOS results, while higher-order terms are support-constrained and non-causal.}
   \label{fig:coeff-forest-3panel}
 \end{figure}
 }
@@ -613,7 +642,7 @@ already saturated.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.96\linewidth]{figure_1_phase_policy.pdf}
-  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for selected $S_{\mathrm{std}}$ values under fixed stress settings. \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence remains Tier A/B refit OOS leave-one-country-out evaluation (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (49 complete-case observations) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ with $s=\ln(B/k)=\num{-2.79}$ at the mid structural baseline, so the ridge sits at $\Phi=\num{2.79}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for $R_{\mathrm{std}}\in\{-0.5,0.5,1.5\}$ at the mid structural baseline with $M_{\mathrm{std}}=0.8$ and $T_{\mathrm{std}}=1.2$ (all other standardized modifiers at $0$; the withdrawn channels do not enter). \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence remains Tier A/B refit OOS leave-one-country-out evaluation (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (207 complete-case observations) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 \end{figure}
 \noindent\justifying
 \textit{Reading note.} The reduced-coordinate geometry makes explicit that $Z$ depends on the sum $(\Phi+s)$, where
@@ -624,7 +653,7 @@ or (ii) structural shifts along $s$.
 \begin{figure}[!htbp]
   \centering
 
-  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to Tier A/B refit OOS leave-one-country-out evidence (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (49 complete-case observations) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to Tier A/B refit OOS leave-one-country-out evidence (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (207 complete-case observations) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 
   \refstepcounter{figure}
   \addcontentsline{lof}{figure}{\protect\numberline{\thefigure}{\FigureFiveCaption}}
@@ -651,19 +680,19 @@ headline fit and regime geometry remain stable across temporal blocks and specif
 \begin{table}[t]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} fixed-coefficient bounded-scale diagnostics across temporal blocks and structural ablations. \textbf{Method context:} all metrics use bounded observed outcomes and clamped predictions $\widehat{Z}\in\mathcal{I}_\varepsilon$; Panel A uses empirical year cutpoints 2006 and 2012, and Panel B compares main-only, main+interactions, and full (including quadratics) specifications without refitting coefficients. \textbf{Interpretation boundary:} this is a fixed-model descriptive diagnostic and is not part of the Tier A/B refit OOS inferential family or causal evidence.}
+\caption{\textbf{Data scope:} fixed-coefficient bounded-scale diagnostics across temporal blocks and structural ablations. \textbf{Method context:} all metrics use bounded observed outcomes and clamped predictions $\widehat{Z}\in\mathcal{I}_\varepsilon$; Panel A uses empirical year cutpoints 2002 and 2011, and Panel B compares main-only, main+interactions, and full (including quadratics) specifications without refitting coefficients. \textbf{Interpretation boundary:} this is a fixed-model descriptive diagnostic and is not part of the Tier A/B refit OOS inferential family or causal evidence.}
 \label{tab:robustness_deterministic}
 \begin{tabularx}{\linewidth}{@{}l l *{5}{>{\raggedleft\arraybackslash}X}@{}}
 \toprule
 Panel & Slice / Ablation & $n$ & $R^2$ & Corr & MAE & RMSE \\
 \midrule
-A & $\text{year}\le2005$ & 45 & \num{0.4115} & \num{0.6415} & \num{0.1231} & \num{0.1749} \\
-A & $2006\le\text{year}\le2012$ & 65 & \num{0.6260} & \num{0.7921} & \num{0.1329} & \num{0.1827} \\
-A & $\text{year}\ge2013$ & 57 & \num{0.6148} & \num{0.7841} & \num{0.1140} & \num{0.1447} \\
+A & $\text{year}\le2002$ & 65 & \num{0.4010} & \num{0.6818} & \num{0.1200} & \num{0.1691} \\
+A & $2003\le\text{year}\le2011$ & 63 & \num{0.3140} & \num{0.6915} & \num{0.2145} & \num{0.2646} \\
+A & $\text{year}\ge2012$ & 79 & \num{0.3249} & \num{0.6242} & \num{0.1538} & \num{0.1871} \\
 \addlinespace[2pt]
-B & main ($\Phi$ linear only) & 167 & \num{0.4728} & \num{0.6877} & \num{0.1449} & \num{0.1904} \\
-B & main$+$interactions & 167 & \num{0.5549} & \num{0.7450} & \num{0.1285} & \num{0.1749} \\
-B & full (incl.\ quadratics) & 167 & \num{0.5642} & \num{0.7514} & \num{0.1260} & \num{0.1731} \\
+B & main ($\Phi$ linear only) & 207 & \num{0.2263} & \num{0.5497} & \num{0.1793} & \num{0.2273} \\
+B & main$+$interactions & 207 & \num{0.3461} & \num{0.6150} & \num{0.1617} & \num{0.2089} \\
+B & full (incl.\ quadratics) & 207 & \num{0.3461} & \num{0.6150} & \num{0.1617} & \num{0.2089} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -676,15 +705,15 @@ provenance: they document that the reported mapping reflects a stable optimizati
 \begin{table}[t]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} training-time cross-validation dispersion and bootstrap uncertainty summaries for the fitted specification. \textbf{Method context:} CV values are reported as mean and standard deviation across folds with a 95\% half-width from fold dispersion, and bootstrap intervals provide 95\% CIs for global metrics. \textbf{Interpretation boundary:} this is a training-time provenance view, not a substitute for bounded-scale panel evaluation or Tier A/B refit OOS evidence, and it does not establish causal or policy-intervention claims.}
+\caption{\textbf{Data scope:} cross-validation dispersion and bootstrap uncertainty summaries. \textbf{Method context:} the Train and Bootstrap columns describe the production-pinned map on the full panel (bootstrap: country-level cluster resampling, 2000 draws, fixed seed, percentile interval); the CV columns give the mean, standard deviation and interquartile range of the Tier~A refit fold-level held-out values across the 100 grouped $k$-fold evaluations. Source artifact: \nolinkurl{supplementary_tables.json}. \textbf{Interpretation boundary:} this is an uncertainty view of the global metrics, not a substitute for bounded-scale panel evaluation or Tier A/B refit OOS evidence, and it does not establish causal or policy-intervention claims.}
 \label{tab:training_uq_summary}
 \begin{tabularx}{0.92\linewidth}{@{}l *{5}{>{\raggedleft\arraybackslash}X}@{}}
 \toprule
-Metric & Train & CV mean & CV std & CV 95\% half-width & Bootstrap 95\% CI \\
+Metric & Train & CV mean & CV std & CV IQR & Bootstrap 95\% CI \\
 \midrule
-$R^2$ & \num{0.9481} & \num{0.9477} & \num{0.0101} & \num{0.0088} & [\num{0.9354},\ \num{0.9581}] \\
-Corr & \num{0.9794} & \num{0.9795} & \num{0.0032} & \num{0.0028} & [\num{0.9752},\ \num{0.9830}] \\
-MAE & \num{0.1341} & \num{0.1341} & \num{0.0142} & \num{0.0124} & [\num{0.1207},\ \num{0.1491}] \\
+$R^2$ & \num{0.3461} & \num{0.3725} & \num{0.2100} & [\num{0.2282},\ \num{0.5385}] & [\num{0.1601},\ \num{0.4883}] \\
+Corr & \num{0.6150} & \num{0.6442} & \num{0.1515} & [\num{0.5596},\ \num{0.7547}] & [\num{0.4860},\ \num{0.7157}] \\
+MAE & \num{0.1617} & \num{0.1534} & \num{0.0244} & [\num{0.1373},\ \num{0.1676}] & [\num{0.1398},\ \num{0.1858}] \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -705,14 +734,14 @@ this file (observed-vs-predicted, calibration-by-decile, and residual structure)
 \csname toprule\endcsname
 Quantity & Value \\
 \midrule
-Countries ($N$) & 48 \\
-Rows used ($n$) & 167 \\
+Countries ($N$) & 83 \\
+Rows used ($n$) & 207 \\
 Year range & 1990--2023 \\
-$R^2$ & \num{0.2516} \\
-$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6311} \\
-MAE & \num{0.1498} \\
-RMSE & \num{0.1893} \\
-Bias $(Z-\widehat{Z})$ & \num{0.0243} \\
+$R^2$ & \num{0.3461} \\
+$\mathrm{Corr}(Z,\widehat{Z})$ & \num{0.6150} \\
+MAE & \num{0.1617} \\
+RMSE & \num{0.2089} \\
+Bias $(Z-\widehat{Z})$ & \num{-0.0440} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -732,35 +761,46 @@ Accordingly, readers are encouraged to interpret the preset rows as reference po
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} preset-country panel alignment between year-averaged observed and predicted bounded outcomes. For each country preset, measured values are the canonical panel outcome normalized into $[\varepsilon,1-\varepsilon]$ (with $\varepsilon=10^{-4}$) and averaged across unique years; predicted values use canonical preprocessing. \textbf{Method context:} MAE is computed on year-averaged pairs and Success (\%) = $100(1-\mathrm{MAE})$ on the bounded scale; Estonia, Russia, and Slovak Republic are flagged because their presets occupy sparse or volatile support regimes. \textbf{Interpretation boundary:} this is a fixed-contract descriptive alignment table, not Tier A/B refit OOS evidence; flagged-country readings are exploratory and the table does not support causal or policy-intervention claims.}
+\caption{\textbf{Data scope:} preset-country panel alignment between year-averaged observed and predicted bounded outcomes. For each country preset, measured values are the canonical panel outcome normalized into $[\varepsilon,1-\varepsilon]$ (with $\varepsilon=10^{-4}$) and averaged across unique years; predicted values use canonical preprocessing. \textbf{Method context:} MAE is computed on year-averaged pairs and Success (\%) = $100(1-\mathrm{MAE})$ on the bounded scale; six countries (China, Czechia, France, Georgia, Italy, Poland) exceed MAE 0.25, each on one to three rows, i.e.\ thin support. \textbf{Interpretation boundary:} this is a fixed-contract descriptive alignment table, not Tier A/B refit OOS evidence; flagged-country readings are exploratory and the table does not support causal or policy-intervention claims.}
 \label{tab:preset-country-z}
 \begin{tabularx}{\linewidth}{@{}l l r *{5}{>{\raggedleft\arraybackslash}X} c c c@{}}
 \toprule
 Country & ISO3 & Years & $\overline{Z}$ & $\overline{\widehat{Z}}$ & MAE & Success (\%) & Bias $(\overline{Z}-\overline{\widehat{Z}})$ & Good & Accept. & Poor \\
 \midrule
-Australia & AUS & 1 & 0.174 & 0.223 & 0.050 & 95.0 & -0.050 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Brazil & BRA & 1 & 0.836 & 0.970 & 0.134 & 86.6 & -0.134 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-Bulgaria & BGR & 1 & 0.414 & 0.582 & 0.168 & 83.2 & -0.168 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-Canada & CAN & 3 & 0.461 & 0.528 & 0.067 & 93.3 & -0.067 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Chile & CHL & 1 & 0.679 & 0.811 & 0.132 & 86.8 & -0.132 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-Czechia & CZE & 1 & 0.000 & 0.133 & 0.133 & 86.7 & -0.133 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-Estonia & EST & 1 & 0.103 & 0.396 & 0.292 & 70.8 & -0.292 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
-Finland & FIN & 1 & 0.387 & 0.334 & 0.054 & 94.6 & 0.054 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Germany & DEU & 2 & 0.205 & 0.299 & 0.094 & 90.6 & -0.094 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Greece & GRC & 1 & 0.849 & 0.939 & 0.089 & 91.1 & -0.089 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Korea & KOR & 2 & 0.382 & 0.488 & 0.106 & 89.4 & -0.106 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-Mexico & MEX & 2 & 0.835 & 0.925 & 0.090 & 91.0 & -0.090 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Netherlands & NLD & 2 & 0.114 & 0.113 & 0.082 & 91.8 & 0.001 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Poland & POL & 2 & 0.826 & 0.922 & 0.096 & 90.4 & -0.096 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Romania & ROU & 2 & 0.850 & 0.916 & 0.066 & 93.4 & -0.066 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Russia & RUS & 2 & 0.373 & 0.624 & 0.250 & 75.0 & -0.250 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
-Slovak Republic & SVK & 1 & 0.423 & 0.146 & 0.277 & 72.3 & 0.277 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
-Slovenia & SVN & 1 & 0.299 & 0.200 & 0.099 & 90.1 & 0.099 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Spain & ESP & 2 & 0.202 & 0.264 & 0.062 & 93.8 & -0.062 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-Switzerland & CHE & 1 & 0.346 & 0.460 & 0.113 & 88.7 & -0.113 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
-T{\"u}rkiye & TUR & 2 & 0.979 & 0.992 & 0.021 & 97.9 & -0.013 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-United Kingdom & GBR & 1 & 0.312 & 0.406 & 0.094 & 90.6 & -0.094 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
-United States & USA & 1 & 0.517 & 0.447 & 0.070 & 93.0 & 0.070 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Australia & AUS & 2 & 0.823 & 0.851 & 0.028 & 97.2 & -0.028 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Brazil & BRA & 2 & 0.368 & 0.591 & 0.223 & 77.7 & -0.223 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Bulgaria & BGR & 2 & 0.730 & 0.580 & 0.150 & 85.0 & 0.150 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Canada & CAN & 3 & 0.622 & 0.745 & 0.177 & 82.3 & -0.122 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Chile & CHL & 5 & 0.491 & 0.631 & 0.140 & 86.0 & -0.140 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+China & CHN & 3 & 0.988 & 0.440 & 0.547 & 45.3 & 0.547 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Colombia & COL & 3 & 0.385 & 0.521 & 0.136 & 86.4 & -0.136 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Czechia & CZE & 2 & 0.926 & 0.628 & 0.298 & 70.2 & 0.298 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Estonia & EST & 2 & 0.889 & 0.671 & 0.218 & 78.2 & 0.218 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Finland & FIN & 2 & 0.707 & 0.775 & 0.068 & 93.2 & -0.068 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+France & FRA & 1 & 0.898 & 0.645 & 0.253 & 74.7 & 0.253 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Georgia & GEO & 2 & 0.234 & 0.661 & 0.427 & 57.3 & -0.427 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Germany & DEU & 4 & 0.869 & 0.719 & 0.149 & 85.1 & 0.149 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Greece & GRC & 1 & 0.496 & 0.693 & 0.197 & 80.3 & -0.197 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+India & IND & 5 & 0.407 & 0.414 & 0.077 & 92.3 & -0.008 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Italy & ITA & 1 & 0.268 & 0.691 & 0.423 & 57.7 & -0.423 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Japan & JPN & 2 & 0.810 & 0.649 & 0.161 & 83.9 & 0.161 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Korea & KOR & 4 & 0.683 & 0.651 & 0.058 & 94.2 & 0.031 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Mexico & MEX & 5 & 0.335 & 0.517 & 0.197 & 80.3 & -0.182 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Netherlands & NLD & 3 & 0.915 & 0.699 & 0.216 & 78.4 & 0.216 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Norway & NOR & 2 & 0.884 & 0.752 & 0.132 & 86.8 & 0.132 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Poland & POL & 2 & 0.246 & 0.642 & 0.396 & 60.4 & -0.396 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Romania & ROU & 4 & 0.361 & 0.591 & 0.231 & 76.9 & -0.231 &  &  & \textcolor{red!70!black}{$\boldsymbol{\times}$} \\
+Russia & RUS & 3 & 0.695 & 0.610 & 0.086 & 91.4 & 0.086 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Slovak Republic & SVK & 2 & 0.639 & 0.565 & 0.074 & 92.6 & 0.074 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Slovenia & SVN & 3 & 0.738 & 0.683 & 0.063 & 93.7 & 0.055 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+South Africa & ZAF & 5 & 0.293 & 0.384 & 0.107 & 89.3 & -0.091 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Spain & ESP & 4 & 0.732 & 0.735 & 0.060 & 94.0 & -0.003 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+Sweden & SWE & 3 & 0.956 & 0.775 & 0.180 & 82.0 & 0.180 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Switzerland & CHE & 2 & 0.666 & 0.754 & 0.088 & 91.2 & -0.088 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+T{\"u}rkiye & TUR & 5 & 0.362 & 0.545 & 0.183 & 81.7 & -0.183 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+Ukraine & UKR & 4 & 0.589 & 0.596 & 0.100 & 90.0 & -0.007 & \textcolor{green!50!black}{$\boldsymbol{\checkmark}$} &  &  \\
+United Kingdom & GBR & 2 & 0.823 & 0.675 & 0.148 & 85.2 & 0.148 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
+United States & USA & 3 & 0.480 & 0.663 & 0.184 & 81.6 & -0.184 &  & \textcolor{green!35!black}{\textbf{+}} &  \\
 \bottomrule
 \end{tabularx}
 \vspace{2pt}
@@ -775,21 +815,17 @@ As a result, the most interpretable comparisons are those that keep the baseline
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} model-implied finite-difference $\Delta Z$ values under a +1 SD shock in each standardized modifier, evaluated at low/mid/high structural baselines. Baselines use $(X,Y)\in\{(0.2,0.2),(0.5,0.5),(0.8,0.8)\}$ in the structural interior band under a fixed contextual state $(M_{\mathrm{std}}=0.8,T_{\mathrm{std}}=1.2,D_{\mathrm{std}}=0.6)$, with baseline predictions $Z\approx 0.004$, $0.033$, and $0.053$. \textbf{Method context:} coefficients follow the production-pinned contract (\nolinkurl{src/data/feCoefficients.ts}) and bracketed ranges are precomputed diagnostic uncertainty bands for the fixed scenario contract. \textbf{Interpretation boundary:} these are regime-dependent scenario diagnostics, not causal or policy-intervention estimates; Tier A/B inferential anchors remain refit OOS evidence, and interval width in saturated regions mainly reflects bounded-map flatness rather than transportable precision. \textbf{Note:} $C_{\mathrm{std}}$ is derived from WVS cultural-practice items sharing source survey with the outcome~$Z$; the large marginal effect partially reflects this shared-source construction and should be interpreted with that overlap in mind.}
+\caption{\textbf{Data scope:} model-implied finite-difference $\Delta Z$ values under a +1 SD shock in each retained standardized modifier, evaluated at low/mid/high structural baselines. Baselines use $(X,Y)\in\{(0.2,0.2),(0.5,0.5),(0.8,0.8)\}$ in the structural interior band under a fixed contextual state ($M_{\mathrm{std}}=0.8$, $T_{\mathrm{std}}=1.2$, all other standardized modifiers at $0$), with baseline predictions $Z\approx 0.572$, $0.594$, and $0.605$. \textbf{Method context:} coefficients follow the production-pinned contract (\nolinkurl{src/data/feCoefficients.ts}) and entries are regenerated from it (\nolinkurl{src/data/analysis/marginal_effects.json}); no uncertainty band is attached. \textbf{Interpretation boundary:} these are regime-dependent scenario diagnostics, not causal or policy-intervention estimates; Tier A/B inferential anchors remain refit OOS evidence, and interval width in saturated regions mainly reflects bounded-map flatness rather than transportable precision. \textbf{Note:} the withdrawn channels $C$, $D$, $G$ and $S$ are neutralised to zero and have no entry; an earlier version of this table listed them with large effects (for $C$, $\Delta Z\approx 0.99$) computed under a model in which they were active.}
 \label{tab:marginal-effects-regimes}
 {\setlength{\tabcolsep}{2pt}%
 \begin{tabularx}{\linewidth}{@{} l >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X @{} }
 \toprule
 Modifier (+1 SD) & $\Delta Z$ (low baseline) & $\Delta Z$ (mid baseline) & $\Delta Z$ (high baseline) \\
 \midrule
-\ensuremath{C_{\mathrm{std}}} (cultural intensity) & 0.9953 [0.1016, 0.9980] & 0.9670 [0.0259, 0.9979] & 0.9473 [0.0138, 0.9978] \\
-\ensuremath{M_{\mathrm{std}}} (media environment) & -0.0037 [-0.4142, 0.5546] & -0.0269 [-0.6299, 0.5476] & -0.0427 [-0.7050, 0.5306] \\
-\ensuremath{T_{\mathrm{std}}} (trauma/shock) & 0.0066 [-0.0311, 0.9507] & 0.0451 [-0.0997, 0.9057] & 0.0687 [-0.1586, 0.8907] \\
-\ensuremath{D_{\mathrm{std}}} (social atomization) & 0.0057 [-0.0793, 0.6853] & 0.0393 [-0.2036, 0.6849] & 0.0601 [-0.2034, 0.6787] \\
-\ensuremath{G_{\mathrm{std}}} (redistribution capacity) & -0.0006 [-0.0527, 0.0025] & -0.0045 [-0.0598, 0.0046] & -0.0070 [-0.0624, 0.0056] \\
-\ensuremath{E_{\mathrm{std}}} (education capacity) & -0.0044 [-0.8666, 0.0000] & -0.0328 [-0.9636, 0.0000] & -0.0525 [-0.9691, 0.0000] \\
-\ensuremath{S_{\mathrm{std}}} (social support) & 0.0011 [-0.0927, 0.2231] & 0.0078 [-0.1259, 0.2611] & 0.0122 [-0.1243, 0.2589] \\
-\ensuremath{R_{\mathrm{std}}} (welfare capacity) & 0.0305 [-0.0992, 0.8398] & 0.1036 [-0.3277, 0.8192] & 0.0767 [-0.4333, 0.7992] \\
+\ensuremath{M_{\mathrm{std}}} (media environment) & -0.0335 & -0.0331 & -0.0328 \\
+\ensuremath{T_{\mathrm{std}}} (trauma/shock) & -0.0211 & -0.0208 & -0.0207 \\
+\ensuremath{E_{\mathrm{std}}} (education capacity) & 0.0914 & 0.0893 & 0.0881 \\
+\ensuremath{R_{\mathrm{std}}} (welfare capacity) & 0.0446 & 0.0863 & 0.1242 \\
 \bottomrule
 \end{tabularx}
 }
@@ -803,12 +839,12 @@ In particular, the curves should be read as regime-conditional summaries: where 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figure_12_marginal_effect_curves.pdf}
-  \caption{\textbf{Data scope:} scenario-based marginal-effect curves showing $\Delta Z$ under +1 SD shocks as a function of baseline prediction $Z$. Curves are shown for three structural baselines in the interior band $(X,Y)\in\{(0.2,0.2),(0.5,0.5),(0.8,0.8)\}$ under the same fixed contextual state used in Table~\ref{tab:marginal-effects-regimes}; the baseline-$Z$ axis is restricted to an empirically supported interior range from sensitivity-weighted quantiles of the canonical panel. \textbf{Method context:} coefficients follow the production-pinned contract (\nolinkurl{src/data/feCoefficients.ts}) and the plot exposes regime dependence under the same fixed scenario contract as the table. \textbf{Interpretation boundary:} these are model-implied regime-conditional associations, not causal response functions or Tier A/B refit OOS validation results. The regime sensitivity pattern ($\Delta Z$ peaking near $Z=0.5$) reflects bounded-scale mapping geometry, not an independently validated behavioral threshold.}
+  \caption{\textbf{Data scope:} scenario-based marginal-effect curves showing $\Delta Z$ under +1 SD shocks as a function of baseline prediction $Z$. Curves are shown for three structural baselines in the interior band $(X,Y)\in\{(0.2,0.2),(0.5,0.5),(0.8,0.8)\}$ under the same fixed contextual state used in Table~\ref{tab:marginal-effects-regimes}; baseline $Z$ is swept by shifting the intercept $\phi_0$, and the axis is restricted to the 5th--95th percentile of the panel's predicted $Z$ (0.18--0.75). Only the four retained channels are drawn; the three baselines nearly coincide for $M$, $T$ and $E$ because $\alpha$ and $\beta$ sit at their lower bound, and differ for $R$ through the $Y\!\cdot\!R$ interaction. \textbf{Method context:} coefficients follow the production-pinned contract (\nolinkurl{src/data/feCoefficients.ts}) and the plot exposes regime dependence under the same fixed scenario contract as the table. \textbf{Interpretation boundary:} these are model-implied regime-conditional associations, not causal response functions or Tier A/B refit OOS validation results. The regime sensitivity pattern ($\Delta Z$ peaking near $Z=0.5$) reflects bounded-scale mapping geometry, not an independently validated behavioral threshold.}
   \label{fig:marginal-effect-curves}
 \end{figure}
 
 \noindent\justifying
-\textit{Context.} The amplifier/suppressor view translates the fitted contextual field into a local, auditable
+\textit{Context.} The sign-reading view (main text, ``Interpretation layer'') translates the fitted contextual field for the retained channels $M$, $T$, $E$ and $R$ into a local, auditable
 mechanism narrative. The intent is interpretability under regime dependence: a channel’s directional role is defined
 by its local contribution to $\Phi$ at a scenario state, while its observable impact on $Z$ is additionally scaled by
 state-dependent sensitivity. This supports disciplined interpretation without overstating causal identification.
@@ -839,10 +875,10 @@ state-dependent sensitivity. This supports disciplined interpretation without ov
       \includegraphics[width=0.98\linewidth]{fig_doc_section3_energy_field.pdf}%
     }%
     \vspace{0pt}
-    {\small\textbf{(B)} Energy-field intuition}
+    {\small\textbf{(B)} Mean-field free energy}
   \end{minipage}
 
-  \caption{\textbf{Data scope:} documentation schematics used in the Section~3 exposition. \textbf{Method context:} Panel \textbf{(A)} shows the bounded response $Z(\Phi)$ around the transition region, and Panel \textbf{(B)} shows the potential-landscape analogy and tipping direction used to explain the mechanism. \textbf{Interpretation boundary:} these are explanatory schematics only; they are not empirical evidence, evidence-tier support, or causal identification. The transition region around $Z \approx 0.5$ reflects bounded-scale mapping geometry.}
+  \caption{\textbf{Data scope:} documentation schematics used in the Section~3 exposition. \textbf{Method context:} Panel \textbf{(A)} shows the bounded response $Z=\sigma(\Phi+s)$ against the reduced coordinate $\Phi+s$, and Panel \textbf{(B)} shows the mean-field free energy $F(Z)=Z\ln Z+(1-Z)\ln(1-Z)-(\Phi+s)Z$ for three values of $\Phi+s$; its unique minimum is $Z=\sigma(\Phi+s)$, so the fitted map is single-well for every $\Phi+s$ (no bistability, tipping point or hysteresis). Both panels are drawn from the model's algebra by \nolinkurl{scripts/make_paper_figures.py}. \textbf{Interpretation boundary:} these are explanatory schematics only; they are not empirical evidence, evidence-tier support, or causal identification. The transition region around $Z \approx 0.5$ reflects bounded-scale mapping geometry.}
 \end{figure}
 }
 
@@ -1021,7 +1057,7 @@ This is the same logic used throughout the tooling: explanations are considered 
 \hspace{0.04\linewidth}%
 \begin{minipage}[t]{0.46\linewidth}%
 \vspace{0pt}
-\captionof{figure}{\textbf{Data scope:} Pearson correlation matrix for the modeled variables on complete-case rows using the same required-column filtering rule as the estimation build step. \textbf{Method context:} the matrix provides a descriptive diagnostic of linear association and potential collinearity in the modeled variable block (generated by \protect\nolinkurl{paper/scripts/make_fig_correlation_heatmap.py}). \textbf{Interpretation boundary:} it is not a validation claim, evidence-tier result, or causal statement.}
+\captionof{figure}{\textbf{Data scope:} Pearson correlation matrix for the modeled variables on complete-case rows using the same required-column filtering rule as the estimation build step. \textbf{Method context:} the matrix provides a descriptive diagnostic of linear association and potential collinearity in the modeled variable block (generated by \protect\nolinkurl{scripts/make_paper_figures.py} from the canonical panel; the withdrawn channels have no observations and are absent). \textbf{Interpretation boundary:} it is not a validation claim, evidence-tier result, or causal statement.}
 \label{fig:correlation}
 \end{minipage}
 \end{figure}
@@ -1032,7 +1068,7 @@ As a practical check, modifiers that are strongly correlated within-panel should
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.72\linewidth]{figure_A3_correlation_heatmap_within.pdf}
-  \caption{\textbf{Data scope:} within-country (demeaned) Pearson correlation matrix for the modeled variable block $X,Y,Z,C,M,T,D,G,E,S,R$ on complete-case rows. \textbf{Method context:} demeaning removes country fixed effects to emphasize within-panel dependence structure. \textbf{Interpretation boundary:} this is descriptive context for reading regime narratives and possible confounding, not validation or causal evidence.}
+  \caption{\textbf{Data scope:} within-country (demeaned) Pearson correlation matrix for the modeled variable block $X,Y,Z,M,T,E,R$ on complete-case rows from countries with at least two observations. \textbf{Method context:} demeaning removes country fixed effects to emphasize within-panel dependence structure. \textbf{Interpretation boundary:} this is descriptive context for reading regime narratives and possible confounding, not validation or causal evidence.}
   \label{fig:correlation-within}
 \end{figure}
 \Section{Reproducibility and additional diagnostics (moved from appendix)}
@@ -1056,18 +1092,18 @@ where relevant, to the modeled variables. It is included here to support verific
 \renewcommand{\arraystretch}{1.1}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth} >{\raggedright\arraybackslash}p{0.30\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
 \toprule
-Source (rawdata/) & Raw file(s) (as committed) & Contributed columns in panel\_model\_data.csv & Model variables (X,Y,Z,C,M,T,D,G,E,S,R) \\
+Source (rawdata/) & Raw file(s) (as committed) & Contributed columns in panel\_model\_data.csv & Model variables (X,Y,Z,M,T,E,R; C,D,G,S withdrawn) \\
 \midrule
 World Values Survey (WVS) constructs & \nolinkurl{rawdata/wvs_combined.csv} (built from WVS/EVS extracts, using \nolinkurl{config/wvs_items.yaml}) & \texttt{Z\_religion\_importance}, \texttt{Z\_violence\_justifiable}, \texttt{Z\_belief\_outcome}, \texttt{C\_religiosity\_index}, \texttt{C\_cultural\_intensity}, \texttt{D\_social\_trust}, \texttt{D\_social\_atomization}, \texttt{S\_support\_index}, \texttt{S\_social\_support}, (plus auxiliary WVS fields) & $Z$, $C$, $D$, $S$ \\
 World Bank WDI (macro) & \nolinkurl{rawdata/worldbank_data_new.csv} and WDI bulk exports (\nolinkurl{rawdata/WDICSV.csv}, metadata files) & \texttt{urban\_pop\_share}, \texttt{gdp\_ppp} & $X$ (from \texttt{urban\_pop\_share}) \\
 World Bank Internet usage & \nolinkurl{rawdata/worldbank_internet_usage.csv} and API export \nolinkurl{rawdata/API\_IT.NET.USER.ZS\_DS2\_en\_csv\_v2\_280824.csv} & \texttt{internet\_users\_pct} & $M$ (via deterministic standardization to \texttt{M\_media\_environment}) \\
-OECD inequality (Gini levels) & \nolinkurl{rawdata/oecd_gini.csv} (derived from OECD WISE/IDD extracts) & \texttt{gini\_index}, \texttt{gini\_disposable} & $Y$ (via deterministic transform to \texttt{Y\_gini}) \\
-OECD redistribution scenarios & \nolinkurl{rawdata/oecd_redistribution.csv}, \nolinkurl{rawdata/OECD\_Redistribution\_derived.csv} & \texttt{market\_gini}, \texttt{disposable\_gini}, \texttt{redistribution\_effect}, \texttt{redistribution\_pct} & $G$ (via deterministic transform to \nolinkurl{G_redistribution_capacity}); scenario replication keys \\
-OECD SOCX (social spending) & \nolinkurl{rawdata/oecd_socx.csv} (plus \nolinkurl{rawdata/SOCX2025-All-nat-cur.xlsx} as upstream export) & \texttt{socx\_public\_social\_spending\_gdp} & $R$ (via deterministic transform to \texttt{R\_welfare\_capacity}) \\
-UNDP Human Development (HDR) & \nolinkurl{rawdata/undp_hdi.csv} (from HDR exports) & \texttt{hdi} & $R$ (via deterministic transform to \texttt{R\_welfare\_capacity}) \\
-Education capacity proxy & (as encoded in the integrated panel) & \texttt{sec\_enroll\_gross} & $E$ (via deterministic transform to \nolinkurl{E_education_capacity}) \\
-UCDP conflict deaths & \nolinkurl{rawdata/ucdp_conflict_deaths.csv} (plus \nolinkurl{rawdata/GEDEvent\_v25\_1.csv} as upstream export) & \texttt{total\_battle\_deaths} & $T$ (via deterministic transform to \texttt{T\_trauma\_shock}) \\
-EM-DAT disasters & \nolinkurl{rawdata/emdat_disasters.csv} (plus public EM-DAT request exports) & \texttt{total\_affected}, \texttt{total\_deaths} & $T$ (via deterministic transform to \texttt{T\_trauma\_shock}) \\
+OECD inequality (Gini levels) & \nolinkurl{rawdata/oecd_gini.csv} (derived from OECD WISE/IDD extracts) & \texttt{gini\_index}, \texttt{gini\_disposable} & $Y$ (World Bank \texttt{SI.POV.GINI} under an exact affine map is the canonical series; OECD levels are not used directly) \\
+OECD redistribution scenarios & \nolinkurl{rawdata/oecd_redistribution.csv}, \nolinkurl{rawdata/OECD\_Redistribution\_derived.csv} & \texttt{market\_gini}, \texttt{disposable\_gini}, \texttt{redistribution\_effect}, \texttt{redistribution\_pct} & $G$ withdrawn: disposable-income Gini is unavailable outside the OECD sample \\
+OECD SOCX (social spending) & \nolinkurl{rawdata/oecd_socx.csv} (plus \nolinkurl{rawdata/SOCX2025-All-nat-cur.xlsx} as upstream export) & \texttt{socx\_public\_social\_spending\_gdp} & not used: audited and rejected as a source for $R$ (not an affine map of the index) \\
+UNDP Human Development (HDR) & \nolinkurl{rawdata/undp_hdi.csv} (from HDR exports) & \texttt{hdi} & $R$ (exact affine rescaling of \texttt{hdi}: $R=7.303771\,\mathrm{HDI}-6.005361$) \\
+Education capacity proxy & (as encoded in the integrated panel) & \texttt{sec\_enroll\_gross} & $E$ (World Bank \texttt{SE.SEC.ENRR}, secondary gross enrolment, under an exact affine map) \\
+UCDP conflict deaths & \nolinkurl{rawdata/ucdp_conflict_deaths.csv} (plus \nolinkurl{rawdata/GEDEvent\_v25\_1.csv} as upstream export) & \texttt{total\_battle\_deaths} & not used: $T$ equals EM-DAT \texttt{total\_deaths} exactly, and UCDP battle deaths are not the same measure (corr.\ $-0.029$) \\
+EM-DAT disasters & \nolinkurl{rawdata/emdat_disasters.csv} (plus public EM-DAT request exports) & \texttt{total\_affected}, \texttt{total\_deaths} & $T$ (exactly \texttt{total\_deaths}, standardized; \texttt{total\_affected} was tested as a composite and not adopted) \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -1125,10 +1161,10 @@ claims.
 \toprule
 Period & Years & nUsed / nTotal & \multicolumn{1}{c}{$R^{2}$} & \multicolumn{1}{c}{Corr} & \multicolumn{1}{c}{MAE} & \multicolumn{1}{c}{RMSE} & \multicolumn{1}{c}{Bias} & \multicolumn{1}{c}{Residual P10} & \multicolumn{1}{c}{Residual P50} & \multicolumn{1}{c}{Residual P90} \\\\
 \midrule
-all years & --- & 207 / 207 & 0.252 & 0.577 & 0.1789 & 0.2268 & 0.0611 & -0.1844 & 0.0448 & 0.3196 \\
-\ensuremath{\le} 2005 & \ensuremath{\le} 2005 & 45 / 45 & -0.564 & 0.289 & 0.2360 & 0.2851 & 0.1508 & -0.1446 & 0.1804 & 0.4864 \\
-2006--2012 & \ensuremath{>} 2005 to \ensuremath{\le} 2012 & 65 / 65 & 0.438 & 0.668 & 0.1816 & 0.2239 & 0.0258 & -0.2254 & -0.0044 & 0.3203 \\
-\ensuremath{>} 2012 & \ensuremath{>} 2012 & 57 / 57 & 0.459 & 0.691 & 0.1309 & 0.1715 & 0.0307 & -0.1536 & -0.0139 & 0.2751 \\
+all years & --- & 207 / 207 & 0.346 & 0.615 & 0.1617 & 0.2089 & -0.0440 & -0.3056 & -0.0390 & 0.2006 \\
+\ensuremath{\le} 2002 & \ensuremath{\le} 2002 & 65 / 65 & 0.401 & 0.682 & 0.1200 & 0.1691 & 0.0447 & -0.1307 & 0.0197 & 0.2331 \\
+2003--2011 & \ensuremath{>} 2002 to \ensuremath{\le} 2011 & 63 / 63 & 0.314 & 0.692 & 0.2145 & 0.2646 & -0.1202 & -0.4409 & -0.1098 & 0.1741 \\
+\ensuremath{>} 2011 & \ensuremath{>} 2011 & 79 / 79 & 0.325 & 0.624 & 0.1538 & 0.1871 & -0.0562 & -0.2620 & -0.0683 & 0.1797 \\
 \bottomrule
 \end{tabularx}
 }
@@ -1150,55 +1186,90 @@ Country & nUsed / nTotal & \multicolumn{1}{c}{$R^{2}$} & \multicolumn{1}{c}{$r$}
 \endhead
 \bottomrule
 \endfoot
-ALL & 207 / 207 & 0.252 & 0.577 & 0.1789 & 0.2268 & 0.0611 & -0.1892 & 0.0284 & 0.3093\\
-ARG & 4 / 4 & -0.251 & 0.620 & 0.0919 & 0.1124 & 0.0059 & -0.0811 & -0.0416 & 0.1309\\
-MEX & 4 / 4 & 0.143 & 0.520 & 0.1113 & 0.1324 & -0.0208 & -0.1432 & -0.0399 & 0.1169\\
-PER & 4 / 4 & -0.090 & 0.557 & 0.0944 & 0.1243 & 0.0339 & -0.0612 & -0.0171 & 0.1699\\
-CAN & 3 / 3 & 0.086 & 0.607 & 0.1419 & 0.1579 & -0.0540 & -0.1974 & -0.0628 & 0.0930\\
-DEU & 3 / 3 & -32.744 & -0.685 & 0.1481 & 0.1567 & 0.1481 & 0.0979 & 0.1480 & 0.1983\\
-ESP & 3 / 3 & -5.766 & 0.998 & 0.1263 & 0.1333 & 0.1263 & 0.0856 & 0.1219 & 0.1687\\
-IDN & 3 / 3 & -0.945 & 0.916 & 0.1423 & 0.1855 & -0.1423 & -0.2632 & -0.0823 & -0.0454\\
-ROU & 3 / 3 & -1.135 & 0.999 & 0.1860 & 0.2062 & -0.1860 & -0.2767 & -0.1526 & -0.1086\\
-RUS & 3 / 3 & -351.272 & -0.435 & 0.1768 & 0.2023 & 0.1768 & 0.0935 & 0.1344 & 0.2770\\
-THA & 3 / 3 & 0.323 & 0.787 & 0.2013 & 0.2084 & 0.0785 & -0.1183 & 0.1459 & 0.2482\\
-TUR & 3 / 3 & -0.849 & 0.843 & 0.1514 & 0.1679 & -0.1514 & -0.2076 & -0.1938 & -0.0782\\
-UKR & 3 / 3 & -4.251 & 1.000 & 0.0756 & 0.0852 & 0.0756 & 0.0368 & 0.0773 & 0.1137\\
-BRA & 2 / 2 & \textemdash{} & 1.000 & 0.0623 & 0.0704 & -0.0623 & -0.0886 & -0.0623 & -0.0360\\
-CHL & 2 / 2 & \textemdash{} & -1.000 & 0.1639 & 0.1643 & 0.0122 & -0.1189 & 0.0122 & 0.1433\\
-COL & 2 / 2 & \textemdash{} & 1.000 & 0.0156 & 0.0169 & -0.0156 & -0.0207 & -0.0156 & -0.0106\\
-ECU & 2 / 2 & \textemdash{} & 1.000 & 0.0327 & 0.0378 & -0.0327 & -0.0479 & -0.0327 & -0.0176\\
-GEO & 2 / 2 & \textemdash{} & 1.000 & 0.1213 & 0.1281 & -0.1213 & -0.1543 & -0.1213 & -0.0882\\
-KAZ & 2 / 2 & \textemdash{} & -1.000 & 0.0975 & 0.1097 & 0.0503 & -0.0277 & 0.0503 & 0.1283\\
-KGZ & 2 / 2 & \textemdash{} & 1.000 & 0.2963 & 0.2966 & 0.2963 & 0.2852 & 0.2963 & 0.3073\\
-KOR & 2 / 2 & \textemdash{} & 1.000 & 0.0496 & 0.0647 & 0.0496 & 0.0163 & 0.0496 & 0.0828\\
-MYS & 2 / 2 & \textemdash{} & 1.000 & 0.2232 & 0.2420 & -0.2232 & -0.2979 & -0.2232 & -0.1484\\
-NGA & 2 / 2 & \textemdash{} & 1.000 & 0.0845 & 0.0845 & -0.0845 & -0.0864 & -0.0845 & -0.0826\\
-NLD & 2 / 2 & \textemdash{} & 1.000 & 0.2162 & 0.2171 & 0.2162 & 0.2002 & 0.2162 & 0.2321\\
-POL & 2 / 2 & \textemdash{} & 1.000 & 0.3085 & 0.3343 & -0.3085 & -0.4117 & -0.3085 & -0.2053\\
-ALB & 1 / 1 & \textemdash{} & \textemdash{} & 0.3439 & 0.3439 & 0.3439 & 0.3439 & 0.3439 & 0.3439\\
-AUS & 1 / 1 & \textemdash{} & \textemdash{} & 0.0036 & 0.0036 & -0.0036 & -0.0036 & -0.0036 & -0.0036\\
-BGR & 1 / 1 & \textemdash{} & \textemdash{} & 0.2369 & 0.2369 & 0.2369 & 0.2369 & 0.2369 & 0.2369\\
-CHE & 1 / 1 & \textemdash{} & \textemdash{} & 0.0737 & 0.0737 & -0.0737 & -0.0737 & -0.0737 & -0.0737\\
-CHN & 1 / 1 & \textemdash{} & \textemdash{} & 0.7084 & 0.7084 & 0.7084 & 0.7084 & 0.7084 & 0.7084\\
-CYP & 1 / 1 & \textemdash{} & \textemdash{} & 0.1446 & 0.1446 & -0.1446 & -0.1446 & -0.1446 & -0.1446\\
-CZE & 1 / 1 & \textemdash{} & \textemdash{} & 0.3367 & 0.3367 & 0.3367 & 0.3367 & 0.3367 & 0.3367\\
-EST & 1 / 1 & \textemdash{} & \textemdash{} & 0.2169 & 0.2169 & 0.2169 & 0.2169 & 0.2169 & 0.2169\\
-FIN & 1 / 1 & \textemdash{} & \textemdash{} & 0.0452 & 0.0452 & 0.0452 & 0.0452 & 0.0452 & 0.0452\\
-FRA & 1 / 1 & \textemdash{} & \textemdash{} & 0.3889 & 0.3889 & 0.3889 & 0.3889 & 0.3889 & 0.3889\\
-GBR & 1 / 1 & \textemdash{} & \textemdash{} & 0.0448 & 0.0448 & 0.0448 & 0.0448 & 0.0448 & 0.0448\\
-GHA & 1 / 1 & \textemdash{} & \textemdash{} & 0.0578 & 0.0578 & 0.0578 & 0.0578 & 0.0578 & 0.0578\\
-GRC & 1 / 1 & \textemdash{} & \textemdash{} & 0.1769 & 0.1769 & -0.1769 & -0.1769 & -0.1769 & -0.1769\\
-IRN & 1 / 1 & \textemdash{} & \textemdash{} & 0.1501 & 0.1501 & -0.1501 & -0.1501 & -0.1501 & -0.1501\\
-ITA & 1 / 1 & \textemdash{} & \textemdash{} & 0.3037 & 0.3037 & -0.3037 & -0.3037 & -0.3037 & -0.3037\\
-JPN & 1 / 1 & \textemdash{} & \textemdash{} & 0.1321 & 0.1321 & 0.1321 & 0.1321 & 0.1321 & 0.1321\\
-PAK & 1 / 1 & \textemdash{} & \textemdash{} & 0.0618 & 0.0618 & -0.0618 & -0.0618 & -0.0618 & -0.0618\\
-SRB & 1 / 1 & \textemdash{} & \textemdash{} & 0.1225 & 0.1225 & 0.1225 & 0.1225 & 0.1225 & 0.1225\\
-SVK & 1 / 1 & \textemdash{} & \textemdash{} & 0.1088 & 0.1088 & 0.1088 & 0.1088 & 0.1088 & 0.1088\\
-SVN & 1 / 1 & \textemdash{} & \textemdash{} & 0.2245 & 0.2245 & 0.2245 & 0.2245 & 0.2245 & 0.2245\\
-URY & 1 / 1 & \textemdash{} & \textemdash{} & 0.0868 & 0.0868 & 0.0868 & 0.0868 & 0.0868 & 0.0868\\
-USA & 1 / 1 & \textemdash{} & \textemdash{} & 0.1191 & 0.1191 & -0.1191 & -0.1191 & -0.1191 & -0.1191\\
-UZB & 1 / 1 & \textemdash{} & \textemdash{} & 0.0573 & 0.0573 & -0.0573 & -0.0573 & -0.0573 & -0.0573\\
-VNM & 1 / 1 & \textemdash{} & \textemdash{} & 0.3087 & 0.3087 & 0.3087 & 0.3087 & 0.3087 & 0.3087\\
+ALL & 207 / 207 & 0.346 & 0.615 & 0.1617 & 0.2089 & -0.0440 & -0.3056 & -0.0390 & 0.2006\\
+ARG & 6 / 6 & -1.685 & 0.164 & 0.0931 & 0.1350 & -0.0921 & -0.2007 & -0.0681 & -0.0075\\
+CHL & 5 / 5 & -1.411 & 0.519 & 0.1396 & 0.1675 & -0.1396 & -0.2413 & -0.1070 & -0.0705\\
+IND & 5 / 5 & 0.251 & 0.884 & 0.0766 & 0.0879 & -0.0078 & -0.1154 & 0.0366 & 0.0721\\
+MEX & 5 / 5 & -1.860 & 0.024 & 0.1966 & 0.2416 & -0.1818 & -0.3576 & -0.1788 & -0.0160\\
+NGA & 5 / 5 & -23.534 & -0.585 & 0.1304 & 0.1487 & 0.0683 & -0.0862 & 0.0742 & 0.2122\\
+PER & 5 / 5 & -2.329 & 0.183 & 0.1688 & 0.2024 & -0.1609 & -0.2888 & -0.1808 & -0.0277\\
+TUR & 5 / 5 & -3.488 & 0.005 & 0.1832 & 0.2296 & -0.1832 & -0.3376 & -0.1950 & -0.0318\\
+ZAF & 5 / 5 & -0.438 & 0.355 & 0.1070 & 0.1493 & -0.0910 & -0.2288 & -0.0469 & 0.0122\\
+DEU & 4 / 4 & -34.543 & -0.720 & 0.1495 & 0.1558 & 0.1495 & 0.0996 & 0.1606 & 0.1905\\
+ESP & 4 / 4 & 0.228 & 0.661 & 0.0600 & 0.0640 & -0.0027 & -0.0752 & 0.0124 & 0.0577\\
+KOR & 4 / 4 & 0.200 & 0.964 & 0.0579 & 0.0787 & 0.0313 & -0.0338 & 0.0112 & 0.1125\\
+PAK & 4 / 4 & 0.403 & 0.835 & 0.0390 & 0.0455 & 0.0256 & -0.0134 & 0.0254 & 0.0648\\
+PHL & 4 / 4 & -17.214 & -0.017 & 0.1495 & 0.1603 & -0.1495 & -0.2151 & -0.1383 & -0.0928\\
+ROU & 4 / 4 & -2.378 & 0.283 & 0.2307 & 0.2707 & -0.2307 & -0.3873 & -0.2116 & -0.0894\\
+UKR & 4 / 4 & -0.566 & -0.368 & 0.0999 & 0.1065 & -0.0069 & -0.1207 & -0.0083 & 0.1080\\
+URY & 4 / 4 & -1.123 & 0.510 & 0.0528 & 0.0696 & 0.0464 & -0.0063 & 0.0401 & 0.1043\\
+ARM & 3 / 3 & -3.350 & -0.982 & 0.1563 & 0.1716 & 0.0067 & -0.1368 & -0.0712 & 0.1814\\
+BGD & 3 / 3 & 0.391 & 0.686 & 0.0183 & 0.0218 & 0.0019 & -0.0183 & -0.0021 & 0.0238\\
+CAN & 3 / 3 & -0.474 & 0.392 & 0.1773 & 0.2005 & -0.1224 & -0.2726 & -0.1452 & 0.0369\\
+CHN & 3 / 3 & -1074.562 & -0.271 & 0.5474 & 0.5592 & 0.5474 & 0.4583 & 0.4817 & 0.6627\\
+COL & 3 / 3 & -11.884 & -0.046 & 0.1361 & 0.1601 & -0.1361 & -0.2128 & -0.1585 & -0.0504\\
+CYP & 3 / 3 & -10.649 & 0.187 & 0.2903 & 0.3034 & -0.2903 & -0.3798 & -0.2460 & -0.2185\\
+EGY & 3 / 3 & -4.108 & 0.994 & 0.2843 & 0.3058 & -0.2843 & -0.3981 & -0.2606 & -0.1800\\
+IDN & 3 / 3 & -5.933 & 0.030 & 0.3208 & 0.3503 & -0.3208 & -0.4642 & -0.2680 & -0.1986\\
+IRN & 3 / 3 & -3.980 & -0.545 & 0.2568 & 0.2938 & -0.2568 & -0.3991 & -0.1615 & -0.1527\\
+KGZ & 3 / 3 & 0.003 & 0.434 & 0.0746 & 0.0792 & 0.0313 & -0.0424 & 0.0479 & 0.0983\\
+MAR & 3 / 3 & -207.584 & -0.154 & 0.2635 & 0.2706 & -0.2635 & -0.3121 & -0.2977 & -0.2013\\
+MYS & 3 / 3 & -2.738 & 0.898 & 0.2896 & 0.3185 & -0.2896 & -0.4224 & -0.2720 & -0.1639\\
+NLD & 3 / 3 & -53.177 & 0.707 & 0.2160 & 0.2171 & 0.2160 & 0.1941 & 0.2217 & 0.2357\\
+RUS & 3 / 3 & -64.589 & -0.250 & 0.0857 & 0.0873 & 0.0857 & 0.0721 & 0.0777 & 0.1025\\
+SRB & 3 / 3 & -0.250 & -0.223 & 0.1185 & 0.1296 & 0.0138 & -0.1167 & 0.0443 & 0.1322\\
+SVN & 3 / 3 & -2.510 & -0.211 & 0.0628 & 0.0731 & 0.0551 & 0.0063 & 0.0778 & 0.0949\\
+SWE & 3 / 3 & -23.668 & -0.967 & 0.1803 & 0.2084 & 0.1803 & 0.0741 & 0.2323 & 0.2657\\
+THA & 3 / 3 & 0.184 & 1.000 & 0.1981 & 0.2288 & -0.0420 & -0.2651 & 0.1149 & 0.1183\\
+USA & 3 / 3 & -1.680 & 0.441 & 0.1836 & 0.2289 & -0.1836 & -0.3223 & -0.1482 & -0.0591\\
+ALB & 2 / 2 & \textemdash{} & 1.000 & 0.1353 & 0.1369 & 0.1353 & 0.1187 & 0.1353 & 0.1520\\
+AUS & 2 / 2 & \textemdash{} & 1.000 & 0.0285 & 0.0304 & -0.0285 & -0.0369 & -0.0285 & -0.0201\\
+BGR & 2 / 2 & \textemdash{} & -1.000 & 0.1498 & 0.1859 & 0.1498 & 0.0617 & 0.1498 & 0.2379\\
+BLR & 2 / 2 & \textemdash{} & -1.000 & 0.1149 & 0.1220 & 0.0409 & -0.0510 & 0.0409 & 0.1329\\
+BRA & 2 / 2 & \textemdash{} & 1.000 & 0.2226 & 0.2302 & -0.2226 & -0.2697 & -0.2226 & -0.1754\\
+CHE & 2 / 2 & \textemdash{} & 1.000 & 0.0880 & 0.0937 & -0.0880 & -0.1136 & -0.0880 & -0.0625\\
+CZE & 2 / 2 & \textemdash{} & -1.000 & 0.2983 & 0.2995 & 0.2983 & 0.2773 & 0.2983 & 0.3193\\
+ECU & 2 / 2 & \textemdash{} & -1.000 & 0.2100 & 0.2193 & -0.2100 & -0.2605 & -0.2100 & -0.1594\\
+EST & 2 / 2 & \textemdash{} & 1.000 & 0.2177 & 0.2211 & 0.2177 & 0.1871 & 0.2177 & 0.2484\\
+ETH & 2 / 2 & \textemdash{} & 1.000 & 0.0906 & 0.0926 & -0.0192 & -0.0917 & -0.0192 & 0.0533\\
+FIN & 2 / 2 & \textemdash{} & 1.000 & 0.0684 & 0.0724 & -0.0684 & -0.0874 & -0.0684 & -0.0495\\
+GBR & 2 / 2 & \textemdash{} & -1.000 & 0.1478 & 0.1967 & 0.1478 & 0.0440 & 0.1478 & 0.2517\\
+GEO & 2 / 2 & \textemdash{} & 1.000 & 0.4270 & 0.4385 & -0.4270 & -0.5070 & -0.4270 & -0.3469\\
+GHA & 2 / 2 & \textemdash{} & 1.000 & 0.1677 & 0.1790 & -0.1677 & -0.2178 & -0.1677 & -0.1177\\
+GTM & 2 / 2 & \textemdash{} & 1.000 & 0.1427 & 0.1449 & -0.0249 & -0.1391 & -0.0249 & 0.0892\\
+HUN & 2 / 2 & \textemdash{} & 1.000 & 0.1437 & 0.1440 & 0.1437 & 0.1358 & 0.1437 & 0.1516\\
+IRQ & 2 / 2 & \textemdash{} & -1.000 & 0.1513 & 0.2060 & -0.1398 & -0.2609 & -0.1398 & -0.0188\\
+JOR & 2 / 2 & \textemdash{} & -1.000 & 0.2365 & 0.2478 & -0.2365 & -0.2957 & -0.2365 & -0.1774\\
+JPN & 2 / 2 & \textemdash{} & -1.000 & 0.1608 & 0.1617 & 0.1608 & 0.1472 & 0.1608 & 0.1745\\
+KAZ & 2 / 2 & \textemdash{} & 1.000 & 0.0352 & 0.0380 & -0.0352 & -0.0467 & -0.0352 & -0.0238\\
+LBN & 2 / 2 & \textemdash{} & -1.000 & 0.0901 & 0.0943 & -0.0901 & -0.1122 & -0.0901 & -0.0679\\
+MKD & 2 / 2 & \textemdash{} & -1.000 & 0.0817 & 0.1041 & 0.0817 & 0.0301 & 0.0817 & 0.1333\\
+NOR & 2 / 2 & \textemdash{} & 1.000 & 0.1319 & 0.1335 & 0.1319 & 0.1155 & 0.1319 & 0.1484\\
+POL & 2 / 2 & \textemdash{} & -1.000 & 0.3957 & 0.4308 & -0.3957 & -0.5320 & -0.3957 & -0.2594\\
+RWA & 2 / 2 & \textemdash{} & 1.000 & 0.1826 & 0.2233 & 0.1286 & -0.0175 & 0.1286 & 0.2746\\
+SVK & 2 / 2 & \textemdash{} & -1.000 & 0.0739 & 0.0933 & 0.0739 & 0.0284 & 0.0739 & 0.1194\\
+TUN & 2 / 2 & \textemdash{} & 1.000 & 0.2649 & 0.3220 & -0.2649 & -0.4114 & -0.2649 & -0.1183\\
+VEN & 2 / 2 & \textemdash{} & -1.000 & 0.1639 & 0.2057 & -0.1243 & -0.2555 & -0.1243 & 0.0068\\
+VNM & 2 / 2 & \textemdash{} & -1.000 & 0.3991 & 0.4245 & 0.3991 & 0.2834 & 0.3991 & 0.5148\\
+BOL & 1 / 1 & \textemdash{} & \textemdash{} & 0.0835 & 0.0835 & -0.0835 & -0.0835 & -0.0835 & -0.0835\\
+FRA & 1 / 1 & \textemdash{} & \textemdash{} & 0.2525 & 0.2525 & 0.2525 & 0.2525 & 0.2525 & 0.2525\\
+GRC & 1 / 1 & \textemdash{} & \textemdash{} & 0.1969 & 0.1969 & -0.1969 & -0.1969 & -0.1969 & -0.1969\\
+HRV & 1 / 1 & \textemdash{} & \textemdash{} & 0.0359 & 0.0359 & 0.0359 & 0.0359 & 0.0359 & 0.0359\\
+ITA & 1 / 1 & \textemdash{} & \textemdash{} & 0.4226 & 0.4226 & -0.4226 & -0.4226 & -0.4226 & -0.4226\\
+KEN & 1 / 1 & \textemdash{} & \textemdash{} & 0.0203 & 0.0203 & 0.0203 & 0.0203 & 0.0203 & 0.0203\\
+LTU & 1 / 1 & \textemdash{} & \textemdash{} & 0.0016 & 0.0016 & 0.0016 & 0.0016 & 0.0016 & 0.0016\\
+LVA & 1 / 1 & \textemdash{} & \textemdash{} & 0.1875 & 0.1875 & 0.1875 & 0.1875 & 0.1875 & 0.1875\\
+MDV & 1 / 1 & \textemdash{} & \textemdash{} & 0.1588 & 0.1588 & -0.1588 & -0.1588 & -0.1588 & -0.1588\\
+MLI & 1 / 1 & \textemdash{} & \textemdash{} & 0.0748 & 0.0748 & -0.0748 & -0.0748 & -0.0748 & -0.0748\\
+MMR & 1 / 1 & \textemdash{} & \textemdash{} & 0.0099 & 0.0099 & -0.0099 & -0.0099 & -0.0099 & -0.0099\\
+MNG & 1 / 1 & \textemdash{} & \textemdash{} & 0.2180 & 0.2180 & 0.2180 & 0.2180 & 0.2180 & 0.2180\\
+PSE & 1 / 1 & \textemdash{} & \textemdash{} & 0.4928 & 0.4928 & -0.4928 & -0.4928 & -0.4928 & -0.4928\\
+TJK & 1 / 1 & \textemdash{} & \textemdash{} & 0.0632 & 0.0632 & 0.0632 & 0.0632 & 0.0632 & 0.0632\\
+TZA & 1 / 1 & \textemdash{} & \textemdash{} & 0.1773 & 0.1773 & 0.1773 & 0.1773 & 0.1773 & 0.1773\\
+UGA & 1 / 1 & \textemdash{} & \textemdash{} & 0.2452 & 0.2452 & 0.2452 & 0.2452 & 0.2452 & 0.2452\\
+UZB & 1 / 1 & \textemdash{} & \textemdash{} & 0.1156 & 0.1156 & -0.1156 & -0.1156 & -0.1156 & -0.1156\\
+YEM & 1 / 1 & \textemdash{} & \textemdash{} & 0.1586 & 0.1586 & -0.1586 & -0.1586 & -0.1586 & -0.1586\\
+ZWE & 1 / 1 & \textemdash{} & \textemdash{} & 0.0007 & 0.0007 & 0.0007 & 0.0007 & 0.0007 & 0.0007\\
 \end{longtable}
 \par\vspace{0.25em}
 {\TableNoteStyle Computed per country on rows with finite observed and predicted Z; no refit (fixed coefficients unless an estimated set is active). Countries with fewer than 30 valid observations may display \enquote{\textemdash{}} due to insufficient sample size. nUsed counts rows with finite observed and predicted Z. Values are shown as \enquote{\textemdash{}} when metrics are undefined or when the minimum per-country sample-size rule applies (e.g., nUsed $<$ 30).}
@@ -1207,24 +1278,24 @@ VNM & 1 / 1 & \textemdash{} & \textemdash{} & 0.3087 & 0.3087 & 0.3087 & 0.3087 
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} variance-inflation-factor diagnostics for the six retained covariates on the complete-case estimation rows ($n=\num{167}$). \textbf{Method context:} $\mathrm{VIF}_j = 1/(1-R_j^2)$, where $R_j^2$ comes from regressing covariate $j$ on the other five; the condition number is that of the design matrix with intercept. Values are emitted by \texttt{generate:collinearity}, not transcribed. \textbf{Interpretation boundary:} this is stability context for reading coefficient signs, not evidence of causal structure; a VIF above the conventional threshold of five describes association under a fixed design rather than a separately identified effect.}
+\caption{\textbf{Data scope:} variance-inflation-factor diagnostics for the six retained covariates on the complete-case estimation rows ($n=\num{207}$). \textbf{Method context:} $\mathrm{VIF}_j = 1/(1-R_j^2)$, where $R_j^2$ comes from regressing covariate $j$ on the other five; the condition number is that of the design matrix with intercept. Values are emitted by \texttt{generate:collinearity}, not transcribed. \textbf{Interpretation boundary:} this is stability context for reading coefficient signs, not evidence of causal structure; a VIF above the conventional threshold of five describes association under a fixed design rather than a separately identified effect.}
 \label{tab:appx-vif}
 \begin{tabular}{@{}lrr@{}}
 \toprule
 Variable & $R^2$ on other covariates & VIF \\
 \midrule
-$R$ (welfare capacity) & 0.8911 & \num{9.19} \\
-$E$ (education capacity) & 0.7892 & \num{4.74} \\
-$X$ (urbanization) & 0.6766 & \num{3.09} \\
-$M$ (media environment) & 0.6153 & \num{2.60} \\
-$Y$ (inequality) & 0.3037 & \num{1.44} \\
-$T$ (trauma/shock) & 0.0741 & \num{1.08} \\
+$R$ (welfare capacity) & 0.8939 & \num{9.43} \\
+$E$ (education capacity) & 0.7929 & \num{4.83} \\
+$X$ (urbanization) & 0.6941 & \num{3.27} \\
+$M$ (media environment) & 0.5381 & \num{2.16} \\
+$Y$ (inequality) & 0.2836 & \num{1.40} \\
+$T$ (trauma/shock) & 0.1457 & \num{1.17} \\
 \midrule
-\multicolumn{3}{@{}l@{}}{\footnotesize Condition number of the design matrix: \num{24.01}} \\
+\multicolumn{3}{@{}l@{}}{\footnotesize Condition number of the design matrix: \num{23.52}} \\
 \bottomrule
 \end{tabular}
 \\[0.35em]
-{\TableNoteStyle Two covariates sit high: $R$ at \num{9.19} and $E$ at \num{4.74}. The reason is substantive rather than statistical. $R$ is an affine rescaling of the Human Development Index, $R = 7.303771\,\mathrm{HDI} - 6.005361$ (max residual $0.000000$ over \num{13441} rows), and HDI is itself built partly from education; $E$ is gross secondary enrolment. The two channels therefore share a component by construction. Coefficients on $R$ and $E$ are reported as conditional associations under this design, and no claim in the paper rests on separating their individual contributions. The remaining four covariates are well separated, with $T$ effectively orthogonal ($\mathrm{VIF}=\num{1.08}$).}
+{\TableNoteStyle Two covariates sit high: $R$ at \num{9.43} and $E$ at \num{4.83}. The reason is substantive rather than statistical. $R$ is an affine rescaling of the Human Development Index, $R = 7.303771\,\mathrm{HDI} - 6.005361$ (max residual $0.000000$ over \num{13441} rows), and HDI is itself built partly from education; $E$ is gross secondary enrolment. The two channels therefore share a component by construction. Coefficients on $R$ and $E$ are reported as conditional associations under this design, and no claim in the paper rests on separating their individual contributions. The remaining four covariates are well separated, with $T$ effectively orthogonal ($\mathrm{VIF}=\num{1.17}$).}
 \end{table}
 \Section{Visual analytics tooling (dashboard, pinned inspection, export contract)}
 \noindent\justifying
@@ -1284,7 +1355,7 @@ standard \texttt{width=\string\linewidth} convention. Each screenshot captures a
 Screenshots are included to document representative parameter states and diagnostic panels, complementing the
 main evaluation by showing how the mechanism-level decomposition and checks appear within the analysis surface.
 They do not alter the computational contract; rather, they provide additional, verifiable context for the
-interpretation pipeline and export protocol. The first screenshots show alternative UI states, followed by explanatory paragraphs describing key inspection techniques (geometry reading, curvature visualization, preset management), and ending with screenshots of specialized diagnostic panels (belief equation, core variables, amplifiers, suppressors, mathematical analysis, system dynamics, and AI interpretation layer).
+interpretation pipeline and export protocol. \emph{Provenance.} The screenshots in this section were captured from an earlier version of the interface, which exposed the channels $C$, $D$, $G$, $S$ and an amplifier/suppressor vocabulary that the paper withdraws (main text, Sections~4 and~8); they document the inspection and export workflow, not model results, and the values displayed in them are superseded by the regenerated figures and tables. The first screenshots show alternative UI states, followed by explanatory paragraphs describing key inspection techniques (geometry reading, curvature visualization, preset management), and ending with screenshots of specialized diagnostic panels (belief equation, core variables, amplifiers, suppressors, mathematical analysis, system dynamics, and AI interpretation layer).
 \noindent\justifying
 Transparency in analytical methods is a cornerstone of reproducible science. Documenting the interactive UI state, parameter values, and diagnostic outputs enables readers to understand not just the final conclusions but the entire process by which results were obtained. The screenshots serve as a visual record of the analytical workflow, from initial parameter setting through iterative sensitivity exploration to final evidence generation. This comprehensive documentation supports scientific scrutiny and allows future researchers to build upon the methodology with full confidence in the computational integrity of the reported results.
 \noindent\justifying
@@ -1397,19 +1468,11 @@ This supplementary document provides comprehensive visual and textual documentat
 \textit{Practical reading path.} For reviewers primarily concerned with evidentiary sufficiency, a linear pass is recommended through (i) the bounded-scale evaluation figures (fit, calibration, residual structure), (ii) the regime-dependent marginal-effect curves (main and robust), and (iii) the correlation and collinearity diagnostics.
 For reviewers concerned with methodological transparency and reproducibility, the export contract figures and UI snapshots provide an auditable bridge from interactive exploration to deterministic artifacts.
 \noindent\justifying
-\textit{On AI-assisted narration.} If the optional AI Interpreter is used, it should be treated as a convenience layer that paraphrases the deterministic state snapshot.
-Scientific claims should be checked against the exported parameters, the $\Phi$ decomposition, and the bounded-scale diagnostics; in particular, any strong narrative about amplifiers/suppressors should be verified in a state where sensitivity is non-negligible (interior band), since saturation can otherwise yield misleading qualitative impressions.
-\noindent\justifying
 \textit{Verification tip.} A quick consistency check is to take one pinned state, recompute $\widehat{Z}$ from the exported snapshot, and then confirm that the UI panels (decomposition, sensitivity, and any narrative text) match that deterministic recomputation.
 If they do, the remaining interpretive question is scientific rather than technical: whether the claimed effect occurs in a region with both adequate support and non-saturated sensitivity.
 \noindent\justifying
 \textit{Minimal replication exercise.} As an end-to-end check, reproducing (i) one preset row in the country summary table, (ii) one regime-based finite difference from the marginal-effects table, and (iii) the corresponding calibration location in the evaluation plots is recommended.
 Together, these three checks confirm alignment across preprocessing, coefficient application, bounded transformation, and the interpretive UI surface.
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=\linewidth]{figure_10_ui_ai_interpreter.png}
-    \caption{\textbf{Data scope:} screenshot of the optional AI-assisted interpretation panel. \textbf{Method context:} the module drafts natural-language summaries of the current deterministic state snapshot using parameters, $Z$, $\Phi$, and term-level contributions. \textbf{Interpretation boundary:} this is a narrative aid only; it does not alter model computation, and any generated text must be verified against deterministic diagnostics and exported artifacts.}
-\end{figure}
 \noindent\justifying
 \noindent\justifying
 \textit{Closing note.} All narrative claims in this supplementary file are intended to be traceable to deterministic artifacts: fixed preprocessing bounds, a production-pinned coefficient bundle, and exported state snapshots.
@@ -1443,7 +1506,7 @@ Even a perfectly reproducible regime pattern can be sample-specific; therefore, 
 \section*{Table S14 --- 2006 Temporal Outlier Sensitivity: LOO Metrics With and Without 2006 Observations}
 
 \noindent\justifying
-Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 12 rows across 12 countries (ARG, BGR, CAN, CHL, DEU, FRA, IDN, MYS, NLD, PER, RUS, UKR). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 167-row canonical panel versus the 147-row panel excluding all 2006 observations. Source artifact: \nolinkurl{src/data/analysis/temporal_outlier_2006_sensitivity.json}.
+Construct-validity diagnostics identify 2006 as the worst year for Z inter-item coherence (pairwise correlation $r = 0.699$ vs.\ median $r = 0.932$ across year slices; see \texttt{construct\_validity\_invariance.json}). The 2006 slice contains 20 rows across 20 countries (ARG, BGR, CAN, CHL, CYP, DEU, FRA, IDN, IND, IRQ, MYS, NLD, PER, RUS, SRB, SWE, UKR, URY, USA, ZAF). Table~S14 compares leave-one-country-out (LOO) refit metrics computed on the full 207-row canonical panel versus the 187-row panel excluding all 2006 observations. Source artifact: \nolinkurl{src/data/analysis/temporal_outlier_2006_sensitivity.json}.
 
 \setcounter{table}{13}%--- force Table S14
 \begin{table}[!htbp]
@@ -1455,9 +1518,9 @@ Construct-validity diagnostics identify 2006 as the worst year for Z inter-item 
 \hline
 \textbf{Tier} & \textbf{$R^2_{\text{full}}$} & \textbf{$R^2_{\text{excl}}$} & \textbf{$\Delta R^2$} & \textbf{MAE$_{\text{full}}$} & \textbf{MAE$_{\text{excl}}$} & \textbf{$\Delta$MAE} & \textbf{RMSE$_{\text{full}}$} & \textbf{RMSE$_{\text{excl}}$} & \textbf{$\Delta$RMSE} \\
 \hline
-A & $\text{year}\le2005$ & 45 & \num{0.4115} & \num{0.6415} & \num{0.1231} & \num{0.1749} \\
-B & main ($\Phi$ linear only) & 167 & \num{0.4728} & \num{0.6877} & \num{0.1449} & \num{0.1904} \\
-C & $-0.8554$ & $-2.5472$ & $-1.6917$ & 0.1164 & 0.1183 & $+0.0019$ & 0.1369 & 0.1218 & $-0.0152$ \\
+A & $-1.6668$ & $-2.2685$ & $-0.6017$ & 0.1389 & 0.1268 & $-0.0120$ & 0.1501 & 0.1345 & $-0.0155$ \\
+B & $-1.5706$ & $-1.6326$ & $-0.0620$ & 0.1160 & 0.1172 & $+0.0012$ & 0.1325 & 0.1266 & $-0.0059$ \\
+C & $-0.9189$ & $-1.8001$ & $-0.8813$ & 0.1233 & 0.1171 & $-0.0062$ & 0.1366 & 0.1279 & $-0.0087$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1471,8 +1534,8 @@ C & $-0.8554$ & $-2.5472$ & $-1.6917$ & 0.1164 & 0.1183 & $+0.0019$ & 0.1369 & 0
 \textbf{Tier} & \textbf{$n_{\text{coeffs}}$} & \textbf{$n_{\text{retained}}$} & \textbf{Fraction} & \textbf{Flipped features} \\
 \hline
 A & 10 & 10 & 1.000 & --- \\
-B & 17 & 16 & 0.941 & $x_{\text{safe}}$ \\
-C & 21 & 20 & 0.952 & $y_{\text{safe}}{:}r$ \\
+B & 17 & 16 & 0.941 & $t$ \\
+C & 21 & 20 & 0.952 & $x_{\text{safe}}{:}y_{\text{safe}}$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1485,14 +1548,14 @@ C & 21 & 20 & 0.952 & $y_{\text{safe}}{:}r$ \\
 \hline
 \textbf{Slice} & \textbf{$n$} & \textbf{Mean $Z$} & \textbf{SD $Z$} & \textbf{Inter-item $r$} \\
 \hline
-2006 & 12 & $-0.104$ & 1.277 & 0.699 \\
-Other years & 75 & 0.076 & 0.915 & 0.932 (median) \\
+2006 & 20 & $-0.244$ & 1.210 & 0.699 \\
+Other years & 187 & $-0.069$ & 1.002 & 0.932 (median) \\
 \hline
 \end{tabular}
 \end{table}
 
 \noindent\justifying
-\textbf{Interpretation.} Excluding 2006 changes OOS $R^2$ materially in every tier ($\Delta R^2$: A $-0.0821$, B $-1.3571$, C $-1.6917$), and the artifact verdict is correspondingly negative: this year-level instability may be a driver of reported aggregate patterns. Sign structure, by contrast, is largely unaffected: Tier~A retains 9 of 10 coefficient signs (90\%, flipped: $m$), Tier~B retains all 17 (100\%), and Tier~C retains 19 of 21 (91\%). The honest reading is that the sign of the model is robust to the 2006 slice while its out-of-sample fit is not, and the out-of-sample fit is already negative in every tier. The 2006 slice also carries a lower mean $Z$ ($-0.244$ vs.\ $-0.126$) and higher variance ($1.210$ vs.\ $1.024$) than the rest of the panel, consistent with the weaker inter-item coherence. That coherence gap is the diagnostic that motivated the check: pairwise item correlation is $0.699$ in 2006 against a median of $0.932$ elsewhere.
+\textbf{Interpretation.} Excluding 2006 moves the country-out summaries in two directions: median held-out RMSE falls in every tier ($\Delta$RMSE: A -0.0155, B -0.0059, C -0.0087) while the per-fold median $R^2$ worsens ($\Delta R^2$: A -0.6017, B -0.0620, C -0.8813). The artifact verdict is correspondingly cautious: this year-level instability may be a driver of reported aggregate patterns. Sign structure, by contrast, is largely unaffected: Tier~A retains 10 of 10 coefficient signs, Tier~B 16 of 17 (flipped: $t$), and Tier~C 20 of 21 (flipped: $x_{\text{safe}}{:}y_{\text{safe}}$). The honest reading is that the sign of the model is robust to the 2006 slice while the effect on out-of-sample fit depends on the metric, and per-fold $R^2$ is itself computed on very few rows. The 2006 slice also carries a lower mean $Z$ ($-0.244$ vs.\ $-0.069$) and higher variance (1.210 vs.\ 1.002 standard deviation) than the rest of the panel, consistent with the weaker inter-item coherence. That coherence gap is the diagnostic that motivated the check: pairwise item correlation is $0.699$ in 2006 against a median of $0.932$ elsewhere.
 
 \section*{Table S18 --- C-Dominance Sensitivity: Can C Be Separated From Z?}
 
@@ -1506,15 +1569,15 @@ Table~S18 asks how much of cultural intensity ($C$)'s predictive contribution re
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 167-row panel. $\Delta R^2$ is Full minus C-Excluded. $C$ is neutralised to zero in the design matrix, so the two columns are identical by construction; see the note above. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
+\caption{\textbf{Panel A: C-Excluded vs.\ Full Model.} Dropping $C$ (and its interactions/quadratic) from each tier and refitting on the canonical 207-row panel. $\Delta R^2$ is Full minus C-Excluded. $C$ is neutralised to zero in the design matrix, so the two columns are identical by construction; see the note above. \textbf{Interpretation boundary:} in-sample training metrics; primary inferential claims rest on out-of-sample validation elsewhere.}
 \label{tab:c-dominance-excluded}
 \begin{tabular}{l r r r r r r}
 \toprule
 Tier & Full $R^2$ & Excl.\ $R^2$ & $\Delta R^2$ & Full RMSE & Excl.\ RMSE & $\Delta$RMSE \\
 \midrule
-A & 0.4569 & 0.4569 & 0.0000 & 0.1780 & 0.1780 & 0.0000 \\
-B & 0.5213 & 0.5213 & 0.0000 & 0.1671 & 0.1671 & 0.0000 \\
-C & 0.5678 & 0.5678 & 0.0000 & 0.1588 & 0.1588 & 0.0000 \\
+A & 0.4654 & 0.4654 & 0.0000 & 0.1889 & 0.1889 & 0.0000 \\
+B & 0.5599 & 0.5599 & 0.0000 & 0.1714 & 0.1714 & 0.0000 \\
+C & 0.5658 & 0.5658 & 0.0000 & 0.1703 & 0.1703 & 0.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1527,9 +1590,9 @@ C & 0.5678 & 0.5678 & 0.0000 & 0.1588 & 0.1588 & 0.0000 \\
 \toprule
 Tier & Observed $R^2$ & Perm.\ Mean $R^2$ & Perm.\ [q05, q95] & $p$-value \\
 \midrule
-A & 0.4569 & 0.4569 & [0.4569, 0.4569] & 1.000 \\
-B & 0.5213 & 0.5213 & [0.5213, 0.5213] & 1.000 \\
-C & 0.5678 & 0.5678 & [0.5678, 0.5678] & 1.000 \\
+A & 0.4654 & 0.4654 & [0.4654, 0.4654] & 1.000 \\
+B & 0.5599 & 0.5599 & [0.5599, 0.5599] & 1.000 \\
+C & 0.5658 & 0.5658 & [0.5658, 0.5658] & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1542,13 +1605,13 @@ C & 0.5678 & 0.5678 & [0.5678, 0.5678] & 1.000 \\
 \toprule
 Rank & Predictor & Partial $R^2$ \\
 \midrule
-1 & $Y$ (Inequality) & 0.1096 \\
-2 & $X$ (Urbanization) & 0.0209 \\
-3 & $M$ (Internet access) & 0.0184 \\
-4 & $T$ (Technology) & 0.0044 \\
-5 & $E$ (Education) & 0.0043 \\
+1 & $Y$ (Inequality) & 0.0829 \\
+2 & $E$ (Education capacity) & 0.0147 \\
+3 & $R$ (Welfare capacity) & 0.0085 \\
+4 & $X$ (Urbanization) & 0.0074 \\
+5 & $M$ (Media environment) & 0.0048 \\
+6 & $T$ (Trauma/shock) & 0.0015 \\
 \midrule
-6 & $R$ (Redistribution) & 0.0008 \\
 7--10 & $C, D, G, S$ (withdrawn) & 0.0000 \\
 \bottomrule
 \end{tabular}
@@ -1564,7 +1627,7 @@ The previous draft reported that dropping $C$ reduced Tier~A $R^2$ by 0.270 and 
 \section*{Table S17 --- Tier~B Sign-Consistency Threshold Sweep Across LOO Country-Out Refits}
 
 \noindent\justifying
-Sweeping the sign-consistency threshold from 0.75 to 0.95 across 48 leave-one-country-out refits, 18 of 18 Tier~B parameters maintain $\geq$\,0.80 sign consistency. One parameter ($x_{\text{safe}}$) falls below 0.85 with sign-consistency~=~0.833, and no second parameter falls below 0.95. The minimum sign-consistency across Tier~B is 0.833 ($x_{\text{safe}}$). No parameter exhibits sign-consistency below 0.80, supporting Tier~B's classification as primary inferential under the disclosed thin-support constraint (4.83~obs/param). Source artifact: \nolinkurl{src/data/analysis/tier_b_stability_sweep.json}.
+Sweeping the sign-consistency threshold from 0.75 to 0.95 across 83 leave-one-country-out refits, 17 of 18 Tier~B parameters maintain $\geq$\,0.80 sign consistency. One parameter, the $x_{\text{safe}}{:}y_{\text{safe}}$ interaction, falls below 0.80 (0.747), and one further parameter ($t$, 0.807) falls below 0.85. The minimum sign-consistency across Tier~B is 0.747 ($x_{\text{safe}}{:}y_{\text{safe}}$). The artifact verdict flags that interaction for review.
 
 \begin{table}[!htbp]
 \centering
@@ -1574,11 +1637,11 @@ Sweeping the sign-consistency threshold from 0.75 to 0.95 across 48 leave-one-co
 \toprule
 Threshold & Pass / Total & Failing Parameters \\
 \midrule
-$\geq$\,0.75 & 18 / 18 & --- \\
-$\geq$\,0.80 & 18 / 18 & --- \\
-$\geq$\,0.85 & 17 / 18 & $x_{\text{safe}}$ \\
-$\geq$\,0.90 & 17 / 18 & $x_{\text{safe}}$ \\
-$\geq$\,0.95 & 17 / 18 & $x_{\text{safe}}$ \\
+$\geq$\,0.75 & 17 / 18 & $x_{\text{safe}}{:}y_{\text{safe}}$ \\
+$\geq$\,0.80 & 17 / 18 & $x_{\text{safe}}{:}y_{\text{safe}}$ \\
+$\geq$\,0.85 & 16 / 18 & $t$, $x_{\text{safe}}{:}y_{\text{safe}}$ \\
+$\geq$\,0.90 & 16 / 18 & $t$, $x_{\text{safe}}{:}y_{\text{safe}}$ \\
+$\geq$\,0.95 & 16 / 18 & $t$, $x_{\text{safe}}{:}y_{\text{safe}}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1586,35 +1649,35 @@ $\geq$\,0.95 & 17 / 18 & $x_{\text{safe}}$ \\
 \begin{table}[!htbp]
 \centering
 \small
-\caption*{\textbf{Panel~B: Individual Parameter Sign-Consistency (Country-Out LOO, 48~folds)}}
+\caption*{\textbf{Panel~B: Individual Parameter Sign-Consistency (Country-Out LOO, 83~folds)}}
 \begin{tabular}{lcc}
 \toprule
-Parameter & Sign Consistency & Passes $\geq$\,0.85? \\
+Parameter & Sign Consistency & Passes $\geq$\,0.80? \\
 \midrule
-intercept       & 1.000 & \checkmark \\
-$x_{\text{safe}}$        & 0.833 & $\times$ \\
-$y_{\text{safe}}$        & 1.000 & \checkmark \\
-$c_{\text{std}}$         & 1.000 & \checkmark \\
-$m$              & 1.000 & \checkmark \\
-$t$              & 1.000 & \checkmark \\
-$d$              & 1.000 & \checkmark \\
-$g$              & 1.000 & \checkmark \\
-$e$              & 1.000 & \checkmark \\
-$s$              & 1.000 & \checkmark \\
-$r$              & 0.979 & \checkmark \\
-$y_{\text{safe}}{:}r$    & 0.958 & \checkmark \\
-$t{:}r$          & 0.979 & \checkmark \\
-$x_{\text{safe}}{:}y_{\text{safe}}$ & 0.958 & \checkmark \\
-$c_{\text{std}}{:}m$     & 1.000 & \checkmark \\
-$e{:}s$          & 1.000 & \checkmark \\
-$c_{\text{std}}^2$       & 1.000 & \checkmark \\
-$m^2$            & 1.000 & \checkmark \\
+intercept & 1.000 & \checkmark \\
+$x_{\text{safe}}$ & 1.000 & \checkmark \\
+$y_{\text{safe}}$ & 1.000 & \checkmark \\
+$c_{\text{std}}$ & 1.000 & \checkmark \\
+$m$ & 1.000 & \checkmark \\
+$t$ & 0.807 & \checkmark \\
+$d$ & 1.000 & \checkmark \\
+$g$ & 1.000 & \checkmark \\
+$e$ & 1.000 & \checkmark \\
+$s$ & 1.000 & \checkmark \\
+$r$ & 1.000 & \checkmark \\
+$y_{\text{safe}}{:}r$ & 1.000 & \checkmark \\
+$t{:}r$ & 1.000 & \checkmark \\
+$x_{\text{safe}}{:}y_{\text{safe}}$ & 0.747 & $\times$ \\
+$c_{\text{std}}{:}m$ & 1.000 & \checkmark \\
+$e{:}s$ & 1.000 & \checkmark \\
+$c_{\text{std}}^2$ & 1.000 & \checkmark \\
+$m^2$ & 1.000 & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \noindent\justifying
-\textbf{Verdict.} All 18 Tier~B parameters maintain $\geq$\,0.80 sign-consistency across LOO refits. The weakest parameter ($x_{\text{safe}}$, 0.833) remains above the 0.80 demotion threshold. No reclassification to exploratory (Tier~C) is warranted. Four of the six zero-variance channels ($c_{\text{std}}$, $d$, $g$, $s$) and their interactions return exactly 1.000 because they are constant columns, not because they are stable estimates; only the estimated structural terms carry information, and among those the weakest is $x_{\text{safe}}$ at 0.833, which reflects expected variability under thin support (4.83~obs/param) rather than systematic instability.
+\textbf{Verdict.} 17 of 18 Tier~B parameters maintain $\geq$\,0.80 sign-consistency across LOO refits; the $x_{\text{safe}}{:}y_{\text{safe}}$ interaction (0.747) does not, and the artifact recommends reviewing it for exploratory demotion. No headline claim in the paper rests on that interaction (the interpreted terms are the retained channels $M$, $T$, $E$, $R$ and the two interactions of the production fit), so it is treated as exploratory within Tier~B rather than relied on. Several zero-variance channels and their interactions return exactly 1.000 because they are constant columns, not because they are stable estimates.
 
 \section*{Table S19 --- Methodological Comparison: Current Workflow vs.\ Representative Approaches in Computational Social Science}
 
@@ -1673,16 +1736,16 @@ It is intended as a self-contained reference so that reviewers can resolve any n
 Symbol & Definition & Type & Scale/Unit & Source \\
 \midrule
 $X$ & Urbanization (structural driver) & Fraction & $[\varepsilon,\,1{-}\varepsilon]$ & World Bank WDI \\
-$Y$ & Inequality / Gini (structural driver) & Index & $[\varepsilon,\,1{-}\varepsilon]$ & OECD IDD/WISE \\
+$Y$ & Inequality / Gini (structural driver) & Index & $[\varepsilon,\,1{-}\varepsilon]$ & World Bank \texttt{SI.POV.GINI}, exact affine map \\
 $Z$ & Belief outcome (dependent variable) & Composite & $[\varepsilon,\,1{-}\varepsilon]$ & WVS 6-item (A006, F028, F050--F053, F063) \\
-$C$ & Cultural intensity (amplifier) & Composite & Std.\ ($\mu{=}2.61$, $\sigma{=}0.54$) & WVS 5-item (A008, A009, E012, E015, E018) \\
-$M$ & Media environment (modifier) & Index & Standardized & World Bank + OECD proxy \\
-$T$ & Trauma / shock (amplifier) & Index & Standardized & UCDP + EM-DAT \\
-$D$ & Social atomization (amplifier) & Composite & Standardized & WVS 5-item (A165, A168, A170, A173, A174) \\
-$G$ & Redistribution capacity (suppressor) & Index & Standardized & OECD redistribution + SOCX \\
-$E$ & Education capacity (suppressor) & Index & Standardized & Secondary enrollment (derived) \\
-$S$ & Social support (suppressor) & Composite & Standardized & WVS 4-item (A101, A106, A008, A009) \\
-$R$ & Welfare capacity (suppressor) & Index & Standardized & UNDP HDR + OECD SOCX \\
+$C$ & Cultural intensity (withdrawn) & Composite & Std.\ (neutralised to 0) & WVS 6-item; $\alpha=0.348$ \\
+$M$ & Media environment (retained modifier) & Index & Standardized & World Bank internet usage \\
+$T$ & Trauma / shock (retained modifier) & Index & Standardized & EM-DAT \texttt{total\_deaths} \\
+$D$ & Social atomization (withdrawn) & Composite & Std.\ (neutralised to 0) & WVS 5 configured items, 4 usable; $\alpha=-1.228$ \\
+$G$ & Redistribution capacity (withdrawn) & Index & Std.\ (neutralised to 0) & OECD scenarios; unavailable outside the OECD \\
+$E$ & Education capacity (retained modifier) & Index & Standardized & World Bank \texttt{SE.SEC.ENRR}, exact affine map \\
+$S$ & Social support (withdrawn) & Composite & Std.\ (neutralised to 0) & WVS 7 configured items, 3 available; 0 cells \\
+$R$ & Welfare capacity (retained modifier) & Index & Standardized & UNDP HDI, exact affine map \\
 \bottomrule
 \end{tabularx}
 
@@ -1695,13 +1758,13 @@ $R$ & Welfare capacity (suppressor) & Index & Standardized & UNDP HDR + OECD SOC
 Symbol & Definition & Domain / Constraint \\
 \midrule
 $\Phi$ & Contextual field: $\phi_0 + \textstyle\sum c_i M_{i} + \sum I_j + \sum Q_k$ & $\mathbb{R}$; clamped to $[-50,+50]$ \\
-$\alpha$ & Urbanization elasticity on $\log X$ & $(0.01,\,2.0]$ \\
-$\beta$ & Inequality elasticity on $\log Y$ & $(0.01,\,2.0]$ \\
+$\alpha$ & Urbanization elasticity on $\log X$ & $[0.05,\,5]$ (lower estimation bound $0.05$) \\
+$\beta$ & Inequality elasticity on $\log Y$ & $[0.05,\,5]$ (lower estimation bound $0.05$) \\
 $\phi_0$ & Field intercept (baseline offset in $\Phi$) & $[-10,\,10]$ \\
 $\varepsilon$ & Interior-band safety margin & $10^{-4}$ \\
 $\sigma(\cdot)$ & Standard logistic: $1/(1+e^{-u})$ & $(0,\,1)$ \\
-$\rho$ & Redistribution \%: $100(g^m - g^d)/g^m$ & $[0,\,100]$ \\
-$\mathcal{L}$ & Composite loss function & $\mathbb{R}^{+}$; minimized during fitting \\
+$\rho$ & Redistribution \%: $100(g^m - g^d)/g^m$ (channel $G$ withdrawn) & $[0,\,100]$ \\
+$\mathcal{L}$ & Estimation loss: unpenalised mean squared error on the bounded scale & $\mathbb{R}^{+}$; minimized during fitting \\
 $B$ & Reduced coordinate: $X^{\alpha} Y^{\beta}$ & $\mathbb{R}^{+}$ \\
 $s$ & Reduced shift: $\ln(B/k)$ & $\mathbb{R}$ \\
 $S$ & Stimulus: $X^{\alpha} Y^{\beta} e^{\Phi}$ & $\mathbb{R}^{+}$ \\
@@ -1716,11 +1779,11 @@ $S$ & Stimulus: $X^{\alpha} Y^{\beta} e^{\Phi}$ & $\mathbb{R}^{+}$ \\
 \toprule
 Symbol & Definition & Value & Role \\
 \midrule
-$k$ & Half-saturation constant & $[0.1,\,10]$ & $Z{=}0.5$ when $S{=}k$ \\
-$\lambda$ & Ridge shrinkage (L$_2$) & $>0$ & Regularization \\
-$x_{\min},x_{\max}$ & Urbanization bounds & 0.4, 0.9 & Clip for safe-band map \\
-$y_{\min},y_{\max}$ & Inequality bounds & $-1.5$, 3.5 & Clip for safe-band map \\
-$z_{\min},z_{\max}$ & Outcome range & $-1.318$, 1.815 & Normalization reference \\
+$k$ & Half-saturation constant & $[10^{-4},\,50]$ & $Z{=}0.5$ when $S{=}k$ \\
+$x/y$ (fitting) & Structural windows in the fitting script & $[0.2223,0.9544]$, $[-1.4601,3.428]$ & Clip for safe-band map \\
+$x/y$ (evaluation) & Structural windows in the model contract & $[0.3304,0.9544]$, $[-1.6078,3.428]$ & Differs from fitting (KI-18) \\
+$z$ (fitting) & Outcome anchors in the fitting script & $-2.3974$, $1.8573$ & 1st/99th percentiles of the panel \\
+$z$ (evaluation) & Outcome anchors in the model contract & $-1.8893$, $1.8541$ & \texttt{Z\_NORMALIZATION}; differs from fitting (KI-18) \\
 $\Phi$ clamp & Field clamping bounds & $[-50,+50]$ & Prevents overflow in $e^{\Phi}$ \\
 \bottomrule
 \end{tabularx}
@@ -1733,15 +1796,11 @@ $\Phi$ clamp & Field clamping bounds & $[-50,+50]$ & Prevents overflow in $e^{\P
 \toprule
 Term & Tier & Definition \\
 \midrule
-$c_C, c_M, c_T, c_D, c_G, c_E, c_S, c_R$ & A & Main-effect coefficients on standardized modifiers \\
-$c_{xy}$ ($X{\cdot}Y$) & B & Urbanization $\times$ Inequality interaction \\
-$c_{yr}$ ($Y{\cdot}R$) & B & Inequality $\times$ Welfare interaction \\
-$c_{tr}$ ($T{\cdot}R$) & B & Trauma $\times$ Welfare interaction \\
-$c_{cm}$ ($C{\cdot}M$) & B & Culture $\times$ Media interaction \\
-$c_{es}$ ($E{\cdot}S$) & B & Education $\times$ Social support interaction \\
-$c_{dt}$ ($D{\cdot}T$) & B & Atomization $\times$ Trauma interaction \\
-$c_{gr}$ ($G{\cdot}R$) & B & Redistribution $\times$ Welfare interaction \\
-$c_{c2}, c_{m2}, c_{t2}, c_{e2}$ & C & Quadratic curvature terms (exploratory) \\
+$c_M, c_T, c_E, c_R$ & A & Estimated main effects on standardized modifiers \\
+$c_C, c_D, c_G, c_S$ & A & Withdrawn channels: fixed at 0, no estimate \\
+$c_{yr}$ ($Y{\cdot}R$), $c_{tr}$ ($T{\cdot}R$) & B & Estimated interactions: inequality $\times$ welfare, trauma $\times$ welfare \\
+$c_{xy}, c_{cm}, c_{es}, c_{dt}, c_{gr}$ & B & Not estimated (fixed at 0): $X{\cdot}Y$, and interactions involving withdrawn channels \\
+$c_{c2}, c_{m2}, c_{t2}, c_{e2}$ & C & Quadratic terms: not estimated in the production fit (exploratory tier only) \\
 \bottomrule
 \end{tabularx}
 
@@ -1753,9 +1812,9 @@ $c_{c2}, c_{m2}, c_{t2}, c_{e2}$ & C & Quadratic curvature terms (exploratory) \
 \toprule
 Tier & Label & Params & Obs/Param & Inferential Role \\
 \midrule
-A & Baseline linear & 11 & 3.09 & Primary; sign consistency $\geq 0.70$ \\
-B & Nonlinear core & 18 & 1.89 & Primary; sign consistency $\geq 0.80$ \\
-C & Full nonlinear & 22 & 1.55 & Exploratory only; threshold 0.60; excluded from headlines \\
+A & Baseline linear & 18.82 & 3.09 & Primary; sign consistency $\geq 0.70$ \\
+B & Nonlinear core & 11.50 & 1.89 & Primary; sign consistency $\geq 0.80$ \\
+C & Full nonlinear & 9.41 & 1.55 & Exploratory only; threshold 0.60; excluded from headlines \\
 \bottomrule
 \end{tabularx}
 
@@ -1765,7 +1824,7 @@ C & Full nonlinear & 22 & 1.55 & Exploratory only; threshold 0.60; excluded from
 
 \noindent\justifying
 Table~S16 formalizes the regime labels used throughout the main manuscript and supplementary materials.
-Regimes are defined by the bounded-scale outcome $Z \in (\varepsilon, 1{-}\varepsilon)$ under the saturation mapping $Z = S/(S+k)$.
+Regimes are defined by the bounded-scale outcome $Z \in (\varepsilon, 1{-}\varepsilon)$ under the saturation mapping $Z = S/(S+k)$; support densities count the production-predicted $Z$ of the 207 country--years (\nolinkurl{supplementary_tables.json}).
 The ridge at $Z{=}0.5$ is a geometric property of this mapping (maximum curvature of the sigmoid), not an independently validated behavioral threshold.
 
 \begingroup
@@ -1775,15 +1834,15 @@ The ridge at $Z{=}0.5$ is a geometric property of this mapping (maximum curvatur
 \toprule
 Regime Label & Formal Definition & Empirical Characterization & Support Density \\
 \midrule
-Low-uptake & $Z < 0.33$ & Below-transition zone; outcome near floor. Marginal sensitivity $\partial Z/\partial\Phi = Z(1{-}Z)$ is low. Secular / low-religiosity country--years. & Sparse (${\approx}8/34$; 23.5\%); extrapolation risk elevated. \\
+Low-uptake & $Z < 0.33$ & Below-transition zone; outcome near floor. Marginal sensitivity $\partial Z/\partial\Phi = Z(1{-}Z)$ is low. Low values of the belief-intensity composite. & Sparse (${\approx}30/207$; 14.5\%); extrapolation risk elevated. \\
 \addlinespace
-Transition corridor & $0.33 \leq Z < 0.67$ & Mid-response band where sensitivity peaks. Contains moderate-religiosity and transitioning country--years. & Moderate (${\approx}18/34$; 52.9\%); best-supported regime. \\
+Transition corridor & $0.33 \leq Z < 0.67$ & Mid-response band where sensitivity peaks. & Best supported (${\approx}134/207$; 64.7\%). \\
 \addlinespace
-Ridge peak & $0.45 \leq Z \leq 0.55$ & Narrow band around $Z{=}0.5$ ($\Phi{+}s \approx 0$) where $\partial Z/\partial\Phi$ is maximal. Location determined by mapping geometry. & Sparse (${\approx}6/34$; 17.6\%); high leverage, limited coverage. \\
+Ridge peak & $0.45 \leq Z \leq 0.55$ & Narrow band around $Z{=}0.5$ ($\Phi{+}s \approx 0$) where $\partial Z/\partial\Phi$ is maximal. Location determined by mapping geometry. & ${\approx}38/207$ (18.4\%); high leverage. \\
 \addlinespace
-High-uptake & $Z \geq 0.67$ & Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. High-religiosity country--years. & Sparse (${\approx}8/34$; 23.5\%); saturation dominant. \\
+High-uptake & $Z \geq 0.67$ & Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. High values of the belief-intensity composite. & ${\approx}43/207$ (20.8\%); saturation dominant. \\
 \addlinespace
-Saturated tails & $Z \to 0$ or $Z \to 1$ & Extreme floor/ceiling where $\partial Z/\partial\Phi \approx 0$. Bounded map compresses effects; apparent stability may reflect mapping mechanics. & Very sparse; narratives prone to misinterpretation. \\
+Saturated tails & $Z \to 0$ or $Z \to 1$ & Extreme floor/ceiling where $\partial Z/\partial\Phi \approx 0$. Bounded map compresses effects; apparent stability may reflect mapping mechanics. & 1/207 predictions below 0.05 or above 0.95; narratives prone to misinterpretation. \\
 \bottomrule
 \end{tabularx}
 \endgroup

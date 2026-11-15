@@ -86,7 +86,7 @@
 
 \noindent \textbf{Why now.} Composite indicators assembled from shared survey item pools are increasingly common, and the failure mode documented here is generic: one wrong item code in a shared pool silently converts a predictor into a rescaling of the outcome. The checks that catch it are inexpensive. Deferring them is expensive.
 
-\noindent \textbf{Why it matters.} The paper reports a negative result that we believe reviewers will find more useful than a positive one. After the constructs were rebuilt and the panel re-derived (83 countries, 207 complete-case observations, 1990--2023), the saturating model reached a held-out $R^2$ of 0.4207, statistically indistinguishable from the 0.4006 of an ordinary linear regression on identical rows and folds, while trailing it in sample (0.2516 against 0.4556). We report the tie rather than a winner. The bounded form was chosen because the outcome is bounded, which is a fact about the measurement scale and not about the response shape; in this sample the shape is not supported. We report the comparison rather than the model in isolation, and we withdraw the saturation claim the original title asserted.
+\noindent \textbf{Why it matters.} The paper reports a negative result that we believe reviewers will find more useful than a positive one. After the constructs were rebuilt and the panel re-derived (83 countries, 207 complete-case observations, 1990--2023), the saturating model reached a held-out $R^2$ of 0.4207, close to the 0.3976 of an ordinary linear regression on identical rows and folds, while trailing it in sample (0.3461 against 0.4564). We report the tie rather than a winner. The bounded form was chosen because the outcome is bounded, which is a fact about the measurement scale and not about the response shape; in this sample the shape is not supported. We report the comparison rather than the model in isolation, and we withdraw the saturation claim the original title asserted.
 
 \SmallHeading{Primary evidence (Tier A/B refit OOS) versus exploratory evidence (Tier C)}
 \noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
@@ -95,7 +95,7 @@
 \item \textbf{Leave-one-country-out} (83 folds, retained as a spatial stress test): median OOS RMSE 0.1501 (Tier~A), 0.1325 (Tier~B), 0.1366 (Tier~C); pooled held-out $R^2$ 0.4117 / 0.4945 / 0.4827 across all 207 rows. Parameter sign consistency is reported per coefficient and sub-threshold terms are flagged as unstable rather than claimed stable.
 \item \textbf{Rolling-origin temporal validation} (25 forward-chaining folds): median OOS RMSE 0.1567 (Tier~A), 0.1602 (Tier~B), 0.1667 (Tier~C).
 \end{itemize}
-\noindent A separately gated lockbox holdout (frozen split, one-time evaluation per release cycle) confirms Tier~A/B stability without repeated peeking.
+\noindent A separately gated lockbox holdout (17 reserved country--years, frozen before the panel widened) is reported as a descriptive check on a thin set; no claim in the paper rests on it.
 
 \noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 1.0000) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
 
@@ -104,23 +104,23 @@
 \noindent The manuscript states the following constraints, consistent across Abstract, Results, Discussion, and the supplementary claim-evidence traceability map (Table~S0):
 \begin{itemize}
 \item No causal identification (observational panel; no IV, DiD, or RDD design).
-\item Thin effective support: 49 complete-case observations, with support-per-parameter ratios of 3.09 (Tier~A), 1.89 (Tier~B), 1.55 (Tier~C).
+\item Thin effective support: 207 complete-case observations, with support-per-parameter ratios of 18.82 (Tier~A), 11.50 (Tier~B), 9.41 (Tier~C).
 \item Ecological aggregation: country--year unit, not individual-level inference.
 \item Scenario comparisons are analyst-exploratory perturbations of the fitted surface, not policy-optimality recommendations.
 \end{itemize}
-\noindent Failure cases are documented rather than hidden: Estonia (MAE 0.292, sparse low-uptake), Russia (MAE 0.250, volatile transition), Slovak Republic (MAE 0.277, sparse mid-regime). Regime-coverage analysis shows low-uptake 23.5\%, mid-transition 52.9\%, high-uptake 23.5\% of unique support.
+\noindent Failure cases are documented rather than hidden: six preset countries exceed MAE 0.25 on year-averaged pairs, each on one to three rows (China (MAE 0.547), Georgia (MAE 0.427), Italy (MAE 0.423), Poland (MAE 0.396), Czechia (MAE 0.298), France (MAE 0.253)). Predicted-$Z$ regime support is low-uptake 14.5\%, transition corridor 64.7\%, high-uptake 20.8\% of the 207 country--years.
 
 \SmallHeading{Fit, significance, and reproducibility}
 
-\noindent The submission addresses a gap where nonlinear models are applied to small, unbalanced macro panels without standardized practices for reporting support, separating robust from exploratory findings, documenting instability, and constraining extrapolation. The paper contributes both validated bounded-nonlinear methodology and a working evidence-proportionality framework that separates Tier~A/B OOS-confirmed patterns from Tier~C exploratory sensitivity. We expect it to be of interest to readers working on comparative urban indicators, macro-urban scenario design, and visual decision support under uncertainty.
+\noindent The submission addresses a gap where composite indicators and nonlinear models are applied to small, unbalanced country panels without first establishing that the constructs measure anything. The paper contributes a reproducible construct audit with hard gates, an honest comparison of a bounded model against a linear baseline, and checks that bind every reported number to its artifact; it does not contribute a new model. It separates Tier~A/B out-of-sample evidence from Tier~C exploratory sensitivity. We expect it to be of interest to readers working on composite indicators, comparative survey data, and reproducible social science.
 
-\noindent Reproducibility is designed into the workflow: deterministic artifacts (parameters, bounded predictions, decomposed contributions) are exportable, and the repository ships the canonical panel, upstream provenance tables, versioned construct definitions, and deterministic regeneration commands. The supplementary claim-evidence traceability map (Table~S0) links all 11 major claims to artifact sources, evidence tiers, and uncertainty caveats.
+\noindent Reproducibility is designed into the workflow: deterministic artifacts (parameters, bounded predictions, decomposed contributions) are exportable, and the repository ships the canonical panel, upstream provenance tables, versioned construct definitions, and deterministic regeneration commands. The supplementary claim-evidence traceability map (Table~S0) links all 13 major claims to artifact sources, evidence tiers, and uncertainty caveats.
 
 \SmallHeading{Why \emph{Social Indicators Research}}
 
 \noindent The paper is a composite-indicator study before it is a modelling study. Its central object is the reliability of WVS-derived constructs, and its central method is the decision to withdraw three of four candidates rather than report them with caveats. That is the review culture this journal has built: indicators are judged on measurement grounds first, and thin-support macro panels are expected rather than disqualifying.
 
-\noindent The findings are stated at the level the evidence supports. Construct reliability is reported with Cronbach's alpha per construct and per country-year coverage. The bounded form is compared against an ordinary linear regression on identical rows and folds and found statistically indistinguishable out of sample; we report the tie instead of a winner. Sample limits are stated in the abstract, the title page and the supplement, and every number traces to a committed artifact that a reviewer can regenerate with one command.
+\noindent The findings are stated at the level the evidence supports. Construct reliability is reported with Cronbach's alpha per construct and per country-year coverage. The bounded form is compared against an ordinary linear regression on identical rows and folds and found close out of sample (paired difference 0.0146 against a fold-to-fold interquartile range near 0.32); we report the near-tie instead of a winner. Sample limits are stated in the abstract, the title page and the supplement, and every number traces to a committed artifact that a reviewer can regenerate with one command.
 
 \noindent Two further details matter for editorial assessment. First, the paper includes a correction note describing an earlier version's defect---an outcome that was an exact rescaling of a predictor---because a methods paper that silently changes its numbers is worse than one that explains why. Second, the reproduction path is complete: the canonical panel rebuilds byte-for-byte from hash-pinned inputs, and an independent verifier re-derives every construct from the raw microdata without importing the producer.
 

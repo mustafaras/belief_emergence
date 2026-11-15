@@ -37,17 +37,21 @@ What is now true:
 - `Z` reaches `alpha = 0.8187` over 287 country-years and is retained;
 - `C` (`0.3482`), `D` (`-1.2285`) and `S` (uncomputable) fail the reliability
   floor and are **declared but not estimated**; the model runs on seven columns;
-- the canonical panel is 87 complete-case country-years, 48 countries,
-  1990–2022, with no scenario replication;
-- in-sample `R² = 0.3854`; the saturating form loses to a linear baseline
-  (0.10 vs 0.20);
+- the canonical panel is 207 complete-case country-years, 83 countries,
+  1990–2023, with no scenario replication;
+- in-sample `R² = 0.3461` for the saturating form against
+  0.4564 for a linear baseline; out of sample the two are
+  close (median held-out `R²` 0.4207 against 0.3976; the saturating form
+  leads on 75 of 100 identical folds by a median of 0.0146, with no significance test);
 - primary out-of-sample evidence is repeated grouped k-fold
-  (`cv_kfold.json`): 100 folds, median held-out `R²` 0.2707 / 0.2790 / 0.2617 for
+  (`cv_kfold.json`): 100 folds, median held-out `R²` 0.4207 / 0.5239 / 0.5038 for
   Tier A/B/C, leakage none, `R²` defined in every fold. Country-out is retained
-  as a spatial stress test; its per-fold median is negative only because 36 of
-  48 folds hold fewer than three rows, and its pooled series is positive
-  (0.3026 / 0.2579 / 0.2724);
-- `npm run q1:gate` returns **READY 24/24**.
+  as a spatial stress test; its per-fold median is negative only because 48 of
+  83 folds hold fewer than three rows, and its pooled series is positive
+  (0.4117 / 0.4945 / 0.4827);
+- every number in the manuscript is checked against its artifact by
+  `npm run check:manuscript-consistency`; the open items are in
+  `docs/PAPER_SYNC_REPORT.md`.
 
 See [`../docs/KNOWN_ISSUES.md`](../docs/KNOWN_ISSUES.md) for the itemised
 history and [`../docs/ROADMAP_TO_SUBMISSION.md`](../docs/ROADMAP_TO_SUBMISSION.md)
