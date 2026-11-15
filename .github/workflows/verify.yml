@@ -210,6 +210,30 @@ jobs:
       - name: Install the lockfile-pinned Chromium build
         run: npx playwright-core install chromium
 
+      - name: Compare 3D surface against its macOS baseline
+        env:
+          RENDER_CHECK_PORT: '5199'
+          SURFACE_BASE_URL: http://127.0.0.1:5199/belief_emergence/
+        run: |
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-surface-ci.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null "$SURFACE_BASE_URL"; then
+              echo "dev server up after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+          if ! curl -fsS -o /dev/null "$SURFACE_BASE_URL"; then
+            echo "dev server did not start; last log lines:"
+            tail -20 /tmp/vite-surface-ci.log
+            exit 1
+          fi
+          CHROME_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")
+          test -x "$CHROME_PATH" || { echo "Chromium not executable: $CHROME_PATH"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run check:surface-snapshot
+
       - name: Compare all route screenshots
         env:
           VISUAL_CHECK_PORT: '5199'

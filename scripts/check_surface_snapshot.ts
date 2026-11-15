@@ -11,9 +11,10 @@
  * The component draws through Plotly into a canvas. Nothing about that output can be
  * asserted from the source: a moved helper, a changed constant or a reordered effect
  * changes the picture without changing any value a unit test can read. The baseline is
- * committed alongside this file. The comparison decodes PNG scanlines and compares their
- * pixels, so platform-specific PNG compression does not affect the result. Linux's
- * viewport is one pixel shorter; there the common image rows are compared exactly.
+ * committed alongside this file and captured on macOS. The comparison decodes PNG
+ * scanlines and compares their pixels, so platform-specific PNG compression does not
+ * affect the result. Headless WebGL rasterization differs on Linux, so CI runs this golden
+ * comparison in the dedicated macOS visual-baselines job.
  *
  * The screenshot is deterministic here — captured twice from the same build, pixel-identical
  * — which is what makes it usable as an acceptance test rather than a source of flaky failures.
@@ -133,6 +134,11 @@ function decodePng(buffer: Buffer): DecodedPng {
 }
 
 async function main(): Promise<void> {
+  if (process.platform !== 'darwin') {
+    console.log('SKIP  surface golden comparison is run on macOS against its reviewed baseline')
+    return
+  }
+
   const { chromium } = (await import('playwright-core')) as typeof import('playwright-core')
   const chromePath =
     process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
@@ -204,20 +210,15 @@ async function main(): Promise<void> {
   const hash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex')
   const capturedPixels = decodePng(captured)
 
-  const heightDifference = Math.abs(expectedPixels.height - capturedPixels.height)
-  const allowedHeightDifference = process.platform === 'linux' ? 1 : 0
-  const commonHeight = Math.min(expectedPixels.height, capturedPixels.height)
-  const commonBytes = expectedPixels.width * commonHeight * 4
   const pixelIdentical =
     expectedPixels.width === capturedPixels.width &&
-    heightDifference <= allowedHeightDifference &&
-    expectedPixels.rgba.subarray(0, commonBytes).equals(capturedPixels.rgba.subarray(0, commonBytes))
+    expectedPixels.height === capturedPixels.height &&
+    expectedPixels.rgba.equals(capturedPixels.rgba)
 
   if (pixelIdentical) {
     console.log(
       `PASS  surface renders pixel-identically to the baseline ` +
-        `(${expectedPixels.width}×${capturedPixels.height} pixels; PNG encoding ignored` +
-        `${heightDifference ? ', one-pixel Linux height difference ignored' : ''})`,
+        `(${expectedPixels.width}×${capturedPixels.height} pixels; PNG encoding ignored)`,
     )
     return
   }
