@@ -66,6 +66,13 @@
     "generate:artifact-facts": "tsx scripts/generate_artifact_facts.ts",
     "check:surface-snapshot": "tsx scripts/check_surface_snapshot.ts",
     "generate:presets": "tsx scripts/generate_presets.ts",
+    "generate:marginal-effects": "tsx scripts/generate_marginal_effects.ts",
+    "generate:preset-alignment": "tsx scripts/generate_preset_alignment.ts",
+    "generate:supplement-tables": "tsx scripts/generate_supplement_tables.ts",
+    "generate:coefficient-bootstrap": "python3 scripts/bootstrap_coefficients.py",
+    "generate:window-sensitivity": "python3 scripts/window_sensitivity.py",
+    "generate:notation-glossary": "python3 scripts/update_notation_glossary.py",
+    "generate:data-figures": "python3 scripts/make_paper_figures.py",
     "check:presets": "tsx scripts/check_presets.ts"
   },
   "dependencies": {

@@ -67,6 +67,16 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'The decision to retain or drop the R channel given its VIF, with the in-sample and k-fold cost of dropping it, and the reasoning for the choice.',
   reviewer_red_team:
     'A hostile-but-fair reviewer simulation: high-risk criticisms, the artifact-backed rebuttal for each, and resolution status.',
+  coefficient_bootstrap:
+    'Country-level cluster-bootstrap intervals for the production coefficients, showing which estimates are distinguishable from zero.',
+  structural_window_sensitivity:
+    'In-sample fit of the shipped coefficients under the fitting, evaluation and realised X/Y windows, and a refit with no clamping, which shows the exponent collapse is not a clamping artefact.',
+  marginal_effects:
+    'Finite-difference change in Z for a one-standard-deviation shock in each retained modifier at three structural baselines, regenerated from the production-pinned map.',
+  preset_country_alignment:
+    'Observed-versus-predicted alignment per country on year-averaged pairs, with the countries that exceed the failure threshold, from the same function the application uses.',
+  supplementary_tables:
+    'Temporal slices, structural ablations and a country-level cluster bootstrap of the production map, which replace supplementary tables that described a retired panel.',
   software_environment:
     'Exact interpreter and library versions used to produce the artifacts, so the pipeline can be reconstructed.',
   temporal_outlier_2006_sensitivity:

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "phase1.coefficient_bootstrap.v1",
+  "generatedAtIso": "2026-11-15T10:38:21.121136+00:00",
+  "method": "Country-level cluster bootstrap, 300 resamples, seed 20260101; each draw refitted by bounded L-BFGS-B from the shipped optimum (same loss, bounds and fixed 1st/99th-percentile target anchoring as fit_coefficients_v2.py). Intervals are percentile intervals of a local refit conditional on the shipped basin.",
+  "resamples": 300,
+  "nCountries": 83,
+  "refitOfFullPanelLoss": 0.03402173601643207,
+  "parameters": {
+    "phi0": {
+      "estimate": 3.3430518940908516,
+      "lo": 3.258094462301018,
+      "median": 3.349220764613359,
+      "hi": 3.4438803917605423,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    },
+    "alpha": {
+      "estimate": 0.05000000004100796,
+      "lo": 0.05000000000000001,
+      "median": 0.05000000000000001,
+      "hi": 0.05000000000000001,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    },
+    "beta": {
+      "estimate": 0.05000000000209442,
+      "lo": 0.05000000000000001,
+      "median": 0.05000000000000001,
+      "hi": 0.05000000000000001,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    },
+    "k": {
+      "estimate": 14.61634212075696,
+      "lo": 13.214507849860409,
+      "median": 14.526446403468425,
+      "hi": 15.912377052896645,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    },
+    "c_M": {
+      "estimate": -0.13563040015342476,
+      "lo": -0.30047776991251063,
+      "median": -0.14605354246565933,
+      "hi": 0.022465687643028465,
+      "shareSameSign": 0.96,
+      "excludesZero": false
+    },
+    "c_T": {
+      "estimate": -0.08578230246394702,
+      "lo": -0.2338891792703183,
+      "median": -0.084118130337085,
+      "hi": 0.08506268706903748,
+      "shareSameSign": 0.8433333333333334,
+      "excludesZero": false
+    },
+    "c_E": {
+      "estimate": 0.38822152894576467,
+      "lo": 0.09999216820912514,
+      "median": 0.40319183473583553,
+      "hi": 0.7567378856917508,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    },
+    "c_R": {
+      "estimate": 0.25871933576557815,
+      "lo": -0.08639702765413713,
+      "median": 0.2692629676159791,
+      "hi": 0.5970846342679429,
+      "shareSameSign": 0.9233333333333333,
+      "excludesZero": false
+    },
+    "c_tr": {
+      "estimate": -0.1668243049602075,
+      "lo": -0.3486685724538074,
+      "median": -0.1675240498519291,
+      "hi": 0.03591559223344207,
+      "shareSameSign": 0.9466666666666667,
+      "excludesZero": false
+    },
+    "c_yr": {
+      "estimate": 0.632454900494166,
+      "lo": 0.10044059159664555,
+      "median": 0.634625663792549,
+      "hi": 1.1498952389671289,
+      "shareSameSign": 0.99,
+      "excludesZero": true
+    },
+    "phi0_minus_lnk": {
+      "estimate": 0.6609116680123432,
+      "lo": 0.49099724258141036,
+      "median": 0.6732498901026933,
+      "hi": 0.8625691237307872,
+      "shareSameSign": 1.0,
+      "excludesZero": true
+    }
+  },
+  "shareOnLowerBound": {
+    "alpha": 1.0,
+    "beta": 1.0
+  }
+}

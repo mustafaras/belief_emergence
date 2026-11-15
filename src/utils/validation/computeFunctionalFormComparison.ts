@@ -55,6 +55,13 @@ export type FunctionalFormComparison = {
   nRows: number;
   kfold: { k: number; repeats: number; folds: number; seed: number };
   models: ModelComparison[];
+  /**
+   * Paired held-out difference (saturating minus linear) on the identical folds.
+   * Descriptive only: folds within a repeat share rows and repeats share countries,
+   * so no p-value is attached, because treating the 100 folds as independent would
+   * overstate the evidence.
+   */
+  pairedKfold: { n: number; median: number; q25: number; q75: number; shareSaturatingAhead: number };
   verdict: string;
   provenance: {
     notes: string[];
@@ -62,6 +69,22 @@ export type FunctionalFormComparison = {
     sameRows: boolean;
   };
 };
+
+function pairedDifference(
+  saturating: number[],
+  linear: number[],
+): { n: number; median: number; q25: number; q75: number; shareSaturatingAhead: number } {
+  if (saturating.length !== linear.length) throw new Error('paired folds are misaligned');
+  const diffs = saturating.map((v, i) => v - linear[i]).filter((v) => Number.isFinite(v));
+  const sorted = [...diffs].sort((a, b) => a - b);
+  return {
+    n: diffs.length,
+    median: quantile(sorted, 0.5),
+    q25: quantile(sorted, 0.25),
+    q75: quantile(sorted, 0.75),
+    shareSaturatingAhead: diffs.filter((v) => v > 0).length / diffs.length,
+  };
+}
 
 /** Ridge term, matching the order of magnitude the saturating fit uses. */
 const RIDGE = 1e-6;
@@ -374,6 +397,7 @@ export function computeFunctionalFormComparison(
     nRows: rows.length,
     kfold: { k, repeats, folds: k * repeats, seed },
     models: [linear, saturating],
+    pairedKfold: pairedDifference(saturatingKfoldR2, linearKfoldR2),
     verdict,
     provenance: {
       notes: [

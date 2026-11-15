@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.functional_form_comparison.v1",
-  "generatedAtIso": "2026-11-11T15:29:16.415Z",
+  "generatedAtIso": "2026-11-15T10:38:18.858Z",
   "purpose": "Tests whether the bounded saturation form beats an ordinary linear regression on identical rows and folds.",
   "covariates": [
     "X",
@@ -77,6 +77,13 @@
       }
     }
   ],
+  "pairedKfold": {
+    "n": 100,
+    "median": 0.014599868649503689,
+    "q25": 0.000057499795960092026,
+    "q75": 0.02764496016074544,
+    "shareSaturatingAhead": 0.75
+  },
   "verdict": "The saturating form matches or beats the linear baseline on held-out R2 (0.4207 against 0.3976).",
   "provenance": {
     "notes": [

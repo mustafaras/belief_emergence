@@ -5,15 +5,15 @@
  * SOURCE: Hardcoded in this file (see OPTIMIZED_SIGMOID_COEFFICIENTS below)
  * Canonical headline metrics: src/data/metrics/headline_metrics_authoritative.json
  * Generation command: npm run generate:headline-metrics
- * Dataset: 167 observations, 76 countries, years 1990-2023
+ * Dataset: 207 observations, 83 countries, years 1990-2023
  * Training Date: 2026-11-11
  * Training/optimizer metadata metrics: R²=0.3376, Correlation=0.6207, MAE=0.1643, RMSE=0.2134, Bias=0.0254 (obs - pred)
  * Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *
  * IMPORTANT (METRICS):
  *   The numbers above are the optimizer/training summary embedded in the coefficients JSON.
- *   The app/paper "headline" metrics are the canonical panel-fit computed on the 167-row v2 panel
- *   using CANONICAL_PREPROCESSING + structural=fixed_map:
+ *   The app/paper "headline" metrics are the canonical panel-fit computed on the 207-row v2 panel
+ *   using CANONICAL_PREPROCESSING + structural=fixed_map (207-row v2 panel):
  *     scripts/generate_headline_metrics.ts (run via: npm run generate:headline-metrics)
  *     Data: public/data/panel_canonical_v2.csv
  *     Output: src/data/metrics/headline_metrics_authoritative.json

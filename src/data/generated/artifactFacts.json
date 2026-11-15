@@ -13,6 +13,10 @@
       "generatedAt": "2026-11-11T15:21:41.041Z",
       "rowCount": 207
     },
+    "coefficient_bootstrap": {
+      "schemaVersion": "phase1.coefficient_bootstrap.v1",
+      "generatedAt": "2026-11-15T10:38:21.121136+00:00"
+    },
     "coefficient_fit": {
       "schemaVersion": "phase1.coefficient_fit.v1",
       "generatedAt": "2026-11-11T14:30:00.000Z",
@@ -73,7 +77,7 @@
     },
     "functional_form_comparison": {
       "schemaVersion": "phase1.functional_form_comparison.v1",
-      "generatedAt": "2026-11-11T15:29:16.415Z",
+      "generatedAt": "2026-11-15T10:38:18.858Z",
       "rowCount": 207
     },
     "gini_window_sensitivity": {
@@ -88,6 +92,10 @@
       "schemaVersion": "phase1.lockbox_holdout.v1",
       "generatedAt": "2026-11-07T14:41:08.896Z",
       "rowCount": 87
+    },
+    "marginal_effects": {
+      "schemaVersion": "phase1.marginal_effects.v1",
+      "generatedAt": "2026-11-15T10:38:19.139Z"
     },
     "metrics_authoritative": {
       "generatedAt": "2026-11-11T15:29:36.137Z",
@@ -105,7 +113,7 @@
     },
     "notation_glossary": {
       "schemaVersion": "phase1.notation_glossary.v1",
-      "generatedAt": "2026-11-09T11:15:00.000Z"
+      "generatedAt": "2026-11-15T10:38:25.216729+00:00"
     },
     "parameter_stability": {
       "schemaVersion": "phase1.parameter_stability.v1",
@@ -114,6 +122,10 @@
     "prediction_interval_coverage": {
       "schemaVersion": "phase1.prediction_interval_coverage.v2",
       "generatedAt": "2026-11-11T15:29:15.683Z"
+    },
+    "preset_country_alignment": {
+      "schemaVersion": "phase1.preset_country_alignment.v1",
+      "generatedAt": "2026-11-15T10:38:19.413Z"
     },
     "q1_submission_gate_report": {
       "schemaVersion": "phase1.q1_submission_gate.v1",
@@ -131,6 +143,15 @@
     "software_environment": {
       "schemaVersion": "phase1.software_environment.v1",
       "generatedAt": "2026-11-10T14:59:41.483Z"
+    },
+    "structural_window_sensitivity": {
+      "schemaVersion": "phase1.structural_window_sensitivity.v1",
+      "generatedAt": "2026-11-15T10:38:21.413783+00:00",
+      "rowCount": 207
+    },
+    "supplementary_tables": {
+      "schemaVersion": "phase1.supplementary_tables.v1",
+      "generatedAt": "2026-11-15T10:38:19.698Z"
     },
     "temporal_outlier_2006_sensitivity": {
       "schemaVersion": "phase1.temporal_outlier_2006_sensitivity.v1",

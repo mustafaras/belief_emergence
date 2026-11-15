@@ -78,7 +78,9 @@ describe('evidence index matches the tree', () => {
     // The headline claim is "10 of 33" after Prompt 5 wired the three limit artifacts from
     // rawdata/ to a committed artifact for Prompt 3. Pinned here so a changed number has
     // to be changed deliberately, alongside the sentence that states it.
-    expect(names.length).toBe(33)
+    // 36 after the marginal-effects, preset-alignment and supplementary-table generators
+    // replaced hand-typed manuscript tables (none of the three is imported by the interface).
+    expect(names.length).toBe(38)
     expect(ARTIFACT_CONSUMPTION.imported.length).toBe(10)
     expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
   })
