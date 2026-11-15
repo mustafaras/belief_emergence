@@ -35,7 +35,8 @@ kept only to describe what the defect was.
 | KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
 | KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
 | KI-16 | Lockbox cannot be honoured | **CLOSED, scope narrowed** — 17 of 87 originally drawn cells stay reserved; 59 backfilled cells added after the split are not lockbox-protected. Disclosed in Lockbox protocol status (main §6). |
-| KI-17 | Functional form vs linear baseline | **REVISED** — measured; the two are indistinguishable out of sample |
+| KI-17 | Functional form vs linear baseline | **REVISED** — measured; close out of sample (bounded leads on 75 of 100 identical folds by a median of 0.0146); linear is ahead in sample |
+| KI-18 | Fitting and evaluation use different X/Y windows and outcome anchors | **OPEN, quantified** — disclosed in the manuscript; unify and refit is a priority extension |
 
 ---
 
@@ -124,6 +125,26 @@ Computed honestly from the declared codings, with no alignment:
 So a correct rebuild does not produce two mildly correlated constructs. It
 produces two constructs that are *negatively* related, and one of them (`C`)
 has alpha 0.30. The +0.496 figure must not be cited anywhere.
+
+---
+
+## KI-18 — The fitting script and the evaluation contract use different structural windows and outcome anchors
+
+**Found 2026-11-15.** The manuscript said the X/Y bounds "are the realised ranges of the v2 panel". They are not.
+
+| | X window | Y window | rows clamped (X / Y) | in-sample R² (observed scale) |
+|---|---|---|---|---|
+| fitting script (`fit_coefficients_v2.py`) | 0.2223–0.9544 | -1.4601–3.4280 | 11 / 9 | 0.3466 |
+| evaluation contract (`modelContract.ts`) | 0.3304–0.9544 | -1.6078–3.4280 | 32 / 8 | 0.3396 |
+| realised panel range | 0.1035–0.9544 | -1.5585–5.2159 | 0 / 0 | 0.3755 |
+
+The fitting script anchors the target at the 1st/99th percentiles of the current panel (-2.3974, 1.8573); the evaluation uses `Z_NORMALIZATION` (-1.8893, 1.8541). The bounded-scale R² of the same predictions is 0.3763 against the fitting anchors and 0.3317 against the evaluation anchors.
+
+**Does it change the finding?** A full refit under the realised ranges (no clamping) gives R² 0.3786; alpha and beta stay on their lower bound; c_M, c_T and c_E move by less than 0.003. The exponent collapse (KI-15) is therefore not a clamping artefact. phi0 and k change individually but not phi0 − ln k, the only combination identified when the structural base is near one.
+
+**Resolution protocol (fixed 2026-11-15, before it is run).** Convention: X and Y windows equal the realised panel ranges; Z anchors equal the current panel's 1st and 99th percentiles; the same constants are used by the fitting script, the model contract and every generator. Choosing them by principle rather than by fit avoids post-hoc specification selection. When executed: refit, regenerate every artifact, report old and new headline numbers side by side, and do not change any conclusion without a new sentence stating the change. Preferably executed after the v2 application exists, because the Claim Registry and the consistency guards then update the interface and the manuscript numbers mechanically.
+
+**State.** Disclosed in the manuscript (Section 8, "Structural window and anchoring") and checked by `STRUCTURAL_WINDOW_DRIFT`. Not fixed, because unifying the windows and refitting changes every downstream artifact. Regenerate with `npm run generate:window-sensitivity`.
 
 ---
 
@@ -411,6 +432,8 @@ country-out, pooled held-out series             Tier A   Tier B   Tier C
   refit R2 (predict every row once)             +0.3853  +0.4288  +0.4036
   canonical R2                                  +0.2605  +0.3062  +0.2516
 ```
+
+*Historical record: these values are from the 146-row panel at the time of the fix. Current values are in `cv_country_out.json` (`pooledRefit`, `pooledCanonical`).*
 
 The gap between those two lines is the issue itself: the negative per-fold
 median was a variance ratio computed on one to four points, not a statement

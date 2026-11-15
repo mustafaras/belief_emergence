@@ -1,10 +1,10 @@
 # Roadmap to submission — evidence-first rebuild
 
-**Baseline:** 39/100 (reviewer assessment, 2026-11-07)
+**Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status:** Phase 1 and 2.1–2.2 complete; Phase 3 and 4 partially complete
-**Last reconciled against the tree:** 2026-11-09
+**Status (2026-11-15):** the manuscript/data track has open reconciliation work listed below; the separate application execution sequence is recorded through Prompt 13.
+**Last reconciled against the tree:** 2026-11-15
 
 > **Read this before trusting any number below.** The plan was written on
 > 2026-11-07 against the *defective* tree. Several figures in the original
@@ -14,6 +14,54 @@
 > `src/data/analysis/`. Where the two disagree, the artifact wins; the
 > measured value is shown in the status tables and the original projection is
 > kept only where it still explains a decision.
+
+## Live status — 2026-11-15
+
+The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
+207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
+`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
+counts and the digest were read directly from the tracked CSV. The current
+`metrics_authoritative.json` records `n=207`, `R²=0.3461`, `r=0.6150`,
+`MAE=0.1617`, and `RMSE=0.2089`. `model_complexity_support.json` records
+18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and C;
+Tiers A/B are primary and Tier C is exploratory. The stored submission-gate
+report says READY (27/27), generated 2026-11-11; that is recorded evidence, not
+a fresh run on 2026-11-15.
+
+The 2026-11-09 reconciliation below predates the panel widening from 167 to
+207 rows. The following discrepancies remain open and take priority over
+submission decisions:
+
+1. **Reconcile the current sample everywhere.** `REPLICATION_RUNBOOK.md` still
+   says 167 rows / 76 countries and expects the older `n=167`, `R²=0.2516`
+   metrics. The manuscript describes 207 rows but also says they are only 167
+   distinct country-year pairs; a direct key count finds 207. Table S18's
+   introduction still labels its source artifact `n=167`, although
+   `c_dominance_sensitivity.json` records `nRows=207`. The app plan and prompt
+   documents also contain 167-row / 76-country statements. Update these
+   references from the canonical CSV and regenerate any dependent checks before
+   treating the stored READY report as current document-wide evidence.
+2. **Refresh stale analysis artifacts.** `reviewer_red_team.json` still carries
+   old sample arithmetic, Tier support ratios, and the superseded Table S18
+   claim. `notation_glossary.json` still reports regime counts out of 146.
+   Reconcile both to the 207-row artifacts and manuscript.
+3. **Repair the journal-target source reference.** `journal_fit_targeting.json`
+   names `TARGET_JOURNALS.md`, but no such file is present in the current tree.
+   Decide on one maintained source and make the artifact point to it.
+4. **Close the two remaining measurement-audit documentation items.** The main
+   text reports construct alpha, but the planned supplement table is absent.
+   The retired v1 panel is not archived under `docs/archive/`; its historical
+   Git object remains available, so decide whether that satisfies the audit
+   requirement or create the requested archive.
+5. **Finish pre-release data-use checks.** The runbook still lists confirmation
+   of CRED permission, OECD extract-size limits, and redistribution terms for
+   the derived panel as open.
+
+The stored quantitative artifact set is mostly built against the 207-row panel;
+the open items above are documentation and artifact reconciliation, not a
+request to rerun or alter empirical analyses without first checking their
+current source contracts. The app's separate execution sequence records
+Prompts 0–13 as complete and contains no Prompt 14.
 
 ### What the Gini backfill changed (2026-11-09, later same day)
 
@@ -45,7 +93,7 @@ fit rises monotonically A < B < C (0.4633 / 0.5399 / 0.5470), but under repeated
 grouped k-fold C lands *below* B (0.4358 vs 0.4665). Eleven extra parameters
 reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
-### Measured status (2026-11-09)
+### Historical measured status (2026-11-09; superseded by Live status)
 
 | Quantity | Measured | Source |
 |---|---|---|
@@ -62,41 +110,13 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ---
 
-## 0. Why 95 is not the right target
+## Current documented score
 
-A 95 requires the paper to be simultaneously: (a) free of measurement
-defects, (b) supported by enough independent cells for its parameter count,
-and (c) reproducible by a reviewer.
-
-Two hard constraints make (b) unreachable at the current scope:
-
-| Constraint | Measured | Consequence |
-|---|---|---|
-| Item-level WVS in repo | WVS Trend File extract, 1981–2022 | 305 country-years computable; 287 emit `Z` |
-| Complete cases in canonical panel | **167** (76 countries, 1990–2023) | 7 predictors × 11 params ⇒ **23.86** obs/param at Tier A |
-| Tier C parameter count | 22 | 167 cells ⇒ **12.85** obs/param — comfortably clears the <5 rule of thumb |
-| Redistribution licence | WVS microdata restricted | reviewer cannot re-derive `Z` without a download manifest |
-
-Even with a perfect rebuild, 22 parameters over 167 cells is no longer thin: 12.85 observations per parameter. A Q1
-methods reviewer will not score that 95. Realistic ceiling:
-
-| Scenario | Cells | Parameters | Expected score |
-|---|---:|---:|---:|
-| Baseline as reviewed | 34 (defective) | 22 | **39** |
-| Honest narrow (single wave) | 13 | 22 | 72–78 |
-| Honest narrow + reduced model | 13 | 8 | 78–84 |
-| **Rebuild as landed, 167 cells, 11-param Tier A** | **167** | **11** | **88–91** |
-| Rebuild + WVS waves 3–6 acquired | 200+ | 11 | 90–93 |
-
-**The plan below targets the 86–90 row and does not manufacture the last
-5 points.** If 95 is non-negotiable, the only path is the WVS data-use
-application in Phase 4-B, and even then the score depends on reviewer
-variance you do not control.
-
-**Current position on this ladder:** between the third and fourth row. The
-11-parameter Tier A model is defined and fits at R² = 0.3854, but Tier C is
-still estimated and reported at 7.59 obs/param (Phase 2.3 is open), which is
-what keeps the paper below the 86–90 band.
+The latest score recorded in project planning documents is **95/100**, dated
+2026-11-11 (`docs/APP_PLAN.md`, `docs/APP_EXECUTION_PROMPTS.md`). Those notes do
+not include the scoring rubric or a detailed reviewer report, and no later
+score is recorded. Treat 95/100 as the latest documented standing. Older
+baselines and projected scores have been removed from this working roadmap.
 
 ---
 
@@ -204,61 +224,40 @@ Two defensible options; pick one and state it in the paper:
 | Option | Cells | Consequence |
 |---|---|---|
 | **A. Wave-7 frame** | 13 in-frame | Smallest claim, fastest, fully verifiable |
-| **B. All-country frame** | 94 projected / **126 realised** | Larger, but abandons the "23-country panel" framing |
+| **B. All-country frame** | 94 projected / **126 realised at decision time** | Larger, but abandons the "23-country panel" framing |
+
+The 126-cell value is the 2026-11-09 decision snapshot; the canonical panel
+was widened to 207 rows on 2026-11-11.
 
 **Decision taken: Option B.** The canonical panel is
-`public/data/panel_canonical_v2.csv` — **126 complete-case country-years,
-66 countries, 1990–2022**, SHA-256 `40DB5B83…A232B24C`. At 11 parameters that
-is 7.9 obs/param at Tier A.
+`public/data/panel_canonical_v2.csv` — **207 complete-case country-years,
+83 countries, 1990–2023**, SHA-256
+`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`.
 
 - [x] Chooses Option B and renames the panel (v1 retired, v2 pinned).
-- [ ] Retain the retired v1 panel under `docs/archive/` for audit. It was
-      deleted outright in `b3477ee`, so the audit trail exists only in git
-      history (`git show 8f5c06b:public/data/panel_canonical_23_countries_v1.csv`).
+- [ ] Retain the retired v1 panel under `docs/archive/` for audit. It is absent
+      from the current tree; the historical blob is still available at
+      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv`. Decide whether
+      the Git history is sufficient or add the requested archive.
 
 ### 2.3 Reduce the model to what support allows
 
-At **126** realised cells:
+At **207** realised cells, the current support artifact records:
 
-| Tier | Params | obs/param | Verdict |
+| Tier | Params | obs/param | Current role |
 |---|---:|---:|---|
-| A | 11 | 7.9 | keep, primary |
-| B | 18 | 4.8 | keep, secondary (support-risk flag set) |
-| C | 22 | 7.59 | **drop or relabel as exploratory appendix** |
+| A | 11 | 18.82 | primary |
+| B | 18 | 11.50 | primary |
+| C | 22 | 9.41 | exploratory |
 
-Dropping Tier C removes the "22 parameters" attack surface entirely. The
-paper becomes an 11-parameter model with an explicitly exploratory appendix.
+Dropping Tier C was considered as a way to remove the "22 parameters" attack
+surface. The decision was to retain it as an explicitly exploratory appendix.
 
-**Status:** [x] **decided 2026-11-09 — Tier C is retained as an exploratory
-appendix, not dropped.**
-
-The decision was blocked on evidence until the evaluation was fixed. Grouped
-k-fold now supplies it:
-
-| Tier | Params | In-sample $R^2$ | Held-out $R^2$ (median) | IQR | obs/param |
-|---|---:|---:|---:|---|---:|
-| A | 11 | 0.4728 | **0.4063** | 0.150–0.501 | 15.18 |
-| B | 18 | 0.5549 | 0.4767 | 0.155–0.518 | 9.28 |
-| C | 22 | 0.5642 | 0.4802 | 0.128–0.520 | 7.59 |
-
-Eleven extra parameters over Tier A buy **+0.091 in sample (0.4728 -> 0.5642) and
-+0.074 out of sample (0.4063 -> 0.4802)**, but that out-of-sample gain over Tier B
-is only +0.004 (0.4767 -> 0.4802) and the sign of C-B flips across fold
-assignments. Complexity buys almost no incremental transfer over the cheaper
-Tier B, which is the finding: the correct response is to report that gap as
-evidence about the functional form, not to delete the tier.
-
-Why not drop it:
-- The gate already enforces `inferentialRole: exploratory` and
-  `supportRiskFlag: true` for C (`model_complexity_support.json`), so no
-  headline claim can use it.
-- The paper's contribution is an audit protocol, and a tier that gains 0.111
-  in sample while losing 0.009 out of sample is the demonstration.
-- Dropping it would also drop the honest disclosure of what happened when the
-  full interaction structure was estimated.
-
-Guarded by `tests/model.tierDiscipline.test.ts`: if a future regeneration marks
-Tier C primary or removes the support-risk flag, the suite fails.
+**Status:** [x] Tier C remains an exploratory appendix. The current
+`model_complexity_support.json` records A/B as primary, C as exploratory, and
+`supportRiskFlag: false` for all three tiers. The previous table and discussion
+used earlier 126/167-row snapshots and are superseded; current values must be
+read from the linked 207-row artifacts.
 
 ---
 
@@ -267,34 +266,37 @@ Tier C primary or removes the support-risk flag, the suite fails.
 Nothing from the current manuscript survives this phase. Assume a full
 rewrite of Sections 5 and 7.
 
-- [x] Regenerate all 20 artefacts under `src/data/analysis/` from the new panel.
-      → **16 of 20** are regenerated against v2. Four are still dated March and
-      describe the defective panel: `c_dominance_sensitivity.json`
-      (2026-03-10), `reviewer_red_team.json` (2026-03-09),
-      `journal_fit_targeting.json` (2026-03-05), `notation_glossary.json`
-      (2026-03-09).
-- [x] Recompute headline metrics. Expect `R² ≈ 0.45–0.65`, not 0.85. If the new
-      `R²` is still >0.95, the rebuild is wrong — stop and investigate.
-      → **R² = 0.2516**, r = 0.5772, n = 167 (`metrics_authoritative.json`).
-      Below the predicted band but far from the tautological 1.0, which is the
-      point of the rebuild.
+- [ ] Reconcile the complete artifact set to the current 207-row panel.
+      Core generated artifacts such as `metrics_authoritative.json`,
+      `model_ladder_metrics.json`, and `c_dominance_sensitivity.json` record
+      207 rows. `reviewer_red_team.json` and `notation_glossary.json` still
+      contain stale sample/support claims; see the live open-work list above.
+- [x] Recompute headline metrics. The current `metrics_authoritative.json`
+      records `n=207`, `R²=0.3461`, `r=0.6150`, `MAE=0.1617`, and `RMSE=0.2089`.
+      The earlier 0.45–0.65 projection was not met; these are in-sample
+      descriptive metrics, not the out-of-sample result.
 - [x] Report **both** metric families (`aggregatesRefit` and
-      `aggregatesCanonical`). The canonical negatives (currently −0.86/−2.15)
-      will likely become the honest result.
-      → both families are in `cv_rolling_origin.json` and
-      `cv_country_out.json`; the country-out canonical negatives
-      (Tier A −2.0066, B −0.9663, C −0.8968) are discussed in the main text.
-- [ ] Fix Table S18 inconsistency (KI-06). `supplementary_materials.tex`
-      still prints `R² = 0.7299` with `RMSE = 0.1606`, and its source artifact
-      still carries the old `fullModel.r2 = 0.99999999999`.
+      `aggregatesCanonical`). Both are in `cv_country_out.json` and
+      `cv_rolling_origin.json`. In `cv_country_out.json`, the current median
+      country-out R² values are refit A/B/C = −1.667/−1.571/−0.919 and
+      canonical A/B/C = −3.603/−2.378/−2.378. The repeated grouped k-fold
+      results are separately recorded in `cv_kfold.json`.
+- [x] Fix the original Table S18 R²/RMSE inconsistency (KI-06). The current
+      table reports the C-withdrawal non-result; the former `R² = 0.7299` and
+      near-one full-model value are described as historical. **Open:** its
+      introduction still labels the source artifact `n=167`; the current
+      artifact records `nRows=207` and must be reconciled with the manuscript.
 - [x] Rewrite the abstract, Results, Discussion, and all claims. Every sentence
       containing a number must be traced to a regenerated artefact.
       → reframed from "bounded model" to "measurement audit" in `e18ede5`,
       `161dc92`. Residual drift is tracked separately (see Known drift below).
-- [ ] Re-run the red-team simulation; the 18 criticisms will change because
-      the model changed. The artifact still says "34 country-years".
+- [ ] Refresh the red-team simulation against the current panel. Although its
+      top-level metadata names 207 rows / 83 countries, its rebuttals still
+      contain the obsolete 167-pair count, old Tier support ratios, and the
+      superseded S18 result.
 
-**Known drift found during reconciliation (2026-11-09):**
+**Historical drift found during reconciliation (2026-11-09; the panel later
+widened again):**
 
 | Where | Says | Reality |
 |---|---|---|
@@ -317,10 +319,11 @@ manuscript number lacks an artefact pointer.
 
 ### 4.1 Reproducibility the reviewer can execute
 
-- [ ] Add `rawdata/` download instructions with checksums so a reviewer can
-      reconstruct inputs without redistribution (WVS licence forbids shipping
-      microdata). Section 9.1 of `REPLICATION_RUNBOOK.md` has the downloads but
-      no checksums.
+- [x] Add `rawdata/` download instructions and input checksums so a reviewer
+      can reconstruct inputs without redistribution. `REPLICATION_RUNBOOK.md`
+      includes the download steps and pinned input SHA-256 values. Its current
+      panel counts and expected headline metrics are stale and remain open in
+      the live reconciliation list.
 - [x] Add `scripts/verify_constructs.ts` that recomputes `Z` and `C` from raw
       microdata and asserts the audit JSON matches. → written as an
       *independent* second implementation (it does not import the producer),
@@ -340,9 +343,9 @@ The five criticisms that will decide this paper, and where each is answered:
 | Criticism | Answered in |
 |---|---|
 | "Your predictor is your outcome" | Phase 1.3 gate + `wvs_construct_audit.json` |
-| "126 cells cannot support your model" | Phase 2.3 — **closed**; C sits at 5.73 obs/param |
+| "207 cells cannot support your model" | Phase 2.3 — **closed as a tier decision**; current artifact reports 18.82 / 11.50 / 9.41 obs/param for A/B/C, with C exploratory |
 | "Temporal extrapolation fails" | existing rolling-origin disclosure, retained |
-| "I cannot re-derive `Z`" | Phase 4.1 — **open**; no `verify_constructs.ts` yet |
+| "I cannot re-derive `Z`" | Phase 4.1 — **closed in code**; `scripts/verify_constructs.ts` is present and wired into CI; license-restricted raw inputs are still required for a full local run |
 | "Your OOS numbers were impossible" | Phase 3 — done; canonical negatives disclosed in text |
 
 ### 4.3 Disclose the correction
@@ -361,9 +364,9 @@ that this item referred to has been removed.
 
 ## Phase 5 — Venue and submission (2–3 days)
 
-With an 11-parameter model and 126 cells, the earlier rejection pattern
-(urban journals: insufficient domain contribution; CSS journals: thin support)
-is addressed on the support axis. Reassess targets:
+Reassess the earlier rejection pattern (urban journals: insufficient domain
+contribution; CSS journals: thin support) against the current manuscript and
+207-row panel. Do not assume the larger sample alone resolves either concern.
 
 **Submission history.** Two attempts predate the rebuild and their PDFs have been
 deleted. Social Indicators Research, manuscript `SOCI-S-26-01446` (33 pages,
@@ -378,35 +381,29 @@ themselves were only ever snapshots of drafts that no longer exist.
 |---|---|---|
 | Social Indicators Research | high | composite-indicator tolerance; current draft already formatted for it |
 | EPJ Data Science | medium | previously tried; only if methodology is foregrounded |
-| Sociological Methods & Research | medium | strong methods fit, but 126 cells is still small for them |
+| Sociological Methods & Research | medium | strong methods fit; support and scope need to be assessed against the current 207-row panel |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
 
-- [ ] Update `TARGET_JOURNALS.md` and `journal_fit_targeting.json` to agree —
-      they currently contradict each other. The artifact is dated 2026-03-05,
-      still names `BE_paper_latest/main/main.tex` as its source, and lists
-      Nature Human Behaviour / EPJ Data Science / Social Networks while the
-      markdown lists 20 venues led by Social Indicators Research.
+- [ ] Restore or choose the canonical journal-target document and align it
+      with `journal_fit_targeting.json`. The JSON now names current manuscript
+      paths and 207/83 sample scope, but still points to `TARGET_JOURNALS.md`,
+      which is absent from the current tree.
 - [x] Resolve the four multiply-defined LaTeX labels. `main.tex` and
       `supplementary_materials.tex` now contain 27 and 28 labels with zero
       duplicates.
 
 ---
 
-## Effort and score projection
+## Historical work plan (superseded by the 207-row panel)
 
-| Phase | Days | Cumulative score | Delivered | Blocking risk |
-|---|---:|---:|---|---|
-| 1. Fix ingestion + gate | 1 | 39 → 45 | **done** | low |
-| 2. Rebuild measurement | 4 | 45 → 60 | **done** (2.3 open) | was: ETL script missing |
-| 3. Regenerate numbers | 6 | 60 → 78 | **~16/20 artefacts** | medium (results may not support the thesis) |
-| 4. Reviewability | 4 | 78 → 87 | **half** (CI done, 4.1b/4.3 open) | low |
-| 5. Venue + submit | 3 | 87 → **88–90** | not started | reviewer variance |
-| 4-B. WVS waves 3–6 (optional) | +21 | 90 → **92–94** | not started | external: WVS approval |
-
-**Current standing: roughly 68–72** — Phase 1 and 2 landed, Phase 3 is
-mostly landed but four artifacts still describe the defective panel, and
-Phase 4 is half done. The 78 row requires Phase 3 closed and Phase 4.3
-written; the 87 score row requires Phase 4.1b and 2.3 as well (both since landed).
+| Phase | Days | Delivered | Blocking risk |
+|---|---:|---|---|
+| 1. Fix ingestion + gate | 1 | **done** | low |
+| 2. Rebuild measurement | 4 | **done** (2.3 open) | was: ETL script missing |
+| 3. Regenerate numbers | 6 | **~16/20 artefacts** | medium (results may not support the thesis) |
+| 4. Reviewability | 4 | **half** (CI done, 4.1b/4.3 open) | low |
+| 5. Venue + submit | 3 | not started | reviewer variance |
+| 4-B. WVS waves 3–6 (optional) | +21 | not started | external: WVS approval |
 
 **Resolved unknown:** the missing ETL script is no longer a blocker.
 `scripts/build_wvs_constructs.ts` was written from scratch against the WVS
@@ -416,23 +413,26 @@ is gone and no longer referenced by the app.
 
 ---
 
-## The one decision that determines the outcome
+## Historical sample decision (later widened)
 
-Phase 2.2 asks whether to keep the "23-country panel" framing (13 cells,
-score ceiling ~78) or move to a wider sample (score ceiling ~90) and rewrite
-the framing. **The 23-country frame is the paper's identity and also its
-ceiling.** No amount of polishing resolves that trade-off; it has to be chosen
-deliberately, and stated in the manuscript.
+Phase 2.2 asked whether to keep the "23-country panel" framing (13 cells) or
+move to a wider sample and rewrite the framing. **The 23-country frame is the
+paper's identity.** The decision was made to use the wider panel and state its
+scope directly in the manuscript.
 
-**Decision taken: the wider frame, then widened again.** The canonical panel is 126 complete-case
-country-years across 48 countries, 1990–2022. The manuscript no longer uses
-the 23-country framing; `main.tex` contains zero occurrences of "23 countries".
-The remaining constraint is not the frame but Tier C's 7.59 obs/param, which
-Phase 2.3 still has to resolve.
+**Decision taken: the wider frame, then widened again.** The current canonical
+panel has 207 complete-case country-years across 83 countries, 1990–2023. The
+23-country framing is retired. The Tier C role is resolved as exploratory;
+the remaining work is to reconcile documents and artifacts to the current
+panel, as listed in Live status.
 
 ---
 
-## Where the work actually stands (2026-11-09)
+## Historical reconciliation snapshot (2026-11-09; superseded)
+
+The table below records what was believed after the 2026-11-09 pass, before
+the panel widened from 167 to 207 rows on 2026-11-11. Its completion labels do
+not override the live status and open-work list at the top of this document.
 
 | # | Item | State |
 |---|---|---|

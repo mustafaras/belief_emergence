@@ -155,15 +155,15 @@ color checks for gradients and overlapping layers, so this records the completed
 gate without claiming full WCAG conformance. Methods and per-theme counts are in
 `APP_EXECUTION_PROMPTS.md` Prompt 12.
 
-**4.3 Performance and visual budgets — implemented and locally verified 2026-11-14; hosted
-workflow run pending.** CI enforces a 2048 KiB initial-JavaScript limit and a 2500 ms
+**4.3 Performance and visual budgets — implemented and verified locally and in hosted CI
+2026-11-14; PR #2 merged.** CI enforces a 2048 KiB initial-JavaScript limit and a 2500 ms
 median cold-navigation FCP limit. It also compares one 1600×1000 screenshot baseline for
 each of the 12 routes, allowing at most 5000 pixels to differ by more than 20 per channel.
 Local measurements were 705 KiB and 568 ms median FCP; all 12 visual baselines matched
 exactly on rerun. Lowered performance limits failed both checks, and a changed route label
 failed the screenshot check with the affected route named. Details and evidence are in
-`APP_EXECUTION_PROMPTS.md` Prompt 13. The GitHub Actions run has not occurred because this
-work remains unpushed. The complete local `npm run ci:gate` passed 81/81 checks.
+`APP_EXECUTION_PROMPTS.md` Prompt 13. The hosted Verify workflow passed on both push and PR;
+PR #2 merged to `main` at `3f5d456`. The complete local `npm run ci:gate` passed 81/81 checks.
 
 ## Order, and what each step unblocks
 
