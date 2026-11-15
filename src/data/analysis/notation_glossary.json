@@ -1,6 +1,6 @@
 {
   "schema": "phase1.notation_glossary.v1",
-  "generated": "2026-11-15T10:38:25.216729+00:00",
+  "generated": "2026-11-15T12:20:05.430463+00:00",
   "generator": "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json)",
   "purpose": "Machine-readable notation glossary and regime definitions for all symbols used in the main manuscript and supplementary materials",
   "model_variables": [
@@ -16,12 +16,12 @@
         0.9544
       ],
       "fitting_window": [
-        0.2223,
-        0.9544
+        0.10345301530914319,
+        0.9544108940201302
       ],
       "evaluation_window": [
-        0.3304,
-        0.9544
+        0.10345301530914319,
+        0.9544108940201302
       ]
     },
     {
@@ -36,12 +36,12 @@
         5.2159
       ],
       "fitting_window": [
-        -1.4601,
-        3.428
+        -1.5584640000000003,
+        5.2158924
       ],
       "evaluation_window": [
-        -1.6078,
-        3.428
+        -1.5584640000000003,
+        5.2158924
       ]
     },
     {
@@ -238,10 +238,10 @@
       "symbol": "x/y fitting window",
       "name": "Structural windows used by the fitting script",
       "values": [
-        0.2223,
-        0.9544,
-        -1.4601,
-        3.428
+        0.10345301530914319,
+        0.9544108940201302,
+        -1.5584640000000003,
+        5.2158924
       ],
       "role": "Clip domain for the safe-band map during fitting"
     },
@@ -249,10 +249,10 @@
       "symbol": "x/y evaluation window",
       "name": "Structural windows in the model contract",
       "values": [
-        0.3304,
-        0.9544,
-        -1.6078,
-        3.428
+        0.10345301530914319,
+        0.9544108940201302,
+        -1.5584640000000003,
+        5.2158924
       ],
       "role": "Clip domain for the safe-band map in evaluation and the interface (differs from fitting; KI-18)"
     },
@@ -269,8 +269,8 @@
       "symbol": "z evaluation anchors",
       "name": "Outcome anchors in the model contract",
       "values": [
-        -1.8893,
-        1.8541
+        -2.3974,
+        1.8573
       ],
       "role": "Z_NORMALIZATION used for evaluation (differs from fitting; KI-18)"
     },
@@ -363,31 +363,31 @@
       "label": "Low-uptake",
       "formal_definition": "Z < 0.33",
       "empirical_characterization": "Below-transition zone; outcome near floor. Marginal sensitivity ∂Z/∂Φ = Z(1−Z) is low. Low values of the belief-intensity composite.",
-      "support_density": "30 of 207 (14.5%); thin support, extrapolation risk elevated."
+      "support_density": "27 of 207 (13.0%); thin support, extrapolation risk elevated."
     },
     {
       "label": "Transition corridor",
       "formal_definition": "0.33 ≤ Z < 0.67",
       "empirical_characterization": "Mid-response band where sensitivity peaks.",
-      "support_density": "134 of 207 (64.7%); best-supported regime."
+      "support_density": "139 of 207 (67.1%); best-supported regime."
     },
     {
       "label": "Ridge peak",
       "formal_definition": "0.45 ≤ Z ≤ 0.55",
       "empirical_characterization": "Narrow band around Z=0.5 (Φ+s ≈ 0) where ∂Z/∂Φ is maximal. Location determined by mapping geometry, not empirical discovery.",
-      "support_density": "38 of 207 (18.4%); high leverage."
+      "support_density": "50 of 207 (24.2%); high leverage."
     },
     {
       "label": "High-uptake",
       "formal_definition": "Z ≥ 0.67",
       "empirical_characterization": "Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. High values of the belief-intensity composite.",
-      "support_density": "43 of 207 (20.8%); saturation effects dominant."
+      "support_density": "41 of 207 (19.8%); saturation effects dominant."
     },
     {
       "label": "Saturated tails",
       "formal_definition": "Z → 0 or Z → 1",
       "empirical_characterization": "Extreme floor/ceiling regions where ∂Z/∂Φ ≈ 0. Bounded map compresses effect sizes; apparent stability may reflect mapping mechanics rather than evidenced structure.",
-      "support_density": "1 of 207 predictions fall below 0.05 or above 0.95; narratives here are prone to misinterpretation."
+      "support_density": "0 of 207 predictions fall below 0.05 or above 0.95; narratives here are prone to misinterpretation."
     }
   ],
   "supplementary_table_mapping": {

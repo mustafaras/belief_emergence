@@ -21,8 +21,8 @@ The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
 207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
 `5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
 counts and the digest were read directly from the tracked CSV. The current
-`metrics_authoritative.json` records `n=207`, `R²=0.3461`, `r=0.6150`,
-`MAE=0.1617`, and `RMSE=0.2089`. `model_complexity_support.json` records
+`metrics_authoritative.json` records `n=207`, `R²=0.4061`, `r=0.6393`,
+`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json` records
 18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and C;
 Tiers A/B are primary and Tier C is exploratory. The stored submission-gate
 report says READY (27/27), generated 2026-11-11; that is recorded evidence, not
@@ -272,9 +272,9 @@ rewrite of Sections 5 and 7.
       207 rows. `reviewer_red_team.json` and `notation_glossary.json` still
       contain stale sample/support claims; see the live open-work list above.
 - [x] Recompute headline metrics. The current `metrics_authoritative.json`
-      records `n=207`, `R²=0.3461`, `r=0.6150`, `MAE=0.1617`, and `RMSE=0.2089`.
-      The earlier 0.45–0.65 projection was not met; these are in-sample
-      descriptive metrics, not the out-of-sample result.
+      records `n=207`, `R²=0.4061`, `r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`,
+      and bias `0.0048`. These are canonical-panel descriptive metrics, not
+      the out-of-sample result.
 - [x] Report **both** metric families (`aggregatesRefit` and
       `aggregatesCanonical`). Both are in `cv_country_out.json` and
       `cv_rolling_origin.json`. In `cv_country_out.json`, the current median

@@ -1019,7 +1019,7 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               step="0.02"
               sliderClassName="modern-slider amplifier"
               ariaLabel="Cultural Intensity parameter"
-              tooltip="AMPLIFIER (c1 = 0 in the v2 panel — the culture channel is unavailable, KI-09). Standardized (z-score): 0 = panel mean cultural intensity, +1 = +1σ above mean, -1 = -1σ below. Presets use standardized C (not raw 1.8–3.6). C enters only through the interaction and curvature terms, so its marginal effect here is not a simple increase. Typical preset range ≈ [-1.5, 1.5]."
+              tooltip="Cultural intensity is unavailable in the v2 panel (KI-09). No current C values or C effects are estimated; this retained slider is a legacy control and does not contribute to the fitted model."
               decimals={2}
               onParameterChange={onParameterChange}
             />

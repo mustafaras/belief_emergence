@@ -30,8 +30,8 @@ export function buildCorpus(sources: unknown[]): Corpus {
       return
     }
     if (typeof node === 'string') {
-      for (const match of node.matchAll(/-?\d+(?:\.\d+)?/g)) {
-        const n = Number(match[0])
+      for (const match of node.matchAll(/[−-]?\d+(?:\.\d+)?/g)) {
+        const n = Number(match[0].replace('−', '-'))
         if (Number.isFinite(n)) values.add(n)
       }
       return
@@ -175,5 +175,8 @@ export function resolveToken(
  * of the token.
  */
 export function extractTokens(text: string): string[] {
-  return text.match(/-?\d+(?:\.\d+)?/g) ?? []
+  const normalized = text.replace(/[−-]\s*\(\s*(\d+(?:\.\d+)?)\s*\)/g, '-$1')
+  return (normalized.match(/[−-]?\d+(?:\.\d+)?/g) ?? []).map((token) =>
+    token.startsWith('−') ? `-${token.slice(1)}` : token,
+  )
 }

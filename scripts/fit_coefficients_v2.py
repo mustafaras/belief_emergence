@@ -48,14 +48,12 @@ PANEL = ROOT / "public" / "data" / "panel_canonical_v2.csv"
 OUT = ROOT / "rawdata" / "coefficients_v2.json"
 COMMITTED = ROOT / "src" / "data" / "analysis" / "coefficient_fit.json"
 
-# Bounds must contain the v2 panel. The previous v1 window (X 0.4-0.9,
-# Y -1.5-3.5) excluded 6 of 49 observations; clipping pinned x_s to the floor
-# at 0.0001 and drove alpha to its lower bound, making X^alpha constant.
-# These are the realised v2 ranges, widened by 1e-4 for float safety.
+# These are reset from the committed canonical panel in main() before fitting.
+# The fitted model, runtime contract and paper all use the same realised ranges.
 STRUCTURAL_MIN = 1e-4
 STRUCTURAL_MAX = 1 - STRUCTURAL_MIN
-PANEL_X_MIN, PANEL_X_MAX = 0.2223, 0.9544
-PANEL_Y_MIN, PANEL_Y_MAX = -1.4601, 3.4280
+PANEL_X_MIN, PANEL_X_MAX = 0.10345301530914319, 0.9544108940201302
+PANEL_Y_MIN, PANEL_Y_MAX = -1.5584640000000003, 5.2158924000000004
 PHI_CLAMP = 50.0
 
 # Channels actually present in v2.
@@ -170,6 +168,20 @@ def write_fe_coefficients(payload, n_rows, n_countries):
     text = re.sub(
         r"export const OPTIMIZED_STRUCTURAL_PARAMS: StructuralParameters = \{[^}]*\};",
         struct_block,
+        text,
+        count=1,
+    )
+
+    z_block = (
+        "export const Z_NORMALIZATION = {\n"
+        "  // Current canonical panel's 1st and 99th percentiles; shared with the fit.\n"
+        f"  min: {float(payload['zScale']['min'])!r},\n"
+        f"  max: {float(payload['zScale']['max'])!r},\n"
+        "};"
+    )
+    text = re.sub(
+        r"export const Z_NORMALIZATION = \{[^}]*\};",
+        z_block,
         text,
         count=1,
     )
@@ -311,10 +323,41 @@ def write_fe_coefficients(payload, n_rows, n_countries):
     path.write_text(text, encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
 
+
+def write_model_contract(bounds):
+    """Keep runtime X/Y normalization identical to the fit's realized panel range."""
+    import re
+
+    path = ROOT / "src" / "utils" / "modelContract.ts"
+    text = path.read_text(encoding="utf-8")
+    for key, value in bounds.items():
+        text, count = re.subn(
+            rf"export const {key} = [-+0-9.eE]+;",
+            f"export const {key} = {float(value)!r};",
+            text,
+            count=1,
+        )
+        if count != 1:
+            raise RuntimeError(f"could not update {key} in {path.relative_to(ROOT)}")
+    path.write_text(text, encoding="utf-8")
+    print(f"wrote {path.relative_to(ROOT)}")
+
 def main():
+    global PANEL_X_MIN, PANEL_X_MAX, PANEL_Y_MIN, PANEL_Y_MAX
     rows = read_panel()
     if not rows:
         sys.exit(f"no usable rows in {PANEL}")
+
+    PANEL_X_MIN = min(r["X"] for r in rows)
+    PANEL_X_MAX = max(r["X"] for r in rows)
+    PANEL_Y_MIN = min(r["Y"] for r in rows)
+    PANEL_Y_MAX = max(r["Y"] for r in rows)
+    structural_window = {
+        "PANEL_X_MIN": PANEL_X_MIN,
+        "PANEL_X_MAX": PANEL_X_MAX,
+        "PANEL_Y_MIN": PANEL_Y_MIN,
+        "PANEL_Y_MAX": PANEL_Y_MAX,
+    }
 
     z_raw = np.array([r["Z"] for r in rows])
     zmin, zmax = float(z_raw.min()), float(z_raw.max())
@@ -405,6 +448,7 @@ def main():
             "c_M": c["M"], "c_T": c["T"], "c_E": c["E"], "c_R": c["R"],
             "c_tr": inter["tr"], "c_yr": inter["yr"],
         },
+        "structuralWindow": structural_window,
         "retractedChannels": {
             ch: "coefficient not estimated: channel unavailable in v2"
             for ch in RETRACTED
@@ -431,6 +475,8 @@ def main():
         "nRows": payload["nRows"],
         "nCountries": payload["nCountries"],
         "parameters": payload["parameters"],
+        "structuralWindow": payload["structuralWindow"],
+        "zScale": payload["zScale"],
         "note": (
             "The fitted coefficients are derived quantities, not licensed data: this file "
             "is committed so the manuscript numbers can be checked, while the raw inputs "
@@ -448,6 +494,7 @@ def main():
     # numbers. Writing it from the same run that writes the artifact removes the
     # possibility of the two diverging.
     write_fe_coefficients(payload, len(rows), len({r["iso3"] for r in rows}))
+    write_model_contract(structural_window)
 
 
 if __name__ == "__main__":

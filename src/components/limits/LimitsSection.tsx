@@ -72,8 +72,8 @@ export default function LimitsSection() {
       <header className="limits-header">
         <h3 id="limits-title">What this model cannot show</h3>
         <p className="limits-lead">
-          Four limits on what the fitted surface means. Each one is a property of the
-          artifacts below, not a caveat added for caution.
+          Three evidence limits on what the fitted surface can show. Each one is a
+          property of the artifacts below, not a caveat added for caution.
         </p>
       </header>
 

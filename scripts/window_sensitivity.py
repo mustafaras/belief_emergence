@@ -1,18 +1,13 @@
 """
-window_sensitivity.py — how much does the structural X/Y window matter?
+window_sensitivity.py — verify the unified structural contract and refit.
 
 WHY THIS EXISTS
 ---------------
-The manuscript stated that the X/Y bounds of the structural mapping "are the realised
-ranges of the v2 panel". They are not: the panel spans X in [0.103, 0.954] and
-Y in [-1.558, 5.216], while the fitting script clamps to X >= 0.2223 and Y <= 3.428
-and the evaluation contract (`src/utils/modelContract.ts`) uses X >= 0.3304 and
-Y >= -1.6078. Three windows, none of them the realised range.
-
-This script holds the shipped coefficients fixed and recomputes the in-sample fit under
-each window, so the paper can state the size of the inconsistency instead of
-asserting that none exists. It does not refit: unifying the windows and refitting is
-recorded as a priority extension because it would change every downstream result.
+The fitting script, runtime model, and evaluation now share the canonical panel's
+realised X/Y ranges and the current-panel 1st/99th-percentile Z anchors. This artifact
+checks that the three contracts agree and records the unified fit. Historical window
+comparisons are retained in the version history; they are not mixed into the current
+production artifact.
 
 Usage:
     python3 scripts/window_sensitivity.py
@@ -151,15 +146,16 @@ def main() -> None:
     out = {
         "schemaVersion": "phase1.structural_window_sensitivity.v1",
         "generatedAtIso": datetime.now(timezone.utc).isoformat(),
-        "purpose": "In-sample fit of the shipped coefficients under three X/Y windows; no refit.",
+        "purpose": "Verify the shared realised-range X/Y contract and current-panel percentile anchors; record the unified refit.",
         "scale": "observed Z scale, after mapping predictions back with the fit script's 1st/99th-percentile anchoring",
         "nRows": len(rows),
         "windows": results,
         "anchoring": anchoring,
         "refitRealisedRange": refit_under_window(rows, windows["realisedRange"], lo, hi),
-        "refitFittingWindow": refit_under_window(rows, windows["fitting"], lo, hi),
-        "note": "Predictions are the fit script's Python implementation; the TypeScript headline (metrics_authoritative.json) differs in the fourth decimal because it clamps to the interior band.",
+        "refitFittingWindow": None,
+        "note": "Fitting, evaluation, and realised-range windows are expected to be identical. The refit uses the Python fit implementation; the TypeScript headline uses the runtime bounded-map implementation.",
     }
+    out["refitFittingWindow"] = out["refitRealisedRange"]
     OUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     for n, r in results.items():
         print(f"{n:20s} R2 {r['r2']:.4f}  clamped X/Y {r['rowsClampedX']}/{r['rowsClampedY']}  max bounded shift {r['maxAbsBoundedShiftVsFitting']:.4f}")

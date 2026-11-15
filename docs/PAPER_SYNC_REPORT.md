@@ -1,6 +1,6 @@
 # Paper sync report
 
-Date: 2026-11-15. Base: `paper/main/main.tex` @ `61231d7` (the 95/100 version).
+Date: 2026-11-15. Validation target: local worktree on `work/paper-artifact-sync`, based on `c6eb26a`; the 59-file working-tree diff is intentionally preserved from the rate-limit handoff.
 
 ## Decision rules (applied to every change)
 
@@ -93,12 +93,45 @@ All generators were re-run in dependency order and every artifact reproduced ide
 
 Updated in this pass: title page (83 countries, 207 rows, correct SHA-256 prefix `5A37D543…F055B9`); `paper/README.md` (it still reported 87 rows, R² 0.3854 and "READY 24/24"); cover letter (support 207 / 18.82–11.50–9.41; failure cases now CHN, GEO, ITA, POL, CZE, FRA; regime shares 14.5 / 64.7 / 20.8 %; lockbox described as a descriptive check; contribution stated as an audit, not a framework; 13 claims in Table S0); highlights (same framing, S usable items, 13 claims); the supplement's `fig_eval_pair` copy (was out of date); the supplement bibliography now points at `../main/references.bib`.
 
-## Still open
+## Sixth pass (rate-limit takeover, 2026-11-15)
+
+The fifth-pass status table below was historical and is superseded here. The live worktree was rebuilt after the latest analysis artifacts and the KI-18 contract update.
+
+| Check | Current result |
+|---|---|
+| Main manuscript | 31 US-letter pages; cross-reference-order LaTeX build succeeds. |
+| Supplement | 28 pages; `biber` is available and the rebuilt bibliography resolves. |
+| Abstract | 191 words. |
+| Source word count | TeXcount 3.1.1 reports 14,009 words for the manuscript source, excluding references. The target journal's maximum is 10,000 words including references, so the draft exceeds the limit before its bibliography is counted. A PDF text extraction also exceeds 17,000 tokens; this is a secondary estimate, not the journal's formal count. |
+| KI-18 windows/anchors | Resolved in the local artifacts and prose: fit, runtime, and evaluation now use the same canonical X/Y ranges and Z anchors; KI-15 records the unified refit and weak-identification result. |
+| Manuscript consistency | Latest local run: 36 claim blocks pass; three optional legacy files are skipped because they are absent. |
+| Browser/visual evidence | No new UI screenshots were generated in this pass. Legacy screenshots remain explicitly identified as earlier-interface images without model results. |
+| Unversioned source data | The auxiliary raw-data counts and three Table S4 rows remain disclosed as not independently reproducible from committed inputs. |
+
+The journal's length rule is a material remaining submission gate. [Social Indicators Research guidance](https://link.springer.com/journal/11205/submission-guidelines) sets a 5,000–10,000-word range including references. Reducing from 14,009 source words before references to at most 10,000 total requires substantial editorial restructuring. The user chose to keep the current draft and leave this gate open; no shortening was authorized in this pass.
+
+## Seventh pass (rate-limit takeover verification, 2026-11-15)
+
+The user chose to preserve the draft and leave O5 open. The paper remains over the journal's length limit; no submission-readiness claim is made.
+
+| Check | Current result |
+|---|---|
+| Full reproducibility gate | `npm run ci:gate`: **91/91**, all browser checks ran with the local Vite server and Chrome; no skipped checks. |
+| Unit suite | `npm run test:run`: **315/315**. |
+| Lint and build | Lint: 0 errors, 7 existing warnings. `npm run build`: pass; Vite reports existing chunk-size and mixed dynamic/static import warnings. |
+| Rendered number provenance | 1,511 distinct values across 12 routes; all resolve to an artifact, a source-bound display, or a checked derivation. |
+| Route and visual checks | Route reachability, render/stale-value checks, support picture, stated limits, and surface snapshot pass. `check:visual-baselines`: 12/12 routes within tolerance; the presets reference was refreshed after reviewing its panel-derived table values. |
+| Evidence index | 38 artifacts: 10 imported, 12 referenced only, 16 untouched; all described. |
+| Diff hygiene | `git diff --check`: pass. |
+
+The takeover also corrected stale validator expectations for current artifacts and metric values, made the number scanner preserve mathematical minus signs, and updated the limits and coefficients explanations to current source semantics. The surface baseline now reflects the current canonical panel Y range; the old range ended at 3.0 while the current panel reaches 5.216.
+
+## Current open gates
 
 | # | Item | Why it stays |
 |---|---|---|
-| O1 | Supp. Table S1 shows 14 unresolved citations | `biber` is not installed on this machine (it was already missing at the start of the session), and the supplement had no `.bib` of its own. The path is fixed; run `latexmk` once on a machine with biber. The main paper's bibliography is intact (`main.bbl`). |
-| O2 | UI screenshots (Figs. 7–9, A4–A14) and `fig_pdf_export_workflow` | Legacy interface; replaced in plan step P34. A provenance note is in the supplement. |
-| O3 | Step 2c data counts (163 of 195, 145 of 207, 65 of 195) and the composite test; three auxiliary rows of Table S4 | Depend on the raw EM-DAT/macro tables, which are not versioned; disclosed as not reproduced. |
-| O4 | KI-18 refit | Protocol fixed in advance; run after v2. |
-| O5 | Main text is 35 pages (was 34) | Check the journal limit. |
+| O1 | **Resolved locally** — supplementary references | Rebuilt successfully with the installed `biber`; confirm zero unresolved citations in the final log. |
+| O2 | Historical UI screenshots | Provenance is disclosed; regenerating the legacy interface is not part of this pass. They remain non-current UI evidence. |
+| O3 | Unversioned raw-source counts and three auxiliary Table S4 rows | Depend on raw EM-DAT/macro tables that are not versioned; the manuscript discloses that these are not reproduced. |
+| O4 | **Resolved locally** — KI-18 unified windows and anchors | Current fit/runtime/evaluation contract and refit are recorded in `structural_window_sensitivity.json` and KI-15. |
+| O5 | **Open, blocking submission length** | Official Social Indicators Research guidance sets a 5,000–10,000-word range including references. TeXcount is already 14,009 before references; the user chose to keep the draft unchanged and leave this gate open. |

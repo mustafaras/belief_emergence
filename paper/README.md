@@ -39,16 +39,15 @@ What is now true:
   floor and are **declared but not estimated**; the model runs on seven columns;
 - the canonical panel is 207 complete-case country-years, 83 countries,
   1990–2023, with no scenario replication;
-- in-sample `R² = 0.3461` for the saturating form against
-  0.4564 for a linear baseline; out of sample the two are
-  close (median held-out `R²` 0.4207 against 0.3976; the saturating form
-  leads on 75 of 100 identical folds by a median of 0.0146, with no significance test);
+- in-sample `R² = 0.4061` for the saturating form against
+  0.4623 for a linear baseline; out of sample the two are tied at the reported
+  precision (median held-out `R²` 0.4074 for both; the bounded form leads on
+  56 of 100 identical folds, paired median difference 0.000001926, with no significance test);
 - primary out-of-sample evidence is repeated grouped k-fold
-  (`cv_kfold.json`): 100 folds, median held-out `R²` 0.4207 / 0.5239 / 0.5038 for
-  Tier A/B/C, leakage none, `R²` defined in every fold. Country-out is retained
-  as a spatial stress test; its per-fold median is negative only because 48 of
-  83 folds hold fewer than three rows, and its pooled series is positive
-  (0.4117 / 0.4945 / 0.4827);
+  (`cv_kfold.json`): 100 folds, median refit `R²` 0.4074 / 0.5216 / 0.4824 for
+  Tier A/B/C, with no country leakage and `R²` defined in every fold. Country-out
+  is retained as a spatial stress test; 48 of 83 folds hold fewer than three
+  rows, and pooled refit `R²` is 0.4053 / 0.4934 / 0.4796;
 - every number in the manuscript is checked against its artifact by
   `npm run check:manuscript-consistency`; the open items are in
   `docs/PAPER_SYNC_REPORT.md`.
@@ -64,9 +63,8 @@ cd paper/main
 latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-## Known LaTeX warnings
+## LaTeX cross-reference status
 
-The four multiply-defined labels reported earlier
-(`fig:main-function-views`, `tab:panel_fit_headline`,
-`tab:marginal-effects-regimes`, `tab:preset-country-z`) are resolved: both
-sources now contain 27 and 28 labels respectively with no duplicates.
+Main and supplementary PDFs share supplementary table references through `xr-hyper`.
+Mirrored main-paper figures and tables in the supplement use `supp-` labels to avoid
+collisions. The latest cross-reference-order build has no undefined or duplicate labels.

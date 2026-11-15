@@ -755,13 +755,13 @@ export function runConsistencyChecks(): void {
     // (several of these tables described an earlier panel and a model in which the
     // withdrawn channels were still active).
     {
-      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      const mainText = [readText(path.join('main', 'main.tex')), readText(path.join('supplementary', 'supplementary_materials.tex'))].filter(Boolean).join('\n');
       const readJson = <T>(name: string): T | null => {
         const p = path.join(ANALYSIS_DIR, name);
         return fs.existsSync(p) ? (JSON.parse(fs.readFileSync(p, 'utf8')) as T) : null;
       };
       const fail = (id: string, message: string, remediation: string): void => {
-        failures.push({ id, file: 'main/main.tex', message, remediation });
+        failures.push({ id, file: 'supplementary/supplementary_materials.tex', message, remediation });
       };
       const f4 = (v: number): string => v.toFixed(4);
       const missingNums = (values: number[], digits = 4): string[] =>
@@ -828,8 +828,15 @@ export function runConsistencyChecks(): void {
       if (pa && mainText) {
         stats.executed += 1;
         const drift: string[] = [];
+        const presetLabel = mainText.indexOf('\\label{tab:preset-country-z}');
+        const presetTableStart = presetLabel < 0 ? -1 : mainText.lastIndexOf('\\begin{table}', presetLabel);
+        const presetTableEnd = presetLabel < 0 ? -1 : mainText.indexOf('\\end{table}', presetLabel);
+        const presetTable = presetTableStart < 0 || presetTableEnd < 0
+          ? ''
+          : mainText.slice(presetTableStart, presetTableEnd);
+        if (!presetTable) drift.push('could not isolate table:preset-country-z');
         for (const c of pa.countries.filter((x) => x.isPreset)) {
-          const line = mainText.split('\n').find((l) => new RegExp(`& ${c.iso3} &`).test(l));
+          const line = presetTable.split('\n').find((l) => new RegExp(`& ${c.iso3} &`).test(l));
           const want = `& ${c.iso3} & ${c.nYears} & ${c.meanObservedZ.toFixed(3)} &`;
           if (!line || !line.includes(want) || !line.includes(`& ${c.mae.toFixed(3)} &`)) drift.push(c.iso3);
         }
@@ -1019,8 +1026,12 @@ export function runConsistencyChecks(): void {
           if (!mainText.includes(upper.toFixed(3))) {
             problems.push(`manuscript does not quote the profile upper bound ${upper.toFixed(3)}`);
           }
-          const shippedOutside = !inside.some((p) => Math.abs(p.value - shipped) < 1e-9);
-          const claimsOutside = /outside.*interval|rejected at the \$5\$|outside\}? that interval/.test(mainText);
+          const lower = Math.min(...inside.map((p) => p.value));
+          const shippedOutside = shipped < lower - 1e-9 || shipped > upper + 1e-9;
+          const profileStart = mainText.indexOf('A profile over');
+          const profileEnd = profileStart < 0 ? -1 : mainText.indexOf('\n\n', profileStart);
+          const profileText = profileStart < 0 ? '' : mainText.slice(profileStart, profileEnd < 0 ? profileStart + 1400 : profileEnd);
+          const claimsOutside = /(?:shipped|\\alpha).{0,100}(?:outside|beyond).{0,100}interval|(?:outside|beyond).{0,100}(?:shipped|\\alpha).{0,100}interval/i.test(profileText);
           if (shippedOutside && !claimsOutside) {
             problems.push('the shipped alpha lies outside the 95% interval but the manuscript does not say so');
           }

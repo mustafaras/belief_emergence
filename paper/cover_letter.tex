@@ -86,18 +86,18 @@
 
 \noindent \textbf{Why now.} Composite indicators assembled from shared survey item pools are increasingly common, and the failure mode documented here is generic: one wrong item code in a shared pool silently converts a predictor into a rescaling of the outcome. The checks that catch it are inexpensive. Deferring them is expensive.
 
-\noindent \textbf{Why it matters.} The paper reports a negative result that we believe reviewers will find more useful than a positive one. After the constructs were rebuilt and the panel re-derived (83 countries, 207 complete-case observations, 1990--2023), the saturating model reached a held-out $R^2$ of 0.4207, close to the 0.3976 of an ordinary linear regression on identical rows and folds, while trailing it in sample (0.3461 against 0.4564). We report the tie rather than a winner. The bounded form was chosen because the outcome is bounded, which is a fact about the measurement scale and not about the response shape; in this sample the shape is not supported. We report the comparison rather than the model in isolation, and we withdraw the saturation claim the original title asserted.
+\noindent \textbf{Why it matters.} The paper reports a negative result that we believe reviewers will find more useful than a positive one. After the constructs were rebuilt and the panel re-derived (83 countries, 207 complete-case observations, 1990--2023), the saturating model reached a held-out $R^2$ of 0.4074, tied at four-decimal precision with ordinary linear regression on identical rows and folds; the paired median difference is 0.0000019 (IQR -0.0000055 to 0.0000162). In sample the linear model leads (0.4623 against 0.4061). The bounded form was chosen because the outcome is bounded, which is a fact about the measurement scale and not about the response shape; in this sample the shape is not supported. We report the comparison rather than the model in isolation, and we withdraw the saturation claim the original title asserted.
 
 \SmallHeading{Primary evidence (Tier A/B refit OOS) versus exploratory evidence (Tier C)}
 \noindent Primary claims are grounded in two complementary refit out-of-sample protocols:
 \begin{itemize}
-\item \textbf{Repeated grouped $k$-fold} (100 held-out evaluations, $k=5$ folds $\times$ 20 seeded repeats, countries intact, no leakage): median held-out $R^2$ 0.4207 (Tier~A), 0.5239 (Tier~B), 0.5038 (Tier~C); $R^2$ is defined in every fold, which the country-out protocol cannot achieve.
-\item \textbf{Leave-one-country-out} (83 folds, retained as a spatial stress test): median OOS RMSE 0.1501 (Tier~A), 0.1325 (Tier~B), 0.1366 (Tier~C); pooled held-out $R^2$ 0.4117 / 0.4945 / 0.4827 across all 207 rows. Parameter sign consistency is reported per coefficient and sub-threshold terms are flagged as unstable rather than claimed stable.
-\item \textbf{Rolling-origin temporal validation} (25 forward-chaining folds): median OOS RMSE 0.1567 (Tier~A), 0.1602 (Tier~B), 0.1667 (Tier~C).
+\item \textbf{Repeated grouped $k$-fold} (100 held-out evaluations, $k=5$ folds $\times$ 20 seeded repeats, countries intact, no leakage): median held-out $R^2$ 0.4074 (Tier~A), 0.5216 (Tier~B), 0.4824 (Tier~C); $R^2$ is defined in every fold, which the country-out protocol cannot achieve.
+\item \textbf{Leave-one-country-out} (83 folds, retained as a spatial stress test): median OOS RMSE 0.1349 (Tier~A), 0.1162 (Tier~B), 0.1272 (Tier~C); pooled held-out $R^2$ 0.4053 / 0.4934 / 0.4796 across all 207 rows. Parameter sign consistency is reported per coefficient and sub-threshold terms are flagged as unstable rather than claimed stable.
+\item \textbf{Rolling-origin temporal validation} (25 forward-chaining folds): median OOS RMSE 0.1423 (Tier~A), 0.1421 (Tier~B), 0.1522 (Tier~C).
 \end{itemize}
 \noindent A separately gated lockbox holdout (17 reserved country--years, frozen before the panel widened) is reported as a descriptive check on a thin set; no claim in the paper rests on it.
 
-\noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 1.0000) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
+\noindent \textbf{Exploratory evidence is explicitly separated.} Tier~C results (full nonlinear complexity---curvature, higher-order interactions) are bounded by a lower stability threshold (0.60; pooled median consistency 0.9900) with wider fold-level variability. No headline claim rests on Tier~C; all sections label Tier~C findings as exploratory sensitivity.
 
 \SmallHeading{Inferential boundaries}
 
@@ -108,7 +108,7 @@
 \item Ecological aggregation: country--year unit, not individual-level inference.
 \item Scenario comparisons are analyst-exploratory perturbations of the fitted surface, not policy-optimality recommendations.
 \end{itemize}
-\noindent Failure cases are documented rather than hidden: six preset countries exceed MAE 0.25 on year-averaged pairs, each on one to three rows (China (MAE 0.547), Georgia (MAE 0.427), Italy (MAE 0.423), Poland (MAE 0.396), Czechia (MAE 0.298), France (MAE 0.253)). Predicted-$Z$ regime support is low-uptake 14.5\%, transition corridor 64.7\%, high-uptake 20.8\% of the 207 country--years.
+\noindent Failure cases are documented rather than hidden: six preset countries exceed MAE 0.25 on year-averaged pairs, each on one to three rows (China (MAE 0.522), Czechia (MAE 0.308), France (MAE 0.264), Georgia (MAE 0.338), Italy (MAE 0.334), Poland (MAE 0.306)). Predicted-$Z$ regime support is low-uptake 13.0\%, transition corridor 67.1\%, high-uptake 19.8\% of the 207 country--years.
 
 \SmallHeading{Fit, significance, and reproducibility}
 
@@ -120,7 +120,7 @@
 
 \noindent The paper is a composite-indicator study before it is a modelling study. Its central object is the reliability of WVS-derived constructs, and its central method is the decision to withdraw three of four candidates rather than report them with caveats. That is the review culture this journal has built: indicators are judged on measurement grounds first, and thin-support macro panels are expected rather than disqualifying.
 
-\noindent The findings are stated at the level the evidence supports. Construct reliability is reported with Cronbach's alpha per construct and per country-year coverage. The bounded form is compared against an ordinary linear regression on identical rows and folds and found close out of sample (paired difference 0.0146 against a fold-to-fold interquartile range near 0.32); we report the near-tie instead of a winner. Sample limits are stated in the abstract, the title page and the supplement, and every number traces to a committed artifact that a reviewer can regenerate with one command.
+\noindent The findings are stated at the level the evidence supports. Construct reliability is reported with Cronbach's alpha per construct and per country-year coverage. The bounded form is compared against an ordinary linear regression on identical rows and folds and found close out of sample (paired difference 0.0000019 (IQR -0.0000055 to 0.0000162)); we report the near-tie instead of a winner. Sample limits are stated in the abstract, the title page and the supplement, and every number traces to a committed artifact that a reviewer can regenerate with one command.
 
 \noindent Two further details matter for editorial assessment. First, the paper includes a correction note describing an earlier version's defect---an outcome that was an exact rescaling of a predictor---because a methods paper that silently changes its numbers is worse than one that explains why. Second, the reproduction path is complete: the canonical panel rebuilds byte-for-byte from hash-pinned inputs, and an independent verifier re-derives every construct from the raw microdata without importing the producer.
 

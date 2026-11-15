@@ -35,8 +35,8 @@ kept only to describe what the defect was.
 | KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
 | KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
 | KI-16 | Lockbox cannot be honoured | **CLOSED, scope narrowed** — 17 of 87 originally drawn cells stay reserved; 59 backfilled cells added after the split are not lockbox-protected. Disclosed in Lockbox protocol status (main §6). |
-| KI-17 | Functional form vs linear baseline | **REVISED** — measured; close out of sample (bounded leads on 75 of 100 identical folds by a median of 0.0146); linear is ahead in sample |
-| KI-18 | Fitting and evaluation use different X/Y windows and outcome anchors | **OPEN, quantified** — disclosed in the manuscript; unify and refit is a priority extension |
+| KI-17 | Functional form vs linear baseline | **REVISED** — grouped k-fold medians tie at 0.4074; bounded leads on 56/100 folds by a paired median difference of 0.0000019; linear leads in sample (0.4623 vs 0.4061) |
+| KI-18 | Fitting and evaluation use different X/Y windows and outcome anchors | **RESOLVED 2026-11-15** — fit, evaluation contract and generators use realised X/Y ranges and current-panel 1st/99th percentile Z anchors; verified by the shared-window consistency guard |
 
 ---
 
@@ -285,67 +285,15 @@ from the artifact.
 
 ---
 
-## KI-15 — `alpha` and `beta` collapse to their lower bound: X and Y carry no structural power
+## KI-15 — Structural elasticities sit at their lower bound and remain weakly identified — UPDATED 2026-11-15
 
-Re-estimating the model on the v2 panel (`scripts/fit_coefficients_v2.py`,
-differential evolution + L-BFGS-B with box constraints), the elasticities in
+On the canonical 207-row, 83-country panel, the production fit estimates `alpha = beta = 0.050`, the configured lower bound. The shared preprocessing contract now uses the realised panel ranges `X in [0.103453, 0.954411]`, `Y in [-1.558464, 5.215892]`, and current-panel 1st/99th percentile outcome anchors `Z in [-2.397431, 1.857307]`; no panel rows are clipped by the X/Y windows. The unified refit and contract are recorded in `structural_window_sensitivity.json`.
 
-```text
-Z = X_s^alpha * Y_s^beta * exp(Phi) / (that + k)
-```
+**Bound sensitivity.** Lowering the common alpha/beta floor from 0.050 to 0.001 moves both estimates to that new floor and raises fit-script observed-scale R2 from 0.3786 to 0.3990 (`elasticity_bound_sensitivity.json`). This shows sensitivity to the imposed floor. It does not establish that either exponent is estimated as zero.
 
-both converge to the lowest permitted value, `alpha = beta = 0.050`, and stay
-there when the bound is widened and the optimiser is restarted. Raising either
-exponent above that floor lowers the fit.
+**Profile evidence.** The alpha profile fixes alpha from 0.001 through 0.064 and re-optimises the other parameters. Loss increases across the tested grid, but all profile p-values exceed 0.05 (0.082 at 0.064); the grid has no interior minimum and does not exclude the shipped value 0.050. Alpha is weakly identified over this range. Beta is not separately profiled in this analysis.
 
-Meaning: the sublinear-power structural term contributes no explanatory power
-on this sample. `X^0.05` and `Y^0.05` are near-constant across the observed
-range, so `Z` is effectively driven by `exp(Phi)` alone. `Y` still matters, but
-through the interaction term `c_yr * Y_s * R` (fitted at +0.63), not through the
-elasticity `beta`.
-
-### Why this is expected here, and what it costs
-
-The v2 panel spans 167 observations across 76 countries, 27 of which contribute a
-single row. There is not enough within-country variation for an elasticity to be
-identified separately from the level term. The v1 panel could report `alpha` near
-1 only because `C` was restating `Z`.
-
-**Measured, not assumed.** An earlier version of this entry asserted that the
-exponents "stay at the bound when it is widened" without anything having measured
-that. It now has: moving the alpha/beta floor from 0.050 to 0.001 and refitting
-leaves both exponents at whatever floor is in force and *raises* in-sample R2 from
-0.3622 to 0.4034 (`src/data/analysis/elasticity_bound_sensitivity.json`). The
-constraint therefore binds, and the data prefer the limit alpha, beta -> 0, in
-which the multiplicative baseline drops out entirely. The manuscript reports this
-as a finding (Results, "the structural baseline is inert on this sample").
-
-**Cost:** the paper's title and framing — "Bounded Nonlinear Response Surfaces
-for Macro-Urban Belief Emergence" driven by urbanization and inequality — no
-longer describes the fitted model. The fitted model is a cross-sectional
-saturating map of *contextual channels* (welfare capacity, media environment,
-education) with urbanization and inequality present but inert as elasticities.
-
-Two defensible responses:
-
-1. **Reframe.** Present the model as a bounded contextual-channel map and move
-   urbanization/inequality to the discussion as boundary conditions. Honest,
-   cheap, and matches what the data supports.
-2. **Change the estimand.** Drop the multiplicative structural term entirely
-   and estimate a bounded additive model on the channels. Cleaner
-   statistically, but a different paper.
-
-The roadmap now assumes (1).
-
-### A separate defect this exposed
-
-The structural mapping window in `src/utils/modelContract.ts` was
-`X in [0.4, 0.9]`, `Y in [-1.5, 3.5]` — the v1 ranges. The v2 panel spans
-`X in [0.3304, 0.9544]` and `Y in [-1.6077, 3.4280]`, so six observations fell
-outside and were clipped to the floor of the interior band. That pinning is
-what first drove `alpha` into its bound; with the window corrected the bound
-result persists, which is how we know it is real rather than a clipping
-artefact.
+The paper reports the production specification and its bounded-scale headline R2 (0.4061), while distinguishing it from the fit script's observed-scale comparison. It retains X and Y in the stated model and avoids interpreting their structural exponents as identified effects. The contract, fit, profile, and sensitivity check are tied together by the manuscript consistency guard.
 
 ---
 
@@ -488,9 +436,9 @@ The coefficients were refit on the 167-cell v2 panel by
 `src/data/feCoefficients.ts`.
 
 ```text
-phi0 = +3.3431   alpha = 0.0500   beta = 0.0500   k = 14.6163
-c_M  = -0.1356   c_T   = -0.0858   c_E = +0.3882   c_R = +0.2587
-c_tr = -0.1668   c_yr  = +0.6325
+phi0 = -5.9312   alpha = 0.0500   beta = 0.0500   k = 0.0013741
+c_M  = -0.1375   c_T   = -0.0849   c_E = +0.3865   c_R = +0.2882
+c_tr = -0.1580   c_yr  = +0.7468
 retracted: C, D, G, S — coefficient not estimated (channel unavailable in v2)
 ```
 

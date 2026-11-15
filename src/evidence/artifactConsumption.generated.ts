@@ -22,6 +22,7 @@ export const ARTIFACT_CONSUMPTION = {
   /** Named in source but never imported: a reader could mistake this for wired-in. */
   referencedOnly: [
     'c_dominance_sensitivity',
+    'coefficient_fit',
     'cv_country_out',
     'cv_kfold',
     'cv_rolling_origin',

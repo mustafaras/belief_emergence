@@ -1,21 +1,31 @@
 {
   "schemaVersion": "phase1.coefficient_fit.v1",
-  "generatedAtIso": "2026-11-11T14:30:00.000Z",
+  "generatedAtIso": "2026-11-15T12:15:19.000Z",
   "source": "scripts/fit_coefficients_v2.py",
   "fittedOn": "public/data/panel_canonical_v2.csv",
   "nRows": 207,
   "nCountries": 83,
   "parameters": {
-    "phi0": 3.3430518940908516,
-    "alpha": 0.05000000004100796,
-    "beta": 0.05000000000209442,
-    "k": 14.61634212075696,
-    "c_M": -0.13563040015342476,
-    "c_T": -0.08578230246394702,
-    "c_E": 0.38822152894576467,
-    "c_R": 0.25871933576557815,
-    "c_tr": -0.1668243049602075,
-    "c_yr": 0.632454900494166
+    "phi0": -5.931199112402061,
+    "alpha": 0.050000000004783135,
+    "beta": 0.050000000001060224,
+    "k": 0.0013740846699083183,
+    "c_M": -0.13747675787632863,
+    "c_T": -0.08491746648481568,
+    "c_E": 0.3865223257852435,
+    "c_R": 0.28816078871308326,
+    "c_tr": -0.1580038890960328,
+    "c_yr": 0.746817674589666
+  },
+  "structuralWindow": {
+    "PANEL_X_MIN": 0.10345301530914319,
+    "PANEL_X_MAX": 0.9544108940201302,
+    "PANEL_Y_MIN": -1.5584640000000003,
+    "PANEL_Y_MAX": 5.2158924
+  },
+  "zScale": {
+    "min": -2.3974310177731915,
+    "max": 1.8573072003785436
   },
   "note": "The fitted coefficients are derived quantities, not licensed data: this file is committed so the manuscript numbers can be checked, while the raw inputs that produce them stay out of the repository."
 }

@@ -10,26 +10,26 @@
     },
     "c_dominance_sensitivity": {
       "schemaVersion": "phase1.c_dominance_sensitivity.v1",
-      "generatedAt": "2026-11-11T15:21:41.041Z",
+      "generatedAt": "2026-11-15T12:18:22.006Z",
       "rowCount": 207
     },
     "coefficient_bootstrap": {
       "schemaVersion": "phase1.coefficient_bootstrap.v1",
-      "generatedAt": "2026-11-15T10:38:21.121136+00:00"
+      "generatedAt": "2026-11-15T11:45:26.390830+00:00"
     },
     "coefficient_fit": {
       "schemaVersion": "phase1.coefficient_fit.v1",
-      "generatedAt": "2026-11-11T14:30:00.000Z",
+      "generatedAt": "2026-11-15T12:15:19.000Z",
       "rowCount": 207
     },
     "collinearity_ablation": {
       "schemaVersion": "phase1.collinearity_ablation.v1",
-      "generatedAt": "2026-11-11T14:47:09.764Z",
+      "generatedAt": "2026-11-15T12:18:24.119Z",
       "rowCount": 207
     },
     "collinearity_diagnostics": {
       "schemaVersion": "phase1.collinearity_diagnostics.v1",
-      "generatedAt": "2026-11-11T14:47:09.111Z",
+      "generatedAt": "2026-11-15T12:18:23.418Z",
       "rowCount": 207
     },
     "construct_item_availability": {
@@ -43,20 +43,20 @@
     },
     "construct_validity_invariance": {
       "schemaVersion": "phase1.construct_validity_invariance.v1",
-      "generatedAt": "2026-11-11T15:29:15.686Z",
+      "generatedAt": "2026-11-15T12:18:20.316Z",
       "rowCount": 207
     },
     "cv_country_out": {
       "schemaVersion": "phase1.cv_country_out.v1",
-      "generatedAt": "2026-11-11T15:29:15.672Z"
+      "generatedAt": "2026-11-15T12:18:20.299Z"
     },
     "cv_kfold": {
       "schemaVersion": "phase1.cv_kfold.v1",
-      "generatedAt": "2026-11-11T15:29:16.081Z"
+      "generatedAt": "2026-11-15T12:18:20.872Z"
     },
     "cv_rolling_origin": {
       "schemaVersion": "phase1.cv_rolling_origin.v1",
-      "generatedAt": "2026-11-11T15:29:15.682Z"
+      "generatedAt": "2026-11-15T12:18:20.310Z"
     },
     "data_code_provenance": {
       "schemaVersion": "phase1.data_code_provenance.v1",
@@ -64,25 +64,25 @@
     },
     "elasticity_bound_sensitivity": {
       "schemaVersion": "phase1.elasticity_bound_sensitivity.v1",
-      "generatedAt": "2026-11-10T15:32:21.561Z"
+      "generatedAt": "2026-11-15T12:16:59.996Z"
     },
     "elasticity_profile": {
       "schemaVersion": "phase1.elasticity_profile.v1",
-      "generatedAt": "2026-11-11T14:11:19.000Z",
+      "generatedAt": "2026-11-15T11:56:51.000Z",
       "rowCount": 207
     },
     "failure_log": {
       "schemaVersion": "phase1.failure_log.v1",
-      "generatedAt": "2026-11-11T15:29:15.684Z"
+      "generatedAt": "2026-11-15T12:18:20.312Z"
     },
     "functional_form_comparison": {
       "schemaVersion": "phase1.functional_form_comparison.v1",
-      "generatedAt": "2026-11-15T10:38:18.858Z",
+      "generatedAt": "2026-11-15T12:18:21.371Z",
       "rowCount": 207
     },
     "gini_window_sensitivity": {
       "schemaVersion": "phase1.gini_window_sensitivity.v1",
-      "generatedAt": "2026-11-11T15:25:00.140Z"
+      "generatedAt": "2026-11-15T11:40:20.366Z"
     },
     "journal_fit_targeting": {
       "schemaVersion": "phase1.journal_fit_targeting.v1",
@@ -95,37 +95,37 @@
     },
     "marginal_effects": {
       "schemaVersion": "phase1.marginal_effects.v1",
-      "generatedAt": "2026-11-15T10:38:19.139Z"
+      "generatedAt": "2026-11-15T12:20:04.306Z"
     },
     "metrics_authoritative": {
-      "generatedAt": "2026-11-11T15:29:36.137Z",
+      "generatedAt": "2026-11-15T12:15:32.436Z",
       "rowCount": 207
     },
     "model_complexity_support": {
       "schemaVersion": "phase1.model_complexity_support.v1",
-      "generatedAt": "2026-11-11T15:29:15.684Z",
+      "generatedAt": "2026-11-15T12:18:20.312Z",
       "rowCount": 207
     },
     "model_ladder_metrics": {
       "schemaVersion": "phase1.model_ladder.v1",
-      "generatedAt": "2026-11-11T15:29:15.595Z",
+      "generatedAt": "2026-11-15T12:18:20.213Z",
       "rowCount": 207
     },
     "notation_glossary": {
       "schemaVersion": "phase1.notation_glossary.v1",
-      "generatedAt": "2026-11-15T10:38:25.216729+00:00"
+      "generatedAt": "2026-11-15T12:20:05.430463+00:00"
     },
     "parameter_stability": {
       "schemaVersion": "phase1.parameter_stability.v1",
-      "generatedAt": "2026-11-11T15:29:15.684Z"
+      "generatedAt": "2026-11-15T12:18:20.312Z"
     },
     "prediction_interval_coverage": {
       "schemaVersion": "phase1.prediction_interval_coverage.v2",
-      "generatedAt": "2026-11-11T15:29:15.683Z"
+      "generatedAt": "2026-11-15T12:18:20.311Z"
     },
     "preset_country_alignment": {
       "schemaVersion": "phase1.preset_country_alignment.v1",
-      "generatedAt": "2026-11-15T10:38:19.413Z"
+      "generatedAt": "2026-11-15T12:20:04.688Z"
     },
     "q1_submission_gate_report": {
       "schemaVersion": "phase1.q1_submission_gate.v1",
@@ -133,7 +133,7 @@
     },
     "r_collinearity_case": {
       "schemaVersion": "phase1.r_collinearity_case.v1",
-      "generatedAt": "2026-11-11T15:21:16.542Z",
+      "generatedAt": "2026-11-15T12:18:27.480Z",
       "rowCount": 207
     },
     "reviewer_red_team": {
@@ -146,21 +146,21 @@
     },
     "structural_window_sensitivity": {
       "schemaVersion": "phase1.structural_window_sensitivity.v1",
-      "generatedAt": "2026-11-15T10:38:21.413783+00:00",
+      "generatedAt": "2026-11-15T11:56:55.644290+00:00",
       "rowCount": 207
     },
     "supplementary_tables": {
       "schemaVersion": "phase1.supplementary_tables.v1",
-      "generatedAt": "2026-11-15T10:38:19.698Z"
+      "generatedAt": "2026-11-15T12:20:05.070Z"
     },
     "temporal_outlier_2006_sensitivity": {
       "schemaVersion": "phase1.temporal_outlier_2006_sensitivity.v1",
-      "generatedAt": "2026-11-11T15:21:41.521Z",
+      "generatedAt": "2026-11-15T12:18:22.619Z",
       "rowCount": 207
     },
     "tier_b_stability_sweep": {
       "schemaVersion": "phase1.tier_b_stability_sweep.v1",
-      "generatedAt": "2026-11-11T15:21:41.860Z"
+      "generatedAt": "2026-11-15T12:18:23.034Z"
     },
     "wvs_construct_audit": {
       "schemaVersion": "wvs.construct_audit/1.0",
@@ -168,7 +168,7 @@
     },
     "zero_fill_sensitivity": {
       "schemaVersion": "phase1.zero_fill_sensitivity.v1",
-      "generatedAt": "2026-11-11T15:07:36.621Z",
+      "generatedAt": "2026-11-15T12:18:25.784Z",
       "rowCount": 207
     }
   }

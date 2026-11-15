@@ -7,7 +7,7 @@ import { OPTIMIZED_STRUCTURAL_PARAMS } from '../src/data/feCoefficients'
 import {
   PROFILE_ALPHA,
   buildLimits,
-  profileUpperBound,
+  largestNonRejectedProfileValue,
   type CollinearityDiagnostics,
   type ElasticityProfile,
   type LockboxHoldout,
@@ -35,27 +35,26 @@ const build = (panelRows = 207) =>
     shippedBeta: OPTIMIZED_STRUCTURAL_PARAMS.beta,
   })
 
-describe('profileUpperBound', () => {
-  it('is the largest grid value the likelihood-ratio test does not reject', () => {
+describe('largestNonRejectedProfileValue', () => {
+  it('returns the largest tested grid value the likelihood-ratio test does not reject', () => {
     const inside = profile.profiles.filter((p) => p.pValue > PROFILE_ALPHA).map((p) => p.value)
-    expect(profileUpperBound(profile)).toBe(Math.max(...inside))
-    expect(profileUpperBound(profile)).toBe(0.016)
+    expect(largestNonRejectedProfileValue(profile)).toBe(Math.max(...inside))
+    expect(largestNonRejectedProfileValue(profile)).toBe(0.064)
   })
 
-  it('excludes values that are rejected', () => {
+  it('does not infer a profile cutoff when no tested value is rejected', () => {
     const rejected = profile.profiles.filter((p) => p.pValue <= PROFILE_ALPHA).map((p) => p.value)
-    expect(rejected).toContain(0.032)
-    expect(profileUpperBound(profile)).toBeLessThan(0.032)
+    expect(rejected).toEqual([])
+    expect(largestNonRejectedProfileValue(profile)).toBe(Math.max(...profile.grid))
   })
 })
 
 describe('buildLimits against the real artifacts', () => {
   const report = build()
 
-  it('states all four limits', () => {
+  it('states the three current evidence limits', () => {
     expect(report.limits.map((l) => l.id)).toEqual([
       'exponents',
-      'shipped-exponent',
       'lockbox',
       'collinearity',
     ])
@@ -66,19 +65,18 @@ describe('buildLimits against the real artifacts', () => {
     expect(report.unsourced).toEqual([])
   })
 
-  it('reports the profile interval the artifact supports', () => {
+  it('reports the largest tested non-rejected alpha value, not a confidence bound', () => {
     const limit = report.limits.find((l) => l.id === 'exponents')
-    const upper = limit?.figures.find((f) => f.label.includes('Upper end'))
-    expect(upper?.value).toBe('0.016')
+    const endpoint = limit?.figures.find((f) => f.label.includes('Largest tested alpha value'))
+    expect(endpoint?.value).toBe('0.064')
+    expect(limit?.statement).toMatch(/beta was not separately profiled/)
+    expect(limit?.consequence).toMatch(/does not exclude the shipped alpha/)
   })
 
-  it('states that the shipped exponent is outside the interval', () => {
-    // 0.05 against an interval ending at 0.016.
-    const limit = report.limits.find((l) => l.id === 'shipped-exponent')
-    expect(limit).toBeDefined()
-    expect(limit?.statement).toMatch(/outside the interval/)
-    // Rounded for prose; the full value is in the figures.
-    expect(limit?.statement).toContain('0.05')
+  it('does not claim the shipped alpha is rejected by the tested profile', () => {
+    expect(report.limits.find((l) => l.id === 'shipped-exponent')).toBeUndefined()
+    const limit = report.limits.find((l) => l.id === 'exponents')
+    expect(limit?.figures.find((f) => f.label === 'Shipped alpha')?.value).toMatch(/^0\.05/)
   })
 
   it('computes the rows outside the reserve from the panel, not from a literal', () => {
@@ -112,21 +110,5 @@ describe('buildLimits against the real artifacts', () => {
     const withR = rCase.variants.find((v) => v.label.includes('with R') && !v.label.includes('without'))
     // Dropping R raises k-fold, so the statement "would not cost held-out fit" is true.
     expect(without!.kFoldR2).toBeGreaterThan(withR!.kFoldR2)
-  })
-})
-
-describe('when a limit would be unsupported', () => {
-  it('omits the shipped-exponent limit if the exponent were inside the interval', () => {
-    const inside = buildLimits({
-      profile,
-      lockbox,
-      collinearity,
-      rCase,
-      panelRows: 207,
-      // A value the panel does support.
-      shippedAlpha: 0.008,
-      shippedBeta: OPTIMIZED_STRUCTURAL_PARAMS.beta,
-    })
-    expect(inside.limits.find((l) => l.id === 'shipped-exponent')).toBeUndefined()
   })
 })

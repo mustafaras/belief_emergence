@@ -36,6 +36,7 @@ from scipy import stats
 ROOT = Path(__file__).resolve().parent.parent
 PANEL = ROOT / "public" / "data" / "panel_canonical_v2.csv"
 OUT = ROOT / "src" / "data" / "analysis" / "elasticity_profile.json"
+CONTRACT = ROOT / "src" / "utils" / "modelContract.ts"
 
 STRUCTURAL_MIN = 1e-4
 STRUCTURAL_MAX = 1 - STRUCTURAL_MIN
@@ -59,19 +60,32 @@ def read_panel():
     return rows
 
 
+def panel_bounds():
+    """Read the unified X/Y bounds from the runtime contract."""
+    import re
+    text = CONTRACT.read_text(encoding="utf-8")
+    values = {}
+    for key in ("PANEL_X_MIN", "PANEL_X_MAX", "PANEL_Y_MIN", "PANEL_Y_MAX"):
+        match = re.search(rf"export const {key} = ([^;]+);", text)
+        if not match:
+            raise ValueError(f"Missing {key} in {CONTRACT}")
+        values[key] = float(match.group(1))
+    return values["PANEL_X_MIN"], values["PANEL_X_MAX"], values["PANEL_Y_MIN"], values["PANEL_Y_MAX"]
+
+
 def structural(value, lo, hi):
     u = min(1.0, max(0.0, (value - lo) / (hi - lo)))
     return STRUCTURAL_MIN + u * (1 - 2 * STRUCTURAL_MIN)
 
 
-def predict(theta, rows, alpha, beta):
+def predict(theta, rows, alpha, beta, bounds):
     phi0 = theta[0]
     k = math.exp(theta[1])
     cM, cT, cE, cR, ctr, cyr = theta[2:8]
     out = np.empty(len(rows))
     for i, r in enumerate(rows):
-        xs = structural(r["X"], 0.2223, 0.9544)
-        ys = structural(r["Y"], -1.4601, 3.4280)
+        xs = structural(r["X"], bounds[0], bounds[1])
+        ys = structural(r["Y"], bounds[2], bounds[3])
         phi = phi0 + cM * r["M"] + cT * r["T"] + cE * r["E"] + cR * r["R"] \
             + ctr * r["T"] * r["R"] + cyr * ys * r["R"]
         phi = max(-PHI_CLAMP, min(PHI_CLAMP, phi))
@@ -80,22 +94,22 @@ def predict(theta, rows, alpha, beta):
     return out
 
 
-def fit_with_fixed(rows, target, alpha, beta, seed=42):
+def fit_with_fixed(rows, target, alpha, beta, bounds, seed=42):
     """Optimise every parameter except alpha and beta, which are held fixed."""
     def loss(theta):
-        pred = np.clip(predict(theta, rows, alpha, beta), 1e-9, 1 - 1e-9)
+        pred = np.clip(predict(theta, rows, alpha, beta, bounds), 1e-9, 1 - 1e-9)
         return float(np.mean((pred - target) ** 2))
 
-    bounds = [
+    parameter_bounds = [
         (-10, 10),                          # phi0
         (math.log(1e-4), math.log(50.0)),   # k
         (-5, 5), (-5, 5), (-5, 5), (-5, 5), # cM cT cE cR
         (-5, 5), (-5, 5),                   # ctr cyr
     ]
-    de = differential_evolution(loss, bounds, seed=seed, maxiter=400,
+    de = differential_evolution(loss, parameter_bounds, seed=seed, maxiter=400,
                                 popsize=20, tol=1e-10, polish=False,
                                 workers=1, updating="deferred")
-    lb = minimize(loss, de.x, method="L-BFGS-B", bounds=bounds,
+    lb = minimize(loss, de.x, method="L-BFGS-B", bounds=parameter_bounds,
                   options={"maxiter": 4000})
     return float(min(lb.fun, de.fun))
 
@@ -109,6 +123,7 @@ def main():
     rows = read_panel()
     if not rows:
         sys.exit(f"no usable rows in {PANEL}")
+    bounds = panel_bounds()
     z = np.array([r["Z"] for r in rows])
     lo, hi = np.percentile(z, [1, 99])
     target = np.clip((z - lo) / (hi - lo), 1e-6, 1 - 1e-6)
@@ -121,7 +136,7 @@ def main():
     for g in grid:
         alpha = g if args.param in ("alpha", "both") else 0.05
         beta = g if args.param in ("beta", "both") else 0.05
-        loss = fit_with_fixed(rows, target, alpha, beta)
+        loss = fit_with_fixed(rows, target, alpha, beta, bounds)
         profiles.append({"value": g, "loss": loss})
         print(f"  {args.param} = {g:<9} loss = {loss:.8f}")
 
@@ -163,6 +178,8 @@ def main():
         "generatedAtIso": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
         "profiledParameter": args.param,
         "nRows": n,
+        "window": {"xMin": bounds[0], "xMax": bounds[1], "yMin": bounds[2], "yMax": bounds[3]},
+        "outcomeAnchors": {"min": float(lo), "max": float(hi)},
         "method": (
             "Profile likelihood: the parameter is fixed on a grid and every other parameter "
             "is re-optimised at each point (differential evolution, then L-BFGS-B). The loss "

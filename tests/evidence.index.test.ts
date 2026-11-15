@@ -82,7 +82,7 @@ describe('evidence index matches the tree', () => {
     // replaced hand-typed manuscript tables (none of the three is imported by the interface).
     expect(names.length).toBe(38)
     expect(ARTIFACT_CONSUMPTION.imported.length).toBe(10)
-    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
+    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(12)
   })
 
   it('flags an artifact whose declared sample predates the current panel', () => {

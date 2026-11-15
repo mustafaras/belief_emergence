@@ -1,6 +1,6 @@
 {
   "schemaVersion": "phase1.prediction_interval_coverage.v2",
-  "generatedAtIso": "2026-11-11T15:29:15.683Z",
+  "generatedAtIso": "2026-11-15T12:18:20.311Z",
   "nominalCoverage": 0.95,
   "severeUnderCoverageThreshold": 0.8,
   "intervalMethods": {
@@ -14,16 +14,29 @@
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9126506024096386,
-        "stdCoverage95": 0.24099767736972058,
+        "meanCoverage95": 0.915863453815261,
+        "stdCoverage95": 0.22304409760100463,
         "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.03734939759036138,
+        "meanGapToNominal": -0.034136546184738936,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.1566265060240964,
+        "severeUnderCoverageRate": 0.1566265060240964,
+        "nFolds": 83
+      },
+      "B": {
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.9136546184738955,
+        "stdCoverage95": 0.24013242420357064,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.03634538152610445,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.14457831325301204,
         "severeUnderCoverageRate": 0.14457831325301204,
         "nFolds": 83
       },
-      "B": {
+      "C": {
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
@@ -35,19 +48,6 @@
         "underCoverageRate": 0.14457831325301204,
         "severeUnderCoverageRate": 0.14457831325301204,
         "nFolds": 83
-      },
-      "C": {
-        "medianCoverage95": 1,
-        "q25Coverage95": 1,
-        "q75Coverage95": 1,
-        "meanCoverage95": 0.9196787148594376,
-        "stdCoverage95": 0.23586237688253872,
-        "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.030321285140562315,
-        "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.13253012048192772,
-        "severeUnderCoverageRate": 0.13253012048192772,
-        "nFolds": 83
       }
     },
     "rolling_origin": {
@@ -55,38 +55,38 @@
         "medianCoverage95": 1,
         "q25Coverage95": 0.6875,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.8391190476190477,
-        "stdCoverage95": 0.2509608990000406,
+        "meanCoverage95": 0.8674047619047619,
+        "stdCoverage95": 0.1908832208604174,
         "iqrWidthCoverage95": 0.3125,
-        "meanGapToNominal": -0.1108809523809523,
+        "meanGapToNominal": -0.08259523809523805,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.44,
-        "severeUnderCoverageRate": 0.28,
+        "underCoverageRate": 0.36,
+        "severeUnderCoverageRate": 0.32,
         "nFolds": 25
       },
       "B": {
         "medianCoverage95": 1,
-        "q25Coverage95": 0.8,
+        "q25Coverage95": 0.7,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.860031746031746,
-        "stdCoverage95": 0.20320009005103762,
-        "iqrWidthCoverage95": 0.19999999999999996,
-        "meanGapToNominal": -0.08996825396825392,
+        "meanCoverage95": 0.844920634920635,
+        "stdCoverage95": 0.19874845103988437,
+        "iqrWidthCoverage95": 0.30000000000000004,
+        "meanGapToNominal": -0.105079365079365,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.44,
-        "severeUnderCoverageRate": 0.24,
+        "underCoverageRate": 0.48,
+        "severeUnderCoverageRate": 0.36,
         "nFolds": 25
       },
       "C": {
-        "medianCoverage95": 0.9166666666666666,
-        "q25Coverage95": 0.625,
+        "medianCoverage95": 1,
+        "q25Coverage95": 0.6666666666666666,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.7911031746031746,
-        "stdCoverage95": 0.2695421822289711,
-        "iqrWidthCoverage95": 0.375,
-        "meanGapToNominal": -0.15889682539682537,
-        "medianGapToNominal": -0.033333333333333326,
-        "underCoverageRate": 0.56,
+        "meanCoverage95": 0.8173174603174602,
+        "stdCoverage95": 0.23300221738212856,
+        "iqrWidthCoverage95": 0.33333333333333337,
+        "meanGapToNominal": -0.13268253968253974,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.48,
         "severeUnderCoverageRate": 0.36,
         "nFolds": 25
       }
@@ -98,16 +98,29 @@
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9126506024096386,
-        "stdCoverage95": 0.24099767736972058,
+        "meanCoverage95": 0.915863453815261,
+        "stdCoverage95": 0.22304409760100463,
         "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.03734939759036138,
+        "meanGapToNominal": -0.034136546184738936,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.1566265060240964,
+        "severeUnderCoverageRate": 0.1566265060240964,
+        "nFolds": 83
+      },
+      "B": {
+        "medianCoverage95": 1,
+        "q25Coverage95": 1,
+        "q75Coverage95": 1,
+        "meanCoverage95": 0.9136546184738955,
+        "stdCoverage95": 0.24013242420357064,
+        "iqrWidthCoverage95": 0,
+        "meanGapToNominal": -0.03634538152610445,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.14457831325301204,
         "severeUnderCoverageRate": 0.14457831325301204,
         "nFolds": 83
       },
-      "B": {
+      "C": {
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
@@ -119,19 +132,6 @@
         "underCoverageRate": 0.14457831325301204,
         "severeUnderCoverageRate": 0.14457831325301204,
         "nFolds": 83
-      },
-      "C": {
-        "medianCoverage95": 1,
-        "q25Coverage95": 1,
-        "q75Coverage95": 1,
-        "meanCoverage95": 0.9196787148594376,
-        "stdCoverage95": 0.23586237688253872,
-        "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.030321285140562315,
-        "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.13253012048192772,
-        "severeUnderCoverageRate": 0.13253012048192772,
-        "nFolds": 83
       }
     },
     "rolling_origin": {
@@ -139,38 +139,38 @@
         "medianCoverage95": 1,
         "q25Coverage95": 0.6875,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.8391190476190477,
-        "stdCoverage95": 0.2509608990000406,
+        "meanCoverage95": 0.8674047619047619,
+        "stdCoverage95": 0.1908832208604174,
         "iqrWidthCoverage95": 0.3125,
-        "meanGapToNominal": -0.1108809523809523,
+        "meanGapToNominal": -0.08259523809523805,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.44,
-        "severeUnderCoverageRate": 0.28,
+        "underCoverageRate": 0.36,
+        "severeUnderCoverageRate": 0.32,
         "nFolds": 25
       },
       "B": {
         "medianCoverage95": 1,
-        "q25Coverage95": 0.8,
+        "q25Coverage95": 0.7,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.860031746031746,
-        "stdCoverage95": 0.20320009005103762,
-        "iqrWidthCoverage95": 0.19999999999999996,
-        "meanGapToNominal": -0.08996825396825392,
+        "meanCoverage95": 0.844920634920635,
+        "stdCoverage95": 0.19874845103988437,
+        "iqrWidthCoverage95": 0.30000000000000004,
+        "meanGapToNominal": -0.105079365079365,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.44,
-        "severeUnderCoverageRate": 0.24,
+        "underCoverageRate": 0.48,
+        "severeUnderCoverageRate": 0.36,
         "nFolds": 25
       },
       "C": {
-        "medianCoverage95": 0.9166666666666666,
-        "q25Coverage95": 0.625,
+        "medianCoverage95": 1,
+        "q25Coverage95": 0.6666666666666666,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.7911031746031746,
-        "stdCoverage95": 0.2695421822289711,
-        "iqrWidthCoverage95": 0.375,
-        "meanGapToNominal": -0.15889682539682537,
-        "medianGapToNominal": -0.033333333333333326,
-        "underCoverageRate": 0.56,
+        "meanCoverage95": 0.8173174603174602,
+        "stdCoverage95": 0.23300221738212856,
+        "iqrWidthCoverage95": 0.33333333333333337,
+        "meanGapToNominal": -0.13268253968253974,
+        "medianGapToNominal": 0.050000000000000044,
+        "underCoverageRate": 0.48,
         "severeUnderCoverageRate": 0.36,
         "nFolds": 25
       }
@@ -182,23 +182,23 @@
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9287148594377509,
-        "stdCoverage95": 0.21704646594874627,
+        "meanCoverage95": 0.9246987951807228,
+        "stdCoverage95": 0.21878825946152944,
         "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.02128514056224906,
+        "meanGapToNominal": -0.025301204819277112,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.12048192771084337,
-        "severeUnderCoverageRate": 0.12048192771084337,
+        "underCoverageRate": 0.13253012048192772,
+        "severeUnderCoverageRate": 0.13253012048192772,
         "nFolds": 83
       },
       "B": {
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9397590361445783,
-        "stdCoverage95": 0.18828910419029374,
+        "meanCoverage95": 0.9377510040160641,
+        "stdCoverage95": 0.19208745498195817,
         "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.010240963855421614,
+        "meanGapToNominal": -0.012248995983935806,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.12048192771084337,
         "severeUnderCoverageRate": 0.12048192771084337,
@@ -208,10 +208,10 @@
         "medianCoverage95": 1,
         "q25Coverage95": 1,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9347389558232931,
-        "stdCoverage95": 0.2118796511712915,
+        "meanCoverage95": 0.9407630522088353,
+        "stdCoverage95": 0.1910648560421795,
         "iqrWidthCoverage95": 0,
-        "meanGapToNominal": -0.015261044176706817,
+        "meanGapToNominal": -0.009236947791164685,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.10843373493975904,
         "severeUnderCoverageRate": 0.10843373493975904,
@@ -221,38 +221,38 @@
     "rolling_origin": {
       "A": {
         "medianCoverage95": 1,
-        "q25Coverage95": 0.8333333333333334,
+        "q25Coverage95": 0.75,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.8652857142857142,
-        "stdCoverage95": 0.2433467675600704,
-        "iqrWidthCoverage95": 0.16666666666666663,
-        "meanGapToNominal": -0.08471428571428574,
+        "meanCoverage95": 0.8736190476190475,
+        "stdCoverage95": 0.1888370944060884,
+        "iqrWidthCoverage95": 0.25,
+        "meanGapToNominal": -0.07638095238095244,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.36,
-        "severeUnderCoverageRate": 0.2,
+        "severeUnderCoverageRate": 0.28,
         "nFolds": 25
       },
       "B": {
         "medianCoverage95": 1,
-        "q25Coverage95": 0.9166666666666666,
+        "q25Coverage95": 0.8,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.9309047619047619,
-        "stdCoverage95": 0.13322277871276975,
-        "iqrWidthCoverage95": 0.08333333333333337,
-        "meanGapToNominal": -0.019095238095238054,
+        "meanCoverage95": 0.8881269841269841,
+        "stdCoverage95": 0.17231893154609043,
+        "iqrWidthCoverage95": 0.19999999999999996,
+        "meanGapToNominal": -0.06187301587301586,
         "medianGapToNominal": 0.050000000000000044,
-        "underCoverageRate": 0.28,
-        "severeUnderCoverageRate": 0.12,
+        "underCoverageRate": 0.4,
+        "severeUnderCoverageRate": 0.2,
         "nFolds": 25
       },
       "C": {
         "medianCoverage95": 1,
         "q25Coverage95": 0.8,
         "q75Coverage95": 1,
-        "meanCoverage95": 0.8762460317460318,
-        "stdCoverage95": 0.1928869392032358,
+        "meanCoverage95": 0.871484126984127,
+        "stdCoverage95": 0.21013862192800248,
         "iqrWidthCoverage95": 0.19999999999999996,
-        "meanGapToNominal": -0.07375396825396818,
+        "meanGapToNominal": -0.07851587301587293,
         "medianGapToNominal": 0.050000000000000044,
         "underCoverageRate": 0.36,
         "severeUnderCoverageRate": 0.24,
@@ -262,71 +262,71 @@
   },
   "pooledByTier": {
     "A": {
-      "meanCoverage95": 0.8956294091710759,
+      "meanCoverage95": 0.9046461640211639,
       "nFolds": 108,
-      "meanGapToNominal": -0.05437059082892404,
-      "underCoverageRate": 0.21296296296296297,
-      "severeUnderCoverageRate": 0.17592592592592593
+      "meanGapToNominal": -0.04535383597883602,
+      "underCoverageRate": 0.2037037037037037,
+      "severeUnderCoverageRate": 0.19444444444444445
     },
     "B": {
-      "meanCoverage95": 0.8966122868900647,
+      "meanCoverage95": 0.8977439741328631,
       "nFolds": 108,
-      "meanGapToNominal": -0.053387713109935286,
-      "underCoverageRate": 0.21296296296296297,
-      "severeUnderCoverageRate": 0.16666666666666666
+      "meanGapToNominal": -0.052256025867136846,
+      "underCoverageRate": 0.2222222222222222,
+      "severeUnderCoverageRate": 0.19444444444444445
     },
     "C": {
-      "meanCoverage95": 0.8899158583186362,
+      "meanCoverage95": 0.8867247207524985,
       "nFolds": 108,
-      "meanGapToNominal": -0.06008414168136378,
-      "underCoverageRate": 0.23148148148148148,
-      "severeUnderCoverageRate": 0.18518518518518517
+      "meanGapToNominal": -0.06327527924750143,
+      "underCoverageRate": 0.2222222222222222,
+      "severeUnderCoverageRate": 0.19444444444444445
     }
   },
   "pooledByTierGaussian": {
     "A": {
-      "meanCoverage95": 0.9140321869488536,
+      "meanCoverage95": 0.9128747795414462,
       "nFolds": 108,
-      "meanGapToNominal": -0.03596781305114638,
-      "underCoverageRate": 0.17592592592592593,
-      "severeUnderCoverageRate": 0.1388888888888889
+      "meanGapToNominal": -0.03712522045855371,
+      "underCoverageRate": 0.18518518518518517,
+      "severeUnderCoverageRate": 0.16666666666666666
     },
     "B": {
-      "meanCoverage95": 0.9377094356261023,
+      "meanCoverage95": 0.9262639623750736,
       "nFolds": 108,
-      "meanGapToNominal": -0.012290564373897639,
-      "underCoverageRate": 0.1574074074074074,
-      "severeUnderCoverageRate": 0.12037037037037036
+      "meanGapToNominal": -0.023736037624926376,
+      "underCoverageRate": 0.18518518518518517,
+      "severeUnderCoverageRate": 0.1388888888888889
     },
     "C": {
-      "meanCoverage95": 0.9211989271017048,
+      "meanCoverage95": 0.9247262639623751,
       "nFolds": 108,
-      "meanGapToNominal": -0.028801072898295144,
+      "meanGapToNominal": -0.02527373603762484,
       "underCoverageRate": 0.16666666666666666,
       "severeUnderCoverageRate": 0.1388888888888889
     }
   },
   "methodComparisonByTier": {
     "A": {
-      "primaryMeanCoverage95": 0.895629409171076,
-      "gaussianMeanCoverage95": 0.9140321869488537,
-      "deltaMeanCoverage95": -0.018402777777777657,
-      "primaryAbsGapToNominal": 0.054370590828923926,
-      "gaussianAbsGapToNominal": 0.03596781305114627
+      "primaryMeanCoverage95": 0.904646164021164,
+      "gaussianMeanCoverage95": 0.9128747795414462,
+      "deltaMeanCoverage95": -0.008228615520282201,
+      "primaryAbsGapToNominal": 0.04535383597883591,
+      "gaussianAbsGapToNominal": 0.03712522045855371
     },
     "B": {
-      "primaryMeanCoverage95": 0.8966122868900648,
-      "gaussianMeanCoverage95": 0.9377094356261023,
-      "deltaMeanCoverage95": -0.041097148736037536,
-      "primaryAbsGapToNominal": 0.053387713109935175,
-      "gaussianAbsGapToNominal": 0.012290564373897639
+      "primaryMeanCoverage95": 0.8977439741328631,
+      "gaussianMeanCoverage95": 0.9262639623750735,
+      "deltaMeanCoverage95": -0.02851998824221036,
+      "primaryAbsGapToNominal": 0.052256025867136846,
+      "gaussianAbsGapToNominal": 0.023736037624926487
     },
     "C": {
-      "primaryMeanCoverage95": 0.8899158583186363,
-      "gaussianMeanCoverage95": 0.921198927101705,
-      "deltaMeanCoverage95": -0.031283068783068746,
-      "primaryAbsGapToNominal": 0.06008414168136367,
-      "gaussianAbsGapToNominal": 0.02880107289829492
+      "primaryMeanCoverage95": 0.8867247207524988,
+      "gaussianMeanCoverage95": 0.9247262639623751,
+      "deltaMeanCoverage95": -0.038001543209876365,
+      "primaryAbsGapToNominal": 0.0632752792475012,
+      "gaussianAbsGapToNominal": 0.02527373603762484
     }
   },
   "assumptionAudit": {
@@ -335,30 +335,30 @@
         "A": {
           "lowVarianceFoldRate": 0.2289156626506024,
           "thinSupportFoldRate": 0.5783132530120482,
-          "medianResidualStdTrain": 0.18974223298739226,
-          "residualStdCv": 0.010880825920536703,
-          "medianResidualCenterShift": -0.06239526562971531,
-          "empiricalVsGaussianMeanDelta": -0.016064257028112452,
+          "medianResidualStdTrain": 0.17200163922617384,
+          "residualStdCv": 0.01018621535160468,
+          "medianResidualCenterShift": -0.05452034695520888,
+          "empiricalVsGaussianMeanDelta": -0.008835341365461848,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 83
         },
         "B": {
           "lowVarianceFoldRate": 0.2289156626506024,
           "thinSupportFoldRate": 0.5783132530120482,
-          "medianResidualStdTrain": 0.17213590203333945,
-          "residualStdCv": 0.012811526763380456,
-          "medianResidualCenterShift": -0.022457797240601707,
-          "empiricalVsGaussianMeanDelta": -0.0321285140562249,
+          "medianResidualStdTrain": 0.15572601136172515,
+          "residualStdCv": 0.012025013471709171,
+          "medianResidualCenterShift": -0.014535272594930482,
+          "empiricalVsGaussianMeanDelta": -0.024096385542168676,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 83
         },
         "C": {
           "lowVarianceFoldRate": 0.2289156626506024,
           "thinSupportFoldRate": 0.5783132530120482,
-          "medianResidualStdTrain": 0.1709796073664527,
-          "residualStdCv": 0.012889667983116464,
-          "medianResidualCenterShift": -0.01923459727267543,
-          "empiricalVsGaussianMeanDelta": -0.015060240963855422,
+          "medianResidualStdTrain": 0.15497159850248984,
+          "residualStdCv": 0.012279047699471458,
+          "medianResidualCenterShift": -0.017151718605811384,
+          "empiricalVsGaussianMeanDelta": -0.03313253012048193,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 83
         }
@@ -367,30 +367,30 @@
         "A": {
           "lowVarianceFoldRate": 0.16,
           "thinSupportFoldRate": 0.32,
-          "medianResidualStdTrain": 0.19118768706396772,
-          "residualStdCv": 0.19106188959361922,
-          "medianResidualCenterShift": -0.03153416373130538,
-          "empiricalVsGaussianMeanDelta": -0.026166666666666668,
+          "medianResidualStdTrain": 0.1731050345697879,
+          "residualStdCv": 0.20475339436616408,
+          "medianResidualCenterShift": -0.028843434517412725,
+          "empiricalVsGaussianMeanDelta": -0.00621428571428571,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 25
         },
         "B": {
           "lowVarianceFoldRate": 0.16,
           "thinSupportFoldRate": 0.32,
-          "medianResidualStdTrain": 0.17377999648114598,
-          "residualStdCv": 0.15109490111836646,
-          "medianResidualCenterShift": 0.007868944716383788,
-          "empiricalVsGaussianMeanDelta": -0.07087301587301587,
+          "medianResidualStdTrain": 0.15718307851364677,
+          "residualStdCv": 0.1637782556993671,
+          "medianResidualCenterShift": 0.00615632176409793,
+          "empiricalVsGaussianMeanDelta": -0.043206349206349214,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 25
         },
         "C": {
           "lowVarianceFoldRate": 0.16,
           "thinSupportFoldRate": 0.32,
-          "medianResidualStdTrain": 0.17116887971394468,
-          "residualStdCv": 0.16834528226214923,
-          "medianResidualCenterShift": 0.009285559834506046,
-          "empiricalVsGaussianMeanDelta": -0.08514285714285715,
+          "medianResidualStdTrain": 0.1560837026031696,
+          "residualStdCv": 0.1798825181849085,
+          "medianResidualCenterShift": 0.004188474592069863,
+          "empiricalVsGaussianMeanDelta": -0.05416666666666667,
           "fallbackToGaussianRate": 0,
           "nComparableFolds": 25
         }
@@ -399,6 +399,47 @@
     "supportRegimeCoveragePrimary": {
       "country_out": {
         "A": {
+          "thin_support": {
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.9166666666666666,
+            "stdCoverage95": 0.23819653367016583,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.033333333333333326,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.125,
+            "severeUnderCoverageRate": 0.125,
+            "nFolds": 48
+          },
+          "moderate_support": {
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.9043209876543209,
+            "stdCoverage95": 0.22012004264731405,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": -0.04567901234567906,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.2222222222222222,
+            "severeUnderCoverageRate": 0.2222222222222222,
+            "nFolds": 27
+          },
+          "broader_support": {
+            "medianCoverage95": 1,
+            "q25Coverage95": 1,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.95,
+            "stdCoverage95": 0.1414213562373095,
+            "iqrWidthCoverage95": 0,
+            "meanGapToNominal": 0,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.125,
+            "severeUnderCoverageRate": 0.125,
+            "nFolds": 8
+          }
+        },
+        "B": {
           "thin_support": {
             "medianCoverage95": 1,
             "q25Coverage95": 1,
@@ -416,10 +457,10 @@
             "medianCoverage95": 1,
             "q25Coverage95": 1,
             "q75Coverage95": 1,
-            "meanCoverage95": 0.9166666666666666,
-            "stdCoverage95": 0.215579124625644,
+            "meanCoverage95": 0.9197530864197531,
+            "stdCoverage95": 0.21243586448122523,
             "iqrWidthCoverage95": 0,
-            "meanGapToNominal": -0.033333333333333326,
+            "meanGapToNominal": -0.030246913580246892,
             "medianGapToNominal": 0.050000000000000044,
             "underCoverageRate": 0.18518518518518517,
             "severeUnderCoverageRate": 0.18518518518518517,
@@ -439,7 +480,7 @@
             "nFolds": 8
           }
         },
-        "B": {
+        "C": {
           "thin_support": {
             "medianCoverage95": 1,
             "q25Coverage95": 1,
@@ -479,92 +520,10 @@
             "severeUnderCoverageRate": 0,
             "nFolds": 8
           }
-        },
-        "C": {
-          "thin_support": {
-            "medianCoverage95": 1,
-            "q25Coverage95": 1,
-            "q75Coverage95": 1,
-            "meanCoverage95": 0.90625,
-            "stdCoverage95": 0.26610368320030064,
-            "iqrWidthCoverage95": 0,
-            "meanGapToNominal": -0.043749999999999956,
-            "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0.125,
-            "severeUnderCoverageRate": 0.125,
-            "nFolds": 48
-          },
-          "moderate_support": {
-            "medianCoverage95": 1,
-            "q25Coverage95": 1,
-            "q75Coverage95": 1,
-            "meanCoverage95": 0.9197530864197531,
-            "stdCoverage95": 0.21243586448122523,
-            "iqrWidthCoverage95": 0,
-            "meanGapToNominal": -0.030246913580246892,
-            "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0.18518518518518517,
-            "severeUnderCoverageRate": 0.18518518518518517,
-            "nFolds": 27
-          },
-          "broader_support": {
-            "medianCoverage95": 1,
-            "q25Coverage95": 1,
-            "q75Coverage95": 1,
-            "meanCoverage95": 1,
-            "stdCoverage95": 0,
-            "iqrWidthCoverage95": 0,
-            "meanGapToNominal": 0.050000000000000044,
-            "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0,
-            "severeUnderCoverageRate": 0,
-            "nFolds": 8
-          }
         }
       },
       "rolling_origin": {
         "A": {
-          "thin_support": {
-            "medianCoverage95": 1,
-            "q25Coverage95": 0.5,
-            "q75Coverage95": 1,
-            "meanCoverage95": 0.75,
-            "stdCoverage95": 0.3779644730092272,
-            "iqrWidthCoverage95": 0.5,
-            "meanGapToNominal": -0.19999999999999996,
-            "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0.375,
-            "severeUnderCoverageRate": 0.375,
-            "nFolds": 8
-          },
-          "moderate_support": {
-            "medianCoverage95": 1,
-            "q25Coverage95": 1,
-            "q75Coverage95": 1,
-            "meanCoverage95": 1,
-            "stdCoverage95": 0,
-            "iqrWidthCoverage95": 0,
-            "meanGapToNominal": 0.050000000000000044,
-            "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0,
-            "severeUnderCoverageRate": 0,
-            "nFolds": 3
-          },
-          "broader_support": {
-            "medianCoverage95": 0.9083333333333333,
-            "q25Coverage95": 0.715625,
-            "q75Coverage95": 1,
-            "meanCoverage95": 0.8555697278911565,
-            "stdCoverage95": 0.16792363644520947,
-            "iqrWidthCoverage95": 0.28437500000000004,
-            "meanGapToNominal": -0.09443027210884347,
-            "medianGapToNominal": -0.04166666666666663,
-            "underCoverageRate": 0.5714285714285714,
-            "severeUnderCoverageRate": 0.2857142857142857,
-            "nFolds": 14
-          }
-        },
-        "B": {
           "thin_support": {
             "medianCoverage95": 1,
             "q25Coverage95": 0.875,
@@ -592,31 +551,31 @@
             "nFolds": 3
           },
           "broader_support": {
-            "medianCoverage95": 0.8869047619047619,
-            "q25Coverage95": 0.715625,
+            "medianCoverage95": 0.9,
+            "q25Coverage95": 0.671875,
             "q75Coverage95": 1,
-            "meanCoverage95": 0.821485260770975,
-            "stdCoverage95": 0.20278811822023302,
-            "iqrWidthCoverage95": 0.28437500000000004,
-            "meanGapToNominal": -0.128514739229025,
-            "medianGapToNominal": -0.0630952380952381,
-            "underCoverageRate": 0.6428571428571429,
-            "severeUnderCoverageRate": 0.2857142857142857,
+            "meanCoverage95": 0.8346513605442176,
+            "stdCoverage95": 0.1821345042512751,
+            "iqrWidthCoverage95": 0.328125,
+            "meanGapToNominal": -0.11534863945578233,
+            "medianGapToNominal": -0.04999999999999993,
+            "underCoverageRate": 0.5,
+            "severeUnderCoverageRate": 0.42857142857142855,
             "nFolds": 14
           }
         },
-        "C": {
+        "B": {
           "thin_support": {
             "medianCoverage95": 1,
-            "q25Coverage95": 0.5,
+            "q25Coverage95": 0.875,
             "q75Coverage95": 1,
-            "meanCoverage95": 0.75,
-            "stdCoverage95": 0.3779644730092272,
-            "iqrWidthCoverage95": 0.5,
-            "meanGapToNominal": -0.19999999999999996,
+            "meanCoverage95": 0.875,
+            "stdCoverage95": 0.23145502494313785,
+            "iqrWidthCoverage95": 0.125,
+            "meanGapToNominal": -0.07499999999999996,
             "medianGapToNominal": 0.050000000000000044,
-            "underCoverageRate": 0.375,
-            "severeUnderCoverageRate": 0.375,
+            "underCoverageRate": 0.25,
+            "severeUnderCoverageRate": 0.25,
             "nFolds": 8
           },
           "moderate_support": {
@@ -634,15 +593,56 @@
           },
           "broader_support": {
             "medianCoverage95": 0.8285714285714285,
-            "q25Coverage95": 0.65625,
-            "q75Coverage95": 0.984375,
-            "meanCoverage95": 0.7876842403628118,
-            "stdCoverage95": 0.22205804135154647,
-            "iqrWidthCoverage95": 0.328125,
-            "meanGapToNominal": -0.16231575963718814,
+            "q25Coverage95": 0.690625,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.812358276643991,
+            "stdCoverage95": 0.1949025655980982,
+            "iqrWidthCoverage95": 0.30937499999999996,
+            "meanGapToNominal": -0.137641723356009,
             "medianGapToNominal": -0.12142857142857144,
-            "underCoverageRate": 0.7142857142857143,
-            "severeUnderCoverageRate": 0.35714285714285715,
+            "underCoverageRate": 0.6428571428571429,
+            "severeUnderCoverageRate": 0.42857142857142855,
+            "nFolds": 14
+          }
+        },
+        "C": {
+          "thin_support": {
+            "medianCoverage95": 1,
+            "q25Coverage95": 0.875,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.875,
+            "stdCoverage95": 0.23145502494313785,
+            "iqrWidthCoverage95": 0.125,
+            "meanGapToNominal": -0.07499999999999996,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.25,
+            "severeUnderCoverageRate": 0.25,
+            "nFolds": 8
+          },
+          "moderate_support": {
+            "medianCoverage95": 1,
+            "q25Coverage95": 0.875,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.9166666666666666,
+            "stdCoverage95": 0.14433756729740646,
+            "iqrWidthCoverage95": 0.125,
+            "meanGapToNominal": -0.033333333333333326,
+            "medianGapToNominal": 0.050000000000000044,
+            "underCoverageRate": 0.3333333333333333,
+            "severeUnderCoverageRate": 0.3333333333333333,
+            "nFolds": 3
+          },
+          "broader_support": {
+            "medianCoverage95": 0.8,
+            "q25Coverage95": 0.5885416666666666,
+            "q75Coverage95": 1,
+            "meanCoverage95": 0.7630668934240362,
+            "stdCoverage95": 0.24633644895002024,
+            "iqrWidthCoverage95": 0.41145833333333337,
+            "meanGapToNominal": -0.18693310657596374,
+            "medianGapToNominal": -0.1499999999999999,
+            "underCoverageRate": 0.6428571428571429,
+            "severeUnderCoverageRate": 0.42857142857142855,
             "nFolds": 14
           }
         }

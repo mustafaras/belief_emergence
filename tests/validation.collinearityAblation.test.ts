@@ -4,29 +4,16 @@ import { describe, expect, it } from 'vitest';
 import ablation from '../src/data/analysis/collinearity_ablation.json';
 import vif from '../src/data/analysis/collinearity_diagnostics.json';
 
-/**
- * The paper states that removing the two dependent covariates (R and E, r =
- * 0.885, VIF 9.19 and 4.74) leaves the Tier C reversal intact. That sentence is
- * the answer to an obvious referee question, so it has to be asserted rather
- * than trusted: if a future panel change quietly breaks the reversal, the claim
- * becomes false and this test should fail.
- */
+/** Pin the current out-of-sample tier ordering across the four ablations. */
 
 describe('collinearity does not carry the central result', () => {
-  it('reports the Tier C ordering as unstable rather than claiming a reversal', () => {
-    // At 167 cells the reversal does not hold across specifications: the full
-    // design and the without-E ablation put C marginally ahead of B. The test
-    // therefore asserts what is measured -- a small, sign-unstable difference --
-    // instead of a stable reversal the data no longer support. What must stay
-    // true is that the difference is small enough to be uninformative.
+  it('reports Tier C below Tier B in every current ablation', () => {
     expect(ablation.specs.length).toBe(4);
     for (const spec of ablation.specs) {
-      expect(Math.abs(spec.cMinusB), `${spec.label}: |C-B| must be small`).toBeLessThan(0.06);
+      expect(spec.cMinusB, `${spec.label}: Tier C - Tier B`).toBeLessThan(0);
+      expect(Math.abs(spec.cMinusB), `${spec.label}: |C-B| must stay small`).toBeLessThan(0.06);
     }
-    expect(ablation.reversalStable).toBe(false);
-    // At least one specification must put C behind B, or the exploratory label
-    // would rest on nothing at all.
-    expect(ablation.specs.some((s) => s.cMinusB < 0)).toBe(true);
+    expect(ablation.reversalStable).toBe(true);
   });
 
   it('keeps in-sample fit monotone A < B < C in every ablation', () => {

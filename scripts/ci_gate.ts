@@ -78,19 +78,18 @@ interface MetricExpectation {
  *
  * These are a regression guard, not a target: they pin whatever the committed
  * panel currently produces so that an accidental change to the data path is
- * caught. When the panel itself changes deliberately (here: the WDI Gini
- * backfill took the sample from 87 to 126 cells, which legitimately moves every
- * number), update this block in the same commit that changes the panel and say
- * so in the message. The one thing that must never happen is editing this list
+ * caught. When the panel or production model changes deliberately, update this
+ * block in the same commit that changes the source metrics and say so in the
+ * message. The one thing that must never happen is editing this list
  * to make a failing build green without a corresponding data change.
  */
 const CANONICAL_METRICS: MetricExpectation[] = [
   { key: 'n',    expected: 207,     tolerance: 0 },
-  { key: 'r2',   expected: 0.3461,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.6150,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1617,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.2089,  tolerance: 0.0001 },
-  { key: 'bias', expected: -0.0440,  tolerance: 0.0001 },
+  { key: 'r2',   expected: 0.40614013285780814, tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6393402220093086,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.13874326672383433, tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.17994920542522055, tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0048270088408924145, tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
