@@ -155,7 +155,7 @@ export function withFacts(index: EvidenceIndex, facts: Record<string, ArtifactFa
 
 /**
  * Artifacts whose declared count is a legitimate sub-sample of the panel, not a stale
- * one. Kept deliberately short and named: every entry here suppresses a warning, which is
+ * one. Kept deliberately short and named: every entry here prevents a warning, which is
  * exactly the kind of allowance that should be hard to add and easy to see.
  */
 const SUBSET_ARTIFACTS: ReadonlySet<string> = new Set(['lockbox_holdout'])

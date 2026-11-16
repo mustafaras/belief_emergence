@@ -1,0 +1,16 @@
+.section {
+  display: grid;
+  max-width: var(--w-wide);
+  gap: var(--space-8);
+  padding-block-end: var(--space-8);
+}
+
+.figureContent {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.loading {
+  width: 100%;
+  height: 4rem;
+}

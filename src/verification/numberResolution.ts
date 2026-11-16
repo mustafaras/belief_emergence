@@ -176,7 +176,9 @@ export function resolveToken(
  */
 export function extractTokens(text: string): string[] {
   const normalized = text.replace(/[−-]\s*\(\s*(\d+(?:\.\d+)?)\s*\)/g, '-$1')
-  return (normalized.match(/[−-]?\d+(?:\.\d+)?/g) ?? []).map((token) =>
-    token.startsWith('−') ? `-${token.slice(1)}` : token,
-  )
+  return (normalized.match(/[−-]?(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)/g) ?? []).map((token) => {
+    const sign = token.startsWith('−') || token.startsWith('-') ? '-' : ''
+    const unsigned = token.replace(/^[−-]/, '').replaceAll(',', '')
+    return `${sign}${unsigned}`
+  })
 }

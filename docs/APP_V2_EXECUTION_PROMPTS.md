@@ -3,6 +3,12 @@
 Bu belge küçük ve hızlı modellerin (flash/haiku sınıfı) **sırayla, birer birer** uygulaması için yazıldı.
 Plan ve gerekçe: `docs/APP_PLAN_V2.md`. Her prompt tek bir commit üretir. Bir prompt bitmeden sonrakine geçilmez.
 
+**Canlı ilerleme durumu (2026-11-16):** Uygulama kayıtları `docs/APP_V2_LOG.md` içindedir.
+P00–P07 ve P10–P17 tamamlandı; P08–P09 makale senkronu önkoşulu olarak tamamlandı.
+P19, gerekli artifact-backed Y/E/T engelleyici sayıları izin verilen kaynaklarda
+bulunmadığı için kısmi ve durdurulmuş durumdadır. P18, plana göre P22'den sonra
+uygulanır; P20–P38 henüz başlamadı. P19 kaynağı çözülmeden P20'ye geçmeyin.
+
 ---
 
 ## Ortak kurallar (HER promptun başına bu bölümü ekle)
@@ -101,7 +107,7 @@ ORTAK KURALLAR
 | `audit.countryYears` | 305 |
 | `audit.Z.alpha` / `audit.Z.cells` | 0.819 / 287 |
 | `audit.C.alpha` / `audit.C.cells` | 0.348 / 303 |
-| `audit.D.alpha` / `audit.D.cells` | −1.229 / 296 |
+| `audit.D.alpha` / `audit.D.cells` | −1.228 / 296 (artifact stores −1.2284774929408622; `p3` displays −1.228) |
 | `audit.S.cells` / `audit.S.computable` | 0 / false. **S için alpha claim'i OLUŞTURMA** (artifact'taki 0.753 kalıntı bir değer) |
 | `audit.failedCount` | 3 (türetilmiş: computable=false ya da α<0.70 olan yapı sayısı, Z hariç) |
 | `data.panelRows` / `data.countries` | 207 / 83 |

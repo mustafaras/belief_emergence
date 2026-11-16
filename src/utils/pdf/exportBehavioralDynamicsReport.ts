@@ -141,26 +141,9 @@ async function loadJsPdfCtor(): Promise<JsPdfNewable> {
   return JsPDFCtor as unknown as JsPdfNewable;
 }
 
-/**
- * DO NOT REMOVE the `html2canvas` dependency on grep evidence.
- *
- * It has no static import anywhere in `src/`, so a dependency audit reports it as unused
- * and removing it looks safe. It loads here, through `await import(...)`, and only when a
- * reader presses Export PDF. Deleting it breaks the export at runtime while passing every
- * test that does not drive the button — which is most of them.
- *
- * Verified after removal of the genuinely dead packages (Prompt 8): the live export
- * produces a 66 kB `%PDF-` download, before and after.
- */
-async function loadHtml2Canvas(): Promise<(element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>> {
-  const html2canvasModule = await import('html2canvas');
-  const html2canvas = (html2canvasModule as unknown as { default?: unknown }).default
-    ?? (html2canvasModule as unknown as { html2canvas?: unknown }).html2canvas
-    ?? (html2canvasModule as unknown as unknown);
-  if (typeof html2canvas !== 'function') {
-    throw new Error('Failed to load html2canvas export from the html2canvas module.');
-  }
-  return html2canvas as unknown as (element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>;
+/** The legacy raster capture path is intentionally disabled until the P32 exporter. */
+async function loadLegacyCanvasRenderer(): Promise<(element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>> {
+  throw new Error('Legacy figure capture is deferred to the P32 evidence bundle exporter.')
 }
 
 function safeIsoTimestampUTC(): string {
@@ -626,7 +609,7 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
   const writeSectionHeading = (title: string, opts?: { minBodyMm?: number }) => {
     if (renderedSectionHeadings.has(title)) {
       if (import.meta.env.DEV) {
-        console.warn('[PDF] Duplicate section heading suppressed', { title });
+        console.warn('[PDF] Duplicate section heading omitted', { title });
       }
       return;
     }
@@ -1216,8 +1199,8 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
   // Narrative sections sourced from a single structured content file
   writeNarrativeTopic('BeliefEquation');
   writeNarrativeTopic('CoreVariables');
-  writeNarrativeTopic('Amplifiers');
-  writeNarrativeTopic('Suppressors');
+  writeNarrativeTopic('Positive contributions');
+  writeNarrativeTopic('Negative contributions');
 
   writeSectionHeading('Methods');
   writeParagraph(
@@ -1239,8 +1222,8 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
     { k: 'Φ main effects', v: formatNumeric(phiComponents.mainEffects, 6) },
     { k: 'Φ interactions', v: formatNumeric(phiComponents.interactions, 6) },
     { k: 'Φ quadratic', v: formatNumeric(phiComponents.quadratic, 6) },
-    { k: 'Φ⁺ (amplifying contribution)', v: formatNumeric(analytics.effects.amplifyingEffects, 6) },
-    { k: 'Φ⁻ (suppressing contribution)', v: formatNumeric(analytics.effects.suppressingEffects, 6) },
+    { k: 'Φ⁺ (positive contribution)', v: formatNumeric(analytics.effects.positiveEffects, 6) },
+    { k: 'Φ⁻ (negative contribution)', v: formatNumeric(analytics.effects.negativeEffects, 6) },
   ]);
 
   writeSectionHeading('Inputs (Current Parameterization)');
@@ -1674,18 +1657,18 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
       return null;
     }
 
-    let html2canvas: (element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>;
+    let renderCanvas: (element: HTMLElement, options: Record<string, unknown>) => Promise<HTMLCanvasElement>;
     try {
-      html2canvas = await loadHtml2Canvas();
+      renderCanvas = await loadLegacyCanvasRenderer();
     } catch (e) {
-      debug.figure.skippedReasons.push('failed to load html2canvas');
+      debug.figure.skippedReasons.push('legacy raster capture is deferred to P32');
       if (import.meta.env.DEV) {
-        console.warn('[PDF] html2canvas import failed; skipping figure.', e);
+        console.warn('[PDF] Legacy figure renderer unavailable; skipping figure.', e);
       }
       return null;
     }
 
-    const tryCapture = async (allowTaint: boolean) => html2canvas(element, {
+    const tryCapture = async (allowTaint: boolean) => renderCanvas(element, {
       scale: 2,
       useCORS: true,
       allowTaint,
@@ -1704,7 +1687,7 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
       return canvas;
     } catch (e) {
       if (import.meta.env.DEV) {
-        console.warn('[PDF] html2canvas strict capture failed; retrying allowTaint=true.', e);
+        console.warn('[PDF] Strict figure capture failed; retrying with relaxed canvas access.', e);
       }
       try {
         const canvas = await tryCapture(true);
@@ -1712,9 +1695,9 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
         return canvas;
       } catch (e2) {
         if (import.meta.env.DEV) {
-          console.warn('[PDF] html2canvas capture failed; skipping figure.', e2);
+          console.warn('[PDF] Figure capture failed; skipping figure.', e2);
         }
-        debug.figure.skippedReasons.push('html2canvas capture failed');
+        debug.figure.skippedReasons.push('figure capture failed');
         return null;
       }
     }
@@ -1723,7 +1706,7 @@ export async function exportBehavioralDynamicsReport(options: ExportBehavioralDy
   // -----------------------------
   // Export-safe figure snapshot hook
   // -----------------------------
-  // WebGL canvases often render blank in html2canvas. The UI layer (Surface3DOverlay)
+  // WebGL canvases often render blank in DOM capture. The legacy UI layer
   // listens for these events and temporarily swaps the WebGL plot for a PNG snapshot.
   const exportRequestId = (() => {
     try {

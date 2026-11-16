@@ -3,7 +3,7 @@
  *
  * The production build was one 6.6 MB chunk containing Plotly, jsPDF, html2canvas and
  * KaTeX, none of which the landing route needs. Splitting it is only half the work: without
- * a budget the next `import` at the top of `App.tsx` quietly puts it back, and the
+ * a budget the next import in the overview shell quietly puts it back, and the
  * regression stays invisible until someone opens the site on a slow connection.
  *
  * WHAT "INITIAL PAYLOAD" MEANS HERE, AND WHY IT IS MEASURED RATHER THAN INFERRED
@@ -197,10 +197,9 @@ async function main(): Promise<void> {
     failures.push('no JavaScript chunks were requested, so the budget measured nothing')
   }
 
-  // The heavy chunk must still exist: deferring is not deleting.
   const all = fs.readdirSync(ASSETS).filter((f) => f.endsWith('.js'))
-  if (!all.some((f) => /^Surface3DOverlay-/.test(f))) {
-    failures.push('no Surface3DOverlay chunk was emitted — the 3D surface may have been removed')
+  if (all.some((f) => /^Surface3DOverlay-/.test(f))) {
+    failures.push('the removed legacy Surface3DOverlay chunk is still emitted')
   }
 
   if (failures.length > 0) {
@@ -212,7 +211,7 @@ async function main(): Promise<void> {
   console.log(
     `\nPASS  landing route loads ${(bytes / 1024).toFixed(0)} KiB of JavaScript in ` +
       `${measured.files.length} chunk(s), under the ${INITIAL_BUDGET_KIB} KiB budget; ` +
-      `${FORBIDDEN_CHUNKS.length} heavy modules deferred; ` +
+      `${FORBIDDEN_CHUNKS.length} legacy/heavy-module checks passed; ` +
       `median FCP is within ${FIRST_CONTENTFUL_PAINT_BUDGET_MS} ms`,
   )
 }

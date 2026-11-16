@@ -2,10 +2,18 @@
 
 Tarih: 2026-11-15 · Kapsam: `repo/` · Uygulama adımları: `docs/APP_V2_EXECUTION_PROMPTS.md`
 
-**Referans makale sürümü.** `paper/main/main.tex`, son commit `61231d7` (2026-11-11). Belgelerde kayıtlı
-en yüksek ve en son puan bu sürüme ait: **95/100** (`docs/ROADMAP_TO_SUBMISSION.md:3`). Çalışma ağacında
-`paper/` değişikliği yok. Uygulama bu sürümü yansıtır. Makalenin iç çelişkileri (§6) sayıları artifact'a
-bağlayarak giderilir; makalenin iddiaları ve anlatısı değiştirilmez.
+**Canlı uygulama durumu (2026-11-16):** `docs/APP_V2_LOG.md`, P00–P07 ve
+P10–P17'yi tamamlandı; P08–P09'u makale-senkronu önkoşulu olarak tamamlandı diye
+kaydediyor. P19, izin verilen artifact'larda istenen Y/E/T engelleyici toplamları
+bulunmadığı için kısmi ve durdurulmuş durumda. P18, plana göre P22'den sonra gelir;
+P20–P38 başlamadı. Bu worktree'deki v2 işi commit edilmedi; canlı ilerleme kaynağı
+APP_V2_LOG.md'dir.
+
+**Güncel makale referansı (2026-11-16).** `paper/main/main.tex` son olarak `be904cc` commit'inde
+güncellendi. Belgelerde kayıtlı en yüksek ve en son puan bu sürüme ait: **95/100**
+(`docs/ROADMAP_TO_SUBMISSION.md:3`). Bu worktree'de `paper/` değişikliği yok. Uygulama bu sürümü
+yansıtır. §6'daki iç çelişkiler listesi tarihsel girdidir; düzeltme durumları ve açık O3/O5 kapıları
+`docs/PAPER_SYNC_REPORT.md` içinde tutulur. O5, kullanıcının kararıyla açık kalır.
 
 ---
 

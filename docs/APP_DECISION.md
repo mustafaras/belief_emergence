@@ -1,5 +1,14 @@
 # Application decision
 
+**Current implementation status (2026-11-16):** Option A remains the product
+decision. Application v1 prompts 0–13 were delivered in PRs #1–#2. This v2
+worktree's `docs/APP_V2_LOG.md` records P00–P07 and P10–P17 complete; P08–P09
+are the completed paper-sync prerequisite. P19 is partial and stopped because
+the required Y/E/T blocker totals are absent from the approved artifacts. P18
+is sequenced after P22; P20–P38 have not started. The v2 work remains
+uncommitted. Section 7 below is the pre-P00 risk register, not completion
+evidence.
+
 **Decision: Option A — Evidence surface.**
 
 Recorded 2026-11-11. This supersedes nothing in the manuscript and touches no file
@@ -202,9 +211,12 @@ Written down so that disagreement has a target.
 
 ---
 
-## 7. Blocking issues for the prompts that follow
+## 7. Pre-P00 risk register for the prompts that follow
 
-Recorded here because the next agent will otherwise act on them.
+Recorded before v2 implementation. Re-check each item against current artifacts
+when its prompt is reached; the sample-count discrepancy recorded below is
+already superseded by the current 207-row panel and must not be presented as a
+live blocker.
 
 - **`wvs_construct_audit.json` sits in `rawdata/`, not `src/data/analysis/`.** The
   paper's central table therefore falls outside the 31-artifact evidence index that
@@ -224,7 +236,8 @@ Recorded here because the next agent will otherwise act on them.
   `bestValue: 0.001`, p > 0.05 at every grid point up to 0.016 and p = 0.0113 at 0.032;
   the shipped alpha is 0.050, outside the grid entirely. The verdict says the parameter
   is not identified, which is a stronger statement than "the interval ends at 0.016".
-- **This document is not yet covered by the drift check.** `check_manuscript_consistency.ts`
-  scans `APP_PLAN.md` and `APP_EXECUTION_PROMPTS.md`. Adding `APP_DECISION.md` to that
-  list is one line and should be done with Prompt 2, or this file will drift the way
-  its siblings already have.
+- **This pre-P00 risk register is not a live numeric source.** Its measurements are
+  dated and must be rechecked against artifacts before a related prompt uses them.
+  The live v2 execution state is summarized at the top of this document and recorded
+  in `APP_V2_LOG.md`; the manuscript consistency checker validates paper-facing
+  claims, not historical application-planning measurements.

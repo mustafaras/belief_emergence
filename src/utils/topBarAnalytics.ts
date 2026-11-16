@@ -38,8 +38,8 @@ export interface TopBarAnalytics {
   exponentialFactor: number;
 
   effects: {
-    amplifyingEffects: number;
-    suppressingEffects: number;
+    positiveEffects: number;
+    negativeEffects: number;
     netEffect: number;
   };
 
@@ -84,8 +84,8 @@ export interface TopBarAnalytics {
 
   componentStats: {
     structuralMean: number;
-    amplifierMean: number;
-    suppressorMean: number;
+    positiveInputMean: number;
+    negativeInputMean: number;
   };
 }
 
@@ -107,17 +107,17 @@ export function computeTopBarAnalytics(input: TopBarAnalyticsInput): TopBarAnaly
   const interactionTerms = phiComponents.interactions;
   const quadraticTerms = phiComponents.quadratic;
 
-  const amplifyingEffects =
+  const positiveEffects =
     (mainTerms > 0 ? mainTerms : 0) +
     (interactionTerms > 0 ? interactionTerms : 0) +
     (quadraticTerms > 0 ? quadraticTerms : 0);
 
-  const suppressingEffects =
+  const negativeEffects =
     (mainTerms < 0 ? Math.abs(mainTerms) : 0) +
     (interactionTerms < 0 ? Math.abs(interactionTerms) : 0) +
     (quadraticTerms < 0 ? Math.abs(quadraticTerms) : 0);
 
-  const netEffect = amplifyingEffects - suppressingEffects;
+  const netEffect = positiveEffects - negativeEffects;
 
   // Sensitivity Analysis (analytic; consistent with canonical Z form)
   // computeStructuralBase maps raw panel-like X/Y into the structural domain [0.0001, 0.9999].
@@ -159,17 +159,17 @@ export function computeTopBarAnalytics(input: TopBarAnalyticsInput): TopBarAnaly
   const yProgress = clamp01((params.Y - (-2)) / (4 - (-2))); // UI slider domain fallback
 
   const structuralMean = (clamp01(params.X) + yProgress) / 2;
-  const amplifierMean =
+  const positiveInputMean =
     [params.C, params.M, params.T, params.D, params.G].reduce((sum, v) => sum + toProgress01(v), 0) / 5;
-  const suppressorMean =
+  const negativeInputMean =
     [params.E, params.S, params.R].reduce((sum, v) => sum + toProgress01(v), 0) / 3;
 
   return {
     exponentialFactor,
 
     effects: {
-      amplifyingEffects,
-      suppressingEffects,
+      positiveEffects,
+      negativeEffects,
       netEffect
     },
 
@@ -218,8 +218,8 @@ export function computeTopBarAnalytics(input: TopBarAnalyticsInput): TopBarAnaly
 
     componentStats: {
       structuralMean,
-      amplifierMean,
-      suppressorMean
+      positiveInputMean,
+      negativeInputMean
     }
   };
 }

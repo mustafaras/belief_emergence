@@ -8,8 +8,8 @@ export type NarrativeBlock =
 export type NarrativeTopic =
   | 'BeliefEquation'
   | 'CoreVariables'
-  | 'Amplifiers'
-  | 'Suppressors'
+  | 'Positive contributions'
+  | 'Negative contributions'
   | 'MathematicalAnalysis'
   | 'SystemDynamics';
 
@@ -63,12 +63,12 @@ export const REPORT_NARRATIVE: Record<NarrativeTopic, NarrativeBlock[]> = {
     },
   ],
 
-  Amplifiers: [
-    { kind: 'heading', level: 2, text: 'Amplifiers' },
+  'Positive contributions': [
+    { kind: 'heading', level: 2, text: 'Positive contributions' },
     {
       kind: 'paragraph',
       text:
-        'Amplifiers are inputs and interactions that push Φ upward (positive net contribution). Because Φ enters inside exp(·), positive changes can have nonlinear impact when Φ is already high.',
+        'Positive contributions arise when signed main effects, interactions, or quadratic terms move Φ upward. Because Φ enters inside exp(·), positive changes can have nonlinear impact when Φ is already high.',
     },
     {
       kind: 'bullets',
@@ -81,16 +81,16 @@ export const REPORT_NARRATIVE: Record<NarrativeTopic, NarrativeBlock[]> = {
     {
       kind: 'note',
       text:
-        'The report decomposes Φ into baseline, main, interaction, and quadratic components, and also reports total amplifying vs suppressing contributions (Φ⁺ vs Φ⁻).',
+        'The report decomposes Φ into baseline, main, interaction, and quadratic components, and also reports positive and negative contributions (Φ⁺ vs Φ⁻).',
     },
   ],
 
-  Suppressors: [
-    { kind: 'heading', level: 2, text: 'Suppressors' },
+  'Negative contributions': [
+    { kind: 'heading', level: 2, text: 'Negative contributions' },
     {
       kind: 'paragraph',
       text:
-        'Suppressors are inputs and interactions that push Φ downward (negative net contribution), attenuating the exponential factor and reducing Z for fixed structural conditions.',
+        'Negative contributions arise when signed main effects, interactions, or quadratic terms move Φ downward, reducing the exponential factor and Z for fixed structural conditions.',
     },
     {
       kind: 'bullets',
@@ -103,7 +103,7 @@ export const REPORT_NARRATIVE: Record<NarrativeTopic, NarrativeBlock[]> = {
     {
       kind: 'note',
       text:
-        'Because Φ is clamped before exponentiation, extremely strong suppressors may saturate the exponential factor’s minimum within the clamp range.',
+        'Because Φ is clamped before exponentiation, large negative contributions may reach the exponential factor’s minimum within the clamp range.',
     },
   ],
 

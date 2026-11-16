@@ -30,12 +30,10 @@ import {
   deriveComputedValues,
   deriveContractConstants,
   deriveDefaultParams,
-  deriveAiTokenCount,
   deriveFormulaEffectEstimates,
   derivePanelConstants,
   derivePhiContributions,
   deriveLimitArithmetic,
-  deriveSliderBounds,
   deriveCountryMeans,
   deriveCountryR2Median,
   deriveFormulaMetrics,
@@ -56,7 +54,8 @@ import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.jso
 import constructAvailabilityArtifact from '../src/data/analysis/construct_item_availability.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
-import { SITEMAP } from '../src/router/routes'
+import { APP_ROUTES } from '../src/app/routes'
+import { buildSupportMatrix } from '../src/sections/data/supportMatrix'
 // The preset table, now generated from the canonical panel.
 //
 // It used to be hand-maintained, which made this check circular: reading the table from the
@@ -72,8 +71,8 @@ const PANEL_CSV = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv
 /** Prompt 6: an allowlist that grows is a check that has stopped checking. */
 const MAX_ALLOWLIST_ENTRIES = 10
 
-/** Scan the router's whole sitemap, including modal routes such as AI Interpreter. */
-const ROUTES = ['', ...SITEMAP.map(({ id }) => id)]
+/** Scan all eleven routes in the current application shell. */
+const ROUTES = APP_ROUTES.map(({ id }) => id)
 
 /** Direct parameter values in TopBar are tied to the named UI defaults. */
 const DEFAULT_PARAMETER_LABELS: readonly {
@@ -256,7 +255,7 @@ export function buildSources(): {
    * reads. That is not verification, it is coincidence with a large enough haystack. An
    * audit found 35 of 139 tokens resolving only through unimported artifacts — `0.42`
    * matched a CV fold metric to four places, `0.04` matched another, and both are simply
-   * the slider defaults in `src/App.tsx`.
+   * the verification defaults in `src/verification/derivedValues.ts`.
    *
    * Restricting the corpus to imported artifacts means a value either comes from something
    * the interface can reach, or it is derived, or it is a declared constant. There is no
@@ -300,6 +299,7 @@ export function buildSources(): {
   if (fs.existsSync(auditPath)) artifacts.push(JSON.parse(fs.readFileSync(auditPath, 'utf8')))
 
   const panelRows = readPanelRows()
+  const supportMatrix = buildSupportMatrix(panelRows)
 
   // The attrition panel computes percentages from the tracked panel audit and WVS audit.
   // Derive its rounded percentages from the same builder so displayed values remain tied
@@ -376,7 +376,6 @@ export function buildSources(): {
     derived: buildCorpus([
       deriveComputedValues(DEFAULT_UI_PARAMS),
       deriveDefaultParams(DEFAULT_UI_PARAMS),
-      deriveAiTokenCount(),
       derivePhiContributions(DEFAULT_UI_PARAMS),
       derivePanelConstants(),
       deriveFormulaEffectEstimates(DEFAULT_UI_PARAMS),
@@ -384,6 +383,7 @@ export function buildSources(): {
       derivePanelStats(panelRows.map((r) => ({ Z: r.Z }))),
       deriveCountryMeans(panelRows as unknown as Array<Record<string, unknown>>),
       deriveCountryR2Median(panelRows),
+      supportMatrix.years,
       supportPicture,
       supportPercentages,
       descriptionClaimValues,
@@ -405,9 +405,6 @@ export function buildSources(): {
         })(),
         shippedAlpha: DEFAULT_UI_PARAMS.alpha,
       }),
-      deriveSliderBounds(
-        fs.readFileSync(path.join(REPO_ROOT, 'src', 'components', 'sidebar', 'ModernSidebar.tsx'), 'utf8'),
-      ),
       PRESET_TABLE.flatMap((p) => Object.values(p.values)),
       alignment.flatMap((row) => [row.successPct, row.mae, row.meanObservedZ, row.meanPredictedZ]),
     ]),
@@ -439,11 +436,11 @@ export function auditText(
     allowlisted: 0,
     unresolved: [],
   }
-  const presetAudit = route === 'presets'
+  const presetAudit = route === 'countries'
     ? validatePresetRows(renderedPresetRows, sources.sourced.presetRows)
     : { validTokens: new Set<string>(), failures: [] as string[] }
   for (const failure of presetAudit.failures) report.unresolved.push({ token: '<row>', line: failure })
-  const constructAudit = route === 'landing'
+  const constructAudit = route === 'overview'
     ? validateConstructRows(renderedConstructRows, sources.sourced.constructRows)
     : { validTokens: new Set<string>(), failures: [] as string[] }
   for (const failure of constructAudit.failures) report.unresolved.push({ token: '<row>', line: failure })
@@ -596,23 +593,28 @@ async function main(): Promise<void> {
   try {
     for (const route of ROUTES) {
       const page = await browser.newPage()
-      if (route === 'ai-interpreter') {
-        // Opening this modal auto-submits its starter prompt. Keep the audit local and
-        // deterministic: a browser check must not spend an API key or depend on a reply.
-        await page.route('**/api/ai/interpret', (request) =>
-          request.fulfill({
-            status: 503,
-            contentType: 'application/json',
-            body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
-          }),
-        )
-      }
-      const target = route ? `${baseUrl}?v=${route}` : baseUrl
+      const target = `${baseUrl}?v=${route}`
       await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 90000 })
       await page.waitForFunction(() => document.body.innerText.length > 200, { timeout: 30000 }).catch(() => {})
       await page.waitForTimeout(2500)
       const { text, presetRows, constructRows } = await page.evaluate(() => ({
-        text: document.body.innerText,
+        // Scale labels are not measurements. `innerText` is layout-aware for HTML but
+        // aggregates SVG `<text>` regardless of `display`, so hiding the axis is not
+        // enough: the marked nodes are detached, the text is read, and they are put back
+        // in the same position. Only the subtree `Axis.tsx` marks is removed, so a value
+        // printed anywhere else is still audited.
+        text: (() => {
+          const marked = Array.from(document.querySelectorAll('[data-scale-label]'))
+          const slots = marked.map(node => ({
+            node,
+            parent: node.parentNode,
+            next: node.nextSibling,
+          }))
+          marked.forEach(node => node.remove())
+          const value = document.body.innerText
+          for (const slot of slots) slot.parent?.insertBefore(slot.node, slot.next)
+          return value
+        })(),
         presetRows: Array.from(document.querySelectorAll<HTMLElement>('.preset-table-row')).map((row) => ({
           name: row.querySelector('.preset-name')?.textContent?.trim() ?? '',
           tokens: Array.from(row.querySelectorAll('td')).flatMap((cell) =>
@@ -627,7 +629,7 @@ async function main(): Promise<void> {
       }))
       await page.close()
 
-      reports.push(auditText(text, sources, route || 'landing', presetRows, constructRows))
+      reports.push(auditText(text, sources, route, presetRows, constructRows))
     }
   } finally {
     await browser.close()

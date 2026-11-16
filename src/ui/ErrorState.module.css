@@ -1,0 +1,22 @@
+.error {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--withdrawn);
+  border-radius: var(--radius-2);
+  background: color-mix(in srgb, var(--withdrawn) 8%, var(--surface));
+  color: var(--ink);
+}
+
+.summary,
+.message {
+  margin: 0;
+}
+
+.summary {
+  font-weight: 600;
+}
+
+.message {
+  color: var(--ink-2);
+}

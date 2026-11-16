@@ -33,6 +33,14 @@ describe('extractTokens', () => {
   it('finds integers and decimals together', () => {
     expect(extractTokens('Panel N = 207, R2 = 0.4061')).toEqual(['207', '2', '0.4061'])
   })
+
+  it('keeps grouped thousands and decimals as single numeric tokens', () => {
+    expect(extractTokens('442,026 respondents; estimate 1,568.69; D alpha −1,228.477')).toEqual([
+      '442026',
+      '1568.69',
+      '-1228.477',
+    ])
+  })
 })
 
 describe('roundsToToken', () => {

@@ -120,7 +120,7 @@ export interface ModelCalculationResult {
     stdValue: number;           // Z-scored modifier value
     contribution: number;       // coef * stdValue
     variable: string;           // Single letter: C, M, T, D, G, E, S, R
-    isAmplifier: boolean;       // true if coef > 0, false if coef < 0
+    hasPositiveCoefficient: boolean;
   }>;
   interactionTerms?: Array<{
     index: number;              // 1-7
@@ -179,9 +179,8 @@ type StandardizedModifiers = {
 // Run `npm run test:run` to verify calculateModel() behavior against test suite.
 //
 // Warnings & Extrapolation:
-// App.tsx monitors slider values against panel bounds and logs warnings when
-// parameters fall outside [PANEL_MIN, PANEL_MAX]. Clipping then ensures stability.
-// See src/App.tsx ~line 105 for runtime validation logic.
+// The former interactive shell logged inputs outside [PANEL_MIN, PANEL_MAX]. Clipping
+// remains the calculation-level safeguard for downstream app controls.
 
 // NOTE: Structural normalization helpers (panel X/Y -> interior safe band) live in src/utils/modelContract.ts.
 
@@ -245,21 +244,21 @@ function buildMainEffectTerms(
   };
 
   const terms = [
-    // Amplifier: positive coef → positive std lifts φ; negative std reduces φ magnitude
+    // Positive coefficient: positive standardized input raises φ; negative input lowers it.
     { name: 'c1_Culture', variable: 'C', coef: coefficeintOverrides?.c1 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c1, stdValue: modifiers.C_std },
-    // Suppressor: negative coef → positive std pushes φ down; negative std creates double-negative relief
+    // Negative coefficient: positive standardized input lowers φ; negative input reverses that direction.
     { name: 'c2_Media', variable: 'M', coef: coefficeintOverrides?.c2 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c2, stdValue: modifiers.M_std },
-    // Amplifier
+    // Positive coefficient.
     { name: 'c3_Trauma', variable: 'T', coef: coefficeintOverrides?.c3 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c3, stdValue: modifiers.T_std },
-    // Suppressor
+    // Negative coefficient.
     { name: 'c4_Atomization', variable: 'D', coef: coefficeintOverrides?.c4 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c4, stdValue: modifiers.D_std },
-    // Amplifier
+    // Positive coefficient.
     { name: 'c5_Redistribution', variable: 'G', coef: coefficeintOverrides?.c5 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c5, stdValue: modifiers.G_std },
-    // Suppressor (double-negative when std < 0 raises φ)
+    // Negative coefficient; a negative input raises φ.
     { name: 'c6_Education', variable: 'E', coef: coefficeintOverrides?.c6 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c6, stdValue: modifiers.E_std },
-    // Suppressor
+    // Negative coefficient.
     { name: 'c7_SocialSupport', variable: 'S', coef: coefficeintOverrides?.c7 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c7, stdValue: modifiers.S_std },
-    // Amplifier
+    // Positive coefficient.
     { name: 'c8_Welfare', variable: 'R', coef: coefficeintOverrides?.c8 ?? OPTIMIZED_SIGMOID_COEFFICIENTS.c8, stdValue: modifiers.R_std },
   ];
 
@@ -267,7 +266,7 @@ function buildMainEffectTerms(
     ...term,
     index: idx + 1,
     label: labelMap[term.name],
-    isAmplifier: term.coef > 0,
+    hasPositiveCoefficient: term.coef > 0,
     contribution: term.coef * term.stdValue,
   }));
 }

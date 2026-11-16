@@ -3,8 +3,8 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-15):** the manuscript/data track has open reconciliation work listed below; the separate application execution sequence is recorded through Prompt 13.
-**Last reconciled against the tree:** 2026-11-15
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19 is partial at its required source gate, while P18 is sequenced after P22 and P20–P38 have not started. App-v2 work remains uncommitted; see `docs/APP_V2_LOG.md`.
+**Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
 > 2026-11-07 against the *defective* tree. Several figures in the original
@@ -15,53 +15,25 @@
 > measured value is shown in the status tables and the original projection is
 > kept only where it still explains a decision.
 
-## Live status — 2026-11-15
+## Live status — 2026-11-16
 
-The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
-207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
-`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
-counts and the digest were read directly from the tracked CSV. The current
-`metrics_authoritative.json` records `n=207`, `R²=0.4061`, `r=0.6393`,
-`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json` records
-18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and C;
-Tiers A/B are primary and Tier C is exploratory. The stored submission-gate
-report says READY (27/27), generated 2026-11-11; that is recorded evidence, not
-a fresh run on 2026-11-15.
+The canonical panel has **207 rows, 207 distinct `(iso3, year)` keys, and 83
+countries**. The current metrics artifact records `n=207`, `R²=0.4061`,
+`r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. Tier A/B are
+primary; Tier C is exploratory. The Q1 gate passed 27/27 automated checks, and
+the full CI gate passed 91/91 in the main worktree. Twelve author/editor
+checklist items remain unsigned.
 
-The 2026-11-09 reconciliation below predates the panel widening from 167 to
-207 rows. The following discrepancies remain open and take priority over
-submission decisions:
+Current repository work reconciled validation protocols, high-error-country
+counts, reviewer-facing artifacts, the supplement, and licensing language.
+Open submission gates remain CRED permission, OECD extract-size limits,
+derived-panel redistribution terms, O3 raw-source access, and O5 manuscript
+length. O5 remains open by the author's choice to keep the current draft.
 
-1. **Reconcile the current sample everywhere.** `REPLICATION_RUNBOOK.md` still
-   says 167 rows / 76 countries and expects the older `n=167`, `R²=0.2516`
-   metrics. The manuscript describes 207 rows but also says they are only 167
-   distinct country-year pairs; a direct key count finds 207. Table S18's
-   introduction still labels its source artifact `n=167`, although
-   `c_dominance_sensitivity.json` records `nRows=207`. The app plan and prompt
-   documents also contain 167-row / 76-country statements. Update these
-   references from the canonical CSV and regenerate any dependent checks before
-   treating the stored READY report as current document-wide evidence.
-2. **Refresh stale analysis artifacts.** `reviewer_red_team.json` still carries
-   old sample arithmetic, Tier support ratios, and the superseded Table S18
-   claim. `notation_glossary.json` still reports regime counts out of 146.
-   Reconcile both to the 207-row artifacts and manuscript.
-3. **Repair the journal-target source reference.** `journal_fit_targeting.json`
-   names `TARGET_JOURNALS.md`, but no such file is present in the current tree.
-   Decide on one maintained source and make the artifact point to it.
-4. **Close the two remaining measurement-audit documentation items.** The main
-   text reports construct alpha, but the planned supplement table is absent.
-   The retired v1 panel is not archived under `docs/archive/`; its historical
-   Git object remains available, so decide whether that satisfies the audit
-   requirement or create the requested archive.
-5. **Finish pre-release data-use checks.** The runbook still lists confirmation
-   of CRED permission, OECD extract-size limits, and redistribution terms for
-   the derived panel as open.
-
-The stored quantitative artifact set is mostly built against the 207-row panel;
-the open items above are documentation and artifact reconciliation, not a
-request to rerun or alter empirical analyses without first checking their
-current source contracts. The app's separate execution sequence records
-Prompts 0–13 as complete and contains no Prompt 14.
+The separate app-v2 sequence is in progress as recorded above. Continue from
+`docs/APP_V2_LOG.md`; local app milestones do not establish submission or release
+readiness. The detailed 2026-11-09 material below is historical context and
+must not be treated as the current sample reconciliation checklist.
 
 ### What the Gini backfill changed (2026-11-09, later same day)
 
@@ -395,6 +367,12 @@ themselves were only ever snapshots of drafts that no longer exist.
 ---
 
 ## Historical work plan (superseded by the 207-row panel)
+
+This table is the 2026-11-09 planning snapshot, not the live task register.
+The "2.3 open" and "4.1b/4.3 open" labels were superseded by the later
+reconciliation below: Tier C's exploratory status was decided, the independent
+construct verifier was added to CI, and the correction note was added. The
+current local and external gates are listed at the top of this document.
 
 | Phase | Days | Delivered | Blocking risk |
 |---|---:|---|---|

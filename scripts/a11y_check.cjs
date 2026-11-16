@@ -1,6 +1,6 @@
 /**
  * Run the complete axe-core rule set against every application route in both colour
- * schemes. The route list is intentionally independent from src/router/routes.ts so a
+ * schemes. The route list is intentionally independent from src/app/routes.ts so a
  * new route cannot silently escape this browser check.
  *
  * Usage: npm run check:a11y [-- --baseline]
@@ -14,18 +14,17 @@ const PORT = process.env.A11Y_CHECK_PORT || '5199';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BASE_PATH = process.env.A11Y_CHECK_BASE || '/belief_emergence/';
 const ALL_ROUTES = [
-  'landing',
-  'component-analysis',
-  'field-dynamics',
-  'statistical-analysis',
-  'sensitivity-analysis',
-  'emergence-analysis',
-  'model-diagnostics',
-  'advanced-parameters',
-  'phi-contributions',
-  'documentation',
-  'ai-interpreter',
-  'presets',
+  'overview',
+  'data',
+  'audit',
+  'gates',
+  'model',
+  'evaluation',
+  'limits',
+  'countries',
+  'geometry',
+  'reproduce',
+  'glossary',
 ];
 const ROUTES = process.env.A11Y_ROUTES
   ? process.env.A11Y_ROUTES.split(',').map((route) => route.trim()).filter(Boolean)
@@ -107,17 +106,7 @@ async function keyboardTabAudit(page, maxSteps = 160) {
         const page = await context.newPage();
         const pageErrors = [];
         page.on('pageerror', (error) => pageErrors.push(error.message));
-        if (route === 'ai-interpreter') {
-          await page.route('**/api/ai/interpret', (request) =>
-            request.fulfill({
-              status: 503,
-              contentType: 'application/json',
-              body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
-            }),
-          );
-        }
-
-        const routeQuery = route === 'landing' ? '' : `?v=${encodeURIComponent(route)}`;
+        const routeQuery = `?v=${encodeURIComponent(route)}`;
         await page.goto(`http://127.0.0.1:${PORT}${BASE_PATH}${routeQuery}`, {
           waitUntil: 'domcontentloaded',
           timeout: 90000,
@@ -157,12 +146,6 @@ async function keyboardTabAudit(page, maxSteps = 160) {
             })),
           };
         });
-        const presetInitialFocus = route === 'presets'
-          ? await page.evaluate(() => ({
-              focusedCloseButton: document.activeElement?.getAttribute('aria-label') === 'Close presets',
-              focusableCount: document.querySelectorAll('.preset-modal button:not([disabled]),.preset-modal a[href],.preset-modal input:not([disabled]),.preset-modal select:not([disabled]),.preset-modal textarea:not([disabled]),.preset-modal [tabindex]:not([tabindex="-1"])').length,
-            }))
-          : null;
         await page.keyboard.press('Tab');
         const interactionAudit = await page.evaluate(() => {
           const isVisible = (element) => {
@@ -239,22 +222,22 @@ async function keyboardTabAudit(page, maxSteps = 160) {
         if (pageErrors.length) failures.push(`${theme}/${route}: page error: ${pageErrors[0]}`);
         console.log(`${theme.padEnd(5)} ${route.padEnd(24)} ${JSON.stringify(counts)} violations=${report.violations.length} focusable=${interactionAudit.focusableCount} buttons=${interactionAudit.buttonCount}/${interactionAudit.visibleButtonCount} disabled=${interactionAudit.disabledButtonCount} ranges=${interactionAudit.rangeInputCount} charts=${interactionAudit.chartCount} unnamedCharts=${interactionAudit.unnamedCharts.length} incompleteChecks=${report.incomplete.length}`);
 
-        if (route === 'landing' && theme === 'dark' && !baselineOnly) {
+        if (route === 'overview' && theme === 'dark' && !baselineOnly) {
           const keyboardPage = await context.newPage();
-          await keyboardPage.goto(`http://127.0.0.1:${PORT}${BASE_PATH}`, { waitUntil: 'domcontentloaded', timeout: 90000 });
+          await keyboardPage.goto(`http://127.0.0.1:${PORT}${BASE_PATH}?v=overview`, { waitUntil: 'domcontentloaded', timeout: 90000 });
           await keyboardPage.waitForFunction(() => document.body.innerText.length > 500, { timeout: 30000 });
           await keyboardPage.waitForTimeout(1800);
           const tabAudit = await keyboardTabAudit(keyboardPage);
           await keyboardPage.close();
           if (!tabAudit.complete || !tabAudit.tabStops || tabAudit.missingRing.length) {
-            failures.push(`dark/landing: keyboard Tab traversal failed (${JSON.stringify(tabAudit)})`);
+            failures.push(`dark/overview: keyboard Tab traversal failed (${JSON.stringify(tabAudit)})`);
           } else {
-            console.log(`dark landing keyboard walk: ${tabAudit.tabStops}/${tabAudit.expectedCount} sequential tab stops reached, all focus rings visible`);
+            console.log(`dark overview keyboard walk: ${tabAudit.tabStops}/${tabAudit.expectedCount} sequential tab stops reached, all focus rings visible`);
           }
         }
 
-        if (route === 'landing' && theme === 'dark' && !baselineOnly) {
-          const themeToggle = page.locator('.sidebar-theme-toggle');
+        if (route === 'overview' && theme === 'dark' && !baselineOnly) {
+          const themeToggle = page.getByRole('button', { name: /Switch to/ });
           if (await themeToggle.count()) {
             await themeToggle.focus();
             await page.keyboard.press('Space');
@@ -262,108 +245,20 @@ async function keyboardTabAudit(page, maxSteps = 160) {
             await page.keyboard.press('Enter');
             const afterEnter = await page.locator('html').getAttribute('data-theme');
             if (afterSpace !== 'light' || afterEnter !== 'dark') {
-              failures.push(`dark/landing: theme toggle keyboard activation failed (Space=${afterSpace}, Enter=${afterEnter})`);
-            } else console.log('dark landing theme toggle: Space and Enter pass');
+              failures.push(`dark/overview: theme toggle keyboard activation failed (Space=${afterSpace}, Enter=${afterEnter})`);
+            } else console.log('dark overview theme toggle: Space and Enter pass');
           } else {
-            failures.push('dark/landing: theme toggle is missing');
+            failures.push('dark/overview: theme toggle is missing');
           }
         }
 
-        if (route === 'presets' && theme === 'dark' && !baselineOnly) {
-          const modal = page.locator('.preset-modal');
-          const modalCheck = await modal.evaluate((dialog) => {
-            const focusables = [...dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')];
-            return { focusableCount: focusables.length };
-          });
-          if (!presetInitialFocus?.focusedCloseButton || modalCheck.focusableCount < 2) {
-            failures.push(`dark/presets: modal did not open with a usable focus trap (${JSON.stringify({ presetInitialFocus, ...modalCheck })})`);
-          } else {
-            await page.locator('.preset-modal-close').focus();
-            await page.keyboard.press('Shift+Tab');
-            const wrappedToLast = await modal.evaluate((dialog) => document.activeElement === dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')[dialog.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])').length - 1]);
-            await page.keyboard.press('Tab');
-            const wrappedToFirst = await modal.evaluate((dialog) => document.activeElement === dialog.querySelector('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'));
-            await page.keyboard.press('Escape');
-            await page.waitForSelector('.preset-modal', { state: 'detached', timeout: 5000 });
-            const restoredFocus = await page.locator('button.modern-preset-button').evaluate((button) => document.activeElement === button);
-            if (!wrappedToLast || !wrappedToFirst || !restoredFocus) {
-              failures.push(`dark/presets: keyboard trap, Escape, or focus restoration failed (${JSON.stringify({ wrappedToLast, wrappedToFirst, restoredFocus })})`);
-            } else console.log('dark presets modal: Tab wrap, Shift+Tab wrap, Escape, and focus restore pass');
-          }
-        }
         await context.close();
       }
     }
 
     if (process.env.A11Y_CHECK_SURFACE === '1' && !baselineOnly) {
-      for (const theme of ['dark', 'light']) {
-        const context = await browser.newContext({ colorScheme: theme });
-        const page = await context.newPage();
-        await page.goto(`http://127.0.0.1:${PORT}${BASE_PATH}`, { waitUntil: 'domcontentloaded', timeout: 90000 });
-        await page.waitForFunction(() => document.body.innerText.length > 500, { timeout: 30000 });
-        await page.waitForTimeout(1000);
-        await page.evaluate((selectedTheme) => {
-          document.documentElement.dataset.theme = selectedTheme;
-        }, theme);
-        await page.locator('.topbar-surface3d-toggle').press('Enter');
-        await page.waitForSelector('.surface3d-plot-layer[role="img"][aria-label]', { timeout: 90000 });
-        await page.waitForSelector('.surface3d-data-table-details summary', { timeout: 90000 });
-        await page.locator('.surface3d-data-table-details summary').focus();
-        await page.keyboard.press('Enter');
-        await page.waitForSelector('.surface3d-data-table-details[open] table caption', { timeout: 30000 });
-
-        const fallbackRows = await page.locator('.surface3d-data-table tbody tr').count();
-        const fallbackColumns = await page.locator('.surface3d-data-table thead th').count();
-        if (fallbackRows < 2 || fallbackColumns < 2) failures.push(`${theme}/surface: table fallback did not render sampled coordinates and values`);
-        await page.addScriptTag({ path: AXE_PATH });
-        const surfaceReport = await page.evaluate(async () => {
-          const result = await window.axe.run(document);
-          return {
-            violations: result.violations.map((violation) => ({ id: violation.id, impact: violation.impact })),
-            incomplete: result.incomplete.map((check) => ({
-              id: check.id,
-              nodes: check.nodes.length,
-              oneToOneContrastTargets: check.id === 'color-contrast'
-                ? check.nodes
-                  .filter((node) => [...node.any, ...node.all, ...node.none]
-                    .some((item) => item.data?.contrastRatio === 1))
-                  .map((node) => node.target)
-                : [],
-            })),
-            missingFocusRing: [...document.querySelectorAll(
-              'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[role="button"],[tabindex="0"]',
-            )].filter((element) => {
-              if (element.closest('[aria-hidden="true"], [inert]')) return false;
-              if (element.getClientRects().length === 0) return false;
-              const visibleStyle = getComputedStyle(element);
-              if (visibleStyle.display === 'none' || visibleStyle.visibility === 'hidden') return false;
-              element.focus({ preventScroll: true });
-              const style = getComputedStyle(element);
-              return style.outlineStyle === 'none'
-                || parseFloat(style.outlineWidth) < 2
-                || !element.matches(':focus-visible');
-            }).map((element) => element.getAttribute('aria-label') || element.innerText?.trim() || element.tagName.toLowerCase()),
-          };
-        });
-        const surfaceCounts = summarize(surfaceReport.violations);
-        for (const level of ['critical', 'serious']) {
-          if (surfaceCounts[level] > 0) failures.push(`${theme}/surface: ${surfaceCounts[level]} ${level} axe violation(s)`);
-        }
-        if (surfaceReport.incomplete.some((check) => check.id === 'aria-prohibited-attr' && check.nodes > 0)) {
-          failures.push(`${theme}/surface: unsupported ARIA attribute usage detected`);
-        }
-        const lowContrast = surfaceReport.incomplete.find((check) => check.id === 'color-contrast')?.oneToOneContrastTargets || [];
-        if (lowContrast.length) failures.push(`${theme}/surface: likely invisible text at ${JSON.stringify(lowContrast)}`);
-        if (surfaceReport.missingFocusRing.length) failures.push(`${theme}/surface: ${surfaceReport.missingFocusRing.length} focus target(s) lack visible focus`);
-        const surfaceIncomplete = surfaceReport.incomplete.map((check) => check.id).join(',') || 'none';
-        console.log(`${theme} surface open: ${JSON.stringify(surfaceCounts)} violations=${surfaceReport.violations.length} table=${fallbackRows}×${fallbackColumns - 1} missingFocus=${surfaceReport.missingFocusRing.length} incomplete=${surfaceIncomplete}`);
-        results.push({ route: 'surface3d-open', theme, counts: surfaceCounts, violations: surfaceReport.violations, incomplete: surfaceReport.incomplete });
-        await context.close();
-      }
+      console.log('SKIP geometry interaction audit: the interactive Geometry Lab is scheduled for a later app-v2 stage.')
     }
-  } finally {
-    await browser.close();
-  }
 
   const outputPath = process.env.A11Y_REPORT_PATH;
   if (outputPath) {
@@ -376,6 +271,9 @@ async function keyboardTabAudit(page, maxSteps = 160) {
     console.error('\nAccessibility check failures:');
     for (const failure of failures) console.error(`  - ${failure}`);
     process.exitCode = 1;
+  }
+  } finally {
+    await browser.close();
   }
 })().catch((error) => {
   console.error(error.stack || error.message || error);

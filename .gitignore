@@ -75,3 +75,4 @@ Thumbs.db
 *.synctex.gz
 *.pdf
 !paper/**/fig*.pdf
+tmp/
