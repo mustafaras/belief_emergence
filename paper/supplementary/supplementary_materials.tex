@@ -1067,20 +1067,22 @@ without an appendix.
 
 \noindent\justifying
 \textbf{Rawdata processing: source-to-column mapping.} The following table provides a compact, auditable mapping
-from raw files under \nolinkurl{rawdata/} to the columns they feed in \nolinkurl{rawdata/panel_model_data.csv} and,
-where relevant, to the modeled variables. It is included here to support verification of variable provenance.
+from local raw inputs and derived intermediates under \nolinkurl{rawdata/} to the columns they feed in
+\nolinkurl{rawdata/panel_model_data.csv} and, where relevant, to the modeled variables. These files are not
+version-controlled in the repository. The replication runbook documents source acquisition and available input
+fingerprints; source-specific access and redistribution conditions apply.
 
 \begin{table}[!htbp]
 \centering
 \TableStyle
-\caption{\textbf{Data scope:} source\,$\rightarrow$\,column provenance map for the integrated panel (\nolinkurl{rawdata/panel_model_data.csv}). \textbf{Method context:} \textit{Model} indicates which of $X,Y,Z,C,M,T,D,G,E,S,R$ each source contributes to directly or via deterministic transforms, and panel-wide coverage is summarized in \nolinkurl{rawdata/panel_model_data.json}. \textbf{Interpretation boundary:} this is provenance documentation only; it is not inferential evidence or a quality claim by itself.}
+\caption{\textbf{Data scope:} source\,$\rightarrow$\,column provenance map for the local integrated panel (\nolinkurl{rawdata/panel_model_data.csv}); listed raw inputs and intermediates are not version-controlled in the repository. \textbf{Method context:} \textit{Model} indicates which of $X,Y,Z,C,M,T,D,G,E,S,R$ each source contributes to directly or via deterministic transforms, and panel-wide coverage is summarized in \nolinkurl{rawdata/panel_model_data.json}. Source acquisition and available fingerprints are documented in the replication runbook. \textbf{Interpretation boundary:} this is provenance documentation only; it is not inferential evidence or a quality claim by itself.}
 \label{tab:source-column-map}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.1}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth} >{\raggedright\arraybackslash}p{0.30\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
 \toprule
-Source (rawdata/) & Raw file(s) (as committed) & Contributed columns in panel\_model\_data.csv & Model variables (X,Y,Z,M,T,E,R; C,D,G,S withdrawn) \\
+Source (rawdata/) & Raw file(s) / local intermediate & Contributed columns in panel\_model\_data.csv & Model variables (X,Y,Z,M,T,E,R; C,D,G,S withdrawn) \\
 \midrule
 World Values Survey (WVS) constructs & \nolinkurl{rawdata/wvs_combined.csv} (built from WVS/EVS extracts, using \nolinkurl{config/wvs_items.yaml}) & \texttt{Z\_religion\_importance}, \texttt{Z\_violence\_justifiable}, \texttt{Z\_belief\_outcome}, \texttt{C\_religiosity\_index}, \texttt{C\_cultural\_intensity}, \texttt{D\_social\_trust}, \texttt{D\_social\_atomization}, \texttt{S\_support\_index}, \texttt{S\_social\_support}, (plus auxiliary WVS fields) & $Z$, $C$, $D$, $S$ \\
 World Bank WDI (macro) & \nolinkurl{rawdata/worldbank_data_new.csv} and WDI bulk exports (\nolinkurl{rawdata/WDICSV.csv}, metadata files) & \texttt{urban\_pop\_share}, \texttt{gdp\_ppp} & $X$ (from \texttt{urban\_pop\_share}) \\

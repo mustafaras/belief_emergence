@@ -99,7 +99,7 @@
 \Section{Data and reproducibility}
 \begin{itemize}
     \setlength{\itemsep}{0.40em}
-    \item Canonical panel: 83 countries; 207 complete-case country--year observations (1990--2023), one row per country--year with no scenario replication. Upstream raw extracts, hash-pinned inputs and machine-readable provenance shipped for full auditability.
+    \item Canonical panel: 83 countries; 207 complete-case country--year observations (1990--2023), one row per country--year with no scenario replication. The repository supplies the panel, provenance and replication instructions; upstream inputs remain subject to provider access and redistribution terms.
     \item Preprocessing treated as a numerical contract: $\varepsilon=10^{-4}$ interior band; clipped min--max mapping for $X$, $Y$, and observed $Z$; clamp $\Phi\in[-50,50]$ before $\exp(\Phi)$; clamp predictions to $[\varepsilon,1-\varepsilon]$.
     \item Deterministic artifact pipeline: identical inputs reproduce identical outputs across all codepaths. Claim-evidence traceability map (Table~S0) links every major claim to its artifact source, evidence tier, and uncertainty caveat.
 \end{itemize}

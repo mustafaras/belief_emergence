@@ -102,13 +102,13 @@ The fifth-pass status table below was historical and is superseded here. The liv
 | Main manuscript | 31 US-letter pages; cross-reference-order LaTeX build succeeds. |
 | Supplement | 28 pages; `biber` is available and the rebuilt bibliography resolves. |
 | Abstract | 191 words. |
-| Source word count | TeXcount 3.1.1 reports 14,009 words for the manuscript source, excluding references. The target journal's maximum is 10,000 words including references, so the draft exceeds the limit before its bibliography is counted. A PDF text extraction also exceeds 17,000 tokens; this is a secondary estimate, not the journal's formal count. |
+| Source word count | TeXcount 3.1.1 reports 14,025 words for the manuscript source, excluding references. The target journal's maximum is 10,000 words including references, so the draft exceeds the limit before its bibliography is counted. A PDF text extraction also exceeds 17,000 tokens; this is a secondary estimate, not the journal's formal count. |
 | KI-18 windows/anchors | Resolved in the local artifacts and prose: fit, runtime, and evaluation now use the same canonical X/Y ranges and Z anchors; KI-15 records the unified refit and weak-identification result. |
 | Manuscript consistency | Latest local run: 36 claim blocks pass; three optional legacy files are skipped because they are absent. |
-| Browser/visual evidence | No new UI screenshots were generated in this pass. Legacy screenshots remain explicitly identified as earlier-interface images without model results. |
-| Unversioned source data | The auxiliary raw-data counts and three Table S4 rows remain disclosed as not independently reproducible from committed inputs. |
+| UI evidence | The submitted main text and supplement do not include UI screenshots; old image files remain unreferenced repository assets and are not presented as current-interface evidence. |
+| Source-data reproducibility | Source-level counts rely on raw inputs that are not version-controlled. The replication runbook documents acquisition steps and available fingerprints. Current Table S4 contains only two availability rows calculated from the committed canonical panel; the earlier three auxiliary rows are absent. |
 
-The journal's length rule is a material remaining submission gate. [Social Indicators Research guidance](https://link.springer.com/journal/11205/submission-guidelines) sets a 5,000–10,000-word range including references. Reducing from 14,009 source words before references to at most 10,000 total requires substantial editorial restructuring. The user chose to keep the current draft and leave this gate open; no shortening was authorized in this pass.
+The journal's length rule is a material remaining submission gate. [Social Indicators Research guidance](https://link.springer.com/journal/11205/submission-guidelines) sets a 5,000–10,000-word range including references. Reducing from 14,025 source words before references to at most 10,000 total requires substantial editorial restructuring. The user chose to keep the current draft and leave this gate open; no shortening was authorized in this pass.
 
 ## Seventh pass (rate-limit takeover verification, 2026-11-15)
 
@@ -131,7 +131,7 @@ The takeover also corrected stale validator expectations for current artifacts a
 | # | Item | Why it stays |
 |---|---|---|
 | O1 | **Resolved locally** — supplementary references | Rebuilt successfully with the installed `biber`; confirm zero unresolved citations in the final log. |
-| O2 | Historical UI screenshots | Provenance is disclosed; regenerating the legacy interface is not part of this pass. They remain non-current UI evidence. |
-| O3 | Unversioned raw-source counts and three auxiliary Table S4 rows | Depend on raw EM-DAT/macro tables that are not versioned; the manuscript discloses that these are not reproduced. |
+| O2 | **Resolved for the submission files** — UI screenshots | No UI screenshots are included or referenced in the current main text or supplement; no current-interface claim depends on the legacy images. The unused image files remain in the repository. |
+| O3 | **Open source-input limitation** — raw-source counts | The manuscript reports source-level WVS/macro coverage counts that cannot be rebuilt from a clean checkout alone because raw inputs are not version-controlled. The runbook documents acquisition and available fingerprints. Current Table S4 has only two rows, both derived from the committed canonical panel; the earlier three auxiliary rows are no longer present. The separately linked raw-data Drive file could not be verified through the connected Drive account; confirm its access and contents before submission. |
 | O4 | **Resolved locally** — KI-18 unified windows and anchors | Current fit/runtime/evaluation contract and refit are recorded in `structural_window_sensitivity.json` and KI-15. |
-| O5 | **Open, blocking submission length** | Official Social Indicators Research guidance sets a 5,000–10,000-word range including references. TeXcount is already 14,009 before references; the user chose to keep the draft unchanged and leave this gate open. |
+| O5 | **Open, blocking submission length** | Official Social Indicators Research guidance sets a 5,000–10,000-word range including references. TeXcount is 14,025 before references; the user chose to keep the draft length and leave this gate open. No shortening was authorized. |
