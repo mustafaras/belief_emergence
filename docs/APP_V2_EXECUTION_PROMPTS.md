@@ -1,5 +1,13 @@
 # Uygulama v2: Adım adım uygulama promptları
 
+**Canlı sıra durumu (2026-11-16):** `repo-app-v2/docs/APP_V2_LOG.md`, P00–P07
+ve P10–P17'yi tamamlandı; P08–P09'u makale-senkronu önkoşulu olarak tamamlandı
+diye kaydediyor. P19, izin verilen kaynaklarda istenen artifact-backed Y/E/T
+engelleyici toplamları bulunmadığı için kısmi ve durdurulmuş durumda. P18, plana
+göre P22'den sonra uygulanır; P20–P38 başlamadı. P19 kaynağı çözülmeden P20'ye
+geçmeyin. Her promptun beklenen sayıları ve dosya yolları işe başlamadan canlı
+artifact'larla doğrulanmalıdır.
+
 Bu belge küçük ve hızlı modellerin (flash/haiku sınıfı) **sırayla, birer birer** uygulaması için yazıldı.
 Plan ve gerekçe: `docs/APP_PLAN_V2.md`. Her prompt tek bir commit üretir. Bir prompt bitmeden sonrakine geçilmez.
 
@@ -101,7 +109,7 @@ ORTAK KURALLAR
 | `audit.countryYears` | 305 |
 | `audit.Z.alpha` / `audit.Z.cells` | 0.819 / 287 |
 | `audit.C.alpha` / `audit.C.cells` | 0.348 / 303 |
-| `audit.D.alpha` / `audit.D.cells` | −1.229 / 296 |
+| `audit.D.alpha` / `audit.D.cells` | −1.228 / 296 (artifact stores −1.2284774929408622; `p3` displays −1.228) |
 | `audit.S.cells` / `audit.S.computable` | 0 / false. **S için alpha claim'i OLUŞTURMA** (artifact'taki 0.753 kalıntı bir değer) |
 | `audit.failedCount` | 3 (türetilmiş: computable=false ya da α<0.70 olan yapı sayısı, Z hariç) |
 | `data.panelRows` / `data.countries` | 207 / 83 |
@@ -163,7 +171,7 @@ Bunlara ek olarak dağılım verisi için bir `selectEvaluationSeries()` fonksiy
 **Commit:** `test(app-v2): registry integrity [P07]`
 
 ### P08–P09: TAMAMLANDI (2026-11-15), ATLA
-Makale senkronu P00'dan önce yapıldı: `scripts/check_manuscript_consistency.ts` artık 38 bloğu artifact'larla karşılaştırıyor (`npm run check:manuscript-consistency`), düzeltmeler ve hâlâ açık maddeler `docs/PAPER_SYNC_REPORT.md` içinde. `check_paper_claims.ts` yazma. P07'den sonra doğrudan P10'a (ya da paralel hat için P03–P06 bitince P14'e) geç. Registry'deki `paperRef.texValue` alanları isteğe bağlıdır; mevcut kontrol kapsamı yeterlidir.
+Makale senkronu P00'dan önce yapıldı: `scripts/check_manuscript_consistency.ts` güncel olarak 36 claim bloğunu artifact'larla karşılaştırıyor (`npm run check:manuscript-consistency`), düzeltmeler ve O3/O5 gibi açık kapılar `docs/PAPER_SYNC_REPORT.md` içinde. `check_paper_claims.ts` yazma. P07'den sonra doğrudan P10'a (ya da paralel hat için P03–P06 bitince P14'e) geç. Registry'deki `paperRef.texValue` alanları isteğe bağlıdır; mevcut kontrol kapsamı yeterlidir.
 
 ---
 
@@ -275,7 +283,7 @@ Mobilde sticky kart, adım metinlerinin üstünde ve normal akışta yer alır. 
 **Commit:** `feat(app-v2): audit replay [P18]`
 
 ### P19: Data & Support: funnel ve destek
-**İçerik:** Şekil 1.1 `Funnel` (442,026 respondents → 305 country-years → 287 outcome cells → 207 estimation rows; her adım bir claim). Şekil 1.2: değişken başına engelleyici çubukları (Y 131, E 92, T 46; değerler artifact'tan, kaynak `construct_prevalence.json` ya da `gini_window_sensitivity.json` meta alanı; bulunamazsa DUR). Şekil 1.3: ülke × yıl destek `Heatmap`'i (`DataContext` panelinden; hücrede satır var ya da yok; ülkeler satır sayısına göre sıralı).
+**İçerik:** Şekil 1.1 `Funnel` (442,026 respondents → 305 country-years → 287 outcome cells → 207 estimation rows; her adım bir claim). Şekil 1.2: değişken başına engelleyici çubukları. **Kaynak düzeltmesi (2026-11-16):** prompt'un adlandırdığı `construct_prevalence.json` ve `gini_window_sensitivity.json` bu sayıları hiç içermiyordu — ve içermesi de beklenemezdi, çünkü Y/E/T atfı onların konusu değil. Planlanan değerler (Y 131, E 92, T 46) `npm run generate:blockers` ile üretilen `covariate_blocker_attribution.json`'dan geliyor. Önemli tanım: bu sayılar **örtüşen maruz kalma**dır (bir hücre hem Y hem E eksikse iki sayıya da girer) ve toplamları at-risk çerçevesini (181) aşar; ayrık (first-failure) seri ayrı raporlanır ve 181'e tam olarak toplanır. Şekil 1.2 her iki seriyi gösterip örtüşmeyi açıkça yazmalı; yalnızca örtüşen çubukları göstermek okuyucuyu toplamaya davet eder. Şekil 1.3: ülke × yıl destek `Heatmap`'i (`DataContext` panelinden; hücrede satır var ya da yok; ülkeler satır sayısına göre sıralı).
 **Commit:** `feat(app-v2): data and support [P19]`
 
 ### P20: Data: Gini penceresi ve zero-fill

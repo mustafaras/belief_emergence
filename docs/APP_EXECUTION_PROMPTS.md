@@ -1,5 +1,10 @@
 # Application work — sequential execution prompts
 
+> **Historical v1 execution record (2026-11-16 reconciliation).** This file's
+> original baselines and prompt text retain their dated context. Prompts 0–13
+> were delivered through PRs #1 and #2; use `APP_PLAN_V2.md` and
+> `APP_V2_EXECUTION_PROMPTS.md` for the separate, unfinished v2 work.
+
 Each prompt below is self-contained: a fresh agent can be handed one, without this
 file or any conversation, and it will have the context, the constraint, the
 verification and the stopping condition it needs. Run them in order. Each ends with a

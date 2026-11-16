@@ -11,7 +11,6 @@ import { useDataContext } from '../../contexts/DataContext'
 import { standardizeCulturalIntensity } from '../../utils/validation/panelPredict'
 import Tooltip from '../documentation/Tooltip'
 import PresetModal, { type PresetData } from './PresetModal'
-import { InlineMath } from 'react-katex'
 import 'katex/dist/katex.min.css'
 import './ModernSidebar.css'
 
@@ -727,22 +726,17 @@ function ModernSidebar({ params, onParameterChange, onShowDocumentation, onShowA
               <span className="abstract-summary-hint">Expand</span>
             </summary>
             <div className="abstract-content" id="sb-abstract" lang="en">
-              <strong>Background.</strong> Macro-urban decision support often depends on sparse country–year evidence,
-              yet comparative pipelines rarely make support limits, uncertainty, and nonlinear response
-              geometry visible within the same workflow. Belief emergence is operationalized as a
-              country–year composite index (<span className="nowrap"><InlineMath math="Z \in [0,1]" /></span>) derived from World Values Survey items measuring
-              religiosity-related belief intensity. A support-aware bounded nonlinear framework models this
-              outcome under urbanization and inequality, paired with diagnostic visual analytics, refit
-              out-of-sample validation, and deterministic evidence export. The analysis uses a canonical
-              panel of 76 countries (167 complete-case country–years, 1990–2023), one row per country–year
-              with no scenario replication. Effective exposure is defined as{' '}
-              <span className="nowrap"><InlineMath math="S=X^{\\alpha}Y^{\\beta}\\exp(\\Phi)" /></span> and mapped to the bounded outcome through{' '}
-              <span className="nowrap"><InlineMath math="Z=S/(S+k)" /></span>, making transition-ridge sensitivity and
-              saturation explicit. Primary claims are anchored to Tier&nbsp;A/B refit out-of-sample evidence from
-              leave-one-country-out cross-validation (23 folds), while rolling-origin temporal evaluation
-              (9 folds) serves as a temporal scope diagnostic. The contribution is a reproducible workflow
-              making model geometry, support boundaries, and validation status auditable end-to-end.
-              Interpretation remains descriptive, non-causal, and limited to the observed support.
+              <strong>Background.</strong> This paper audits a published bounded nonlinear model of country-year belief intensity.
+              An item-level World Values Survey audit found low aggregate reliability for cultural intensity and
+              social atomization, could not compute social support, and found the outcome composite's alpha to be
+              0.819 across 287 country-years. In the earlier panel, the outcome was an exact rescaling of a predictor,
+              making its reported fit algebraically guaranteed. The rebuilt panel contains 207 complete-case
+              country-years across 83 countries (1990–2023). On identical rows and 100 grouped, country-held-out
+              evaluations, the saturating model and ordinary linear regression have the same median held-out R²
+              (0.4074); the linear model fits better in sample (0.4623 versus 0.4061). The analysis establishes
+              neither predictive superiority nor causal effects. Its contribution is an auditable sequence of
+              measurement, design-integrity, model-comparison, and reproducibility checks, with interpretation
+              limited to descriptive evidence in the observed support.
             </div>
           </details>
         </div>

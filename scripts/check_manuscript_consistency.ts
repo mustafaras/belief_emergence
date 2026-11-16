@@ -1345,6 +1345,102 @@ export function runConsistencyChecks(): void {
       context: 'Repro runbook expected LOO triplet',
     });
 
+    // ---------------------------------------------------------------------
+    // Covariate blocker attribution.
+    //
+    // This claim lived only in prose for four months and was wrong in two ways
+    // that arithmetic alone exposes: the three counts (131/92/46) summed to more
+    // than the frame they were said to partition (180), and the sentence called
+    // the leading count a number "lost to Y alone" when the cells overlap.
+    // A reader cannot check a claim whose definition is not in the tree, so the
+    // definition now has a generator and these checks assert the manuscript
+    // against it.
+    //
+    // Two distinct failure modes are caught:
+    //   1. numeric drift — the quoted counts stop matching the artifact;
+    //   2. semantic drift — the wording reverts to a partition ("alone", "lost
+    //      to X", "sum to") for counts that are exposure and do not partition.
+    // ---------------------------------------------------------------------
+    {
+      const attributionPath = path.join(ANALYSIS_DIR, 'covariate_blocker_attribution.json');
+      const mainText = readText(path.join('main', 'main.tex')) ?? '';
+      if (fs.existsSync(attributionPath) && mainText) {
+        stats.executed += 1;
+        const attr = JSON.parse(fs.readFileSync(attributionPath, 'utf8')) as {
+          frame: { atRiskCells: number };
+          exposure: { covariate: string; cells: number }[];
+          exposureIsPartition: boolean;
+          firstFailure: { covariate: string; cells: number }[];
+        };
+        const exposureOf = (code: string): number | null =>
+          attr.exposure.find((r) => r.covariate === code)?.cells ?? null;
+        const top = attr.exposure.slice(0, 3);
+        const problems: string[] = [];
+
+        if (exposureOf('Y') === null) problems.push('artifact has no Y exposure count');
+
+        const quoted = (n: number): boolean => mainText.includes(`\\num{${n}}`);
+        for (const need of [attr.frame.atRiskCells, ...top.map((r) => r.cells)]) {
+          if (!quoted(need)) problems.push(`\\num{${need}} is not quoted`);
+        }
+
+        // The sentence must not call overlapping counts a partition. "Alone" is the
+        // exact word that was wrong, so it is the word that is refused.
+        if (!attr.exposureIsPartition) {
+          const blockerParagraph = mainText.match(/The binding constraint on the sample[\s\S]*?\n\n/)?.[0] ?? '';
+          if (blockerParagraph === '') {
+            problems.push('the blocker paragraph could not be located, so its wording cannot be checked');
+          } else {
+            for (const forbidden of ['alone', 'were lost to', 'were lost after']) {
+              if (blockerParagraph.includes(forbidden)) {
+                problems.push(
+                  `wording "${forbidden}" presents overlapping exposure counts as a partition; ` +
+                    'the artifact records exposureIsPartition=false',
+                );
+              }
+            }
+          }
+        }
+
+        if (problems.length > 0) {
+          failures.push({
+            id: 'COVARIATE_BLOCKERS_DRIFT',
+            file: 'main/main.tex',
+            message: `Step 2b disagrees with covariate_blocker_attribution.json: ${problems.join('; ')}`,
+            remediation:
+              'Run npm run generate:blockers, then restate the sentence as exposure (counts overlap and do not sum to the frame) or, if a partition is meant, quote the firstFailure numbers and say so.',
+          });
+        }
+      }
+
+      // The recovered-cell count is a function of the adopted Gini window. It was
+      // quoted as 79 while the table two paragraphs above said 97 for the same
+      // adopted window, because the sentence was written for the +/-2 era and the
+      // table was regenerated.
+      const giniPath = path.join(ANALYSIS_DIR, 'gini_window_sensitivity.json');
+      if (fs.existsSync(giniPath) && mainText) {
+        stats.executed += 1;
+        const gini = JSON.parse(fs.readFileSync(giniPath, 'utf8')) as {
+          rows: { window: number; completeCaseRows: number; giniBackfilled: number }[];
+        };
+        const adopted = gini.rows.find((r) => r.window === 5) ?? gini.rows.at(-1);
+        if (adopted) {
+          const sentence = mainText.match(/No cell was\s+recoverable at its exact year: every one of the\s+\\num\{([0-9]+)\} recovered cells/);
+          const found = sentence ? Number.parseInt(sentence[1], 10) : Number.NaN;
+          if (found !== adopted.giniBackfilled) {
+            failures.push({
+              id: 'GINI_RECOVERED_COUNT_DRIFT',
+              file: 'main/main.tex',
+              message:
+                `the prose reports ${Number.isNaN(found) ? 'no parseable count' : found} recovered cells, ` +
+                `but gini_window_sensitivity.json records ${adopted.giniBackfilled} at the adopted window +/-${adopted.window}.`,
+              remediation: 'Quote the adopted-window value, not the value from a narrower window that the table no longer uses.',
+            });
+          }
+        }
+      }
+    }
+
     if (failures.length > 0) {
       console.error('\n❌ Manuscript consistency check failed.');
       for (const failure of failures) {

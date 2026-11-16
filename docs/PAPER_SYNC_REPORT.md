@@ -2,6 +2,8 @@
 
 Date: 2026-11-15. Validation target: local worktree on `work/paper-artifact-sync`, based on `c6eb26a`; the 59-file working-tree diff is intentionally preserved from the rate-limit handoff.
 
+> **Current correction (2026-11-16):** the live `preset_country_alignment.json` reports 9 of 83 countries above MAE 0.25 (including 6 preset cases). Earlier `15 of 83` text in this handoff was stale and is superseded. The current coverage artifact reports rolling-origin means 0.867/0.845/0.817 and below-nominal fold rates 36%/48%/48%.
+
 ## Decision rules (applied to every change)
 
 1. **Artifacts are authoritative.** They are regenerated deterministically from the committed panel and code (`generate:functional-form` reproduced the committed values exactly); the manuscript is prose that had drifted from them.
@@ -34,7 +36,7 @@ Verification: main 35 pp, supplementary 36 pp, highlights and cover letter compi
 | §5 coverage | "closest to nominal in the mid tertile" | no regime-conditional coverage claim; Table S20 itself says tertile coverage is not archived | Claim had no artifact. |
 | §5 rolling coverage | 57 / 31 / 24 % | mean coverage 0.84 / 0.86 / 0.79; 44 / 44 / 56 % of folds fall short (country-out 0.91 / 0.91 / 0.92) | `prediction_interval_coverage.json`. Still "below nominal", milder. |
 | §5 country slices | "countries with ≥30 observations: RMSE median 0.0878" | countries contribute 1–6 rows; 35 of 83 have ≥3, so within-country R² is not reported | No country has 30 rows. |
-| Limitations | failures = EST, RUS, SVK (MAE > 0.25) | CHN, CZE, FRA, GEO, ITA, POL (1–3 rows each); 15 of 83 countries exceed 0.25 | `preset_country_alignment.json`; RUS and SVK are now "good". |
+| Limitations | failures = EST, RUS, SVK (MAE > 0.25) | CHN, CZE, FRA, GEO, ITA, POL (1–3 rows each); 9 of 83 countries exceed 0.25 | `preset_country_alignment.json`; RUS and SVK are now "good". |
 | Limitations, 2006 | ΔR² only (−0.115/−0.199/−0.935); 12 rows | 20 rows / 20 countries; ΔRMSE −0.0155/−0.0059/−0.0087 and ΔR² −0.60/−0.06/−0.88; "effect depends on the metric" | Artifact. The old "does not rescue the fit" is no longer true for RMSE. |
 | Limitations, C exclusion | Y partial R² 0.1096 | 0.0829 | Artifact. |
 | Marginal-effects table | C, D, G, S rows; E negative; baseline Z ≈ 0.004–0.053 | M, T, E, R only; E +0.09 (matches c_E = +0.39); baseline Z ≈ 0.57–0.61; α, β at the bound make baselines nearly equal except for R | Regenerated from the production map. |
@@ -133,12 +135,27 @@ This continuation corrected repository-availability statements without shortenin
 | Check | Current result |
 |---|---|
 | Raw-data provenance | Corrected the main text, supplement, title page, bibliography, highlights, cover letter, and report to state that raw source inputs are not version-controlled and remain subject to provider terms. The linked external raw-data Drive file could not be verified through the connected account. |
+| Construct audit alpha | Corrected the manuscript's D row to `−1.228`, from `wvs_construct_audit.json` raw alpha `−1.2284774929408622`; this matches the three-decimal app claim and the user's artifact-source decision. |
 | Table S4 and UI screenshots | Current Table S4 contains two availability rows derived from the committed canonical panel; the earlier three auxiliary rows are absent. No UI screenshots are included or referenced in the submission files; legacy image files remain unreferenced. |
-| Source word count | TeXcount 3.1.1 reports 14,025 manuscript-source words excluding references. The user chose to keep the draft length and leave O5 open. |
-| Local checks | Manuscript consistency: 36 claim blocks pass; 3 optional legacy files absent. Section-reference check, evidence-index check, and `git diff --check` pass. |
-| Submission PDFs | Main manuscript (31 pages), supplement (28), title page (2), cover letter (3), and highlights (3) compile; all five are assembled under `submission/`. |
+| Source word count | TeXcount 3.1.1 reports 14,034 manuscript-source words excluding references after the 2026-11-16 edits. The user chose to keep the draft length and leave O5 open. |
+| Local checks | Manuscript consistency: 36 claim blocks pass; 3 optional legacy files absent. Section-reference and evidence-index checks pass. The Q1 automated gate is **READY, 27/27** on the main worktree; its 12 human checklist items remain unsigned. Browser checks used a dedicated server for this checkout. |
+| Submission PDFs | Main manuscript recompiled after the D-alpha source correction (31 pages) and refreshed in `paper/main/main.pdf` and `submission/01_manuscript.pdf`; both outputs are byte-identical. The other four current bundle PDFs remain present under `submission/`. |
 | Hosted PR checks | PR #3 at `be904cc` passes all six hosted analysis/manuscript, PDF compilation, and route visual-baseline checks. PR remains open and has no review decision; the automated reviewer reported insufficient quota. |
 | Preserved worktree files | Branch is synchronized with origin. The two pre-existing supplementary `.SAVE-ERROR` files were not modified. |
+
+## Ninth pass (blocker attribution and the two contradictions it exposed, 2026-11-16)
+
+Step 2b of the manuscript asserted that "of the 180 cells lost after the WVS join, 131 were lost to Y alone; education 92 and trauma 46". The three numbers sum to 269 against a stated 180, so the sentence was arithmetically impossible as written. It was never checked because no generator existed and the claim was not in the whitelist.
+
+| Item | Before | After |
+|---|---|---|
+| Blocker counts | Hand-typed in prose, the panel builder comment and the roadmap | `covariate_blocker_attribution.json`, written by `npm run generate:blockers` |
+| Quantity described | "Cells lost to Y alone" | Overlapping exposure: a cell short of both Y and E counts under both, so the counts do not partition the frame |
+| Current values | 180 / Y 131 / E 92 / T 46 (one cell stale: `MV→MDV 2021` resolves only through the ISO-2 map) | 181 / Y 132 / E 93 / T 46 exposure; Y 128 / E 26 / T 20 / X 4 / M 2 / R 1 disjoint first failure, summing to 181 |
+| Recovered cells in prose | 79 (the ±2 figure) while the table above said 97 (±5, adopted) | 97 |
+| Enforcement | None | `COVARIATE_BLOCKERS_DRIFT` and `GINI_RECOVERED_COUNT_DRIFT` in `check:manuscript-consistency`; both mutation-tested |
+
+The permanently-lost count derived by the new generator is 61, matching the panel audit's `missingCovariate`; the artifact records that cross-check so the two derivations cannot drift apart silently. The manuscript's claim is now exposure-based and names the artifact, so a reader can reconstruct it.
 
 ## Current open gates
 
@@ -148,4 +165,5 @@ This continuation corrected repository-availability statements without shortenin
 | O2 | **Resolved for the submission files** — UI screenshots | No UI screenshots are included or referenced in the current main text or supplement; no current-interface claim depends on the legacy images. The unused image files remain in the repository. |
 | O3 | **Open source-input limitation** — raw-source counts | The manuscript reports source-level WVS/macro coverage counts that cannot be rebuilt from a clean checkout alone because raw inputs are not version-controlled. The runbook documents acquisition and available fingerprints. Current Table S4 has only two rows, both derived from the committed canonical panel; the earlier three auxiliary rows are no longer present. The separately linked raw-data Drive file could not be verified through the connected Drive account; confirm its access and contents before submission. |
 | O4 | **Resolved locally** — KI-18 unified windows and anchors | Current fit/runtime/evaluation contract and refit are recorded in `structural_window_sensitivity.json` and KI-15. |
-| O5 | **Open, blocking submission length** | Official Social Indicators Research guidance sets a 5,000–10,000-word range including references. TeXcount is 14,025 before references; the user chose to keep the draft length and leave this gate open. No shortening was authorized. |
+| O5 | **Open, blocking submission length** | Official Social Indicators Research guidance sets a 5,000–10,000-word range including references. TeXcount is 14,034 before references; the user chose to keep the draft length and leave this gate open. No shortening was authorized. |
+| O6 | **Open, source-license and derived-output clearance** | WVS/EVS microdata remain non-redistributable under the stated conditions; permission to redistribute the committed mixed-source panel is not established. The exact EM-DAT product/version behind local extracts is not established, and its public-data terms prohibit redistribution and derivative databases. OECD’s general terms permit reuse with attribution subject to dataflow-specific/third-party restrictions, which remain unreviewed for the local extracts. See `LICENSE`, `REPLICATION_RUNBOOK.md`, and `data_code_provenance.json`. |

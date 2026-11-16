@@ -1,18 +1,18 @@
 # KNOWN ISSUES — Measurement defects and their disposition
 
-**Status:** OPEN ITEMS BELOW ARE TRACKED INDIVIDUALLY — no entry still blocks release
+**Status (2026-11-16):** findings are tracked individually; KI-09–11 describe withdrawn constructs, KI-15 remains a reported identification limit, and separate submission gates remain open
 **Severity:** was Critical; the blocking defect (KI-01) is closed
 **Discovered:** 2026-11-07
-**Last reconciled against the tree:** 2026-11-09
+**Last reconciled against the tree:** 2026-11-16
 **Affects:** historical claims in `paper/main/main.tex` up to commit `41c2fad`
 
-Every finding below is independently reproducible from the committed tree.
-Unless an entry says otherwise, its reproduction commands now run against
-`public/data/panel_canonical_v2.csv` (167 complete-case country-years, 76
-countries, 1990--2023) and `rawdata/wvs_construct_audit.json`. Where an entry
-still cites `panel_canonical_23_countries_v1.csv` or
+The canonical panel currently contains 207 complete-case country-years across
+83 countries (1990--2023), with 207 unique `(iso3, year)` keys. Many measurements
+inside the issue records are explicitly historical snapshots from earlier
+panel versions; use the current artifacts for present-day values. Where an
+entry cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
-kept only to describe what the defect was.
+kept only to describe the original defect.
 
 ## Disposition summary
 
@@ -711,7 +711,12 @@ verify:all` runs on a clean Ubuntu runner. That remains open (Phase 4.1).
 
 ---
 
-## What must change before submission
+## Historical pre-submission checklist (2026-11-09; superseded)
+
+> This checklist and the verification table below are a dated snapshot, not the
+> current task list. Several items were resolved or revised after 2026-11-09;
+> use the disposition summary above for issue status and
+> `docs/ROADMAP_TO_SUBMISSION.md` for current repository and external gates.
 
 1. **Recover or rewrite the ingestion pipeline** (KI-00). Without it nothing
    else can be verified. This is the first task, and it is not optional.

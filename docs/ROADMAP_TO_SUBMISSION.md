@@ -3,8 +3,8 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-15):** the manuscript/data track has open reconciliation work listed below; the separate application execution sequence is recorded through Prompt 13.
-**Last reconciled against the tree:** 2026-11-15
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19 is closed (its blocker attribution now has a generator and an artifact), while P18 is sequenced after P22 and P20–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
 > 2026-11-07 against the *defective* tree. Several figures in the original
@@ -15,63 +15,64 @@
 > measured value is shown in the status tables and the original projection is
 > kept only where it still explains a decision.
 
-## Live status — 2026-11-15
+## Live status — 2026-11-16
 
 The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
 207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
 `5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
 counts and the digest were read directly from the tracked CSV. The current
 `metrics_authoritative.json` records `n=207`, `R²=0.4061`, `r=0.6393`,
-`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json` records
-18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and C;
-Tiers A/B are primary and Tier C is exploratory. The stored submission-gate
-report says READY (27/27), generated 2026-11-11; that is recorded evidence, not
-a fresh run on 2026-11-15.
+`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json`
+records 18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and
+C; A/B are primary complexity tiers and C is exploratory. The latest Q1 gate
+was rerun after this reconciliation on 2026-11-16: READY (27/27 automated
+checks). Its 12 human checklist items remain unsigned and must be completed by
+the responsible author/editor before submission.
 
-The 2026-11-09 reconciliation below predates the panel widening from 167 to
-207 rows. The following discrepancies remain open and take priority over
-submission decisions:
+The manuscript reports 207 rows and 207 unique `(iso3, year)` keys, matching
+the canonical CSV. This pass reconciled the current-facing repository details:
+validation protocols, high-error-country counts, reviewer-facing artifacts,
+the supplement, and repository licensing language.
+The remaining work is:
 
-1. **Reconcile the current sample everywhere.** `REPLICATION_RUNBOOK.md` still
-   says 167 rows / 76 countries and expects the older `n=167`, `R²=0.2516`
-   metrics. The manuscript describes 207 rows but also says they are only 167
-   distinct country-year pairs; a direct key count finds 207. Table S18's
-   introduction still labels its source artifact `n=167`, although
-   `c_dominance_sensitivity.json` records `nRows=207`. The app plan and prompt
-   documents also contain 167-row / 76-country statements. Update these
-   references from the canonical CSV and regenerate any dependent checks before
-   treating the stored READY report as current document-wide evidence.
-2. **Refresh stale analysis artifacts.** `reviewer_red_team.json` still carries
-   old sample arithmetic, Tier support ratios, and the superseded Table S18
-   claim. `notation_glossary.json` still reports regime counts out of 146.
-   Reconcile both to the 207-row artifacts and manuscript.
-3. **Repair the journal-target source reference.** `journal_fit_targeting.json`
-   names `TARGET_JOURNALS.md`, but no such file is present in the current tree.
-   Decide on one maintained source and make the artifact point to it.
-4. **Close the two remaining measurement-audit documentation items.** The main
-   text reports construct alpha, but the planned supplement table is absent.
-   The retired v1 panel is not archived under `docs/archive/`; its historical
-   Git object remains available, so decide whether that satisfies the audit
-   requirement or create the requested archive.
-5. **Finish pre-release data-use checks.** The runbook still lists confirmation
-   of CRED permission, OECD extract-size limits, and redistribution terms for
-   the derived panel as open.
+1. **Final verification of the 2026-11-16 reconciliation — complete.** The
+   evidence index was regenerated and checked; the full CI gate passed 91/91;
+   the Q1 gate passed 27/27; and the supplementary materials, main manuscript,
+   title page, cover letter, and highlights compiled successfully. The latest
+   TeX sources report 14,034 words excluding references.
+2. **Keep external gates open until resolved by the responsible person.** CRED
+   permission, OECD extract-size limits, redistribution terms for the derived
+   panel, O3 raw-source access, and all 12 author/editor checklist signatures
+   remain open. Documentation does not close these permissions or signatures.
+3. **Preserve the prior length decision.** TeXcount 3.1.1 reports 14,034
+   manuscript-source words excluding references. O5 remains open by the
+   author's choice to keep the current draft rather than shorten it to the
+   journal limit.
+4. **Application v2 remains in progress.** Its worktree log records P00–P07,
+   P10–P17, and P08–P09 complete. P19 is closed: the Y/E/T blocker totals were
+   never stored in an artifact and are not a lookup, so they were derived into
+   `covariate_blocker_attribution.json` by `npm run generate:blockers`, whose
+   two series (overlapping exposure and disjoint first failure) replace the
+   manuscript's arithmetically impossible "131 lost to Y alone of 180" sentence.
+   P20 has not started. P18 is intentionally sequenced after P22.
+   Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
+   infer release readiness from these logged local milestones.
 
-The stored quantitative artifact set is mostly built against the 207-row panel;
-the open items above are documentation and artifact reconciliation, not a
-request to rerun or alter empirical analyses without first checking their
-current source contracts. The app's separate execution sequence records
-Prompts 0–13 as complete and contains no Prompt 14.
+Repository-local work can proceed without modifying restricted source data or
+signing human checklists. The retired v1 panel is retained in Git history at
+`8f5c06b`; the old blob is not duplicated in the working tree.
 
 ### What the Gini backfill changed (2026-11-09, later same day)
 
-The road to 126 cells ran through one covariate. Of the 180 cells lost after the
-WVS join, 131 were lost to `Y_gini` alone. The upstream macro panel and the
+The road to 126 cells ran through one covariate. Of the country-years that reach
+the covariate stage short of at least one driver, `Y_gini` carries the largest
+exposure count, but these counts overlap and do not partition the frame — the
+current attribution is in `src/data/analysis/covariate_blocker_attribution.json`.
+The upstream macro panel and the
 World Bank series are the same construct under an exact affine map
 (`Y = 0.164028 * SI.POV.GINI - 5.413122`, max residual 0.000000), so backfilling
 changes coverage, not meaning. The price is a ±2-year borrow on all 79 recovered
 cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
-
 | Quantity | Before | After |
 |---|---:|---:|
 | Complete-case cells | 87 | **167** |
@@ -212,10 +213,11 @@ and KI-12.
       from estimation and keep them as declared-but-not-estimated channels.
       The model estimates 7 columns. This is the substantive redesign the
       plan anticipated, and the manuscript now leads with it.
-- [ ] Report realized alpha per construct in the supplement. `Z` at 0.8187
-      clears the 0.80 benchmark; `C` at 0.3482 and `D` at −1.2285 are the
-      evidence for withdrawal. The main text reports them; the supplement has
-      no construct-alpha table yet.
+- [x] Report realized alpha and computability per construct in supplementary
+      Table S21: `Z` 0.8187 across 287 cells; `C` 0.3482 across 303; `D`
+      −1.2285 across 296; `S` 0.7530 on the available three-item subset but
+      zero computable seven-item cells. Alpha is aggregate-level, not
+      respondent-level reliability.
 
 ### 2.2 Decide the sample honestly
 
@@ -235,10 +237,10 @@ was widened to 207 rows on 2026-11-11.
 `5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`.
 
 - [x] Chooses Option B and renames the panel (v1 retired, v2 pinned).
-- [ ] Retain the retired v1 panel under `docs/archive/` for audit. It is absent
-      from the current tree; the historical blob is still available at
-      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv`. Decide whether
-      the Git history is sufficient or add the requested archive.
+- [x] Retain the retired v1 panel for audit in Git history at
+      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv` (630 data rows;
+      SHA-256 `f8dc16ae49044f84f6ea2cda10afe58d2f98f8a06cee18ea27005c8ccf0eb076`).
+      Git history is sufficient; no duplicate archive is needed.
 
 ### 2.3 Reduce the model to what support allows
 
@@ -266,11 +268,11 @@ read from the linked 207-row artifacts.
 Nothing from the current manuscript survives this phase. Assume a full
 rewrite of Sections 5 and 7.
 
-- [ ] Reconcile the complete artifact set to the current 207-row panel.
-      Core generated artifacts such as `metrics_authoritative.json`,
-      `model_ladder_metrics.json`, and `c_dominance_sensitivity.json` record
-      207 rows. `reviewer_red_team.json` and `notation_glossary.json` still
-      contain stale sample/support claims; see the live open-work list above.
+- [x] Reconcile current-facing artifacts to the 207-row panel. Core generated
+      artifacts, `reviewer_red_team.json`, `abstract_screening_pack.json`,
+      `journal_fit_targeting.json`, and `notation_glossary.json` use current
+      scope and validation facts. Final evidence-index and CI checks remain in
+      the live closeout list.
 - [x] Recompute headline metrics. The current `metrics_authoritative.json`
       records `n=207`, `R²=0.4061`, `r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`,
       and bias `0.0048`. These are canonical-panel descriptive metrics, not
@@ -283,17 +285,16 @@ rewrite of Sections 5 and 7.
       results are separately recorded in `cv_kfold.json`.
 - [x] Fix the original Table S18 R²/RMSE inconsistency (KI-06). The current
       table reports the C-withdrawal non-result; the former `R² = 0.7299` and
-      near-one full-model value are described as historical. **Open:** its
-      introduction still labels the source artifact `n=167`; the current
-      artifact records `nRows=207` and must be reconciled with the manuscript.
+      near-one full-model value are historical. The current source artifact and
+      table use `nRows=207`.
 - [x] Rewrite the abstract, Results, Discussion, and all claims. Every sentence
       containing a number must be traced to a regenerated artefact.
       → reframed from "bounded model" to "measurement audit" in `e18ede5`,
       `161dc92`. Residual drift is tracked separately (see Known drift below).
-- [ ] Refresh the red-team simulation against the current panel. Although its
-      top-level metadata names 207 rows / 83 countries, its rebuttals still
-      contain the obsolete 167-pair count, old Tier support ratios, and the
-      superseded S18 result.
+- [x] Refresh the red-team simulation against current support, coverage,
+      country-alignment, baseline-comparison, and licensing evidence. Joint
+      exclusion of the six preset high-error countries remains an unrun
+      extension.
 
 **Historical drift found during reconciliation (2026-11-09; the panel later
 widened again):**
@@ -319,11 +320,10 @@ manuscript number lacks an artefact pointer.
 
 ### 4.1 Reproducibility the reviewer can execute
 
-- [x] Add `rawdata/` download instructions and input checksums so a reviewer
-      can reconstruct inputs without redistribution. `REPLICATION_RUNBOOK.md`
-      includes the download steps and pinned input SHA-256 values. Its current
-      panel counts and expected headline metrics are stale and remain open in
-      the live reconciliation list.
+- [x] Add `rawdata/` download instructions and input checksums. The current
+      `REPLICATION_RUNBOOK.md` pins the 207-row panel contract and input hashes;
+      clean-clone regeneration still depends on restricted third-party source
+      access and does not close O3.
 - [x] Add `scripts/verify_constructs.ts` that recomputes `Z` and `C` from raw
       microdata and asserts the audit JSON matches. → written as an
       *independent* second implementation (it does not import the producer),
@@ -384,10 +384,9 @@ themselves were only ever snapshots of drafts that no longer exist.
 | Sociological Methods & Research | medium | strong methods fit; support and scope need to be assessed against the current 207-row panel |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
 
-- [ ] Restore or choose the canonical journal-target document and align it
-      with `journal_fit_targeting.json`. The JSON now names current manuscript
-      paths and 207/83 sample scope, but still points to `TARGET_JOURNALS.md`,
-      which is absent from the current tree.
+- [x] Choose the canonical journal-target document and align it with
+      `journal_fit_targeting.json`. The JSON points to this roadmap’s Phase 5
+      venue assessment and names current manuscript paths and 207/83 scope.
 - [x] Resolve the four multiply-defined LaTeX labels. `main.tex` and
       `supplementary_materials.tex` now contain 27 and 28 labels with zero
       duplicates.
@@ -395,6 +394,12 @@ themselves were only ever snapshots of drafts that no longer exist.
 ---
 
 ## Historical work plan (superseded by the 207-row panel)
+
+This table is the 2026-11-09 planning snapshot, not the live task register.
+The "2.3 open" and "4.1b/4.3 open" labels were superseded by the later
+reconciliation below: Tier C's exploratory status was decided, the independent
+construct verifier was added to CI, and the correction note was added. The
+current local and external gates are listed at the top of this document.
 
 | Phase | Days | Delivered | Blocking risk |
 |---|---:|---|---|

@@ -80,7 +80,9 @@ describe('evidence index matches the tree', () => {
     // to be changed deliberately, alongside the sentence that states it.
     // 36 after the marginal-effects, preset-alignment and supplementary-table generators
     // replaced hand-typed manuscript tables (none of the three is imported by the interface).
-    expect(names.length).toBe(38)
+    // 39 after covariate_blocker_attribution.json gave the manuscript's "binding
+    // constraint" sentence a generator instead of a memory.
+    expect(names.length).toBe(39)
     expect(ARTIFACT_CONSUMPTION.imported.length).toBe(10)
     expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(12)
   })

@@ -21,6 +21,7 @@ A = ROOT / "src" / "data" / "analysis"
 PANEL_Z = [float(r["Z"]) for r in csv.DictReader((ROOT / "public" / "data" / "panel_canonical_v2.csv").open(encoding="utf-8"))]
 J = lambda n: json.loads((A / n).read_text(encoding="utf-8"))
 g, w, st, mc = J("notation_glossary.json"), J("structural_window_sensitivity.json"), J("supplementary_tables.json"), J("model_complexity_support.json")
+cp, ia = J("construct_prevalence.json"), J("construct_item_availability.json")
 fw, ec, rr, an = w["windows"]["fitting"], w["windows"]["evaluationContract"], w["windows"]["realisedRange"], w["anchoring"]
 r4 = lambda x: round(float(x), 4)
 
@@ -52,10 +53,10 @@ for gl in g["greek_letters"]:
         gl["definition"] = "mean squared error between modelled and normalised observed Z (unpenalised)"
 hyper = [
     {"symbol": "k", "name": "Half-saturation constant", "bounds": [0.0001, 50], "role": "Saturation curve inflection; Z=0.5 when S=k"},
-    {"symbol": "x/y fitting window", "name": "Structural windows used by the fitting script", "values": [fw["xMin"], fw["xMax"], fw["yMin"], fw["yMax"]], "role": "Clip domain for the safe-band map during fitting"},
-    {"symbol": "x/y evaluation window", "name": "Structural windows in the model contract", "values": [ec["xMin"], ec["xMax"], ec["yMin"], ec["yMax"]], "role": "Clip domain for the safe-band map in evaluation and the interface (differs from fitting; KI-18)"},
-    {"symbol": "z fitting anchors", "name": "Outcome anchors in the fitting script", "values": [r4(an["fitAnchors"]["lo"]), r4(an["fitAnchors"]["hi"])], "role": "1st/99th percentiles of the current panel"},
-    {"symbol": "z evaluation anchors", "name": "Outcome anchors in the model contract", "values": [r4(an["evaluationAnchors"]["lo"]), r4(an["evaluationAnchors"]["hi"])], "role": "Z_NORMALIZATION used for evaluation (differs from fitting; KI-18)"},
+    {"symbol": "x/y fitting window", "name": "Structural windows used by fitting", "values": [fw["xMin"], fw["xMax"], fw["yMin"], fw["yMax"]], "role": "Canonical realised X/Y ranges, shared with the evaluation contract after KI-18"},
+    {"symbol": "x/y evaluation window", "name": "Structural windows in the model contract", "values": [ec["xMin"], ec["xMax"], ec["yMin"], ec["yMax"]], "role": "Same canonical realised X/Y ranges used by fitting and runtime after KI-18"},
+    {"symbol": "z fitting anchors", "name": "Outcome anchors shared by fitting and evaluation", "values": [r4(an["fitAnchors"]["lo"]), r4(an["fitAnchors"]["hi"])], "role": "Current-panel 1st/99th percentile anchors, shared across the contract after KI-18"},
+    {"symbol": "z evaluation anchors", "name": "Outcome anchors shared by fitting and evaluation", "values": [r4(an["evaluationAnchors"]["lo"]), r4(an["evaluationAnchors"]["hi"])], "role": "Same current-panel 1st/99th percentile anchors used in fitting after KI-18"},
     {"symbol": "Φ_clamp", "name": "Field clamping bounds", "values": [-50, 50], "role": "Prevents numerical overflow in e^Φ"},
 ]
 assert len(hyper) == len(g["hyperparameters"])
@@ -63,6 +64,25 @@ g["hyperparameters"] = hyper
 tiers = {t["tier"]: t for t in mc["complexityByTier"]}
 for t in g["tier_definitions"]:
     t["obs_per_param"] = round(tiers[t["tier"]]["supportPerParameter"], 2)
+construct_names = {"Z": "Z_belief_outcome", "C": "C_cultural_intensity", "D": "D_social_atomization", "S": "S_social_support"}
+prevalence = {c["name"]: c for c in cp["constructs"]}
+for v in g["model_variables"]:
+    source_name = construct_names.get(v["symbol"])
+    if source_name is None:
+        continue
+    audit = prevalence[source_name]
+    available = ia["constructs"][source_name]["availableItems"]
+    v["construct_audit"] = {
+        "cronbachAlpha": audit["alpha"],
+        "configuredItems": audit["items"],
+        "availableItems": len(available),
+        "cellsEmitted": audit["cells"],
+        "computable": audit["cells"] > 0,
+        "disposition": audit["disposition"],
+        "alphaScope": "available-item subset only; does not establish seven-item computability" if v["symbol"] == "S" else "aggregate-level aligned country-year item means",
+    }
+g["coefficient_terms"]["status_note"] = "Lists describe the nominal tier parameterization. C, D, G and S are withdrawn; their main effects and dependent terms are neutralized to zero rather than estimated."
+g["coefficient_terms"]["withdrawn_channel_terms"] = ["c_C", "c_D", "c_G", "c_S", "c_cm", "c_es", "c_dt", "c_gr", "c_c2"]
 rs = st["regimeSupport"]; n = rs["n"]
 pct = lambda c: f"{c} of {n} ({100 * c / n:.1f}%)"
 dens = {
@@ -78,7 +98,8 @@ for r in g["regime_definitions"]:
     if c:
         r["empirical_characterization"] = c
 g["support_density_basis"] = rs["basis"]
+g["supplementary_table_mapping"]["S21"] = "Construct Reliability and Computability (aggregate alpha, available items, emitted country-years)"
 g["generated"] = datetime.now(timezone.utc).isoformat()
-g["generator"] = "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json)"
+g["generator"] = "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json, construct_prevalence.json, construct_item_availability.json)"
 (A / "notation_glossary.json").write_text(json.dumps(g, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 print("updated notation_glossary.json")

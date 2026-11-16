@@ -551,7 +551,7 @@ async function main(): Promise<void> {
   const baseUrl =
     urlArgIndex !== -1 && process.argv[urlArgIndex + 1]
       ? process.argv[urlArgIndex + 1]
-      : 'http://localhost:5199/belief_emergence/'
+      : `http://localhost:${process.env.RENDER_CHECK_PORT || '5199'}/belief_emergence/`
 
   if (ALLOWLIST.length >= MAX_ALLOWLIST_ENTRIES) {
     console.error(

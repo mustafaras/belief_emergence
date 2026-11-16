@@ -27,6 +27,8 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'How widely the measurement failure extends: how many configured constructs fail a routine reliability floor, and how much of the frame survives it.',
   construct_validity_invariance:
     'Coverage and slice stability for each construct on the current panel, including where invariance breaks down.',
+  covariate_blocker_attribution:
+    'Which covariate is short for which cell, reported as overlapping exposure (a cell missing two drivers counts under both) alongside a disjoint first-failure view; this is the definition behind the manuscript\'s "binding constraint" sentence.',
   cv_country_out:
     'Leave-one-country-out cross-validation: refit and canonical metrics per fold, plus pooled aggregates.',
   cv_kfold:

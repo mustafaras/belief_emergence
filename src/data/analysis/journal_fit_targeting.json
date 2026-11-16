@@ -1,14 +1,14 @@
 {
   "schemaVersion": "phase1.journal_fit_targeting.v1",
-  "generatedAtIso": "2026-11-09T11:25:00.000Z",
+  "generatedAtIso": "2026-11-16T09:02:54Z",
   "source": {
     "manuscriptPath": "paper/main/main.tex",
     "companionPaths": [
       "paper/titlepage.tex",
       "paper/highlights.tex",
-      "TARGET_JOURNALS.md"
+      "docs/ROADMAP_TO_SUBMISSION.md"
     ],
-    "scope": "Journal-fit targeting reconciled with TARGET_JOURNALS.md strategic priority ranking (2026-11-09)",
+    "scope": "Journal-fit targeting reconciled with the Phase 5 venue assessment in docs/ROADMAP_TO_SUBMISSION.md (2026-11-16)",
     "manuscriptTitle": "Measurement Validity Before Model Geometry: A Reproducible Audit of Bounded Response Models",
     "sampleScope": "207 complete-case country-years, 83 countries, 1990-2023",
     "tagScale": [
