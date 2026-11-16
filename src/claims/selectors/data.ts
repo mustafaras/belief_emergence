@@ -16,7 +16,8 @@ const prevalenceSchema = z.object({
 const giniSchema = z.object({
   rows: z.array(z.object({
     window: z.number().int().nonnegative(),
-    completeCaseRows: z.number().int().nonnegative()
+    completeCaseRows: z.number().int().nonnegative(),
+    giniBackfilled: z.number().int().nonnegative()
   }).passthrough())
 }).passthrough()
 
@@ -24,12 +25,14 @@ const splitSchema = z.object({
   label: z.string(),
   n: z.number().int().nonnegative(),
   cMinusB: z.number(),
+  perRepeatMedianCminusB: z.number(),
   kFold: z.object({ A: z.number(), B: z.number(), C: z.number() }).passthrough()
 }).passthrough()
 
 const zeroFillSchema = z.object({
   nZeroAnchor: z.number().int().nonnegative(),
-  splits: z.array(splitSchema)
+  splits: z.array(splitSchema),
+  resultSurvivesRemoval: z.boolean()
 }).passthrough()
 
 const panelSummarySchema = z.object({
@@ -85,14 +88,24 @@ function claim(
   return { id, label, value, format, artifact, path, note }
 }
 
-const giniClaims = gini.rows.map(row => claim(
-  `data.gini.window.${row.window}.rows`,
-  `Complete cases at Gini window ±${row.window} years`,
-  row.completeCaseRows,
-  'int',
-  'gini_window_sensitivity.json',
-  `rows[window=${row.window}].completeCaseRows`
-))
+const giniClaims = gini.rows.flatMap(row => [
+  claim(
+    `data.gini.window.${row.window}.rows`,
+    `Complete cases at Gini window ±${row.window} years`,
+    row.completeCaseRows,
+    'int',
+    'gini_window_sensitivity.json',
+    `rows[window=${row.window}].completeCaseRows`
+  ),
+  claim(
+    `data.gini.window.${row.window}.recovered`,
+    `Gini cells borrowed from a neighbouring year at window ±${row.window}`,
+    row.giniBackfilled,
+    'int',
+    'gini_window_sensitivity.json',
+    `rows[window=${row.window}].giniBackfilled`
+  )
+])
 
 const fullPanel = zeroFill.splits.find(split => split.label === 'full panel')
 const withoutZeroAnchor = zeroFill.splits.find(split => split.label === 'zero-anchor rows removed')
@@ -123,6 +136,10 @@ export const dataClaims: Claim[] = [
   claim('data.blockers.rescued', 'Cells rescued by the covariate backfill', blockers.resolution.rescuedByBackfill, 'int', 'covariate_blocker_attribution.json', 'resolution.rescuedByBackfill'),
   claim('data.blockers.lost', 'Cells still lost to a missing covariate', blockers.resolution.permanentlyLost, 'int', 'covariate_blocker_attribution.json', 'resolution.permanentlyLost'),
   claim('data.zeroAnchor.rows', 'Zero-anchor rows', zeroFill.nZeroAnchor, 'int', 'zero_fill_sensitivity.json', 'nZeroAnchor'),
-  claim('data.zeroAnchor.fullPanel.cMinusB', 'Tier C minus Tier B k-fold R² with all rows', fullPanel.cMinusB, 'signed2', 'zero_fill_sensitivity.json', 'splits[full panel].cMinusB'),
-  claim('data.zeroAnchor.withoutRows.cMinusB', 'Tier C minus Tier B k-fold R² without zero-anchor rows', withoutZeroAnchor.cMinusB, 'signed2', 'zero_fill_sensitivity.json', 'splits[zero-anchor rows removed].cMinusB')
+  claim('data.zeroAnchor.fullPanel.cMinusB', 'Tier C minus Tier B k-fold R² with all rows', fullPanel.cMinusB, 'signed3', 'zero_fill_sensitivity.json', 'splits[full panel].cMinusB'),
+  claim('data.zeroAnchor.fullPanel.perRepeat', 'Tier C minus Tier B per-repeat median with all rows', fullPanel.perRepeatMedianCminusB, 'signed3', 'zero_fill_sensitivity.json', 'splits[full panel].perRepeatMedianCminusB'),
+  claim('data.zeroAnchor.fullPanel.n', 'Rows with all zero-anchor cells retained', fullPanel.n, 'int', 'zero_fill_sensitivity.json', 'splits[full panel].n'),
+  claim('data.zeroAnchor.withoutRows.cMinusB', 'Tier C minus Tier B k-fold R² without zero-anchor rows', withoutZeroAnchor.cMinusB, 'signed3', 'zero_fill_sensitivity.json', 'splits[zero-anchor rows removed].cMinusB'),
+  claim('data.zeroAnchor.withoutRows.perRepeat', 'Tier C minus Tier B per-repeat median without zero-anchor rows', withoutZeroAnchor.perRepeatMedianCminusB, 'signed3', 'zero_fill_sensitivity.json', 'splits[zero-anchor rows removed].perRepeatMedianCminusB'),
+  claim('data.zeroAnchor.withoutRows.n', 'Rows after deleting the zero-anchor cells', withoutZeroAnchor.n, 'int', 'zero_fill_sensitivity.json', 'splits[zero-anchor rows removed].n')
 ]

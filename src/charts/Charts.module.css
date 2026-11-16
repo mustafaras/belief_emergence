@@ -71,15 +71,26 @@
 
 .claimValue {
   cursor: pointer;
-  text-decoration: underline dotted;
-  text-underline-offset: 2px;
+
+  /*
+   * SVG `<text>` does not lay out a baseline box the way HTML inline text does:
+   * `text-decoration` renders through the glyphs, so a dotted underline drew a
+   * line across the middle of every number ("4̶4̶2̶,̶0̶2̶6̶"). The affordance is
+   * therefore a dotted *bottom border on the hit area* plus a colour shift, and
+   * the focus ring still carries the keyboard state.
+   */
+  fill: var(--accent);
+}
+
+.claimValue:hover {
+  fill: var(--focus);
 }
 
 .claimValue:focus-visible {
   fill: var(--focus);
+  stroke: none;
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  text-decoration-style: solid;
+  outline-offset: 3px;
 }
 
 .loss {

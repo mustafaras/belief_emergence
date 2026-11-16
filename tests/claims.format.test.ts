@@ -43,6 +43,16 @@ describe('formatClaim', () => {
     expect(formatClaim(-0.14, 'signed2')).toBe('−0.14')
   })
 
+  it('keeps three places for signed values that cross zero in the third', () => {
+    // The zero-fill lab rests on a gap that moves from −0.0079 to +0.0005. At two
+    // places the crossing prints as "+0.00" and the finding is invisible, which is
+    // the precise way this lab can stop being true while still rendering.
+    expect(formatClaim(-0.007917, 'signed3')).toBe('−0.008')
+    expect(formatClaim(0.000452, 'signed3')).toBe('+0.000')
+    expect(formatClaim(-0.028747, 'signed3')).toBe('−0.029')
+    expect(formatClaim(-0.007917, 'signed3')).not.toBe(formatClaim(-0.007917, 'signed2'))
+  })
+
   it('throws for unknown claim ids', () => {
     expect(() => getClaim('missing.claim')).toThrow()
   })

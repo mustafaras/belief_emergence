@@ -14,3 +14,37 @@
   width: 100%;
   height: 4rem;
 }
+
+.lab {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.labReadout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.labFigure {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.labFigure > button {
+  font-size: var(--fs-40);
+}
+
+.labFigureLabel {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.labFigureNote {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+}

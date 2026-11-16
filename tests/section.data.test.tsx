@@ -51,7 +51,7 @@ describe('Data & Support section', () => {
     // Figure 1.2 is now plotted from the attribution artifact. The two series are
     // asserted separately because the whole point of the figure is that the
     // overlapping counts do not sum to the frame while the disjoint ones do.
-    const blockerChart = screen.getByRole('img', { name: 'Covariate blocker counts' })
+    const blockerChart = screen.getByRole('group', { name: 'Covariate blocker counts' })
     const blockerRows = blockerChart.closest('figure')?.querySelector('table')?.textContent ?? ''
     expect(blockerRows).toContain('Cells short of this driver')
     expect(blockerRows).toContain('Cells attributed on first failure')

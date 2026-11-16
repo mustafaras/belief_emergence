@@ -19,5 +19,9 @@ export function formatClaim(value: number, format: ClaimFormat): string {
       return String(value)
     case 'signed2':
       return value < 0 ? `−${fixed(Math.abs(value), 2)}` : `+${fixed(value, 2)}`
+    case 'signed3':
+      // The zero-fill lab argues about a sign that crosses zero at +0.0005; at two
+      // places that crossing prints as "+0.00" and the finding disappears.
+      return value < 0 ? `−${fixed(Math.abs(value), 3)}` : `+${fixed(value, 3)}`
   }
 }

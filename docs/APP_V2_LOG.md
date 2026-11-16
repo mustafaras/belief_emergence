@@ -224,3 +224,31 @@ The earlier sessions searched for an artifact that would *contain* Y/E/T blocker
 - Updated for the new artifact: evidence index (39 artifacts), `artifactDescriptions`, and the pinned inventory test.
 - Acceptance: `npm run test:run` **351/351** (56 files); `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`, `check:support-picture`, `check:dom-numbers` all PASS. `npm run ci:gate` **89/91**: the two failures are Construct Audit (P21) and Geometry surface (P29), both unstarted and recorded as such in the earlier P19 entry.
 - Commit deferred; work remains uncommitted.
+
+## P20 — Data labs: Gini window and zero-fill
+
+- Figure 1.4 "How far may a Gini value be borrowed?" — `SegmentedControl` over exact/±1/±2/±3/±5, the adopted value defaulted and marked on the `LineProfile`. Two large readouts move with the selection: complete-case rows and the number of cells borrowed from a neighbouring year, plus that count as a share of the rows. Every readout is a registered claim, so the click target and the plotted point are the same number.
+- Figure 1.5 "Do the imputed zero-death cells carry the result?" — `Toggle` between the full panel and the panel with all `nZeroAnchor` inferred-zero rows deleted, comparing Tier C − Tier B on grouped k-fold and on the per-repeat median.
+- URL state: `gw=0|1|2|3|5` (deleted at the adopted ±5) and `zf=0|1`. Lab changes `replaceState` so they do not fill the back stack, and preserve unrelated keys so a claim deep link survives. `useLabUrlState` owns this, not the router.
+- New claims: per-window `recovered` counts, both splits' `n`, both `perRepeatMedianCminusB`. `giniSchema` and `zeroFillSchema` extended to cover the fields the labs read, so a renamed artifact field fails at load rather than rendering blank.
+
+### Corrections the artifact forced
+
+- The prompt's fixed caution ("The ordering is conditional on the zero-death inference") is not what the artifact says, and the artifact is right. `zero_fill_sensitivity.json` reports `resultSurvivesRemoval: true`: the k-fold gap keeps its sign (−0.029 → −0.009) when the 42 rows are deleted. The per-repeat median does cross zero (−0.008 → +0.000). So the honest statement is *partly* conditional, and it names which metric survives. The callout says that and cites the two numbers; `resultSurvivesRemoval` is shown as the recorded verdict.
+- Signed values print at three places in this lab. At two, the crossing that the whole argument rests on renders as `+0.00` and disappears. Added `signed3` to `ClaimFormat` with a test asserting it differs from `signed2` on exactly that value.
+
+### Three defects found while building this
+
+- **`CompareBars` accepted `claimId` and ignored it.** Values were never clickable, so the chart's numbers had no route to their artifact. Now every `claimId` renders a focusable button that opens the Claim Inspector, and the chart switches `role="img"` → `role="group"` when it contains interactive children (axe `nested-interactive`, which flagged both Data charts the moment the buttons appeared; `Funnel` already did this).
+- **Every clickable chart value was unreadable.** `text-decoration: underline dotted` on SVG `<text>` draws through the glyphs — `442,026` rendered as `4̶4̶2̶,̶0̶2̶6̶`. This was already true of `Funnel` before P20 and no check caught it, because the accessible table carries the value and the audit reads `innerText`. Replaced with a colour affordance and a focus ring; verified at 3× on the running page.
+- **`LineProfile` clipped a marker label at the right edge** ("paper ±5" rendered as "paper") and formatted year ticks as `0.00 … 5.00`. Labels now anchor inward when they would overflow, and `xFormat`/`yFormat` let a caller print integer ticks while the data table keeps its own precision.
+
+### Verification
+
+- `npm run test:run`: PASS, 352 tests across 56 files. `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, 0 violations across 11 routes × 2 themes, exit 0. Focusable targets rose to 41 on the Data route (24 buttons).
+- `npm run check:dom-numbers`: PASS, 221 distinct values across 11 routes, 0 unresolved, allowlist still 3 entries. The labs' rounded displays are supplied by `deriveLabDisplayValues`, which re-applies the same rounding to the same artifact fields rather than widening the corpus policy.
+- `npm run check:support-picture`, `check:routes`, `check:render`, `check:bundle-budget`: PASS. Landing route 1,545 KiB in 4 chunks (budget 2,048 KiB).
+- `npm run ci:gate`: **89/91**. The two failures remain Construct Audit (P21) and the Geometry surface snapshot (P29); both are unstarted.
+- Browser: segmented control and toggle both move their readouts and write `?gw=` / `?zf=`, with no page errors. Screenshots `tmp/shots/p20-gini.png`, `tmp/shots/p20-zerofill.png`.
+- Commit: `feat(app-v2): gini window and zero-fill labs [P20]`.

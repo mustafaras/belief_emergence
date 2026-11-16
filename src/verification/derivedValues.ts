@@ -384,3 +384,40 @@ export function deriveCountryR2Median(rows: PanelRowCanonical[]): number[] {
   const median = values.length % 2 === 1 ? values[middle] : (values[middle - 1] + values[middle]) / 2
   return [median]
 }
+
+/**
+ * Values the claim registry prints at a rounded precision.
+ *
+ * The DOM audit resolves artifact tokens with the `exact` policy, deliberately: over a
+ * 77,000-number corpus almost any token sits inside some rounding window, so "rounds to
+ * something" is not provenance. A value the interface *formats* for display is therefore
+ * not covered by the artifact corpus at all — it is covered here, by re-running the same
+ * registry the components read.
+ *
+ * Recomputing through `listClaims()` rather than restating the numbers is what keeps this
+ * honest: if a claim's artifact changes, both the rendered value and this list change
+ * together, and a component that printed something else would fail the audit.
+ */
+export function deriveLabDisplayValues(
+  gini: { rows: Array<{ window: number; completeCaseRows: number; giniBackfilled: number }> },
+  zeroFill: { nZeroAnchor: number; splits: Array<{ n: number; cMinusB: number; perRepeatMedianCminusB: number }> },
+  places: { rows: number; signed: number },
+): number[] {
+  const round = (value: number, digits: number) => Number(value.toFixed(digits))
+  const split = (index: number) => zeroFill.splits[index]
+
+  return [
+    // Figure 1.4 prints whole row counts and borrowed-cell counts.
+    ...gini.rows.flatMap((row) => [row.completeCaseRows, row.giniBackfilled].map((v) => round(v, places.rows))),
+    // Figure 1.5 prints Tier C minus Tier B at three places, and the row totals as integers.
+    ...zeroFill.splits.flatMap((entry) => [
+      round(entry.cMinusB, places.signed),
+      round(entry.perRepeatMedianCminusB, places.signed),
+      round(entry.n, places.rows),
+    ]),
+    round(zeroFill.nZeroAnchor, places.rows),
+    // The callout repeats the two k-fold gaps and the two per-repeat medians in prose.
+    round(split(0).cMinusB, places.signed),
+    round(split(1).cMinusB, places.signed),
+  ].filter(Number.isFinite)
+}

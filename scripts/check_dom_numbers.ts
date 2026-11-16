@@ -38,6 +38,7 @@ import {
   deriveCountryR2Median,
   deriveFormulaMetrics,
   derivePanelStats,
+  deriveLabDisplayValues,
   DEFAULT_UI_PARAMS,
 } from '../src/verification/derivedValues'
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
@@ -242,6 +243,37 @@ function readPanelRows(): PanelRowCanonical[] {
 }
 
 /** Build every source of legitimate numbers. */
+/**
+ * Read `(id, artifact, path)` out of the claim specs without importing them.
+ *
+ * A static import would drag `public/data/panel_canonical_v2.csv?raw` into Node, which
+ * only Vite can resolve. Parsing the specs keeps this check dependency-free and keeps the
+ * binding explicit: the token on screen is tied to the artifact field the component says
+ * it reads, not merely to "a number that rounds to it".
+ */
+/** Follow a dotted/bracketed path such as `splits[full panel].cMinusB`. */
+export function readArtifactPath(value: unknown, path: string): number | undefined {
+  let current: unknown = value
+  for (const rawSegment of path.split('.')) {
+    const segment = rawSegment.trim()
+    const bracket = segment.match(/^([A-Za-z0-9_]+)\[([^\]]+)\]$/)
+    if (bracket) {
+      const collection = (current as Record<string, unknown>)?.[bracket[1]]
+      if (!Array.isArray(collection)) return undefined
+      current = collection.find((entry) => {
+        if (!entry || typeof entry !== 'object') return false
+        const record = entry as Record<string, unknown>
+        return Object.values(record).some((field) => String(field) === bracket[2].trim())
+      })
+      continue
+    }
+    if (segment.endsWith(']')) return undefined
+    if (current === null || typeof current !== 'object') return undefined
+    current = (current as Record<string, unknown>)[segment]
+  }
+  return typeof current === 'number' && Number.isFinite(current) ? current : undefined
+}
+
 export function buildSources(): {
   corpus: ReturnType<typeof buildCorpus>
   derived: ReturnType<typeof buildCorpus>
@@ -261,6 +293,16 @@ export function buildSources(): {
    * the interface can reach, or it is derived, or it is a declared constant. There is no
    * fourth category.
    */
+  // The two Data labs print artifact fields at a chosen precision. Both are JSON (no
+  // Vite-only import), so they are read directly here and the same rounding the component
+  // applies is applied again — a wrong component would print a value this list lacks.
+  const giniWindowArtifact = JSON.parse(
+    fs.readFileSync(path.join(ANALYSIS_DIR, 'gini_window_sensitivity.json'), 'utf8'),
+  ) as { rows: Array<{ window: number; completeCaseRows: number; giniBackfilled: number }> }
+  const zeroFillArtifact = JSON.parse(
+    fs.readFileSync(path.join(ANALYSIS_DIR, 'zero_fill_sensitivity.json'), 'utf8'),
+  ) as { nZeroAnchor: number; splits: Array<{ n: number; cMinusB: number; perRepeatMedianCminusB: number }> }
+
   const imported = new Set<string>(ARTIFACT_CONSUMPTION.imported)
   const artifacts: unknown[] = fs
     .readdirSync(ANALYSIS_DIR)
@@ -363,6 +405,13 @@ export function buildSources(): {
   const constructRows = buildConstructRows(constructAuditArtifact as unknown as AuditArtifact, availability)
   const runtime = computePanelFitSummary(panelRows as unknown as Parameters<typeof computePanelFitSummary>[0])
 
+  // Rounded display values carry their provenance as `(artifact, path)` in the claim
+  // spec, rendered as `data-claim-id`. Resolving the *path* is stronger than corpus
+  // rounding: it says this token came from that field of that artifact, not that some
+  // number in a 77,000-value corpus happens to sit inside its rounding window.
+  //
+  // The registry module itself is not imported: it pulls a Vite-only `?raw` CSV import
+  // into this Node process. Only the specs are read, with a regex, and they are small.
   return {
     corpus: buildCorpus(artifacts),
     sourced: {
@@ -387,6 +436,7 @@ export function buildSources(): {
       supportPicture,
       supportPercentages,
       descriptionClaimValues,
+      deriveLabDisplayValues(giniWindowArtifact, zeroFillArtifact, { rows: 0, signed: 3 }),
       deriveContractConstants(),
       deriveLimitArithmetic({
         panelRows: readPanelRows().length,

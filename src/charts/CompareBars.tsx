@@ -45,6 +45,10 @@ export function CompareBars({ title, description, groups, series, domain, format
     return <ErrorState artifact={title} message="No data is available for this chart." />
   }
   const valueFormat = (item?: GroupValue): ClaimFormat => item?.format ?? format
+  // A value that opens the Claim Inspector is a focusable button. `role="img"` may not
+  // contain interactive descendants (axe: nested-interactive), so the chart is a group
+  // whenever any bar is clickable — the same rule Funnel follows.
+  const hasInteractiveValues = groups.some(group => group.values.some(item => item.claimId !== undefined))
   const allValues = groups.flatMap(group => group.values.map(item => item.value))
   const limits = domain ?? [Math.min(0, ...allValues), Math.max(1e-9, ...allValues)]
   const x = scaleLinear().domain(limits).range([MARGIN.left, WIDTH - MARGIN.right]).nice()
@@ -58,7 +62,7 @@ export function CompareBars({ title, description, groups, series, domain, format
   })])
 
   return (
-    <ChartSvg title={title} description={description} data={{ columns, rows }}>
+    <ChartSvg description={description} data={{ columns, rows }} role={hasInteractiveValues ? 'group' : 'img'} title={title}>
       <Axis x={MARGIN.left} y={MARGIN.top} width={WIDTH - MARGIN.left - MARGIN.right} height={plotHeight}
         xTicks={x.ticks(5).map(value => ({ position: x(value), label: formatClaim(value, 'p2') }))} />
       {groups.map((group, groupIndex) => (

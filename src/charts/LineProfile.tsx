@@ -2,6 +2,7 @@ import { extent } from 'd3-array'
 import { scaleLinear, scaleLog } from 'd3-scale'
 import { curveMonotoneX, line } from 'd3-shape'
 import { formatClaim } from '../claims/format'
+import type { ClaimFormat } from '../claims/types'
 import { Axis } from './Axis'
 import { ChartSvg } from './ChartSvg'
 import type { Point } from './chartTypes'
@@ -18,13 +19,16 @@ type LineProfileProps = {
   xLabel: string
   yLabel: string
   logX?: boolean
+  /** Axis tick format. The data table keeps its own precision. */
+  xFormat?: ClaimFormat
+  yFormat?: ClaimFormat
 }
 
 const WIDTH = 720
 const HEIGHT = 420
 const MARGIN = { top: 42, right: 36, bottom: 70, left: 84 }
 
-export function LineProfile({ title, description, points, thresholds = [], highlightX = [], xLabel, yLabel, logX = false }: LineProfileProps) {
+export function LineProfile({ title, description, points, thresholds = [], highlightX = [], xLabel, yLabel, logX = false, xFormat = 'p2', yFormat = 'p2' }: LineProfileProps) {
   if (points.length === 0) return <ErrorState artifact={title} message="No data is available for this chart." />
   if (logX && points.some(point => point.x <= 0)) return <ErrorState artifact={title} message="Log-scale inputs must be positive." />
   const sorted = [...points].sort((a, b) => a.x - b.x)
@@ -41,10 +45,30 @@ export function LineProfile({ title, description, points, thresholds = [], highl
   return (
     <ChartSvg title={title} description={description} data={{ columns, rows }}>
       <Axis x={MARGIN.left} y={MARGIN.top} width={WIDTH - MARGIN.left - MARGIN.right} height={HEIGHT - MARGIN.top - MARGIN.bottom}
-        xTicks={x.ticks(5).map(value => ({ position: x(value), label: formatClaim(value, 'p2') }))}
-        yTicks={y.ticks(5).map(value => ({ position: y(value), label: formatClaim(value, 'p2') }))} xLabel={xLabel} yLabel={yLabel} />
+        xTicks={x.ticks(5).map(value => ({ position: x(value), label: formatClaim(value, xFormat) }))}
+        yTicks={y.ticks(5).map(value => ({ position: y(value), label: formatClaim(value, yFormat) }))} xLabel={xLabel} yLabel={yLabel} />
       {thresholds.map(item => <g key={`${item.y}-${item.label}`}><line className={item.style === 'dashed' ? styles.dashed : styles.reference} x1={MARGIN.left} x2={WIDTH - MARGIN.right} y1={y(item.y)} y2={y(item.y)} /><text className={styles.label} x={WIDTH - MARGIN.right - 4} y={y(item.y) - 6} textAnchor="end">{item.label}</text></g>)}
-      {highlightX.map(item => <g key={`${item.x}-${item.label}`}><line className={styles.highlight} x1={x(item.x)} x2={x(item.x)} y1={MARGIN.top} y2={HEIGHT - MARGIN.bottom} /><text className={styles.label} x={x(item.x) + 4} y={MARGIN.top + 14}>{item.label}</text></g>)}
+      {highlightX.map(item => {
+        // A marker at the far right of the domain used to render its label past the
+        // viewBox, where it was clipped to "paper". Anchor the text inward when there
+        // is no room to the right, and keep it inside the plot at both ends.
+        const plotRight = WIDTH - MARGIN.right
+        const anchorStart = x(item.x) + 4
+        const fits = anchorStart + 120 <= plotRight
+        return (
+          <g key={`${item.x}-${item.label}`}>
+            <line className={styles.highlight} x1={x(item.x)} x2={x(item.x)} y1={MARGIN.top} y2={HEIGHT - MARGIN.bottom} />
+            <text
+              className={styles.label}
+              textAnchor={fits ? 'start' : 'end'}
+              x={fits ? anchorStart : x(item.x) - 4}
+              y={MARGIN.top + 14}
+            >
+              {item.label}
+            </text>
+          </g>
+        )
+      })}
       <path d={path ?? ''} fill="none" stroke="var(--accent)" strokeWidth="3"><title>{title}</title></path>
       {sorted.map(point => <circle cx={x(point.x)} cy={y(point.y)} fill="var(--accent)" key={`${point.x}-${point.y}`} r="4"><title>{`${xLabel}: ${formatClaim(point.x, 'p3')}; ${yLabel}: ${formatClaim(point.y, 'p3')}`}</title></circle>)}
     </ChartSvg>

@@ -4,6 +4,9 @@ import { formatClaim } from '../../claims/format'
 import { getClaim } from '../../claims/registry'
 import { Callout, ErrorState, FigureFrame, SectionHeader, Skeleton } from '../../ui'
 import blockers from '../../data/analysis/covariate_blocker_attribution.json'
+import { GiniWindowLab } from './GiniWindowLab'
+import { ZeroFillLab } from './ZeroFillLab'
+import { useLabUrlState } from './useLabUrlState'
 import { buildSupportMatrix } from './supportMatrix'
 import styles from './Data.module.css'
 
@@ -20,6 +23,7 @@ const blockerGroups = blockers.exposure.map(row => {
 
 export default function DataSection() {
   const { panelData, loading, error } = useDataContext()
+  const { giniWindow, zeroFill, setGiniWindow, setZeroFill } = useLabUrlState()
   const support = panelData ? buildSupportMatrix(panelData) : null
 
   return (
@@ -101,6 +105,15 @@ export default function DataSection() {
           />
         )}
       </FigureFrame>
+
+      <SectionHeader
+        eyebrow="Decision labs"
+        title="Two choices the panel depends on"
+        lede="Both are inferences rather than measurements: how stale a borrowed inequality value may be, and whether absence from the disaster file means zero. Each lab shows what changes when the choice changes, and what does not."
+      />
+
+      <GiniWindowLab onChange={setGiniWindow} value={giniWindow as '0' | '1' | '2' | '3' | '5'} />
+      <ZeroFillLab onChange={setZeroFill} value={zeroFill} />
     </section>
   )
 }
