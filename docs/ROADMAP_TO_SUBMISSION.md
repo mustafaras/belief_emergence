@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19–P22 are closed (blocker attribution, the two Data labs, the construct audit and the design gates are built), while P18 — sequenced after P22 — and P23–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P22 are closed (audit replay, blocker attribution, the two Data labs, the construct audit and the design gates are built), while P23–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -61,7 +61,9 @@ The remaining work is:
    because no artifact carries an item-level correlation matrix. P22 is closed:
    the four design gates are measured on both panels (0/4 and 4/4), with the
    submitted design matrix read from git and the upstream 4.44e-15 recomputed
-   over 1,128 rows. P18 is now unblocked; P23 has not started.
+   over 1,128 rows. P18 is closed: the five-state replay under the Overview
+   findings derives its panel state from the gate artifact and reports 0/4 to
+   4/4 as the reader scrolls. P23 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
