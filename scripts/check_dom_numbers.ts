@@ -458,6 +458,23 @@ export function buildSources(): {
       ).toFixed(6)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The evaluation section prints held-out R² at four places (r2) and the fold strip's
+      // table at three (p3), plus the degenerate per-fold medians. All are formatted artifact
+      // values, recomputed here rather than widening the corpus policy.
+      ...functionalFormArtifact.models.flatMap((model) => [
+        Number(model.inSample.r2.toFixed(4)),
+        Number(model.inSample.r2.toFixed(3)),
+        Number(model.kfold.median.toFixed(4)),
+        Number(model.kfold.median.toFixed(3)),
+        Number(model.kfold.q25.toFixed(4)),
+        Number(model.kfold.q25.toFixed(3)),
+        Number(model.kfold.q75.toFixed(4)),
+        Number(model.kfold.q75.toFixed(3)),
+        Number(model.countryOutPooled.r2.toFixed(4)),
+        Number(model.countryOutPooled.r2.toFixed(3)),
+        Number(model.countryOutPerFold.median.toFixed(4)),
+        Number(model.countryOutPerFold.median.toFixed(3)),
+      ]),
       // The model section prints observations-per-parameter at three places, derived from the
       // same artifact the tier cards read.
       ...modelComplexityArtifact.complexityByTier.map((tier) => Number(tier.supportPerParameter.toFixed(3))),

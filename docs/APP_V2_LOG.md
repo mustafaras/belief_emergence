@@ -387,3 +387,25 @@ The nonlinear refit on the submitted panel is degenerate and is recorded as such
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: 7 KaTeX blocks, 6 coefficient rows, 6 + 4 chips, 4 specification cards; no page errors. Screenshots `tmp/shots/p23-equations.png`, `tmp/shots/p23-table.png`.
 - Commit: `feat(app-v2): model section [P23]`.
+
+## P24 — Evaluation: functional-form comparison (hero)
+
+- Figure 5.1 plots three groups — in-sample, grouped k-fold, pooled country-out — for both forms. The caption says they are three different evaluations rather than three estimates of one quantity, because the contrast between them *is* the argument: the bounded form loses in sample (0.4061 vs 0.4623) and ties out of sample (0.4074 vs 0.4074).
+- The hero sentence prints both held-out medians as `InlineClaim` buttons, so the section's headline numbers open their artifact like every other value. They were `<span>`s on the first attempt, which broke the interface's own rule that every number is inspectable — and the number audit would not have caught it, because a span's text is just text.
+- A `DistStrip` shows the per-fold distribution with the raw 100 folds per model. The artifact previously carried only `{median, q25, q75, n}`; a strip built from quartiles would have been a drawing of the summary rather than of the data, so `block()` now also emits `values` and `FoldSummary` names the type. Regenerating the artifact changed no headline number.
+- Two callouts take positions the prompt did not ask for but the artifacts support: the earlier "linear won decisively" claim is recorded as withdrawn rather than revised, and the country-out bars are labelled a spatial stress test with its degenerate per-fold median printed (both models −1.82), so a reader does not mistake the pooled figure for a per-fold one.
+
+### Defects found
+
+- **The hero numbers were not claims.** Caught by inspection, not by a check: the section read "0.4074 against 0.4074" in a `<span>` while the chart below it made the same two values clickable. `InlineClaim` now renders a button that opens the inspector, keeps the sentence's typography, and carries the artifact path in its title.
+- **`-1.8199223791720796` printed as `-1.82`** in prose for both models, which then required the exact value in the derived corpus. Rather than allowlisting, the evaluation section's rounded forms (`r2` at four places, strip-table quartiles at three, and the degenerate per-fold medians) are now computed from `functional_form_comparison.json` in the same rounding the components apply.
+
+### Verification
+
+- `npm run generate:functional-form`: unchanged headline values (0.4623 / 0.4074 / 0.4053), now with 100 raw folds per model.
+- `npm run test:run`: PASS, 380 tests across 61 files (seven new evaluation tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **323** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: two charts, eight claim nodes, headline opens the inspector, no page errors. Screenshot `tmp/shots/p24-hero.png`.
+- Commit: `feat(app-v2): functional form comparison [P24]`.

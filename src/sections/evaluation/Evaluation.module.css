@@ -1,0 +1,98 @@
+.section {
+  display: grid;
+  max-width: var(--w-wide);
+  gap: var(--space-8);
+}
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5);
+}
+
+.figureNumber {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  margin: 0;
+}
+
+.headline {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  border-block: 1px solid var(--line);
+}
+
+.headlineText {
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  margin: 0;
+}
+
+.headlineSub {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: 1.6;
+  margin: 0;
+  max-width: var(--w-prose);
+}
+
+.inlineClaim {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: inherit;
+}
+
+.inlineClaim:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.stripFigure {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.stripCaption {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  line-height: 1.6;
+  max-width: var(--w-prose);
+}
+
+.notes {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.h2 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  margin: 0;
+}
+
+.prose {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: 1.7;
+  margin: 0;
+  max-width: var(--w-prose);
+}

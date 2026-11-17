@@ -40,11 +40,21 @@ export type FitMetrics = {
 export type ModelComparison = {
   model: 'linear_baseline' | 'saturating_bounded';
   inSample: FitMetrics;
-  kfold: { median: number; q25: number; q75: number; n: number };
+  kfold: FoldSummary;
   /** Per-fold median. Degenerate on country-out: most folds hold 1-2 rows. */
-  countryOutPerFold: { median: number; q25: number; q75: number; n: number };
+  countryOutPerFold: FoldSummary;
   /** All held-out rows concatenated, so every row is predicted exactly once. */
   countryOutPooled: FitMetrics;
+};
+
+/** A per-fold metric series with its quartiles. */
+export type FoldSummary = {
+  median: number;
+  q25: number;
+  q75: number;
+  n: number;
+  /** The raw per-fold values, so a strip plot does not have to invent a shape. */
+  values: number[];
 };
 
 export type FunctionalFormComparison = {
@@ -100,14 +110,23 @@ function quantile(sorted: number[], q: number): number {
   return sorted[lo] * (1 - w) + sorted[hi] * w;
 }
 
-function block(values: number[]): { median: number; q25: number; q75: number; n: number } {
+/**
+ * Summary of a per-fold metric series.
+ *
+ * `values` carries the raw per-fold series alongside the quartiles. The summary alone is
+ * enough to print four numbers, but a distribution strip that had only the quartiles would
+ * have to invent the shape between them — so the artifact keeps the folds themselves. They
+ * are cheap (100 numbers per model) and are the only honest input for a strip plot.
+ */
+function block(values: number[]): { median: number; q25: number; q75: number; n: number; values: number[] } {
   const finite = values.filter((v) => Number.isFinite(v)).sort((a, b) => a - b);
-  if (finite.length === 0) return { median: NaN, q25: NaN, q75: NaN, n: 0 };
+  if (finite.length === 0) return { median: NaN, q25: NaN, q75: NaN, n: 0, values: [] };
   return {
     median: quantile(finite, 0.5),
     q25: quantile(finite, 0.25),
     q75: quantile(finite, 0.75),
     n: finite.length,
+    values: finite,
   };
 }
 
