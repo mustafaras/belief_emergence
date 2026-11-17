@@ -19,6 +19,10 @@ export function formatClaim(value: number, format: ClaimFormat): string {
       return String(value)
     case 'signed2':
       return value < 0 ? `−${fixed(Math.abs(value), 2)}` : `+${fixed(value, 2)}`
+    case 'year':
+      // A year is a label, not a quantity: `int` gives "2,008", which reads as two thousand
+      // and eight rather than as the survey year.
+      return String(Math.round(value))
     case 'p6':
       // The bounded-vs-linear gap is 7.1e-6. At four places it prints "0.0000", which reads
       // as a tie to the reader who is told the models tie, and as a zero to a reader who is

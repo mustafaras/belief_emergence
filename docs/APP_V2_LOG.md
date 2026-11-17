@@ -498,3 +498,39 @@ Verified after the fix: `npm run build`, `check:bundle-budget` PASS (1,616 KiB),
 - `npm run ci:gate`: **90/91**, payload 1,618 KiB. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: 6 VIF rows with R flagged, banner appears only in the counterfactual, 0.699/0.932 both render; no page errors. Screenshot `tmp/shots/p27-collinearity.png`.
 - Commit: `feat(app-v2): collinearity, lockbox, 2006 [P27]`.
+
+## P28 — Countries
+
+- A sortable table over all 83 countries: name, ISO3, years, mean observed Z, mean predicted Ẑ, MAE, and a verdict badge. Search by name or ISO3, and a verdict filter. Withdrawn channels have no column because `preset_country_alignment.json` was computed from the retained covariates — there is no estimate to put in one.
+- Clicking a row opens a drawer with the country's observed and predicted series over its survey years, a per-year table of observed/predicted/residual, and a link to the Geometry Lab carrying `iso=`.
+- URL state `q=` and `iso=`, both written with `replaceState` and preserving other keys, so a link to `?v=countries&iso=EST` reopens Estonia's drawer.
+
+### The prompt's "failure log note (EST/RUS/SVK)" is not supportable
+
+The prompt asked the drawer to show a failure-log note for those three countries. The failure log records **zero nonconverged folds** in every tier, and none of the three appears in it. What the artifacts do show is different, so the drawer states that instead:
+
+| Country | Years | MAE | Verdict | In the failure list? |
+|---|---|---|---|---|
+| EST | 2 | 0.232 | **poor** | no (threshold is 0.25) |
+| RUS | 3 | 0.124 | acceptable | no |
+| SVK | 2 | 0.117 | acceptable | no |
+
+Estonia carries the largest residuals in the preset set (0.271 in 1996, 0.193 in 2011) and is the only one of the three classified poor. The drawer names the largest residual and says plainly that zero folds failed to converge, so a wide residual is a fit difference rather than an estimation failure.
+
+### Defects found
+
+- **`LineProfile` could draw only one series.** The country drawer needs observed and predicted on one pair of axes, so the chart gained a `series` prop; the extra lines participate in the y-domain, because a second line clipped to the first line's range would misrepresent the comparison.
+- **`--accent` and `--tier-b` are the same hex** (`#2F43C8`), so drawing the second series in `--tier-b` produced two indistinguishable lines. The predicted line now uses the neutral comparator token, and a legend appears whenever there is more than one series.
+- **Year ticks rendered as "2,008"** because `int` formatting applies a thousands separator. Added a `year` claim format that prints the number bare.
+- **`button` kept its user-agent background.** The reset normalised `font` but not `background`, so the row triggers rendered as grey boxes with white text — a **2.1:1** contrast failure in the dark theme, and a latent defect application-wide rather than specific to this section. The reset now clears background, border, padding and colour on `button`; components that want a surface opt in.
+- **`Drawer` was uncontrolled**, so the open country could not live in the URL. Added optional `open`/`onOpenChange`.
+
+### Verification
+
+- `npm run test:run`: PASS, 403 tests across 65 files (seven new country tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **629** distinct values (83 countries × 6 numeric columns joined the corpus), 0 unresolved, allowlist still 3.
+- `npm run check:render`: RENDER OK.
+- `npm run ci:gate`: **90/91**, payload 1,619 KiB. The only remaining failure is the Geometry surface snapshot (P29).
+- Browser: 83 rows, search narrows to 2 for "est", drawer opens and writes `iso=EST`, legend reads Observed/Predicted, year ticks are 1996–2008. Screenshot `tmp/shots/p28-drawer.png`.
+- Commit: `feat(app-v2): countries [P28]`.
