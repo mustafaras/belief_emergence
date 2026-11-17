@@ -1,9 +1,5 @@
 import { z } from 'zod'
-import cvKfold from '../../data/analysis/cv_kfold.json'
-import cvCountryOut from '../../data/analysis/cv_country_out.json'
-import cvRolling from '../../data/analysis/cv_rolling_origin.json'
-import coverage from '../../data/analysis/prediction_interval_coverage.json'
-import ladder from '../../data/analysis/model_ladder_metrics.json'
+import summary from '../../data/analysis/evaluation_summary.json'
 import type { Claim } from '../types'
 
 /**
@@ -15,62 +11,67 @@ import type { Claim } from '../types'
  * easier to trust than one that says only "R²".
  */
 /**
- * A metric block.
+ * The Evaluation section reads `evaluation_summary.json`, a generated projection of the four
+ * cross-validation artifacts.
  *
- * Quartiles can be null: leave-one-country-out folds with one or two rows have no
- * measurable variance, so R² is undefined rather than small. The claim layer must accept
- * that instead of coercing it to zero, which would report a perfect fit for a fold that
- * could not be scored at all.
+ * The raw artifacts are 1.8 MB and 0.9 MB because they carry per-fold coefficient vectors and
+ * observed/predicted arrays that no view renders. Importing them put 2.2 MB into the initial
+ * bundle; the summary is 16 KiB and holds exactly the numbers the section prints. Each claim
+ * still names the artifact it ultimately came from, so the inspector points at the evidence of
+ * record rather than at the projection.
  */
-const maybeNumber = z.number().nullable()
-const blockSchema = z.object({
-  median: maybeNumber,
-  q25: maybeNumber,
-  q75: maybeNumber,
-  /** Present on k-fold aggregates, absent on country-out, where most folds cannot be scored. */
-  n: z.number().int().nonnegative().optional(),
-}).passthrough()
-
-const kfoldSchema = z.object({
-  config: z.object({
-    k: z.number().int().positive(),
-    repeats: z.number().int().positive(),
-    seeds: z.array(z.number()),
+const summarySchema = z.object({
+  kfold: z.object({
+    config: z.object({ k: z.number(), repeats: z.number(), seeds: z.array(z.number()) }).passthrough(),
+    folds: z.number().int().nonnegative(),
+    aggregates: z.record(z.string(), z.object({
+      median: z.number().nullable(),
+      q25: z.number().nullable(),
+      q75: z.number().nullable(),
+      n: z.number().int().nullable(),
+    }).nullable()),
+    series: z.record(z.string(), z.array(z.number())),
   }).passthrough(),
-  folds: z.array(z.object({
-    repeat: z.number().int().nonnegative(),
-    tierResults: z.record(z.string(), z.object({
-      testMetricsRefit: z.object({ r2: maybeNumber, rmse: maybeNumber }).passthrough(),
-    }).passthrough()),
-  }).passthrough()),
-  aggregatesRefit: z.record(z.string(), z.object({ r2: blockSchema }).passthrough()),
-  perRepeatRefit: z.array(z.record(z.string(), z.object({ r2: maybeNumber }).passthrough())),
-}).passthrough()
-
-const protocolSchema = z.object({
-  folds: z.array(z.object({
-    tierResults: z.record(z.string(), z.object({
-      testMetricsRefit: z.object({ r2: maybeNumber, rmse: maybeNumber }).passthrough(),
-    }).passthrough()),
-  }).passthrough()),
-  aggregatesRefit: z.record(z.string(), z.object({ r2: blockSchema }).passthrough()),
-}).passthrough()
-
-const coverageSchema = z.object({
-  nominalCoverage: z.number(),
-  byProtocol: z.record(
-    z.string(),
-    z.record(z.string(), z.object({
+  loo: z.object({
+    folds: z.number().int().nonnegative(),
+    aggregates: z.record(z.string(), z.object({
+      median: z.number().nullable(),
+      q25: z.number().nullable(),
+      q75: z.number().nullable(),
+      n: z.number().int().nullable(),
+    }).nullable()),
+    series: z.record(z.string(), z.array(z.number())),
+  }).passthrough(),
+  rolling: z.object({
+    byTier: z.record(z.string(), z.array(z.object({ year: z.number(), rmse: z.number() }).passthrough())),
+  }).passthrough(),
+  coverage: z.object({
+    nominalCoverage: z.number(),
+    byProtocol: z.record(z.string(), z.record(z.string(), z.object({
       meanCoverage95: z.number(),
       underCoverageRate: z.number(),
       nFolds: z.number().int().nonnegative(),
-    }).passthrough()),
-  ),
+    }).passthrough())),
+  }).passthrough(),
+  ladder: z.array(z.object({
+    tier: z.string(),
+    exploratory: z.boolean(),
+    parameterCount: z.number().int().nonnegative(),
+    r2: z.number(),
+    corr: z.number(),
+    mae: z.number(),
+    rmse: z.number(),
+    bias: z.number(),
+  }).passthrough()),
+  seeds: z.array(z.object({
+    seed: z.number(),
+    delta: z.number(),
+    cAhead: z.boolean(),
+  }).passthrough()),
+  nRows: z.number().int().nonnegative(),
 }).passthrough()
 
-const kfold = kfoldSchema.parse(cvKfold)
-const loo = protocolSchema.parse(cvCountryOut)
-const cov = coverageSchema.parse(coverage)
+const data = summarySchema.parse(summary)
 const tiers = ['A', 'B', 'C'] as const
 
 const claim = (
@@ -78,72 +79,40 @@ const claim = (
   artifact: string, path: string, note?: string,
 ): Claim => ({ id, label, value, format, artifact, path, note })
 
-/* ---- per-seed Tier C minus B, the quantity Lab 5 explores ---- */
-
 export type SeedDelta = { seed: number; delta: number; cAhead: boolean }
 
 /**
  * One entry per repeat.
  *
- * `seeds` in the artifact has one value per planned repeat, and `perRepeatRefit` has one
- * entry per completed repeat. Zipping them is correct only while the two lengths agree; if
- * a repeat had failed, the arrays would misalign and every seed would be attributed to the
- * wrong delta. The length check makes that a loud failure instead.
+ * The generator already pairs each repeat with its seed and drops repeats whose R² is
+ * undefined; doing that here as well would be a second place for the rule to drift, so the
+ * projection carries the pairing and this reads it.
  */
-export const seedDeltas: SeedDelta[] = (() => {
-  const { seeds } = kfold.config
-  const repeats = kfold.perRepeatRefit
-  if (seeds.length !== repeats.length) {
-    throw new Error(
-      `cv_kfold.json has ${seeds.length} seeds but ${repeats.length} completed repeats; `
-      + 'per-seed attribution would be wrong.',
-    )
-  }
-  return seeds.flatMap((seed, index) => {
-    const c = repeats[index].C.r2
-    const b = repeats[index].B.r2
-    // A repeat whose R² is undefined carries no ordering information; dropping it is
-    // correct, inventing a zero would bias the count of seeds where C trails B.
-    if (c === null || b === null) return []
-    const delta = c - b
-    return [{ seed, delta, cAhead: delta > 0 }]
-  })
-})()
+export const seedDeltas: SeedDelta[] = data.seeds
 
 const seedsWithCFailing = seedDeltas.filter((entry) => !entry.cAhead).length
 
-/* ---- fold-series helpers (raw, for the strip plots) ---- */
-
-export const kfoldFoldSeries = (tier: string): number[] =>
-  kfold.folds
-    .map((fold) => fold.tierResults[tier]?.testMetricsRefit.r2)
-    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value))
-
-export const looFoldSeries = (tier: string): number[] =>
-  loo.folds
-    .map((fold) => fold.tierResults[tier]?.testMetricsRefit.r2)
-    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value))
+/** Per-fold R² series, straight from the projection. */
+export const kfoldFoldSeries = (tier: string): number[] => data.kfold.series[tier] ?? []
+export const looFoldSeries = (tier: string): number[] => data.loo.series[tier] ?? []
 
 export type RollingPoint = { year: number; rmse: number }
+export const rollingSeries = (tier: string): RollingPoint[] => data.rolling.byTier[tier] ?? []
 
-export const rollingSeries = (tier: string): RollingPoint[] =>
-  (cvRolling as { folds: Array<{ testYear: number; tierResults: Record<string, { testMetricsRefit: { rmse: number } }> }> })
-    .folds
-    .map((fold) => ({ year: fold.testYear, rmse: fold.tierResults[tier]?.testMetricsRefit.rmse }))
-    .filter((point): point is RollingPoint => typeof point.rmse === 'number' && Number.isFinite(point.rmse))
-    .sort((a, b) => a.year - b.year)
-
-export const coverageByProtocol = cov.byProtocol
-export const nominalCoverage = cov.nominalCoverage
+export const coverageByProtocol = data.coverage.byProtocol
+export const nominalCoverage = data.coverage.nominalCoverage
+export const ladderRows = data.ladder
+export const ladderRowsCount = data.nRows
 
 /* ---- aggregate claims ---- */
 
-const tierClaims = (protocol: 'kfold' | 'loo', aggregates: typeof kfold.aggregatesRefit): Claim[] => {
+const tierClaims = (protocol: 'kfold' | 'loo'): Claim[] => {
   const artifact = `${protocol === 'kfold' ? 'cv_kfold' : 'cv_country_out'}.json`
   const protocolLabel = protocol === 'kfold' ? 'grouped k-fold' : 'leave-one-country-out'
+  const aggregates = protocol === 'kfold' ? data.kfold.aggregates : data.loo.aggregates
   const out: Claim[] = []
   for (const tier of tiers) {
-    const block = aggregates[tier]?.r2
+    const block = aggregates[tier]
     if (!block) continue
     // A null quartile is a fold set that could not be scored, not a zero; it is skipped.
     for (const [suffix, value, label] of [
@@ -166,17 +135,17 @@ const tierClaims = (protocol: 'kfold' | 'loo', aggregates: typeof kfold.aggregat
 }
 
 export const protocolClaims: Claim[] = [
-  ...tierClaims('kfold', kfold.aggregatesRefit),
-  ...tierClaims('loo', loo.aggregatesRefit),
-  claim('eval.seeds.total', 'Planned k-fold repeats (one seed each)', kfold.config.seeds.length, 'int', 'cv_kfold.json', 'config.seeds'),
+  ...tierClaims('kfold'),
+  ...tierClaims('loo'),
+  claim('eval.seeds.total', 'Planned k-fold repeats (one seed each)', data.kfold.config.seeds.length, 'int', 'cv_kfold.json', 'config.seeds'),
   claim('eval.seeds.cFails', 'Repeats where Tier C trails Tier B', seedsWithCFailing, 'int', 'cv_kfold.json', 'perRepeatRefit', 'Counted per repeat: a repeat is one seed.'),
-  claim('eval.protocol.kfold.folds', 'Grouped k-fold folds', kfold.folds.length, 'int', 'cv_kfold.json', 'folds'),
-  claim('eval.protocol.loo.folds', 'Leave-one-country-out folds', loo.folds.length, 'int', 'cv_country_out.json', 'folds'),
-  claim('eval.protocol.rolling.folds', 'Rolling-origin folds', (cvRolling as { folds: unknown[] }).folds.length, 'int', 'cv_rolling_origin.json', 'folds'),
-  claim('eval.nominalCoverage', 'Nominal interval coverage', cov.nominalCoverage, 'pct1', 'prediction_interval_coverage.json', 'nominalCoverage'),
+  claim('eval.protocol.kfold.folds', 'Grouped k-fold folds', data.kfold.folds, 'int', 'cv_kfold.json', 'folds'),
+  claim('eval.protocol.loo.folds', 'Leave-one-country-out folds', data.loo.folds, 'int', 'cv_country_out.json', 'folds'),
+  claim('eval.protocol.rolling.folds', 'Rolling-origin folds', Object.values(data.rolling.byTier)[0]?.length ?? 0, 'int', 'cv_rolling_origin.json', 'folds'),
+  claim('eval.nominalCoverage', 'Nominal interval coverage', data.coverage.nominalCoverage, 'pct1', 'prediction_interval_coverage.json', 'nominalCoverage'),
   ...(['country_out', 'rolling_origin'] as const).flatMap((protocol) =>
     tiers.flatMap((tier) => {
-      const entry = cov.byProtocol[protocol]?.[tier]
+      const entry = coverageByProtocol[protocol]?.[tier]
       if (!entry) return []
       return [
         claim(`eval.coverage.${protocol}.${tier}`, `Mean ${protocol === 'country_out' ? 'country-out' : 'rolling-origin'} coverage, tier ${tier}`, entry.meanCoverage95, 'pct1', 'prediction_interval_coverage.json', `byProtocol.${protocol}.${tier}.meanCoverage95`),
@@ -184,11 +153,11 @@ export const protocolClaims: Claim[] = [
       ]
     }),
   ),
-  claim('eval.ladder.nRows', 'Rows behind the model ladder', ladder.nRows, 'int', 'model_ladder_metrics.json', 'nRows'),
+  claim('eval.ladder.nRows', 'Rows behind the model ladder', data.nRows, 'int', 'model_ladder_metrics.json', 'nRows'),
 ]
 
 /** Per-seed claims, so Lab 5's readout is inspectable too. */
-export const seedClaims: Claim[] = seedDeltas.map((entry) =>
+export const seedClaims: Claim[] = seedDeltas.map((entry, index) =>
   claim(
     `eval.seed.${entry.seed}.cMinusB`,
     `Tier C minus Tier B R² at seed ${entry.seed}`,
@@ -196,9 +165,8 @@ export const seedClaims: Claim[] = seedDeltas.map((entry) =>
     'signed3',
     'cv_kfold.json',
     // A per-seed delta is `perRepeatRefit[i].C.r2 - perRepeatRefit[i].B.r2`: no single field
-    // in the artifact equals it. The path therefore names the repeat the value was taken from
-    // rather than pretending the difference is stored.
+    // equals it, so the path names the array and the note records the derivation.
     'perRepeatRefit',
-    `Derived: perRepeatRefit[${seedDeltas.indexOf(entry)}].C.r2 minus B.r2 for the repeat seeded ${entry.seed}.`,
+    `Derived: perRepeatRefit[${index}].C.r2 minus B.r2 for the repeat seeded ${entry.seed}.`,
   ),
 )

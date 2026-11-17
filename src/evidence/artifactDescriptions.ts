@@ -25,6 +25,8 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'Which configured items exist in the harmonised source per construct, which is what makes social support uncomputable rather than merely weak.',
   construct_prevalence:
     'How widely the measurement failure extends: how many configured constructs fail a routine reliability floor, and how much of the frame survives it.',
+  evaluation_summary:
+    'A generated projection of the four cross-validation artifacts onto the values the Evaluation section renders; the raw fold files carry per-fold coefficient vectors and observed/predicted arrays that no view displays, so importing them directly made the initial payload exceed its budget.',
   sign_diagnostics:
     'Whether a channel keeps its sign across panels, measured separately for its marginal association and its partial coefficient, because the two answers differ for the media channel and only one of them is the quantity a coefficient table reports.',
   design_gates:

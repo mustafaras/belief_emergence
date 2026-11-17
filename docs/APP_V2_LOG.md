@@ -439,3 +439,13 @@ The nonlinear refit on the submitted panel is degenerate and is recorded as such
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: four tabs switch and write `?tab=`, the seed control writes `?seed=`, Lab 5 reads −0.087 with 13/20 seeds failing; no page errors. Screenshot `tmp/shots/p25-kfold.png`.
 - Commit: `feat(app-v2): evaluation protocols [P25]`.
+
+### P25 bundle regression, found by running the app
+
+- Running the app locally surfaced two problems the gate had not: a React hydration error on the Model route, and a bundle overrun on Evaluation.
+- **Model:** `MathBlock` returned a `<div>` in both display and inline modes, and three of its uses sit inside a `<p>`. A `<div>` there is invalid HTML; React reported a hydration error on every Model visit. The smoke test caught it and `ci:gate` could not — the gate asserts text and numbers, and this was a console warning. Inline math is now a `<span>`; no console errors remain on `?v=model`, 7 KaTeX blocks still render.
+- **Evaluation:** importing the four cross-validation artifacts directly put **2,295 KiB** into the initial payload against a 2,048 KiB budget. The cause is that `cv_kfold.json` is 1.8 MB and `cv_country_out.json` 0.9 MB, because each fold carries its full coefficient vector plus observed/predicted arrays; the section renders a few hundred numbers. `src/evidence/evidenceIndex.ts` already documents this hazard and loads artifacts with `eager: false`.
+- Fix: `scripts/generate_evaluation_summary.ts` projects the four artifacts onto exactly what the section renders — per-fold R² series, aggregate quartiles, the rolling RMSE series, coverage rates, the ladder, and the seed deltas. The projection is **16 KiB** and every claim still names the raw artifact, so the inspector points at the evidence of record rather than at the summary.
+- Result: initial payload **2,295 → 1,616 KiB**, budget PASS, and the rendered-number audit still resolves all 357 values with nothing added to the allowlist. The raw artifacts remain on disk, in the evidence index, and reproducible.
+
+Verified after the fix: `npm run build`, `check:bundle-budget` PASS (1,616 KiB), `test:run` 386/386, `check:render` RENDER OK, `check:dom-numbers` 357 with 0 unresolved, `ci:gate` **90/91** with only the unstarted Geometry surface remaining.

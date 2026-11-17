@@ -77,10 +77,10 @@ describe('evidence index matches the tree', () => {
   it('reports the imported count the interface prints', () => {
     // Pin the current inventory totals so changes update both the generated fact and
     // the evidence-index display deliberately.
-    // 29 after P25: the protocol tabs import the four cross-validation artifacts.
-    expect(names.length).toBe(41)
-    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(29)
-    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(1)
+    // 30 after the evaluation-summary projection replaced the four raw CV imports.
+    expect(names.length).toBe(42)
+    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(28)
+    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(3)
     expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
   })
 

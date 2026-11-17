@@ -9,9 +9,9 @@ import {
   nominalCoverage,
   rollingSeries,
   seedDeltas,
+  ladderRows,
 } from '../../claims/selectors/protocols'
 import { Badge, Callout, Card, DataTable, SegmentedControl, Tabs } from '../../ui'
-import ladder from '../../data/analysis/model_ladder_metrics.json'
 import styles from './Protocols.module.css'
 
 /**
@@ -34,15 +34,15 @@ const TAB_ITEMS = [
 
 const TIERS = ['A', 'B', 'C'] as const
 /** Flattened once: `DataColumn.key` must name a row field, and the metrics nest. */
-const inSampleRows = ladder.tiers.map((tier) => ({
+const inSampleRows = ladderRows.map((tier) => ({
   tier: tier.tier,
   exploratory: tier.exploratory,
   parameterCount: tier.parameterCount,
-  r2: tier.trainMetrics.r2,
-  corr: tier.trainMetrics.corr,
-  mae: tier.trainMetrics.mae,
-  rmse: tier.trainMetrics.rmse,
-  bias: tier.trainMetrics.bias,
+  r2: tier.r2,
+  corr: tier.corr,
+  mae: tier.mae,
+  rmse: tier.rmse,
+  bias: tier.bias,
 }))
 
 const TIER_COLORS: Record<string, string> = {

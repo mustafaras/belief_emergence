@@ -79,6 +79,11 @@
       "generatedAt": "2026-11-15T11:56:51.000Z",
       "rowCount": 207
     },
+    "evaluation_summary": {
+      "schemaVersion": "phase1.evaluation_summary.v1",
+      "generatedAt": "2026-11-17T12:50:17.229Z",
+      "rowCount": 207
+    },
     "failure_log": {
       "schemaVersion": "phase1.failure_log.v1",
       "generatedAt": "2026-11-15T12:18:20.312Z"
