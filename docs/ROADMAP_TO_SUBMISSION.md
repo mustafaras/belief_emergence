@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P26 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs and the exponent limits are built), while P27–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P27 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, and the collinearity/lockbox/2006 cards are built), while P28–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -75,8 +75,10 @@ The remaining work is:
    is the majority that justifies the exploratory label. P26 is closed: the profile
    likelihood shows the structural exponent is not identified — no grid point clears
    even the uncorrected threshold, so the Bonferroni toggle changes nothing and the
-   printed bound is the edge of the tested grid rather than a located limit. P27 has
-   not started.
+   printed bound is the edge of the tested grid rather than a located limit. P27 is
+   closed: collinearity is reported with its consequence, the R-drop counterfactual
+   is shown and refused as post-hoc specification selection, and the lockbox and 2006
+   cards state their limits. P28 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
