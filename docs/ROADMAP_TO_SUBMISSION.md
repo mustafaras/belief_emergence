@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19 and P20 are closed (blocker attribution has a generator and an artifact; the two Data labs are built), while P18 is sequenced after P22 and P21–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19, P20 and P21 are closed (blocker attribution has a generator and an artifact; the two Data labs and the construct audit are built), while P18 is sequenced after P22 and P22–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -56,8 +56,10 @@ The remaining work is:
    manuscript's arithmetically impossible "131 lost to Y alone of 180" sentence.
    P20 is closed: the Gini-window and zero-fill labs are built, and building them
    corrected the prompt's zero-fill wording — the artifact records that the k-fold
-   gap survives deletion while the per-repeat median does not. P21 has not started.
-   P18 is intentionally sequenced after P22.
+   gap survives deletion while the per-repeat median does not. P21 is closed: the
+   audit table and reliability-floor lab are built, and Figure 2.2 was skipped
+   because no artifact carries an item-level correlation matrix. P22 has not
+   started. P18 is intentionally sequenced after P22.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
