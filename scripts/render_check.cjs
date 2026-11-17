@@ -9,13 +9,38 @@ const fs = require('node:fs');
 const PORT = process.env.RENDER_CHECK_PORT || '5199';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const BASE_PATH = process.env.RENDER_CHECK_BASE || '/belief_emergence/';
+/**
+ * Text that must not appear anywhere.
+ *
+ * `amplifier` and `suppressor` are handled separately below: the paper's own §5 quotes that
+ * vocabulary as prior framing while declining to adopt it, and the model section repeats the
+ * quotation. Banning the words outright would force the section to paraphrase a term the
+ * manuscript quotes verbatim; allowing them outright would let a future section use them as
+ * findings. The rule is therefore positional — the words may appear only inside quotation
+ * marks, which is exactly the distinction the manuscript draws.
+ */
 const FORBIDDEN = [
   /Belief Emergence/i,
   /emergent signal/i,
-  /\bamplifier/i,
-  /\bsuppressor/i,
   /0\.8461/,
 ];
+
+/** Words permitted only as a quotation. */
+const QUOTED_ONLY = [/\bamplifier/i, /\bsuppressor/i];
+
+const QUOTE_CHARS = new Set(['"', "'", '\u201c', '\u201d', '\u2018', '\u2019']);
+
+/** True when every occurrence of the pattern sits inside quotation marks. */
+function onlyInsideQuotes(text, pattern) {
+  const global = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g');
+  let match;
+  while ((match = global.exec(text)) !== null) {
+    const before = text[match.index - 1] ?? '';
+    const after = text[match.index + match[0].length] ?? '';
+    if (!QUOTE_CHARS.has(before) || !QUOTE_CHARS.has(after)) return false;
+  }
+  return true;
+}
 const ROUTES = [
   'overview',
   'data',
@@ -63,6 +88,11 @@ const ROUTES = [
       for (const pattern of FORBIDDEN) {
         const hit = result.text.match(pattern);
         if (hit) failures.push(route + ': forbidden text appears: ' + hit[0]);
+      }
+      for (const pattern of QUOTED_ONLY) {
+        if (!onlyInsideQuotes(result.text, pattern)) {
+          failures.push(route + ': "' + pattern.source + '" appears outside quotation marks');
+        }
       }
       if (pageErrors.length) failures.push(route + ': runtime error: ' + pageErrors[0]);
     }

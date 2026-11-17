@@ -148,6 +148,10 @@
       "schemaVersion": "phase1.reviewer_red_team.v1",
       "generatedAt": "2026-11-09T11:20:00.000Z"
     },
+    "sign_diagnostics": {
+      "schemaVersion": "phase1.sign_diagnostics.v1",
+      "generatedAt": "2026-11-17T09:26:16.009Z"
+    },
     "software_environment": {
       "schemaVersion": "phase1.software_environment.v1",
       "generatedAt": "2026-11-10T14:59:41.483Z"

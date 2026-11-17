@@ -346,3 +346,44 @@ Two things had to be got right for these to match the paper, and both were wrong
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: scrolling moves the counter 0 → 1 → 3 → 4 and the mini chart is present at rest; no page errors. Screenshots `tmp/shots/p18-replay-start.png`, `tmp/shots/p18-replay-end.png`.
 - Commit: `feat(app-v2): audit replay [P18]`.
+
+## P23 — The Model
+
+- Four equations rendered serverlessly with `katex.renderToString`: the structural product with its field, the saturation map, the equivalent logit form, and the logistic form. A callout states the point the four share — they are one model, so a claim about one is a claim about all four.
+- The Φ term map separates what was estimated from what was named. Six chips carry their coefficient and an `identified` / `not identified` badge driven by the bootstrap interval; four withdrawn chips carry the reason in their accessible name rather than only a strike-through, because colour and line-through are both invisible to a screen reader.
+- Table 4.1 lists the six estimated terms with coefficient, 95% country-cluster interval, and an identification column. Only education capacity and the inequality × welfare interaction have intervals excluding zero.
+- Four specification cards: Tier A (11 parameters, 18.818 obs/parameter), B (18, 11.5), C (22, 9.409, exploratory), plus the linear baseline.
+- "Reading the signs" gives the three paragraphs from §5, applies the directional vocabulary only to the four surviving channels, and derives the identified count from the intervals rather than typing it.
+
+### The M row, and why the prompt's shorthand was not usable
+
+The prompt asked Table 4.1 to annotate M with "sign flipped across panels; not identified". No artifact recorded a flip, so it was measured — `scripts/generate_sign_diagnostics.ts` → `sign_diagnostics.json`. The answer splits, and the split is the finding:
+
+| | submitted panel | rebuilt panel |
+|---|---|---|
+| `corr(M, Z)` — marginal | **−0.690** | **+0.356** |
+| single-variable slope | −1.143 | +0.368 |
+| partial coefficient (X, Y, T, E, R controlled) | −0.520 | −0.105 |
+| 95% interval on the partial coefficient | [−0.296, +0.019] | same artifact |
+
+The marginal association reverses; the partial coefficient does not; and the partial interval includes zero, so neither sign is a finding. The prompt's shorthand is true of the first quantity and false of the second, and a coefficient table reports the second. The row and its callout now state both.
+
+The nonlinear refit on the submitted panel is degenerate and is recorded as such rather than resolved: the outcome there is an exact affine rescaling of `C`, so the design matrix is rank-deficient and the optimiser has no unique basin. That is the same defect the design gates report, arrived at from a different direction.
+
+### Defects found
+
+- **`render_check`'s FORBIDDEN list banned `amplifier` and `suppressor` outright**, while the manuscript's §5 quotes that vocabulary as prior framing it declines to adopt, and this section repeats the quotation. Banning the words forces a paraphrase of a term the paper quotes verbatim; allowing them lets a future section use them as findings. Replaced with a positional rule — the words may appear only inside quotation marks — and unit-checked against both a quoted and a bare occurrence.
+- **`model.bootstrap.M.lo` does not exist**; the ids are `model.bootstrap.c_M.lo`. The section threw on every panel until corrected, which is why the first browser run reported zero KaTeX blocks and zero rows.
+- **`Table 4.1` was passing the number audit by coincidence** — an unrelated artifact happens to contain the string `4.1`. The label is now marked `data-scale-label`, the same mechanism the axis ticks use, so a label is excluded because it is a label and not because some artifact contains the digits.
+- **`p2` printed 9.409 as `9.41` and 18.818 as `18.82`**, which the audit read as two values that resolve nowhere. Now `p3`, matching what the artifact records.
+- **Inline KaTeX rendered at display scale**, so a lone `Φ` inside a paragraph dwarfed its line. Scoped to `1em` for inline math only.
+
+### Verification
+
+- `npm run test:run`: PASS, 373 tests across 60 files (six new model tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:render`: **RENDER OK** — 11 routes, no forbidden text, no page errors, with the quoted-only rule live.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** on all 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **301** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: 7 KaTeX blocks, 6 coefficient rows, 6 + 4 chips, 4 specification cards; no page errors. Screenshots `tmp/shots/p23-equations.png`, `tmp/shots/p23-table.png`.
+- Commit: `feat(app-v2): model section [P23]`.

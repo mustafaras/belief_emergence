@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import signDiagnostics from '../../data/analysis/sign_diagnostics.json'
 import coefficientBootstrapArtifact from '../../data/analysis/coefficient_bootstrap.json'
 import coefficientFitArtifact from '../../data/analysis/coefficient_fit.json'
 import failureLogArtifact from '../../data/analysis/failure_log.json'
@@ -168,8 +169,57 @@ for (const tier of ['A', 'B', 'C'] as const) {
   }
 }
 
+/**
+ * Sign diagnostics for the media channel.
+ *
+ * The execution prompt asked Table 4.1 to say "sign flipped across panels; not identified" for
+ * M. Nothing recorded a flip, so it was measured, and the answer splits: the marginal
+ * association reverses sign while the partial coefficient does not — and the partial
+ * coefficient's interval includes zero, so neither sign is a finding. Both numbers are
+ * claimed so the table can show which is which.
+ */
+const signSchema = z.object({
+  panels: z.array(z.object({
+    panel: z.enum(['original', 'rebuilt']),
+    panelRows: z.number().int().nonnegative(),
+    marginalCorrelation: z.number(),
+    marginalSlope: z.number(),
+    partialCoefficient: z.number(),
+    partialInterval: z.object({
+      lo: z.number(),
+      hi: z.number(),
+      excludesZero: z.boolean(),
+    }).nullable(),
+  }).passthrough()),
+  finding: z.object({
+    marginalFlips: z.boolean(),
+    partialFlips: z.boolean(),
+    partialIdentified: z.boolean(),
+    statement: z.string(),
+  }).passthrough(),
+}).passthrough()
+
+const signs = signSchema.parse(signDiagnostics)
+const signOf = (panel: 'original' | 'rebuilt') => {
+  const found = signs.panels.find((entry) => entry.panel === panel)
+  if (!found) throw new Error(`sign_diagnostics.json has no ${panel} panel entry`)
+  return found
+}
+
+export const signClaims: Claim[] = [
+  claim('model.sign.original.marginal', 'M: marginal correlation with the outcome, submitted panel', signOf('original').marginalCorrelation, 'signed2', 'sign_diagnostics.json', 'panels[panel=original].marginalCorrelation'),
+  claim('model.sign.rebuilt.marginal', 'M: marginal correlation with the outcome, rebuilt panel', signOf('rebuilt').marginalCorrelation, 'signed2', 'sign_diagnostics.json', 'panels[panel=rebuilt].marginalCorrelation'),
+  claim('model.sign.original.partial', 'M: partial coefficient, submitted panel', signOf('original').partialCoefficient, 'signed2', 'sign_diagnostics.json', 'panels[panel=original].partialCoefficient'),
+  claim('model.sign.rebuilt.partial', 'M: partial coefficient, rebuilt panel', signOf('rebuilt').partialCoefficient, 'signed2', 'sign_diagnostics.json', 'panels[panel=rebuilt].partialCoefficient'),
+  claim('model.sign.original.rows', 'M: complete rows on the submitted panel', signOf('original').panelRows, 'int', 'sign_diagnostics.json', 'panels[panel=original].panelRows'),
+  claim('model.sign.rebuilt.rows', 'M: complete rows on the rebuilt panel', signOf('rebuilt').panelRows, 'int', 'sign_diagnostics.json', 'panels[panel=rebuilt].panelRows'),
+]
+
+export const signDiagnosticsData = signs
+
 export const modelClaims: Claim[] = [
   ...coefficientClaims,
+  ...signClaims,
   claim('model.params', 'Fitted model parameters', Object.keys(fit.parameters).length, 'int', 'coefficient_fit.json', 'parameters'),
   ...bootstrapClaims,
   claim('model.identified.phi0MinusLnK', 'Identified combination phi0 minus log(k)', phi0MinusLnK.estimate, 'p3', 'coefficient_bootstrap.json', 'parameters.phi0_minus_lnk.estimate', 'The combination is identified; phi0 and k are not separately identified.'),

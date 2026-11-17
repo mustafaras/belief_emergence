@@ -25,6 +25,8 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'Which configured items exist in the harmonised source per construct, which is what makes social support uncomputable rather than merely weak.',
   construct_prevalence:
     'How widely the measurement failure extends: how many configured constructs fail a routine reliability floor, and how much of the frame survives it.',
+  sign_diagnostics:
+    'Whether a channel keeps its sign across panels, measured separately for its marginal association and its partial coefficient, because the two answers differ for the media channel and only one of them is the quantity a coefficient table reports.',
   design_gates:
     'The four design rules applied to the submitted and rebuilt panels, with the submitted design matrix read from git and a provenance block recording which upstream figures were recomputed and which are recorded only.',
   construct_validity_invariance:

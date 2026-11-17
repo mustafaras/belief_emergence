@@ -57,6 +57,7 @@ import constructAvailabilityArtifact from '../src/data/analysis/construct_item_a
 import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
 import designGatesArtifact from '../src/data/analysis/design_gates.json'
 import functionalFormArtifact from '../src/data/analysis/functional_form_comparison.json'
+import modelComplexityArtifact from '../src/data/analysis/model_complexity_support.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -457,6 +458,9 @@ export function buildSources(): {
       ).toFixed(6)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The model section prints observations-per-parameter at three places, derived from the
+      // same artifact the tier cards read.
+      ...modelComplexityArtifact.complexityByTier.map((tier) => Number(tier.supportPerParameter.toFixed(3))),
       deriveConstructAuditDisplays(
         constructAuditArtifact.constructs
           ? Object.values(constructAuditArtifact.constructs).map((entry) =>
@@ -676,11 +680,13 @@ async function main(): Promise<void> {
       await page.waitForFunction(() => document.body.innerText.length > 200, { timeout: 30000 }).catch(() => {})
       await page.waitForTimeout(2500)
       const { text, presetRows, constructRows } = await page.evaluate(() => ({
-        // Scale labels are not measurements. `innerText` is layout-aware for HTML but
-        // aggregates SVG `<text>` regardless of `display`, so hiding the axis is not
-        // enough: the marked nodes are detached, the text is read, and they are put back
-        // in the same position. Only the subtree `Axis.tsx` marks is removed, so a value
-        // printed anywhere else is still audited.
+        // Labels are not measurements: d3-chosen axis ticks and table/figure numbers
+        // (`Table 4.1`, `Figure 1.1`). `innerText` is layout-aware for HTML but aggregates
+        // SVG `<text>` regardless of `display`, so hiding them is not enough: the marked
+        // nodes are detached, the text is read, and they are put back in place. Only the
+        // subtree explicitly marked `data-scale-label` is removed, so a value printed
+        // anywhere else is still audited — and removing a label cannot hide a number,
+        // because a label that were also a measurement would not be marked.
         text: (() => {
           const marked = Array.from(document.querySelectorAll('[data-scale-label]'))
           const slots = marked.map(node => ({
