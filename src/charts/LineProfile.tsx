@@ -33,7 +33,13 @@ export function LineProfile({ title, description, points, thresholds = [], highl
   if (logX && points.some(point => point.x <= 0)) return <ErrorState artifact={title} message="Log-scale inputs must be positive." />
   const sorted = [...points].sort((a, b) => a.x - b.x)
   const [xMin, xMax] = extent(sorted, point => point.x) as [number, number]
-  const [yMin, yMax] = extent(sorted, point => point.y) as [number, number]
+  // Threshold lines are part of the chart's content, so the domain has to contain them.
+  // Computing it from the data points alone drew the Bonferroni threshold above the plot
+  // and clipped it: the whole point of that line is the distance between it and the curve.
+  const thresholdY = thresholds.map((item) => item.y)
+  const [dataMin, dataMax] = extent(sorted, point => point.y) as [number, number]
+  const yMin = thresholdY.length > 0 ? Math.min(dataMin, ...thresholdY) : dataMin
+  const yMax = thresholdY.length > 0 ? Math.max(dataMax, ...thresholdY) : dataMax
   const xDomain = xMin === xMax ? [xMin / 1.2, xMax * 1.2] : [xMin, xMax]
   const yPadding = yMin === yMax ? 0.1 : (yMax - yMin) * 0.08
   const x = (logX ? scaleLog() : scaleLinear()).domain(xDomain).range([MARGIN.left, WIDTH - MARGIN.right])
@@ -47,7 +53,22 @@ export function LineProfile({ title, description, points, thresholds = [], highl
       <Axis x={MARGIN.left} y={MARGIN.top} width={WIDTH - MARGIN.left - MARGIN.right} height={HEIGHT - MARGIN.top - MARGIN.bottom}
         xTicks={x.ticks(5).map(value => ({ position: x(value), label: formatClaim(value, xFormat) }))}
         yTicks={y.ticks(5).map(value => ({ position: y(value), label: formatClaim(value, yFormat) }))} xLabel={xLabel} yLabel={yLabel} />
-      {thresholds.map(item => <g key={`${item.y}-${item.label}`}><line className={item.style === 'dashed' ? styles.dashed : styles.reference} x1={MARGIN.left} x2={WIDTH - MARGIN.right} y1={y(item.y)} y2={y(item.y)} /><text className={styles.label} x={WIDTH - MARGIN.right - 4} y={y(item.y) - 6} textAnchor="end">{item.label}</text></g>)}
+      {thresholds.map((item, index) => (
+        <g key={`${item.y}-${item.label}`}>
+          <line className={item.style === 'dashed' ? styles.dashed : styles.reference} x1={MARGIN.left} x2={WIDTH - MARGIN.right} y1={y(item.y)} y2={y(item.y)} />
+          {/* Labels sit at the left so they cannot collide with a vertical marker, which is
+              usually placed at a data value somewhere along the axis. Alternating rows keeps
+              two nearby thresholds from overprinting. */}
+          <text
+            className={styles.label}
+            textAnchor="start"
+            x={MARGIN.left + 6}
+            y={y(item.y) - 6 + index * 12}
+          >
+            {item.label}
+          </text>
+        </g>
+      ))}
       {highlightX.map(item => {
         // A marker at the far right of the domain used to render its label past the
         // viewBox, where it was clipped to "paper". Anchor the text inward when there

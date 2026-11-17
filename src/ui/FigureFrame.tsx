@@ -15,7 +15,9 @@ export function FigureFrame({ number, title, children, scope, method, boundary, 
   return (
     <figure className={styles.figure}>
       <div className={styles.figureBody}>
-        <p className={styles.figureNumber}>Figure {number}</p>
+        {/* A figure number is a label, not a measurement: marked so the rendered-number
+            audit excludes it rather than relying on some artifact containing the digits. */}
+        <p className={styles.figureNumber} data-scale-label="">Figure {number}</p>
         <h2>{title}</h2>
         {children}
       </div>

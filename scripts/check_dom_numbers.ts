@@ -60,6 +60,7 @@ import functionalFormArtifact from '../src/data/analysis/functional_form_compari
 import modelComplexityArtifact from '../src/data/analysis/model_complexity_support.json'
 import ladderArtifact from '../src/data/analysis/model_ladder_metrics.json'
 import kfoldArtifact from '../src/data/analysis/cv_kfold.json'
+import elasticityProfileArtifact from '../src/data/analysis/elasticity_profile.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -74,6 +75,25 @@ import { GENERATED_PRESETS as PRESET_TABLE } from '../src/data/presets.generated
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis')
+
+/** Standard-normal quantile, Acklam's approximation; chi2_1 is the square of a normal. */
+function inverseNormalCdf(p: number): number {
+  const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.383577518672690e2, -3.066479806614716e1, 2.506628277459239]
+  const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1]
+  const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996, 3.754408661907416]
+  if (p < 0.02425) {
+    const q = Math.sqrt(-2 * Math.log(p))
+    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  if (p > 1 - 0.02425) {
+    const q = Math.sqrt(-2 * Math.log(1 - p))
+    return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  const q = p - 0.5
+  const r = q * q
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
 const PANEL_CSV = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv')
 
 /** Prompt 6: an allowlist that grows is a check that has stopped checking. */
@@ -460,6 +480,23 @@ export function buildSources(): {
       ).toFixed(6)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The limits section prints the profile's thresholds and statistics: the chi-square
+      // quantiles the toggles compare against, and the per-point LR statistic shown in the
+      // chart's accessible table.
+      ...(() => {
+        const profiles = (elasticityProfileArtifact as { profiles: Array<{ lrStatistic: number; pValue: number }> })
+          .profiles
+        const chi = (p: number): number => 2 * inverseNormalCdf(1 - p / 2) ** 2 / 2 // chi2_1 = z^2
+        const threshold95 = chi(0.05)
+        const thresholdBonferroni = chi(0.05 / profiles.length)
+        const maxStatistic = Math.max(...profiles.map((point) => point.lrStatistic))
+        return [
+          Number(threshold95.toFixed(2)),
+          Number(thresholdBonferroni.toFixed(2)),
+          Number(maxStatistic.toFixed(2)),
+          ...profiles.flatMap((point) => [Number(point.lrStatistic.toFixed(3))]),
+        ]
+      })(),
       // The protocol tabs print:
       //   - each tier's in-sample fit at four places (the ladder table),
       //   - k-fold R² quartiles at three places (the strip's accessible table),

@@ -449,3 +449,29 @@ The nonlinear refit on the submitted panel is degenerate and is recorded as such
 - Result: initial payload **2,295 → 1,616 KiB**, budget PASS, and the rendered-number audit still resolves all 357 values with nothing added to the allowlist. The raw artifacts remain on disk, in the evidence index, and reproducible.
 
 Verified after the fix: `npm run build`, `check:bundle-budget` PASS (1,616 KiB), `test:run` 386/386, `check:render` RENDER OK, `check:dom-numbers` 357 with 0 unresolved, `ci:gate` **90/91** with only the unstarted Geometry surface remaining.
+
+## P26 — Limits: the structural exponent
+
+- Figure 6.1 plots the profile likelihood-ratio statistic across the grid with both thresholds drawn, and marks where the shipped exponent sits. Decision Lab 6 toggles the Bonferroni correction.
+
+### Two things the data said that the prompt did not
+
+**The correction changes nothing, and that is the finding.** The prompt expected the upper bound to move between 0.016 and 0.032 as multiplicity was charged. It does not move at all: **0.064 in both states**, because the largest statistic anywhere on the grid is **3.02** — below even the uncorrected χ²₁ threshold of 3.84, let alone the Bonferroni threshold of 7.24. There is no rejected point for a correction to reject. The toggle stays and the readout says "grid edge — no point is rejected", because an interval that is the edge of the tested grid is a different statement from an interval the data located.
+
+**The shipped exponent was never a tested value.** `α = 0.050` is not one of the seven grid points; it lies between 0.032 and 0.064. The profile therefore brackets the shipped value without testing it, which is precisely why the parameter reads as unidentified rather than estimated. My first draft said "outside the tested grid", which the test caught as wrong in the other direction — 0.050 < 0.064.
+
+### Defects found
+
+- **`profileUpperBound` returned the grid maximum silently.** It computed `max(value | p > threshold)`; when every point clears the threshold that expression returns the largest grid value, so both the plain and the Bonferroni bound printed 0.064 and read as "the interval ends here". Rewritten to return `{ value, gridLimited, maxStatistic, threshold }`, computing the χ² quantile from the p-value by the closed form rather than typing 3.84, so a Bonferroni correction is a real recomputation.
+- **`LineProfile` computed its y-domain from the data points only**, so any threshold above the largest point was drawn outside the viewBox — the Bonferroni line was invisible, which removed the comparison the chart exists to make. The domain now includes the thresholds.
+- **Threshold labels were anchored at the right edge**, where they collided with a vertical marker placed near the axis end ("Bonferroni" printed through "shipped 0.050"). They now sit at the left, alternating rows.
+- **`FigureFrame`'s figure number was passing the number audit by coincidence**, like `Table 4.1` did. Now marked `data-scale-label`, so every figure number is excluded because it is a label.
+
+### Verification
+
+- `npm run test:run`: PASS, 391 tests across 63 files (five new limits tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **376** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**; payload 1,616 KiB. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: the toggle moves nothing (0.064 both ways) and says why; the chart draws both thresholds; no page errors. Screenshots `tmp/shots/p26-limits.png`, `tmp/shots/p26-chart.png`.
+- Commit: `feat(app-v2): exponent limits [P26]`.

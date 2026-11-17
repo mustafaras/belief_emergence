@@ -10,7 +10,13 @@ import type { Claim } from '../types'
 
 const finite = z.number().finite()
 const profileSchema = z.object({
-  profiles: z.array(z.object({ value: finite, loss: finite, lrStatistic: finite, pValue: finite })).min(1)
+  profiles: z.array(z.object({ value: finite, loss: finite, lrStatistic: finite, pValue: finite })).min(1),
+  // The shape of the profile is the finding: a monotone rise with no interior minimum is what
+  // "not identified" looks like, and the section renders it rather than restating it in prose.
+  grid: z.array(finite).min(1),
+  monotoneRising: z.boolean(),
+  interiorMinimum: z.boolean(),
+  verdict: z.string().min(1),
 })
 const boundSensitivitySchema = z.object({
   runs: z.array(z.object({ lowerBound: finite, alpha: finite, beta: finite, r2: finite, atBound: z.boolean() })).min(2)
@@ -75,10 +81,98 @@ if (!shippedRun || !relaxedRun || !withR || !withoutR) {
   throw new Error('Limit artifacts are missing the shipped/relaxed bound or R ablation records.')
 }
 
-function profileUpperBound(pThreshold: number): number {
-  const admissible = profile.profiles.filter(point => point.pValue > pThreshold)
-  if (admissible.length === 0) throw new Error(`No elasticity profile point exceeds p threshold ${pThreshold}.`)
-  return Math.max(...admissible.map(point => point.value))
+/**
+ * The largest profiled alpha whose profile p-value clears a threshold.
+ *
+ * THE TRAP THIS REPLACES
+ * ----------------------
+ * The original version returned `max(value | p > threshold)`. On this panel *every* profile
+ * point clears the 0.05 threshold — the statistic never reaches 3.84 even at the top of the
+ * grid — so the function returned the largest grid value, 0.064, and both the plain and the
+ * Bonferroni bound printed the same number. That reads as "the interval ends at 0.064",
+ * which is a claim about the data. It is actually a claim about where the grid stops.
+ *
+ * The honest result is that the profile is *unbounded above within the tested grid*: no
+ * point is rejected, so the data do not locate an upper limit at all. Returning the grid
+ * maximum with a note that says so is correct; returning it silently is not.
+ */
+export type ProfileUpperBound = {
+  value: number
+  /** True when no profile point cleared the threshold, so the bound is the grid edge. */
+  gridLimited: boolean
+  /** Largest LR statistic in the grid, for the reader to compare against the threshold. */
+  maxStatistic: number
+  threshold: number
+}
+
+export function profileUpperBound(pThreshold: number): ProfileUpperBound {
+  // LR ~ chi-square with one degree of freedom, so the p-value threshold maps to a statistic.
+  // 3.841 is chi2_1 at 0.95; the general form keeps Bonferroni honest.
+  const chiSquareThreshold = chiSquareQuantile1(pThreshold)
+  const admissible = profile.profiles.filter(point => point.lrStatistic < chiSquareThreshold)
+  const maxStatistic = Math.max(...profile.profiles.map(point => point.lrStatistic))
+  if (admissible.length === 0) {
+    throw new Error(`No elasticity profile point falls below chi2_1 threshold ${chiSquareThreshold}.`)
+  }
+  const value = Math.max(...admissible.map(point => point.value))
+  // Grid-limited when the admissible set reaches the last tested value.
+  const gridMax = Math.max(...profile.profiles.map(point => point.value))
+  return {
+    value,
+    gridLimited: value === gridMax,
+    maxStatistic,
+    threshold: chiSquareThreshold,
+  }
+}
+
+/**
+ * chi2_1 quantile, by the closed form for one degree of freedom.
+ *
+ * For k = 1 the chi-square distribution is the square of a standard normal, so the upper
+ * quantile at 1 - p is `Phi^{-1}(1 - p/2)^2`. Bonferroni divides the tail probability by the
+ * number of grid points, which is why the threshold has to be recomputed rather than typed.
+ */
+function chiSquareQuantile1(p: number): number {
+  return normalQuantile(1 - p / 2) ** 2
+}
+
+/** Peter Acklam's rational approximation; accurate to ~1e-9 over the useful range. */
+function normalQuantile(p: number): number {
+  const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.383577518672690e2, -3.066479806614716e1, 2.506628277459239]
+  const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1]
+  const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996, 3.754408661907416]
+  const pLow = 0.02425
+  if (p < pLow) {
+    const q = Math.sqrt(-2 * Math.log(p))
+    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  if (p > 1 - pLow) {
+    const q = Math.sqrt(-2 * Math.log(1 - p))
+    return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  const q = p - 0.5
+  const r = q * q
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
+
+const ci95Upper = profileUpperBound(0.05)
+const bonferroniUpper = profileUpperBound(0.05 / profile.profiles.length)
+
+export const profileBounds = {
+  ci95: ci95Upper,
+  bonferroni: bonferroniUpper,
+  grid: profile.grid,
+  points: profile.profiles.map((point) => ({
+    value: point.value,
+    loss: point.loss,
+    lrStatistic: point.lrStatistic,
+    pValue: point.pValue,
+  })),
+  shippedAlpha: shippedRun.alpha,
+  monotone: profile.monotoneRising,
+  interiorMinimum: profile.interiorMinimum,
+  verdict: profile.verdict,
 }
 
 const lockboxCountryCount = new Set(lockbox.splitPolicy.lockboxCells.map(cell => cell.split('::')[0])).size
@@ -106,8 +200,8 @@ const vifClaim = (covariate: string) => {
 
 export const limitsClaims: Claim[] = [
   claim('limits.alpha.shipped', 'Shipped structural exponent alpha', shippedRun.alpha, 'p3', 'elasticity_bound_sensitivity.json', 'runs[lowerBound=0.05].alpha'),
-  claim('limits.profile.ci95Upper', 'Largest profiled alpha with p above 0.05', profileUpperBound(0.05), 'p3', 'elasticity_profile.json', 'profiles'),
-  claim('limits.profile.bonferroniUpper', 'Largest profiled alpha above Bonferroni p threshold', profileUpperBound(0.05 / profile.profiles.length), 'p3', 'elasticity_profile.json', 'profiles', `Computed with p > 0.05/${profile.profiles.length}.`),
+  claim('limits.profile.ci95Upper', 'Largest profiled alpha whose profile p-value clears 0.05', ci95Upper.value, 'p3', 'elasticity_profile.json', 'profiles', ci95Upper.gridLimited ? 'No point is rejected: this is the edge of the tested grid, not a located bound.' : undefined),
+  claim('limits.profile.bonferroniUpper', 'Largest profiled alpha above the Bonferroni p threshold', bonferroniUpper.value, 'p3', 'elasticity_profile.json', 'profiles', bonferroniUpper.gridLimited ? `Computed with p > 0.05/${profile.profiles.length}; no point is rejected, so this is the grid edge.` : `Computed with p > 0.05/${profile.profiles.length}.`),
   claim('limits.bound.r2.before', 'In-sample R² at shipped alpha/beta lower bound', shippedRun.r2, 'r2', 'elasticity_bound_sensitivity.json', 'runs[lowerBound=0.05].r2'),
   claim('limits.bound.r2.after', 'In-sample R² after relaxing alpha/beta lower bound', relaxedRun.r2, 'r2', 'elasticity_bound_sensitivity.json', 'runs[lowerBound=0.001].r2'),
   vifClaim('R'),
