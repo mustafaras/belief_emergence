@@ -12,8 +12,10 @@ describe('Evaluation section', () => {
 
   it('renders the hero comparison and the per-fold strip', () => {
     const { container } = renderEvaluation()
-    // Two charts: the grouped comparison and the fold distribution.
-    expect(container.querySelectorAll('svg[role="group"], svg[role="img"]').length).toBe(2)
+    // Two charts in the hero (grouped comparison, fold distribution) plus the protocol tabs,
+    // which each render their own view. Scope to the hero so a tab addition does not fail it.
+    const hero = container.querySelector('article')
+    expect(hero?.querySelectorAll('svg[role="group"], svg[role="img"]').length).toBe(2)
     expect(container.textContent).toContain('Bounded vs linear across three evaluations')
     expect(container.textContent).toContain('Per-fold distribution')
   })

@@ -3,10 +3,24 @@ import styles from './Interactive.module.css'
 
 export type TabItem = { id: string; label: string; content: ReactNode }
 
-type TabsProps = { label: string; tabs: TabItem[] }
+type TabsProps = {
+  label: string
+  tabs: TabItem[]
+  /**
+   * Controlled selection. Optional so existing callers keep the internal state they were
+   * written against; a section that mirrors the tab into the query string passes both.
+   */
+  activeId?: string
+  onActiveChange?: (id: string) => void
+}
 
-export function Tabs({ label, tabs }: TabsProps) {
-  const [active, setActive] = useState(tabs[0]?.id ?? '')
+export function Tabs({ label, tabs, activeId, onActiveChange }: TabsProps) {
+  const [internal, setInternal] = useState(tabs[0]?.id ?? '')
+  const active = activeId ?? internal
+  const setActive = (id: string) => {
+    setInternal(id)
+    onActiveChange?.(id)
+  }
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     const current = tabs.findIndex(tab => tab.id === active)

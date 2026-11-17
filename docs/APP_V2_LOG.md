@@ -409,3 +409,33 @@ The nonlinear refit on the submitted panel is degenerate and is recorded as such
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: two charts, eight claim nodes, headline opens the inspector, no page errors. Screenshot `tmp/shots/p24-hero.png`.
 - Commit: `feat(app-v2): functional form comparison [P24]`.
+
+## P25 — Evaluation protocols and tiers
+
+- Four tabs, one per protocol, rather than one figure with twelve bars: grouped k-fold is the primary held-out protocol, country-out is a spatial stress test whose per-fold median is degenerate, rolling origin is a temporal scope diagnostic, and coverage asks a different question again. Averaging four answers to four questions was the failure mode this structure avoids.
+- Grouped k-fold: a `DistStrip` over the raw 100 folds per tier, median cards, and Decision Lab 5 with a `SegmentedControl` over the twenty seeds.
+- Country-out: per-fold median beside pooled R², with the degenerate figure labelled as such and the variance-ratio caveat stated.
+- Rolling origin: RMSE by test year as a `LineProfile`, labelled a trajectory rather than a sample.
+- Coverage: observed coverage against nominal 95% for both protocols.
+- In-sample context below the tabs: the ladder table with R², Corr, MAE, RMSE and bias per tier, Tier C badged exploratory everywhere it appears.
+- URL state `tab=` and `seed=`, both written with `replaceState` and preserving unrelated keys. `Tabs` gained optional `activeId`/`onActiveChange` so a section can mirror the selection without giving up the uncontrolled behaviour the earlier callers rely on.
+
+### What the seed sweep shows
+
+**Tier C trails Tier B on 13 of 20 seeds.** That is a majority, and it is the number that justifies calling Tier C exploratory rather than merely noisy — eleven extra parameters help the training fit and cost transfer on most draws. The lab's readout is a per-seed claim (`eval.seed.<n>.cMinusB`), so the value on screen opens the repeat it came from.
+
+### Defects found
+
+- **Four artifacts carry `null` where a metric is undefined**, not zero: a country-out fold with one or two rows has no measurable variance, so R² does not exist. The zod schemas rejected the artifact outright, which was the correct first reaction and the wrong final one — the fix is to model the null and drop those entries, not to coerce them to 0, which would report a perfect fit for a fold that could not be scored.
+- **`Tabs` was uncontrolled**, so the section could not mirror the tab into the query string without duplicating its keyboard handling. Added `activeId`/`onActiveChange` as optional props; existing callers are untouched.
+- **`DataTable` columns must name a row field**, and the ladder's metrics nest under `trainMetrics`. Rather than loosen the table's contract, the rows are flattened once at module scope.
+- **Per-seed deltas have no single artifact field** — they are `C.r2 - B.r2` within one repeat. The claim path names `perRepeatRefit` and the note records the derivation, because pointing at a field that does not exist would be a worse lie than admitting the value is computed.
+
+### Verification
+
+- `npm run test:run`: PASS, 386 tests across 62 files (six new protocol tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **357** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: four tabs switch and write `?tab=`, the seed control writes `?seed=`, Lab 5 reads −0.087 with 13/20 seeds failing; no page errors. Screenshot `tmp/shots/p25-kfold.png`.
+- Commit: `feat(app-v2): evaluation protocols [P25]`.

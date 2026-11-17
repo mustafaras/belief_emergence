@@ -77,11 +77,11 @@ describe('evidence index matches the tree', () => {
   it('reports the imported count the interface prints', () => {
     // Pin the current inventory totals so changes update both the generated fact and
     // the evidence-index display deliberately.
-    // 26 after P23: sign_diagnostics.json is imported by the model selector.
+    // 29 after P25: the protocol tabs import the four cross-validation artifacts.
     expect(names.length).toBe(41)
-    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(27)
-    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(2)
-    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(12)
+    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(29)
+    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(1)
+    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
   })
 
   it('flags an artifact whose declared sample predates the current panel', () => {

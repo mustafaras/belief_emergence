@@ -58,6 +58,8 @@ import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
 import designGatesArtifact from '../src/data/analysis/design_gates.json'
 import functionalFormArtifact from '../src/data/analysis/functional_form_comparison.json'
 import modelComplexityArtifact from '../src/data/analysis/model_complexity_support.json'
+import ladderArtifact from '../src/data/analysis/model_ladder_metrics.json'
+import kfoldArtifact from '../src/data/analysis/cv_kfold.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -458,6 +460,34 @@ export function buildSources(): {
       ).toFixed(6)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The protocol tabs print:
+      //   - each tier's in-sample fit at four places (the ladder table),
+      //   - k-fold R² quartiles at three places (the strip's accessible table),
+      //   - the per-seed Tier C − B delta at three places (Lab 5's readout).
+      ...ladderArtifact.tiers.flatMap((tier) => [
+        Number(tier.trainMetrics.r2.toFixed(4)),
+        Number(tier.trainMetrics.corr.toFixed(4)),
+        Number(tier.trainMetrics.mae.toFixed(4)),
+        Number(tier.trainMetrics.rmse.toFixed(4)),
+        Number(tier.trainMetrics.bias.toFixed(2)),
+      ]),
+      ...['A', 'B', 'C'].flatMap((tier) => {
+        const block = (kfoldArtifact as { aggregatesRefit: Record<string, { r2: Record<string, number | null> }> })
+          .aggregatesRefit[tier]?.r2
+        if (!block) return []
+        // The strip's accessible table prints four places; the tier cards print four places
+        // too (r2). Both forms are derived so neither can drift from the artifact.
+        return [block.q25, block.median, block.q75]
+          .filter((value): value is number => typeof value === 'number')
+          .flatMap((value) => [Number(value.toFixed(3)), Number(value.toFixed(4))])
+      }),
+      ...(kfoldArtifact as { perRepeatRefit: Array<Record<string, { r2: number | null }>> })
+        .perRepeatRefit.flatMap((repeat) => {
+          const c = repeat.C?.r2
+          const b = repeat.B?.r2
+          if (c === null || c === undefined || b === null || b === undefined) return []
+          return [Number((c - b).toFixed(3))]
+        }),
       // The evaluation section prints held-out R² at four places (r2) and the fold strip's
       // table at three (p3), plus the degenerate per-fold medians. All are formatted artifact
       // values, recomputed here rather than widening the corpus policy.

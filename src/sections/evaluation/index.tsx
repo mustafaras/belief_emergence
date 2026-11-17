@@ -4,6 +4,7 @@ import { useClaimInspector } from '../../claims/InspectorContext'
 import { formatClaim } from '../../claims/format'
 import { getClaim } from '../../claims/registry'
 import { Callout, Card, SectionHeader } from '../../ui'
+import ProtocolsSection from './Protocols'
 import comparison from '../../data/analysis/functional_form_comparison.json'
 import styles from './Evaluation.module.css'
 
@@ -164,6 +165,8 @@ export default function EvaluationSection() {
           and it is what the bars show.
         </Callout>
       </Card>
+
+      <ProtocolsSection />
 
       <div className={styles.notes}>
         <h2 className={styles.h2}>What the comparison can and cannot settle</h2>

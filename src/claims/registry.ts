@@ -4,9 +4,10 @@ import { dataClaims } from './selectors/data'
 import { gatesClaims } from './selectors/gates'
 import { evaluationClaims } from './selectors/evaluation'
 import { limitsClaims } from './selectors/limits'
+import { protocolClaims, seedClaims } from './selectors/protocols'
 import { modelClaims } from './selectors/model'
 
-const claimList = [...auditClaims, ...dataClaims, ...evaluationClaims, ...gatesClaims, ...limitsClaims, ...modelClaims]
+const claimList = [...auditClaims, ...dataClaims, ...evaluationClaims, ...gatesClaims, ...limitsClaims, ...modelClaims, ...protocolClaims, ...seedClaims]
 const claimIds = new Set<string>()
 for (const claim of claimList) {
   if (claimIds.has(claim.id)) throw new Error(`Duplicate claim id: ${claim.id}`)
