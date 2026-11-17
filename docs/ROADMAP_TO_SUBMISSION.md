@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P23 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates and the model section are built), while P24–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P24 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section and the functional-form hero are built), while P25–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -68,8 +68,9 @@ The remaining work is:
    derived from the bootstrap intervals. Its M row needed a new measurement
    rather than a transcription — the marginal association reverses across panels
    while the partial coefficient does not, and the partial interval includes
-   zero — so `sign_diagnostics.json` now records both quantities. P24 has not
-   started.
+   zero — so `sign_diagnostics.json` now records both quantities. P24 is closed:
+   Figure 5.1 plots the three evaluations side by side and its hero numbers are
+   clickable claims. P25 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
