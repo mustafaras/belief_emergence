@@ -1,5 +1,5 @@
 import { useRoute } from '../../app/useRoute'
-import { Num, SectionHeader, Skeleton } from '../../ui'
+import { Num, SectionHeader } from '../../ui'
 import { FindingCard } from './FindingCard'
 import styles from './Overview.module.css'
 
@@ -28,7 +28,7 @@ export default function OverviewSection() {
         />
         <FindingCard
           description="The published outcome was a rescaling of a predictor."
-          metric={<Skeleton aria-label="Design gate claim will be connected in P22" className={styles.gateSkeleton} />}
+          metric={<Num id="gates.original.identityCorr" />}
           onNavigate={navigate}
           route="gates"
           routeLabel="Design gates"

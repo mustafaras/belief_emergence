@@ -10,7 +10,7 @@ describe('Overview section', () => {
     delete document.documentElement.dataset.theme
   })
 
-  it('shows the sourced findings, keeps the P22 gate claim pending, and links to the relevant route', async () => {
+  it('shows the sourced findings, now with the gate claim connected, and links to the relevant route', async () => {
     window.history.replaceState(null, '', '/?v=overview')
     const { container } = render(<AppShell />)
 
@@ -22,7 +22,9 @@ describe('Overview section', () => {
     expect(container.querySelector('[data-claim-id="eval.bounded.kfold"]')).toBeTruthy()
     expect(container.querySelector('[data-claim-id="eval.linear.kfold"]')).toBeTruthy()
     expect(container.querySelector('[data-claim-id="limits.profile.bonferroniUpper"]')).toBeTruthy()
-    expect(screen.getByRole('status', { name: /P22/ })).toBeTruthy()
+    // P22 closed the placeholder: the outcome-identity card now carries a real claim
+    // instead of a Skeleton, so the metric opens design_gates.json.
+    expect(container.querySelector('[data-claim-id="gates.original.identityCorr"]')).toBeTruthy()
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
     expect(screen.getAllByRole('status', { name: 'Withdrawn' })).toHaveLength(2)
     expect(screen.getByRole('status', { name: 'Neutral' })).toBeTruthy()

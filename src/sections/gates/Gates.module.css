@@ -1,0 +1,119 @@
+.section {
+  display: grid;
+  max-width: var(--w-wide);
+  gap: var(--space-6);
+}
+
+.lab {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.status {
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  margin: 0;
+}
+
+.status strong {
+  font-family: var(--font-mono);
+  font-size: var(--fs-18);
+  margin-inline-end: var(--space-1);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.h2 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  margin: 0 0 var(--space-2);
+}
+
+.prose {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+  max-width: var(--w-prose);
+}
+
+.rootCause,
+.provenance {
+  display: grid;
+  gap: var(--space-2);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--line);
+}
+
+.diagramFigure {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.diagram {
+  width: 100%;
+  max-width: 660px;
+  height: auto;
+}
+
+.box {
+  fill: var(--surface-2);
+  stroke: var(--line);
+}
+
+.boxBroken {
+  fill: color-mix(in srgb, var(--withdrawn) 8%, transparent);
+  stroke: var(--withdrawn);
+}
+
+.boxLabel {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-16);
+  font-weight: 600;
+}
+
+.boxNote {
+  fill: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+}
+
+.arrow,
+.arrowAlarm {
+  stroke-width: 1.5;
+}
+
+.arrow {
+  stroke: var(--ink-3);
+}
+
+.arrowAlarm {
+  stroke: var(--withdrawn);
+}
+
+.alarm {
+  fill: var(--withdrawn);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+}
+
+.alarmNote {
+  fill: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+}
+
+.diagramCaption {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  line-height: 1.55;
+  max-width: var(--w-prose);
+}

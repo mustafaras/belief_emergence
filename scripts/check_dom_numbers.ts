@@ -55,6 +55,7 @@ import { formatNumeric } from '../src/utils/formatNumeric'
 import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.json'
 import constructAvailabilityArtifact from '../src/data/analysis/construct_item_availability.json'
 import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
+import designGatesArtifact from '../src/data/analysis/design_gates.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -441,6 +442,11 @@ export function buildSources(): {
       deriveLabDisplayValues(giniWindowArtifact, zeroFillArtifact, { rows: 0, signed: 3 }),
       // The audit table prints alpha at two places and the summary prints the failure
       // rate as a percentage; both are formatted artifact values, not new measurements.
+      // The gates section prints the upstream deviation in scientific notation
+      // ("4.44 × 10⁻¹⁵"). The scanner reads the significand as its own token, so the value
+      // it must resolve is the mantissa, not the raw 4.44e-15. Derived from the artifact
+      // rather than allowlisted: it is the artifact's measurement, only re-expressed.
+      Number(designGatesArtifact.originalProvenance.upstreamIdentity.maxAbsDeviation.toExponential(2).split('e')[0]),
       deriveConstructAuditDisplays(
         constructAuditArtifact.constructs
           ? Object.values(constructAuditArtifact.constructs).map((entry) =>

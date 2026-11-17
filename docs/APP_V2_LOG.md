@@ -279,3 +279,45 @@ The earlier sessions searched for an artifact that would *contain* Y/E/T blocker
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: slider moves 0.70 → 1 admitted, 0.30 → 2, 0.90 → 0; table colours stay fixed at the paper floor; no page errors. Screenshots `tmp/shots/p21-audit-table.png`, `tmp/shots/p21-lab-fixed.png`.
 - Commit: `feat(app-v2): construct audit [P21]`.
+
+## P22 — Design Gates
+
+- Four `GateCard`s render the manuscript's four rules with their measured values and a badge, switched by a `SegmentedControl` between the submitted and rebuilt panels. `panel=original|rebuilt` is written with `replaceState` and read back on popstate; the default is the original panel, so the key is dropped rather than set to it.
+- Every measured value is a claim, so a reader can open `design_gates.json` and check "1.000" against the field. The rank gate prints as a count (`7 of 8`) rather than `7.000`, because a rank is not a correlation.
+- Root-cause diagram: `A006 → Z item 1` and `A006 → C index`, the second arrow drawn as a broken red path into `C = a·Z + b, r = 1 by construction`. Inline SVG with title and desc, not a diagram library: the topology is fixed and the point is the arrow direction.
+- P17's placeholder is gone. The "Outcome identity" finding card now renders `gates.original.identityCorr` instead of a Skeleton, and the overview test asserts the claim id rather than a pending status.
+- Provenance block states which numbers a clean clone can reproduce: the 630-row design matrix is read from `8f5c06b`, while the upstream 1,128-row deviation is recomputed only when the restricted extract is present.
+
+### What the gates actually measure — and the two panels
+
+The manuscript's claim is that all four rules failed on the submitted panel and all four pass on the rebuilt one. Both halves were prose; nothing computed them. Measured now:
+
+| Gate | Rule | Submitted | Rebuilt |
+|---|---|---|---|
+| identity | \|corr(xⱼ,Z)\| < 0.999 | **1.000** (C) | 0.577 (R) |
+| duplicates | \|corr(xⱼ,xₖ)\| < 0.9999 | **1.000** (D / S) | 0.885 (E / R) |
+| rank | rank(X) = p | **7 of 8** | 6 of 6 |
+| singlePredictor | R²(xⱼ→Z) < 0.99 | **1.000** (C) | 0.334 (R) |
+
+Two things had to be got right for these to match the paper, and both were wrong on the first attempt:
+
+- **The predictor list must be the submitted design matrix**, which includes `S_support_index` and excludes `M_internet_daily` (that column is empty). Narrowing to the columns with full coverage silently raises the rank gate from 7/8 to 7/7 and turns a failing gate into a passing one. The list is now an explicit constant with that failure written beside it.
+- **The upstream deviation is not the 630-row panel.** `4.4e-15` and `1,128 rows` come from `rawdata/panel_model_data.csv`, a different and larger file. Measuring the deviation on the committed v1 panel gives 8.9e-16 over 630 rows — a real number, but not the one the paper prints.
+
+### Defects found
+
+- **Naive `split(',')` again.** The first version of the upstream measurement parsed the macro extract by splitting on commas; quoted country names shifted every column after them and it reported 1,181 rows with a deviation of 5.78. Switched to PapaParse, which the panel loader already uses. This is the second time in two prompts that a hand-rolled parser produced a plausible-looking wrong number.
+- **Kahan summation was required to reproduce the published figure.** With a plain `reduce` sum the deviation is 1.13e-14; compensated, it is 4.44e-15. The reported quantity is the floating-point residue of an exact identity, so the summing order dominates it — and reporting 1.13e-14 would have contradicted the manuscript while looking like rigor.
+- **Rounding to twelve places reported the deviation as 0.** `4.4e-15.toFixed(12)` is `0.000000000000`, which would have claimed perfect equality. Now stored via `toPrecision(3)`.
+- **`heading-order` on both themes**: the gate cards are `h3` with no `h2` above them, since the section header is the `h1`. Added the lab heading; a11y is back to 0 across all routes.
+- **`4.44e-15` broke the number audit.** The scanner tokenises rendered text and read `4.44` and `-15` as two values, leaving the exponent unresolved. The figure is now written `4.44 × 10⁻¹⁵`, and the audit derives the mantissa from the artifact — the value the reader sees, not a loosened policy.
+
+### Verification
+
+- `npm run generate:design-gates`: submitted 0/4 pass, rebuilt 4/4 pass, upstream deviation `4.44e-15` **recomputed** from the sibling worktree's extract over 1,128 rows.
+- `npm run test:run`: PASS, 362 tests across 58 files (five new gate tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** on all 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, 262 distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: switching panels moves the summary 0/4 to 4/4 and writes `?panel=rebuilt`; no page errors. Screenshots `tmp/shots/p22-original.png`, `tmp/shots/p22-diagram.png`.
+- Commit: `feat(app-v2): design gates [P22]`.

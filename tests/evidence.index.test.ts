@@ -77,11 +77,9 @@ describe('evidence index matches the tree', () => {
   it('reports the imported count the interface prints', () => {
     // Pin the current inventory totals so changes update both the generated fact and
     // the evidence-index display deliberately.
-    // 24 after P21: the construct audit renders item availability, so
-    // construct_item_availability.json became an imported artifact rather than a
-    // named-only one.
-    expect(names.length).toBe(39)
-    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(24)
+    // 25 after P22: design_gates.json is imported by the gates selector.
+    expect(names.length).toBe(40)
+    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(25)
     expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(2)
     expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(13)
   })

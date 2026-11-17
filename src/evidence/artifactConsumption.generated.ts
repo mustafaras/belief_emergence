@@ -16,6 +16,7 @@ export const ARTIFACT_CONSUMPTION = {
     'construct_prevalence',
     'covariate_blocker_attribution',
     'cv_kfold',
+    'design_gates',
     'elasticity_bound_sensitivity',
     'elasticity_profile',
     'failure_log',

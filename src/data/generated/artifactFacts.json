@@ -66,6 +66,10 @@
       "schemaVersion": "phase1.data_code_provenance.v1",
       "generatedAt": "2026-11-09T11:30:00.000Z"
     },
+    "design_gates": {
+      "schemaVersion": "phase1.design_gates.v1",
+      "generatedAt": "2026-11-17T07:11:30.224Z"
+    },
     "elasticity_bound_sensitivity": {
       "schemaVersion": "phase1.elasticity_bound_sensitivity.v1",
       "generatedAt": "2026-11-15T12:16:59.996Z"
