@@ -321,3 +321,28 @@ Two things had to be got right for these to match the paper, and both were wrong
 - `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: switching panels moves the summary 0/4 to 4/4 and writes `?panel=rebuilt`; no page errors. Screenshots `tmp/shots/p22-original.png`, `tmp/shots/p22-diagram.png`.
 - Commit: `feat(app-v2): design gates [P22]`.
+
+## P18 — Audit Replay
+
+- A five-state replay under the Overview findings: the submitted panel, then three repairs, then the honest comparison. The prompt says "four steps" and then lists Step 0–4, so the counter reads 0/4 at rest and the steps are labelled Start, 1, 2, 3, 4 — Step 0 is the starting state, not a step.
+- Panel state is derived, not written: `statesAfter(index)` unions the gates each step names and falls back to the artifact's `rebuilt.allPass` for the last step. If `design_gates.json` ever stopped reporting all-pass, the replay would show it instead of claiming completion.
+- Active step is tracked by scroll geometry against a reading line at 35% of the viewport, not by an `IntersectionObserver`. The observer variant fired only on threshold crossings, so once a step left the banded `rootMargin` the panel kept the last value it saw — it reported 4 gates passing at rest because the last step had been the last entry to cross.
+- Step navigation buttons exist for keyboard use and are shown at narrow widths; `prefers-reduced-motion` disables the only transition (a colour change).
+- The last step renders the bounded-vs-linear `CompareBars` in its own column. It was first placed inside the sticky card, where it was clipped: the card is `position: sticky` and sized to its content, so a chart appended at its bottom ran past the viewport and was never seen.
+
+### Defects found
+
+- **`window.matchMedia` was called unguarded.** jsdom does not implement it, and neither do older embedded webviews; the Overview threw and every test that rendered the page failed. The reduced-motion rule is CSS, so the flag only decides whether to animate — it now degrades to "animate" instead of throwing.
+- **A layout-less environment selected the last step.** jsdom reports every `getBoundingClientRect().top` as 0, which satisfies "top <= reading line" for all five steps. Guarded: if every step measures zero, stay at the start.
+- **`p4` printed the model gap as `0.0000`** while the sentence around it said the difference was tiny. The gap is 7.1e-6. Added `p6` to `ClaimFormat` and the replay now prints `0.000007` next to both R² values at `r2`, so the sentence and the number agree.
+- **`opacity: 0.72` on inactive steps** dropped the step number and the repair tags to **2.74:1** contrast on both themes. The dimming is now a colour change on the title only, which is what the hierarchy was for.
+- **The a11y keyboard walk stopped at 26 of 29** on Overview. The three unreachable stops existed because `document.activeElement` returns an `SVGElement` for a focusable `<text>` in the mini chart, and the audit tested `instanceof HTMLElement` — so it read a valid tab stop as the document boundary and reported a failure on a page whose order was intact. Fixed in `scripts/a11y_check.cjs`; the walk now reports 29/29.
+
+### Verification
+
+- `npm run test:run`: PASS, 367 tests across 59 files (five new replay tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** on 11 routes × 2 themes, and the Overview keyboard walk reaches **29/29** stops with visible focus rings.
+- `npm run check:dom-numbers`: PASS, 266 distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: scrolling moves the counter 0 → 1 → 3 → 4 and the mini chart is present at rest; no page errors. Screenshots `tmp/shots/p18-replay-start.png`, `tmp/shots/p18-replay-end.png`.
+- Commit: `feat(app-v2): audit replay [P18]`.

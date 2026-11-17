@@ -1,0 +1,216 @@
+.replay {
+  display: grid;
+  gap: var(--space-5);
+  padding-block-start: var(--space-8);
+  border-block-start: 1px solid var(--line);
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.h2 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  margin: 0;
+}
+
+.lede {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  line-height: 1.6;
+  margin: 0;
+  max-width: var(--w-prose);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  align-items: start;
+}
+
+.sticky {
+  position: sticky;
+  top: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.stickyTitle {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stickyCount {
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  margin: 0;
+}
+
+.stickyCount strong {
+  font-family: var(--font-mono);
+  font-size: var(--fs-28);
+  margin-inline-end: var(--space-1);
+}
+
+.gateList {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gateRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding-block: var(--space-1);
+  border-block-end: 1px dashed var(--line);
+}
+
+.gateLabel {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  line-height: 1.4;
+}
+
+.mini {
+  border-block-start: 1px solid var(--line);
+  padding-block-start: var(--space-3);
+}
+
+.stepNav {
+  display: none;
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stepTitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  margin: 0;
+}
+
+.step,
+.stepActive {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--line);
+
+  /* Dimming with `opacity` multiplies every descendant's contrast — the step number and the
+     repair tags fell to 2.74:1. The reading hierarchy is carried by colour instead, which
+     affects only what is meant to recede. */
+  transition: color 220ms ease;
+}
+
+.step .stepTitle {
+  color: var(--ink-2);
+}
+
+.stepActive .stepTitle {
+  color: var(--ink);
+}
+
+.stepNumber {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stepBody {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: 1.65;
+  margin: 0;
+  max-width: var(--w-prose);
+}
+
+.stepFixes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: baseline;
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  margin: 0;
+}
+
+.fixTag {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  color: var(--ink-2);
+  font-size: var(--fs-12);
+}
+
+.delta {
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  margin: 0;
+}
+
+/* Reduced motion: the opacity transition is the only animation, so drop it. */
+@media (prefers-reduced-motion: reduce) {
+  .step,
+  .stepActive {
+    transition: none;
+  }
+}
+
+@media (width <= 60rem) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* On narrow screens the panel state sits above the steps in normal flow: a sticky card
+     would cover the text it is meant to accompany. */
+  .sticky {
+    position: static;
+  }
+
+  .stepNav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .stepButton {
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-1);
+    background: var(--surface);
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: var(--fs-12);
+    cursor: pointer;
+  }
+
+  .stepButton[aria-current='step'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}

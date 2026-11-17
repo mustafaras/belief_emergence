@@ -1,5 +1,6 @@
 import { useRoute } from '../../app/useRoute'
 import { Num, SectionHeader } from '../../ui'
+import { AuditReplay } from './AuditReplay'
 import { FindingCard } from './FindingCard'
 import styles from './Overview.module.css'
 
@@ -83,6 +84,8 @@ export default function OverviewSection() {
           <li><strong>Decisions are interactive.</strong> Compare the reported evidence while keeping each conclusion within its limits.</li>
         </ul>
       </section>
+
+      <AuditReplay />
     </section>
   )
 }

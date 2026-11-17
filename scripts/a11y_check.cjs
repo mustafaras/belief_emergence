@@ -60,7 +60,11 @@ async function keyboardTabAudit(page, maxSteps = 160) {
     await page.keyboard.press('Tab');
     const state = await page.evaluate(() => {
       const element = document.activeElement;
-      if (!(element instanceof HTMLElement) || element === document.body) return { documentBoundary: true };
+      // An SVG <text> that opens the Claim Inspector is focusable and returns an
+      // SVGElement, not an HTMLElement. Treating that as the document boundary ended the
+      // traversal at stop 26 of 29 and reported a failure for a page whose tab order was
+      // intact. `Element` is the correct test; body is still the boundary.
+      if (!(element instanceof Element) || element === document.body) return { documentBoundary: true };
       const candidates = [...document.querySelectorAll(
         'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[role="button"],[tabindex="0"]',
       )].filter((candidate) => {

@@ -56,6 +56,7 @@ import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.jso
 import constructAvailabilityArtifact from '../src/data/analysis/construct_item_availability.json'
 import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
 import designGatesArtifact from '../src/data/analysis/design_gates.json'
+import functionalFormArtifact from '../src/data/analysis/functional_form_comparison.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -447,6 +448,15 @@ export function buildSources(): {
       // it must resolve is the mantissa, not the raw 4.44e-15. Derived from the artifact
       // rather than allowlisted: it is the artifact's measurement, only re-expressed.
       Number(designGatesArtifact.originalProvenance.upstreamIdentity.maxAbsDeviation.toExponential(2).split('e')[0]),
+      // The replay prints the bounded-minus-linear gap at six places, and the mini chart
+      // prints each form's k-fold R² at three. Both are derivations of one artifact, so they
+      // are recomputed rather than allowlisted.
+      Number((
+        (functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0) -
+        (functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0)
+      ).toFixed(6)),
+      Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
+      Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
       deriveConstructAuditDisplays(
         constructAuditArtifact.constructs
           ? Object.values(constructAuditArtifact.constructs).map((entry) =>
