@@ -36,6 +36,11 @@ describe('Limits section', () => {
     expect(profileBounds.shippedAlpha).toBeGreaterThan(Math.max(...profileBounds.grid.filter((v) => v < profileBounds.shippedAlpha)))
     expect(profileBounds.shippedAlpha).toBeLessThan(Math.max(...profileBounds.grid))
     expect(screen.getByText(/not one of the seven grid points/i)).toBeTruthy()
+    // The bracketing points must be derived. An earlier version indexed grid[4] and grid[5],
+    // which printed 0.016 and 0.032 — numbers that do not bracket 0.050 at all.
+    const low = Math.max(...profileBounds.grid.filter((v) => v < profileBounds.shippedAlpha))
+    const high = Math.min(...profileBounds.grid.filter((v) => v > profileBounds.shippedAlpha))
+    expect(screen.getByText(new RegExp(`${low.toFixed(3)} and ${high.toFixed(3)}`))).toBeTruthy()
   })
 
   it('reports both bound-sensitivity R² values and calls the constraint binding', () => {

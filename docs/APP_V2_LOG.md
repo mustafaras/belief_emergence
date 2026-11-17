@@ -475,3 +475,26 @@ Verified after the fix: `npm run build`, `check:bundle-budget` PASS (1,616 KiB),
 - `npm run ci:gate`: **90/91**; payload 1,616 KiB. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
 - Browser: the toggle moves nothing (0.064 both ways) and says why; the chart draws both thresholds; no page errors. Screenshots `tmp/shots/p26-limits.png`, `tmp/shots/p26-chart.png`.
 - Commit: `feat(app-v2): exponent limits [P26]`.
+
+## P27 — Limits: collinearity, lockbox, 2006
+
+- Table 6.2 lists the six retained covariates' variance inflation factors, R first at 9.43 and flagged above the conventional threshold of 5. The condition number (23.52 on 207 rows) is stated alongside, and the consequence — affected coefficients are associations under a fixed design, not separately identified effects — is spelled out rather than implied.
+- Decision Lab 7 toggles R out of the specification. Dropping it lowers the maximum VIF from 9.43 to 2.47, costs 0.0115 in sample, and *improves* k-fold R² by 1.3e-5. The lab shows all three, and the mandatory caution says why the improvement is not acted on: it is discovered in the same data that would then validate it.
+- A counterfactual banner appears above the section while the toggle is on, so a reader cannot mistake the lower VIF for the reported model.
+- Lockbox card: 17 cells across 11 countries, with the distinction the paper draws — 59 cells recovered by the covariate backfill are out of sample but not blind, and 17 cells cannot resolve a difference as small as the one this paper reports.
+- 2006 card: construct correlation 0.699 in that year against a median of 0.932 elsewhere, with the Tier C country-out R² shift (1.270) reported as how much one year can move an aggregate on a panel this sparse — not as a reason to exclude it.
+- `R = 7.30·HDI − 6.01` was re-derived from the macro extract (18,948 overlapping rows, slope 7.3038, intercept −6.0054) before being quoted.
+
+### Defects found
+
+- **The bracket sentence indexed the grid instead of deriving it.** It printed "between 0.016 and 0.032" for a shipped value of 0.050, which those two points do not bracket at all — 0.050 sits between **0.032 and 0.064**. The test that caught the earlier "outside the grid" error did not catch this one, because it only asserted membership; it now derives the bracketing pair from the value and checks the rendered sentence against it.
+- **Two components rendered the same heading.** `LimitsSection` and `Collinearity` both printed "Table 6.2 — collinearity"; the section's copy was left behind when the table moved into its own component, and it kept the unmarked label after the other was fixed.
+
+### Verification
+
+- `npm run test:run`: PASS, 396 tests across 64 files (five new collinearity tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **396** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run ci:gate`: **90/91**, payload 1,618 KiB. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: 6 VIF rows with R flagged, banner appears only in the counterfactual, 0.699/0.932 both render; no page errors. Screenshot `tmp/shots/p27-collinearity.png`.
+- Commit: `feat(app-v2): collinearity, lockbox, 2006 [P27]`.

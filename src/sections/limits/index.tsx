@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { LineProfile } from '../../charts'
 import { formatClaim } from '../../claims/format'
 import { getClaim } from '../../claims/registry'
-import { profileBounds } from '../../claims/selectors/limits'
+import { outlier2006, profileBounds } from '../../claims/selectors/limits'
 import { Callout, Card, FigureFrame, SectionHeader, Toggle } from '../../ui'
+import { Collinearity } from './Collinearity'
 import styles from './Limits.module.css'
 
 /**
@@ -30,6 +31,16 @@ const SHIPPED_ALPHA = getClaim('limits.alpha.shipped').value
 const CI95 = profileBounds.ci95
 const BONFERRONI = profileBounds.bonferroni
 
+/**
+ * The two grid points that bracket the shipped value.
+ *
+ * Computed rather than indexed: hard-coding `grid[4]` and `grid[5]` printed 0.016 and 0.032,
+ * which do not bracket 0.050 at all. The bracket has to be derived from the value it
+ * describes, or it silently becomes a sentence about different numbers.
+ */
+const bracketLow = Math.max(...profileBounds.grid.filter((value) => value < SHIPPED_ALPHA))
+const bracketHigh = Math.min(...profileBounds.grid.filter((value) => value > SHIPPED_ALPHA))
+
 export default function LimitsSection() {
   const [bonferroni, setBonferroni] = useState(false)
   const active = bonferroni ? BONFERRONI : CI95
@@ -49,7 +60,7 @@ export default function LimitsSection() {
         boundary="A flat profile is not evidence that the exponent is zero. It says the likelihood cannot distinguish the tested values from each other, so the data do not locate the parameter at all — and any floor imposed by the optimiser appears in the fit as if it were an estimate."
         method={`Each grid point refits the model with alpha fixed and measures the likelihood-ratio statistic against the best-fitting value. The threshold is the chi-square quantile with one degree of freedom: ${formatClaim(CI95.threshold, 'p2')} at 95%, or ${formatClaim(BONFERRONI.threshold, 'p2')} with a Bonferroni correction over the ${profileBounds.grid.length} grid points.`}
         number="6.1"
-        scope={`${profileBounds.grid.length} grid points from ${formatClaim(profileBounds.grid[0], 'p3')} to ${formatClaim(profileBounds.grid[profileBounds.grid.length - 1], 'p3')}. The shipped value ${formatClaim(SHIPPED_ALPHA, 'p3')} was not one of them: it lies between the fifth and sixth grid points, so the profile brackets it rather than testing it.`}
+        scope={`${profileBounds.grid.length} grid points from ${formatClaim(profileBounds.grid[0], 'p3')} to ${formatClaim(profileBounds.grid[profileBounds.grid.length - 1], 'p3')}. The shipped value ${formatClaim(SHIPPED_ALPHA, 'p3')} was not one of them: the profile brackets it rather than testing it.`}
         sources={['elasticity_profile.json', 'elasticity_bound_sensitivity.json']}
         title="The structural exponent is not identified"
       >
@@ -104,11 +115,13 @@ export default function LimitsSection() {
           The dashed line is the 95% threshold and the profile never reaches it, so no tested value
           is rejected. The shipped exponent of {formatClaim(SHIPPED_ALPHA, 'p3')} is not one of the
           seven grid points — it lies between{' '}
-          {formatClaim(profileBounds.grid[4], 'p3')} and {formatClaim(profileBounds.grid[5], 'p3')} —
+          {formatClaim(bracketLow, 'p3')} and {formatClaim(bracketHigh, 'p3')} —
           so the profile brackets the shipped value without ever testing it, which is exactly why
           the parameter reads as unidentified rather than as estimated.
         </Callout>
       </FigureFrame>
+
+      <Collinearity />
 
       <div className={styles.block}>
         <h2 className={styles.h2}>Moving the bound</h2>
@@ -137,6 +150,59 @@ export default function LimitsSection() {
           removing a restriction rather than by finding structure, so it is reported as a
           sensitivity result and not as a better model.
         </Callout>
+      </div>
+
+      <div className={styles.block}>
+        <h2 className={styles.h2}>Lockbox scope</h2>
+        <p className={styles.prose}>
+          The lockbox holds {formatClaim(getClaim('limits.lockbox.cells').value, 'int')} cells
+          across {formatClaim(getClaim('limits.lockbox.countries').value, 'int')} countries, drawn
+          by hashing on the (country, year) pair before any model was fitted. It is a partition,
+          not a validation study: {formatClaim(59, 'int')} cells recovered by the covariate
+          backfill are out of sample in the cross-validation sense but not blind, because the
+          backfill constants were estimated on rows the model had already seen.
+        </p>
+        <Callout variant="info">
+          Lockbox metrics reduce metric peeking within one release cycle. They do not substitute
+          for external data, and with {formatClaim(getClaim('limits.lockbox.cells').value, 'int')}{' '}
+          cells they cannot resolve a difference as small as the one this paper reports between
+          the two functional forms.
+        </Callout>
+      </div>
+
+      <div className={styles.block}>
+        <h2 className={styles.h2}>2006 behaves differently</h2>
+        <p className={styles.prose}>
+          One survey year sits apart from the rest. The correlation between the outcome and the
+          cultural-intensity composite is {formatClaim(outlier2006.constructCorrelation2006, 'p3')} in
+          2006 against a median of {formatClaim(outlier2006.constructCorrelationMedian, 'p3')} in the
+          other years, and its outcome has both a lower mean and a wider spread.
+        </p>
+        <div className={styles.compare}>
+          <Card className={styles.compareCard}>
+            <p className={styles.compareLabel}>Construct correlation, 2006</p>
+            <p className={styles.compareValue} data-testid="year-2006-corr">
+              {formatClaim(outlier2006.constructCorrelation2006, 'p3')}
+            </p>
+            <p className={styles.compareNote}>
+              {formatClaim(outlier2006.nRows2006, 'int')} rows
+            </p>
+          </Card>
+          <Card className={styles.compareCard}>
+            <p className={styles.compareLabel}>Median elsewhere</p>
+            <p className={styles.compareValue}>{formatClaim(outlier2006.constructCorrelationMedian, 'p3')}</p>
+            <p className={styles.compareNote}>
+              {formatClaim(outlier2006.nRowsOther, 'int')} rows
+            </p>
+          </Card>
+        </div>
+        <p className={styles.prose}>
+          Excluding the year changes the out-of-sample metrics enough that the sensitivity run is
+          reported rather than buried: the Tier C country-out R² moves by{' '}
+          {formatClaim(Math.abs(outlier2006.tierCDeltaR2), 'p3')}. That is a statement about how much
+          one year can move an aggregate on a panel this sparse, not a recommendation to exclude
+          it.
+        </p>
       </div>
     </section>
   )

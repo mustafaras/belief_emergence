@@ -22,9 +22,10 @@ const boundSensitivitySchema = z.object({
   runs: z.array(z.object({ lowerBound: finite, alpha: finite, beta: finite, r2: finite, atBound: z.boolean() })).min(2)
 })
 const collinearitySchema = z.object({
+  n: z.number().int().nonnegative(),
   conditionNumber: finite,
   maxVif: finite,
-  entries: z.array(z.object({ covariate: z.string(), r2OnOthers: finite, vif: finite }))
+  entries: z.array(z.object({ covariate: z.string(), r2OnOthers: finite, vif: finite })),
 })
 const rCollinearitySchema = z.object({
   variants: z.array(z.object({ label: z.string(), maxVif: finite, inSampleR2: finite, kFoldR2: finite })),
@@ -192,6 +193,56 @@ function claim(
   return { id, label, value, format, artifact, path, note }
 }
 
+/**
+ * VIF rows in descending order, with the conventional threshold applied.
+ *
+ * `flagged` is computed rather than stored: the artifact records the VIFs, and whether one is
+ * "high" depends on a convention (5 here) that belongs to the view, not to the measurement.
+ */
+const VIF_CONVENTIONAL_THRESHOLD = 5
+
+const VIF_LABELS: Record<string, string> = {
+  R: 'Welfare capacity',
+  E: 'Education capacity',
+  X: 'Settlement / urbanisation',
+  M: 'Media environment',
+  Y: 'Gini (inequality)',
+  T: 'Trauma exposure',
+}
+
+export const vifEntries = [...collinearity.entries]
+  .sort((a, b) => b.vif - a.vif)
+  .map((entry) => ({
+    covariate: entry.covariate,
+    label: VIF_LABELS[entry.covariate] ?? entry.covariate,
+    vif: entry.vif,
+    flagged: entry.vif > VIF_CONVENTIONAL_THRESHOLD,
+  }))
+
+/**
+ * The 2006 sensitivity, flattened for the card.
+ *
+ * The year is not excluded from any reported number; it is reported as a reason the aggregate
+ * is fragile. `tierCDeltaR2` is the country-out R² change for Tier C, the tier the sensitivity
+ * moves most.
+ */
+export const outlier2006 = {
+  constructCorrelation2006: temporalOutlier.constructDiagnostics.constructCorrelation2006,
+  constructCorrelationMedian: temporalOutlier.constructDiagnostics.constructCorrelationMedian,
+  nRows2006: temporalOutlier.constructDiagnostics.year2006.nRows,
+  nRowsOther: temporalOutlier.constructDiagnostics.otherYears.nRows,
+  tierCDeltaR2: temporalOutlier.looComparisonRefit.find((entry) => entry.tier === 'C')?.r2.delta ?? 0,
+  excludedNRows: temporalOutlier.excluded2006NRows,
+}
+
+/** The two specifications Lab 7 toggles between. */
+export const rCase = {
+  withR: { maxVif: withR.maxVif, inSampleR2: withR.inSampleR2, kFoldR2: withR.kFoldR2 },
+  withoutR: { maxVif: withoutR.maxVif, inSampleR2: withoutR.inSampleR2, kFoldR2: withoutR.kFoldR2 },
+  verdict: rCollinearity.verdict,
+  conventionalThreshold: VIF_CONVENTIONAL_THRESHOLD,
+}
+
 const vifClaim = (covariate: string) => {
   const entry = collinearity.entries.find(item => item.covariate === covariate)
   if (!entry) throw new Error(`Collinearity artifact has no VIF record for ${covariate}.`)
@@ -207,6 +258,8 @@ export const limitsClaims: Claim[] = [
   vifClaim('R'),
   vifClaim('E'),
   claim('limits.vif.max', 'Maximum covariate variance inflation factor', collinearity.maxVif, 'p2', 'collinearity_diagnostics.json', 'maxVif'),
+  claim('limits.collinearity.conditionNumber', 'Condition number of the design matrix', collinearity.conditionNumber, 'p2', 'collinearity_diagnostics.json', 'conditionNumber'),
+  claim('limits.collinearity.n', 'Rows behind the collinearity diagnostics', collinearity.n, 'int', 'collinearity_diagnostics.json', 'n'),
   claim('limits.dropR.maxVif', 'Maximum VIF after removing R', withoutR.maxVif, 'p2', 'r_collinearity_case.json', 'variants[label=without R].maxVif', 'Counterfactual specification only; the reported model retains R.'),
   claim('limits.dropR.maxVif.withR', 'Maximum VIF with R retained', withR.maxVif, 'p2', 'r_collinearity_case.json', 'variants[label=with R].maxVif'),
   claim('limits.dropR.inSampleR2.withR', 'In-sample R² with R retained', withR.inSampleR2, 'r2', 'r_collinearity_case.json', 'variants[label=with R].inSampleR2'),

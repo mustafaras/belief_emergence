@@ -61,6 +61,9 @@ import modelComplexityArtifact from '../src/data/analysis/model_complexity_suppo
 import ladderArtifact from '../src/data/analysis/model_ladder_metrics.json'
 import kfoldArtifact from '../src/data/analysis/cv_kfold.json'
 import elasticityProfileArtifact from '../src/data/analysis/elasticity_profile.json'
+import collinearityArtifact from '../src/data/analysis/collinearity_diagnostics.json'
+import rCaseArtifact from '../src/data/analysis/r_collinearity_case.json'
+import outlierArtifact from '../src/data/analysis/temporal_outlier_2006_sensitivity.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -480,6 +483,16 @@ export function buildSources(): {
       ).toFixed(6)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
       Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The collinearity table prints VIFs at two places, the R-case lab prints in-sample and
+      // k-fold R² at four, and the 2006 card prints the construct correlations at three.
+      ...(collinearityArtifact as { entries: Array<{ vif: number }> }).entries
+        .map((entry) => Number(entry.vif.toFixed(2))),
+      ...(rCaseArtifact as { variants: Array<{ inSampleR2: number; kFoldR2: number }> }).variants
+        .flatMap((variant) => [Number(variant.inSampleR2.toFixed(4)), Number(variant.kFoldR2.toFixed(4))]),
+      Number((outlierArtifact as { constructDiagnostics: { constructCorrelationMedian: number } })
+        .constructDiagnostics.constructCorrelationMedian.toFixed(3)),
+      Number(Math.abs((outlierArtifact as { looComparisonRefit: Array<{ tier: string; r2: { delta: number } }> })
+        .looComparisonRefit.find((entry) => entry.tier === 'C')?.r2.delta ?? 0).toFixed(3)),
       // The limits section prints the profile's thresholds and statistics: the chi-square
       // quantiles the toggles compare against, and the per-point LR statistic shown in the
       // chart's accessible table.

@@ -91,3 +91,12 @@
   font-size: var(--fs-12);
   margin: 0;
 }
+
+.tableNumber {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
