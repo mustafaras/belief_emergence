@@ -85,10 +85,13 @@ The remaining work is:
    closed: the Geometry Lab renders the fitted surface with Plotly, its withdrawn
    channels are provably inert, and the surface snapshot passes against a re-captured
    baseline. With it, `ci:gate` reaches **91/91** for the first time. P30 is closed:
-   the observed support overlay, the three 2D companions and the A/B capture are
-   built, and the overlay exposed a real scale error — the panel's `Z` is raw while
-   the model returns a normalised `Z`, so the points are mapped through the same
-   normalisation the model uses. P31 has not started.
+   the observed support overlay, the extrapolation shading, the three 2D companions
+   and the A/B capture are built. Two measurements shaped it — the panel's `Z` is
+   raw while the model returns a normalised `Z`, so the points are mapped through the
+   same normalisation the model uses; and six of the 207 rows normalise outside the
+   model's output band, so the overlay plots them off the surface rather than
+   clamping them onto it. The grey sheet is the convex hull of the observed (X, Y)
+   points, which marks 608 of 2,304 grid cells as extrapolation. P31 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
