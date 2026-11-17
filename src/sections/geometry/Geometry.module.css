@@ -175,3 +175,82 @@
     grid-template-columns: 1fr;
   }
 }
+
+.surfaceControls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.companion {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
+}
+
+.companionNote {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  line-height: 1.6;
+  margin: 0;
+  max-width: var(--w-prose);
+}
+
+.capture {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-start: var(--space-5);
+  border-block-start: 1px solid var(--line);
+}
+
+.captureButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.captureHint {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  margin: 0;
+}
+
+.diffCard {
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+
+.diffTable {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  min-width: 24rem;
+}
+
+.diffTable thead th {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.diffTable th,
+.diffTable td {
+  padding: var(--space-2);
+  border-block-end: 1px solid var(--line);
+  text-align: end;
+}
+
+.diffTable th:first-child,
+.diffTable thead th:first-child {
+  text-align: start;
+}
+
+.visuallyHidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

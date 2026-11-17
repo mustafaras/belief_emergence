@@ -572,3 +572,41 @@ E = +1                   →  Z moves (the retained channels do respond)
 - `npm run check:dom-numbers`: PASS, **637** distinct values, 0 unresolved, allowlist still 3 entries — the four live geometry values are recomputed from the same model and defaults rather than allowlisted.
 - Browser: Plotly renders one canvas, six sliders, Z 0.648 / Φ −5.911 / s 6.523 / Z(1−Z) 0.2280, no console errors. Screenshots `tmp/shots/p29-geometry.png`, `tmp/shots/p29-surface.png`.
 - Commit: `feat(app-v2): geometry lab controls and surface [P29]`.
+
+## P30 — Geometry Lab: observed support, 2D companions, A/B capture
+
+`ci:gate` remains green at **91/91** after this prompt.
+
+- **Support overlay**, on by default. The 207 observed panel rows are plotted on the fitted surface. It answers the question the surface alone cannot: whether the fitted map sits where the data actually is, or extrapolates across a region no country occupies.
+- **Extrapolation shading.** The grey sheet is not a threshold or a radius — it is every grid cell outside the **convex hull of the observed (X, Y) points**. Measured on the shipped panel: a 12-vertex hull over a 48 × 48 grid marks **608 of 2,304 cells (26.4%)** as extrapolation. A number someone chose would have been arbitrary; the hull is a statement about where the observations are.
+- **Three 2D companions**, because a 3D surface is a bad instrument for reading a number: a Φ×s heatmap of Z with the Z = 0.5 crossing, a Z(Φ) profile at the current s, and a Z(1−Z) gain profile at the current Φ. Each marker follows the sliders.
+- **A/B capture.** Two snapshots of the full channel state, a ΔZ/ΔΦ table between them, a copyable link, CSV export, and a PNG export of the surface via Plotly `toImage`.
+
+### The support overlay was wrong at first, and the fix is the interesting part
+
+The first capture showed the Z axis blown out to **±3000** with the surface squashed flat. The panel stores `Z` raw (−2.656 … 3.369); `calculateModel` does not return that quantity, it returns Z inside the training band after `Z_NORMALIZATION` (min −2.397, max 1.857). Two different variables on one axis.
+
+The overlay now maps each observed `Z` through the same normalisation the model uses. Re-captured: surface at 0.2–1.0 with 207 points distributed over it.
+
+**Then the clamp came off.** The mapped values were being clamped into [1e-4, 1−1e-4] so every point would touch the surface. Measuring first showed that **six of the 207 rows normalise outside the model's output band** (−0.061 … 1.355 across the panel): the fitted map cannot represent those six observations at all. Pinning them to the edge made the overlay agree with the surface by hiding the disagreement. They are now plotted where they land, above and below the surface, and the caption says so.
+
+### Defects found
+
+- **The heatmap's two axes shared one range.** Φ spans [−8, 2] and s spans [0, 10]; drawing both against the field's range saturated nearly every cell to one colour. Each axis now carries its own extent (`PHI_RANGE`, `S_RANGE`), which is what makes the diagonal ridge visible.
+- **`Heatmap`'s tick rule was a year rule.** `showTick` was `index === 0 || last || year % 5 === 0`, written for year columns. On a Φ axis spanning [−8, 2] no interior label is divisible by five, so the axis printed its two endpoints and nothing else. The rule is now a `tickLabel` prop with the year behaviour as the default, and the Φ×s heatmap supplies its own.
+- **The Z axis title was clipped off the canvas.** At `margin: 8` all titles were cut; at 56 the rotated Z title was still cut, because a 3D scene's titles sit outside the plot box. Titles are now the bare letters X / Y / Z, with the words spelled out in the caption beneath — the honest fix at a 574-pixel canvas, and it cannot clip.
+- **The 3D camera was too close for the box it had to hold**, so the scene's top edge was cut. Pulling back to 1.7 fixed the clipping but left the surface small; 2.15 with the centre nudged down is the version that frames it.
+- **`document.body.insertBefore` threw when restoring detached `data-scale-label` nodes.** Removing a labelled subtree and reinserting it breaks when the recorded `nextSibling` was inside the removed subtree. The restore path now re-anchors against a still-attached sibling.
+- **The heatmap's axis ticks and its accessible table's coordinate headers were being number-audited.** They are grid coordinates, not claims, and they exist in no artifact. `ChartSvg` gained a `coordinateHeaders` prop that marks only `<th>` and the first `<td>` of each row; the marks are scoped, so the table's *values* are still audited.
+- **`Φ + s` joined the derived-value set.** It is the total log-odds the model applies, it appears in the companion caption, and it has no artifact — recomputed in `check_dom_numbers.ts` rather than allowlisted.
+
+### Verification
+
+- **`npm run ci:gate`: 91/91 PASS**, payload 1,620 KiB against the 2,048 KiB budget.
+- `npm run test:run`: PASS, **414 tests across 67 files** — three companion tests plus three hull tests (convex ordering drops interior points, collinear input yields a hull with no interior, the mask marks only outside cells).
+- `npm run check:surface-snapshot`: **PASS**, 574×471, 0 pixels outside tolerance, against the capture reviewed above.
+- `npm run check:dom-numbers`: PASS, **618** distinct values, 0 unresolved, allowlist still 3 entries.
+- `npm run check:a11y`: PASS, **0 violations across 22 route-theme pairs**; geometry reports 37 focusable elements, 6 ranges, 2 charts, 0 unnamed charts.
+- `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- Browser (`?v=geometry`, 1440×1000): three Plotly traces — `Observed support`, `Outside observed support`, `surface`; support switch reports `aria-checked="true"`; three companion tabs; PNG button enabled; A/B table three rows; no console errors. Screenshots `tmp/shots/p30-geometry.png`, `tmp/shots/p30-surface.png`, `tmp/shots/p30-heat.png`.
+- Commit: `feat(app-v2): geometry support and companions [P30]`.

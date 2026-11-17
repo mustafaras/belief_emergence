@@ -508,6 +508,9 @@ export function buildSources(): {
           Number(phi.toFixed(3)),
           Number(s.toFixed(3)),
           Number((z * (1 - z)).toFixed(4)),
+          // The companions' prose prints Phi + s, which places the configuration relative to
+          // the ridge at zero. Same model, one more arrangement of the same numbers.
+          Number((phi + s).toFixed(3)),
         ]
       })(),
       // The limits section prints the profile's thresholds and statistics: the chi-square
@@ -810,7 +813,17 @@ async function main(): Promise<void> {
           }))
           marked.forEach(node => node.remove())
           const value = document.body.innerText
-          for (const slot of slots) slot.parent?.insertBefore(slot.node, slot.next)
+          for (const slot of slots) {
+            if (!slot.parent) continue
+            // `next` may itself have been removed (a marked node whose sibling was also
+            // marked), in which case insertBefore throws and the page is left mutated.
+            const anchor = slot.next && slot.next.parentNode === slot.parent ? slot.next : null
+            try {
+              slot.parent.insertBefore(slot.node, anchor)
+            } catch {
+              slot.parent.appendChild(slot.node)
+            }
+          }
           return value
         })(),
         presetRows: Array.from(document.querySelectorAll<HTMLElement>('.preset-table-row')).map((row) => ({

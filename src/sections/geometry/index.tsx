@@ -1,8 +1,12 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { calculateModel } from '../../utils/calculateModel'
+import { Z_NORMALIZATION } from '../../data/feCoefficients'
 import { useDataContext } from '../../contexts/DataContext'
 import { formatClaim } from '../../claims/format'
-import { Callout, SectionHeader, Skeleton, Slider } from '../../ui'
+import { Callout, SectionHeader, Skeleton, Slider, Toggle } from '../../ui'
+import { CaptureAB } from './CaptureAB'
+import type { SurfaceImageFn } from './Surface3D'
+import { Companions } from './Companions'
 import {
   applyCountryMeans,
   CONTROL_RANGES,
@@ -46,7 +50,40 @@ const CONTROL_LABELS: Record<keyof GeometryState, string> = {
 export default function GeometrySection() {
   const [state, setState, setOne] = useGeometryParams()
   const [isoFilled, setIsoFilled] = useState<string | null>(null)
+  const [showSupport, setShowSupport] = useState(true)
+  const [surfaceImage, setSurfaceImage] = useState<SurfaceImageFn | null>(null)
   const { panelData } = useDataContext()
+
+  /**
+   * The 207 observed rows as (X, Y, Z) triples.
+   *
+   * Plotted over the surface so a reader can see where the data actually sit: the corners of
+   * the box are extrapolation, and the points show that without a caption needing to say so.
+   */
+  /**
+   * The 207 rows mapped onto the surface's own scale.
+   *
+   * The panel stores `Z` raw (−2.66 to 3.37) while `calculateModel` returns it inside the
+   * training band [0.0001, 0.9999] after `Z_NORMALIZATION`. Plotting the raw values against the
+   * surface put two unrelated scales on one axis: the Z axis stretched to ±3,000 and the
+   * surface flattened to a plane. Observed points are normalised with the same constants the
+   * fit used, so a point sits directly above the cell it belongs to.
+   *
+   * Six rows normalise outside the band the model can emit (−0.061 … 1.355 across all 207).
+   * They are left where they land, above or below the surface, rather than clamped to its edge:
+   * the fitted map cannot represent those six observations, and the overlay is the only place
+   * in the application where that is visible.
+   */
+  const supportPoints = useMemo(() => (panelData ?? [])
+    .filter((row) => [row.X, row.Y, row.Z].every((value) => typeof value === 'number' && Number.isFinite(value)))
+    .map((row) => ({
+      x: row.X as number,
+      y: row.Y as number,
+      // Deliberately not clamped into the model's band: six of the 207 rows land outside
+      // [0.0001, 0.9999] once normalised, which is a fact about the panel the surface cannot
+      // show on its own. Pinning them to the edge would hide it.
+      z: ((row.Z as number) - Z_NORMALIZATION.min) / (Z_NORMALIZATION.max - Z_NORMALIZATION.min),
+    })), [panelData])
 
   /**
    * `?iso=` fills the controls from that country's mean row.
@@ -149,18 +186,46 @@ export default function GeometrySection() {
             <ComputedValue digits={4} label="Z(1−Z)" value={gain} />
           </div>
 
+          <div className={styles.surfaceControls}>
+            <Toggle
+              checked={showSupport}
+              label={`Show observed support (${supportPoints.length} rows)`}
+              onChange={setShowSupport}
+            />
+          </div>
+
           <Suspense fallback={<Skeleton aria-label="Loading the 3D surface" className={styles.surfaceSkeleton} />}>
-            <Surface3D state={state} />
+            <Surface3D
+              registerImageFn={setSurfaceImage}
+              showSupport={showSupport}
+              state={state}
+              support={supportPoints}
+            />
           </Suspense>
 
           <p className={styles.caption}>
-            The surface is the fitted map evaluated on a 48 × 48 grid across the panel&apos;s
-            realised X and Y ranges, with M, T, E and R held at the values on the left. It is the
-            same function whose coefficients are estimated in the model section; nothing here is a
-            new fit.
+            Axes are <strong>X</strong> settlement / urbanisation, <strong>Y</strong> inequality and{' '}
+            <strong>Z</strong> emergence — single letters on the canvas, spelled out here because
+            the rotated axis titles do not fit at this width. The surface is the fitted map
+            evaluated on a 48 × 48 grid across the panel&apos;s realised X and Y ranges, with M, T,
+            E and R held at the values on the left. It is the same function whose coefficients are
+            estimated in the model section; nothing here is a new fit.
           </p>
+          {showSupport ? (
+            <p className={styles.caption}>
+              Grey cells are outside the convex hull of the observed (X, Y) points: the model still
+              returns a value there, but no country in the panel occupies that combination, so the
+              cell is extrapolation. {supportPoints.length} observed rows are plotted over the
+              surface; the six that normalise outside the model&apos;s output band appear above or
+              below it rather than on it.
+            </p>
+          ) : null}
         </div>
       </div>
+
+      <Companions state={state} />
+
+      <CaptureAB state={state} surfaceImage={surfaceImage} />
     </section>
   )
 }

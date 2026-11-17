@@ -7,13 +7,21 @@ type ChartSvgProps = {
   title: string
   description: string
   data: AccessibleTable
+  /**
+   * Column and row headers that are axis coordinates rather than values.
+   *
+   * A heatmap's accessible table must carry its axis labels or a screen-reader user cannot
+   * locate a cell, but those labels are grid coordinates and not measurements. Marking the
+   * header cells lets the rendered-number audit skip them while the cell values stay audited.
+   */
+  coordinateHeaders?: boolean
   children: ReactNode
   viewBoxHeight?: number
   role?: 'img' | 'group'
   scrollLabel?: string
 }
 
-export function ChartSvg({ title, description, data, children, viewBoxHeight = 420, role = 'img', scrollLabel }: ChartSvgProps) {
+export function ChartSvg({ title, description, data, children, viewBoxHeight = 420, role = 'img', scrollLabel, coordinateHeaders = false }: ChartSvgProps) {
   const figureRef = useRef<HTMLDivElement>(null)
   const size = useChartSize(figureRef, viewBoxHeight)
   const id = useId().replaceAll(':', '')
@@ -29,11 +37,24 @@ export function ChartSvg({ title, description, data, children, viewBoxHeight = 4
         </svg>
         <table className={styles.visuallyHidden}>
           <caption>{title} data</caption>
-          <thead><tr>{data.columns.map(column => <th key={column} scope="col">{column}</th>)}</tr></thead>
+          <thead>
+            <tr>
+              {data.columns.map(column => (
+                <th key={column} scope="col" {...(coordinateHeaders ? { 'data-scale-label': '' } : {})}>{column}</th>
+              ))}
+            </tr>
+          </thead>
           <tbody>
             {data.rows.map((row, index) => (
               <tr key={`${String(row[0])}-${index}`}>
-                {row.map((cell, cellIndex) => <td key={cellIndex}>{cell ?? 'Not observed'}</td>)}
+                {row.map((cell, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    {...(coordinateHeaders && cellIndex === 0 ? { 'data-scale-label': '' } : {})}
+                  >
+                    {cell ?? 'Not observed'}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>

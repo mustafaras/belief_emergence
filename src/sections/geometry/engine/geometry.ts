@@ -166,3 +166,71 @@ export function makePolylineFromGridYSlice(surface: SurfacePayload, iy: number):
 
   return { xs, ys, zs }
 }
+
+export type Point2 = { x: number; y: number }
+
+/**
+ * Convex hull of the observed (X, Y) points, by monotone chain.
+ *
+ * Used to mark the part of the surface that is extrapolation. A radius or a bounding box would
+ * be an invented threshold; the hull is the smallest convex region a straight line cannot leave
+ * without crossing data, so "outside the hull" is a statement about where the observations are
+ * rather than a number someone chose.
+ *
+ * Collinear points are dropped, so the result is a strict polygon: a hull of fewer than three
+ * vertices has no interior and callers must treat everything as outside.
+ */
+export function convexHull(points: Point2[]): Point2[] {
+  const unique = new Map<string, Point2>()
+  for (const point of points) {
+    if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) continue
+    unique.set(`${point.x},${point.y}`, point)
+  }
+  const sorted = [...unique.values()].sort((a, b) => (a.x === b.x ? a.y - b.y : a.x - b.x))
+  if (sorted.length < 3) return sorted
+
+  const cross = (o: Point2, a: Point2, b: Point2) =>
+    (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+
+  const build = (input: Point2[]): Point2[] => {
+    const out: Point2[] = []
+    for (const point of input) {
+      while (out.length >= 2 && cross(out[out.length - 2], out[out.length - 1], point) <= 0) out.pop()
+      out.push(point)
+    }
+    out.pop()
+    return out
+  }
+
+  return [...build(sorted), ...build([...sorted].reverse())]
+}
+
+/**
+ * Which grid cells lie outside the observed hull.
+ *
+ * Returns a same-shaped boolean grid, `true` where the cell is extrapolation. A cell is tested
+ * at its centre, which is the honest choice for a surface drawn between sample points: the
+ * question is not whether a corner touches data but whether the cell as a whole does.
+ */
+export function extrapolationMask(
+  xVals: number[],
+  yVals: number[],
+  hull: Point2[],
+): boolean[][] {
+  return yVals.map((y) => xVals.map((x) => !isInsideHull(hull, { x, y })))
+}
+
+export function isInsideHull(hull: Point2[], point: Point2): boolean {
+  if (hull.length < 3) return false
+  let sign = 0
+  for (let i = 0; i < hull.length; i += 1) {
+    const a = hull[i]
+    const b = hull[(i + 1) % hull.length]
+    const cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)
+    if (cross === 0) continue
+    const current = cross > 0 ? 1 : -1
+    if (sign === 0) sign = current
+    else if (sign !== current) return false
+  }
+  return true
+}

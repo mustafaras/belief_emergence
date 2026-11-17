@@ -13,12 +13,25 @@ type HeatmapProps = {
   scale: 'viridis' | 'diverging'
   legendLabel: string
   valueLabel?: (value: number) => string
+  /**
+   * Which column labels to draw as ticks. The default is a year grid, where labelling every
+   * column is unreadable and every fifth year is the convention. A heatmap whose columns are a
+   * metric rather than a year needs its own rule: the year rule leaves a Φ axis spanning
+   * [−8, 2] with only its two endpoints labelled, because no intermediate label is divisible
+   * by five.
+   */
+  tickLabel?: (column: string, index: number, count: number) => boolean
+}
+
+const defaultTickLabel = (column: string, index: number, count: number) => {
+  const year = Number(column)
+  return index === 0 || index === count - 1 || (Number.isFinite(year) && year % 5 === 0)
 }
 
 const WIDTH = 720
 const MARGIN = { top: 54, right: 34, bottom: 48, left: 118 }
 
-export function Heatmap({ title, description, rows, cols, values, scale, legendLabel, valueLabel }: HeatmapProps) {
+export function Heatmap({ title, description, rows, cols, values, scale, legendLabel, valueLabel, tickLabel }: HeatmapProps) {
   const missingId = useId().replaceAll(':', '')
   if (rows.length === 0 || cols.length === 0 || values.length === 0) {
     return <ErrorState artifact={title} message="No data is available for this chart." />
@@ -45,6 +58,7 @@ export function Heatmap({ title, description, rows, cols, values, scale, legendL
 
   return (
     <ChartSvg
+      coordinateHeaders
       title={title}
       description={description}
       data={{ columns, rows: tableRows }}
@@ -59,13 +73,14 @@ export function Heatmap({ title, description, rows, cols, values, scale, legendL
       </defs>
       <text className={styles.label} x={MARGIN.left} y={28}>{legendLabel}</text>
       {cols.map((column, colIndex) => {
-        const year = Number(column)
-        const showTick = colIndex === 0 || colIndex === cols.length - 1 || (Number.isFinite(year) && year % 5 === 0)
-        return showTick ? <text className={styles.label} key={column} textAnchor="middle" x={MARGIN.left + colIndex * cellWidth + cellWidth / 2} y={MARGIN.top - 10}>{column}</text> : null
+        const showTick = (tickLabel ?? defaultTickLabel)(column, colIndex, cols.length)
+        // Column headers are axis ticks: grid coordinates, not measurements. Marked so the
+        // rendered-number audit excludes them, the same way `Axis` marks its own.
+        return showTick ? <text className={styles.label} data-scale-label="" key={column} textAnchor="middle" x={MARGIN.left + colIndex * cellWidth + cellWidth / 2} y={MARGIN.top - 10}>{column}</text> : null
       })}
       {rows.map((row, rowIndex) => (
         <g key={row}>
-          <text className={styles.label} textAnchor="end" x={MARGIN.left - 10} y={MARGIN.top + rowIndex * cellHeight + cellHeight / 2 + 4}>{row}</text>
+          <text className={styles.label} data-scale-label="" textAnchor="end" x={MARGIN.left - 10} y={MARGIN.top + rowIndex * cellHeight + cellHeight / 2 + 4}>{row}</text>
           {cols.map((column, colIndex) => {
             const value = values[rowIndex]?.[colIndex]
             const fill = value === undefined || value === null ? `url(#${missingId})` : fillFor(value)
