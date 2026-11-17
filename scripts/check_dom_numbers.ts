@@ -50,6 +50,7 @@ import { computePresetCountryAlignment } from '../src/utils/validation/presetCou
 import { computePanelFitSummary } from '../src/utils/validation/computePanelFitSummary'
 import { predictFromPanelRow } from '../src/utils/validation/panelPredict'
 import { computeBias } from '../src/utils/metrics'
+import { calculateModel } from '../src/utils/calculateModel'
 import { getProductionHeadlineMetrics } from '../src/data/modelMetrics'
 import { formatNumeric } from '../src/utils/formatNumeric'
 import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.json'
@@ -493,6 +494,22 @@ export function buildSources(): {
         .constructDiagnostics.constructCorrelationMedian.toFixed(3)),
       Number(Math.abs((outlierArtifact as { looComparisonRefit: Array<{ tier: string; r2: { delta: number } }> })
         .looComparisonRefit.find((entry) => entry.tier === 'C')?.r2.delta ?? 0).toFixed(3)),
+      // The Geometry lab prints four live values computed from the default slider position:
+      // Z, Phi, s (= logit(Z) - Phi) and the local gain Z(1-Z). They are recomputed here from
+      // the same model and the same defaults, so a drifted formula fails rather than passing.
+      ...(() => {
+        const defaults = { X: 0.62, Y: 1.35, M: 0.02, T: 0.01, E: 0.03, R: 0.02, C: 0, D: 0, G: 0, S: 0 }
+        const result = calculateModel(defaults as never)
+        const z = result.Z
+        const phi = result.phi
+        const s = Math.log(z / (1 - z)) - phi
+        return [
+          Number(z.toFixed(3)),
+          Number(phi.toFixed(3)),
+          Number(s.toFixed(3)),
+          Number((z * (1 - z)).toFixed(4)),
+        ]
+      })(),
       // The limits section prints the profile's thresholds and statistics: the chi-square
       // quantiles the toggles compare against, and the per-point LR statistic shown in the
       // chart's accessible table.

@@ -534,3 +534,41 @@ Estonia carries the largest residuals in the preset set (0.271 in 1996, 0.193 in
 - `npm run ci:gate`: **90/91**, payload 1,619 KiB. The only remaining failure is the Geometry surface snapshot (P29).
 - Browser: 83 rows, search narrows to 2 for "est", drawer opens and writes `iso=EST`, legend reads Observed/Predicted, year ticks are 1996–2008. Screenshot `tmp/shots/p28-drawer.png`.
 - Commit: `feat(app-v2): countries [P28]`.
+
+## P29 — Geometry Lab: controls and surface
+
+**`ci:gate` is green: 91/91.** This closes the last gate that had been failing since the v2 work began.
+
+- Persistent caution banner, controls for the six retained channels with slider bounds from the panel's realised ranges, and a locked withdrawn-channel list (C, D, G, S) with a reason and a §2 link each.
+- Four live values above the surface — Z, Φ, s, Z(1−Z) — rendered through a `ComputedValue` component labelled "computed live", because they follow the sliders and have no artifact behind them.
+- The surface itself: Plotly, lazily imported so the landing route never requests it, drawing a 48×48 grid of the fitted map across the panel's realised X and Y ranges with the other four channels held where the reader put them.
+- `?iso=` fills the controls from that country's mean rows, which is what makes the Countries drawer's "Open in Geometry Lab" link honest rather than decorative.
+- Every slider value travels in the URL, so a shared link reproduces the picture.
+
+### The withdrawn-channel claim, verified two ways
+
+The prompt asks that the model receive C, D, G and S as zero and that a test pin this. Pinning the inputs is the weaker half. The stronger statement, now asserted, is that feeding a non-zero value through those channels leaves the output **bit-identical** — their coefficients are 0, so the channels are structurally inert rather than merely defaulted:
+
+```
+C=2.61, D=1.5, G=1, S=1  →  ΔZ < 1e-12 in every case
+E = +1                   →  Z moves (the retained channels do respond)
+```
+
+### Defects found — most of them in the rendering, not the logic
+
+- **`s` was computed as `logit(Z)`.** The model is `Z = σ(Φ + s)`, so `s = logit(Z) − Φ`; the first version printed 0.612, which is the *total* log-odds and duplicates the meaning of a different card. Correct value: 6.523, cross-checked two independent ways.
+- **The surface rendered as a thin wedge with unreadable axes.** Three separate causes, found in sequence: `margin: 0` clipped the axis titles off the canvas; `aspectmode` left to `auto` scaled the axes to Y's 6.8-wide range against X's 0.85; and a camera placed at 2.4 units pushed the scene past the viewBox. The layout now mirrors the v1 component's working configuration — plain `title` plus `tickformat`, `aspectmode: 'cube'`, camera at 1.7 — and reads as a surface with labelled axes.
+- **Plotly 3 ignores sibling `titlefont`.** Font sizes set that way changed nothing on screen; the title block takes `title.font`, and the simplest fix was to drop the override and match v1.
+- **`check_surface_snapshot` navigated to the landing route** and then clicked a `/3D SURFACE/` toggle that no longer exists, so it reported "nothing to compare" against a page that never renders Plotly. It now loads `?v=geometry` and waits for the canvas.
+- **The committed baseline was the v1 surface** (1076×421). The v2 surface is a different shape at a different size (574×507), and the v1 component it was captured from has been deleted — so the baseline is re-captured from the reviewed v2 render and the check passes at 0 pixels outside tolerance.
+- **Plotly's SVG has no accessible name**, reported as an unclassified chart on both themes. The container now carries `role="img"` and a sentence describing what the surface shows.
+
+### Verification
+
+- **`npm run ci:gate`: 91/91 PASS** — every gate green for the first time, payload 1,620 KiB against the 2,048 KiB budget.
+- `npm run test:run`: PASS, 408 tests across 66 files (five new geometry tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:surface-snapshot`: **PASS**, 574×507, 0 pixels outside tolerance.
+- `npm run check:a11y`: PASS, exit 0, **0 violations** across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, **637** distinct values, 0 unresolved, allowlist still 3 entries — the four live geometry values are recomputed from the same model and defaults rather than allowlisted.
+- Browser: Plotly renders one canvas, six sliders, Z 0.648 / Φ −5.911 / s 6.523 / Z(1−Z) 0.2280, no console errors. Screenshots `tmp/shots/p29-geometry.png`, `tmp/shots/p29-surface.png`.
+- Commit: `feat(app-v2): geometry lab controls and surface [P29]`.

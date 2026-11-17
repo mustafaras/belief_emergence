@@ -171,7 +171,9 @@ async function main(): Promise<void> {
     const page = await context.newPage()
 
     try {
-      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 })
+      // The surface lives on the Geometry route, not the landing route: the v1 toggle this
+      // script clicked no longer exists, and a v2 landing page never renders a Plotly canvas.
+      await page.goto(`${BASE_URL}?v=geometry`, { waitUntil: 'domcontentloaded', timeout: 60000 })
     } catch (e) {
       console.log(
         `SKIP  no server at ${BASE_URL} (${(e as Error).message.split('\n')[0].slice(0, 70)})`,
@@ -180,16 +182,10 @@ async function main(): Promise<void> {
       return
     }
 
-    await page.waitForTimeout(9000)
-
-    // The surface is behind a toggle now, so a snapshot has to turn it on explicitly.
-    await page.evaluate(() => {
-      const button = [...document.querySelectorAll('button')].find((b) =>
-        /3D SURFACE/i.test((b as HTMLElement).innerText),
-      )
-      if (button) (button as HTMLButtonElement).click()
-    })
-    await page.waitForTimeout(12000)
+    // Plotly is a lazy chunk and the scene needs its first WebGL frame before the canvas has
+    // pixels worth comparing; wait for the element rather than for a fixed delay.
+    await page.waitForSelector('.js-plotly-plot canvas', { timeout: 60000 }).catch(() => {})
+    await page.waitForTimeout(4000)
 
     const plot = await page.$('.js-plotly-plot')
     if (!plot) {
