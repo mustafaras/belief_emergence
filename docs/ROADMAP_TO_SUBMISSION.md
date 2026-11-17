@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P28 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards and the country table are built), while P29–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P29 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table and the geometry lab are built), and **the application's own CI gate now passes 91/91**; P30–P38 have not started. App-v2 work remains uncommitted; see its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -81,8 +81,11 @@ The remaining work is:
    cards state their limits. P28 is closed: the country table, its search and verdict
    filter, and the per-country drawer are built. Its prompt asked for a failure-log
    note on EST/RUS/SVK that the log does not support — it records zero nonconverged
-   folds — so the drawer reports the residuals those countries actually carry. P29
-   has not started.
+   folds — so the drawer reports the residuals those countries actually carry. P29 is
+   closed: the Geometry Lab renders the fitted surface with Plotly, its withdrawn
+   channels are provably inert, and the surface snapshot passes against a re-captured
+   baseline. With it, `ci:gate` reaches **91/91** for the first time. P30 has not
+   started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
