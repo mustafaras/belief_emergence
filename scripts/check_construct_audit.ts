@@ -90,7 +90,7 @@ if (!sRow) {
   if (sRow.alpha !== null) {
     failures.push('S_social_support exposes an alpha despite emitting no cells')
   }
-  if (!sRow.suppressedAlpha) {
+  if (!sRow.alphaWithheld) {
     failures.push(
       'S_social_support carries a leftover alpha that is not marked as suppressed — a ' +
         'renderer could print it',
@@ -151,11 +151,19 @@ async function checkRendered(): Promise<void> {
   const page = await browser.newPage()
   const port = process.env.RENDER_CHECK_PORT || '5199'
   try {
-    await page.goto(`http://localhost:${port}/belief_emergence/`, {
+    // The table lives on the Construct Audit route. Loading the landing route and waiting
+    // for the table to appear never worked once the v2 router made sections lazy: the
+    // overview renders no audit table, so the check reported "0 rows" against a page that
+    // was correct.
+    await page.goto(`http://localhost:${port}/belief_emergence/?v=audit`, {
       waitUntil: 'domcontentloaded',
       timeout: 90000,
     })
-    await page.waitForTimeout(9000)
+    await page.waitForFunction(
+      () => document.querySelectorAll('.construct-audit-table tbody tr').length > 0,
+      { timeout: 30000 },
+    ).catch(() => {})
+    await page.waitForTimeout(600)
   } catch (e) {
     console.log(`SKIP  rendered assertions: no dev server on port ${port} (${(e as Error).message.slice(0, 60)})`)
     await browser.close()

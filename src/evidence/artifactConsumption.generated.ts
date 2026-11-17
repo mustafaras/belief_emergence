@@ -12,6 +12,7 @@ export const ARTIFACT_CONSUMPTION = {
     'coefficient_fit',
     'collinearity_ablation',
     'collinearity_diagnostics',
+    'construct_item_availability',
     'construct_prevalence',
     'covariate_blocker_attribution',
     'cv_kfold',
@@ -34,7 +35,6 @@ export const ARTIFACT_CONSUMPTION = {
   ],
   /** Named in source but never imported: a reader could mistake this for wired-in. */
   referencedOnly: [
-    'construct_item_availability',
     'construct_validity_invariance',
     'cv_country_out',
   ],

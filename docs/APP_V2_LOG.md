@@ -252,3 +252,30 @@ The earlier sessions searched for an artifact that would *contain* Y/E/T blocker
 - `npm run ci:gate`: **89/91**. The two failures remain Construct Audit (P21) and the Geometry surface snapshot (P29); both are unstarted.
 - Browser: segmented control and toggle both move their readouts and write `?gw=` / `?zf=`, with no page errors. Screenshots `tmp/shots/p20-gini.png`, `tmp/shots/p20-zerofill.png`.
 - Commit: `feat(app-v2): gini window and zero-fill labs [P20]`.
+
+## P21 — Construct Audit
+
+- Table 2.1 renders one row per construct from `constructRows`, the same builder `npm run check:construct-audit` validates: construct, configured items, usable items, cells, alpha, verdict badge, and the reason. Rows carry `data-construct` and `data-verdict` so a verifier addresses a row by identity rather than position; `DataTable` gained a general `rowAttributes` prop for this instead of hard-coding construct knowledge into the table.
+- `S_social_support` renders the words "not computable". It carries `cronbachAlpha: 0.753` beside `cellsEmitted: 0` — above the 0.70 floor — so printing the alpha would show a reliability pass for the one construct the paper says cannot be estimated. `buildConstructRows` withholds it and the table has no path to it; a test asserts `0.753` appears nowhere on the page.
+- Scope note reconciles eight proposed channels with four audited constructs and says the other four are "not estimated", so a reader cannot compare 3/4 with the manuscript's three-of-eight and conclude one is wrong.
+- Decision Lab 3 — reliability floor slider, 0.30–0.90 step 0.05, paper value 0.70. The admitted count is recomputed by `admittedAt(floor)`, which re-filters each alpha rather than reading a stored verdict: moving the slider asks "how many would survive *my* threshold", which is a different question from the paper's verdict and has to be answered by the alpha. A withheld alpha never counts, at any floor — S is "not admitted — no observations" even at 0.30, where C joins and the count becomes 2.
+- The table's alpha colour reflects the *paper's* verdict, not the slider. Colouring it by the live floor made Z turn red at 0.90, which reads as a finding when it is a hypothetical.
+- **Figure 2.2 skipped, deliberately.** No artifact here carries an item-level correlation matrix; `wvs_construct_audit.json` reports aggregate alpha only and `itemOverlaps` is a two-construct overlap list, not a matrix. The prompt's rule is to skip and log rather than fabricate, so the section states the omission in a Callout. A reconstructed matrix would be the exact failure the section documents.
+
+### Defects found
+
+- **`check:construct-audit` read a field that does not exist.** It asserted `sRow.suppressedAlpha`, but `ConstructRow` names the flag `alphaWithheld`. The check had never run against a rendered page, so the assertion was dead and the guard it was supposed to provide was absent; the script is outside `tsc -b`'s include, which is why nothing caught it. Fixed, and the check now passes on real output.
+- **The same check loaded the wrong route.** It navigated to the app root (Overview) and waited 9 s for a table that route never renders, so it reported "0 rows" against a correct page. It now loads `?v=audit` and waits for the rows.
+- **`Slider` drew the paper marker twice.** A caller that labelled the paper value in `marks` got the component's own "paper" marker at the same offset, and the two strings overprinted ("paper 0.70" over "paper"). The component now skips its marker when a mark already sits there.
+- **Badge `pass` was 4.39:1**, below the 4.5 floor for 12px text, and axe flagged it the moment a retained badge rendered in the light theme. `--pass` darkened `#1A7F4B` → `#157347` (5.1:1). This was latent: no retained badge existed on any route before this section.
+- Claim pointers for the verdict counts named `wvs_construct_audit.json` while the values live in `construct_prevalence.json`; the registry-integrity test caught it and the specs now carry the correct artifact.
+
+### Verification
+
+- `npm run test:run`: PASS, 357 tests across 57 files (five new audit tests). `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:construct-audit`: **PASS** — 4 constructs, 1 retained, 2 withdrawn, 1 uncomputable, failure rate 75% at floor 0.70.
+- `npm run check:a11y`: PASS, exit 0, 0 violations across 11 routes × 2 themes.
+- `npm run check:dom-numbers`: PASS, 242 distinct values, 0 unresolved, allowlist still 3 entries. The audit's two-place alphas, its percentage and the Data labs' signed three-place values are supplied by `deriveConstructAuditDisplays` / `deriveLabDisplayValues`, which re-apply the same rounding to the same artifact fields rather than loosening the corpus policy.
+- `npm run ci:gate`: **90/91**. The only remaining failure is the Geometry surface snapshot (P29, unstarted).
+- Browser: slider moves 0.70 → 1 admitted, 0.30 → 2, 0.90 → 0; table colours stay fixed at the paper floor; no page errors. Screenshots `tmp/shots/p21-audit-table.png`, `tmp/shots/p21-lab-fixed.png`.
+- Commit: `feat(app-v2): construct audit [P21]`.

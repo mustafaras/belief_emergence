@@ -39,6 +39,7 @@ import {
   deriveFormulaMetrics,
   derivePanelStats,
   deriveLabDisplayValues,
+  deriveConstructAuditDisplays,
   DEFAULT_UI_PARAMS,
 } from '../src/verification/derivedValues'
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
@@ -53,6 +54,7 @@ import { getProductionHeadlineMetrics } from '../src/data/modelMetrics'
 import { formatNumeric } from '../src/utils/formatNumeric'
 import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.json'
 import constructAvailabilityArtifact from '../src/data/analysis/construct_item_availability.json'
+import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
 import { APP_ROUTES } from '../src/app/routes'
@@ -437,6 +439,16 @@ export function buildSources(): {
       supportPercentages,
       descriptionClaimValues,
       deriveLabDisplayValues(giniWindowArtifact, zeroFillArtifact, { rows: 0, signed: 3 }),
+      // The audit table prints alpha at two places and the summary prints the failure
+      // rate as a percentage; both are formatted artifact values, not new measurements.
+      deriveConstructAuditDisplays(
+        constructAuditArtifact.constructs
+          ? Object.values(constructAuditArtifact.constructs).map((entry) =>
+              entry.computable ? entry.cronbachAlpha : null,
+            )
+          : [],
+        prevalenceArtifact.summary.failureRate,
+      ),
       deriveContractConstants(),
       deriveLimitArithmetic({
         panelRows: readPanelRows().length,

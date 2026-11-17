@@ -14,6 +14,15 @@ type DataTableProps<Row extends object> = {
   rows: Row[]
   stickyFirst?: boolean
   caption: string
+  /**
+   * Per-row DOM attributes, keyed by the row object identity.
+   *
+   * Verification scripts and tests need to address a specific row (`data-construct`,
+   * `data-verdict`) without depending on its position, which changes the moment a column
+   * becomes sortable. Passing attributes in keeps the table a presentational component: it
+   * does not need to know that "construct" is a concept.
+   */
+  rowAttributes?: (row: Row) => Record<string, string | undefined>
 }
 
 type SortDirection = 'ascending' | 'descending'
@@ -23,7 +32,7 @@ function compareValues(first: unknown, second: unknown): number {
   return String(first ?? '').localeCompare(String(second ?? ''), 'en', { numeric: true })
 }
 
-export function DataTable<Row extends object>({ columns, rows, stickyFirst = false, caption }: DataTableProps<Row>) {
+export function DataTable<Row extends object>({ columns, rows, stickyFirst = false, caption, rowAttributes }: DataTableProps<Row>) {
   const [sortKey, setSortKey] = useState<keyof Row & string | null>(null)
   const [direction, setDirection] = useState<SortDirection>('ascending')
   const sortedRows = useMemo(() => {
@@ -60,7 +69,7 @@ export function DataTable<Row extends object>({ columns, rows, stickyFirst = fal
         </thead>
         <tbody>
           {sortedRows.map((row, rowIndex) => (
-            <tr key={String(rowIndex)}>
+            <tr key={String(rowIndex)} {...(rowAttributes?.(row) ?? {})}>
               {columns.map((column, index) => (
                 <td className={[column.align ? styles[column.align] : '', index === 0 && stickyFirst ? styles.stickyFirst : ''].filter(Boolean).join(' ')} key={column.key}>
                   {column.render ? column.render(row) : String(row[column.key] ?? '')}

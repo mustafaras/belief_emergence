@@ -56,7 +56,15 @@ export function Slider({ min, max, step, value, onChange, marks = [], paperValue
       />
       <div aria-hidden="true" className={styles.sliderMarks}>
         {marks.map(mark => <span key={`${mark.value}-${mark.label}`} style={{ left: position(mark.value) }}>{mark.label}</span>)}
-        {paperValue !== undefined && <span className={styles.paperMark} style={{ left: position(paperValue) }}>paper</span>}
+        {/*
+          The paper marker is dropped when a mark already labels that exact position.
+          Rendering both printed "paper 0.70" and "paper" on top of each other: the caller
+          had labelled the paper value in `marks` (so the number is visible) and the
+          component then drew its own marker at the same offset.
+        */}
+        {paperValue !== undefined && !marks.some(mark => Math.abs(mark.value - paperValue) < 1e-9) && (
+          <span className={styles.paperMark} style={{ left: position(paperValue) }}>paper</span>
+        )}
       </div>
     </div>
   )

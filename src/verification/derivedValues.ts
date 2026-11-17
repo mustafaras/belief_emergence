@@ -421,3 +421,22 @@ export function deriveLabDisplayValues(
     round(split(1).cMinusB, places.signed),
   ].filter(Number.isFinite)
 }
+
+/**
+ * Rounded forms the construct audit prints.
+ *
+ * The table shows alpha at two places (`-1.2285` → `-1.23`) and the summary line shows the
+ * failure rate as a percentage (`0.75` → `75.0%`). Neither resolves against the artifact
+ * corpus, which the DOM audit reads with the `exact` policy on purpose. Both are the same
+ * numbers the claims carry, just formatted, so they are recomputed here from the same
+ * artifact values rather than added to an allowlist.
+ */
+export function deriveConstructAuditDisplays(
+  alphas: ReadonlyArray<number | null>,
+  failureRate: number,
+): number[] {
+  const rounded = alphas
+    .filter((alpha): alpha is number => alpha !== null && Number.isFinite(alpha))
+    .map((alpha) => Number(alpha.toFixed(2)))
+  return [...rounded, Number((failureRate * 100).toFixed(1))]
+}
