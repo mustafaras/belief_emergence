@@ -82,7 +82,7 @@ export default function ModelSection() {
         <h2 className={styles.h2}>What enters the field</h2>
         <p className={styles.prose}>
           Eight channels were proposed. Four were estimated; four were withdrawn in the construct
-          audit and never enter <span className={styles.inlineMath}><MathBlock tex="\Phi" /></span>{' '}
+          audit and never enter <MathBlock tex="\Phi" />{' '}
           here. That distinction is the whole point of the map below: not-estimated is a different
           statement from small-effect.
         </p>
@@ -196,8 +196,8 @@ export default function ModelSection() {
         <p className={styles.prose}>
           Because the outcome is bounded, a coefficient&rsquo;s sign propagates to <em>Z</em> with
           state-dependent force: differentiating the saturation map gives
-          {' '}<span className={styles.inlineMath}><MathBlock tex="\partial Z/\partial \Phi = Z(1-Z)" /></span>, so
-          {' '}<span className={styles.inlineMath}><MathBlock tex="\partial Z/\partial j_{\mathrm{std}} = c_j\,Z(1-Z)" /></span>.
+          {' '}<MathBlock tex="\partial Z/\partial \Phi = Z(1-Z)" />, so
+          {' '}<MathBlock tex="\partial Z/\partial j_{\mathrm{std}} = c_j\,Z(1-Z)" />.
           The direction is fixed by the sign of the coefficient; the magnitude peaks near the
           middle of the range and vanishes at both ends.
         </p>

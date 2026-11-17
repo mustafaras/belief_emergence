@@ -23,8 +23,11 @@ export function MathBlock({ tex, display = false, label }: { tex: string; displa
     output: 'html',
   })
 
+  // Inline math must be a <span>: it is used inside <p>, and a <div> there is invalid HTML
+  // that React reports as a hydration error. Display math stays a block.
+  const Element = display ? 'div' : 'span'
   return (
-    <div
+    <Element
       aria-label={label}
       className={display ? styles.display : styles.inline}
       role={label === undefined ? undefined : 'math'}
