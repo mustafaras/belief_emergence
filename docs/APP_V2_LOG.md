@@ -930,3 +930,72 @@ One real accessibility fix came out of rule 4: the brand title is elided with an
   `min-width` changes did not regress anything it measures.
 - Paper figures recaptured after the CSS changed; `check:paper-figures` PASS.
 - Commit: `test(app-v2): layout guards [P35]`.
+
+## P36 — Accessibility and end-to-end journeys
+
+`ci:gate` goes from 97 to **98/98**. `npm run test:e2e` runs **28 tests in 1.4 minutes**.
+
+Six specs under `e2e/`, driven by `playwright.config.ts` against the running dev server:
+`a11y` (11 routes × 2 themes), `referee`, `replicator`, `explorer`, `mobile`, `keyboard`.
+
+### The journeys found a real defect the property checks could not
+
+**The command palette's artifact links did not work.** The palette sets `?artifact=cv_kfold.json`
+— the filename as it sits on disk — while the Evidence page builds its loader key by appending
+`.json` to the value, so it looked for `cv_kfold.json.json`, missed, and opened the drawer on
+"could not be read". A reader following the advertised path from a claim to the file it came
+from got an empty panel and no explanation. The parameter is now normalised to a bare basename
+on read, so both writers agree.
+
+This is exactly the class of defect the specs exist for: the palette passed its own tests, the
+drawer passed its own tests, and the path between them was broken.
+
+### Three more real layout defects, found because `check:layout` was wrong
+
+The layout guard from P35 had a **containment exemption** that let any overflow pass if *some*
+element on the page had `overflow-x: auto`. That is not containment, and it was hiding three
+defects — found when `mobile.spec.ts` measured the same pages independently:
+
+- **Evaluation scrolled 955px on a 390px screen.** The protocol tabs are an `inline-flex` with
+  `width: fit-content`, an intrinsic width; four tabs together measure 955px and the control
+  widened the document by 565px instead of wrapping.
+- **The reproduce page scrolled 530px.** `.command` is a grid item with `min-width: auto`, so
+  the `white-space: pre` command block inside it — 514px for the full-reproduction line — set
+  the column width. Both the container and the code block needed `min-width: 0`.
+- **The gates page scrolled 482px.** A paragraph quotes
+  `8f5c06b:public/data/panel_canonical_23_countries_v1.csv` in a `<code>` run with no break
+  opportunity; that single token is 466px wide. `overflow-wrap: anywhere` lets a path break.
+
+The exemption is now gone. A table that legitimately scrolls does not widen the document — the
+box clips it — so the document's own `scrollWidth` is the whole test. Removing the escape hatch
+is what turned three passing routes into three failing ones, which is the right direction.
+
+Two search fields also had fixed `min-inline-size` values (18rem, 20rem) that do not fit beside
+their labels below ~420px; they now shrink.
+
+### Defects in the specs themselves
+
+- **`referee.spec.ts` counted the word "fail"**, which also appears in the prose ("all four
+  fail"). It passed on a page whose gates all succeeded. Now counts the four status badges.
+- **The gates step read the page before the route rendered.** `expect(toHaveURL)` resolves when
+  the address bar changes, which is before the lazy route module mounts; counting badges at
+  that moment found zero. A `waitFor` on the first badge fixed it.
+- **`replicator.spec.ts` picked the first palette result**, which is the *artifact* entry and
+  navigates straight to the file — skipping the inspector the journey is about. It now indexes
+  to the first `CLAIM` result deliberately.
+- **`mobile.spec.ts` clicked a button where the contents list is anchors.**
+- **Vitest collected the Playwright specs** and reported six broken suites. `vite.config.ts` now
+  excludes `e2e/**`; the directory name is why they live there.
+
+The `a11y` spec injects `axe-core` from the installed package rather than adding
+`@axe-core/playwright` — one dependency fewer, and the same rule set the existing check uses.
+
+### Verification
+
+- **`npm run ci:gate`: 98/98 PASS**, payload 1,628 KiB.
+- `npm run test:e2e`: **28 passed (1.4m)** across both projects.
+- `npm run check:layout`: PASS, 66 combinations — and it now fails on the three defects above
+  when they are reintroduced.
+- `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped**. `npx tsc -b`, `npm run lint`
+  (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- Commit: `test(app-v2): a11y and e2e journeys [P36]`.

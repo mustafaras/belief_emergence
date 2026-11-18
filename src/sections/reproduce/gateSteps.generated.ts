@@ -26,6 +26,7 @@ export const GATE_STEPS: GateStep[] = [
   { phase: "Phase 6: Validation Checks", label: "README metrics current", needs: "Node only" },
   { phase: "Phase 6: Validation Checks", label: "Paper figure specs", needs: "Node only" },
   { phase: "Phase 6: Validation Checks", label: "Layout guards", needs: "Node only" },
+  { phase: "Phase 6: Validation Checks", label: "End-to-end journeys", needs: "Node only" },
   { phase: "Phase 6: Validation Checks", label: "Description numbers", needs: "Node only" },
   { phase: "Phase 6: Validation Checks", label: "Presets reproduce", needs: "Node only" },
   { phase: "Phase 6: Validation Checks", label: "Rendered numbers", needs: "Node only" },
@@ -54,5 +55,5 @@ export const GATE_LOOP_CHECKS = {
   artifactPresence: 32,
   schemaVersions: 25,
   canonicalMetrics: 6,
-  total: 97,
+  total: 98,
 } as const

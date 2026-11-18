@@ -145,6 +145,9 @@ function auditInPage() {
           right: Math.round(rect.right),
           tag: el.tagName,
           cls: String(el.className || '').slice(0, 40),
+          // The element itself, so containment can be checked on its real ancestors rather
+          // than by matching class names — which failed silently when two elements shared one.
+          el,
         };
       }
     }
@@ -153,16 +156,15 @@ function auditInPage() {
      * still fits, and the box announces itself with `scrollLabel`. Only a width that leaks
      * past such a box to the document counts.
      */
-    const contained =
-      widest !== null &&
-      [...document.querySelectorAll('*')].some((el) => {
-        if (el.getBoundingClientRect().right < docScroll.clientWidth) return false;
-        const style = getComputedStyle(el);
-        return (
-          ['auto', 'scroll'].includes(style.overflowX) &&
-          el.scrollWidth > el.clientWidth
-        );
-      });
+    /*
+     * No containment escape hatch. An earlier version exempted any width whose ancestor had
+     * `overflow-x: auto`, intending to allow a table to scroll inside its own box — but that
+     * let the evaluation route ship 955px wide on a 390px screen while this check passed,
+     * because an unrelated chart on the same page satisfied the condition. A table that
+     * legitimately scrolls does not widen the document: the box clips it. So the document's
+     * own scrollWidth is the whole test.
+     */
+    const contained = false;
     if (!contained) {
       problems.push({
         rule: 'no-horizontal-scroll',

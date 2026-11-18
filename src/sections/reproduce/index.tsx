@@ -19,9 +19,20 @@ import styles from './Reproduce.module.css'
  */
 const ARTIFACT_KEY = 'artifact'
 
+/**
+ * The artifact named in `?artifact=`, normalised to a bare basename.
+ *
+ * Two writers disagree about the suffix: the evidence table sets `cv_kfold`, and the command
+ * palette's artifact entries set `cv_kfold.json` — the filename as it sits on disk. The loader
+ * key is built by appending `.json`, so the palettte's form produced `cv_kfold.json.json`,
+ * the lookup missed, and the drawer opened on "could not be read" with no clue why. Accepting
+ * both spellings here is cheaper than fixing one caller and leaving the other to rot.
+ */
 const readArtifactParam = (): string | null => {
   if (typeof window === 'undefined') return null
-  return new URLSearchParams(window.location.search).get(ARTIFACT_KEY)
+  const raw = new URLSearchParams(window.location.search).get(ARTIFACT_KEY)
+  if (!raw) return null
+  return raw.replace(/\.json$/i, '')
 }
 
 function writeArtifactParam(name: string | null) {

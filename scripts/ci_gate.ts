@@ -458,6 +458,12 @@ function phaseValidationChecks(): boolean {
     // Every other browser check asks whether an element is readable in isolation. This one
     // asks whether the page fits: no horizontal scroll, no overlap, no text under 12px.
     { label: 'Layout guards',                cmd: 'npm run check:layout', reportSkip: true },
+    // Journeys, not properties: whether a reader can get from the overview to the audit to the
+    // gate result with state carried across routes. Every individual page can be correct and
+    // the path still broken.
+    ...(process.env.CHROME_PATH
+      ? [{ label: 'End-to-end journeys', cmd: 'npm run test:e2e', reportSkip: true }]
+      : []),
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },

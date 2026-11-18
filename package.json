@@ -70,6 +70,7 @@
     "generate:paper-figures": "tsx scripts/capture_paper_figures.ts",
     "check:paper-figures": "tsx scripts/check_paper_figures.ts",
     "check:layout": "node scripts/layout_check.cjs",
+    "test:e2e": "playwright test",
     "check:construct-audit": "tsx scripts/check_construct_audit.ts",
     "check:support-picture": "tsx scripts/check_support_picture.ts",
     "check:limits": "tsx scripts/check_limits.ts",

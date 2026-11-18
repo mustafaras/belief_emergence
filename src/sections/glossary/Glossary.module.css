@@ -25,7 +25,10 @@
   border-radius: var(--radius-1);
   color: var(--ink);
   font: inherit;
-  min-inline-size: 20rem;
+  /* A fixed 20rem floor does not fit beside its label below ~420px, and the pair then
+     widened the document by 21px. The field shrinks; the label does not. */
+  min-inline-size: 0;
+  flex: 1 1 12rem;
   padding: 0.45rem 0.6rem;
 }
 

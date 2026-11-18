@@ -24,4 +24,14 @@ export default defineConfig({
     'import.meta.env.VITE_COMMIT': JSON.stringify(readCommit()),
   },
   plugins: [react()],
+  /*
+   * Vitest and Playwright both collect `*.spec.ts`. Without this, `npm run test:run` imports
+   * the six Playwright files, fails on `@playwright/test` being outside its environment, and
+   * reports six broken suites that are not broken — while the real e2e run passes. The
+   * exclusion is by directory, which is why the specs live in `e2e/` rather than beside the
+   * unit tests.
+   */
+  test: {
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
+  },
 });

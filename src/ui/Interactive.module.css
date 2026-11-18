@@ -33,7 +33,15 @@
 .segmented,
 .tabList {
   display: inline-flex;
+  /*
+   * `fit-content` is an intrinsic width. On a 390px screen the four protocol tabs together
+   * measure 955px, so the control widened the document by 565px instead of wrapping — and
+   * `check:layout` passed it because an unrelated chart on the same page satisfied its
+   * containment exemption. Wrapping is what keeps every tab reachable on a phone.
+   */
+  max-width: 100%;
   width: fit-content;
+  flex-wrap: wrap;
   gap: var(--space-1);
   padding: var(--space-1);
   border: 1px solid var(--line);

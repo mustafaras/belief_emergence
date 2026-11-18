@@ -34,7 +34,8 @@
   border-radius: var(--radius-1);
   color: var(--ink);
   font: inherit;
-  min-inline-size: 18rem;
+  min-inline-size: 0;
+  flex: 1 1 12rem;
   padding: 0.45rem 0.6rem;
 }
 
@@ -162,6 +163,8 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-2);
   padding: var(--space-4, 1rem);
+  /* A grid item's default `min-width: auto` lets its longest child set the column width. */
+  min-width: 0;
 }
 
 .commandHead {
@@ -198,6 +201,13 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-1);
   display: block;
+  /*
+   * `white-space: pre` gives the block a min-content width equal to the longest command line —
+   * 514px for the full-reproduction command. As a grid child that floor propagated to the
+   * document, which scrolled 140px on a phone even though this element scrolls its own
+   * content. `min-width: 0` is what lets the box be narrower than its text.
+   */
+  min-width: 0;
   font-family: var(--font-mono, ui-monospace, monospace);
   font-size: var(--text-sm, 0.875rem);
   overflow-x: auto;
