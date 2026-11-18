@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P35 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, and layout guards are built), and **the application's own CI gate now passes 97/97**; P36–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P36 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, and six end-to-end journeys are built), and **the application's own CI gate now passes 98/98**; P37–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -123,7 +123,12 @@ The remaining work is:
    themes, and it found that six of eleven routes scrolled horizontally at 390px — a defect
    the accessibility and support checks both missed because every element was individually
    readable. The cause was `min-width: auto` in five forms, fixed at the source in 121 rules.
-   `ci:gate` now passes 97/97. P36 has not started.
+   P36 is closed: six Playwright journeys cover the referee, replicator, explorer, phone and
+   keyboard paths, and 28 tests pass. Writing them found a real defect the property checks
+   could not — the command palette's artifact links opened an empty drawer — and three more
+   layout defects that the P35 guard had been hiding behind a containment exemption that let
+   any overflow pass if some unrelated element on the page scrolled. `ci:gate` now passes
+   98/98. P37 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
