@@ -715,3 +715,67 @@ Two items in the prompt could not be honoured and are stated rather than faked:
   and measured in the build output, which is a stronger guarantee than a lazy component.
 
 - Commit: `feat(app-v2): evidence bundle export [P32]`.
+
+## P33 — The README from the registry
+
+`ci:gate` goes from 94 to **95/95**.
+
+The README ran to 3,819 lines and carried the retired panel's numbers in **65 places**: 630
+rows, r² = 0.8461, correlation 0.9488, MAE 0.1005, RMSE 0.1212, 23 countries, 2000–2022,
+100/100 tests, 17 files, 15 parameters, 84.61% of variance. None of it was true any more, and
+nothing failed when it went stale — a README is not compiled, so a wrong figure there is
+invisible to every check the repository had. The same figures had already been caught in
+`src/` by `check:no-hardcoded-headline`; documentation was simply never in scope.
+
+### What is generated, and what is not
+
+Only what sits between `<!-- claims:start -->` and `<!-- claims:end -->`: the headline metrics
+table, the tagline's panel figures, and a status row for tests, gate checks, claims, panel,
+countries, constructs and routes. Everything else stays hand-written. A generator that owns a
+3,800-line file turns every future edit into a merge conflict with a template.
+
+The prose was then corrected by a rule script rather than by hand, so each substitution is
+reported and reviewable: **21 rules, 65 replacements**, printed one line per rule.
+
+### Three things the generator cannot do, and the architecture that follows
+
+- **It cannot import the claim registry.** `src/claims/selectors/data.ts` imports the panel as
+  `?raw`, a Vite-only specifier plain Node cannot resolve — `tsx` fails on the CSV. The values
+  are dumped from inside Vitest, the only process sharing the application's module graph, into
+  `tmp/readme-metrics.json`; the generator reads that file. One source, no duplicated constants.
+- **It cannot count tests from source.** Counting `it(` calls gives **437**; Vitest reports
+  **434 passing, 1 skipped**. The dump reads a Vitest JSON report, and prints passing tests
+  rather than total, because "435 tests" when 434 pass is the same class of error as "630".
+- **It must not read the gate total from a fixture.** First version took `gateChecks` from the
+  dump; adding a check made the gate run 95 while the README still said 94, and the freshness
+  check passed anyway because both read the same stale fixture. The total is now read live from
+  `gateSteps.generated.ts` — and the check immediately caught the 94-vs-95 difference.
+
+### Defects found
+
+- **`eval.headline.r2` did not exist.** `metrics_authoritative.json` has carried `r2` since it
+  was written; the Zod schema never read the field, so the headline fit had **no registered
+  claim**. The README's most important number had nothing to be checked against — which is
+  part of why the withdrawn 0.8461 survived. Claim added; a test pins it to the artifact field.
+- **238 registered claims and 149 reachable ones were being conflated.** The README printed one
+  number labelled "claims" while the Evidence page printed the other. Both are now named:
+  *149 shown / 228 registered*.
+- **Six in-page anchors were dead.** `#citation` pointed at a heading that renders as
+  `#citation--attribution`; the same class of defect as P32's file links, in the half of the
+  link namespace that check did not cover. `check:readme-links` now derives GitHub's
+  heading-to-anchor rule and checks 259 headings alongside 30 file links.
+- **The title was the project's name, not the paper's.** Now `Measurement Validity Before
+  Model Geometry`, which is what the application, the PDF and the manuscript all call it.
+
+### Verification
+
+- **`npm run ci:gate`: 95/95 PASS**, payload 1,628 KiB.
+- `npm run check:readme-metrics`: **PASS** — block current, no retired value. Mutation-tested
+  twice: putting `R²=0.8461` back into the prose failed on that line; changing a badge from
+  `Tests-434` to `Tests-999` failed on the block diff.
+- `npm run check:readme-links`: **PASS**, 30 file links and 259 headings.
+- `npm run test:run`: PASS, **434 tests in 70 files, 1 skipped** (the metrics dump, which runs
+  only under `README_METRICS=1` so an ordinary run never rewrites a file).
+- `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`,
+  `npm run build`: PASS.
+- Commit: `docs(app-v2): readme from registry [P33]`.

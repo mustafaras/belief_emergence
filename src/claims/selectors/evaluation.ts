@@ -58,6 +58,10 @@ const modelLadderSchema = z.object({
 })
 const metricsSchema = z.object({
   n: z.number().int().positive(),
+  // `r2` was in the artifact from the start and was never read, so the headline fit had no
+  // registered claim — the README carried the withdrawn 0.8461 for months partly because
+  // there was nothing to compare it against.
+  r2: finite,
   corr: finite,
   mae: finite,
   rmse: finite,
@@ -127,6 +131,7 @@ export const evaluationClaims: Claim[] = [
   )),
   claim('eval.kfold.folds', 'Grouped k-fold evaluation folds', cvKfold.folds.length, 'int', 'cv_kfold.json', 'folds.length'),
   claim('eval.headline.n', 'Headline metric observations', metrics.n, 'int', 'metrics_authoritative.json', 'n'),
+  claim('eval.headline.r2', 'Headline in-sample R²', metrics.r2, 'r2', 'metrics_authoritative.json', 'r2'),
   claim('eval.headline.corr', 'Headline correlation', metrics.corr, 'p4', 'metrics_authoritative.json', 'corr'),
   claim('eval.headline.mae', 'Headline mean absolute error', metrics.mae, 'p4', 'metrics_authoritative.json', 'mae'),
   claim('eval.headline.rmse', 'Headline root mean squared error', metrics.rmse, 'p4', 'metrics_authoritative.json', 'rmse'),

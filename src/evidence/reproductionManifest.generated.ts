@@ -119,6 +119,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -226,6 +227,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -332,6 +334,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -458,6 +461,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -578,6 +582,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -687,6 +692,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -789,6 +795,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -943,6 +950,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -1079,6 +1087,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -1228,6 +1237,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -1390,6 +1400,7 @@ export const REPRODUCTION_MANIFEST = {
         "eval.headline.corr",
         "eval.headline.mae",
         "eval.headline.n",
+        "eval.headline.r2",
         "eval.headline.rmse",
         "eval.kfold.folds",
         "eval.ladder.nRows",
@@ -1886,7 +1897,7 @@ export const REPRODUCTION_MANIFEST = {
     },
     {
       "module": "evaluation",
-      "declaredIds": 27,
+      "declaredIds": 28,
       "unresolved": false,
       "routes": [
         "audit",
@@ -1989,4 +2000,4 @@ export const REPRODUCTION_MANIFEST = {
 }
 
 /** Claims reachable from at least one route. */
-export const MANIFEST_CLAIM_COUNT = 148
+export const MANIFEST_CLAIM_COUNT = 149
