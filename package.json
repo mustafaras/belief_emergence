@@ -67,6 +67,8 @@
     "readme:metrics": "README_METRICS=1 vitest run tests/readme.metrics.dump.test.ts",
     "generate:readme": "tsx scripts/generate_readme.ts",
     "check:readme-metrics": "tsx scripts/check_readme_metrics.ts",
+    "generate:paper-figures": "tsx scripts/capture_paper_figures.ts",
+    "check:paper-figures": "tsx scripts/check_paper_figures.ts",
     "check:construct-audit": "tsx scripts/check_construct_audit.ts",
     "check:support-picture": "tsx scripts/check_support_picture.ts",
     "check:limits": "tsx scripts/check_limits.ts",

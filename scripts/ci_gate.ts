@@ -452,6 +452,9 @@ function phaseValidationChecks(): boolean {
     // The README documented a 630-row panel and a withdrawn r² for months because nothing
     // compiled it. Its generated block and its forbidden values are now checked like code.
     { label: 'README metrics current',       cmd: 'npm run check:readme-metrics' },
+    // The README showed thirteen v1 screenshots for months and nothing noticed, because an
+    // image either loads or does not. Coverage between README and capture spec is checkable.
+    { label: 'Paper figure specs',           cmd: 'npm run check:paper-figures' },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },

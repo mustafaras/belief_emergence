@@ -124,7 +124,7 @@ If you see an access error (e.g., “You need access”), request access from th
 **Build status**
 
 <img alt="tests" src="https://img.shields.io/badge/tests-434%20passed-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
-<img alt="gate" src="https://img.shields.io/badge/gate-95%2F95-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
+<img alt="gate" src="https://img.shields.io/badge/gate-96%2F96-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
 <img alt="claims" src="https://img.shields.io/badge/claims-149%20shown%20%2F%20228%20registered-4c8eda?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
 <img alt="panel" src="https://img.shields.io/badge/panel-207%20rows-7d8590?style=flat-square&labelColor=0d1117" />&nbsp;
 <img alt="countries" src="https://img.shields.io/badge/countries-83-7d8590?style=flat-square&labelColor=0d1117" />&nbsp;
@@ -382,13 +382,13 @@ The model builds on three theoretical traditions:
 <div align="center">
 
 <picture>
-  <img src="figures/screenshots/figure_7_ui_dashboard.png" alt="Dashboard overview (3D surface + controls)" width="920" />
+  <img src="figures/screenshots/figure_7_ui_dashboard.png" alt="Application overview: the landing route with its four findings" width="920" />
 </picture>
 
 <br/>
 
 <sub>
-<b>Figure 1</b> — Main dashboard: parameter control panel (left) · 3D response surface (center) · real-time metrics (top bar)
+<b>Figure 1</b> — Application overview: the argument and the four findings that motivate it
 </sub>
 
 </div>
@@ -655,7 +655,7 @@ console.log(Z, debug);
 
 <div align="center">
   <img src="figures/screenshots/figure_A4_ui_screenshot_1.png" alt="UI screenshot (quick start)" width="920" />
-  <br/><sub><b>Quick start view</b> — Parameter panel + 3D surface with default configuration</sub>
+  <br/><sub><b>Data &amp; Support</b> — Attrition from 442,026 respondents to 207 country-years, with the two sensitivity labs</sub>
 </div>
 
 ### Docker Deployment (Planned)
@@ -692,7 +692,7 @@ npm run build
 
 <div align="center">
   <img src="figures/screenshots/figure_A5_ui_screenshot_2.png" alt="Interactive visual analytics" width="920" />
-  <br/><sub><b>Interactive Visual Analytics</b> — Real-time 3D surface with parameter controls and metrics overlay</sub>
+  <br/><sub><b>Response surface</b> — The fitted map over settlement and inequality, with the 207 observed rows plotted on it</sub>
 </div>
 
 #### Real-time 3D Surface Rendering
@@ -719,7 +719,7 @@ npm run build
 
 <div align="center">
   <img src="figures/screenshots/figure_9_ui_presets.png" alt="Preset selection and parameter controls" width="920" />
-  <br/><sub><b>Preset System</b> — One-click preset selection with real-time parameter updates</sub>
+  <br/><sub><b>Countries</b> — Per-country observed and predicted values with the verdict the residual supports</sub>
 </div>
 
 #### Scenario Management
@@ -731,7 +731,7 @@ npm run build
 
 <div align="center">
   <img src="figures/screenshots/figure_8_ui_pinned_inspection.png" alt="Pinned inspection for scenario comparison" width="920" />
-  <br/><sub><b>A/B Scenario Comparison</b> — Pinned inspection points with side-by-side differential analysis</sub>
+  <br/><sub><b>A/B comparison</b> — Two captured configurations and the difference between them</sub>
 </div>
 
 ### 2. Model Validation Infrastructure
@@ -796,7 +796,7 @@ Related workflow diagram (PDF):
 
 <div align="center">
   <img src="figures/screenshots/figure_A7_ui_screenshot_4.png" alt="Export/report UI" width="920" />
-  <br/><sub><b>Export & Reporting</b> — PDF report generation with embedded metadata, disclaimers, and visualization</sub>
+  <br/><sub><b>Evidence bundle</b> — The PDF export, carrying each claim with its artifact, JSON path and rebuild command</sub>
 </div>
 
 #### URL-Based Sharing
@@ -1365,7 +1365,7 @@ flowchart TD
 
 <div align="center">
   <img src="figures/screenshots/figure_A14_system_dynamics_panel.png" alt="System dynamics / architecture panel" width="920" />
-  <br/><sub><b>System Dynamics Panel</b> — Architecture overview showing data flow and component relationships</sub>
+  <br/><sub><b>Provenance</b> — Microdata through to the rendered application; every link names the artifact that establishes it</sub>
 </div>
 
 <p align="right"><a href="#table-of-contents">⬆ Back to Contents</a></p>
@@ -1399,7 +1399,7 @@ $$+ \theta_C C^2 + \theta_M M^2 + \cdots$$
 
 <div align="center">
   <img src="figures/screenshots/figure_A9_belief_equation_panel.png" alt="Belief equation / field strength panel" width="920" />
-  <br/><sub><b>Belief Equation Panel</b> — Field strength Φ expansion with interactive coefficient visualization</sub>
+  <br/><sub><b>Phi term map</b> — Which channels the field keeps, and which were withdrawn with the reason recorded</sub>
 </div>
 
 ### Sigmoid Transformation
@@ -1480,16 +1480,6 @@ flowchart LR
     style Phi fill:#16213e,stroke:#f5c842,color:#fff
 ```
 
-<div align="center">
-  <img src="figures/screenshots/figure_A11_amplifiers_panel.png" alt="Amplifiers panel" width="920" />
-  <br/><sub><b>Amplifiers Panel</b> — C, T, G, R modifier effects on belief emergence (γ > 0)</sub>
-</div>
-
-<div align="center">
-  <img src="figures/screenshots/figure_A12_suppressors_panel.png" alt="Suppressors panel" width="920" />
-  <br/><sub><b>Suppressors Panel</b> — M, D, E modifier effects with E×S interaction mitigator</sub>
-</div>
-
 ### Standardization Contract
 
 Modifiers are z-scored before entering the model (unless `modifiersAreStandardized` flag is set):
@@ -1500,7 +1490,7 @@ This ensures comparable magnitudes across context dimensions.
 
 <div align="center">
   <img src="figures/screenshots/figure_A13_mathematical_analysis_panel.png" alt="Mathematical analysis panel" width="920" />
-  <br/><sub><b>Mathematical Analysis Panel</b> — Standardization contract and coefficient diagnostics</sub>
+  <br/><sub><b>Collinearity</b> — Variance inflation factors; R is flagged above the threshold the paper states</sub>
 </div>
 
 ---
@@ -2144,7 +2134,7 @@ function computeSurfaceGrid(params: ModelParams, resolution: number): SurfaceDat
 
 <div align="center">
   <img src="figures/screenshots/figure_A10_core_variables_panel.png" alt="Core variables panel" width="920" />
-  <br/><sub><b>Core Variables Panel</b> — X (Settlement) and Y (Inequality) structural input visualization</sub>
+  <br/><sub><b>Core variables</b> — The attrition cascade and the support the panel actually provides</sub>
 </div>
 
 ---
@@ -2185,7 +2175,7 @@ https://app.example.com/?x=0.75&y=0.62&c=0.83&vm=3d&cs=viridis&cam=1.2,1.5,2.0,0
 
 <div align="center">
   <img src="figures/screenshots/figure_A6_ui_screenshot_3.png" alt="URL sharing and state persistence" width="920" />
-  <br/><sub><b>URL State Persistence</b> — Shareable link encoding all 28 parameters and view settings</sub>
+  <br/><sub><b>URL state</b> — Every control in the query string, so a shared link reproduces the view</sub>
 </div>
 
 ### Backward Compatibility
@@ -3311,7 +3301,7 @@ npm run audit:search
 
 **Decision**: Run everything in the browser — data loading, model computation, validation, export. No backend server required.
 
-**Consequences**: Zero infrastructure cost; works offline after first load; limits dataset size to browser memory (~200 MB practical limit); AI interpreter requires optional external API.
+**Consequences**: Zero infrastructure cost; works offline after first load; limits dataset size to browser memory (~200 MB practical limit).
 
 </details>
 

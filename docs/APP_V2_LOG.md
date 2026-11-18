@@ -779,3 +779,85 @@ reported and reviewable: **21 rules, 65 replacements**, printed one line per rul
 - `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`,
   `npm run build`: PASS.
 - Commit: `docs(app-v2): readme from registry [P33]`.
+
+## P34 — Paper UI figures captured from the application
+
+`ci:gate` goes from 95 to **96/96**.
+
+### What the prompt asked for, and what the manuscript actually uses
+
+The prompt lists eleven UI figures to regenerate into `paper/supplementary/`. Checking first
+was the whole task, because the premise does not hold:
+
+- **The supplementary uses 20 figures and every one is a PDF or PDF-pair.** `grep '\.png'`
+  over `supplementary_materials.tex` returns nothing, and `main.tex` includes no PNG at all.
+  The fourteen UI screenshots are **never referenced by the manuscript.**
+- **Their real consumer is the README**, which displays thirteen of them.
+
+So nothing was written into `paper/supplementary/`. Writing there would have added files no
+document includes — invisible, and impossible to notice going stale. The captures overwrite
+`figures/screenshots/` instead, where the images are actually shown.
+
+### What was wrong with the fourteen that existed
+
+They were from the v1 interface. `figure_7_ui_dashboard.png` still printed **`Panel N = 630`**,
+a `3D SURFACE OFF` toggle and an `EXPORT PDF` button — none of which exist in the rebuilt
+application. The repository's front page had been showing a retired product. All eleven that
+still have a subject are now captured from the running v2 application.
+
+### Three captions had no subject, and were not faked
+
+- **`figure_A11_amplifiers_panel`** and **`figure_A12_suppressors_panel`** described C, T, G, R
+  amplifier and M, D, E suppressor panels. The rebuild withdrew those construct families; §5
+  quotes the amplifier/suppressor vocabulary only to explain why it is not used. No v2 panel
+  shows them.
+- **`figure_10_ui_ai_interpreter`** documented the endpoint deleted in P32; no component for it
+  exists in `src/`.
+
+Their README blocks and their PNGs are **removed**, and that is recorded here as a human
+decision — a script should not silently decide to delete a figure from a paper's front page.
+
+### Defects found in the capture path, each caught by looking at the output
+
+Nine of these produced a file that *looked* successful. Every one was found by opening the
+image, not by the script exiting zero.
+
+- **Two figures were blank white PNGs** (2 KiB). `table` matched a chart's screen-reader table,
+  which is clipped to 1px but still reports an `offsetParent`, so Playwright's `visible=true`
+  accepted it. Fixed by measuring each candidate's box and taking the **largest** match.
+- **A threshold was not enough.** At `200 × 80` the accessible tables still passed; the VIF
+  table is `958 × 392` while the chart table beside it is `269 × 334`, so "largest" was the
+  only rule that picked the right element.
+- **`clip` on a page screenshot is not equivalent to `element.screenshot()`.** At
+  `deviceScaleFactor: 2` the clip is applied in CSS pixels after the page has already scrolled
+  the element into view, so it pointed at empty space above the target and produced a blank
+  PNG. Reverted to the element call.
+- **The A/B figure compared a state with itself.** Capturing A then B without moving anything
+  gave a table whose every Δ was `+0.000` — accurate, and useless as a figure. Changing the URL
+  between the clicks does not work either: navigation remounts the section and slot A is lost.
+  The sliders are now driven in place, so the figure shows ΔZ = +0.016, ΔΦ = +0.008.
+- **Full-page captures were enormous.** 2,880 × 14,676 at 2x for the Data route, 1,916 × 8,496
+  for the country table. Full-page shots are now 1x and clipped to the viewport.
+- **The country table was cut off at the left.** The page itself scrolls horizontally, so
+  resetting the table's `scrollLeft` did nothing and the heading read `eometry`. The viewport is
+  widened to 2,000px instead, which fixes the cause.
+- **The surface figure was two-thirds empty paper.** The Plotly container is 34rem tall with the
+  scene in the middle. Trimming against the corner colour failed — Plotly's paper and plot area
+  are both near-white. The crop now uses the bounding box of rows and columns that contain any
+  ink at all: 1,148 × 1,086 → **661 × 539**.
+- **`page.evaluate` cannot take a named inner function.** esbuild wraps it in a `__name()`
+  helper that does not exist in the browser, so the trim threw `ReferenceError` and swallowed
+  the figure. Inlined.
+
+### Verification
+
+- **`npm run ci:gate`: 96/96 PASS**, payload 1,628 KiB.
+- `npm run check:paper-figures`: **PASS**, 11 README screenshots ↔ 11 capture specs.
+- `npm run generate:paper-figures`: 11 captured, 0 skipped. Every file inspected by eye and by
+  size: all between 19 KiB and 348 KiB, none above 2,128 × 2,000.
+- `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped** (four new spec tests: coverage,
+  route presence, capture-size ceiling, and non-blank files).
+- `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`: PASS.
+- `README`: `check:readme-links` PASS (30 files, 259 headings), `check:readme-metrics` PASS
+  (95 → 96 gate checks regenerated).
+- Commit: `feat(app-v2): paper ui figures from app [P34]`.
