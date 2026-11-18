@@ -33,6 +33,7 @@
 }
 
 .topbar {
+  min-width: 0;
   position: sticky;
   z-index: 20;
   top: 0;
@@ -65,6 +66,7 @@
 }
 
 .headerActions {
+  min-width: 0;
   display: flex;
   flex: 0 0 auto;
   align-items: center;
@@ -112,6 +114,7 @@
 }
 
 .layout {
+  min-width: 0;
   display: grid;
   width: min(100%, 1440px);
   min-height: calc(100vh - 56px);
@@ -120,6 +123,7 @@
 }
 
 .sidebar {
+  min-width: 0;
   position: sticky;
   top: 56px;
   display: flex;
@@ -139,11 +143,13 @@
 }
 
 .routeNav {
+  min-width: 0;
   display: grid;
   gap: var(--space-1);
 }
 
 .routeLink {
+  min-width: 0;
   display: flex;
   min-height: 40px;
   align-items: center;
@@ -180,6 +186,7 @@
 }
 
 .progressBlock {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   margin-top: auto;
@@ -211,6 +218,7 @@
 }
 
 .routeMeta {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -232,6 +240,7 @@
 }
 
 .sectionNavigation {
+  min-width: 0;
   display: flex;
   justify-content: space-between;
   gap: var(--space-4);
@@ -282,7 +291,13 @@
   }
 }
 
-@media (width <= 767px) {
+/*
+ * 900 rather than 767. At exactly 768 the full title, the "Search" label with its ⌘K hint, the
+ * Paper link and the export button do not fit on one line: the title slid under the search
+ * control while both stayed "visible" to every earlier check. The label is what has to go
+ * first, and it has to go before the row is full rather than after.
+ */
+@media (width <= 900px) {
   .topbar {
     height: 52px;
     gap: var(--space-2);

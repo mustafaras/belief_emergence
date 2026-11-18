@@ -90,7 +90,13 @@ function ShellContent() {
       <header className={styles.topbar}>
         <a className={styles.brand} href={routeHref('overview')} onClick={event => { event.preventDefault(); navigate('overview') }}>
           <span aria-hidden="true" className={styles.brandMark}>◆</span>
-          <span>Measurement Validity Before Model Geometry</span>
+          {/*
+            The title is elided with an ellipsis below 768px, so the full string is not on
+            screen there. `title` makes it available on hover and to the platform's tooltip;
+            without it a reader sees "Measurement Validity Before Mode…" and nothing says what
+            was cut. Found by `check:layout`, rule 4.
+          */}
+          <span title="Measurement Validity Before Model Geometry">Measurement Validity Before Model Geometry</span>
         </a>
         <div className={styles.headerActions}>
           <button aria-label="Search ⌘K" className={styles.searchButton} onClick={() => setPaletteOpen(true)} ref={searchButtonRef} type="button">

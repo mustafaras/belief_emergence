@@ -74,3 +74,20 @@ svg {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Grid and flex children default to `min-width: auto`, which means "never shrink below my
+ * content". A long word, a table, or a label beside a badge then sizes the track to the
+ * content rather than to the container, and the whole page scrolls sideways on a phone.
+ *
+ * This is the default the box model should have had. It is scoped to the layout containers
+ * that establish tracks rather than to `*`, so it does not fight a component that genuinely
+ * needs an intrinsic width — those set `min-width` themselves and win on specificity.
+ *
+ * Found by `npm run check:layout`: six of eleven routes scrolled horizontally at 390px, and
+ * every other check passed because each offending element was individually readable.
+ */
+.grid-safe > *,
+.flex-safe > * {
+  min-width: 0;
+}

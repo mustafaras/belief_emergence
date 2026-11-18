@@ -1,10 +1,12 @@
 .card {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
 }
 
 .head {
+  min-width: 0;
   display: flex;
   gap: var(--space-3);
   align-items: center;
@@ -25,6 +27,7 @@
 }
 
 .measured {
+  min-width: 0;
   display: flex;
   gap: var(--space-2);
   align-items: baseline;

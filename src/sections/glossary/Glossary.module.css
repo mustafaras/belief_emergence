@@ -6,6 +6,7 @@
 }
 
 .filter {
+  min-width: 0;
   align-items: center;
   display: flex;
   gap: var(--space-3);
@@ -43,6 +44,7 @@
 }
 
 .regimes {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   list-style: none;
@@ -58,6 +60,7 @@
 }
 
 .regimeHead {
+  min-width: 0;
   align-items: baseline;
   display: flex;
   flex-wrap: wrap;

@@ -124,7 +124,7 @@ If you see an access error (e.g., “You need access”), request access from th
 **Build status**
 
 <img alt="tests" src="https://img.shields.io/badge/tests-434%20passed-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
-<img alt="gate" src="https://img.shields.io/badge/gate-96%2F96-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
+<img alt="gate" src="https://img.shields.io/badge/gate-97%2F97-3fb950?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
 <img alt="claims" src="https://img.shields.io/badge/claims-149%20shown%20%2F%20228%20registered-4c8eda?style=for-the-badge&labelColor=1a1a2e" />&nbsp;
 <img alt="panel" src="https://img.shields.io/badge/panel-207%20rows-7d8590?style=flat-square&labelColor=0d1117" />&nbsp;
 <img alt="countries" src="https://img.shields.io/badge/countries-83-7d8590?style=flat-square&labelColor=0d1117" />&nbsp;

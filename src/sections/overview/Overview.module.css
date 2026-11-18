@@ -1,14 +1,32 @@
 .overview {
+  min-width: 0;
   display: grid;
   gap: var(--space-8);
   max-width: var(--w-wide);
   padding-block-end: var(--space-8);
+
+  /*
+   * A single-column grid still creates one implicit `auto` track, and an `auto` track is at
+   * least as wide as its widest item's min-content. The findings grid inside it asked for
+   * 720px, so the track grew to 720px inside a 358px section — the section did not clip it,
+   * and the document scrolled horizontally by 346px on a phone. Stating the column explicitly
+   * with a zero minimum is what makes the track follow the container rather than its content.
+   */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .findings {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
+
+  /*
+   * `minmax(0, 1fr)` fixes the *track*, but a grid container still sizes to its content when
+   * its own width is indefinite — which it is inside a block parent whose width comes from its
+   * child. Stating `min-width: 0` here caps the container; the card's own `min-width: 0` caps
+   * each item. Either one alone left the grid at 720px in a 390px viewport.
+   */
+  min-width: 0;
 }
 
 .fractionConnector {
@@ -24,6 +42,7 @@
 }
 
 .metricPair {
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
@@ -55,6 +74,7 @@
 }
 
 .readingGuide {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   max-width: var(--w-prose);
@@ -67,6 +87,7 @@
 }
 
 .readingGuide ul {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   margin: 0;

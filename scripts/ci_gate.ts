@@ -455,6 +455,9 @@ function phaseValidationChecks(): boolean {
     // The README showed thirteen v1 screenshots for months and nothing noticed, because an
     // image either loads or does not. Coverage between README and capture spec is checkable.
     { label: 'Paper figure specs',           cmd: 'npm run check:paper-figures' },
+    // Every other browser check asks whether an element is readable in isolation. This one
+    // asks whether the page fits: no horizontal scroll, no overlap, no text under 12px.
+    { label: 'Layout guards',                cmd: 'npm run check:layout', reportSkip: true },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },

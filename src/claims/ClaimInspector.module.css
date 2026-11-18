@@ -24,12 +24,14 @@
 }
 
 .details {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   margin: 0;
 }
 
 .details > div {
+  min-width: 0;
   display: grid;
   gap: var(--space-1);
 }
@@ -41,6 +43,7 @@
 }
 
 .details dd {
+  min-width: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

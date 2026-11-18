@@ -861,3 +861,72 @@ image, not by the script exiting zero.
 - `README`: `check:readme-links` PASS (30 files, 259 headings), `check:readme-metrics` PASS
   (95 → 96 gate checks regenerated).
 - Commit: `feat(app-v2): paper ui figures from app [P34]`.
+
+## P35 — Layout guards
+
+`ci:gate` goes from 96 to **97/97**.
+
+`scripts/layout_check.cjs` runs five mechanical invariants across **11 routes × 3 viewports
+× 2 themes = 66 combinations**, 10,072 rendered text nodes:
+
+1. The document does not scroll horizontally.
+2. No two visible text elements overlap by more than 10%, unless one contains the other.
+3. Every visible text element renders at 12px or larger.
+4. No text element hides its own overflow without a `title` (plus a 24px target-size rule).
+5. The landing route has content below the fold, so an empty shell cannot pass.
+
+### What it found: six of eleven routes scrolled sideways on a phone
+
+Nothing else caught this. `check:a11y` passed, because every element was individually
+readable; `check:support-picture` passed, because it measures one route. The page simply did
+not fit, and on a 390px screen it scrolled 346px to the right.
+
+Every instance was the same mistake in a different component: **`min-width: auto`**.
+
+- **An implicit `auto` grid track** sizes to its content's min-content width. `.overview`
+  declared `display: grid` with no `grid-template-columns`, so its single implicit track grew
+  to the 720px its findings grid asked for, inside a 358px section.
+- **`1fr` is `minmax(auto, 1fr)`**, not `minmax(0, 1fr)`. Five responsive rules used the bare
+  form — including `.layout` in the audit replay — and each one refused to shrink below its
+  content on exactly the viewport where it mattered.
+- **A `flex` row without `flex-wrap`** in `FindingCard` grew to hold the kicker and its badge
+  side by side.
+- **A grid item that is itself a grid** (`.step`, `.sticky`) needed `min-width: 0` in its own
+  right, not just on its container.
+
+The fix was applied at the source: **121 rules across 23 files** gained `min-width: 0`, and
+five bare `1fr` tracks became `minmax(0, 1fr)`. A blanket `[class*='section']` rule was tried
+first and rejected — it does not survive CSS-module hashing reliably, and it would have hidden
+the real cause in a global stylesheet.
+
+### Defects the guard itself had, each caught by the rule crying wolf
+
+- **Fifty `target-size` findings, none of them defects.** Every one was an inline link in a
+  sentence, which WCAG 2.2 exempts explicitly, or an SVG `<text>` node that picks up
+  `[role="button"]` from its chart. Scoped to real controls, skipping `ownerSVGElement`.
+- **Twenty-one `min-font-size` findings on the Model route.** All were KaTeX scaffolding —
+  struts and vlist markers, 1px wide by design. The maths renders at the surrounding size.
+- **Three `no-text-overlap` findings on charts.** A chart's accessible `<table>` is hidden with
+  `clip-path: inset(50%)` and keeps a real bounding box, so a rectangle test accepted a table
+  no sighted reader can see. `isVisible` now walks ancestors for `clip-path`.
+- **Two `no-horizontal-scroll` findings on tables.** A wide table inside its own scrollable box
+  is not a document-level failure. Recognised by an ancestor with `overflow-x: auto` that is
+  itself narrower than the page.
+- **The header overlapped at exactly 768px.** The breakpoint was `<= 767`, so the title slid
+  under the search control at the one width between the two states. Raised to 900.
+
+One real accessibility fix came out of rule 4: the brand title is elided with an ellipsis below
+900px and had no `title`, so the full name was unavailable anywhere.
+
+### Verification
+
+- **`npm run ci:gate`: 97/97 PASS**, payload 1,628 KiB.
+- `npm run check:layout`: **PASS**, 66 combinations, 10,072 text nodes.
+- Mutation-checked against the real defect: reverting `.overview`'s explicit track restores
+  the 736 > 390 failure on the overview route.
+- `npm run test:run`: PASS, 438 tests in 71 files, 1 skipped. `npx tsc -b`, `npm run lint`
+  (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- `npm run check:a11y`: still 0 violations across 22 route-theme pairs, so the
+  `min-width` changes did not regress anything it measures.
+- Paper figures recaptured after the CSS changed; `check:paper-figures` PASS.
+- Commit: `test(app-v2): layout guards [P35]`.

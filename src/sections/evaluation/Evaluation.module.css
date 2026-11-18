@@ -1,10 +1,20 @@
 .section {
+  min-width: 0;
   display: grid;
   max-width: var(--w-wide);
   gap: var(--space-8);
+
+  /*
+   * An implicit `auto` track sizes to its content's min-content width. When a child cannot
+   * shrink — a wide table, an unbreakable row, a chart with a fixed aspect — the track grows
+   * past the container and the document scrolls horizontally. A zero-minimum column makes the
+   * track follow the container instead.
+   */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .hero {
+  min-width: 0;
   display: grid;
   gap: var(--space-5);
   padding: var(--space-5);
@@ -26,6 +36,7 @@
 }
 
 .headline {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   padding-block: var(--space-3);
@@ -64,6 +75,7 @@
 }
 
 .stripFigure {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   margin: 0;
@@ -78,6 +90,7 @@
 }
 
 .notes {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
 }

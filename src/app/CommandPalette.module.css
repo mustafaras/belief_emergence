@@ -1,4 +1,5 @@
 .backdrop {
+  min-width: 0;
   position: fixed;
   z-index: 60;
   inset: 0;
@@ -21,6 +22,7 @@
 }
 
 .searchRow {
+  min-width: 0;
   display: flex;
   min-height: 60px;
   align-items: center;
@@ -52,6 +54,7 @@
 }
 
 .results {
+  min-width: 0;
   display: grid;
   max-height: calc(min(72vh, 720px) - 112px);
   overflow-y: auto;
@@ -62,6 +65,7 @@
 }
 
 .result {
+  min-width: 0;
   display: flex;
   width: 100%;
   min-height: 56px;
@@ -119,6 +123,7 @@
 }
 
 .footer {
+  min-width: 0;
   display: flex;
   min-height: 48px;
   align-items: center;

@@ -1,8 +1,10 @@
 .slider,
 .tabs,
 .figure {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .slider input {
@@ -139,6 +141,7 @@
 
 .figureBody,
 .figureCaption {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
 }
@@ -161,6 +164,7 @@
 }
 
 .figureCaption ul {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -194,6 +198,7 @@
 
 .popover,
 .drawer {
+  min-width: 0;
   position: fixed;
   z-index: 10;
   display: grid;
@@ -213,6 +218,7 @@
 }
 
 .drawerBackdrop {
+  min-width: 0;
   position: fixed;
   z-index: 9;
   inset: 0;
@@ -229,6 +235,7 @@
 }
 
 .drawerHeader {
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;

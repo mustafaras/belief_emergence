@@ -1,32 +1,38 @@
 .wrap {
+  min-width: 0;
   display: grid;
   gap: var(--space-6);
 }
 
 .panel {
+  min-width: 0;
   display: grid;
   gap: var(--space-5);
   padding-block-start: var(--space-4);
 }
 
 .strip {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
 }
 
 .tierRow {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 }
 
 .tierCard {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
 }
 
 .tierBadge {
+  min-width: 0;
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -42,6 +48,7 @@
 }
 
 .tierMedian {
+  min-width: 0;
   display: grid;
   gap: var(--space-1);
   margin: 0;
@@ -60,6 +67,7 @@
 }
 
 .lab {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   padding: var(--space-4);
@@ -84,6 +92,7 @@
 }
 
 .seedReadout {
+  min-width: 0;
   display: flex;
   gap: var(--space-3);
   align-items: baseline;
@@ -110,12 +119,14 @@
 }
 
 .compare {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
 }
 
 .compareCard {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
@@ -146,6 +157,7 @@
 }
 
 .inSample {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   padding-block-start: var(--space-5);

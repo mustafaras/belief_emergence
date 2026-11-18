@@ -3,13 +3,29 @@
   min-height: 15rem;
   flex-direction: column;
   gap: var(--space-3);
+
+  /*
+   * A grid item defaults to `min-width: auto`, so its column is at least as wide as the
+   * widest unbreakable thing inside it. The card's content is a row of text, and that floor
+   * pushed the findings grid to 720px inside a 390px viewport — the document scrolled
+   * horizontally by 346px while every other visible element still fit.
+   */
+  min-width: 0;
 }
 
 .topline {
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
+
+  /*
+   * Without wrapping, the badge cannot move to a second line: the flex line grows to fit both
+   * items and the card widens past the grid column. At 390px that made the findings grid 720px
+   * wide and the document scroll horizontally by 346px, which every other check missed.
+   */
+  flex-wrap: wrap;
 }
 
 .kicker {
@@ -27,6 +43,7 @@
 }
 
 .metric {
+  min-width: 0;
   display: flex;
   min-height: 3rem;
   align-items: baseline;

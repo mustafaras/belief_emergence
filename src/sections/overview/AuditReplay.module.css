@@ -1,13 +1,31 @@
 .replay {
+  min-width: 0;
   display: grid;
   gap: var(--space-5);
   padding-block-start: var(--space-8);
   border-block-start: 1px solid var(--line);
+
+  /*
+   * An implicit `auto` track sizes to its content's min-content width. When a child cannot
+   * shrink — a wide table, an unbreakable row, a chart with a fixed aspect — the track grows
+   * past the container and the document scrolls horizontally. A zero-minimum column makes the
+   * track follow the container instead.
+   */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .intro {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
+
+  /*
+   * An implicit `auto` track sizes to its content's min-content width. When a child cannot
+   * shrink — a wide table, an unbreakable row, a chart with a fixed aspect — the track grows
+   * past the container and the document scrolls horizontally. A zero-minimum column makes the
+   * track follow the container instead.
+   */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .h2 {
@@ -26,6 +44,7 @@
 }
 
 .layout {
+  min-width: 0;
   display: grid;
   gap: var(--space-5);
   grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
@@ -33,11 +52,13 @@
 }
 
 .sticky {
+  min-width: 0;
   position: sticky;
   top: var(--space-5);
   display: grid;
   gap: var(--space-3);
   padding: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .stickyTitle {
@@ -62,6 +83,7 @@
 }
 
 .gateList {
+  min-width: 0;
   display: grid;
   gap: var(--space-2);
   list-style: none;
@@ -70,6 +92,7 @@
 }
 
 .gateRow {
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--space-2);
@@ -95,6 +118,7 @@
 }
 
 .steps {
+  min-width: 0;
   display: grid;
   gap: var(--space-6);
   list-style: none;
@@ -110,7 +134,12 @@
 
 .step,
 .stepActive {
+  min-width: 0;
   display: grid;
+  /* A single implicit `auto` track sizes to the widest child's min-content. `stepNumber` is
+     uppercase, letter-spaced and in a mono face, so that floor pushed the item to 720px
+     inside a 358px list — the last domino in a chain of the same mistake. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
   padding-block: var(--space-4);
   border-block-start: 1px solid var(--line);
@@ -148,6 +177,7 @@
 }
 
 .stepFixes {
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -183,7 +213,7 @@
 
 @media (width <= 60rem) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   /* On narrow screens the panel state sits above the steps in normal flow: a sticky card
@@ -193,6 +223,7 @@
   }
 
   .stepNav {
+    min-width: 0;
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
@@ -213,4 +244,12 @@
     border-color: var(--accent);
     color: var(--accent);
   }
+}
+
+.gateList > * {
+  min-width: 0;
+}
+
+.sticky > * {
+  min-width: 0;
 }

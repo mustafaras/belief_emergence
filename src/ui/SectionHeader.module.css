@@ -1,4 +1,5 @@
 .header {
+  min-width: 0;
   display: grid;
   gap: var(--space-3);
   max-width: var(--w-prose);
