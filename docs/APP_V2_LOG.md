@@ -649,3 +649,34 @@ The overlay now maps each observed `Z` through the same normalisation the model 
 - `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
 - Browser: reproduce route renders 42 artifact rows, the consumption filter switches 11 → 42, `?artifact=cv_kfold` opens the drawer and the tree expands; glossary renders 47 symbols in 6 tabs, 99 KaTeX nodes, and a search for "gini" narrows 97 rows to 7. No console errors. Screenshots `tmp/shots/p31-reproduce.png`, `tmp/shots/p31-drawer.png`, `tmp/shots/p31-glossary.png`.
 - Commit: `feat(app-v2): reproduce and glossary [P31]`.
+
+## P32 — The evidence bundle
+
+`ci:gate` remains green at **93/93**.
+
+- **`src/export/evidenceBundle.ts`** replaces a 2,038-line narrative generator. It writes a PDF carrying a cover page (title, timestamp, commit, source URL), one section per route listing the claims that route displays with their `id`, artifact, JSON path and rebuild command, and an index of all 42 artifacts with their provenance.
+- **`VITE_COMMIT`** is defined in `vite.config.ts` from `git rev-parse --short HEAD`, not from an environment variable a CI step has to remember to set. Read at config time, so a build from a fresh clone carries its commit without anyone knowing to pass it.
+- **The `/api/ai/interpret` middleware is deleted**, along with the 180 lines of `handleAiInterpret` and `readJsonBody` it needed. Nothing in `src/` ever called it.
+- **Deleted with the old generator:** `src/utils/pdfFonts.ts` (132 lines), `tests/pdfFonts.fallback.test.ts`, and `src/content/reportNarrative.ts` — the last of which was imported by nothing.
+- The button imports jsPDF on click. jsPDF plus the claim-registry walk lands in its own 361 KiB chunk; the landing route stays at **1,628 KiB** against the 2,048 KiB budget.
+
+### The old export printed a withdrawn number
+
+`exportBehavioralDynamicsReport.ts` opened with the 630-row panel's **r² = 0.8461**. That is the figure the construct audit withdrew in P18 — the model in which C was an exact rescaling of the outcome, which `gates.original.identityCorr` measures at r = 1. A PDF that hands a reader a retracted metric is worse than no export, so the generator is deleted rather than repaired, and the guardrail test that pointed at it now points at the new module.
+
+### Defects found
+
+- **The standard PDF fonts cannot encode U+2212.** `formatClaim` prints a minus as `−`, correct in HTML and unrepresentable in WinAnsi. `doc.text()` emitted a control byte and every `signed2` value rendered as mojibake — which is precisely the family of claims about the *direction* of a coefficient. Verified against a real download, not assumed: 3 occurrences of `−` and 1 of `→` across the printed claims. `pdfSafe` now substitutes hyphen-minus and `->`, and `write()` **throws** on any codepoint it still cannot encode rather than emitting a broken glyph. A test asserts both halves.
+- **A registered claim is not a displayed claim.** `eval.paired.median` is `exact`-formatted and its raw value is `0.000001926431755006064` — 21 digits, printed nowhere in the interface, which shows the two medians it is derived from. The first bundle printed it in full. The bundle now takes claims from the generated manifest's `directClaimIds`, so a claim with no route shows on no page, and a test asserts that value's absence.
+- **`exact` needed a second format for print.** Even displayed values can be too long for a cell. `formatBundleValue` keeps `exact` verbatim when it is short and switches to three-place scientific notation when it is not, so magnitude survives without pretending to a precision no reader can use.
+- **The header overflowed a 390px viewport by 11px.** Adding the export button pushed `Contents` past the right edge — caught by `check:support-picture` at `mobile 401/390px`, not by eye. The label now drops below 768px exactly as Search and Paper already did.
+
+### Verification
+
+- **`npm run ci:gate`: 93/93 PASS**, landing payload 1,628 KiB.
+- `npm run test:run`: PASS, **432 tests across 69 files** (9 new for the bundle).
+- Downloaded the bundle in a browser and read it back: **11 pages**, 258 text runs, title, `Build commit: 8fac710`, source URL with its query string, 8 route sections, artifact index, and **0 occurrences of U+2212** in the text stream.
+- `npm run check:support-picture`: PASS, `mobile 390/390px`, `keyboard 0→21`.
+- `npm run check:a11y`: PASS, 0 violations across 22 route-theme pairs.
+- `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- Commit: `feat(app-v2): evidence bundle export [P32]`.

@@ -10,6 +10,7 @@ import { Drawer, Kbd } from '../ui'
 import { APP_ROUTES, getAppRoute, type AppRouteId } from './routes'
 import { useRoute } from './useRoute'
 import { CommandPalette } from './CommandPalette'
+import { ExportBundleButton } from './ExportBundleButton'
 import styles from './AppShell.module.css'
 
 function routeHref(route: AppRouteId): string {
@@ -96,6 +97,7 @@ function ShellContent() {
             <Search aria-hidden="true" size={16} /><span>Search</span><Kbd>⌘K</Kbd>
           </button>
           <a className={styles.paperLink} href="#paper-reference">Paper</a>
+          <ExportBundleButton />
           <button aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} aria-pressed={theme === 'dark'} className={styles.themeButton} onClick={toggleTheme} type="button">
             {theme === 'light' ? <Moon aria-hidden="true" size={18} /> : <Sun aria-hidden="true" size={18} />}
           </button>
