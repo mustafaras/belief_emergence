@@ -990,12 +990,46 @@ their labels below ~420px; they now shrink.
 The `a11y` spec injects `axe-core` from the installed package rather than adding
 `@axe-core/playwright` — one dependency fewer, and the same rule set the existing check uses.
 
+### Post-implementation audit: four specs were weaker than they read
+
+Re-checking every spec against the prompt found four that would have passed on broken code.
+Each was rewritten, and each rewrite is mutation-tested.
+
+- **`referee` asserted a literal `2`** where the prompt asks for the expected value to be
+  computed from the artifact. Deriving it exposed a rule the app applies and my helper did
+  not: `S_social_support` has alpha **0.753**, above every floor a reader will try, but is
+  marked `computable: false`, so the audit never admits it. Counting it gave **3** against the
+  interface's **2**. The helper now mirrors the real rule — `computable === true` *and*
+  `alpha >= floor` — and the assertion is the derived number rather than a constant.
+- **`referee` selected the submitted panel inside an `if`.** If the radio had been missing the
+  step would have been skipped and the test would have passed on the rebuilt panel, where the
+  gates are supposed to succeed. It is now mandatory, checks `toBeChecked()`, and asserts the
+  section's own `gate-summary` reads `0`.
+- **`mobile` had two nested `if`s around the table-scroll check** — `if (boxes.count())` and
+  `if (scrollWidth > clientWidth)` — so a page with no scrollable table at all passed. Every
+  clause is now asserted: the box exists, it is wider than its viewport (711 vs 356), it has
+  `overflow-x: auto`, scrolling it moves the box, and scrolling it does **not** move the page.
+- **`keyboard` asserted a focus ring on one control.** The prompt says the focus is *always*
+  visible. It now focuses every focusable element on the audit route (21 of them) and fails on
+  any that draws neither an outline of at least 1px nor a box-shadow. `check:a11y` counts
+  focusables but cannot ask this question: a missing ring is invisible in a screenshot of an
+  unfocused page.
+
+One gate defect too: the e2e step was registered only when `CHROME_PATH` was set. A step that
+disappears when a variable is unset changes the total silently while the run still reports
+PASS. It is now always registered and reports SKIPPED without a browser, and a skip is not a
+pass in this gate.
+
+### Mutation checks
+
+- `admittedAt(floor)` → `admittedAt(0)` in the audit: `referee` fails.
+- The artifact-parameter normalisation reverted to append `.json`: `replicator` fails.
+
 ### Verification
 
 - **`npm run ci:gate`: 98/98 PASS**, payload 1,628 KiB.
-- `npm run test:e2e`: **28 passed (1.4m)** across both projects.
-- `npm run check:layout`: PASS, 66 combinations — and it now fails on the three defects above
-  when they are reintroduced.
+- `npm run test:e2e`: **28 passed (1.5m)** across both projects; `a11y` alone is 22/22.
+- `npm run check:layout`: PASS, 66 combinations, 10,072 text nodes.
 - `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped**. `npx tsc -b`, `npm run lint`
   (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
 - Commit: `test(app-v2): a11y and e2e journeys [P36]`.

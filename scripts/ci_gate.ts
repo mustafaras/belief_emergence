@@ -461,9 +461,12 @@ function phaseValidationChecks(): boolean {
     // Journeys, not properties: whether a reader can get from the overview to the audit to the
     // gate result with state carried across routes. Every individual page can be correct and
     // the path still broken.
-    ...(process.env.CHROME_PATH
-      ? [{ label: 'End-to-end journeys', cmd: 'npm run test:e2e', reportSkip: true }]
-      : []),
+    //
+    // Always registered, never conditionally omitted. A step that disappears when a variable is
+    // unset changes the total silently, and the run still reports PASS — which is how a suite
+    // loses coverage without anyone noticing. When the browser is absent the step reports
+    // SKIPPED, and a skip is not a pass in this gate.
+    { label: 'End-to-end journeys', cmd: 'npm run test:e2e', reportSkip: true },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },

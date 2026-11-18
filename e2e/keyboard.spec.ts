@@ -43,6 +43,42 @@ test('the audit slider and the gates switch are usable by keyboard alone', async
     (ring.boxShadow !== 'none' && ring.boxShadow !== '')
   expect(hasRing, `no visible focus ring: ${JSON.stringify(ring)}`).toBe(true)
 
+  /*
+   * Every focusable element on the page must draw a visible ring when focused.
+   *
+   * The single-slider check above proves the control works; it does not prove a keyboard user
+   * can see where they are. `check:a11y` counts focusables but cannot ask this question — it
+   * would have to focus all 44 of them, and a missing ring is invisible in a screenshot of an
+   * unfocused page. A zero-width outline passes `:focus-visible` and helps nobody, so the test
+   * is on the computed outline and shadow, not on the pseudo-class.
+   */
+  const ringless = await page.evaluate(() => {
+    const focusable = [
+      ...document.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]',
+      ),
+    ].filter((el) => {
+      const rect = el.getBoundingClientRect()
+      return rect.width > 0 && rect.height > 0
+    })
+
+    const missing: string[] = []
+    for (const el of focusable) {
+      el.focus()
+      const style = getComputedStyle(el)
+      const width = parseFloat(style.outlineWidth) || 0
+      const hasOutline = style.outlineStyle !== 'none' && width >= 1
+      const hasShadow = style.boxShadow !== 'none' && style.boxShadow !== ''
+      if (!hasOutline && !hasShadow) {
+        missing.push(`${el.tagName}<${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 24)}>`)
+      }
+    }
+    return { checked: focusable.length, missing }
+  })
+
+  expect(ringless.checked, 'the audit route has focusable controls').toBeGreaterThan(5)
+  expect(ringless.missing, `these focusables draw no focus ring: ${ringless.missing.join(', ')}`).toEqual([])
+
   // The gates panel switch is reachable by Tab and changes the panel.
   await gotoRoute(page, 'gates')
   const switchToRebuilt = page.getByRole('radio', { name: /rebuilt/i })

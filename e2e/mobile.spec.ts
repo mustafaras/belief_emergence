@@ -30,19 +30,28 @@ test('the contents drawer works and no route scrolls the page sideways', async (
   await page.locator('header').first().waitFor({ state: 'visible' })
   await page.waitForTimeout(600)
 
-  // 2. A wide table is allowed to scroll inside its own box.
-  const scrollBoxes = page.locator('[class*="tableScroll"], [role="region"][tabindex]')
-  if (await scrollBoxes.count()) {
-    const box = scrollBoxes.first()
-    const metrics = await box.evaluate((node) => ({
-      scrollWidth: node.scrollWidth,
-      clientWidth: node.clientWidth,
-      overflowX: getComputedStyle(node).overflowX,
-    }))
-    if (metrics.scrollWidth > metrics.clientWidth) {
-      expect(['auto', 'scroll']).toContain(metrics.overflowX)
-    }
-  }
+  // 2. The evaluation table is wider than a phone and must scroll inside its own box.
+  //
+  // Every clause here is asserted rather than guarded by `if`. The first version wrapped the
+  // whole check in `if (await scrollBoxes.count())` and then in `if (sw > cw)`, so a page with
+  // no scrollable box at all passed — which is precisely the regression this is meant to catch.
+  const scrollBox = page.locator('[class*="tableScroll"]').first()
+  await expect(scrollBox).toBeVisible()
+  const metrics = await scrollBox.evaluate((node) => ({
+    scrollWidth: node.scrollWidth,
+    clientWidth: node.clientWidth,
+    overflowX: getComputedStyle(node).overflowX,
+  }))
+  expect(metrics.scrollWidth, 'the table is wider than its box on a phone').toBeGreaterThan(
+    metrics.clientWidth,
+  )
+  expect(['auto', 'scroll'], 'the box scrolls rather than clipping').toContain(metrics.overflowX)
+
+  // 3. Scrolling that box moves it, and does not move the page.
+  const beforeScroll = await page.evaluate(() => window.scrollX)
+  await scrollBox.evaluate((node) => { node.scrollLeft = 120 })
+  const afterScroll = await page.evaluate(() => window.scrollX)
+  expect(afterScroll, 'scrolling the table does not scroll the document').toBe(beforeScroll)
 
   // 3. The document itself does not scroll horizontally, on any route.
   for (const route of ['overview', 'evaluation', 'countries', 'reproduce', 'glossary'] as const) {

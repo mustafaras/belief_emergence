@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { gotoRoute } from './helpers'
+import { admittedAt, gotoRoute } from './helpers'
 
 /**
  * The referee's journey: does the paper's central claim survive being checked by hand?
@@ -37,11 +37,11 @@ test('overview → audit → gates: the four failures are reachable without a UR
   await floor.fill('0.3')
   await floor.dispatchEvent('change')
 
-  // The count is derived from the artifact's alphas; at 0.30 two constructs clear the bar
-  // while only one does at the 0.70 default. Asserting the direction plus the exact number
-  // catches both a disconnected slider and a wrong rule.
-  await expect(counter).toHaveText('2')
-  expect(Number(await counter.innerText())).toBeGreaterThan(atDefault)
+  // The expected count is computed from the same artifact the interface reads, so a passing
+  // assertion means the slider is wired to the rule — not that a magic number still matches.
+  const expectedAtFloor = admittedAt(0.3)
+  expect(expectedAtFloor, 'the artifact admits more than the default at 0.30').toBeGreaterThan(atDefault)
+  await expect(counter).toHaveText(String(expectedAtFloor))
 
   // 4. Into the gates, on the submitted panel, and all four must fail.
   await page.getByRole('link', { name: /Design gates|gates/i }).first().click().catch(async () => {
@@ -53,13 +53,16 @@ test('overview → audit → gates: the four failures are reachable without a UR
   // route module has rendered; the badges are counted against a page that may still be blank.
   await page.getByRole('status').first().waitFor({ state: 'visible' })
 
-  const original = page.getByRole('radio', { name: /original|submitted/i })
-    .or(page.getByRole('button', { name: /original|submitted/i }))
-    .first()
-  if (await original.count()) {
-    await original.click()
-    await page.waitForTimeout(400)
-  }
+  // The panel switch is a radiogroup, and choosing the submitted panel is a step of the
+  // journey, not an optional one: an `if` here would let the test pass on the rebuilt panel,
+  // where the gates are supposed to succeed. The radio must exist and must become checked.
+  const original = page.getByRole('radio', { name: /original panel/i })
+  await expect(original).toBeVisible()
+  await original.click()
+  await expect(original).toBeChecked()
+
+  // The section prints its own count of passing gates; on the submitted panel it is zero.
+  await expect(page.getByTestId('gate-summary')).toHaveText('0')
 
   // Each gate states its verdict as a status badge. Counting badges, not the word: "fail"
   // also appears in the prose ("all four fail"), so a text search would pass on a page whose

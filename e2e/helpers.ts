@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
 import type { Page } from '@playwright/test'
 
 /**
@@ -43,4 +45,36 @@ export async function setTheme(page: Page, theme: 'light' | 'dark'): Promise<voi
     theme,
     { timeout: 5000 },
   )
+}
+
+/**
+ * How many constructs the audit admits at a reliability floor, read from the artifact.
+ *
+ * The referee journey asserts that moving the slider changes the counter. A literal `2` would
+ * test the artifact rather than the wiring: if a construct's alpha changed, the test would
+ * fail on a page that is behaving correctly. Deriving the expectation from the same file the
+ * interface reads means a passing test says "the control is connected", which is the claim.
+ *
+ * Two conditions, both of which the first version of this function got wrong by checking only
+ * the second:
+ *
+ *   - `computable` must be true. `S_social_support` has alpha 0.753 — above every floor a
+ *     reader will try — but is marked not computable, so the audit never admits it. Counting
+ *     it produced 3 where the interface correctly showed 2, and the mismatch is exactly the
+ *     kind of silent disagreement an artifact-derived expectation is supposed to catch.
+ *   - `cronbachAlpha` must be a number at or above the floor. A construct with no alpha
+ *     ("withheld") never counts, at any floor, so null is excluded rather than treated as 0.
+ */
+export function admittedAt(floor: number): number {
+  const artifact = JSON.parse(
+    readFileSync(path.join(process.cwd(), 'src/data/analysis/wvs_construct_audit.json'), 'utf8'),
+  ) as {
+    constructs: Record<string, { cronbachAlpha?: number | null; computable?: boolean }>
+  }
+  return Object.values(artifact.constructs).filter(
+    (construct) =>
+      construct.computable === true &&
+      typeof construct.cronbachAlpha === 'number' &&
+      construct.cronbachAlpha >= floor,
+  ).length
 }
