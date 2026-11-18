@@ -63,6 +63,7 @@
     "check:reproduction-manifest": "tsx scripts/check_reproduction_manifest.ts",
     "generate:gate-steps": "tsx scripts/generate_gate_steps.ts",
     "check:gate-steps": "tsx scripts/check_gate_steps.ts",
+    "check:readme-links": "tsx scripts/check_readme_links.ts",
     "check:construct-audit": "tsx scripts/check_construct_audit.ts",
     "check:support-picture": "tsx scripts/check_support_picture.ts",
     "check:limits": "tsx scripts/check_limits.ts",

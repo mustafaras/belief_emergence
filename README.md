@@ -375,11 +375,11 @@ The model implements a bounded sigmoid transformation $Z = \sigma(\Phi(X, Y, \ma
 
 | Role | Entry Point | Purpose |
 | --- | --- | --- |
-| **Developer** | [`src/main.tsx`](src/main.tsx) → [`src/App.tsx`](src/App.tsx) | Application bootstrap |
+| **Developer** | [`src/main.tsx`](src/main.tsx) → [`src/app/AppShell.tsx`](src/app/AppShell.tsx) | Application bootstrap |
 | **Model Engineer** | [`src/utils/calculateModel.ts`](src/utils/calculateModel.ts) | Core computation engine |
 | **Data Scientist** | [`src/data/panelDataLoader.ts`](src/data/panelDataLoader.ts) | Panel data pipeline |
 | **QA Engineer** | [`src/utils/modelValidator.ts`](src/utils/modelValidator.ts) | Validation suite (19 tests) |
-| **UI Developer** | [`src/components/visualization/Surface3DSurface.tsx`](src/components/visualization/Surface3DSurface.tsx) | 3D visualization |
+| **UI Developer** | [`src/sections/geometry/Surface3D.tsx`](src/sections/geometry/Surface3D.tsx) | 3D visualization |
 
 ## 🏗️ System Architecture
 
@@ -803,15 +803,14 @@ Dead packages removed, and one that only *looks* dead kept:
 | `@types/three` | **removed** | orphaned with `three` |
 | `html2canvas` | **kept** | no static import, but loaded by `await import(...)` in the PDF exporter |
 
-`html2canvas` is the trap. A dependency audit reports it unused because nothing imports it
-at the top of a module; it loads when a reader presses Export PDF. Removing it breaks the
-export at runtime while passing every test that does not drive the button. The warning is
-written at the import site in
-[exportBehavioralDynamicsReport.ts](./src/utils/pdf/exportBehavioralDynamicsReport.ts), and
-`tests/dependencies.hygiene.test.ts` fails if either mistake is repeated — including if a
-second `plotly*` package reappears one word away from the one in use.
+`plotly.js-dist-min` carries `html2canvas` as its own transitive dependency, and the
+geometry lab reaches it when a reader exports the surface as a PNG. That is why the package
+must not be added to this project's manifest: `tests/dependencies.hygiene.test.ts` fails if
+it reappears as a direct dependency or as an import, which is what makes an accidental
+duplicate — one word away from the transitive copy — impossible to miss.
 
-Verified after removal: the export still produces a 66 kB `%PDF-` download.
+The evidence-bundle PDF is a separate path with no such coupling: it uses jsPDF only, and
+that chunk is fetched when the button is pressed rather than on load.
 
 #### Surface component
 
@@ -1177,9 +1176,10 @@ src/
 │   ├── modelContract.ts        # Parameter contracts
 │   ├── modelValidator.ts       # 19 validation tests
 │   ├── uiToModelTransform.ts   # UI → model adapter
-│   ├── urlState.ts             # URL persistence
-│   └── pdf/
-│       └── exportBehavioralDynamicsReport.ts
+│   └── urlState.ts             # URL persistence
+│
+├── export/
+│   └── evidenceBundle.ts       # The evidence-bundle PDF
 │
 ├── data/
 │   ├── feCoefficients.ts       # Model coefficients
@@ -1533,8 +1533,8 @@ flowchart LR
     end
 
     subgraph Output["Canonical Dataset"]
-        Panel["panel_canonical_23_countries_v1.csv\n630 rows × 13 cols"]
-        Meta["Metadata\n(N=23 countries, 2000-2022)"]
+        Panel["panel_canonical_v2.csv\n207 country-years × 13 cols"]
+        Meta["Metadata\n(83 countries, 1990–2023)"]
     end
 
     Sources --> Extract
@@ -1695,7 +1695,7 @@ src/utils/
   └── panelDataLoader.ts     [Panel data loading (in src/data/)]
 
 public/data/
-  └── panel_canonical_23_countries_v1.csv    [630 rows, source-verified]
+  └── panel_canonical_v2.csv                 [207 country-years, 83 countries]
 
 tests/
   └── *.test.ts              [Vitest: 17 files, 100 tests, 100% passing]
@@ -2005,10 +2005,14 @@ Bias: -0.0699
 
 ### Panel Data Structure
 
-[`public/data/panel_canonical_23_countries_v1.csv`](public/data/panel_canonical_23_countries_v1.csv)
+[`public/data/panel_canonical_v2.csv`](public/data/panel_canonical_v2.csv)
+
+The retired 630-row panel is not in the working tree. It is readable at commit `8f5c06b`
+as `public/data/panel_canonical_23_countries_v1.csv`, which is where the construct audit
+goes to measure what the rebuild changed.
 
 ```csv
-country,year,x,y,c,m,t,d,g,e,s,r,z_actual
+iso3,year,X,Y,C,M,T,E,R,S,D,G,Z
 USA,2000,0.75,0.62,0.83,...
 GER,2000,0.68,0.71,0.91,...
 ...
@@ -2056,7 +2060,7 @@ export const FE_COEFFICIENTS = {
 
 ### 3D Surface Component
 
-[`src/components/visualization/Surface3DSurface.tsx`](src/components/visualization/Surface3DSurface.tsx)
+[`src/sections/geometry/Surface3D.tsx`](src/sections/geometry/Surface3D.tsx)
 
 Key features:
 
@@ -2238,47 +2242,6 @@ const memoizedCalculateModel = memoize(
 );
 ```
 
-### AI Interpretation Endpoint
-
-Optional `/api/ai/interpret` endpoint (dev/preview only):
-
-<div align="center">
-  <img src="figures/screenshots/figure_10_ui_ai_interpreter.png" alt="AI interpreter panel" width="920" />
-  <br/><sub><b>AI Interpreter</b> — Natural language queries with model-aware context and causal disclaimers</sub>
-</div>
-
-```typescript
-// vite.config.ts middleware
-server.middlewares.use('/api/ai/interpret', async (req, res) => {
-  const { snapshot, query } = await req.body;
-  
-  const prompt = `
-    Strict rules:
-    1. No causal claims — only model-implied associations
-    2. Modifiers are z-scores if modifiersAreStandardized=true
-    3. Z ∈ [0.0001, 0.9999] due to interior band clamping
-    
-    Snapshot: ${JSON.stringify(snapshot)}
-    Query: ${query}
-  `;
-  
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  
-  res.json(await response.json());
-});
-```
-
----
 
 ## Development
 
@@ -2636,9 +2599,6 @@ docker run -p 8080:80 belief-emergence
 Create `.env` file for optional features:
 
 ```bash
-# Optional: AI interpretation endpoint
-OPENAI_API_KEY=sk-...
-
 # Optional: analytics
 VITE_ANALYTICS_ID=G-...
 ```
@@ -3081,7 +3041,10 @@ These metrics are based on 630 observations across 23 countries.
 - OECD — inequality/redistribution data
 - UNDP — human development indices
 
-See [`rawdata/`](rawdata/) for source files.
+See `rawdata/` for source files. That directory is gitignored and is **not** in a fresh
+clone; obtain the survey extract through the link above, then place the files there. Every
+script that needs it either records that it could not recompute a measurement, or leaves the
+committed artifact untouched rather than replacing it with zeros.
 
 #### Q: Can I use my own data?
 
@@ -3109,7 +3072,7 @@ See [`rawdata/`](rawdata/) for source files.
 1. Update `ModelParams` interface in [`src/types.ts`](src/types.ts)
 2. Add coefficient to [`src/data/feCoefficients.ts`](src/data/feCoefficients.ts)
 3. Update calculation in [`src/utils/calculateModel.ts`](src/utils/calculateModel.ts)
-4. Add slider to [`src/components/sidebar/ModernSidebar.tsx`](src/components/sidebar/ModernSidebar.tsx)
+4. Add slider to [`src/app/AppShell.tsx`](src/app/AppShell.tsx)
 5. Add validation test to [`src/utils/modelValidator.ts`](src/utils/modelValidator.ts)
 
 #### Q: How do I deploy to production?

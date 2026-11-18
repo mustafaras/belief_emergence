@@ -652,7 +652,7 @@ The overlay now maps each observed `Z` through the same normalisation the model 
 
 ## P32 — The evidence bundle
 
-`ci:gate` remains green at **93/93**.
+`ci:gate` goes from 93 to **94/94**: the audit below added one check.
 
 - **`src/export/evidenceBundle.ts`** replaces a 2,038-line narrative generator. It writes a PDF carrying a cover page (title, timestamp, commit, source URL), one section per route listing the claims that route displays with their `id`, artifact, JSON path and rebuild command, and an index of all 42 artifacts with their provenance.
 - **`VITE_COMMIT`** is defined in `vite.config.ts` from `git rev-parse --short HEAD`, not from an environment variable a CI step has to remember to set. Read at config time, so a build from a fresh clone carries its commit without anyone knowing to pass it.
@@ -678,5 +678,40 @@ The overlay now maps each observed `Z` through the same normalisation the model 
 - Downloaded the bundle in a browser and read it back: **11 pages**, 258 text runs, title, `Build commit: 8fac710`, source URL with its query string, 8 route sections, artifact index, and **0 occurrences of U+2212** in the text stream.
 - `npm run check:support-picture`: PASS, `mobile 390/390px`, `keyboard 0→21`.
 - `npm run check:a11y`: PASS, 0 violations across 22 route-theme pairs.
+- `npm run check:readme-links`: PASS, 30 relative links resolve.
 - `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+
+### Post-implementation audit
+
+Every item in the prompt was re-checked against the built artifact rather than against the
+commit message, and the audit found six defects — five of them documentation.
+
+- **The README still documented the deleted endpoint.** An "AI Interpretation Endpoint"
+  section showed the exact `/api/ai/interpret` middleware that was being removed, with a
+  `process.env.OPENAI_API_KEY` example. The feature's own component does not exist in `src/`;
+  only a screenshot survived in `figures/screenshots/`. Removed, along with its env-var block.
+- **Two README links pointed at deleted files**, and three more at components the v2 rebuild
+  had already replaced (`src/App.tsx`, `Surface3DSurface.tsx`, `ModernSidebar.tsx`). Five
+  broken links, only two of them caused by this prompt — the rest had been dead since earlier
+  prompts and nothing checked.
+- **The README described the retired 630-row panel** in its data pipeline, its file tree and
+  a CSV sample: `panel_canonical_23_countries_v1.csv`, "630 rows × 13 cols", "N=23 countries,
+  2000-2022". All replaced with the current panel; the v1 file is now described as readable
+  at commit `8f5c06b`, which is where the audit actually goes to measure the rebuild.
+- **`check:readme-links` is new** and in the gate. A dead link is worse than no link: a reader
+  who follows one concludes the checkout is broken rather than that the file moved. Mutation-
+  tested by adding a link to `src/does/not/exist.ts`, which failed on that exact path.
+- **Verified rather than assumed:** the PDF was downloaded three times and parsed back. 11
+  pages, 258 text runs, **78 distinct claim ids**, 8 route sections with their paper
+  references, the artifact index with provenance on every row, and **zero U+2212** in the text
+  stream. jsPDF appears only in `evidenceBundle-*.js`, never in `index-*.js`.
+
+Two items in the prompt could not be honoured and are stated rather than faked:
+
+- **`paperRef` per claim.** Zero of 227 claims carry one. The PDF prints the route's paper
+  reference instead, which is where that mapping actually exists (`routes.ts`).
+- **`React.lazy`.** It wraps a component; this is an imperative save triggered by a click.
+  The property the prompt wanted — jsPDF off the landing route — is met by `await import()`
+  and measured in the build output, which is a stronger guarantee than a lazy component.
+
 - Commit: `feat(app-v2): evidence bundle export [P32]`.

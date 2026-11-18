@@ -446,6 +446,9 @@ function phaseValidationChecks(): boolean {
     // runs. Both are derived from source, so both can silently drift; these re-derive them.
     { label: 'Reproduction manifest matches tree', cmd: 'npm run check:reproduction-manifest' },
     { label: 'Gate step list matches gate',  cmd: 'npm run check:gate-steps' },
+    // Deleting a module leaves its documentation behind. A dead link reads as a broken
+    // checkout rather than as a moved file, so the README is checked like any other claim.
+    { label: 'README links resolve',         cmd: 'npm run check:readme-links' },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },
