@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P32 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF are built), and **the application's own CI gate now passes 93/93**; P33–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P32 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF are built), and **the application's own CI gate now passes 94/94**; P33–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -104,7 +104,12 @@ The remaining work is:
    hash read from `git rev-parse` at build time, one section per route with each claim's
    artifact and rebuild command, and an artifact index with provenance. It replaces a
    2,038-line narrative export whose first number was the withdrawn r² = 0.8461, and the
-   unused `/api/ai/interpret` dev middleware is gone with it. P33 has not started.
+   unused `/api/ai/interpret` dev middleware is gone with it. A post-implementation audit
+   found six further defects, all in documentation the deletion had orphaned: the README
+   still documented the removed endpoint, gave five links to files that do not exist, and
+   described the retired 630-row panel in three places. Those are fixed, and `check:readme-links`
+   now fails on any relative README link that does not resolve — so `ci:gate` passes 94/94.
+   P33 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
