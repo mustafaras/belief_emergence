@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P33 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, and a registry-generated README are built), and **the application's own CI gate now passes 95/95**; P34–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P34 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, and UI figures captured from the app are built), and **the application's own CI gate now passes 96/96**; P35–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -113,7 +113,13 @@ The remaining work is:
    figures in its 3,819 lines were corrected by a reported rule script, and two guards keep
    them from returning — a freshness check on the generated block and a retired-value ban over
    the rest. Building it exposed a real gap: the headline r² had never been registered as a
-   claim at all. `ci:gate` now passes 95/95. P34 has not started.
+   claim at all. P34 is closed with a finding that changed its scope: the manuscript's
+   supplementary uses 20 figures and every one is a PDF, so the fourteen UI screenshots were
+   never referenced by the paper at all — their only consumer is the README. Nothing was written
+   into `paper/supplementary/`; the eleven figures that still have a subject were recaptured
+   from the running v2 application (the old ones still printed `Panel N = 630`), and three whose
+   panels the rebuild removed were deleted from the README rather than filled with a lookalike.
+   `ci:gate` now passes 96/96. P35 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
