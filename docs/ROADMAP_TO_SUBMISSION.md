@@ -127,8 +127,12 @@ The remaining work is:
    keyboard paths, and 28 tests pass. Writing them found a real defect the property checks
    could not — the command palette's artifact links opened an empty drawer — and three more
    layout defects that the P35 guard had been hiding behind a containment exemption that let
-   any overflow pass if some unrelated element on the page scrolled. `ci:gate` now passes
-   98/98. P37 has not started.
+   any overflow pass if some unrelated element on the page scrolled. A post-implementation audit
+   then found four of the six specs weaker than they read — a literal where the prompt asked for
+   a value derived from the artifact, a conditional panel selection, two nested `if`s around the
+   table-scroll assertion, and a focus-ring check on one control instead of all of them — plus a
+   gate step that vanished when `CHROME_PATH` was unset. All five are fixed and mutation-tested.
+   `ci:gate` now passes 98/98. P37 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
