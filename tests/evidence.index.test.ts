@@ -77,11 +77,12 @@ describe('evidence index matches the tree', () => {
   it('reports the imported count the interface prints', () => {
     // Pin the current inventory totals so changes update both the generated fact and
     // the evidence-index display deliberately.
-    // 30 after the evaluation-summary projection replaced the four raw CV imports.
+    // 29 after the Notation section began reading `notation_glossary.json` directly; the
+    // Evidence section itself imports no artifact, it lists them.
     expect(names.length).toBe(42)
-    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(28)
+    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(29)
     expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(3)
-    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
+    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(10)
   })
 
   it('flags an artifact whose declared sample predates the current panel', () => {

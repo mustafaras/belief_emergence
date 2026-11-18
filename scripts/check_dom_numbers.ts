@@ -44,6 +44,9 @@ import {
 } from '../src/verification/derivedValues'
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
 import { ARTIFACT_CONSUMPTION } from '../src/evidence/artifactConsumption.generated'
+import { MANIFEST_CLAIM_COUNT, REPRODUCTION_MANIFEST } from '../src/evidence/reproductionManifest.generated'
+import { GATE_LOOP_CHECKS } from '../src/sections/reproduce/gateSteps.generated'
+import notationGlossary from '../src/data/analysis/notation_glossary.json'
 import { DESCRIPTION_NUMBERS } from '../src/evidence/descriptionNumbers'
 import { buildSupportPicture, type PanelAudit } from '../src/verification/supportPicture'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
@@ -468,6 +471,32 @@ export function buildSources(): {
       supportPercentages,
       descriptionClaimValues,
       deriveLabDisplayValues(giniWindowArtifact, zeroFillArtifact, { rows: 0, signed: 3 }),
+      // The Evidence page prints how many distinct claims the corpus contains. That number
+      // is not in any artifact: it is counted from the manifest generated out of the import
+      // graph, so it is re-derived from the same committed file rather than allowlisted.
+      [MANIFEST_CLAIM_COUNT as number],
+      // Route-level counts on the same page: claims shown per route and artifacts behind
+      // them. Also counts over the manifest, not measurements.
+      ...REPRODUCTION_MANIFEST.routes.flatMap((route) => [
+        route.directClaimIds.length,
+        route.artifacts.length,
+        route.artifacts.filter((name) =>
+          REPRODUCTION_MANIFEST.artifacts.some((entry) => entry.name === name && entry.generator !== null),
+        ).length,
+      ]),
+      // The gate's step total, printed as prose ("Runs the 93 checks").
+      [GATE_LOOP_CHECKS.total as number],
+      // The Notation table prints a hyperparameter's numeric values into its source column,
+      // because that artifact has no single symbol to point at. Read from the same JSON the
+      // section reads, at the same precision, rather than allowlisted.
+      ...notationGlossary.hyperparameters.flatMap((entry) =>
+        'values' in entry && Array.isArray(entry.values)
+          ? (entry.values as number[]).map((value) => Number(Number(value).toFixed(3)))
+          : [],
+      ),
+      // Tier rows print parameters and observations-per-parameter straight from the same
+      // artifact; the values are artifact fields, re-stated so a wrong component fails here.
+      ...notationGlossary.tier_definitions.flatMap((tier) => [tier.params, tier.obs_per_param, tier.sign_consistency_threshold]),
       // The audit table prints alpha at two places and the summary prints the failure
       // rate as a percentage; both are formatted artifact values, not new measurements.
       // The gates section prints the upstream deviation in scientific notation

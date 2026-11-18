@@ -1,0 +1,329 @@
+.section {
+  margin-block-start: var(--space-8, 3rem);
+}
+
+.h2 {
+  font-size: var(--text-xl, 1.35rem);
+  margin-block-end: var(--space-3, 0.75rem);
+}
+
+.lede {
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-block-end: var(--space-4, 1rem);
+  max-inline-size: 72ch;
+}
+
+.filter {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3, 0.75rem);
+  margin-block-end: var(--space-3, 0.75rem);
+}
+
+.filter span {
+  color: var(--ink-2);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+}
+
+.filter input {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  color: var(--ink);
+  font: inherit;
+  min-inline-size: 18rem;
+  padding: 0.45rem 0.6rem;
+}
+
+.filter input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.artifactLink {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  padding: 0;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.artifactLink:hover {
+  color: var(--accent-strong, var(--accent));
+}
+
+.empty {
+  color: var(--ink-2);
+  font-style: italic;
+  margin-block-start: var(--space-3, 0.75rem);
+}
+
+/* --- provenance chain ------------------------------------------------- */
+
+.chain {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chainItem {
+  display: grid;
+  gap: var(--space-4, 1rem);
+  grid-template-columns: 2rem 1fr;
+  padding-block-end: var(--space-4, 1rem);
+  position: relative;
+}
+
+/* The connecting rule, drawn from each marker to the next; the last item has none. */
+.chainItem:not(:last-child)::before {
+  background: var(--line);
+  content: '';
+  inset-block: 2rem auto;
+  inset-inline-start: 0.95rem;
+  height: calc(100% - 1.5rem);
+  position: absolute;
+
+  /* Extends toward the next marker rather than stopping at this item's own box. */
+  width: 1px;
+}
+
+.chainMarker {
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-2);
+  display: flex;
+  font-size: var(--text-sm, 0.875rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  height: 2rem;
+  justify-content: center;
+  position: relative;
+  width: 2rem;
+  z-index: 1;
+}
+
+.chainBody {
+  padding-block-start: 0.25rem;
+}
+
+.chainHead {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2, 0.5rem);
+}
+
+.chainDetail {
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin-block: 0.35rem 0.25rem;
+  max-inline-size: 68ch;
+}
+
+.chainSource {
+  color: var(--ink-2);
+  font-size: var(--text-sm, 0.875rem);
+  margin: 0;
+}
+
+.chainSource code {
+  background: var(--surface-2);
+  border-radius: var(--radius-1);
+  padding: 0.1rem 0.35rem;
+}
+
+/* --- commands --------------------------------------------------------- */
+
+.commands {
+  display: grid;
+  gap: var(--space-4, 1rem);
+}
+
+.command {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  padding: var(--space-4, 1rem);
+}
+
+.commandHead {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3, 0.75rem);
+  justify-content: space-between;
+  margin-block-end: var(--space-2, 0.5rem);
+}
+
+.copyButton {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm, 0.875rem);
+  padding: 0.25rem 0.6rem;
+}
+
+.copyButton:hover {
+  border-color: var(--accent);
+}
+
+.copyButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.commandCode {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm, 0.875rem);
+  overflow-x: auto;
+  padding: 0.6rem 0.75rem;
+  white-space: pre;
+}
+
+.commandNote {
+  color: var(--ink-2);
+  font-size: var(--text-sm, 0.875rem);
+  line-height: 1.55;
+  margin-block: var(--space-2, 0.5rem) 0;
+  max-inline-size: 68ch;
+}
+
+/* --- json tree -------------------------------------------------------- */
+
+.jsonTree {
+  max-block-size: 60vh;
+  overflow: auto;
+}
+
+.jsonMeta {
+  color: var(--ink-2);
+  font-size: var(--text-sm, 0.875rem);
+  margin-block-end: var(--space-2, 0.5rem);
+}
+
+.jsonList {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm, 0.8125rem);
+  line-height: 1.7;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.jsonRow {
+  align-items: baseline;
+  display: flex;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.jsonToggle {
+  background: none;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.jsonToggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.jsonLeaf {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.jsonKey {
+  color: var(--ink-2);
+}
+
+.jsonValue {
+  color: var(--ink-2);
+}
+
+.visuallyHidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.filterRow {
+  margin-block-end: var(--space-3);
+}
+
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.segment,
+.segmentActive {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 0.35rem 0.75rem;
+}
+
+.segmentActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+  font-weight: 600;
+}
+
+.segment:first-child,
+.segmentActive:first-child {
+  border-end-start-radius: var(--radius-1);
+  border-start-start-radius: var(--radius-1);
+}
+
+.segment:last-child,
+.segmentActive:last-child {
+  border-end-end-radius: var(--radius-1);
+  border-start-end-radius: var(--radius-1);
+}
+
+.segment + .segment,
+.segmentActive + .segment,
+.segment + .segmentActive,
+.segmentActive + .segmentActive {
+  border-inline-start: 0;
+}
+
+.segment:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.segment:focus-visible,
+.segmentActive:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}

@@ -442,6 +442,10 @@ function phaseValidationChecks(): boolean {
     // The evidence index prints a schema, timestamp and row count for every artifact.
     // This keeps that committed consumption list honest against the real imports.
     { label: 'Evidence index matches tree',  cmd: 'npm run check:evidence-index' },
+    // The Evidence page names the script that rebuilds each artifact and the steps the gate
+    // runs. Both are derived from source, so both can silently drift; these re-derive them.
+    { label: 'Reproduction manifest matches tree', cmd: 'npm run check:reproduction-manifest' },
+    { label: 'Gate step list matches gate',  cmd: 'npm run check:gate-steps' },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },

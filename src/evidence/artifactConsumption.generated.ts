@@ -27,6 +27,7 @@ export const ARTIFACT_CONSUMPTION = {
     'metrics_authoritative',
     'model_complexity_support',
     'model_ladder_metrics',
+    'notation_glossary',
     'parameter_stability',
     'prediction_interval_coverage',
     'preset_country_alignment',

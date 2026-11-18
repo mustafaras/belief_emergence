@@ -228,17 +228,17 @@
   min-width: 24rem;
 }
 
-.diffTable thead th {
-  color: var(--ink-3);
-  font-family: var(--font-sans);
-  font-weight: 600;
-}
-
 .diffTable th,
 .diffTable td {
   padding: var(--space-2);
   border-block-end: 1px solid var(--line);
   text-align: end;
+}
+
+.diffTable thead th {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-weight: 600;
 }
 
 .diffTable th:first-child,

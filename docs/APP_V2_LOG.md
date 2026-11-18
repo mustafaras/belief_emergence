@@ -610,3 +610,42 @@ The overlay now maps each observed `Z` through the same normalisation the model 
 - `npx tsc -b`, `npm run lint` (0 errors, 1 existing warning), `npm run lint:css`, `npm run build`: PASS.
 - Browser (`?v=geometry`, 1440×1000): three Plotly traces — `Observed support`, `Outside observed support`, `surface`; support switch reports `aria-checked="true"`; three companion tabs; PNG button enabled; A/B table three rows; no console errors. Screenshots `tmp/shots/p30-geometry.png`, `tmp/shots/p30-surface.png`, `tmp/shots/p30-heat.png`.
 - Commit: `feat(app-v2): geometry support and companions [P30]`.
+
+## P31 — Evidence & Reproducibility, and Notation
+
+`ci:gate` goes from 91 to **93/93**: this prompt added two checks of its own.
+
+- **The artifact index.** 42 artifacts with their schema, timestamp, row count, consumption status and the command that would rebuild each. Filterable by name and by consumption; a row opens the JSON.
+- **A JSON tree** with `?artifact=` deep links, so a review comment can point at the file rather than describe where to look.
+- **A provenance chain** in the order the paper argues: microdata → construct audit → panel → fit → artifacts → this application. Each link names the artifact that establishes it, and two are marked because they narrow or remove something.
+- **Commands**, copied verbatim, and the gate's own step list.
+- **Notation**: 47 symbols in five groups, KaTeX-rendered, searchable, each with its source and the window it was fitted over. Plus the five regimes with their formal definitions and the support each actually has, and the three specification tiers.
+
+### Three claims the prompt asked for that no artifact supports
+
+- **"paperRef per claim."** The prompt asks the artifact table to carry each claim's manuscript location. **Zero of 227 claims have a `paperRef`.** The claim type has the optional field and nothing populates it, so the column would have been blank for every row — or filled in by hand, which is the failure mode this repository exists to avoid. Routes are mapped to paper sections instead (`§3, §4 Step 2b–2d` and so on), which *is* in `routes.ts`.
+- **"used in sections."** Measured first: a naive transitive walk gives **every artifact the same answer (26)**, because the claim registry imports every selector and the shell imports the registry on all 11 routes. Restricted to files under `src/sections/<route>/` the answer becomes meaningful: 5 artifacts are displayed by a route, the other 37 are reachable but not shown.
+- **"claims per artifact."** True but misleading as a column: `cv_kfold` backs 36 claims, `prediction_interval_coverage` 25, and eight artifacts back none. The 16 with none are exactly the ones a reader should be told about, so they are listed rather than hidden.
+
+### Defects found
+
+- **Generators were invisible.** The first pass found **0 of 42** artifacts with a producer, because a generator does not import what it writes — it builds a path and calls `writeFileSync`. Five spellings are now recognised: `path.join(REPO_ROOT, 'src', 'data', 'analysis', ...)`, `path.join(ANALYSIS_DIR, ...)`, Python's `ROOT / "src" / "data" / "analysis" / ...`, `writeJson('x.json', ...)`, and a bare literal. 27 of 42 resolve to a named `npm run` script.
+- **An audit is not a producer.** `check_support_picture.ts` names `covariate_blocker_attribution.json` because it reads the committed copy to verify it. Reporting that as the generator would tell a reader to run a check to rebuild an artifact, which does not rebuild it. `isArtifactProducer` excludes `check_*` and `ci_gate.ts`.
+- **`design_gates.json` and `sign_diagnostics.json` have generator scripts with no npm entry**, so nothing in the workflow would rebuild them. Recorded in the manifest as `recorded` rather than papered over with a plausible-looking script name.
+- **`wvs_construct_audit.json` is a hand-copy.** `build:wvs-constructs` writes it to `rawdata/`; nothing writes it to `src/data/analysis/`. It arrived in commit `04f751d` as a byte-identical copy. The manifest classifies this as `copied` — verified by content comparison, not assumed — and says so only when `rawdata/` is present, because on a clean clone the check cannot be made at all.
+- **The gate step list undercounted by 63.** 28 steps are written as literals; 63 more are emitted from loops over the expected artifacts (32), schema versions (25) and canonical metrics (6). 28 + 63 = **91**, matching the gate exactly at the time of writing, and 93 after this prompt's two additions. The generator reads all three loop bounds from the gate's own tables, so the page cannot claim a number the gate does not run.
+- **The JSON tree withheld 98% of `cv_kfold`.** It flattened the whole 105,771-entry document and then cut at 2,000, so opening the file showed its first two keys and a number nobody could act on. It now walks only expanded branches: the root is open, everything below is opt-in, and the withheld count names the subtree it applies to. Verified 13 → 1 → 13 → 16 entries across a collapse/expand cycle.
+- **The heatmap-style year tick rule leaked into the tree's sibling components** in the previous prompt; here the same class of bug appeared in `selectorClaimFacts`, whose export regex required `= [` and therefore missed every selector that builds its claims with `.map(...)`. `seedClaims` emits one claim per seed and was being reported as declaring none. Now detected as "exports a claims array, yields no literal ids".
+- **`--ink-3` on `--surface-2` is 4.29:1**, below the 4.5:1 floor. Both new pages failed the contrast rule on their secondary text; both now use `--ink-2`. Caught by axe, not by eye.
+
+### Verification
+
+- **`npm run ci:gate`: 93/93 PASS**, payload 1,627 KiB against the 2,048 KiB budget.
+- `npm run test:run`: PASS, **429 tests across 69 files** (15 new: 3 tree, 2 selector extraction, 2 provenance extraction, 2 manifest invariants, 1 gate arithmetic, 5 glossary).
+- `npm run check:reproduction-manifest`: **PASS** (11 routes, 42 artifacts, 148 claims) — mutation-tested by flipping one `provenance` value, which failed at the exact line and restored the file.
+- `npm run check:gate-steps`: **PASS** (30 literal steps, 93 total) — mutation-tested by adding two checks to the gate, which failed immediately until regenerated.
+- `npm run check:dom-numbers`: PASS, **693** distinct values, 0 unresolved, allowlist still 3 entries. The manifest counts, gate total and glossary values are re-derived from the same committed files rather than allowlisted.
+- `npm run check:a11y`: PASS, **0 violations across 22 route-theme pairs**.
+- `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- Browser: reproduce route renders 42 artifact rows, the consumption filter switches 11 → 42, `?artifact=cv_kfold` opens the drawer and the tree expands; glossary renders 47 symbols in 6 tabs, 99 KaTeX nodes, and a search for "gini" narrows 97 rows to 7. No console errors. Screenshots `tmp/shots/p31-reproduce.png`, `tmp/shots/p31-drawer.png`, `tmp/shots/p31-glossary.png`.
+- Commit: `feat(app-v2): reproduce and glossary [P31]`.
