@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P36 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, and six end-to-end journeys are built), and **the application's own CI gate now passes 98/98**; P37–P38 have not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P37 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, and 44 visual baselines are built), and **the application's own CI gate now passes 99/99**; P38 has not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -132,7 +132,12 @@ The remaining work is:
    a value derived from the artifact, a conditional panel selection, two nested `if`s around the
    table-scroll assertion, and a focus-ring check on one control instead of all of them — plus a
    gate step that vanished when `CHROME_PATH` was unset. All five are fixed and mutation-tested.
-   `ci:gate` now passes 98/98. P37 has not started.
+   P37 is closed: 44 visual baselines (11 routes × 2 viewports × 2 themes) are committed at
+   4.4 MB and compared with the same pixel rules as the surface snapshot. Reviewing all 44 by
+   eye before committing is what produced the design — three capture strategies were tried and
+   rejected — and it also found a real defect: every wide formula on the Model route looked
+   truncated, because `overflow: auto hidden` scrolls but no mobile browser shows a scrollbar.
+   `ci:gate` now passes 99/99. P38 has not started.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
