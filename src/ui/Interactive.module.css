@@ -33,6 +33,7 @@
 .segmented,
 .tabList {
   display: inline-flex;
+
   /*
    * `fit-content` is an intrinsic width. On a 390px screen the four protocol tabs together
    * measure 955px, so the control widened the document by 565px instead of wrapping — and

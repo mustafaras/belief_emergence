@@ -1033,3 +1033,70 @@ pass in this gate.
 - `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped**. `npx tsc -b`, `npm run lint`
   (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
 - Commit: `test(app-v2): a11y and e2e journeys [P36]`.
+
+## P37 — Visual baselines
+
+`ci:gate` goes from 98 to **99/99**. **44 baselines**: 11 routes × 2 viewports × 2 themes.
+
+Every other check asks a question about one property. None of them can answer "does this page
+still look like itself": a stylesheet edit that reorders a grid, a padding change that collapses
+a section, or a font that fails to load all leave every check passing and the page visibly
+wrong. The comparison uses the same decoder and tolerance as `check:surface-snapshot` — a pixel
+counts as changed when a channel differs by more than 24, and the image fails above 100 changed
+pixels. The decoder now lives in `scripts/lib/png.ts` so the two checks cannot drift apart on
+what "the same picture" means.
+
+### Three attempts at what to capture, each caught by looking at the image
+
+The prompt's condition was to review all 44 images by eye before committing, and that condition
+is what produced the decisions below — the script exited zero for all three.
+
+1. **A full-page capture clamped to 2400px cut the Geometry route short.** It is 2630px at 1440
+   and 3682px at 390, so the Capture A/B controls and the whole companion section were missing
+   from a baseline meant to detect their regressions.
+2. **The honest full document is 19.7 MB** across 44 files; the Data route alone is 7888px tall
+   on a phone. That set is not reviewable, and reviewing is the point.
+3. **Downscaling to half saved a third of the bytes** and blurred the thing being compared.
+
+The shipped rule is a fixed window: 2400px at 1440, 2532px at 390, **4.4 MB total**. What that
+costs is stated in the module rather than hidden: content below the window is *not* covered by
+these images. It is covered by `check:layout` (every route, three viewports) and by the e2e
+journeys, which scroll to what they assert on. What the screenshots uniquely catch — a heading
+that moved, a card that lost its border, a chart that stopped drawing — appears in the first
+screens, which is what the window holds.
+
+### A real defect the review found
+
+**Every wide formula on the Model route looked truncated.** `katex-display` has
+`overflow: auto hidden`, so the content scrolls — but every mobile browser hides the scrollbar
+until it is touched, so `∑_k` ran to the column edge and stopped. A reader sees a broken render,
+not content they can reach.
+
+The fix is a fade at the right edge — and applying it unconditionally would have been the second
+mistake, dimming formulas that end exactly at the column. The first attempt at "only when it
+overflows" used `:not(:has(> .katex))`, which **never matches**: `.katex` *is* the direct child,
+so every formula faded. It is now measured from the element's own `scrollWidth`, set as a data
+attribute, and re-measured on resize. Measuring before `document.fonts.ready` gave the fallback
+metrics and reported "fits" for a formula that overflows by 52px once KaTeX's fonts arrive, so
+the measurement waits for them.
+
+Verified: four display formulas, two overflow and are masked, two fit and are not.
+
+### Determinism
+
+Captured twice and compared byte-for-byte: **5 of 44 files differ**, all by PNG chunk metadata.
+Pixel comparison across those five: **0 pixels changed**. The tolerance is not load-bearing here
+— the raster is identical — which is what makes the baselines usable rather than a source of
+flake.
+
+### Verification
+
+- **`npm run ci:gate`: 99/99 PASS**, payload 1,628 KiB.
+- `npm run check:visual-baselines`: PASS, 44/44 within 100 pixels at channel tolerance 24.
+- All 44 opened and reviewed: no overlap, no clipping, no blank regions. A contact sheet of the
+  whole set was rendered and read, and then the individual full-size images.
+- `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped**. `npx tsc -b`, `npm run lint`
+  (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- Registered on every platform, not only macOS: a step that disappears changes the total
+  silently, which is the same defect fixed in P36's e2e entry.
+- Commit: `test(app-v2): visual baselines [P37]`.

@@ -163,6 +163,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-2);
   padding: var(--space-4, 1rem);
+
   /* A grid item's default `min-width: auto` lets its longest child set the column width. */
   min-width: 0;
 }
@@ -201,6 +202,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-1);
   display: block;
+
   /*
    * `white-space: pre` gives the block a min-content width equal to the longest command line —
    * 514px for the full-reproduction command. As a grid child that floor propagated to the

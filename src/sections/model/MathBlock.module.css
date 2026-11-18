@@ -25,6 +25,28 @@
 /* KaTeX ships its own sizing; these keep long formulae from escaping the column. */
 .display :global(.katex-display) {
   margin: 0;
+
+  /*
+   * A wide formula scrolls rather than clipping — the Model route has three that exceed a
+   * 358px column. But every mobile browser hides the scrollbar until it is touched, so the
+   * formula looks truncated: the `∑_k` term ran to the right edge and stopped, which a reader
+   * reads as a broken render rather than as content they can reach. The mask fades the last
+   * 2rem so the cut is visibly a fade.
+   */
   overflow: auto hidden;
   padding-block: var(--space-1);
+  scrollbar-width: thin;
+}
+
+/*
+ * The fade only where there is something to reach.
+ *
+ * The first version applied the mask unconditionally and then tried to switch it off for
+ * formulas that fit — with `:not(:has(> .katex))`, which never matches, because `.katex` *is*
+ * the direct child. So the selector did nothing and every formula faded, including the ones
+ * that end exactly at the column edge. A mask is measurable: `MathBlock` sets it from the
+ * element's own scroll state instead of guessing from the DOM.
+ */
+.display :global(.katex-display[data-overflows='true']) {
+  mask-image: linear-gradient(to right, currentcolor calc(100% - 2rem), transparent);
 }

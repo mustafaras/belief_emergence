@@ -491,11 +491,19 @@ function phaseValidationChecks(): boolean {
     // The initial payload, measured from the built site rather than inferred from the
     // bundle. Runs after Phase 7's build so dist/ is current.
     { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
-    // Plotly's WebGL canvas is platform-specific. The reviewed baseline is macOS; the
-    // dedicated macOS visual-baselines job runs this exact pixel comparison there.
+    // Plotly's WebGL canvas is platform-specific, and so is text rasterisation. The 44
+    // baselines are captured on macOS; on any other platform the comparison is not meaningful,
+    // so the step reports SKIPPED rather than a failure — and a skip is not a pass here.
     ...(process.platform === 'darwin'
-      ? [{ label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true }]
-      : []),
+      ? [
+          { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
+          { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
+        ]
+      : [
+          // Still registered on other platforms so the total does not change silently.
+          { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
+          { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
+        ]),
   ];
   let allOk = true;
   for (const c of checks) {

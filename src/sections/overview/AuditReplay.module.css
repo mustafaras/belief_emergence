@@ -136,6 +136,7 @@
 .stepActive {
   min-width: 0;
   display: grid;
+
   /* A single implicit `auto` track sizes to the widest child's min-content. `stepNumber` is
      uppercase, letter-spaced and in a mono face, so that floor pushed the item to 720px
      inside a 358px list — the last domino in a chain of the same mistake. */

@@ -76,6 +76,7 @@
     "check:limits": "tsx scripts/check_limits.ts",
     "check:bundle-budget": "tsx scripts/check_bundle_budget.ts",
     "check:visual-baselines": "tsx scripts/check_visual_baselines.ts",
+    "generate:visual-baselines": "tsx scripts/check_visual_baselines.ts --write",
     "generate:artifact-facts": "tsx scripts/generate_artifact_facts.ts",
     "check:surface-snapshot": "tsx scripts/check_surface_snapshot.ts",
     "generate:presets": "tsx scripts/generate_presets.ts",
