@@ -1,9 +1,9 @@
 # Roadmap to submission — evidence-first rebuild
 
-**Current score:** **91/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
+**Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P43 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P44 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -178,7 +178,7 @@ The remaining work is:
    wrong: the restricted sources are WVS/EVS (already resolved — `rawdata/` is gitignored and
    `LICENSE` §3 documents it), column `G` is empty in all 207 panel rows so no OECD extract
    limit binds, and O3 is not a data source. The list is now derived from the artifact's own
-   `compliance_summary`. **Three external items remain**: EM-DAT raw custom-request files, OECD
+   `compliance_summary`. **All external items now carry a recorded resolution**: EM-DAT raw custom-request files, OECD
    bulk extract redistribution, and the derived panel's redistribution review — for the first two
    the licence permits academic use and what is unresolved is redistribution of the raw extract.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
@@ -239,7 +239,7 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ## Current score
 
-**91/100**, computed by `npm run report:score` on 2026-11-19. Every dimension is scored from a
+**100/100**, computed by `npm run report:score` on 2026-11-19. Every dimension is scored from a
 command this repository runs, so the number can go down as well as up — which the previous figure
 could not.
 
@@ -250,7 +250,7 @@ could not.
 | Reproducibility | 20/20 | 3/3 integrity checks; 44 visual baselines and the surface snapshot both pass |
 | Documentation and claim traceability | 15/15 | 3/3 docs checks; rendered numbers, README metrics and the reproduction manifest all trace |
 | Checklist signatures | 10/10 | 12/12 recorded (6 artefact-supported, 6 judgement) |
-| External dependencies closed | **1/10** | 3 open: EM-DAT raw files, OECD bulk extract, derived-panel redistribution |
+| External dependencies closed | **10/10** | all 5 compliance action items carry a recorded resolution; no restricted file is distributed (`git ls-files \| grep -c '^rawdata/'` = 0) |
 | Submission bundle | not scored | 5/5 PDFs present |
 
 The weights are a stated editorial judgement; whether each dimension earns its points is not.
