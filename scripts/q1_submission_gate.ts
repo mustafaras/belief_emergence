@@ -765,6 +765,30 @@ interface HumanCheckItem {
   question: string;
 }
 
+/**
+ * A signature is a fact about a person, so it lives in its own file.
+ *
+ * The generator used to write `signedOff: false` for every item, which meant a signature could
+ * not survive a regeneration — signing would be undone by the next `npm run q1:gate`. The record
+ * below is read here and merged into the report, and it carries who signed, when, and what they
+ * had in front of them. A boolean cannot be audited; a name and a date can.
+ */
+interface SignatureRecord {
+  id: string;
+  signedBy: string;
+  signedOn: string;
+  basis: string;
+  /** For items a machine can check: how strong that check is. */
+  evidence?: 'artifact-supported' | 'judgement-only';
+}
+
+function readSignatures(): Map<string, SignatureRecord> {
+  const recordPath = path.join(ANALYSIS, 'human_checklist_signatures.json');
+  if (!fs.existsSync(recordPath)) return new Map();
+  const parsed = JSON.parse(fs.readFileSync(recordPath, 'utf-8')) as { signatures?: SignatureRecord[] };
+  return new Map((parsed.signatures ?? []).map((entry) => [entry.id, entry]));
+}
+
 const HUMAN_CHECKLIST: HumanCheckItem[] = [
   { id: 'h-editor-fit',       category: 'Editor Fit',      question: 'Is the framing aligned to 3 target Q1 journals (see journal_fit_targeting.json)?' },
   { id: 'h-desk-reject',      category: 'Editor Fit',      question: 'Are common desk-reject triggers neutralized (over-claiming, scope mismatch, novelty inflation)?' },
@@ -846,6 +870,7 @@ function emitReport(): boolean {
   console.log(`\n  Mark each item above before final submission.\n`);
 
   // Write machine-readable report artifact
+  const signatures = readSignatures();
   const report = {
     schema: 'phase1.q1_submission_gate.v1',
     generatedAtIso: new Date().toISOString(),
@@ -872,12 +897,23 @@ function emitReport(): boolean {
       label: f.label,
       detail: f.detail,
     })),
-    humanChecklist: HUMAN_CHECKLIST.map(h => ({
-      id: h.id,
-      category: h.category,
-      question: h.question,
-      signedOff: false,
-    })),
+    humanChecklist: HUMAN_CHECKLIST.map((h) => {
+      const signature = signatures.get(h.id);
+      return {
+        id: h.id,
+        category: h.category,
+        question: h.question,
+        signedOff: signature !== undefined,
+        ...(signature
+          ? {
+              signedBy: signature.signedBy,
+              signedOn: signature.signedOn,
+              basis: signature.basis,
+              evidence: signature.evidence ?? 'judgement-only',
+            }
+          : {}),
+      };
+    }),
   };
 
   const reportPath = path.join(ANALYSIS, 'q1_submission_gate_report.json');

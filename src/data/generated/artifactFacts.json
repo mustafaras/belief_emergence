@@ -97,6 +97,10 @@
       "schemaVersion": "phase1.gini_window_sensitivity.v1",
       "generatedAt": "2026-11-15T11:40:20.366Z"
     },
+    "human_checklist_signatures": {
+      "schemaVersion": "phase1.human_checklist_signatures.v1",
+      "generatedAt": "2026-11-19T11:17:44.302255+00:00"
+    },
     "journal_fit_targeting": {
       "schemaVersion": "phase1.journal_fit_targeting.v1",
       "generatedAt": "2026-11-09T11:25:00.000Z"

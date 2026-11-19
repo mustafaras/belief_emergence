@@ -80,10 +80,10 @@ describe('evidence index matches the tree', () => {
     // 28: the Evaluation claims stopped importing `cv_kfold.json` in P38 and read the
     // `evaluation_summary.json` projection instead — that artifact is 289 KiB gzipped and was
     // 68% of the initial payload for four numbers and a fold count.
-    expect(names.length).toBe(42)
+    expect(names.length).toBe(43)
     expect(ARTIFACT_CONSUMPTION.imported.length).toBe(28)
     expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(4)
-    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(10)
+    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
   })
 
   it('flags an artifact whose declared sample predates the current panel', () => {

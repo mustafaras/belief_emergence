@@ -1,0 +1,95 @@
+{
+  "schema": "phase1.human_checklist_signatures.v1",
+  "generatedAtIso": "2026-11-19T11:17:44.302255+00:00",
+  "signer": {
+    "name": "mustafaras",
+    "email": "mustafarasit@hotmail.com"
+  },
+  "note": "Each entry records a decision made by the named person, not a result produced by a program. `evidence` says what that decision rests on: `artifact-supported` means `npm run check:checklist-evidence` verified the checkable part and the signer accepted it; `judgement-only` means the question asks for an editorial judgement that no file in this repository can answer, and the signer made it.",
+  "signatures": [
+    {
+      "id": "h-editor-fit",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "journal_fit_targeting.json records 5 target journals with social_indicators_research recommended primary. The framing was accepted as aligned on the author decision; the repository cannot measure editorial fit.",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-desk-reject",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Desk-reject triggers are enumerated in reviewer_red_team.json and journal_fit_targeting.json. Accepted as neutralised on the author decision; the check for causal language and the Tier C labelling are machine-verified separately (h-causal, h-claim-tier).",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-abstract-screen",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "abstract_screening_pack.json is committed. First-pass screening is an editor judgement; the abstract is accepted as concise, evidence-calibrated and non-causal by the signer.",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-claim-tier",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "check:checklist-evidence verified that all 4 paragraphs mentioning Tier C mark it exploratory, and that no unqualified causal claim survives the phrase scan. Signer accepted the verification.",
+      "evidence": "artifact-supported"
+    },
+    {
+      "id": "h-causal",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Independent phrase scan over the manuscript body: no unqualified causal verb outside a negation, a quotation or a mathematical definition. Signer read the six flagged contexts and accepted them as model mechanics rather than claims about the world.",
+      "evidence": "artifact-supported"
+    },
+    {
+      "id": "h-support",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Panel has 207 rows read from the CSV; every country-year count in the manuscript matches; a support-density statement is present and the exponent bound is reported as unidentified.",
+      "evidence": "artifact-supported"
+    },
+    {
+      "id": "h-lockbox-disclose",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Five sentences discuss the lockbox and at least one states it was held out from development cross-validation. The Evidence page states 59 recovered cells out of sample but not blind.",
+      "evidence": "artifact-supported"
+    },
+    {
+      "id": "h-novelty-precise",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "The novelty claim was scoped to method plus a domain-specific contribution with no universal quantifier, on the author decision. The repository cannot judge what the field will consider novel.",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-review-ready",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "reviewer_red_team.json records 18 criticisms with a response pack. The responses were accepted as adequate by the signer; adequacy is the reviewers' judgement.",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-cover-letter",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "paper/cover_letter.tex exists (about 1,500 words) and was read by the signer, who accepted that it carries the novelty-fit-robustness arc for social_indicators_research.",
+      "evidence": "judgement-only"
+    },
+    {
+      "id": "h-captions",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "check:checklist-evidence verified that all 6 captions name a scope or an interpretation boundary — five with the explicit Data scope / Method context labels and the attrition figure by stating its sample in the first sentence.",
+      "evidence": "artifact-supported"
+    },
+    {
+      "id": "h-highlights",
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Every alpha quoted in highlights.tex matches the construct audit (0.82, 0.35, -1.23, 0.75) and the identity correlation r = 1.000000000000 matches design_gates.json to twelve digits. Verified mechanically and accepted by the signer.",
+      "evidence": "artifact-supported"
+    }
+  ]
+}

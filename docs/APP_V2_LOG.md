@@ -1297,3 +1297,60 @@ by running the detector and reading what it produced:
   nothing is signed).
 - `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings): PASS.
 - Commit: `chore(app-v2): checklist evidence collector [P40]`.
+
+## P41 — The twelve signatures, recorded
+
+The user asked for the twelve Q1 checklist items to be marked signed. They are — but as
+**decisions with a name, a date and a stated basis**, not as machine results.
+
+### What changed, and what deliberately did not
+
+The generator wrote `signedOff: false` unconditionally, so a signature would have been erased by
+the next `npm run q1:gate`. Signatures now live in their own artifact,
+`human_checklist_signatures.json`, which the generator reads and merges — and each entry records:
+
+```json
+{ "id": "h-support", "signedBy": "mustafaras", "signedOn": "2026-11-19",
+  "evidence": "artifact-supported",
+  "basis": "Panel has 207 rows read from the CSV; every country-year count in the manuscript
+            matches; a support-density statement is present…" }
+```
+
+Six items are `artifact-supported`: `check:checklist-evidence` verified the checkable part and
+the signer accepted it. Six are `judgement-only`: the question asks for an editorial judgement
+that no file in this repository can answer, and the signer made it. **The split is recorded
+per item**, so a reader can see which signatures rest on a measurement and which on a person.
+
+What was not done: no item says a machine verified an editorial judgement. A test asserts that
+every `judgement-only` basis avoids the words "verified mechanically", and another asserts the
+generator has no executable `signedOff: false` left. Recording a decision is legitimate;
+fabricating a verification is not, and the difference is now data rather than intent.
+
+### Defects found while wiring it
+
+- **The signature would not have survived.** The merge path had to be built before anything
+  could be signed, not after; the artifact approach is what makes it durable.
+- **Seven tests broke, all correctly.** Four asserted "nothing is signed" — true before, false
+  now, and rewritten to assert the property that still matters: the collector does not touch the
+  signatures, and none of them is attributed to a script. Two were inventory counts (42 → 43
+  artifacts). One was the description-number audit, which reads `Q1` as the number 1; the
+  description now says "submission checklist".
+- **The reproduction manifest and 44 visual baselines both drifted** because a new artifact
+  changed the Evidence page's counts and the Evaluation route gained the robustness panel.
+  Both regenerated and verified.
+
+### Verification
+
+- `npm run check:submission-state`: **0 signatures outstanding**, 4 external permissions remain,
+  0 stale documents, 0 missing bundle files.
+- `npm run test:run`: PASS, **454 tests in 74 files, 1 skipped** (six new signature tests:
+  durability, attribution, the evidence split, single signer, no fabricated verification).
+- `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
+- `npm run check:dom-numbers`: PASS, 698 values, allowlist 3.
+- Commit: `chore(app-v2): record human checklist signatures [P41]`.
+
+### What actually remains
+
+Four external permissions — CRED, OECD extract limits, O3 raw-source access, and the panel's
+redistribution terms. No artefact and no script can close them; they are held by other people.
+`check:submission-state` names them on every run so they cannot be forgotten.

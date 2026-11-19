@@ -47,6 +47,8 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'Whether the exponents sit at their lower bound because the bound is too tight or because the panel cannot identify them; relaxing the bound moves the fit, so they are driven toward zero rather than merely clipped.',
   elasticity_profile:
     'Profile likelihood over a grid of alpha: the loss rises monotonically, there is no interior optimum, and the parameter is therefore not identified on this panel.',
+  human_checklist_signatures:
+    'The submission checklist decisions: who signed each item, when, and on what basis.',
   failure_log:
     'Per-cell validation failures with their tiers, so a reader can see which observations the model could not reproduce.',
   functional_form_comparison:

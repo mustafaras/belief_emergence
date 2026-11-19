@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import { execFileSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 
 /**
  * The evidence collector must not claim more than it checked.
@@ -39,16 +40,15 @@ describe('checklist evidence', () => {
     }
   })
 
-  it('does not sign anything', () => {
-    // The collector reports; it does not write. `signedOff` stays false in the artifact.
-    const artifact = JSON.parse(
-      execFileSync('node', ['-e', `
-        const fs = require('fs');
-        const d = JSON.parse(fs.readFileSync('src/data/analysis/q1_submission_gate_report.json','utf8'));
-        process.stdout.write(JSON.stringify(d.humanChecklist.map(h => h.signedOff)));
-      `], { encoding: 'utf8' }),
-    ) as boolean[]
-    expect(artifact.every((signed) => signed === false)).toBe(true)
+  it('does not sign anything itself', () => {
+    // The collector reports; it does not write. Signatures now exist in the artifact, but they
+    // came from a named person through `human_checklist_signatures.json` — not from this script.
+    // The property worth protecting is that running the collector leaves them untouched.
+    const before = readFileSync('src/data/analysis/q1_submission_gate_report.json', 'utf8')
+    execFileSync('npx', ['tsx', 'scripts/collect_checklist_evidence.ts', '--json'], { encoding: 'utf8' })
+    const after = readFileSync('src/data/analysis/q1_submission_gate_report.json', 'utf8')
+    expect(after).toBe(before)
+    expect(before).not.toContain('"signedBy": "check:checklist-evidence"')
   })
 
   it('quotes the α and identity figures from the artifacts, not from the highlights file', () => {

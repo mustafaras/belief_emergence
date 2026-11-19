@@ -36,7 +36,7 @@ export const REPRODUCTION_MANIFEST = {
   "generatedFrom": {
     "routes": 11,
     "claimModules": 9,
-    "artifacts": 42,
+    "artifacts": 43,
     "rawdataChecked": false
   },
   "routes": [
@@ -1672,6 +1672,14 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "generator": "npm run generate:gini-window",
       "provenance": "generated"
+    },
+    {
+      "name": "human_checklist_signatures",
+      "sourceTwin": null,
+      "claimedBy": 0,
+      "routes": [],
+      "generator": null,
+      "provenance": "recorded"
     },
     {
       "name": "journal_fit_targeting",
