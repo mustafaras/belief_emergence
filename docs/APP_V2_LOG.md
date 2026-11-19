@@ -1187,3 +1187,53 @@ for `document.fonts.ready` and one extra frame. Two consecutive full comparisons
   ⚠️ rather than ✅ because `check:paper-claims` does not exist in this repository and never
   has; the article–application agreement is carried by three other checks, named in the table.
 - Commit: `chore(app-v2): budgets and final gate [P38]`.
+
+## P39 — Submission state (starter for the next step)
+
+The prompt sequence closed at P38. What remains is not application work, so the honest next
+step is a way to see exactly what is left. `npm run check:submission-state` separates the four
+kinds of outstanding item and fails while any is open.
+
+```
+BLOCKING — HUMAN SIGNATURE REQUIRED (12)     the Q1 gate's checklist, unsigned
+BLOCKING — EXTERNAL PERMISSION (4)           CRED, OECD, O3, panel redistribution
+STALE — DOCUMENT DISAGREES WITH THE TREE (0)
+MISSING FROM THE SUBMISSION BUNDLE (0)
+READY (8)                                    27/27 automated checks, 99/99 gate, 207 rows, 5 PDFs
+```
+
+16 items stand between this tree and a submission, and **none of them is closed by code**. The
+script says so rather than implying otherwise.
+
+### What writing it found
+
+- **The Q1 checklist carried `n=146 country-years`** — the sample two rebuilds ago — inside
+  `h-support`, the question that asks whether support-density boundaries are acknowledged. It
+  was in the check that exists to stop hand-maintained artifacts describing a different panel.
+  The figure is now derived from the CSV.
+- **The roadmap recorded `ci:gate` at 91/91** and said the log ran "through P30". Both were true
+  when written and neither was current. The status line had been updated each prompt; the body
+  had not.
+- **Two bugs in the checker itself, both found by running it.** It looked for the submission
+  bundle in `paper/submission/` and reported all five PDFs missing while they sat in
+  `submission/` one directory up — this repository is checked out twice, as siblings, so `..`
+  from the app root lands on the directory containing both. And its log-depth check hardcoded
+  `P38`, so it flagged the roadmap as stale *after* the roadmap was corrected to `P38`. A check
+  that fails on a correct file teaches its reader to ignore it; both now compare against the
+  tree rather than a constant.
+
+### Deliberately not added to `ci:gate`
+
+The step would have made the gate fail on every run, because the 12 signatures and 4
+permissions are real and open. A gate that is red until a human signs a form is a gate people
+stop running. It stays a separate command, and `ci_gate` is unchanged at 99/99.
+
+### Verification
+
+- `npm run check:submission-state`: STALE **0**, MISSING **0**, READY **8**, and it names the 16.
+- Mutation-tested: reverting the roadmap to "commits through P30" makes it report exactly that
+  disagreement and nothing else.
+- `npm run test:run`: PASS, **443 tests in 72 files, 1 skipped** (five new, including one that
+  fails if the checklist figure ever stops matching the CSV).
+- **`npm run ci:gate`: 99/99 PASS**, payload 179 KiB gzipped.
+- Commit: `chore(app-v2): submission state checker [P39]`.

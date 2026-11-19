@@ -263,7 +263,7 @@
     {
       "id": "h-support",
       "category": "Claim Strength",
-      "question": "Are support-density boundaries (n=146 country-years) explicitly acknowledged for high-dimensional terms?",
+      "question": "Are support-density boundaries (n=207 country-years) explicitly acknowledged for high-dimensional terms?",
       "signedOff": false
     },
     {
