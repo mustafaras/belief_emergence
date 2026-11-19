@@ -141,27 +141,9 @@ jobs:
           test -x "$CHROME" || { echo "browser not executable"; exit 1; }
           echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
 
-      # The server is started inside the step that uses it, not in a step of its own.
-      #
-      # GitHub Actions runs each `run:` block in a separate shell, and a background process does
-      # not survive the shell that spawned it. The previous version started Vite, waited for it,
-      # and exited 0 — which killed the server — so every browser check in the next step failed
-      # with ERR_CONNECTION_REFUSED while passing locally.
-      - name: Start the dev server (kept alive for the steps that need it)
-        run: |
-          nohup npx vite --port 5199 --strictPort > /tmp/vite-ci.log 2>&1 &
-          echo $! > /tmp/vite.pid
-          for i in $(seq 1 60); do
-            if curl -sf -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-              echo "dev server up after ${i}s (pid $(cat /tmp/vite.pid))"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "dev server did not start; last log lines:"
-          tail -20 /tmp/vite-ci.log
-          exit 1
-
+      # No standalone server step. Each step that needs a browser starts Vite itself and stops
+      # it on exit — Actions gives every `run:` block a fresh shell, so a server started in one
+      # step is gone by the next. This step used to exist and could never have worked.
       - name: Deterministic reproducibility gate
         env:
           ROUTE_CHECK_PORT: '5199'
@@ -173,7 +155,7 @@ jobs:
           # The server must live inside this step. Actions gives every `run:` block its own
           # shell, and a background process does not outlive it — which is why the browser
           # checks in this step failed with ERR_CONNECTION_REFUSED in CI while passing locally.
-          npx vite --port 5199 --strictPort > /tmp/vite-gate.log 2>&1 &
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-gate.log 2>&1 &
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do
@@ -196,7 +178,7 @@ jobs:
         env:
           RENDER_CHECK_PORT: '5199'
         run: |
-          npx vite --port 5199 --strictPort > /tmp/vite-checks.log 2>&1 &
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-checks.log 2>&1 &
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do
