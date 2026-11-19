@@ -10,9 +10,9 @@ P20–P38 başlamadı. Bu worktree'deki v2 işi commit edilmedi; canlı ilerleme
 APP_V2_LOG.md'dir.
 
 **Güncel makale referansı (2026-11-16).** `paper/main/main.tex` son olarak `be904cc` commit'inde
-güncellendi. Belgelerde kayıtlı en yüksek ve en son puan bu sürüme ait: **95/100**
-(`docs/ROADMAP_TO_SUBMISSION.md:3`). Bu worktree'de `paper/` değişikliği yok. Uygulama bu sürümü
-yansıtır. §6'daki iç çelişkiler listesi tarihsel girdidir; düzeltme durumları ve açık O3/O5 kapıları
+güncellendi. Puan artık hesaplanıyor: **91/100** (`npm run report:score`,
+`docs/ROADMAP_TO_SUBMISSION.md` § "Current score"). Eski 95/100 rubriksizdi ve yeniden üretilemiyordu;
+kayıttan kaldırıldı. Bu worktree'de `paper/` değişikliği yok. Uygulama bu sürümü yansıtır. §6'daki iç çelişkiler listesi tarihsel girdidir; düzeltme durumları ve açık O3/O5 kapıları
 `docs/PAPER_SYNC_REPORT.md` içinde tutulur. O5, kullanıcının kararıyla açık kalır.
 
 ---
@@ -277,7 +277,7 @@ dosyasını üretir. CI'da bir uyumsuzluk varsa kapı düşer.
 | P20 | 196 | Anahtar kelimeler eski çerçevede (düşük öncelik) |
 | P21 | 719 | "Density overlays" vaadi P29 ile karşılanır |
 
-**Kural:** yalnızca sayılar ve tekrarlar düzeltilir. İddia ve anlatı değişmez; 95/100'lük sürümün
+**Kural:** yalnızca sayılar ve tekrarlar düzeltilir. İddia ve anlatı değişmez; önceki sürümün
 argümanı korunur. Her düzeltme `PAPER_SYNC_REPORT.md`'ye kaydedilir.
 
 ---

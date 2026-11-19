@@ -33,6 +33,7 @@
     "ci:gate": "tsx scripts/ci_gate.ts",
     "q1:gate": "tsx scripts/q1_submission_gate.ts",
     "check:submission-state": "tsx scripts/check_submission_state.ts",
+    "report:score": "tsx scripts/compute_paper_score.ts",
     "check:checklist-evidence": "tsx scripts/collect_checklist_evidence.ts",
     "verify:all": "npm run audit:search && npm run test:run && npm run lint && npm run build",
     "build:wvs-constructs": "tsx scripts/build_wvs_constructs.ts",

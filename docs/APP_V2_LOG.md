@@ -1403,3 +1403,60 @@ missing permission. A signer cannot act on "permission missing" if the permissio
   restricted sources are WVS/EVS, and `G` is empty in every row).
 - `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
 - Commit: `chore(app-v2): derive external dependencies from provenance [P42]`.
+
+## P43 — The score, computed
+
+**91/100**, and every point of it comes from a command this repository runs.
+
+| Dimension | Points | Basis |
+|---|---:|---|
+| Measurement validity | 25/25 | 9/9 measurement-validity checks |
+| Inferential compliance and lockbox | 20/20 | 6/6 inferential, lockbox and validity checks |
+| Reproducibility | 20/20 | 3/3 integrity checks; 44/44 visual baselines and the surface baseline present |
+| Documentation and claim traceability | 15/15 | 3/3 docs checks; number-audit allowlist still 3 entries, README metrics, manifest |
+| Checklist signatures | 10/10 | 12/12 recorded, 6 artefact-supported and 6 judgement |
+| **External dependencies closed** | **1/10** | 3 open: EM-DAT raw files, OECD bulk extract, derived-panel redistribution |
+| Submission bundle | not scored | 5/5 PDFs present |
+
+`npm run report:score` computes it in **1.3 seconds**.
+
+### Why the old 95/100 was retired, not adjusted
+
+It came with no rubric, no reviewer report and no reproducible computation. A score whose basis is
+unrecorded cannot fall, so it does not measure anything — and it was **higher than the current
+computed score while the repository was measurably worse**: the README still carried the withdrawn
+r² = 0.8461, six of eleven routes scrolled sideways on a phone, and the landing payload was 426 KiB
+gzipped. The replacement is lower and defensible; the old figure was higher and was not.
+
+Every 95/100 in the tree was removed or explicitly framed as history. The roadmap's "Current
+documented score" section is replaced by a table naming each dimension's basis.
+
+### The gap is external, and the score says so
+
+Nine of ten points on the external dimension are lost to three licence and redistribution items.
+They are separate from the other six dimensions precisely so a reader can see how much of the
+score is **not** about the work. No repository change can close them, and the tool refuses to
+report 100 while any is open — a test asserts that.
+
+### Defects found while building it
+
+- **The scorer took over ten minutes.** It re-ran the visual baselines and the surface snapshot to
+  check reproducibility. A command that slow is one nobody runs before a decision; it now reads
+  whether the baselines are present (44/44) and leaves the running to `ci:gate`.
+- **The number audit was in the timed path** for the same reason — a browser it did not need. It
+  now reads the allowlist, which is the artefact that shows the audit has not been widened, and
+  reports the count (3 entries).
+- **`readFileSync` on a directory** — my first attempt at reading the baseline set. It would have
+  thrown on a path that exists, which is worse than returning false.
+- **Four tests spawned four `tsx` processes**, each paying startup, and timed out at five seconds
+  under full-suite load while passing in isolation. Computed once and cached; the first test
+  carries an explicit 30-second budget so the timeout measures the code, not the machine.
+
+### Verification
+
+- `npm run report:score`: **91/100** in 1.3 s, seven dimensions each with its evidence line.
+- `npm run test:run`: PASS, **463 tests in 76 files, 1 skipped** (four new: the dimensions add to
+  100, the score cannot reach 100 with an open external, every dimension states its basis, and the
+  bundle is reported at zero weight).
+- `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
+- Commit: `chore(app-v2): computed manuscript score [P43]`.
