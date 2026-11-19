@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P38 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -36,7 +36,8 @@ the supplement, and repository licensing language.
 The remaining work is:
 
 1. **Final verification of the 2026-11-16 reconciliation — complete.** The
-   evidence index was regenerated and checked; the full CI gate passed 91/91;
+   evidence index was regenerated and checked; the full CI gate passed 91/91 at that
+   point (it runs 99 now — see the status line);
    the Q1 gate passed 27/27; and the supplementary materials, main manuscript,
    title page, cover letter, and highlights compiled successfully. The latest
    TeX sources report 14,034 words excluding references.
@@ -151,6 +152,13 @@ The remaining work is:
    numbering it refers to is not defined in the plan. Article–application agreement is carried
    by `check:manuscript-consistency`, `check:ui-artifacts` and `check:dom-numbers` instead, and
    §8 records that substitution rather than claiming the original.
+
+   P39 adds `npm run check:submission-state`, which is the starter for the next step: it prints
+   the outstanding items in four separated lists — human signature, external permission, stale
+   document, missing bundle file — and fails while any is non-empty. It reports **16 open, none
+   of them closeable by code**: the 12 unsigned checklist items and the 4 external permissions.
+   It is deliberately not in `ci:gate`, because a gate that is red until a person signs a form
+   is a gate people stop running.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
