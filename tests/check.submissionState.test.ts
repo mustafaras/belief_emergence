@@ -25,10 +25,34 @@ describe('submission state', () => {
     expect(output).toMatch(/STALE — DOCUMENT DISAGREES WITH THE TREE \(0\)/)
   })
 
-  it('finds the submission bundle in the manuscript worktree', () => {
+  it('reports the submission bundle honestly, wherever it is running', () => {
+    /*
+     * The bundle is built by the workflow's assemble step, so it exists on a developer machine
+     * that has run it and does not exist on a fresh CI checkout. The first version of this test
+     * asserted `MISSING (0)` unconditionally and failed in CI for a reason that was not a defect.
+     *
+     * What the script must guarantee is the property, not the count: every one of the five
+     * expected files is either present in the READY list or named in the MISSING list. A file
+     * that appears in neither would be silently dropped.
+     */
     const output = report()
-    expect(output).toMatch(/MISSING FROM THE SUBMISSION BUNDLE \(0\)/)
-    expect(output).toContain('01_manuscript.pdf')
+    const expected = [
+      '01_manuscript.pdf',
+      '02_supplementary.pdf',
+      '03_title_page.pdf',
+      '04_cover_letter.pdf',
+      '05_highlights.pdf',
+    ]
+    const missingSection = /MISSING FROM THE SUBMISSION BUNDLE \((\d+)\)([\s\S]*?)(?:\n\n|$)/.exec(output)
+    const readySection = /READY \(\d+\)([\s\S]*)$/.exec(output)
+    const missingCount = Number(missingSection?.[1] ?? '0')
+
+    for (const file of expected) {
+      const inMissing = (missingSection?.[2] ?? '').includes(file)
+      const inReady = (readySection?.[1] ?? '').includes(file)
+      expect(inMissing || inReady, `${file} is in neither list`).toBe(true)
+    }
+    expect(missingCount).toBe(expected.filter((file) => (missingSection?.[2] ?? '').includes(file)).length)
   })
 
   it('counts the human signatures from the Q1 artifact rather than from a constant', () => {

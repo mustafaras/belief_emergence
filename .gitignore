@@ -43,9 +43,16 @@ rawdata/
 *.xls
 data/raw/
 
-# Ignore all CSVs except the canonical panel data used by the app
+# Ignore all CSVs except those the application imports with `?raw`.
+#
+# Vite resolves a `?raw` import at build time, so an untracked file is not a missing asset at
+# runtime — it is a build failure. Two CSVs are imported that way: the canonical panel and the
+# observed-vs-predicted export. The second was ignored by this rule and absent from CI, where
+# `Failed to resolve import` broke the build while every local check passed, because the file
+# existed on the developer machine.
 *.csv
 !public/data/panel_canonical_v2.csv
+!src/data/analysis/observed_vs_predicted_authoritative.csv
 
 # Generated reports & debug outputs
 eslint-out.txt
