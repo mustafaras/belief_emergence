@@ -21,6 +21,13 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/verify.yml'
+      # Build and test configuration. `vite.config.ts` decides which files Vitest collects and
+      # how many workers it uses; `.gitignore` decides whether an imported asset is committed.
+      # Neither was in this list, so a commit that changed test behaviour — bounding the worker
+      # count, for instance — did not trigger a run at all.
+      - 'vite.config.ts'
+      - '.gitignore'
+      - 'playwright.config.ts'
   pull_request:
     paths:
       - 'src/**'
@@ -32,6 +39,13 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/verify.yml'
+      # Build and test configuration. `vite.config.ts` decides which files Vitest collects and
+      # how many workers it uses; `.gitignore` decides whether an imported asset is committed.
+      # Neither was in this list, so a commit that changed test behaviour — bounding the worker
+      # count, for instance — did not trigger a run at all.
+      - 'vite.config.ts'
+      - '.gitignore'
+      - 'playwright.config.ts'
   workflow_dispatch:
 
 jobs:
