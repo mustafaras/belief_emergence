@@ -23,6 +23,8 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { resolveManuscriptRoot } from './lib/worktree'
+
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url))
 
 /**
@@ -37,12 +39,7 @@ const APP_ROOT = fileURLToPath(new URL('..', import.meta.url))
  * Candidates are tried in order and the first with a `paper/` directory wins, so a single
  * checkout (CI, or a fresh clone of one branch) works as well as the two-worktree layout.
  */
-const WORKTREE = path.resolve(APP_ROOT, '..')
-const REPO_ROOT = [
-  WORKTREE,
-  path.join(WORKTREE, 'repo'),
-  path.join(WORKTREE, '..'),
-].find((candidate) => existsSync(path.join(candidate, 'paper'))) ?? WORKTREE
+const REPO_ROOT = resolveManuscriptRoot(APP_ROOT)
 
 type Item = { id: string; detail: string }
 

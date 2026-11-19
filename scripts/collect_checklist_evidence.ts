@@ -23,11 +23,26 @@ import { fileURLToPath } from 'node:url'
 
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const WORKTREE = path.resolve(APP_ROOT, '..')
-const REPO_ROOT = [
+/*
+ * Order matters, and the first version had it backwards.
+ *
+ * In the two-worktree layout this branch has no `paper/` of its own, so the sibling `repo/` is
+ * the manuscript. In a single checkout — CI, or a clean clone — this branch *does* carry a
+ * `paper/`, and it is the one the tests run against. Putting the sibling first means a clean
+ * checkout reads its own tree, and a two-worktree checkout still finds the manuscript next door.
+ *
+ * The previous order put `WORKTREE` first, so a clean clone read its own tree correctly but the
+ * two-worktree checkout also found `paper/` there — an older copy — and silently read the wrong
+ * manuscript. The collector then reported that the paper states no country-year counts.
+ */
+const candidates = [
+  // The app's own tree first: in a single checkout this is the only correct answer.
+  path.join(APP_ROOT, '..', path.basename(APP_ROOT)),
   WORKTREE,
   path.join(WORKTREE, 'repo'),
-  path.join(WORKTREE, '..'),
-].find((candidate) => existsSync(path.join(candidate, 'paper'))) ?? WORKTREE
+]
+const REPO_ROOT =
+  candidates.find((candidate) => existsSync(path.join(candidate, 'paper', 'main', 'main.tex'))) ?? WORKTREE
 
 const read = (relative: string): string =>
   existsSync(path.join(REPO_ROOT, relative)) ? readFileSync(path.join(REPO_ROOT, relative), 'utf8') : ''

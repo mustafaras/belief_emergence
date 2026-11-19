@@ -21,10 +21,10 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { resolveManuscriptRoot } from './lib/worktree'
+
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url))
-const WORKTREE = path.resolve(APP_ROOT, '..')
-const REPO_ROOT = [WORKTREE, path.join(WORKTREE, 'repo'), path.join(WORKTREE, '..')]
-  .find((candidate) => existsSync(path.join(candidate, 'paper'))) ?? WORKTREE
+const REPO_ROOT = resolveManuscriptRoot(APP_ROOT)
 
 type Dimension = {
   id: string
