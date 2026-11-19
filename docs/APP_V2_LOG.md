@@ -1237,3 +1237,63 @@ stop running. It stays a separate command, and `ci_gate` is unchanged at 99/99.
   fails if the checklist figure ever stops matching the CSV).
 - **`npm run ci:gate`: 99/99 PASS**, payload 179 KiB gzipped.
 - Commit: `chore(app-v2): submission state checker [P39]`.
+
+## P40 — Checklist evidence for the twelve signatures
+
+The twelve items P39 surfaced are not twelve acts of faith. **Six of them ask a question a file
+in this repository can answer.** What a person must contribute is judgement and a signature, not
+the reading. `npm run check:checklist-evidence` does the reading.
+
+```
+✓ supported (6)     h-claim-tier  h-causal  h-support  h-lockbox-disclose  h-captions  h-highlights
+! needs-review (0)
+? cannot-check (6)  h-editor-fit  h-desk-reject  h-abstract-screen
+                    h-novelty-precise  h-review-ready  h-cover-letter
+```
+
+The six that cannot be checked are marked as such rather than guessed at. They ask whether the
+framing is aligned to a journal, whether desk-reject triggers are neutralised, whether the
+novelty claim is scoped for a field, whether the red-team responses are adequate, whether the
+abstract passes first-pass screening, and whether the cover letter has a coherent arc. A machine
+that answered any of those would be laundering a judgement into a grep result — which is exactly
+what the signatures exist to prevent. **The script never writes `signedOff`.**
+
+### What the reading found
+
+The six artefact-checkable items all pass, and each pass is a measurement rather than an
+assertion:
+
+- **h-highlights**: every α the highlights quote is an α the construct audit records, and the
+  identity correlation they cite (`r = 1.000000000000`) matches `design_gates.json` to the digit.
+- **h-support**: the panel has 207 rows and every country-year count in the manuscript matches.
+- **h-claim-tier**: all four paragraphs that mention Tier C mark it exploratory.
+- **h-lockbox-disclose**: the lockbox is discussed and stated to have been held out.
+- **h-captions**: all six captions name a scope or an interpretation boundary.
+- **h-causal**: no unqualified causal claim survives a phrase scan of 14,034 words.
+
+### Four false positives, each of which would have made the report noise
+
+A report that flags a correct manuscript is a report nobody reads. Every one of these was found
+by running the detector and reading what it produced:
+
+- **`increases`, `reduces`, `lowers` are not causal claims here** — they describe what a
+  *coefficient* does to the latent index. All ten of the first run's candidates were that kind.
+- **`due to` inside "Propagation accelerators due to X"** is a heading fragment, not a claim.
+- **Sentence-splitting cut Tier C at the first `\num{0.4623}`** — a decimal point — so the
+  qualifier following the number was never in the window. Reading paragraphs instead found that
+  the paper says "Tier C (full exploratory complexity) is retained as an exploratory appendix".
+- **Captions were required to carry the `\textbf{Data scope:}` label.** The attrition figure
+  states 442,026 respondents and 207 complete-case rows in its first sentence but does not use
+  the label; it was reported as unbounded. A structural convention is not the property being
+  checked.
+
+### Verification
+
+- `npm run check:checklist-evidence`: **6 supported, 0 need reading, 6 judgements**.
+- Mutation-tested: changing one α in `highlights.tex` from 0.35 to 0.47 makes the report say
+  `α = 0.47 is quoted but no construct records it (recorded: 0.82, 0.35, -1.23, 0.75)`.
+- `npm run test:run`: PASS, **448 tests in 73 files, 1 skipped** (five new, including one that
+  asserts no editorial judgement is ever reported as machine-supported, and one that asserts
+  nothing is signed).
+- `npx tsc -b`, `npm run lint` (0 errors, 2 existing warnings): PASS.
+- Commit: `chore(app-v2): checklist evidence collector [P40]`.
