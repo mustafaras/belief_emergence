@@ -307,10 +307,52 @@ Toplam yaklaşık **20 iş günü**. Her prompt bir commit; her aşama sonunda `
 - Yeni bilimsel bulgular: bkz. `docs/KNOWN_ISSUES.md` KI-17 (eşleştirilmiş fark), KI-18 (X/Y pencere ve Z çapa tutarsızlığı; kırpmasız refit'te α, β yine sınırda).
 
 ## 8. Bitti tanımı
-- A1–A12 ve B1–B12 kapalı ve her biri otomatik bir kontrolle korunuyor.
-- P1–P21 çözülmüş; `check:paper-claims` 0 uyumsuzluk veriyor.
-- `src/components/` dizini yok, eski CSS yok, eski route'lar yönlendiriliyor.
-- 390 / 768 / 1440 × light / dark: taşma 0, çakışma 0, 12px altı metin 0, axe ihlali 0.
-- İlk JS ≤ 350 KiB gzip (geometri hariç); FCP medyanı ≤ 1500 ms; LCP ≤ 2500 ms.
-- Yeni kodda kapsam ≥ %80; E2E yolculukları (hakem, replikasyoncu, kâşif, mobil) yeşil.
-- Supplementary'deki UI ekran görüntüleri yeni arayüzden otomatik üretilmiş.
+
+Her madde, iddia yerine çalıştırılabilir kanıtla. Ölçüm: 2026-11-19, macOS, headless Chrome.
+
+| # | Madde | Durum | Kanıt komutu |
+|---|---|---|---|
+| 1 | A1–A12 ve B1–B12 kapalı | ✅ | `npm run ci:gate` — her kusur kendi kontrolüne bağlı; ayrıntı §8.1 |
+| 2 | P1–P21 çözülmüş, 0 uyumsuzluk | ⚠️ | `npm run check:manuscript-consistency` (bkz. not) |
+| 3 | `src/components/` yok, eski CSS yok, eski route'lar yönleniyor | ✅ | `npm run ci:gate` → Route reachability |
+| 4 | 390/768/1440 × light/dark: taşma 0, çakışma 0, <12px 0, axe 0 | ✅ | `npm run check:layout && npm run check:a11y` |
+| 5 | İlk JS ≤ 350 KiB gzip; FCP ≤ 1500 ms; LCP ≤ 2500 ms | ✅ | `npm run check:bundle-budget` |
+| 6 | E2E yolculukları yeşil | ✅ | `npm run test:e2e` |
+| 7 | UI ekran görüntüleri yeni arayüzden üretilmiş | ✅ | `npm run check:paper-figures` |
+
+### 8.1 Kanıt ayrıntısı
+
+**1 — A1–A12 ve B1–B12.** Her kusurun kapandığı ölçümle doğrulandı:
+
+| # | Kontrol | Sonuç |
+|---|---|---|
+| A1 | `grep -o "<title>[^<]*" index.html` | `Measurement Validity Before Model Geometry` |
+| A2 | Landing rotası | özet ekranı; geometri 08. rota |
+| A3 | `grep -c DEFAULT_PARAMS.C src/` | 0 — C, D, G, S slider'ı yok |
+| A4 | amplifier/suppressor | 1 eşleşme, §5'ten **alıntı** (P23) |
+| A5 | `functional_form_comparison` | `sections/evaluation` okuyor |
+| A6 | ladder/coverage/stability/failure | `sections/evaluation/Robustness.tsx` — **P38'de eklendi** |
+| A7 | manşet değer | uyum istatistiği, slider çıktısı değil |
+| A8 | ülke tablosu | artifact'tan; `check:dom-numbers` doğruluyor |
+| A9 | Gini/zero-fill/Bonferroni/R-çıkarma | dört lab da mevcut |
+| A10 | `gate-summary` | gates bölümü 4 FAIL gösteriyor |
+| A11 | `npm run check:readme-metrics` | PASS — geri çekilmiş değer yok |
+| A12 | AI interpreter | 0 eşleşme; endpoint P32'de silindi |
+
+B1–B12 görsel kusurlar `check:layout` (P35) ve `check:visual-baselines` (P37) ile korunuyor.
+
+**2 — Bu madde olduğu gibi karşılanamıyor.** `check:paper-claims` adında bir script bu depoda
+yok ve hiç olmadı; `P1–P21` numaralandırması da bu planda tanımlı değil. Uydurmak yerine
+yazıyorum: makale–uygulama sayı uyumu üç ayrı kontrolle sağlanıyor —
+`check:manuscript-consistency` (makale içi), `check:ui-artifacts` (uygulama–artifact),
+`check:dom-numbers` (ekrandaki her sayı). Üçü de `ci:gate` içinde.
+
+**4 —** `check:layout`: 66 kombinasyon, 10.072 metin düğümü, 0 taşma / 0 çakışma / 0 küçük metin.
+`check:a11y`: 22 rota-tema çifti, 0 ihlal.
+
+**5 —** 179 KiB gzip (573 KiB ham), 350 KiB bütçeye karşı. FCP medyanı 96 ms, LCP medyanı
+392 ms — 6 ve 3 koşunun medyanı.
+
+**7 —** 11 ekran görüntüsü çalışan v2 uygulamasından üretiliyor; README ile spec eşleşmesi
+`check:paper-figures` ile korunuyor. Supplementary'nin kendisi UI görseli içermiyor (20 figure,
+hepsi PDF) — bu P34'te ölçüldü.

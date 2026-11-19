@@ -159,9 +159,25 @@ jobs:
         env:
           ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
-          INITIAL_CHUNK_BUDGET_KIB: '2048'
-          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
+          INITIAL_CHUNK_BUDGET_KIB: '350'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
+          LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: npm run ci:gate
+
+      # The two checks P35 and P36 added. Until now they ran on a developer machine and in
+      # `ci:gate`, but not in CI — which means a pull request could break the layout of every
+      # route and the journeys that walk them, and the workflow would stay green. `ci:gate`
+      # already invokes both; running them explicitly here as well makes the failure name the
+      # check rather than the whole gate.
+      - name: Layout guards across 11 routes, 3 viewports and 2 themes
+        env:
+          RENDER_CHECK_PORT: '5199'
+        run: npm run check:layout
+
+      - name: End-to-end journeys
+        env:
+          RENDER_CHECK_PORT: '5199'
+        run: npm run test:e2e
 
       - name: Accessibility and Q1 submission gates
         env:
@@ -170,8 +186,9 @@ jobs:
           ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
           BUNDLE_CHECK_PORT: '5200'
-          INITIAL_CHUNK_BUDGET_KIB: '2048'
-          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
+          INITIAL_CHUNK_BUDGET_KIB: '350'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
+          LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: |
           ./node_modules/.bin/vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-accessibility-ci.log 2>&1 &
           VITE_PID=$!
@@ -234,12 +251,23 @@ jobs:
           test -x "$CHROME_PATH" || { echo "Chromium not executable: $CHROME_PATH"; exit 1; }
           CHROME_PATH="$CHROME_PATH" npm run check:surface-snapshot
 
-      - name: Compare all route screenshots
+      - name: Compare all 44 route screenshots
         env:
-          VISUAL_CHECK_PORT: '5199'
-          VISUAL_CHANNEL_TOLERANCE: '20'
-          VISUAL_MAX_CHANGED_PIXELS: '5000'
-        run: npm run check:visual-baselines
+          # The variable this script actually reads. The step previously set
+          # VISUAL_CHECK_PORT, which nothing consumes — the check would have run against the
+          # default port and failed to connect rather than comparing anything.
+          RENDER_CHECK_PORT: '5199'
+        run: |
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-visual-ci.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then break; fi
+            sleep 1
+          done
+          CHROME_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")
+          test -x "$CHROME_PATH" || { echo "Chromium not executable: $CHROME_PATH"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run check:visual-baselines
 
   build-paper:
     name: Compile manuscript and supplement

@@ -1100,3 +1100,90 @@ flake.
 - Registered on every platform, not only macOS: a step that disappears changes the total
   silently, which is the same defect fixed in P36's e2e entry.
 - Commit: `test(app-v2): visual baselines [P37]`.
+
+## P38 — Budgets and the final gate
+
+`ci:gate`: **99/99 PASS**. This closes the prompt sequence.
+
+### The budget was measuring the wrong unit
+
+It was 2048 KiB of *uncompressed* JavaScript. No server sends these files raw: the landing
+chunk was 1586 KiB on disk and **426 KiB over the wire**, so the check was comparing a number
+four times the real transfer cost against a limit set for the wrong one. It is now gzipped
+bytes — 350 KiB — with the raw figure printed beside it, because growth in raw with flat gzip
+means a change in compressibility and is worth seeing.
+
+### What was actually in the payload
+
+`cv_kfold.json` is **289 KiB gzipped** and was **68% of the landing route**. It was imported by
+`claims/selectors/evaluation.ts` to produce four tier medians and a fold count. The repository
+already carries `evaluation_summary.json` — a 3 KiB projection built in P25 for exactly this
+reason — and it holds the same aggregates and the same fold count. The claims read the
+projection now.
+
+The change was larger than it looked: `selectEvaluationSeries` existed only to read per-fold,
+per-seed data from that artifact, was imported by no component, and existed only to be tested.
+It went with the artifact, and its test was rewritten to check the same arithmetic — every tier
+median equals the median of the series it summarises — against the projection. **426 → 179 KiB
+gzipped**, and FCP fell to a 96 ms median.
+
+### LCP, and why the naive measurement would have passed everything
+
+LCP is not exposed through `performance.getEntriesByType`. It needs a `PerformanceObserver`
+installed before the page navigates, which is what `context.addInitScript` is for. Reading it
+after the load returns `0`, which a budget check would happily compare against 2500 ms and
+report as a pass — a measurement of nothing, reported as success. Installed correctly: **392 ms
+median** against a 2500 ms budget.
+
+### A6 was real, and only partly what it looked like
+
+The plan's item A6 says four out-of-sample artifacts are "read by 0 components". Checking
+before fixing found the situation subtler: `failure_log`, `model_ladder_metrics`,
+`prediction_interval_coverage` and `parameter_stability` were all **already on the import list**
+— `model.ts` and `evaluation.ts` imported them — so the consumption check called them consumed
+while no page displayed a single value from them. An import is not a display.
+
+They are now a "Robustness of the fit" panel on the Evaluation route, and each row states what
+its artifact says including where that is unflattering:
+
+- 324 folds, **none failed** — which says the optimiser was not the obstacle, not that the model is right.
+- Sign consistency at the stated 0.70 floor: **`t:r` changes sign across repeats**. That is a
+  finding, and it is on screen rather than in a JSON file.
+- Interval coverage: worst protocol 100% against a 95% nominal claim.
+- The nested ladder reports **in-sample** R² by tier. My first draft of that row claimed "the
+  best held-out tier"; the artifact has no held-out metric, and the schema parse caught it by
+  throwing a ZodError that blanked the whole route.
+
+### CI had two defects of its own
+
+- **`check:layout` and `test:e2e` were not in the workflow at all.** Both passed locally and in
+  `ci:gate`, but a pull request that broke every route's layout or the journeys that walk them
+  would have gone green. Both are now explicit steps.
+- **The visual-baseline step set `VISUAL_CHECK_PORT`**, which nothing reads; the script reads
+  `RENDER_CHECK_PORT`. The comparison would have run against the default port and failed to
+  connect rather than comparing anything. The step also assumed a server was already up; it now
+  starts one.
+- The budget env values in the workflow still pinned the old 2048/2500, so CI and a local run
+  would have disagreed about what passing meant.
+
+### Determinism, chased rather than assumed
+
+One baseline failed immediately after being written and passed on every run afterwards.
+Capturing the Countries route repeatedly showed two variants under load and one in isolation.
+The cause was web fonts: a page that paints before they arrive lays out in the fallback face
+and shifts when they land, and the fonts are fetched per browser context. The capture now waits
+for `document.fonts.ready` and one extra frame. Two consecutive full comparisons pass.
+
+### Verification
+
+- **`npm run ci:gate`: 99/99 PASS**, landing payload **179 KiB gzipped** (573 KiB raw).
+- `npm run check:bundle-budget`: FCP median **96 ms** / LCP median **392 ms**, three cold runs.
+- `npm run check:dom-numbers`: PASS, **698** distinct values, 0 unresolved, allowlist still 3.
+- `npm run check:layout`: PASS, 66 combinations. `npm run check:a11y`: PASS, 22 route-theme pairs.
+- `npm run check:visual-baselines`: PASS, 44/44.
+- `npm run test:run`: PASS, **438 tests in 71 files, 1 skipped**. `npx tsc -b`, `npm run lint`
+  (0 errors, 2 existing warnings), `npm run lint:css`, `npm run build`: PASS.
+- `docs/APP_PLAN_V2.md` §8: every item marked with the command that proves it. Item 2 is marked
+  ⚠️ rather than ✅ because `check:paper-claims` does not exist in this repository and never
+  has; the article–application agreement is carried by three other checks, named in the table.
+- Commit: `chore(app-v2): budgets and final gate [P38]`.

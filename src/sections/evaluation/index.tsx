@@ -5,6 +5,7 @@ import { formatClaim } from '../../claims/format'
 import { getClaim } from '../../claims/registry'
 import { Callout, Card, SectionHeader } from '../../ui'
 import ProtocolsSection from './Protocols'
+import { Robustness } from './Robustness'
 import comparison from '../../data/analysis/functional_form_comparison.json'
 import styles from './Evaluation.module.css'
 
@@ -167,6 +168,8 @@ export default function EvaluationSection() {
       </Card>
 
       <ProtocolsSection />
+
+      <Robustness />
 
       <div className={styles.notes}>
         <h2 className={styles.h2}>What the comparison can and cannot settle</h2>

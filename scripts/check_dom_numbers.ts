@@ -47,6 +47,7 @@ import { ARTIFACT_CONSUMPTION } from '../src/evidence/artifactConsumption.genera
 import { MANIFEST_CLAIM_COUNT, REPRODUCTION_MANIFEST } from '../src/evidence/reproductionManifest.generated'
 import { GATE_LOOP_CHECKS } from '../src/sections/reproduce/gateSteps.generated'
 import notationGlossary from '../src/data/analysis/notation_glossary.json'
+import * as robustness from '../src/claims/selectors/robustness'
 import { DESCRIPTION_NUMBERS } from '../src/evidence/descriptionNumbers'
 import { buildSupportPicture, type PanelAudit } from '../src/verification/supportPicture'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
@@ -486,6 +487,16 @@ export function buildSources(): {
       ]),
       // The gate's step total, printed as prose ("Runs the 93 checks").
       [GATE_LOOP_CHECKS.total as number],
+      // The robustness panel: fold totals, the sign-consistency floor, interval coverage and
+      // the ladder's per-tier fit. All read from four artifacts that no component displayed
+      // before P38, and re-derived here so a wrong panel fails the audit.
+      [robustness.failureLog.totalFolds as number],
+      [robustness.parameterStability.threshold as number],
+      // Printed with `pct1`, so the token on screen is the value times 100 at one decimal.
+      [(robustness.intervalCoverage.nominal as number) * 100],
+      [(robustness.intervalCoverage.severeThreshold as number) * 100],
+      [(robustness.intervalCoverage.worstCoverage as number) * 100],
+      ...robustness.ladderMetrics.rows.flatMap((row) => [row.parameters, row.r2]),
       // The Notation table prints a hyperparameter's numeric values into its source column,
       // because that artifact has no single symbol to point at. Read from the same JSON the
       // section reads, at the same precision, rather than allowlisted.

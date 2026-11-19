@@ -15,7 +15,6 @@ export const ARTIFACT_CONSUMPTION = {
     'construct_item_availability',
     'construct_prevalence',
     'covariate_blocker_attribution',
-    'cv_kfold',
     'design_gates',
     'elasticity_bound_sensitivity',
     'elasticity_profile',
@@ -42,6 +41,7 @@ export const ARTIFACT_CONSUMPTION = {
   referencedOnly: [
     'construct_validity_invariance',
     'cv_country_out',
+    'cv_kfold',
     'cv_rolling_origin',
   ],
 } as const

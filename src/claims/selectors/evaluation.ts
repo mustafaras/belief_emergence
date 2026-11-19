@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import collinearityAblationArtifact from '../../data/analysis/collinearity_ablation.json'
-import cvKfoldArtifact from '../../data/analysis/cv_kfold.json'
+// `cv_kfold.json` is 289 KiB gzipped and was the single largest item in the landing chunk —
+// 68% of it, for four numbers and a fold count. `evaluation_summary.json` carries the same
+// aggregates and fold count in 3 KiB, so the claims read the projection. Same substitution
+// P25 made for the Evaluation section's charts.
+import evaluationSummary from '../../data/analysis/evaluation_summary.json'
 import functionalFormArtifact from '../../data/analysis/functional_form_comparison.json'
 import metricsArtifact from '../../data/analysis/metrics_authoritative.json'
 import modelLadderArtifact from '../../data/analysis/model_ladder_metrics.json'
@@ -25,20 +29,6 @@ const functionalFormSchema = z.object({
     q25: finite,
     q75: finite,
     shareSaturatingAhead: finite
-  })
-})
-const foldTierSchema = z.object({ testMetricsRefit: z.object({ r2: finite }) }).passthrough()
-const cvKfoldSchema = z.object({
-  config: z.object({ repeats: z.number().int().positive(), seeds: z.array(z.number().int()) }),
-  folds: z.array(z.object({
-    repeat: z.number().int().nonnegative(),
-    foldIndex: z.number().int().nonnegative(),
-    tierResults: z.object({ A: foldTierSchema, B: foldTierSchema, C: foldTierSchema })
-  }).passthrough()),
-  aggregatesRefit: z.object({
-    A: z.object({ r2: rangeSchema }),
-    B: z.object({ r2: rangeSchema }),
-    C: z.object({ r2: rangeSchema })
   })
 })
 const coverageTierSchema = z.object({
@@ -73,7 +63,6 @@ const zeroFillSchema = z.object({
 })
 
 const functionalForm = functionalFormSchema.parse(functionalFormArtifact)
-const cvKfold = cvKfoldSchema.parse(cvKfoldArtifact)
 const intervalCoverage = intervalCoverageSchema.parse(intervalCoverageArtifact)
 const modelLadder = modelLadderSchema.parse(modelLadderArtifact)
 const metrics = metricsSchema.parse(metricsArtifact)
@@ -123,13 +112,13 @@ export const evaluationClaims: Claim[] = [
   ...(['A', 'B', 'C'] as const).map(tier => claim(
     `eval.kfold.median.${tier}`,
     `Tier ${tier} grouped k-fold refit R² median`,
-    cvKfold.aggregatesRefit[tier].r2.median,
+    evaluationSummary.kfold.aggregates[tier].median,
     'r2',
-    'cv_kfold.json',
-    `aggregatesRefit.${tier}.r2.median`,
+    'evaluation_summary.json',
+    `kfold.aggregates.${tier}.median`,
     'Primary repeated grouped k-fold refit family; Tier C remains exploratory.'
   )),
-  claim('eval.kfold.folds', 'Grouped k-fold evaluation folds', cvKfold.folds.length, 'int', 'cv_kfold.json', 'folds.length'),
+  claim('eval.kfold.folds', 'Grouped k-fold evaluation folds', evaluationSummary.kfold.folds, 'int', 'evaluation_summary.json', 'kfold.folds'),
   claim('eval.headline.n', 'Headline metric observations', metrics.n, 'int', 'metrics_authoritative.json', 'n'),
   claim('eval.headline.r2', 'Headline in-sample R²', metrics.r2, 'r2', 'metrics_authoritative.json', 'r2'),
   claim('eval.headline.corr', 'Headline correlation', metrics.corr, 'p4', 'metrics_authoritative.json', 'corr'),
@@ -153,28 +142,3 @@ export const evaluationClaims: Claim[] = [
   claim('eval.tier.cMinusB.repeatMedian', 'Full-panel per-repeat median Tier C minus Tier B R²', fullPanel.perRepeatMedianCminusB, 'p4', 'zero_fill_sensitivity.json', 'splits[label=full panel].perRepeatMedianCminusB')
 ]
 
-export type EvaluationSeriesPoint = {
-  tier: 'A' | 'B' | 'C'
-  seed: number
-  repeat: number
-  foldIndex: number
-  r2: number
-}
-
-export function selectEvaluationSeries(): EvaluationSeriesPoint[] {
-  if (cvKfold.config.seeds.length !== cvKfold.config.repeats) {
-    throw new Error('K-fold seed count does not match its configured repeat count.')
-  }
-
-  return cvKfold.folds.flatMap(fold => {
-    const seed = cvKfold.config.seeds[fold.repeat]
-    if (seed === undefined) throw new Error(`No seed is recorded for k-fold repeat ${fold.repeat}.`)
-    return (['A', 'B', 'C'] as const).map(tier => ({
-      tier,
-      seed,
-      repeat: fold.repeat,
-      foldIndex: fold.foldIndex,
-      r2: fold.tierResults[tier].testMetricsRefit.r2
-    }))
-  })
-}

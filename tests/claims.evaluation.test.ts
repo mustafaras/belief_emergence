@@ -1,8 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
-import cvKfoldArtifact from '../src/data/analysis/cv_kfold.json'
+import evaluationSummary from '../src/data/analysis/evaluation_summary.json'
 import { getClaim } from '../src/claims/registry'
-import { selectEvaluationSeries } from '../src/claims/selectors/evaluation'
 
 describe('evaluation claims', () => {
   it('uses current functional-form and grouped k-fold artifact values', () => {
@@ -35,22 +34,25 @@ describe('evaluation claims', () => {
     expect(getClaim('eval.paired.median').note).toContain('no significance test')
   })
 
-  it('keeps seed-resolved refit fold data for charts', () => {
-    const series = selectEvaluationSeries()
-    expect(series).toHaveLength(300)
-    expect(new Set(series.map(point => point.seed).values())).toHaveProperty('size', 20)
-    expect(series.slice(0, 3).map(point => [point.tier, point.seed, point.repeat, point.foldIndex, point.r2])).toEqual([
-      ['A', 20260101, 0, 0, cvKfoldArtifact.folds[0].tierResults.A.testMetricsRefit.r2],
-      ['B', 20260101, 0, 0, cvKfoldArtifact.folds[0].tierResults.B.testMetricsRefit.r2],
-      ['C', 20260101, 0, 0, cvKfoldArtifact.folds[0].tierResults.C.testMetricsRefit.r2]
-    ])
-
+  /*
+   * The tier medians must equal the median of the per-fold series they summarise.
+   *
+   * This used to read `cv_kfold.json` directly, which put a 289 KiB artifact on the landing
+   * route — 68% of the initial payload — to check four numbers. The projection carries the same
+   * series, so the same arithmetic is still checked, and the claim now points at the file it
+   * actually reads. What is lost is the seed resolved per fold data (repeat, fold index, seed):
+   * `selectEvaluationSeries` was its only reader, no component imported it, and it went with
+   * the artifact.
+   */
+  it('sources each tier median from the series it summarises', () => {
     for (const tier of ['A', 'B', 'C'] as const) {
-      const values = series.filter(point => point.tier === tier).map(point => point.r2).sort((a, b) => a - b)
+      const values = [...evaluationSummary.kfold.series[tier]].sort((a, b) => a - b)
       expect(values).toHaveLength(100)
       const median = (values[49] + values[50]) / 2
       expect(median).toBeCloseTo(getClaim(`eval.kfold.median.${tier}`).value, 10)
     }
+    expect(evaluationSummary.kfold.folds).toBe(getClaim('eval.kfold.folds').value)
+    expect(new Set(evaluationSummary.seeds.map((entry) => entry.seed)).size).toBe(20)
   })
 
   it('sources tier fit and C-minus-B summaries from their current artifacts', () => {

@@ -109,9 +109,23 @@ async function capture(browser: Awaited<ReturnType<typeof chromium.launch>>, ite
   const page = await context.newPage()
   try {
     await page.goto(`${BASE}?v=${item.route}`, { waitUntil: 'networkidle', timeout: 60000 })
-    // Geometry imports Plotly; evaluation renders charts. A screenshot taken while those are
-    // still painting is a picture of a loading state, not of the page.
+    /*
+     * Settle deterministically before the capture.
+     *
+     * A fixed timeout was not enough under load: running the 44 captures back to back, the
+     * Countries route produced two variants across three runs, while the same combination
+     * repeated in isolation was identical five times out of five. The difference is the web
+     * fonts — they are fetched once per context, and a page that paints before they arrive
+     * lays out in the fallback face and shifts when they land.
+     *
+     * `document.fonts.ready` waits for the font set the page actually uses, which is the
+     * event a timeout was approximating. The timeout stays as a floor because chart canvases
+     * (Plotly, the evaluation strips) paint on the next frames after fonts resolve.
+     */
+    await page.evaluate(() => document.fonts.ready)
     await page.waitForTimeout(item.route === 'geometry' ? 3500 : 1200)
+    // One more frame after the last paint, so the capture is of the settled document.
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
     // A fixed window, not `fullPage`: see the note on this function. `clip` keeps the capture
     // identical in size across routes, which is also what makes a dimension mismatch meaningful.
     return await page.screenshot({

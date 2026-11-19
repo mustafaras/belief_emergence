@@ -35,7 +35,7 @@ export type ClaimModuleManifest = {
 export const REPRODUCTION_MANIFEST = {
   "generatedFrom": {
     "routes": 11,
-    "claimModules": 8,
+    "claimModules": 9,
     "artifacts": 42,
     "rawdataChecked": false
   },
@@ -188,7 +188,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
@@ -291,7 +291,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 27,
+      "reachableArtifacts": 26,
       "generators": []
     },
     {
@@ -402,12 +402,12 @@ export const REPRODUCTION_MANIFEST = {
         "gini_window_sensitivity",
         "zero_fill_sensitivity"
       ],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
       "id": "evaluation",
-      "files": 49,
+      "files": 51,
       "directClaimIds": [
         "config.seeds",
         "cv_country_out.json",
@@ -530,7 +530,7 @@ export const REPRODUCTION_MANIFEST = {
       "artifacts": [
         "functional_form_comparison"
       ],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
@@ -653,7 +653,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
@@ -756,7 +756,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
@@ -861,7 +861,7 @@ export const REPRODUCTION_MANIFEST = {
       "artifacts": [
         "notation_glossary"
       ],
-      "reachableArtifacts": 27,
+      "reachableArtifacts": 26,
       "generators": []
     },
     {
@@ -1023,7 +1023,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 26,
+      "reachableArtifacts": 25,
       "generators": []
     },
     {
@@ -1159,12 +1159,12 @@ export const REPRODUCTION_MANIFEST = {
       "artifacts": [
         "model_complexity_support"
       ],
-      "reachableArtifacts": 27,
+      "reachableArtifacts": 26,
       "generators": []
     },
     {
       "id": "overview",
-      "files": 103,
+      "files": 105,
       "directClaimIds": [
         "eval.bounded.kfold",
         "eval.linear.kfold",
@@ -1331,12 +1331,12 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 29,
+      "reachableArtifacts": 28,
       "generators": []
     },
     {
       "id": "reproduce",
-      "files": 103,
+      "files": 105,
       "directClaimIds": [
         "audit.respondents",
         "data.frameShare"
@@ -1494,7 +1494,7 @@ export const REPRODUCTION_MANIFEST = {
       ],
       "unresolvedClaimModules": [],
       "artifacts": [],
-      "reachableArtifacts": 29,
+      "reachableArtifacts": 28,
       "generators": []
     }
   ],
@@ -1981,6 +1981,16 @@ export const REPRODUCTION_MANIFEST = {
         "glossary",
         "limits",
         "model",
+        "overview",
+        "reproduce"
+      ]
+    },
+    {
+      "module": "robustness",
+      "declaredIds": 0,
+      "unresolved": false,
+      "routes": [
+        "evaluation",
         "overview",
         "reproduce"
       ]
