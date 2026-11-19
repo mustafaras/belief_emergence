@@ -42,9 +42,18 @@ export default defineConfig({
      * the same suite finishes in seconds. Four workers on a two-core runner, each holding a jsdom
      * environment, is the shape of that failure.
      */
+    /*
+     * One fork, not two.
+     *
+     * Two still stalled on the hosted runner: the suite has to finish inside the job's budget and
+     * each fork holds a jsdom environment plus a React tree. Serial execution costs about 40
+     * seconds locally against a suite that took 21 minutes to be killed in CI — the trade is
+     * obvious.
+     */
     poolOptions: {
-      forks: { maxForks: 2, minForks: 1 },
+      forks: { maxForks: 1, minForks: 1, singleFork: true },
     },
     testTimeout: 20_000,
+    hookTimeout: 20_000,
   },
 });
