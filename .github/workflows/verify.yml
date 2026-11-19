@@ -66,8 +66,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Reported per file and bounded in time, because a bare `vitest run` that stalls says
+      # nothing about where: the job is killed with SIGTERM and the log ends mid-suite.
       - name: Run test suite
-        run: npm run test:run
+        run: |
+          timeout 900 npx vitest run --reporter=verbose 2>&1 | tee /tmp/vitest.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "vitest exited $status; last completed files:"
+            grep -oE "✓ tests/[A-Za-z.]+" /tmp/vitest.log | tail -5
+            echo "files completed: $(grep -cE '✓ tests/' /tmp/vitest.log)"
+            exit "$status"
+          fi
 
       - name: Lint
         run: npm run lint
