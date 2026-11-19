@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P41 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P42 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -173,6 +173,14 @@ The remaining work is:
    see which rest on a measurement and which on the author decision. The four external permissions
    (CRED, OECD, O3, panel redistribution) remain open and are named on every run of
    `check:submission-state`; nothing in this repository can close them.
+
+   P42 checked that list against `data_code_provenance.json` and found three of the four were
+   wrong: the restricted sources are WVS/EVS (already resolved — `rawdata/` is gitignored and
+   `LICENSE` §3 documents it), column `G` is empty in all 207 panel rows so no OECD extract
+   limit binds, and O3 is not a data source. The list is now derived from the artifact's own
+   `compliance_summary`. **Three external items remain**: EM-DAT raw custom-request files, OECD
+   bulk extract redistribution, and the derived panel's redistribution review — for the first two
+   the licence permits academic use and what is unresolved is redistribution of the raw extract.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
