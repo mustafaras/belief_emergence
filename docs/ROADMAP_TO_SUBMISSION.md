@@ -3,7 +3,7 @@
 **Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P37 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, and 44 visual baselines are built), and **the application's own CI gate now passes 99/99**; P38 has not started. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P30 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -137,7 +137,20 @@ The remaining work is:
    eye before committing is what produced the design — three capture strategies were tried and
    rejected — and it also found a real defect: every wide formula on the Model route looked
    truncated, because `overflow: auto hidden` scrolls but no mobile browser shows a scrollbar.
-   `ci:gate` now passes 99/99. P38 has not started.
+   P38 is closed and the prompt sequence with it: the payload budget is now measured in gzipped
+   bytes (it was measuring a number four times the real transfer cost), the landing route fell
+   from 426 to 179 KiB gzip when a 289 KiB artifact was replaced by the 3 KiB projection that
+   already existed, LCP is measured with an observer installed before navigation, and the four
+   out-of-sample artifacts the plan's item A6 named are displayed on the Evaluation route for
+   the first time. Two CI defects were fixed — `check:layout` and `test:e2e` were not in the
+   workflow at all, and the visual-baseline step set a port variable nothing reads.
+   `ci:gate` now passes 99/99. **P00–P38 are complete.**
+
+   One item of the plan's §8 is marked unsatisfied rather than closed: it names
+   `check:paper-claims`, a script that does not exist in this repository, and the P1–P21
+   numbering it refers to is not defined in the plan. Article–application agreement is carried
+   by `check:manuscript-consistency`, `check:ui-artifacts` and `check:dom-numbers` instead, and
+   §8 records that substitution rather than claiming the original.
    Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
    infer release readiness from these logged local milestones.
 
