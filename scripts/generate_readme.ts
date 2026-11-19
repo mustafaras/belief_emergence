@@ -83,11 +83,18 @@ const FIXTURE = path.join(REPO_ROOT, 'tmp', 'readme-metrics.json')
 
 function readFixture(): Fixture {
   if (!existsSync(FIXTURE)) {
-    throw new Error(
-      'tmp/readme-metrics.json is missing. Run `npm run readme:metrics` first; it dumps the ' +
-        'values from the claim registry through Vitest, which is the only process that can ' +
-        'resolve the registry\'s Vite-only panel import.',
-    )
+    /*
+     * Produce it rather than complain about it.
+     *
+     * `tmp/` is gitignored, so a clean checkout — CI, or a colleague's clone — has no fixture,
+     * and `check:readme-metrics` failed there with "run `npm run readme:metrics` first". A check
+     * that requires a preparatory command nobody documented fails on correct work.
+     */
+    console.log('  tmp/readme-metrics.json is absent; generating it (one Vitest run)…')
+    execFileSync('npm', ['run', 'readme:metrics'], { cwd: REPO_ROOT, stdio: 'pipe' })
+    if (!existsSync(FIXTURE)) {
+      throw new Error('could not generate tmp/readme-metrics.json; run `npm run readme:metrics` to see why')
+    }
   }
   return JSON.parse(readFileSync(FIXTURE, 'utf8')) as Fixture
 }
