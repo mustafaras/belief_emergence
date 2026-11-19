@@ -494,16 +494,12 @@ function phaseValidationChecks(): boolean {
     // Plotly's WebGL canvas is platform-specific, and so is text rasterisation. The 44
     // baselines are captured on macOS; on any other platform the comparison is not meaningful,
     // so the step reports SKIPPED rather than a failure — and a skip is not a pass here.
-    ...(process.platform === 'darwin'
-      ? [
-          { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
-          { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
-        ]
-      : [
-          // Still registered on other platforms so the total does not change silently.
-          { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
-          { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
-        ]),
+    // Registered unconditionally so the total does not change with the platform. Each script
+    // decides for itself whether it can run, and reports SKIP when it cannot — the previous
+    // version had two identical branches here, so the platform test did nothing and the checks
+    // ran on Linux and failed.
+    { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
+    { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
   ];
   let allOk = true;
   for (const c of checks) {

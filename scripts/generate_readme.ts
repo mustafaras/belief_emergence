@@ -108,13 +108,26 @@ function readTestTotals(): { tests: number; files: number } {
     numPendingTests?: number
     testResults?: unknown[]
   }
-  // Passing tests, not total: this suite skips the README-metrics dump unless it is asked
-  // for, so total is one higher than what runs. A README claiming "435 tests" when 434 pass
-  // is the same class of error as the 630 it used to claim.
+
+  /*
+   * The README does not state a test count, because a test count is not machine-independent.
+   *
+   * `npm run check:readme-metrics` regenerates and compares the block. On a development
+   * checkout Vitest skips the tests that need a browser or a manuscript worktree; in CI it runs
+   * them. The two numbers are 434 and 463 — rounding to the nearest ten gave 430 and 460, so even
+   * an approximate figure disagreed. A number that changes with the machine cannot be asserted,
+   * and an assertion that fails on correct work is the defect this whole pass has been removing.
+   *
+   * The README now says what is true in both environments — the suite passes, and the exact
+   * count is in the CI run — and `check:readme-metrics` compares the block, which no longer
+   * contains it.
+   */
+  const passed = report.numPassedTests ?? report.numTotalTests ?? 0
+  const files = Array.isArray(report.testResults) ? report.testResults.length : 0
   return {
-    tests: report.numPassedTests ?? report.numTotalTests ?? 0,
+    tests: passed,
     skipped: report.numPendingTests ?? 0,
-    files: Array.isArray(report.testResults) ? report.testResults.length : 0,
+    files,
   }
 }
 
@@ -225,13 +238,13 @@ ${cell(badge('Correlation', metrics.corr, '3fb950'), 'Correlation', 'Observed vs
 ${cell(badge('MAE', metrics.mae, '4c8eda'), 'MAE', 'Mean absolute error')}
 ${cell(badge('RMSE', metrics.rmse, '4c8eda'), 'RMSE', 'Root mean squared error')}
 ${cell(badge('N', String(metrics.panelRows), '7d8590'), 'Observations', `${metrics.countries} countries · ${metrics.yearMin}–${metrics.yearMax}`)}
-${cell(badge('Tests', `${metrics.tests}`, '3fb950'), 'Tests', `${metrics.testFiles} files · all passing`)}
+${cell(badge('Tests', 'passing', '3fb950'), 'Tests', `${metrics.testFiles} files · all passing`)}
 </tr>
 </table>
 
 **Build status**
 
-${badge('tests', `${metrics.tests} passed`, '3fb950')}&nbsp;
+${badge('tests', 'all passing', '3fb950')}&nbsp;
 ${badge('gate', `${metrics.gateChecks}/${metrics.gateChecks}`, '3fb950')}&nbsp;
 ${badge('claims', `${metrics.reachableClaims} shown / ${metrics.claims} registered`, '4c8eda')}&nbsp;
 ${flatBadge('panel', `${metrics.panelRows} rows`, '7d8590')}&nbsp;

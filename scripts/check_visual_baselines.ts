@@ -188,6 +188,21 @@ async function main(): Promise<void> {
     return
   }
 
+  /*
+   * The baselines are captured on macOS, and text rasterisation differs by platform. Comparing
+   * them on Linux would fail on every run for a reason that is not a defect — which is exactly
+   * what happened in CI: the gate has a `process.platform === 'darwin'` branch, but both of its
+   * branches were identical, so the check ran everywhere.
+   *
+   * SKIP, not PASS: a skip is reported distinctly by the gate and does not count as a pass.
+   */
+  if (process.platform !== 'darwin') {
+    console.log(
+      `SKIP  visual baselines were captured on macOS; comparison is not meaningful on ${process.platform}`,
+    )
+    return
+  }
+
   // Compare mode. A missing directory or a partial set is a SKIP, not a pass: the baselines
   // are generated on macOS and a fresh clone has none until they are regenerated.
   if (!existsSync(BASELINE_DIR)) {

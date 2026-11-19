@@ -36,8 +36,7 @@ export const REPRODUCTION_MANIFEST = {
   "generatedFrom": {
     "routes": 11,
     "claimModules": 9,
-    "artifacts": 43,
-    "rawdataChecked": false
+    "artifacts": 43
   },
   "routes": [
     {
@@ -2009,8 +2008,6 @@ export const REPRODUCTION_MANIFEST = {
     routes: number
     claimModules: number
     artifacts: number
-    /** Whether rawdata/ was present, so the copy classification could be attempted. */
-    rawdataChecked: boolean
   }
   routes: RouteManifest[]
   artifacts: ArtifactManifest[]

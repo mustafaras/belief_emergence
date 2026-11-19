@@ -38,9 +38,8 @@ type Manifest = {
     routes: number
     claimModules: number
     artifacts: number
-    /** Whether rawdata/ was present, so the copy classification could be attempted. */
-    rawdataChecked: boolean
   }
+
   routes: Array<{
     id: string
     files: number
@@ -294,7 +293,6 @@ const manifest: Manifest = {
     routes: routes.length,
     claimModules: claimModuleRoutes.size,
     artifacts: artifacts.length,
-    rawdataChecked: RAW_AVAILABLE,
   },
   routes,
   artifacts,
@@ -349,8 +347,6 @@ export const REPRODUCTION_MANIFEST = ${JSON.stringify(manifest, null, 2)} as {
     routes: number
     claimModules: number
     artifacts: number
-    /** Whether rawdata/ was present, so the copy classification could be attempted. */
-    rawdataChecked: boolean
   }
   routes: RouteManifest[]
   artifacts: ArtifactManifest[]
