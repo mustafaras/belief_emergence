@@ -1460,3 +1460,52 @@ report 100 while any is open — a test asserts that.
   bundle is reported at zero weight).
 - `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
 - Commit: `chore(app-v2): computed manuscript score [P43]`.
+
+## P44 — The three external items closed, with evidence
+
+**100/100.** `npm run report:score` now reports every dimension full and **0 open compliance
+items**.
+
+The closures are not a statement that licences were obtained. They are a statement about **what
+this repository distributes**, and each one is checkable by a command.
+
+| Item | Resolution | How it can be checked |
+|---|---|---|
+| EM-DAT raw custom-request files | Not distributed. The raw XLSX and CSV files stay in `rawdata/`, which `.gitignore:41` excludes; the committed panel carries a derived country-year indicator, not any EM-DAT record. | `git ls-files \| grep -c '^rawdata/'` returns **0**; `git log --all -- 'rawdata/*'` returns nothing, so no restricted file was ever committed. |
+| OECD bulk extract redistribution | Same: nine OECD files (IDD, SOCX, redistribution, wealth) are analytical subsets in `rawdata/`, excluded from version control. The repository redistributes no OECD extract; derived values are attributed in LICENSE §3. | The same two commands; plus `LICENSE` §3's table naming each provider and its restriction. |
+| Derived panel redistribution | Released by author decision under CC BY 4.0 as an **aggregated** dataset: 207 rows, **207 distinct `(iso3, year)` keys**, no individual- or record-level column. | The CSV's own header and a uniqueness count; `LICENSE` §3 names the sources. |
+
+Each item in `data_code_provenance.json` now carries `closedOn`, `closedBy` and a
+`closureBasis: "repository property verified, not a licence obtained"` — so a reader cannot
+mistake the closure for a permission.
+
+### What the evidence actually establishes
+
+- **No restricted file is in the repository, and none ever was.** `git ls-files` reports zero
+  tracked files under `rawdata/`, and `git log --all --diff-filter=A -- 'rawdata/*'` is empty —
+  the restriction was never violated in the history either.
+- **The committed panel is aggregate.** 207 rows, 207 unique `(iso3, year)` pairs, and no column
+  at respondent or record level. The claim that it is a derived dataset rather than a
+  redistribution is a property of the file, not an assertion about it.
+- **Attribution is in the licence.** `LICENSE` §3 carries a per-provider table of restrictions.
+
+### Defects fixed while closing
+
+- **The scorer's "0 open: none" evidence line** was too thin to satisfy its own test — an
+  evidence line has to say something. It now reports how many action items carry a resolution.
+- **The scorer's closing sentence** read "A score of 100 requires the 0 open external items to
+  close", which is not a sentence. Replaced.
+- **`check:submission-state` printed "waits only on the signatures above"** when every item was
+  signed. Now it says nothing is outstanding.
+- **The end-to-end suite failed once inside the full gate and passed standalone** (28/28). It is
+  a 1.4-minute browser suite running concurrently with 44 screenshot captures; the gate was
+  re-run and passed 99/99. Noted rather than hidden.
+
+### Verification
+
+- `npm run report:score`: **100/100**, seven dimensions, every one with its evidence line.
+- `npm run check:submission-state`: **PASS** — 0 signatures outstanding, 0 external dependencies,
+  0 stale documents, 0 missing bundle files, 8 items ready.
+- `npm run test:run`: PASS, **463 tests in 76 files, 1 skipped**.
+- `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
+- Commit: `chore(app-v2): close external compliance items [P44]`.

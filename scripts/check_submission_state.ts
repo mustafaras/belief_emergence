@@ -276,7 +276,14 @@ function main(): void {
   const blocking = unsigned.length + external.length + stale.length + bundle.missing.length
   console.log('')
   if (blocking === 0) {
-    console.log('PASS  nothing automated is outstanding; the submission waits only on the signatures above')
+    // The closing line used to say "waits only on the signatures above" even when every item was
+    // signed, which is a contradiction a reader would have to resolve themselves.
+    console.log(
+      unsigned.length === 0
+        ? 'PASS  nothing is outstanding: every checklist item is signed, every external dependency ' +
+            'carries a recorded resolution, and the submission bundle is complete'
+        : `PASS  nothing automated is outstanding; ${unsigned.length} checklist item(s) await a signature`,
+    )
     return
   }
   console.log(

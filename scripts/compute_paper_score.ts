@@ -230,7 +230,11 @@ const dimensions: Dimension[] = []
     label: 'External dependencies closed',
     weight,
     earned,
-    evidence: [`${open.length} open: ${open.map((entry) => entry.item).join('; ') || 'none'}`],
+    evidence: [
+      open.length === 0
+        ? `0 open — all ${provenance?.compliance_summary.action_items.length ?? 0} compliance action items carry a recorded resolution`
+        : `${open.length} open: ${open.map((entry) => entry.item).join('; ')}`,
+    ],
     gap: open.length === 0 ? 'none' : `${open.length} licence/redistribution item(s) unresolved`,
   })
 }
@@ -252,6 +256,12 @@ dimensions.push({
   gap: '',
 })
 
+function openExternalCount(): number {
+  return (provenance?.compliance_summary.action_items ?? []).filter(
+    (entry) => entry.priority.toLowerCase() !== 'resolved' && !(entry.resolution ?? '').trim(),
+  ).length
+}
+
 const totalWeight = dimensions.reduce((sum, dimension) => sum + dimension.weight, 0)
 const totalEarned = dimensions.reduce((sum, dimension) => sum + dimension.earned, 0)
 const ceiling = totalWeight // what a perfect repository could reach
@@ -272,8 +282,11 @@ if (process.argv.includes('--json')) {
     `\nThe weights are a stated editorial judgement. Whether each dimension earns its points is ` +
       `not: every line above comes from a command this repository runs.`,
   )
+  const stillOpen = openExternalCount()
   console.log(
-    `A score of ${ceiling} requires the ${(provenance?.compliance_summary.action_items ?? []).filter((e) => e.priority.toLowerCase() !== 'resolved' && !(e.resolution ?? '').trim()).length} ` +
-      `open external items to close; no repository work can do that.`,
+    stillOpen === 0
+      ? `All ${provenance?.compliance_summary.action_items.length ?? 0} compliance action items carry a recorded ` +
+          `resolution; the external dimension is full. Read the resolutions before relying on this figure.`
+      : `A score of ${ceiling} requires ${stillOpen} open external item(s) to close; no repository work can do that.`,
   )
 }

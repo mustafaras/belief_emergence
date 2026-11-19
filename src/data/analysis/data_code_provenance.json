@@ -370,7 +370,11 @@
         "affected_files": [
           "rawdata/public_emdat_custom_request_2025-12-01_4f6c3918-ed0e-462e-83e9-075db6e4edbc.xlsx",
           "rawdata/public_emdat_incl_hist_2025-12-01.xlsx"
-        ]
+        ],
+        "resolution": "Raw EM-DAT XLSX and CSV files remain in rawdata/, which .gitignore line 41 excludes and which `git ls-files` confirms contains no tracked file. Only the processed summary (emdat_disasters.csv aggregate) reaches the committed panel, and the panel stores the derived indicator rather than any EM-DAT record. No EM-DAT file is redistributed by this repository, so no separate CRED permission is required for what is published. Verified by `npm run check:submission-state`, which asserts zero tracked files under rawdata/.",
+        "closedOn": "2026-11-19",
+        "closedBy": "mustafaras",
+        "closureBasis": "repository property verified, not a licence obtained"
       },
       {
         "priority": "medium",
@@ -379,7 +383,11 @@
         "affected_files": [
           "rawdata/OECD.WISE.INE,DSD_WISE_IDD@DF_IDD,1.0+all.csv",
           "rawdata/OECD.WISE.INE,DSD_WEALTH@DF_WEALTH,1.0+all.csv"
-        ]
+        ],
+        "resolution": "All nine OECD files (IDD, SOCX, redistribution metrics, wealth distribution) are analytical subsets held in rawdata/, excluded from version control by .gitignore line 41. The repository redistributes no OECD extract: the committed panel carries country-year values derived from them, attributed in LICENSE § 3 and in data_code_provenance.json. Attribution and the absence of extract redistribution satisfy the terms the artifact records.",
+        "closedOn": "2026-11-19",
+        "closedBy": "mustafaras",
+        "closureBasis": "repository property verified, not a licence obtained"
       },
       {
         "priority": "resolved",
@@ -389,8 +397,14 @@
       {
         "priority": "low",
         "item": "Derived panel redistribution review",
-        "description": "The canonical panel and upstream integrated panel contain country-year aggregates derived in part from WVS microdata. While aggregation reduces redistribution risk, the WVS terms should be reviewed to confirm that country-level aggregates are not considered restricted derivatives."
+        "description": "The canonical panel and upstream integrated panel contain country-year aggregates derived in part from WVS microdata. While aggregation reduces redistribution risk, the WVS terms should be reviewed to confirm that country-level aggregates are not considered restricted derivatives.",
+        "resolution": "Resolved by the author decision recorded here: the canonical panel (83 countries, 207 complete-case country-years) is released under CC BY 4.0 as a derived, aggregated dataset, not as a redistribution of any source microdata. LICENSE § 3 states this and names the sources. No WVS, EVS, EM-DAT or OECD record is reproduced at individual or record level in the committed panel; every value is a country-year aggregate computed by a script in this repository.",
+        "closedOn": "2026-11-19",
+        "closedBy": "mustafaras",
+        "closureBasis": "repository property verified, not a licence obtained"
       }
-    ]
+    ],
+    "open_count": 0,
+    "closed_count": 5
   }
 }
