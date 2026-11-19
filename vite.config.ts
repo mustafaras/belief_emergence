@@ -33,5 +33,18 @@ export default defineConfig({
    */
   test: {
     exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
+    /*
+     * Bounded concurrency, because the default is derived from the CPU count and a hosted runner
+     * reports more cores than it can usefully schedule.
+     *
+     * In CI the suite completed 459 of 463 tests and then stopped: 36 of 76 files never started,
+     * the process sat idle for 21 minutes, and the job was killed with SIGTERM (exit 143). Locally
+     * the same suite finishes in seconds. Four workers on a two-core runner, each holding a jsdom
+     * environment, is the shape of that failure.
+     */
+    poolOptions: {
+      forks: { maxForks: 2, minForks: 1 },
+    },
+    testTimeout: 20_000,
   },
 });
