@@ -1230,7 +1230,7 @@ stop running. It stays a separate command, and `ci_gate` is unchanged at 99/99.
 
 ### Verification
 
-- `npm run check:submission-state`: STALE **0**, MISSING **0**, READY **8**, and it names the 16.
+- `npm run check:submission-state`: STALE **0**, MISSING **0**, READY **8**, and 16 named as outstanding.
 - Mutation-tested: reverting the roadmap to "commits through P30" makes it report exactly that
   disagreement and nothing else.
 - `npm run test:run`: PASS, **443 tests in 72 files, 1 skipped** (five new, including one that
