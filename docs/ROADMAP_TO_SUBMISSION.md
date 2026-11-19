@@ -1,9 +1,9 @@
 # Roadmap to submission — evidence-first rebuild
 
-**Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
+**Current score:** **91/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P42 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P43 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -237,13 +237,32 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ---
 
-## Current documented score
+## Current score
 
-The latest score recorded in project planning documents is **95/100**, dated
-2026-11-11 (`docs/APP_PLAN.md`, `docs/APP_EXECUTION_PROMPTS.md`). Those notes do
-not include the scoring rubric or a detailed reviewer report, and no later
-score is recorded. Treat 95/100 as the latest documented standing. Older
-baselines and projected scores have been removed from this working roadmap.
+**91/100**, computed by `npm run report:score` on 2026-11-19. Every dimension is scored from a
+command this repository runs, so the number can go down as well as up — which the previous figure
+could not.
+
+| Dimension | Points | Basis |
+|---|---:|---|
+| Measurement validity | 25/25 | 9/9 measurement-validity checks |
+| Inferential compliance and lockbox discipline | 20/20 | 6/6 inferential, lockbox and validity checks |
+| Reproducibility | 20/20 | 3/3 integrity checks; 44 visual baselines and the surface snapshot both pass |
+| Documentation and claim traceability | 15/15 | 3/3 docs checks; rendered numbers, README metrics and the reproduction manifest all trace |
+| Checklist signatures | 10/10 | 12/12 recorded (6 artefact-supported, 6 judgement) |
+| External dependencies closed | **1/10** | 3 open: EM-DAT raw files, OECD bulk extract, derived-panel redistribution |
+| Submission bundle | not scored | 5/5 PDFs present |
+
+The weights are a stated editorial judgement; whether each dimension earns its points is not.
+
+### Why the old 95/100 is retired
+
+The figure recorded on 2026-11-11 came with **no rubric, no reviewer report and no reproducible
+computation**. A score whose basis is unrecorded cannot fall, so it does not measure anything. It
+was also *higher* than the current computed score while the repository was measurably worse: the
+README still carried a withdrawn r², six of eleven routes scrolled sideways on a phone, and the
+landing payload was 426 KiB gzipped. The replacement is lower and defensible; the old number was
+higher and was not.
 
 ---
 
