@@ -1354,3 +1354,52 @@ fabricating a verification is not, and the difference is now data rather than in
 Four external permissions — CRED, OECD extract limits, O3 raw-source access, and the panel's
 redistribution terms. No artefact and no script can close them; they are held by other people.
 `check:submission-state` names them on every run so they cannot be forgotten.
+
+## P42 — The external list was three-quarters wrong
+
+`check:submission-state` carried four external blockers written from memory of the roadmap:
+CRED, an OECD extract-size limit, O3 raw access, and panel redistribution. Checking them against
+`data_code_provenance.json` — an artifact the script never read — found **three were false**:
+
+- **CRED is not a restricted source.** The restricted sources are WVS and EVS. The high-priority
+  action item covering them is **already resolved**: `rawdata/` is gitignored (`.gitignore:41`)
+  and `LICENSE` §3 documents the restriction in the terms the artifact describes.
+- **The OECD wealth measure is empty.** Column `G` carries a value in **none of the 207 rows**,
+  so an OECD extract-size limit does not bind on the committed panel.
+- **O3 does not appear as a data source at all.**
+
+What the artifact does carry is a `compliance_summary` with five action items and their
+resolutions, and that is now the source of the list. Three remain open: EM-DAT raw custom-request
+files, OECD bulk extract redistribution, and the derived panel's redistribution review.
+
+### 16 → 3, and the remaining three are real
+
+| | Before P42 | After |
+|---|---:|---:|
+| Signatures outstanding | 12 | 0 (recorded in P41) |
+| External dependencies | 4 | **3** |
+| Stale documents | 0 | 0 |
+| Missing bundle files | 0 | 0 |
+
+The three are exactly what `data_code_provenance.json` records as unresolved, and the script now
+states what kind of question each is: for EM-DAT and OECD, **the licence permits academic use —
+what is unresolved is redistribution of the raw extract**, which is a different ask from a
+missing permission. A signer cannot act on "permission missing" if the permission exists.
+
+### Defects in the checker itself, found by running it
+
+- **It listed an item marked `priority: resolved`.** Filtering only on a non-empty resolution
+  paragraph missed "Repository LICENSE file", which the artifact marks resolved with no note.
+  Both spellings of closure now count.
+- **The resolution filter nearly dropped a genuinely closed item.** The WVS action item is the
+  only one with a resolution paragraph, and reading it confirms the closure rather than assuming
+  it — `rawdata/` is gitignored and `LICENSE` §3 carries the restriction, both verified.
+
+### Verification
+
+- `npm run check:submission-state`: **3 external dependencies**, 0 signatures, 0 stale, 0 missing.
+- `npm run test:run`: PASS, **459 tests in 75 files, 1 skipped** (five new: the list matches the
+  artifact, the invented items do not return, a `resolved` item is treated as closed, the
+  restricted sources are WVS/EVS, and `G` is empty in every row).
+- `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
+- Commit: `chore(app-v2): derive external dependencies from provenance [P42]`.

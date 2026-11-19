@@ -46,6 +46,17 @@ const REPO_ROOT = [
 
 type Item = { id: string; detail: string }
 
+/** Read a committed JSON artifact, or null when it is absent or unparseable. */
+function readJson<T>(relativePath: string): T | null {
+  const full = path.join(APP_ROOT, relativePath)
+  if (!existsSync(full)) return null
+  try {
+    return JSON.parse(readFileSync(full, 'utf8')) as T
+  } catch {
+    return null
+  }
+}
+
 const checklist = JSON.parse(
   readFileSync(path.join(APP_ROOT, 'src', 'data', 'analysis', 'q1_submission_gate_report.json'), 'utf8'),
 ) as {
@@ -54,29 +65,77 @@ const checklist = JSON.parse(
   humanChecklist: Array<{ id: string; category: string; question: string; signedOff: boolean }>
 }
 
-/*
- * External permissions, transcribed from the roadmap's constraint list rather than invented
- * here. Each names what would close it, because "CRED permission" is not actionable on its own
- * and the person who can resolve it needs to know what to ask for.
+/**
+ * External items, read from `data_code_provenance.json` rather than transcribed from prose.
+ *
+ * The first version of this list had four entries — CRED, an OECD extract-size limit, O3 raw
+ * access, and panel redistribution — written from memory of the roadmap. Checking them against
+ * the provenance artifact found that three were wrong:
+ *
+ *   - The restricted sources are WVS/EVS, not CRED. `rawdata/` is gitignored and LICENSE §3
+ *     documents the restriction, so the high-priority action item is **resolved**.
+ *   - `G` (the OECD wealth measure) is empty in all 207 panel rows, so an OECD extract-size
+ *     limit does not bear on the committed data.
+ *   - O3 does not appear as a data source at all.
+ *
+ * What the artifact does carry is a `compliance_summary` with five action items and their
+ * resolutions. Those are the external items, and they are read here.
  */
-const EXTERNAL = [
-  {
-    id: 'cred-permission',
-    detail: 'CRED: permission to use and redistribute the disaster extract is not held in this repository.',
-  },
-  {
-    id: 'oecd-size',
-    detail: 'OECD: the extract-size limit and redistribution terms for the derived panel are unresolved.',
-  },
-  {
-    id: 'o3-raw-source',
-    detail: 'O3: access to the raw source has not been obtained, so the artifact that depends on it cannot be recomputed here.',
-  },
-  {
-    id: 'panel-redistribution',
-    detail: 'The derived panel is committed; whether it may be redistributed is an author decision, not a repository one.',
-  },
-]
+type ProvenanceArtifact = {
+  compliance_summary?: {
+    action_items?: Array<{ priority: string; item: string; resolution?: string }>
+  }
+  data_sources?: Array<{ name: string; license?: string }>
+}
+
+/**
+ * What the open question actually is, from the license text rather than from the item name.
+ *
+ * `data_code_provenance.json` records both the licence and the action item. The licences for
+ * EM-DAT and OECD permit academic use; what is unresolved is whether the **derived panel** and
+ * the raw extracts may be redistributed. A signer needs that distinction — "permission missing"
+ * and "permission held, redistribution unclear" call for different actions.
+ */
+function restrictionKind(item: string): string | null {
+  if (/em-dat|oecd/i.test(item)) {
+    return 'The licence permits academic use; what is unresolved is redistribution of the raw extract.'
+  }
+  if (/derived panel/i.test(item)) {
+    return 'The committed panel is derived from restricted sources; whether it may be redistributed is an author decision.'
+  }
+  return null
+}
+
+function externalItems(): Item[] {
+  const provenance = readJson<ProvenanceArtifact>('src/data/analysis/data_code_provenance.json')
+  const items = provenance?.compliance_summary?.action_items ?? []
+
+  return items
+    .filter((entry) => {
+      /*
+       * Two ways an item is closed, both of them the artifact's own words:
+       *
+       *   - it carries a resolution paragraph (the WVS/EVS item does: rawdata is gitignored and
+       *     LICENSE §3 documents the restriction);
+       *   - its priority is `resolved` (the LICENSE item).
+       *
+       * An empty resolution on a `medium` item is an open item, not a closed one with no note.
+       * The first version treated only a non-empty resolution as closure and so listed the
+       * already-resolved LICENSE item alongside the genuinely open ones.
+       */
+      if (entry.priority.trim().toLowerCase() === 'resolved') return false
+      return (entry.resolution ?? '').trim().length === 0
+    })
+    .map((entry) => ({
+      id: entry.item.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40),
+      // Say what kind of question it is. "EM-DAT raw custom-request files" alone reads as
+      // "permission missing", which is not the finding: the licenses permit academic use and
+      // the open question is redistribution of the raw extract.
+      detail:
+        `[${entry.priority}] ${entry.item} — no resolution recorded in data_code_provenance.json. ` +
+        (restrictionKind(entry.item) ?? ''),
+    }))
+}
 
 /** Documents that must agree with the measured tree, and the figure that proves they do not. */
 function staleDocuments(panelRows: number): Item[] {
@@ -208,12 +267,13 @@ function main(): void {
     id: item.id,
     detail: `[${item.category}] ${item.question}`,
   })))
-  section('BLOCKING — EXTERNAL PERMISSION', EXTERNAL.map((item) => ({ id: item.id, detail: item.detail })))
+  const external = externalItems()
+  section('BLOCKING — EXTERNAL DEPENDENCY', external)
   section('STALE — DOCUMENT DISAGREES WITH THE TREE', stale)
   section('MISSING FROM THE SUBMISSION BUNDLE', bundle.missing)
   section('READY', ready)
 
-  const blocking = unsigned.length + EXTERNAL.length + stale.length + bundle.missing.length
+  const blocking = unsigned.length + external.length + stale.length + bundle.missing.length
   console.log('')
   if (blocking === 0) {
     console.log('PASS  nothing automated is outstanding; the submission waits only on the signatures above')
@@ -221,7 +281,7 @@ function main(): void {
   }
   console.log(
     `FAIL  ${blocking} item(s) stand between this tree and a submission: ` +
-      `${unsigned.length} signature(s), ${EXTERNAL.length} external permission(s), ` +
+      `${unsigned.length} signature(s), ${external.length} external dependency(ies), ` +
       `${stale.length} stale document(s), ${bundle.missing.length} missing bundle file(s)`,
   )
   console.log('      this script cannot close any of them; it exists so that none is forgotten')
