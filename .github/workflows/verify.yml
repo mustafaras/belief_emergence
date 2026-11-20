@@ -70,13 +70,17 @@ jobs:
       # nothing about where: the job is killed with SIGTERM and the log ends mid-suite.
       - name: Run test suite
         run: |
-          timeout 900 npx vitest run --reporter=verbose 2>&1 | tee /tmp/vitest.log
-          status=${PIPESTATUS[0]}
-          if [ "$status" -ne 0 ]; then
-            echo "vitest exited $status; last completed files:"
-            grep -oE "✓ tests/[A-Za-z.]+" /tmp/vitest.log | tail -5
-            echo "files completed: $(grep -cE '✓ tests/' /tmp/vitest.log)"
-            exit "$status"
+          # `timeout` must signal the whole process group, not just the npm wrapper — with a pipe
+          # the child survives and the step hangs until the job's own limit kills it, which is why
+          # the previous version ran for 54 minutes.
+          set -o pipefail
+          timeout --signal=KILL 600 npx vitest run --reporter=verbose > /tmp/vitest.log 2>&1 || true
+          echo "--- files completed: $(grep -cE '✓ tests/' /tmp/vitest.log) ---"
+          grep -E "✓ tests/|Test Files|Tests " /tmp/vitest.log | tail -12
+          if ! grep -q "Test Files  76 passed" /tmp/vitest.log; then
+            echo "the suite did not complete"
+            tail -30 /tmp/vitest.log
+            exit 1
           fi
 
       - name: Lint
