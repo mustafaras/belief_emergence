@@ -67,10 +67,10 @@
  *   Components must not reimplement math or negate coefficients.
  *
  * MODEL PERFORMANCE (SCIENTIFIC PRODUCTION):
- *   Trained on 76 countries, 167 observations (1990–2023)
+ *   Trained on 83 countries, 207 complete-case observations (1990–2023)
  *   Method: Logit-space optimization (Differential Evolution + L-BFGS-B)
  *   Feature standardization: z-score
- *   Training metadata (from canonical JSON): Corr 0.6207, R² 0.3376, MAE 0.1643, Bias 0.0254 (obs - pred)
+ *   Training metadata (from canonical JSON): Corr 0.6393, R² 0.4061, MAE 0.1387, Bias 0.0048 (obs - pred)
  *
  *   Headline (paper/app): use PRODUCTION_MODEL_METADATA.headline (canonical panel-fit)
  */

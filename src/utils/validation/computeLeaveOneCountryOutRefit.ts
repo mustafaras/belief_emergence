@@ -56,9 +56,9 @@ export type CountryOutRefitSummary = {
   /**
    * Pooled held-out evaluation (KI-14 remedy 2). Every row is predicted exactly
    * once, by a model that never saw its country; the metrics are then computed
-   * on all 87 pairs at once. Unlike the per-fold R² distribution, this statistic
-   * is defined because its denominator is the variance across the whole panel
-   * rather than across a 1-4 row test slice.
+   * on all 207 canonical pairs at once. Unlike the per-fold R² distribution,
+   * this statistic is defined because its denominator is the variance across
+   * the whole panel rather than across a 1-6 row test slice.
    */
   pooledRefit: Record<ModelTier, PooledMetrics>;
   pooledCanonical: Record<ModelTier, PooledMetrics>;
@@ -400,8 +400,8 @@ export function computeLeaveOneCountryOutRefit(
       metricSemanticsNotes: [
         'Primary OOS inference uses fold-specific refit metrics (testMetricsRefit / aggregatesRefit).',
         'Canonical fixed-model metrics are diagnostic-only and stored separately (testMetricsCanonical / aggregatesCanonical).',
-            'DIAGNOSTIC ONLY, NOT THE PRIMARY EVALUATION: a country-out fold holds out 1-4 rows, and R² is undefined below three pairs. 36 of 48 folds therefore carry no R² (KI-14). The primary OOS evidence is cv_kfold.json (repeated grouped k-fold, ~17 test rows per fold). This file is reported as a spatial stress test.',
-        'pooledRefit / pooledCanonical are the exception: every row is predicted exactly once by a model that never saw its country, so the pooled series has 87 pairs and R² is defined. Use these two blocks when a single spatial OOS number is required; do not use the per-fold median.',
+            'DIAGNOSTIC ONLY, NOT THE PRIMARY EVALUATION: a country-out fold holds out 1-6 rows, and R² is undefined below three pairs. 48 of 83 folds therefore carry no R² (KI-14). The primary OOS evidence is cv_kfold.json (repeated grouped k-fold, ~17 test rows per fold). This file is reported as a spatial stress test.',
+        'pooledRefit / pooledCanonical are the exception: every canonical row is predicted exactly once by a model that never saw its country, so the pooled series has 207 pairs and R² is defined. Use these two blocks when a single spatial OOS number is required; do not use the per-fold median.',
           ],
           inferentialContract: {
             primaryEvidenceFamily: 'aggregatesRefit',

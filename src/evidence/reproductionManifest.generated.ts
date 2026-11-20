@@ -1577,8 +1577,8 @@ export const REPRODUCTION_MANIFEST = {
       "routes": [
         "data"
       ],
-      "generator": null,
-      "provenance": "recorded"
+      "generator": "npm run generate:blockers",
+      "provenance": "generated"
     },
     {
       "name": "cv_country_out",

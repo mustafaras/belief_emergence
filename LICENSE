@@ -72,24 +72,36 @@ file is governed by the license terms of its original provider. Key restrictions
 | `EVS_WVS_Joint_Csv_v5_0.csv` | EVS/WVS | **Restricted** |
 | `wvs_combined.csv` | Derived from WVS | **Restricted** |
 
-Replicators must download these files directly from
-<https://www.worldvaluessurvey.org/> under the WVS Academic Data Use Agreement.
-See `REPLICATION_RUNBOOK.md § 9` for step-by-step download instructions.
+Replicators must obtain these files through the official
+<https://www.worldvaluessurvey.org/> download flow and accept the applicable
+Conditions of Use. The current WVS download form collects project and intended-use
+details. Those conditions require non-profit use, correct citation (including
+sending the publication citation to WVSA), and no redistribution of the WVS data
+files. See `REPLICATION_RUNBOOK.md § 9` for the current access instructions.
 
 ### EM-DAT
 
 | File | Provider | Redistribution |
 |------|----------|---------------|
-| `emdat_disasters.csv` | CRED / UCLouvain | **Conditional** (aggregated derivative) |
-| `public_emdat_custom_request_*.xlsx` | CRED / UCLouvain | **Conditional** (requires CRED permission) |
+| `emdat_disasters.csv` | CRED / UCLouvain | **Not cleared** (identify the product and applicable terms before redistribution) |
+| `public_emdat_custom_request_*.xlsx` | CRED / UCLouvain | **Not cleared** (written permission or a suitable license is required before redistribution) |
 
-Register at <https://www.emdat.be/> and request the data under CRED's academic
-license.
+The current EM-DAT Public Data terms prohibit redistribution of EM-DAT or a
+substantial part and prohibit derivative databases. The separately published
+EM-DAT Archive uses CC BY-NC-ND 4.0 and does not permit modified versions. Match
+each local extract to its product and terms before deciding what may be shared;
+the repository currently makes no redistribution claim for these files. Sources:
+<https://doc.emdat.be/legal/terms-of-use-2023/> and
+<https://doc.emdat.be/docs/additional-resources-and-tutorials/faq/>.
 
 ### OECD
 
-OECD data files are included as analytical subsets with attribution under OECD's
-research-use terms. Bulk redistribution may require separate confirmation.
+OECD's general data terms permit extraction, copying, adapting, and sharing with
+appropriate attribution unless dataset-specific or third-party restrictions apply.
+Check the metadata/source tab for each included dataflow and record any applicable
+query or extract limits; this repository has not established that every selected
+extract is clear for redistribution. See
+<https://www.oecd.org/en/about/terms-conditions.html>.
 
 ### Freely Redistributable
 
@@ -100,10 +112,14 @@ data are freely redistributable with attribution.
 
 ## 4 — Canonical Analytical Panel
 
-The canonical analytical panel (`public/data/panel_canonical_23_countries_v1.csv`)
-contains only country-year aggregated values — no individual-level microdata.
-Country-level aggregation is above the WVS redistribution restriction threshold.
-This file is redistributable with attribution.
+The current canonical analytical panel (`public/data/panel_canonical_v2.csv`)
+contains country-year aggregated values and no individual-level microdata.
+However, the WVS Conditions of Use do not expressly resolve redistribution of
+this mixed-source derived panel. Its status is **not cleared** until the author
+or responsible data steward confirms that the WVS terms permit this specific
+country-level output. Do not treat this file as publicly redistributable based
+only on its aggregation level. See `REPLICATION_RUNBOOK.md § 9` and the WVS
+Conditions of Use at <https://www.worldvaluessurvey.org/AJDownloadLicense.jsp>.
 
 ---
 

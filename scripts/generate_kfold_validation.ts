@@ -2,8 +2,8 @@
  * generate_kfold_validation.ts — emit src/data/analysis/cv_kfold.json.
  *
  * The evaluation the paper should have been reporting. Country-out CV holds out
- * 1-4 rows per fold, so R² is undefined in 36 of 48 folds and the reported
- * median comes from the twelve leftovers (KI-14). Repeated grouped k-fold gives
+ * 1-6 rows per fold, so R² is undefined in 48 of 83 folds and the per-fold
+ * median uses the 35 remaining folds (KI-14). Repeated grouped k-fold gives
  * every fold ~17 test rows while keeping countries intact.
  *
  * Usage:

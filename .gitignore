@@ -60,6 +60,9 @@ eslint-report.json
 zip_debug.txt
 zip_done.txt
 
+# Locally assembled submission packet (generated from paper sources)
+submission/
+
 # Zips & archives
 *.zip
 q1_share.zip
@@ -69,8 +72,8 @@ Thumbs.db
 .AppleDouble
 .LSOverride
 
-# LaTeX build artefacts (the PDFs are produced by CI and attached as workflow
-# artifacts; committed binaries drift from source and cannot be reviewed).
+# LaTeX build artefacts (local builds and CI outputs; source figures are the
+# explicit PDF exception below).
 *.aux
 *.bbl
 *.bcf
@@ -83,3 +86,5 @@ Thumbs.db
 *.pdf
 !paper/**/fig*.pdf
 tmp/
+paper/supplementary/*.bbl-SAVE-ERROR
+paper/supplementary/*.bcf-SAVE-ERROR

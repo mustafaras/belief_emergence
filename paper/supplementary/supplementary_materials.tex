@@ -210,7 +210,7 @@ No causal identification (Explicit inferential boundaries) & Tier 0 (Study desig
 
 \medskip
 
-This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 207 rows across 83 countries a country-out fold holds out one to six rows, and $R^2$ is undefined below three pairs, so 48 of the 83 country-out folds carry no $R^2$ and the per-fold median describes the 35 remaining folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out cross-validation serves as the primary spatial validation pathway for Tier A/B inferential claims in the main text, while rolling-origin temporal evaluation serves as a temporal scope diagnostic that reveals the boundary of forward extrapolation under current temporal sample depth.
+This section reports refit performance across three protocols: repeated grouped $k$-fold (the primary spatial evaluation), leave-one-country-out (retained as a spatial stress test), and rolling-origin (a temporal scope diagnostic). The primary evidence is the $k$-fold protocol, for a measured reason: with 207 rows across 83 countries a country-out fold holds out one to six rows, and $R^2$ is undefined below three pairs, so 48 of the 83 country-out folds carry no $R^2$ and the per-fold median describes the 35 remaining folds rather than the model (KI-14). Repeated grouped $k$-fold keeps the spatial separation while giving every fold roughly seventeen test rows. Leave-one-country-out summaries are reported as a separate spatial stress test; rolling-origin temporal evaluation remains a temporal scope diagnostic and does not establish forward extrapolation.
 Artifact ownership for this section is fixed as follows. Fold metrics are stored in \path{cv_country_out.json} and \path{cv_rolling_origin.json}. Term-stability summaries are stored in \path{parameter_stability.json}, coverage diagnostics in \path{prediction_interval_coverage.json}, construct-validity and slice-invariance diagnostics in \path{construct_validity_invariance.json}, and release-gated holdout confirmation in \path{lockbox_holdout.json}. These files are treated as the authoritative Gate-3 evidence objects for reproducibility checks.
 Metric-family contract for these artifacts is explicit. Refit outputs (\texttt{testMetricsRefit} and \texttt{aggregatesRefit}, plus their support-collapsed counterparts) are primary inferential evidence. Canonical fixed-model outputs (\texttt{testMetricsCanonical} and \texttt{aggregatesCanonical}, plus their support-collapsed counterparts) are diagnostic contrasts only. Lockbox outputs (\texttt{lockboxEvaluation.byTier.*.}\allowbreak\texttt{testMetricsRefit}) are release-time anti-peeking confirmation metrics.
 
@@ -290,7 +290,7 @@ Temporal monotonicity & Pass & Pass & Pass & Test year $>$ max train year \\
 
 \noindent\textit{Interpretation.} Rolling-origin RMSE medians are comparable to the grouped $k$-fold errors, which is the useful part: the model does not degrade catastrophically when the held-out unit is a year rather than a country. The per-fold $R^2$ values are again computed on small test sets (a single survey year), so they are reported for completeness and not used to rank tiers. Strict temporal forward-chaining is enforced, so no fold sees data from after its own cut point.
 
-\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.1423/\allowbreak 0.1421/\allowbreak 0.1522 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is below target (mean coverage 0.84/0.86/0.79 for Tier A/B/C; 44\%/44\%/56\% of folds fall short of nominal), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (25 origin-folds). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains repeated grouped $k$-fold cross-validation, with leave-one-country-out as a stress test (Tier A mean coverage 0.91). Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
+\noindent\textit{Interpretation.} Rolling-origin RMSE medians are 0.1423/\allowbreak 0.1421/\allowbreak 0.1522 (Tier A/B/C). Strict temporal forward-chaining (test year always follows training years) prevents look-ahead bias. However, prediction interval coverage at the 95\% nominal level is below target (mean coverage 0.867/0.845/0.817 for Tier A/B/C; 36\%/48\%/48\% of folds fall short of nominal), constituting a \emph{temporal scope limitation}: the model's cross-sectional explanatory structure does not reliably extrapolate forward in time under the current temporal sample depth (25 origin-folds). Accordingly, rolling-origin results serve as a temporal scope diagnostic that reveals the temporal generalization boundary, not as evidence supporting headline claims. The primary spatial validation pathway remains repeated grouped $k$-fold cross-validation, with leave-one-country-out as a stress test (Tier A mean coverage 0.916). Tier C retains exploratory status under broader fold variability. In low-variance folds and saturated regimes, interval width can appear artificially narrow, so coverage/uncertainty should be read jointly with support diagnostics rather than as a stand-alone precision signal.
 
 {\small\textbf{Frozen Lockbox Holdout Summary:}}
 
@@ -391,7 +391,7 @@ Tier complexity burden & \path{src/data/analysis/model_complexity_support.json}:
 \item {\small\textbf{High-uptake support:} 41 of 207 unique country-years (19.8\%) have predicted $Z \ge 0.67$. Interpret high-uptake behavior conditionally on this support rather than as a broad population regularity.}
 \end{itemize}
 
-\noindent\textbf{Boundary Disclosure:} No catastrophic failures (convergence issues, NaN, infeasible predictions) detected. The preset high-error cases are CHN, CZE, FRA, GEO, ITA, and POL; across all 83 countries, 15 exceed MAE 0.25. Tier C remains exploratory despite pooled median sign consistency 0.990 (threshold 0.60), because model complexity and out-of-sample results do not support headline inference. All of this is disclosed here and in the manuscript's ``Explicit inferential boundaries'' section.
+\noindent\textbf{Boundary Disclosure:} No catastrophic failures (convergence issues, NaN, infeasible predictions) detected. The preset high-error cases are CHN, CZE, FRA, GEO, ITA, and POL; across all 83 countries, 9 exceed MAE 0.25. Tier C remains exploratory despite pooled median sign consistency 0.990 (threshold 0.60), because model complexity and out-of-sample results do not support headline inference. All of this is disclosed here and in the manuscript's ``Explicit inferential boundaries'' section.
 
 \Section{Main-manuscript figures and tables (in manuscript order)}
 \noindent\justifying
@@ -630,7 +630,7 @@ already saturated.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.96\linewidth]{figure_1_phase_policy.pdf}
-  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ with $s=\ln(B/k)=\num{-2.79}$ at the mid structural baseline, so the ridge sits at $\Phi=\num{2.79}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for $R_{\mathrm{std}}\in\{-0.5,0.5,1.5\}$ at the mid structural baseline with $M_{\mathrm{std}}=0.8$ and $T_{\mathrm{std}}=1.2$ (all other standardized modifiers at $0$; the withdrawn channels do not enter). \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence remains Tier A/B refit OOS leave-one-country-out evaluation (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (207 complete-case observations) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \caption{\textbf{Data scope:} model-implied bounded-response geometry and local sensitivity under the fitted preprocessing and parameter contract (Figure~S4). \emph{(A)} shows $Z(\Phi)=\tfrac{Be^{\Phi}}{Be^{\Phi}+k}$ with $s=\ln(B/k)=\num{-2.79}$ at the mid structural baseline, so the ridge sits at $\Phi=\num{2.79}$ and $\tfrac{\partial Z}{\partial \Phi}=Z(1-Z)$; \emph{(B)} shows policy-style slices of $Z$ versus $E_{\mathrm{std}}$ for $R_{\mathrm{std}}\in\{-0.5,0.5,1.5\}$ at the mid structural baseline with $M_{\mathrm{std}}=0.8$ and $T_{\mathrm{std}}=1.2$ (all other standardized modifiers at $0$; the withdrawn channels do not enter). \textbf{Method context:} this is an in-sample geometry diagnostic generated under the same bounded-domain contract as the fitted model; primary inferential evidence is repeated grouped $k$-fold Tier A/B refit OOS evaluation; leave-one-country-out is a spatial stress test and rolling-origin is a temporal scope diagnostic. \textbf{Interpretation boundary:} read at the country--year state level under thin support (207 complete-case observations) with uneven regime coverage; descriptive, non-causal, and not a policy-intervention estimate. The ridge at $Z=0.5$ reflects bounded-scale mapping geometry (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 \end{figure}
 \noindent\justifying
 \textit{Reading note.} The reduced-coordinate geometry makes explicit that $Z$ depends on the sum $(\Phi+s)$, where
@@ -641,7 +641,7 @@ or (ii) structural shifts along $s$.
 \begin{figure}[!htbp]
   \centering
 
-  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to Tier A/B refit OOS leave-one-country-out evidence (the primary spatial validation pathway), with rolling-origin serving as a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (207 complete-case observations) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
+  \newcommand{\FigureFiveCaption}{\textbf{Data scope:} reduced-coordinate geometry of the main function $Z=\sigma(\Phi+s)$ with $s:=\ln(B/k)$ (where $B=X^{\alpha}Y^{\beta}$) (Figure~S5). Values are computed in the interior band $(\varepsilon,1-\varepsilon)$ (here $\varepsilon=10^{-4}$), while the color scale is labeled by the conceptual endpoints $Z\in[0,1]$. \emph{(A)} Heatmap of $Z$ over $(\Phi,s)$ with constant-$Z$ contours and the ridge $Z=0.5$. \emph{(B)} Slices $Z(\Phi)$ at three shifts. \emph{(C)} Isometric surface of $Z(\Phi,s)$ with ridge and baseline slice overlaid. \textbf{Method context:} this is an in-sample geometry diagnostic; protocol interpretation is anchored to repeated grouped $k$-fold Tier A/B refit OOS evidence; leave-one-country-out is a spatial stress test and rolling-origin is a temporal scope diagnostic. \textbf{Interpretation boundary:} read as model-implied country--year geometry under thin support (207 complete-case observations) with uneven regime coverage; support-conditioned, non-causal, and not a transportability claim. The ridge at $Z=0.5$ is a geometric property of the bounded-scale mapping (maximum of $Z(1-Z)$), not an independently validated behavioral threshold.}
 
   \refstepcounter{figure}
   \addcontentsline{lof}{figure}{\protect\numberline{\thefigure}{\FigureFiveCaption}}
@@ -1496,7 +1496,7 @@ Table~S19 provides a systematic comparison across eight methodological dimension
 \hline
 Scale awareness & Explicit [0,1] bounded map; regime-dependent sensitivity & Unbounded linear; no scale constraint & Bounded via link functions when specified & Output-clipped or sigmoid; geometry not interpreted & Raw indices; scale bounds implicit \\
 \hline
-Validation & Tiered LOO refit (primary) + temporal diagnostic & In-sample fit; OOS CV rare & Posterior predictive; LOO-IC & k-fold CV or train/test split & Bivariate or MLM; OOS rare \\
+Validation & Repeated grouped $k$-fold refit (primary), country-out stress test, and temporal diagnostic & In-sample fit; OOS CV rare & Posterior predictive; LOO-IC & k-fold CV or train/test split & Bivariate or MLM; OOS rare \\
 \hline
 Support transparency & 34 country-years; support ratios per tier & N, T reported; per-parameter density rare & n\textsubscript{eff}, R-hat; thin-support rarely flagged & Feature importance; density not reported & Country counts; effective support not quantified \\
 \hline
@@ -1644,30 +1644,58 @@ Saturated tails & $Z \to 0$ or $Z \to 1$ & Extreme floor/ceiling where $\partial
 \noindent\justifying\small
 \textit{Note.} Regime boundaries (0.33, 0.67) are operational tercile cuts on the bounded $Z$ scale for interpretive stratification; they are not model-estimated thresholds.
 The ridge-peak band (0.45--0.55) corresponds to the highest-sensitivity zone under the sigmoid mapping.
-All support counts refer to unique country--years in the canonical 23-country panel under complete-case requirements.
+All support counts refer to the 207 unique country--years across 83 countries in the canonical panel under complete-case requirements.
 
-\section*{Table S20 --- Regime-Stratified Prediction Interval Coverage (LOO Country-Out)}
+\section*{Table S20 --- Fold-Level Prediction Interval Coverage by Protocol}
 \label{sec:table_s20}
 
 \setcounter{table}{19}%--- force Table S20
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Regime-stratified 95\% prediction interval coverage under the leave-one-country-out (LOO) protocol, stratified by predicted-$Z$ tertile. Coverage is reported for Tier~A (primary inferential tier). The mid-tertile (transition corridor) shows coverage closest to nominal; the low-$Z$ and high-$Z$ tails exhibit below-nominal coverage consistent with the compression effects of the bounded sigmoidal mapping (Eq.~4). Regime-stratified calibration under rolling-origin folds is flagged as a priority validation extension (main manuscript, Section~8.3).}
-\label{tab:regime_coverage}
-\begin{tabular}{@{}lcccc@{}}
+\caption{Fold-level empirical coverage of nominal 95\% prediction intervals under the country-out and rolling-origin protocols. Mean coverage and its standard deviation are calculated across folds; the final column is the share of folds below 95\%. Source: \nolinkurl{src/data/analysis/prediction_interval_coverage.json}.}
+\label{tab:interval-coverage-protocol}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-\textbf{Regime} & \textbf{$n$ (rows)} & \textbf{Nominal} & \textbf{Qualitative pattern} & \textbf{Interval width}\\
+\textbf{Protocol} & \textbf{Tier} & \textbf{Folds} & \textbf{Mean coverage (SD)} & \textbf{Folds below 95\%}\\
 \midrule
-Low ($\hat{Z}<0.33$)         & $\approx 210$ & 95\% & Below nominal  & Narrow (tail compression) \\
-Mid ($0.33\le\hat{Z}<0.67$)  & $\approx 210$ & 95\% & Closest to nominal & Moderate \\
-High ($\hat{Z}\ge 0.67$)     & $\approx 210$ & 95\% & Below nominal  & Narrow (tail compression) \\
+Country-out & A & 83 & 91.6\% (22.3 pp) & 15.7\% \\
+Country-out & B & 83 & 91.4\% (24.0 pp) & 14.5\% \\
+Country-out & C & 83 & 90.8\% (25.6 pp) & 14.5\% \\
+Rolling-origin & A & 25 & 86.7\% (19.1 pp) & 36.0\% \\
+Rolling-origin & B & 25 & 84.5\% (19.9 pp) & 48.0\% \\
+Rolling-origin & C & 25 & 81.7\% (23.3 pp) & 48.0\% \\
 \bottomrule
 \end{tabular}
 
 \vspace{4pt}
 \justifying\small
-\textit{Note.} Exact empirical coverage percentages per tertile are not separately archived in the current pipeline output (\texttt{prediction\_interval\_coverage.json} reports by protocol/tier/support regime). The qualitative pattern---mid-tertile coverage nearest nominal, tail coverage depressed---is consistent with the bounded mapping geometry: $\partial Z/\partial\Phi = Z(1-Z)$ compresses intervals near 0 and 1, reducing effective width and inflating under-coverage in saturated regimes. Quantitative tertile-level coverage is a priority extension for Phase-2 pipeline enrichment.
+\textit{Note.} Country-out is a spatial stress test; rolling-origin describes temporal scope. Values are fold averages, not pooled observation-level coverage. The artifact does not contain predicted-$Z$ tertile-specific coverage, so no low/mid/high regime comparison is reported here. Tier~C remains exploratory.
+\end{table}
+
+\section*{Table S21 --- Construct Reliability and Computability}
+\label{sec:table_s21}
+
+\setcounter{table}{20}%--- force Table S21
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Aggregate-level internal-consistency audit and construct availability from the configured WVS item sets. Sources: \nolinkurl{rawdata/wvs_construct_audit.json}, \nolinkurl{src/data/analysis/construct_prevalence.json}, and \nolinkurl{src/data/analysis/construct_item_availability.json}.}
+\label{tab:construct-reliability}
+\begin{tabular}{@{}lrrrrl@{}}
+\toprule
+\textbf{Construct} & \textbf{Configured items} & \textbf{Items in $\alpha$} & \textbf{Country-years emitted} & \textbf{Aggregate $\alpha$} & \textbf{Disposition}\\
+\midrule
+Belief outcome ($Z$) & 6 & 6 & 287 & 0.8187 & Retained \\
+Cultural intensity ($C$) & 6 & 6 & 303 & 0.3482 & Withdrawn \\
+Social atomization ($D$) & 5 & 4 & 296 & $-1.2285$ & Withdrawn \\
+Social support ($S$) & 7 & 3 & 0 & 0.7530 & Uncomputable \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\justifying\small
+\textit{Note.} Aggregate $\alpha$ is computed over aligned country-year item means, not respondent-level psychometric reliability. For $S$, $\alpha=0.7530$ describes only the three available items; it does not establish reliability or computability of the configured seven-item index. The declared minimum coverage is four of seven items, and no country-year meets it. For $D$, four configured item columns were available in the Trend File used by the audit.
 \end{table}
 
 \section*{References}

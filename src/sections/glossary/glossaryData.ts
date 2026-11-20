@@ -109,6 +109,13 @@ for (const hyperparameter of glossary.hyperparameters) {
 // interaction's meaning is not recoverable from its name alone. Both shapes are read, and
 // the shape decides what the definition cell says.
 for (const [tier, terms] of Object.entries(glossary.coefficient_terms)) {
+  /*
+   * `coefficient_terms` holds one non-list entry: `status_note`, a sentence about the nominal
+   * tier parameterisation. Iterating it produced 164 glossary rows, one per character — the
+   * glossary test caught the total (220 against an expected 56) but the cause was invisible
+   * from the count alone.
+   */
+  if (!Array.isArray(terms)) continue
   for (const term of terms as Array<string | { term: string; definition: string }>) {
     const name = typeof term === 'string' ? term : term.term
     const definition = typeof term === 'string'

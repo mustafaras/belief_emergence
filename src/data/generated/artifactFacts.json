@@ -6,7 +6,7 @@
   "facts": {
     "abstract_screening_pack": {
       "schemaVersion": "phase1.abstract_screening_pack.v1",
-      "generatedAt": "2026-11-09T11:32:00.000Z"
+      "generatedAt": "2026-11-16T09:02:54Z"
     },
     "c_dominance_sensitivity": {
       "schemaVersion": "phase1.c_dominance_sensitivity.v1",
@@ -103,7 +103,7 @@
     },
     "journal_fit_targeting": {
       "schemaVersion": "phase1.journal_fit_targeting.v1",
-      "generatedAt": "2026-11-09T11:25:00.000Z"
+      "generatedAt": "2026-11-16T09:02:54Z"
     },
     "lockbox_holdout": {
       "schemaVersion": "phase1.lockbox_holdout.v1",
@@ -130,7 +130,7 @@
     },
     "notation_glossary": {
       "schemaVersion": "phase1.notation_glossary.v1",
-      "generatedAt": "2026-11-15T12:20:05.430463+00:00"
+      "generatedAt": "2026-11-16T08:42:26.934723+00:00"
     },
     "parameter_stability": {
       "schemaVersion": "phase1.parameter_stability.v1",
@@ -146,7 +146,7 @@
     },
     "q1_submission_gate_report": {
       "schemaVersion": "phase1.q1_submission_gate.v1",
-      "generatedAt": "2026-11-11T15:29:35.297Z"
+      "generatedAt": "2026-11-16T15:59:26.926Z"
     },
     "r_collinearity_case": {
       "schemaVersion": "phase1.r_collinearity_case.v1",
@@ -155,7 +155,7 @@
     },
     "reviewer_red_team": {
       "schemaVersion": "phase1.reviewer_red_team.v1",
-      "generatedAt": "2026-11-09T11:20:00.000Z"
+      "generatedAt": "2026-11-16T09:00:00+00:00"
     },
     "sign_diagnostics": {
       "schemaVersion": "phase1.sign_diagnostics.v1",

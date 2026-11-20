@@ -3,12 +3,11 @@
  *
  * WHY THIS FILE EXISTS
  * --------------------
- * Leave-one-country-out (LOO) is the wrong evaluation for this panel. With 87
- * country-years across 48 countries, a country-out fold holds out between one
- * and four rows: four folds have one test row, eight have two, and R² is
- * undefined below three. The reported country-out median R² is therefore the
- * median of twelve degenerate folds, not a statement about the model
- * (docs/KNOWN_ISSUES.md KI-14).
+ * Leave-one-country-out (LOO) is retained as a spatial stress test, but it is not
+ * the primary evaluation for this panel. With 207 country-years across 83
+ * countries, a country-out fold holds out between one and six rows. R² is
+ * undefined for 48 of 83 folds with fewer than three rows, so its per-fold
+ * median uses only the 35 remaining folds (docs/KNOWN_ISSUES.md KI-14).
  *
  * This module implements the first remedy KI-14 proposed: repeated grouped
  * k-fold. Countries are assigned to folds as whole units, so no country appears
@@ -373,7 +372,7 @@ export function computeKFoldRefit(
         `k=${k} folds per repeat, ${repeats} seeded repeats, ${expectedFoldCount} total evaluations.`,
         'R² is computed per fold on that fold\u2019s test rows; a fold contributes to the R² distribution only where the statistic is defined.',
         'Distributions are reported instead of a single point estimate because the repeats are independent shuffles.',
-        'Supersedes cv_country_out.json for inference: country-out holds out 1-4 rows per fold, below the three-pair floor for R² (KI-14).',
+        'Supersedes cv_country_out.json for inference: country-out holds out 1-6 rows per fold, and 48 of 83 folds fall below the three-pair floor for R² (KI-14).',
       ],
       inferentialContract: {
         primaryEvidenceFamily: 'aggregatesRefit',

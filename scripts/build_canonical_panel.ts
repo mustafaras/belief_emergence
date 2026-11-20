@@ -10,9 +10,9 @@
  * the constructs (scripts/build_wvs_constructs.ts) showed that the three
  * contextual constructs cannot be salvaged:
  *
- *   Z_belief_outcome      alpha = +0.81   usable
- *   C_cultural_intensity  alpha = +0.33   not one dimension
- *   D_social_atomization  alpha = -0.42   items disagree
+ *   Z_belief_outcome      alpha = +0.8187 usable
+ *   C_cultural_intensity  alpha = +0.3482 not one dimension
+ *   D_social_atomization  alpha = -1.2285 items disagree
  *   S_social_support      computable for 0 cells (3 of 7 items available)
  *
  * So this panel keeps only what the data supports:
@@ -36,6 +36,8 @@ import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { readCsvRecords } from './lib/csv';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const WVS_CONSTRUCTS = path.join(ROOT, 'rawdata', 'wvs_combined.csv');
@@ -49,8 +51,13 @@ const DRY_RUN = process.argv.includes('--dry-run');
 /**
  * Gini backfill from the World Bank WDI series.
  *
- * WHY: `Y_gini` was the binding constraint on the sample — of 180 cells lost
- * after the WVS join, 131 were lost to this one covariate. The upstream macro
+ * WHY: `Y_gini` was the binding constraint on the sample — of the cells that
+ * reach the covariate stage and are missing at least one driver, it is the
+ * largest by a wide margin. The count is a property of the data, not a
+ * constant: `npm run generate:blockers` records the current attribution in
+ * `src/data/analysis/covariate_blocker_attribution.json`, and that artifact is
+ * the number to quote. A cell missing both Y and E is counted under both, so
+ * these are exposure counts and they do not sum to the frame. The upstream macro
  * panel draws inequality from a harmonised OECD/WDI merge that stops in some
  * years, while WDI publishes `SI.POV.GINI` for 2,402 country-years.
  *
@@ -62,10 +69,10 @@ const DRY_RUN = process.argv.includes('--dry-run');
  * new construct and no new measurement error.
  *
  * `--gini-window N` controls how far a neighbouring year may be borrowed when
- * the exact year is absent. 0 means exact-year only. The default is 2, chosen
+ * the exact year is absent. 0 means exact-year only. The canonical default is 5,
  * because WVS waves are irregular: a survey fielded in 2011 is a statement
- * about roughly 2009-2013, and a Gini measured one year away is closer to that
- * statement than dropping the cell is.
+ * about roughly 2009-2013, and a nearby Gini is closer to that statement than
+ * dropping the cell is. Narrower alternatives are reported separately.
  */
 const GINI_INDICATOR = 'SI.POV.GINI';
 /** Affine map from WDI Gini to the macro panel's Y_gini scale (verified exact). */
@@ -143,16 +150,16 @@ const WDI_TO_M = { slope: 0.03122824, intercept: -1.68101806 };
 
 function parseGiniWindow(argv: string[]): number {
   const flag = argv.indexOf('--gini-window');
-  if (flag === -1) return 2;
+  if (flag === -1) return 5;
   const raw = Number.parseInt(argv[flag + 1] ?? '', 10);
   return Number.isFinite(raw) && raw >= 0 ? raw : 2;
 }
 const GINI_WINDOW = parseGiniWindow(process.argv);
 
 /**
- * Pinned input fingerprints. The panel is only reproducible if the two inputs
- * are the ones it was built from, and both are gitignored (one is
- * licence-restricted, the other is a 22k-row merge). A silent input swap would
+ * Pinned input fingerprints. The panel is only reproducible if all four input
+ * files are the ones it was built from. They are gitignored; several carry
+ * source or redistribution restrictions. A silent input swap would
  * produce a different panel with the same name, so the build refuses to run
  * against an unrecognised file instead of emitting one.
  *
@@ -174,6 +181,11 @@ const EXPECTED_INPUTS: Array<{ label: string; path: string; sha256: string }> = 
     label: 'World Bank WDI (Gini backfill source)',
     path: WDI,
     sha256: 'C1CC1613DEE65121F0F77A26AC589A266E8A13AD56956B9BAEAD7ADF7E155309',
+  },
+  {
+    label: 'EM-DAT country-year disaster deaths (trauma backfill source)',
+    path: EM_DAT,
+    sha256: '7A8C6C2B3FD13AA2F0A49703797541669F67172DB89902DF72AD981FD88E755C',
   },
 ];
 
@@ -241,8 +253,8 @@ const KEPT = [
 
 /** Covariates dropped because they cannot support inference in this sample. */
 const DROPPED = [
-  { out: 'C', reason: 'alpha 0.33 — not a unidimensional construct (KI-09)' },
-  { out: 'D', reason: 'alpha -0.42 — items disagree (KI-10)' },
+  { out: 'C', reason: 'alpha 0.3482 — not a unidimensional construct (KI-09)' },
+  { out: 'D', reason: 'alpha -1.2285 — items disagree (KI-10)' },
   { out: 'S', reason: '3 of 7 configured items available; below min_item_coverage (KI-11)' },
   // G is not a construct defect: it is simply unavailable for the countries in
   // scope. Redistribution capacity requires disposable-income Gini, which
@@ -250,34 +262,8 @@ const DROPPED = [
   { out: 'G', reason: 'disposable-income Gini unavailable outside the OECD sample' },
 ];
 
-function parseCsvLine(line: string): string[] {
-  const out: string[] = [];
-  let cur = '';
-  let quoted = false;
-  for (let i = 0; i < line.length; i += 1) {
-    const ch = line[i];
-    if (quoted) {
-      if (ch === '"') {
-        if (line[i + 1] === '"') { cur += '"'; i += 1; } else { quoted = false; }
-      } else { cur += ch; }
-    } else if (ch === '"') { quoted = true; }
-    else if (ch === ',') { out.push(cur); cur = ''; }
-    else { cur += ch; }
-  }
-  out.push(cur);
-  return out;
-}
-
 function readCsv(file: string): Array<Record<string, string>> {
-  const text = fs.readFileSync(file, 'utf-8').replace(/^\uFEFF/, '');
-  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  const header = parseCsvLine(lines[0]).map((h) => h.trim());
-  return lines.slice(1).map((line) => {
-    const cells = parseCsvLine(line);
-    const row: Record<string, string> = {};
-    header.forEach((h, i) => { row[h] = (cells[i] ?? '').trim(); });
-    return row;
-  });
+  return readCsvRecords(fs.readFileSync(file, 'utf-8'));
 }
 
 function main(): void {
@@ -500,10 +486,8 @@ function main(): void {
   }
 
   const nParams = KEPT.length + 1;
-  console.log(`\n  observations per parameter : ${(rows.length / nParams).toFixed(1)} (${rows.length} rows / ${nParams} params)`);
-  if (rows.length / nParams < 10) {
-    console.log('  WARNING: below the conventional 10 obs/param floor — this must be stated as a limitation');
-  }
+  console.log(`\n  rows per retained field plus intercept : ${(rows.length / nParams).toFixed(1)} (${rows.length} rows / ${nParams} fields)`);
+  console.log('  Note: inferential support ratios are tier-specific; see model_complexity_support.json.');
 
   /* ---------------------------------------------------------------- */
   /*  Audit — no retained predictor may restate the outcome            */

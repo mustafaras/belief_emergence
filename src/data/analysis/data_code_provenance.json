@@ -392,7 +392,11 @@
       {
         "priority": "resolved",
         "item": "Repository LICENSE file",
-        "description": "LICENSE file added (MIT for code, CC BY 4.0 for documentation). Third-party data restrictions documented in LICENSE § 3. rawdata/.gitignore excludes redistribution-restricted files."
+        "description": "LICENSE file added (MIT for code, CC BY 4.0 for documentation). Third-party data restrictions documented in LICENSE § 3. rawdata/.gitignore excludes redistribution-restricted files.",
+        "resolution": "Resolved by repository inspection: LICENSE exists and states MIT for code and CC BY 4.0 for documentation; its section 3 names the third-party data restrictions; `rawdata/` is gitignored, so no redistribution-restricted source file is tracked (git ls-files under rawdata/ returns 0 entries).",
+        "closedOn": "2026-11-20",
+        "closedBy": "mustafaras",
+        "closureBasis": "repository property verified, not a licence obtained"
       },
       {
         "priority": "low",

@@ -8,9 +8,9 @@
 
 The canonical panel currently contains 207 complete-case country-years across
 83 countries (1990--2023), with 207 unique `(iso3, year)` keys. Many measurements
-inside the issue records are historical snapshots from earlier panel versions;
-use the current artifacts for present-day values. Where an entry cites
-`panel_canonical_23_countries_v1.csv` or
+inside the issue records are explicitly historical snapshots from earlier
+panel versions; use the current artifacts for present-day values. Where an
+entry cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
 kept only to describe the original defect.
 

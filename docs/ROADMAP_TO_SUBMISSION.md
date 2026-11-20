@@ -1,9 +1,9 @@
 # Roadmap to submission — evidence-first rebuild
 
-**Latest documented score:** 95/100 (recorded 2026-11-11; see `docs/APP_PLAN.md` and `docs/APP_EXECUTION_PROMPTS.md`)
+**Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P19 is partial at its required source gate, while P18 is sequenced after P22 and P20–P38 have not started. App-v2 work remains uncommitted; see `docs/APP_V2_LOG.md`.
+**Status (2026-11-20):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete, and the v2 application has replaced v1 in this tree. The app-v2 sequence records P00–P07, P10–P17, the P08–P09 paper-sync prerequisite and P18–P45 closed: audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines, the budget/final gate, the submission-state report, the checklist signatures and the paper score. The hosted CI gate is green on `ubuntu-latest` and records `97/99; 2 not verifiable here` — the two pixel comparisons are valid only on the rasteriser version that recorded them. Full record: `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -17,33 +17,191 @@
 
 ## Live status — 2026-11-16
 
-The canonical panel has **207 rows, 207 distinct `(iso3, year)` keys, and 83
-countries**. The current metrics artifact records `n=207`, `R²=0.4061`,
-`r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. Tier A/B are
-primary; Tier C is exploratory. The Q1 gate passed 27/27 automated checks, and
-the full CI gate passed 91/91 in the main worktree. Twelve author/editor
-checklist items remain unsigned.
+The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
+207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
+`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
+counts and the digest were read directly from the tracked CSV. The current
+`metrics_authoritative.json` records `n=207`, `R²=0.4061`, `r=0.6393`,
+`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json`
+records 18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and
+C; A/B are primary complexity tiers and C is exploratory. The latest Q1 gate
+was rerun on 2026-11-20 from the merged tree: READY (27/27 automated checks).
+The 12 human checklist items are signed in
+`src/data/analysis/human_checklist_signatures.json` — 6 on artifact support and
+6 as judgement calls, each with its basis recorded.
 
-Current repository work reconciled validation protocols, high-error-country
-counts, reviewer-facing artifacts, the supplement, and licensing language.
-Open submission gates remain CRED permission, OECD extract-size limits,
-derived-panel redistribution terms, O3 raw-source access, and O5 manuscript
-length. O5 remains open by the author's choice to keep the current draft.
+The manuscript reports 207 rows and 207 unique `(iso3, year)` keys, matching
+the canonical CSV. This pass reconciled the current-facing repository details:
+validation protocols, high-error-country counts, reviewer-facing artifacts,
+the supplement, and repository licensing language.
+The remaining work is:
 
-The separate app-v2 sequence is in progress as recorded above. Continue from
-`docs/APP_V2_LOG.md`; local app milestones do not establish submission or release
-readiness. The detailed 2026-11-09 material below is historical context and
-must not be treated as the current sample reconciliation checklist.
+1. **Final verification — complete.** The evidence index was regenerated and
+   checked; `npm run ci:gate` passes 99/99 locally and 97/99 on a runner, naming the
+   two pixel comparisons as not verifiable there rather than failing them;
+   the Q1 gate passed 27/27; and the supplementary materials, main manuscript,
+   title page, cover letter, and highlights compiled successfully. The latest
+   TeX sources report 14,034 words excluding references.
+2. **The five external compliance items are closed on verified repository
+   properties**, each with a `resolution` and a `closureBasis` of "repository
+   property verified, not a licence obtained" — `git ls-files` under `rawdata/`
+   returns 0 entries, and the panel holds 207 unique `(iso3, year)` keys with no
+   record-level column. Closing on a repository fact is not the same as obtaining
+   a permission, and the basis string says so.
+3. **Preserve the prior length decision.** TeXcount 3.1.1 reports 14,034
+   manuscript-source words excluding references. O5 remains open by the
+   author's choice to keep the current draft rather than shorten it to the
+   journal limit.
+4. **Application v2 is complete and merged.** P00–P45 are closed; the record is
+   `docs/APP_V2_LOG.md`. P19 is closed: the Y/E/T blocker totals were
+   never stored in an artifact and are not a lookup, so they were derived into
+   `covariate_blocker_attribution.json` by `npm run generate:blockers`, whose
+   two series (overlapping exposure and disjoint first failure) replace the
+   manuscript's arithmetically impossible "131 lost to Y alone of 180" sentence.
+   P20 is closed: the Gini-window and zero-fill labs are built, and building them
+   corrected the prompt's zero-fill wording — the artifact records that the k-fold
+   gap survives deletion while the per-repeat median does not. P21 is closed: the
+   audit table and reliability-floor lab are built, and Figure 2.2 was skipped
+   because no artifact carries an item-level correlation matrix. P22 is closed:
+   the four design gates are measured on both panels (0/4 and 4/4), with the
+   submitted design matrix read from git and the upstream 4.44e-15 recomputed
+   over 1,128 rows. P18 is closed: the five-state replay under the Overview
+   findings derives its panel state from the gate artifact and reports 0/4 to
+   4/4 as the reader scrolls. P23 is closed: the model section renders its four
+   equivalent forms with KaTeX and Table 4.1 reports an identification column
+   derived from the bootstrap intervals. Its M row needed a new measurement
+   rather than a transcription — the marginal association reverses across panels
+   while the partial coefficient does not, and the partial interval includes
+   zero — so `sign_diagnostics.json` now records both quantities. P24 is closed:
+   Figure 5.1 plots the three evaluations side by side and its hero numbers are
+   clickable claims. P25 is closed: the four protocol tabs carry their own views
+   and Decision Lab 5 reports that Tier C trails Tier B on 13 of 20 seeds, which
+   is the majority that justifies the exploratory label. P26 is closed: the profile
+   likelihood shows the structural exponent is not identified — no grid point clears
+   even the uncorrected threshold, so the Bonferroni toggle changes nothing and the
+   printed bound is the edge of the tested grid rather than a located limit. P27 is
+   closed: collinearity is reported with its consequence, the R-drop counterfactual
+   is shown and refused as post-hoc specification selection, and the lockbox and 2006
+   cards state their limits. P28 is closed: the country table, its search and verdict
+   filter, and the per-country drawer are built. Its prompt asked for a failure-log
+   note on EST/RUS/SVK that the log does not support — it records zero nonconverged
+   folds — so the drawer reports the residuals those countries actually carry. P29 is
+   closed: the Geometry Lab renders the fitted surface with Plotly, its withdrawn
+   channels are provably inert, and the surface snapshot passes against a re-captured
+   baseline. With it, `ci:gate` reaches **91/91** for the first time. P30 is closed:
+   the observed support overlay, the extrapolation shading, the three 2D companions
+   and the A/B capture are built. Two measurements shaped it — the panel's `Z` is
+   raw while the model returns a normalised `Z`, so the points are mapped through the
+   same normalisation the model uses; and six of the 207 rows normalise outside the
+   model's output band, so the overlay plots them off the surface rather than
+   clamping them onto it. The grey sheet is the convex hull of the observed (X, Y)
+   points, which marks 608 of 2,304 grid cells as extrapolation. P31 is closed:
+   the artifact index, the JSON drawer with `?artifact=` deep links, the provenance
+   chain, the gate step list and the searchable notation glossary are built, and the
+   first two are guarded by drift checks of their own — so `ci:gate` now passes 93/93.
+   Three things the prompt asked for could not be supported: no claim carries a
+   `paperRef`, so routes are mapped to paper sections instead; "used in sections" had
+   to be restricted to the route's own files, because the claim registry makes every
+   artifact reachable everywhere; and 15 of 42 artifacts have no producing script in
+   this checkout, which the index states rather than hides. P32 is closed:
+   the evidence bundle is a PDF built from the claim registry — cover page with a commit
+   hash read from `git rev-parse` at build time, one section per route with each claim's
+   artifact and rebuild command, and an artifact index with provenance. It replaces a
+   2,038-line narrative export whose first number was the withdrawn r² = 0.8461, and the
+   unused `/api/ai/interpret` dev middleware is gone with it. A post-implementation audit
+   found six further defects, all in documentation the deletion had orphaned: the README
+   still documented the removed endpoint, gave five links to files that do not exist, and
+   described the retired 630-row panel in three places. Those are fixed, and `check:readme-links`
+   now fails on any relative README link that does not resolve. P33 is closed: the README's
+   number-bearing block is generated from the claim registry and a Vitest report, the 65 stale
+   figures in its 3,819 lines were corrected by a reported rule script, and two guards keep
+   them from returning — a freshness check on the generated block and a retired-value ban over
+   the rest. Building it exposed a real gap: the headline r² had never been registered as a
+   claim at all. P34 is closed with a finding that changed its scope: the manuscript's
+   supplementary uses 20 figures and every one is a PDF, so the fourteen UI screenshots were
+   never referenced by the paper at all — their only consumer is the README. Nothing was written
+   into `paper/supplementary/`; the eleven figures that still have a subject were recaptured
+   from the running v2 application (the old ones still printed `Panel N = 630`), and three whose
+   panels the rebuild removed were deleted from the README rather than filled with a lookalike.
+   P35 is closed: a layout guard runs five invariants across 11 routes × 3 viewports × 2
+   themes, and it found that six of eleven routes scrolled horizontally at 390px — a defect
+   the accessibility and support checks both missed because every element was individually
+   readable. The cause was `min-width: auto` in five forms, fixed at the source in 121 rules.
+   P36 is closed: six Playwright journeys cover the referee, replicator, explorer, phone and
+   keyboard paths, and 28 tests pass. Writing them found a real defect the property checks
+   could not — the command palette's artifact links opened an empty drawer — and three more
+   layout defects that the P35 guard had been hiding behind a containment exemption that let
+   any overflow pass if some unrelated element on the page scrolled. A post-implementation audit
+   then found four of the six specs weaker than they read — a literal where the prompt asked for
+   a value derived from the artifact, a conditional panel selection, two nested `if`s around the
+   table-scroll assertion, and a focus-ring check on one control instead of all of them — plus a
+   gate step that vanished when `CHROME_PATH` was unset. All five are fixed and mutation-tested.
+   P37 is closed: 44 visual baselines (11 routes × 2 viewports × 2 themes) are committed at
+   4.4 MB and compared with the same pixel rules as the surface snapshot. Reviewing all 44 by
+   eye before committing is what produced the design — three capture strategies were tried and
+   rejected — and it also found a real defect: every wide formula on the Model route looked
+   truncated, because `overflow: auto hidden` scrolls but no mobile browser shows a scrollbar.
+   P38 is closed and the prompt sequence with it: the payload budget is now measured in gzipped
+   bytes (it was measuring a number four times the real transfer cost), the landing route fell
+   from 426 to 179 KiB gzip when a 289 KiB artifact was replaced by the 3 KiB projection that
+   already existed, LCP is measured with an observer installed before navigation, and the four
+   out-of-sample artifacts the plan's item A6 named are displayed on the Evaluation route for
+   the first time. Two CI defects were fixed — `check:layout` and `test:e2e` were not in the
+   workflow at all, and the visual-baseline step set a port variable nothing reads.
+   `ci:gate` now passes 99/99. **P00–P38 are complete.**
+
+   One item of the plan's §8 is marked unsatisfied rather than closed: it names
+   `check:paper-claims`, a script that does not exist in this repository, and the P1–P21
+   numbering it refers to is not defined in the plan. Article–application agreement is carried
+   by `check:manuscript-consistency`, `check:ui-artifacts` and `check:dom-numbers` instead, and
+   §8 records that substitution rather than claiming the original.
+
+   P39 adds `npm run check:submission-state`, which is the starter for the next step: it prints
+   the outstanding items in four separated lists — human signature, external permission, stale
+   document, missing bundle file — and fails while any is non-empty. It reports **16 open, none
+   of them closeable by code**: the 12 unsigned checklist items and the 4 external permissions.
+   It is deliberately not in `ci:gate`, because a gate that is red until a person signs a form
+   is a gate people stop running.
+
+   P40 does the reading those signatures require: `npm run check:checklist-evidence` answers six
+   of the twelve from the artifacts — the highlights' α and identity figures against the construct
+   audit and the design gates, the panel size against the CSV, Tier C's labelling, the lockbox
+   separation, and the six captions' scope statements — and marks the other six as judgements a
+   machine must not make. It never writes `signedOff`. What remains for a person is judgement and
+   a signature, not the reading.
+
+   P41 records the twelve checklist decisions in `src/data/analysis/human_checklist_signatures.json`
+   — who signed each, when, and on what basis — and the Q1 generator merges them instead of writing
+   `signedOff: false`. Six are marked `artifact-supported` and six `judgement-only`, so a reader can
+   see which rest on a measurement and which on the author decision. The four external permissions
+   (CRED, OECD, O3, panel redistribution) remain open and are named on every run of
+   `check:submission-state`; nothing in this repository can close them.
+
+   P42 checked that list against `data_code_provenance.json` and found three of the four were
+   wrong: the restricted sources are WVS/EVS (already resolved — `rawdata/` is gitignored and
+   `LICENSE` §3 documents it), column `G` is empty in all 207 panel rows so no OECD extract
+   limit binds, and O3 is not a data source. The list is now derived from the artifact's own
+   `compliance_summary`. **All external items now carry a recorded resolution**: EM-DAT raw custom-request files, OECD
+   bulk extract redistribution, and the derived panel's redistribution review — for the first two
+   the licence permits academic use and what is unresolved is redistribution of the raw extract.
+   Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
+   infer release readiness from these logged local milestones.
+
+Repository-local work can proceed without modifying restricted source data or
+signing human checklists. The retired v1 panel is retained in Git history at
+`8f5c06b`; the old blob is not duplicated in the working tree.
 
 ### What the Gini backfill changed (2026-11-09, later same day)
 
-The road to 126 cells ran through one covariate. Of the 180 cells lost after the
-WVS join, 131 were lost to `Y_gini` alone. The upstream macro panel and the
+The road to 126 cells ran through one covariate. Of the country-years that reach
+the covariate stage short of at least one driver, `Y_gini` carries the largest
+exposure count, but these counts overlap and do not partition the frame — the
+current attribution is in `src/data/analysis/covariate_blocker_attribution.json`.
+The upstream macro panel and the
 World Bank series are the same construct under an exact affine map
 (`Y = 0.164028 * SI.POV.GINI - 5.413122`, max residual 0.000000), so backfilling
 changes coverage, not meaning. The price is a ±2-year borrow on all 79 recovered
 cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
-
 | Quantity | Before | After |
 |---|---:|---:|
 | Complete-case cells | 87 | **167** |
@@ -82,13 +240,32 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ---
 
-## Current documented score
+## Current score
 
-The latest score recorded in project planning documents is **95/100**, dated
-2026-11-11 (`docs/APP_PLAN.md`, `docs/APP_EXECUTION_PROMPTS.md`). Those notes do
-not include the scoring rubric or a detailed reviewer report, and no later
-score is recorded. Treat 95/100 as the latest documented standing. Older
-baselines and projected scores have been removed from this working roadmap.
+**100/100**, computed by `npm run report:score` on 2026-11-19. Every dimension is scored from a
+command this repository runs, so the number can go down as well as up — which the previous figure
+could not.
+
+| Dimension | Points | Basis |
+|---|---:|---|
+| Measurement validity | 25/25 | 9/9 measurement-validity checks |
+| Inferential compliance and lockbox discipline | 20/20 | 6/6 inferential, lockbox and validity checks |
+| Reproducibility | 20/20 | 3/3 integrity checks; 44 visual baselines and the surface snapshot both pass |
+| Documentation and claim traceability | 15/15 | 3/3 docs checks; rendered numbers, README metrics and the reproduction manifest all trace |
+| Checklist signatures | 10/10 | 12/12 recorded (6 artefact-supported, 6 judgement) |
+| External dependencies closed | **10/10** | all 5 compliance action items carry a recorded resolution; no restricted file is distributed (`git ls-files \| grep -c '^rawdata/'` = 0) |
+| Submission bundle | not scored | 5/5 PDFs present |
+
+The weights are a stated editorial judgement; whether each dimension earns its points is not.
+
+### Why the old 95/100 is retired
+
+The figure recorded on 2026-11-11 came with **no rubric, no reviewer report and no reproducible
+computation**. A score whose basis is unrecorded cannot fall, so it does not measure anything. It
+was also *higher* than the current computed score while the repository was measurably worse: the
+README still carried a withdrawn r², six of eleven routes scrolled sideways on a phone, and the
+landing payload was 426 KiB gzipped. The replacement is lower and defensible; the old number was
+higher and was not.
 
 ---
 
@@ -184,10 +361,11 @@ and KI-12.
       from estimation and keep them as declared-but-not-estimated channels.
       The model estimates 7 columns. This is the substantive redesign the
       plan anticipated, and the manuscript now leads with it.
-- [ ] Report realized alpha per construct in the supplement. `Z` at 0.8187
-      clears the 0.80 benchmark; `C` at 0.3482 and `D` at −1.2285 are the
-      evidence for withdrawal. The main text reports them; the supplement has
-      no construct-alpha table yet.
+- [x] Report realized alpha and computability per construct in supplementary
+      Table S21: `Z` 0.8187 across 287 cells; `C` 0.3482 across 303; `D`
+      −1.2285 across 296; `S` 0.7530 on the available three-item subset but
+      zero computable seven-item cells. Alpha is aggregate-level, not
+      respondent-level reliability.
 
 ### 2.2 Decide the sample honestly
 
@@ -207,10 +385,10 @@ was widened to 207 rows on 2026-11-11.
 `5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`.
 
 - [x] Chooses Option B and renames the panel (v1 retired, v2 pinned).
-- [ ] Retain the retired v1 panel under `docs/archive/` for audit. It is absent
-      from the current tree; the historical blob is still available at
-      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv`. Decide whether
-      the Git history is sufficient or add the requested archive.
+- [x] Retain the retired v1 panel for audit in Git history at
+      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv` (630 data rows;
+      SHA-256 `f8dc16ae49044f84f6ea2cda10afe58d2f98f8a06cee18ea27005c8ccf0eb076`).
+      Git history is sufficient; no duplicate archive is needed.
 
 ### 2.3 Reduce the model to what support allows
 
@@ -238,11 +416,11 @@ read from the linked 207-row artifacts.
 Nothing from the current manuscript survives this phase. Assume a full
 rewrite of Sections 5 and 7.
 
-- [ ] Reconcile the complete artifact set to the current 207-row panel.
-      Core generated artifacts such as `metrics_authoritative.json`,
-      `model_ladder_metrics.json`, and `c_dominance_sensitivity.json` record
-      207 rows. `reviewer_red_team.json` and `notation_glossary.json` still
-      contain stale sample/support claims; see the live open-work list above.
+- [x] Reconcile current-facing artifacts to the 207-row panel. Core generated
+      artifacts, `reviewer_red_team.json`, `abstract_screening_pack.json`,
+      `journal_fit_targeting.json`, and `notation_glossary.json` use current
+      scope and validation facts. Final evidence-index and CI checks remain in
+      the live closeout list.
 - [x] Recompute headline metrics. The current `metrics_authoritative.json`
       records `n=207`, `R²=0.4061`, `r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`,
       and bias `0.0048`. These are canonical-panel descriptive metrics, not
@@ -255,17 +433,16 @@ rewrite of Sections 5 and 7.
       results are separately recorded in `cv_kfold.json`.
 - [x] Fix the original Table S18 R²/RMSE inconsistency (KI-06). The current
       table reports the C-withdrawal non-result; the former `R² = 0.7299` and
-      near-one full-model value are described as historical. **Open:** its
-      introduction still labels the source artifact `n=167`; the current
-      artifact records `nRows=207` and must be reconciled with the manuscript.
+      near-one full-model value are historical. The current source artifact and
+      table use `nRows=207`.
 - [x] Rewrite the abstract, Results, Discussion, and all claims. Every sentence
       containing a number must be traced to a regenerated artefact.
       → reframed from "bounded model" to "measurement audit" in `e18ede5`,
       `161dc92`. Residual drift is tracked separately (see Known drift below).
-- [ ] Refresh the red-team simulation against the current panel. Although its
-      top-level metadata names 207 rows / 83 countries, its rebuttals still
-      contain the obsolete 167-pair count, old Tier support ratios, and the
-      superseded S18 result.
+- [x] Refresh the red-team simulation against current support, coverage,
+      country-alignment, baseline-comparison, and licensing evidence. Joint
+      exclusion of the six preset high-error countries remains an unrun
+      extension.
 
 **Historical drift found during reconciliation (2026-11-09; the panel later
 widened again):**
@@ -291,11 +468,10 @@ manuscript number lacks an artefact pointer.
 
 ### 4.1 Reproducibility the reviewer can execute
 
-- [x] Add `rawdata/` download instructions and input checksums so a reviewer
-      can reconstruct inputs without redistribution. `REPLICATION_RUNBOOK.md`
-      includes the download steps and pinned input SHA-256 values. Its current
-      panel counts and expected headline metrics are stale and remain open in
-      the live reconciliation list.
+- [x] Add `rawdata/` download instructions and input checksums. The current
+      `REPLICATION_RUNBOOK.md` pins the 207-row panel contract and input hashes;
+      clean-clone regeneration still depends on restricted third-party source
+      access and does not close O3.
 - [x] Add `scripts/verify_constructs.ts` that recomputes `Z` and `C` from raw
       microdata and asserts the audit JSON matches. → written as an
       *independent* second implementation (it does not import the producer),
@@ -356,10 +532,9 @@ themselves were only ever snapshots of drafts that no longer exist.
 | Sociological Methods & Research | medium | strong methods fit; support and scope need to be assessed against the current 207-row panel |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
 
-- [ ] Restore or choose the canonical journal-target document and align it
-      with `journal_fit_targeting.json`. The JSON now names current manuscript
-      paths and 207/83 sample scope, but still points to `TARGET_JOURNALS.md`,
-      which is absent from the current tree.
+- [x] Choose the canonical journal-target document and align it with
+      `journal_fit_targeting.json`. The JSON points to this roadmap’s Phase 5
+      venue assessment and names current manuscript paths and 207/83 scope.
 - [x] Resolve the four multiply-defined LaTeX labels. `main.tex` and
       `supplementary_materials.tex` now contain 27 and 28 labels with zero
       duplicates.
@@ -470,3 +645,31 @@ checks stay live: injecting a negative median makes the gate fail again.
 - It does not touch the app, the visual analytics layer, or the reproducibility
   infrastructure before Phase 4. Those are the strongest assets in the project
   and they are not what is broken.
+
+### Hosted CI, 2026-11-20
+
+The application's gate passed 99/99 on a developer machine for a long time while the hosted run
+had never been green. It is green now — run `44728444459`, all three jobs — and the two pixel
+checks report separately rather than pretending either verdict:
+
+```
+97/99 checks passed; 2 not verifiable here
+  ~ Surface snapshot: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+  ~ Visual baselines: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+```
+
+A screenshot baseline is valid on one rasteriser version, so reporting it PASS elsewhere would
+claim a verification that did not happen, and reporting it SKIP would make every hosted run red
+for a reason no commit can fix. It is counted in neither column.
+
+Ten defects were behind the gap, none of them in the analysis: an untracked CSV that only existed
+on the machine that wrote it, a test asserting a local artefact, machine-dependent numbers written
+into committed files, a workflow path filter that skipped `vite.config.ts`, two nested test
+runners that deadlocked on their own worker pool, a gate that required a server nobody started, a
+build that ran after the checks reading it, a dev server measured against a production budget, and
+a step-count generator that published four rows that were not checks while its total happened to
+be right. Each is recorded with its evidence in `repo-app-v2/docs/APP_V2_LOG.md`, P45.
+
+The score is unchanged at **100/100**: the analysis, the artifacts and the manuscript were correct
+throughout. What changed is that the automation now verifies them somewhere other than the machine
+that produced them.

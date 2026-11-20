@@ -1,7 +1,7 @@
 {
   "schema": "phase1.notation_glossary.v1",
-  "generated": "2026-11-15T12:20:05.430463+00:00",
-  "generator": "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json)",
+  "generated": "2026-11-16T08:42:26.934723+00:00",
+  "generator": "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json, construct_prevalence.json, construct_item_availability.json)",
   "purpose": "Machine-readable notation glossary and regime definitions for all symbols used in the main manuscript and supplementary materials",
   "model_variables": [
     {
@@ -62,7 +62,16 @@
       "bounds_raw": [
         -2.6558,
         3.3693
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.818715691617005,
+        "configuredItems": 6,
+        "availableItems": 6,
+        "cellsEmitted": 287,
+        "computable": true,
+        "disposition": "retained",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "C",
@@ -78,7 +87,16 @@
         "E015",
         "E018",
         "E035"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.3481590618313876,
+        "configuredItems": 6,
+        "availableItems": 6,
+        "cellsEmitted": 303,
+        "computable": true,
+        "disposition": "withdrawn",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "M",
@@ -110,7 +128,16 @@
         "A170",
         "A173",
         "A174"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": -1.2284774929408622,
+        "configuredItems": 5,
+        "availableItems": 5,
+        "cellsEmitted": 296,
+        "computable": true,
+        "disposition": "withdrawn",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "G",
@@ -143,7 +170,16 @@
         "F185",
         "F186",
         "G006"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.7530436198636796,
+        "configuredItems": 7,
+        "availableItems": 3,
+        "cellsEmitted": 0,
+        "computable": false,
+        "disposition": "uncomputable",
+        "alphaScope": "available-item subset only; does not establish seven-item computability"
+      }
     },
     {
       "symbol": "R",
@@ -236,14 +272,14 @@
     },
     {
       "symbol": "x/y fitting window",
-      "name": "Structural windows used by the fitting script",
+      "name": "Structural windows used by fitting",
       "values": [
         0.10345301530914319,
         0.9544108940201302,
         -1.5584640000000003,
         5.2158924
       ],
-      "role": "Clip domain for the safe-band map during fitting"
+      "role": "Canonical realised X/Y ranges, shared with the evaluation contract after KI-18"
     },
     {
       "symbol": "x/y evaluation window",
@@ -254,25 +290,25 @@
         -1.5584640000000003,
         5.2158924
       ],
-      "role": "Clip domain for the safe-band map in evaluation and the interface (differs from fitting; KI-18)"
+      "role": "Same canonical realised X/Y ranges used by fitting and runtime after KI-18"
     },
     {
       "symbol": "z fitting anchors",
-      "name": "Outcome anchors in the fitting script",
+      "name": "Outcome anchors shared by fitting and evaluation",
       "values": [
         -2.3974,
         1.8573
       ],
-      "role": "1st/99th percentiles of the current panel"
+      "role": "Current-panel 1st/99th percentile anchors, shared across the contract after KI-18"
     },
     {
       "symbol": "z evaluation anchors",
-      "name": "Outcome anchors in the model contract",
+      "name": "Outcome anchors shared by fitting and evaluation",
       "values": [
         -2.3974,
         1.8573
       ],
-      "role": "Z_NORMALIZATION used for evaluation (differs from fitting; KI-18)"
+      "role": "Same current-panel 1st/99th percentile anchors used in fitting after KI-18"
     },
     {
       "symbol": "Φ_clamp",
@@ -330,6 +366,18 @@
       "c_m2",
       "c_t2",
       "c_e2"
+    ],
+    "status_note": "Lists describe the nominal tier parameterization. C, D, G and S are withdrawn; their main effects and dependent terms are neutralized to zero rather than estimated.",
+    "withdrawn_channel_terms": [
+      "c_C",
+      "c_D",
+      "c_G",
+      "c_S",
+      "c_cm",
+      "c_es",
+      "c_dt",
+      "c_gr",
+      "c_c2"
     ]
   },
   "tier_definitions": [
@@ -392,7 +440,8 @@
   ],
   "supplementary_table_mapping": {
     "S15": "Notation Glossary (Panels A–E: variables, Greek letters, hyperparameters, coefficients, tier definitions)",
-    "S16": "Regime Definitions (5 regimes with formal definitions, characterization, support density)"
+    "S16": "Regime Definitions (5 regimes with formal definitions, characterization, support density)",
+    "S21": "Construct Reliability and Computability (aggregate alpha, available items, emitted country-years)"
   },
   "support_density_basis": "production-predicted Z on the bounded scale, 207 country-years"
 }

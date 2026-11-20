@@ -2,18 +2,15 @@
 
 Tarih: 2026-11-15 · Kapsam: `repo/` · Uygulama adımları: `docs/APP_V2_EXECUTION_PROMPTS.md`
 
-**Canlı uygulama durumu (2026-11-16):** `docs/APP_V2_LOG.md`, P00–P07 ve
-P10–P17'yi tamamlandı; P08–P09'u makale-senkronu önkoşulu olarak tamamlandı diye
-kaydediyor. P19, izin verilen artifact'larda istenen Y/E/T engelleyici toplamları
-bulunmadığı için kısmi ve durdurulmuş durumda. P18, plana göre P22'den sonra gelir;
-P20–P38 başlamadı. Bu worktree'deki v2 işi commit edilmedi; canlı ilerleme kaynağı
-APP_V2_LOG.md'dir.
+**Canlı uygulama durumu (2026-11-20).** `docs/APP_V2_LOG.md`, P00–P45'in tamamını kaydediyor.
+P19'daki engel (Y/E/T blocker toplamları) artifact'lar üretildikten sonra çözüldü ve P20–P45
+kapandı. Bu birleştirmeyle v2 çalışması `main`'e giriyor; canlı ilerleme kaynağı hâlâ
+`APP_V2_LOG.md`.
 
-**Güncel makale referansı (2026-11-16).** `paper/main/main.tex` son olarak `be904cc` commit'inde
-güncellendi. Puan artık hesaplanıyor: **91/100** (`npm run report:score`,
-`docs/ROADMAP_TO_SUBMISSION.md` § "Current score"). Eski 95/100 rubriksizdi ve yeniden üretilemiyordu;
-kayıttan kaldırıldı. Bu worktree'de `paper/` değişikliği yok. Uygulama bu sürümü yansıtır. §6'daki iç çelişkiler listesi tarihsel girdidir; düzeltme durumları ve açık O3/O5 kapıları
-`docs/PAPER_SYNC_REPORT.md` içinde tutulur. O5, kullanıcının kararıyla açık kalır.
+**Güncel puan (2026-11-20).** Puan hesaplanıyor: **100/100** (`npm run report:score`), yedi
+kanıt boyutu, her biri kendi kanıt satırıyla. Eski 95/100 rubriksizdi ve yeniden üretilemiyordu;
+kayıttan kaldırıldı. Bu worktree'de `paper/` değişikliği yok. §6'daki iç çelişkiler listesi
+tarihsel girdidir; düzeltme durumları `docs/PAPER_SYNC_REPORT.md` içinde tutulur.
 
 ---
 
@@ -251,7 +248,11 @@ dosyasını üretir. CI'da bir uyumsuzluk varsa kapı düşer.
 
 ---
 
-## 6. Makale iç çelişkileri (P08–P09 girdisi; satırlar `main.tex`)
+## 6. Makale iç çelişkileri (P08–P09 öncesi tarihsel girdi; satırlar `main.tex`)
+
+Bu liste 2026-11-15 tarihli başlangıç fotoğrafıdır. P08–P09 çalışması bunları gözden geçirip
+düzeltti; eski satır numaralarını veya örnek sayıları yeni bir düzeltme talimatı olarak kullanma.
+Son doğrulama sonucu ve kalan O3/O5 kapıları `docs/PAPER_SYNC_REPORT.md` içinde tutulur.
 
 | # | Satır | Çelişki |
 |---|---|---|
@@ -300,7 +301,7 @@ Toplam yaklaşık **20 iş günü**. Her prompt bir commit; her aşama sonunda `
 
 ## 7b. P00'dan önce tamamlananlar (2026-11-15)
 
-- Makale, highlights, cover letter ve supplementary sayıları artifact'lara bağlandı; 38 tutarlılık bloğu (`npm run check:manuscript-consistency`). Ayrıntı: `docs/PAPER_SYNC_REPORT.md`.
+- Makale, highlights, cover letter ve supplementary sayıları artifact'lara bağlandı; güncel kontrol 36 tutarlılık bloğunu doğrular (`npm run check:manuscript-consistency`). Ayrıntı: `docs/PAPER_SYNC_REPORT.md`.
 - Altı yeni üretici: `generate:marginal-effects`, `generate:preset-alignment`, `generate:supplement-tables`, `generate:coefficient-bootstrap`, `generate:window-sensitivity`, `generate:data-figures`; `generate:functional-form` eşleştirilmiş fold farkıyla genişletildi.
 - Veriye bağlı şekiller (Şekil 1, S1, S2, S5, A2, A3) eski modelden/panelden yeniden üretildi.
 - AI Interpreter makaleden kaldırıldı.

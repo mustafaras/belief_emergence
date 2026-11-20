@@ -1,5 +1,10 @@
 # Application plan — from demo to evidence surface
 
+> **Historical baseline (2026-11-11).** The measurements and panel counts in
+> this v1 plan describe the v1 review snapshot, not the current 207-row panel.
+> Application v1 prompts 0–13 were delivered through PRs #1 and #2. They do not
+> complete the separate `APP_PLAN_V2.md` sequence.
+
 ## The diagnosis in one paragraph
 
 The application is a parameter explorer. Twelve sliders, forty-six buttons, one

@@ -5,12 +5,20 @@ import glossary from '../src/data/analysis/notation_glossary.json'
 
 describe('the notation glossary', () => {
   it('lists every symbol the artifact defines', () => {
+    /*
+     * Only the list-valued entries are terms. `coefficient_terms` also carries `status_note`, a
+     * sentence, and `flat()` spreads a string into its characters — so the old form counted 164
+     * rows that do not exist and expected 57 where the artifact defines 56. Both this test and
+     * the builder were reading the same field the same wrong way, which is why the mismatch
+     * survived: the numbers only disagreed once the builder was fixed.
+     */
+    const termLists = Object.values(glossary.coefficient_terms).filter(Array.isArray) as unknown[][]
     const expected =
       glossary.model_variables.length +
       glossary.greek_letters.length +
       glossary.derived_quantities.length +
       glossary.hyperparameters.length +
-      Object.values(glossary.coefficient_terms).flat().length
+      termLists.flat().length
     expect(GLOSSARY).toHaveLength(expected)
   })
 
