@@ -114,15 +114,26 @@ function readFixture(): Fixture {
 }
 
 
-/** Test totals from a vitest JSON report, which counts what actually ran. */
+/**
+ * Test totals, from a vitest JSON report when one exists.
+ *
+ * This is the **second** place that started a test runner from inside a test runner, and the two
+ * together are why the CI stall resisted four rounds of attempts to fix the worker pool.
+ *
+ *   `tests/report.score.test.ts` -> `compute_paper_score.ts` -> `check:readme-metrics`
+ *     -> `generate_readme.ts` `readFixture()`  -> `npm run readme:metrics` (vitest)
+ *     -> `generate_readme.ts` `readTestTotals()` -> `vitest run --reporter=json` (vitest)
+ *
+ * `tmp/` is gitignored, so on a clean checkout both branches are taken and two nested runners
+ * wait on a worker pool their parent already holds. Nothing completes; the job is killed.
+ *
+ * The README no longer states a test count — that was removed because the count is not
+ * machine-independent — so a missing report is no longer a reason to start one. The counts are
+ * returned as zero and the caller prints them nowhere.
+ */
 function readTestTotals(): { tests: number; files: number } {
   if (!existsSync(REPORT)) {
-    // Producing a README that says "0 tests" would be worse than being slow: the number is
-    // the point. A missing report is generated rather than substituted with a guess.
-    execFileSync('npx', ['vitest', 'run', '--reporter=json', `--outputFile=${REPORT}`], {
-      cwd: REPO_ROOT,
-      stdio: 'pipe',
-    })
+    return { tests: 0, files: 0 }
   }
   const report = JSON.parse(readFileSync(REPORT, 'utf8')) as {
     numTotalTests?: number
