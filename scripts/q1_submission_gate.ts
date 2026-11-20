@@ -60,13 +60,15 @@ function record(
   if (!pass) console.log(`        ${detail}`);
 }
 
+/**
+ * Run a command, keeping why it failed.
+ *
+ * This returned a bare boolean and discarded both streams, so a 24-minute hosted run reported
+ * "Test suite failed" and nothing else — while the same suite had passed 77/77 six minutes
+ * earlier in the same job, and passes locally. The reason existed and was thrown away.
+ */
 function runCmd(cmd: string): boolean {
-  try {
-    execSync(cmd, { stdio: 'pipe', cwd: ROOT });
-    return true;
-  } catch {
-    return false;
-  }
+  return runCmdCaptured(cmd).ok;
 }
 
 /**
@@ -102,9 +104,12 @@ function readJson(name: string): Record<string, unknown> | null {
 function gateCodeQuality(): void {
   console.log('\n── Gate 1: Code Quality ──');
 
-  const ok1 = runCmd('npm run test:run');
+  const tests = runCmdCaptured('npm run test:run');
+  const ok1 = tests.ok;
   record('cq-tests', 'Code Quality', 'Test suite passes', ok1, 'critical',
-    ok1 ? 'All tests passed' : 'Test suite failed — fix before submission');
+    ok1
+      ? 'All tests passed'
+      : `Test suite failed — fix before submission:\n${tests.output.split(/\r?\n/).filter((l) => /×|FAIL |AssertionError|expected/i.test(l)).slice(0, 12).join('\n') || tests.output.split(/\r?\n/).slice(-15).join('\n')}`);
 
   const ok2 = runCmd('npm run lint');
   record('cq-lint', 'Code Quality', 'Lint passes (zero errors)', ok2, 'critical',
