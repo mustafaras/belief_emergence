@@ -194,9 +194,14 @@ jobs:
           test -x "$CHROME" || { echo "browser not executable"; exit 1; }
           echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
 
-      # No standalone server step. Each step that needs a browser starts Vite itself and stops
-      # it on exit — Actions gives every `run:` block a fresh shell, so a server started in one
-      # step is gone by the next. This step used to exist and could never have worked.
+      # The gate starts and stops its own preview server, so this step does not bootstrap one.
+      # It used to: a `vite` dev server on 5199 held the port before the gate ran, and the gate —
+      # which now checks the port and adopts an existing listener rather than starting a second
+      # one — would have measured unminified dev output instead of the build. Two servers for one
+      # port is also how a stale listener gets picked up. One owner, one lifetime.
+      #
+      # The browser checks are still inside the gate, after its build step, and they report SKIP
+      # rather than PASS when they cannot run.
       - name: Deterministic reproducibility gate
         env:
           ROUTE_CHECK_PORT: '5199'
@@ -204,23 +209,7 @@ jobs:
           INITIAL_CHUNK_BUDGET_KIB: '350'
           FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
           LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
-        run: |
-          # The server must live inside this step. Actions gives every `run:` block its own
-          # shell, and a background process does not outlive it — which is why the browser
-          # checks in this step failed with ERR_CONNECTION_REFUSED in CI while passing locally.
-          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-gate.log 2>&1 &
-          VITE_PID=$!
-          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
-          for i in $(seq 1 60); do
-            if curl -sf -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-              echo "dev server up after ${i}s"
-              break
-            fi
-            sleep 1
-          done
-          curl -sf -o /dev/null http://127.0.0.1:5199/belief_emergence/ || {
-            echo "dev server did not start"; tail -20 /tmp/vite-gate.log; exit 1; }
-          npm run ci:gate
+        run: npm run ci:gate
 
       # The two checks P35 and P36 added. Until now they ran on a developer machine and in
       # `ci:gate`, but not in CI — which means a pull request could break the layout of every

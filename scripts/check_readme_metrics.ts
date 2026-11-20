@@ -117,7 +117,7 @@ function main(): void {
   const metrics = buildMetrics()
   console.log(
     `PASS  README claims block is current and carries no retired value ` +
-      `(${metrics.panelRows} rows, ${metrics.countries} countries, r² ${metrics.r2}, ${metrics.tests} tests)`,
+      `(${metrics.panelRows} rows, ${metrics.countries} countries, r² ${metrics.r2})`,
   )
 }
 

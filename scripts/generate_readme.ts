@@ -28,7 +28,6 @@ import { fileURLToPath } from 'node:url'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const README = path.join(REPO_ROOT, 'README.md')
-const REPORT = path.join(REPO_ROOT, 'tmp', 'vitest-report.json')
 
 const START = '<!-- claims:start -->'
 const END = '<!-- claims:end -->'
@@ -44,8 +43,6 @@ export type ReadmeMetrics = {
   rmse: string
   constructsRetained: number
   constructsWithdrawn: number
-  tests: number
-  testFiles: number
   routes: number
   gateChecks: number
   /** Registered in the claim registry. */
@@ -114,55 +111,6 @@ function readFixture(): Fixture {
 }
 
 
-/**
- * Test totals, from a vitest JSON report when one exists.
- *
- * This is the **second** place that started a test runner from inside a test runner, and the two
- * together are why the CI stall resisted four rounds of attempts to fix the worker pool.
- *
- *   `tests/report.score.test.ts` -> `compute_paper_score.ts` -> `check:readme-metrics`
- *     -> `generate_readme.ts` `readFixture()`  -> `npm run readme:metrics` (vitest)
- *     -> `generate_readme.ts` `readTestTotals()` -> `vitest run --reporter=json` (vitest)
- *
- * `tmp/` is gitignored, so on a clean checkout both branches are taken and two nested runners
- * wait on a worker pool their parent already holds. Nothing completes; the job is killed.
- *
- * The README no longer states a test count — that was removed because the count is not
- * machine-independent — so a missing report is no longer a reason to start one. The counts are
- * returned as zero and the caller prints them nowhere.
- */
-function readTestTotals(): { tests: number; files: number } {
-  if (!existsSync(REPORT)) {
-    return { tests: 0, files: 0 }
-  }
-  const report = JSON.parse(readFileSync(REPORT, 'utf8')) as {
-    numTotalTests?: number
-    numPassedTests?: number
-    numPendingTests?: number
-    testResults?: unknown[]
-  }
-
-  /*
-   * The README does not state a test count, because a test count is not machine-independent.
-   *
-   * `npm run check:readme-metrics` regenerates and compares the block. On a development
-   * checkout Vitest skips the tests that need a browser or a manuscript worktree; in CI it runs
-   * them. The two numbers are 434 and 463 — rounding to the nearest ten gave 430 and 460, so even
-   * an approximate figure disagreed. A number that changes with the machine cannot be asserted,
-   * and an assertion that fails on correct work is the defect this whole pass has been removing.
-   *
-   * The README now says what is true in both environments — the suite passes, and the exact
-   * count is in the CI run — and `check:readme-metrics` compares the block, which no longer
-   * contains it.
-   */
-  const passed = report.numPassedTests ?? report.numTotalTests ?? 0
-  const files = Array.isArray(report.testResults) ? report.testResults.length : 0
-  return {
-    tests: passed,
-    skipped: report.numPendingTests ?? 0,
-    files,
-  }
-}
 
 /**
  * Claims reachable from a route, from the generated manifest.
@@ -215,7 +163,6 @@ function readPanelSpan(): { yearMin: number; yearMax: number } {
 export function buildMetrics(): ReadmeMetrics {
   const fixture = readFixture()
   const span = readPanelSpan()
-  const tests = readTestTotals()
 
   return {
     panelRows: fixture.values.panelRows,
@@ -228,8 +175,6 @@ export function buildMetrics(): ReadmeMetrics {
     rmse: fixture.values.rmse.toFixed(3),
     constructsRetained: fixture.values.constructsRetained,
     constructsWithdrawn: fixture.values.constructsWithdrawn,
-    tests: tests.tests,
-    testFiles: tests.files,
     routes: fixture.manifest.routes,
     // Read live rather than from the fixture: the gate's step count changes whenever a
     // check is added, and a fixture captured before that change would publish a stale total
@@ -271,7 +216,7 @@ ${cell(badge('Correlation', metrics.corr, '3fb950'), 'Correlation', 'Observed vs
 ${cell(badge('MAE', metrics.mae, '4c8eda'), 'MAE', 'Mean absolute error')}
 ${cell(badge('RMSE', metrics.rmse, '4c8eda'), 'RMSE', 'Root mean squared error')}
 ${cell(badge('N', String(metrics.panelRows), '7d8590'), 'Observations', `${metrics.countries} countries · ${metrics.yearMin}–${metrics.yearMax}`)}
-${cell(badge('Tests', 'passing', '3fb950'), 'Tests', `${metrics.testFiles} files · all passing`)}
+${cell(badge('Tests', 'passing', '3fb950'), 'Tests', 'the suite is green; the count is in the CI run')}
 </tr>
 </table>
 
@@ -306,7 +251,7 @@ function main(): void {
   writeFileSync(README, updated)
   console.log(
     `wrote README.md claims block: ${metrics.panelRows} rows, ${metrics.countries} countries, ` +
-      `r² ${metrics.r2}, ${metrics.tests} tests in ${metrics.testFiles} files, ` +
+      `r² ${metrics.r2}, ` +
       `${metrics.gateChecks} gate checks, ${metrics.reachableClaims} of ${metrics.claims} claims shown`,
   )
 }

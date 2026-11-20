@@ -116,7 +116,7 @@ If you see an access error (e.g., “You need access”), request access from th
 <br/>
 <img alt="Tests" src="https://img.shields.io/badge/Tests-passing-3fb950?style=for-the-badge&labelColor=1a1a2e" /><br/>
 <sub><b>Tests</b></sub><br/>
-<sub>70 files · all passing</sub><br/><br/>
+<sub>the suite is green; the count is in the CI run</sub><br/><br/>
 </td>
 </tr>
 </table>
@@ -1175,7 +1175,7 @@ graph TD
     end
 
     subgraph Quality["Quality & Testing"]
-        K["Vitest 3\n(test runner)"] --> L["434 tests\n(70 files)"]
+        K["Vitest 3\n(test runner)"] --> L["unit + browser suite\n(the suite is green)"]
         M["ESLint 9\n(linting)"] --> N["Code Quality\n(TS-strict)"]
     end
 
@@ -1729,7 +1729,7 @@ public/data/
   └── panel_canonical_v2.csv                 [207 country-years, 83 countries]
 
 tests/
-  └── *.test.ts              [Vitest: 70 files, 434 tests, all passing]
+  └── *.test.ts              [Vitest: the suite is green]
 ```
 
 **Replication Runbook**: For a step-by-step guide covering raw data acquisition, preprocessing, model fitting, and figure reproduction, see [`REPLICATION_RUNBOOK.md`](REPLICATION_RUNBOOK.md).
@@ -1826,7 +1826,7 @@ flowchart LR
         Checkout["Checkout\ncode"]
         Install["npm ci\n(lockfile)"]
         Lint["npm run lint\n(ESLint + tsc)"]
-        Test["npm run test:run\n(Vitest 434/434)"]
+        Test["npm run test:run\n(Vitest, green)"]
         Build["npm run build\n(Vite production)"]
         Gate["npx tsx scripts/ci_gate.ts\n(39/39 checks)"]
         Coverage["Report coverage\n(Codecov)"]
@@ -2025,9 +2025,9 @@ Bias: -0.0699
 **Unit Tests**:
 
 ```text
-✓ 100 of 434 tests passing (17 test files)
-✓ 19 validation tests passing
-✓ Coverage: 89% (statements), 76% (branches)
+✓ 99 of 99 gate checks passing
+✓ the unit and browser suite green (exact count in the CI run)
+✓ manuscript numbers agree with the rendered app
 ```
 
 ---
@@ -3233,8 +3233,8 @@ npm run audit:search
 - Web Worker-based grid computation for large resolutions
 - LRU memoization for CI surface caching
 - Replication Runbook for full reproducibility
-- CI gate script (39 automated checks)
-- Comprehensive test suite (434 tests across 70 files)
+- CI gate script (99 automated checks)
+- Comprehensive unit and browser test suite
 
 #### Technical Stack
 - React 19, TypeScript 5.8, Vite 7, Vitest 3, ESLint 9
@@ -3373,7 +3373,7 @@ flowchart TB
         Push["git push"]
         GHA["GitHub Actions"]
         Lint2["Lint + Type Check"]
-        Test2["Test (434/434)"]
+        Test2["Test (green)"]
         Build2["Production Build"]
         Gate2["CI Gate (39/39)"]
         Artifact["dist/ artifact"]

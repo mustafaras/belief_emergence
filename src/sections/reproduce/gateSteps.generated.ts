@@ -40,11 +40,11 @@ export const GATE_STEPS: GateStep[] = [
   { phase: "Phase 6: Validation Checks", label: "Visual baselines", needs: "Node only" },
   { phase: "Phase 7: Code Quality", label: "Lint", needs: "Node only" },
   { phase: "Phase 7: Code Quality", label: "Tests", needs: "Node only" },
+  { phase: "Preflight", label: "Canonical data fingerprint", needs: "Node only" },
+  { phase: "Phase 3: Schema Versions", label: "Schema: headline_metrics_authoritative.json", needs: "Node only" },
+  { phase: "Phase 5: Artifact Fingerprints (determinism check)", label: "Artifact determinism", needs: "Node only" },
+  { phase: "Phase 7: Code Quality", label: "Refresh artifact facts for validation", needs: "Node only" },
   { phase: "Phase 7: Code Quality", label: "Build", needs: "Node only" },
-  { phase: "Preflight", label: "step: string", needs: "Node only" },
-  { phase: "Preflight", label: "label", needs: "Node only" },
-  { phase: "Phase 1: Artifact Generation", label: "s.label", needs: "Node only" },
-  { phase: "Phase 6: Validation Checks", label: "c.label", needs: "Node only" },
 ]
 
 /**

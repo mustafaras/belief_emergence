@@ -20,7 +20,7 @@
  *
  * Usage:  npm run check:bundle-budget
  */
-import { spawn } from 'node:child_process'
+import { spawn, type ChildProcess } from 'node:child_process'
 import fs from 'node:fs'
 import { gzipSync } from 'node:zlib'
 import path from 'node:path'
@@ -70,6 +70,47 @@ if (!fs.existsSync(ASSETS)) {
 
 const failures: string[] = []
 
+/**
+ * True when something is already bound to `port`.
+ *
+ * A TCP connect, not an HTTP request: a socket that accepts and never answers is exactly the
+ * leftover this guard exists for, and a request against it only times out — which reads as
+ * "free". Verified against a bound-but-silent listener.
+ */
+async function portIsOpen(port: string): Promise<boolean> {
+  const { connect } = await import('node:net')
+  return new Promise<boolean>((resolve) => {
+    const socket = connect({ host: '127.0.0.1', port: Number(port) })
+    const done = (open: boolean) => {
+      socket.destroy()
+      resolve(open)
+    }
+    socket.once('connect', () => done(true))
+    socket.once('error', () => done(false))
+    socket.setTimeout(1000, () => done(false))
+  })
+}
+
+/**
+ * Stop the preview server and wait for it to actually exit.
+ *
+ * `kill()` only posts a signal. Returning immediately leaves the child holding the port while the
+ * next run starts, which is how one interrupted run poisons the following ones.
+ */
+async function stopServer(server: ChildProcess): Promise<void> {
+  if (server.exitCode !== null || server.signalCode !== null) return
+  const exited = new Promise<void>((resolve) => server.once('exit', () => resolve()))
+  server.kill('SIGTERM')
+  const timedOut = await Promise.race([
+    exited.then(() => false),
+    new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 5000)),
+  ])
+  if (timedOut) {
+    server.kill('SIGKILL')
+    await Promise.race([exited, new Promise((resolve) => setTimeout(resolve, 2000))])
+  }
+}
+
 /** Serve dist/, total the initial JavaScript, and measure cold landing-route FCP. */
 async function measureInitialPayload(): Promise<{
   files: string[]
@@ -78,6 +119,22 @@ async function measureInitialPayload(): Promise<{
 }> {
   const { chromium } = (await import('playwright-core')) as typeof import('playwright-core')
   const chromePath = process.env.CHROME_PATH || chromium.executablePath()
+
+  /*
+   * Refuse to measure a port this process does not own.
+   *
+   * The preview server is started with `--strictPort`, so a second instance on a taken port exits
+   * immediately — but the readiness poll below then succeeds against the *occupant*, and the run
+   * measures whatever that server happens to be serving. An interrupted earlier run leaves its
+   * preview behind; the next run then navigates to a stale `dist`, finds no body, and reports
+   * "browser did not report first-contentful-paint", which names the wrong thing entirely.
+   */
+  if (await portIsOpen(PORT)) {
+    throw new Error(
+      `port ${PORT} is already in use, so the measurement would read whatever is serving it. ` +
+        'Stop that process (a previous run may have left its preview behind) and re-run.',
+    )
+  }
 
   const server = spawn(process.execPath, [
     path.join(REPO_ROOT, 'node_modules', 'vite', 'bin', 'vite.js'),
@@ -170,11 +227,7 @@ async function measureInitialPayload(): Promise<{
       await browser.close()
     }
   } finally {
-    try {
-      server.kill('SIGTERM')
-    } catch {
-      // Already exited.
-    }
+    await stopServer(server)
   }
 }
 

@@ -58,15 +58,33 @@ const steps: Step[] = []
  * checks each record one or many rows without going through `runCommand`.
  */
 {
-  const pattern = /record\(\s*`?([A-Za-z][A-Za-z0-9 _:${}<>()[\]/.–-]*?)`?\s*,/g
+  // Only a quoted first argument is a literal label. Accepting a bare identifier matched the
+  // helper's own signature (`record(step: string, pass: boolean, …)`), which published a step
+  // called "step: string" on the Evidence page. A template literal stays excluded on purpose: a
+  // label built from data cannot be listed without evaluating the loop that builds it.
+  //
+  // A record whose verdict is the literal `false` describes an *error* branch — "the metrics file
+  // is missing", "regeneration failed" — and contributes no row to a run that passes. Counting
+  // those overstated the total by three. A label that also appears with a real verdict keeps its
+  // row, because the pairing means one of the two always fires.
+  const pattern = /record\(\s*(?:'(?<sq>[^']+)'|"(?<dq>[^"]+)")\s*,\s*(?<verdict>[^,]+),/g
+  const literal: Array<{ at: number; label: string; always: boolean }> = []
   let match: RegExpExecArray | null
   while ((match = pattern.exec(source)) !== null) {
-    const label = match[1].trim()
-    // Skip the helper's own definition and any call whose label is a template variable.
-    if (!label || label.includes('$') || label === 'step') continue
-    if (steps.some((step) => step.label === label)) continue
-    const phase = [...phases].reverse().find((entry) => entry.at < (match as RegExpExecArray).index)
-    steps.push({ phase: phase?.name ?? 'Preflight', label, needs: 'Node only' })
+    const label = (match.groups?.sq ?? match.groups?.dq ?? '').trim()
+    if (!label) continue
+    literal.push({
+      at: match.index,
+      label,
+      always: (match.groups?.verdict ?? '').trim() !== 'false',
+    })
+  }
+  const hasAlways = new Set(literal.filter((entry) => entry.always).map((entry) => entry.label))
+  for (const entry of literal) {
+    if (!hasAlways.has(entry.label)) continue
+    if (steps.some((step) => step.label === entry.label)) continue
+    const phase = [...phases].reverse().find((declared) => declared.at < entry.at)
+    steps.push({ phase: phase?.name ?? 'Preflight', label: entry.label, needs: 'Node only' })
   }
 }
 

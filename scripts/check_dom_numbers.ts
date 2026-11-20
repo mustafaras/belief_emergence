@@ -787,7 +787,11 @@ async function main(): Promise<void> {
   const baseUrl =
     urlArgIndex !== -1 && process.argv[urlArgIndex + 1]
       ? process.argv[urlArgIndex + 1]
-      : 'http://localhost:5199/belief_emergence/'
+      // `127.0.0.1`, not `localhost`: the preview servers are started with `--host 127.0.0.1`, and
+      // `localhost` resolves to `::1` first on a dual-stack machine, so the request can arrive at
+      // a socket nothing is listening on and read as a dead server rather than as a name mismatch.
+      // RENDER_CHECK_PORT is honoured so this follows the gate rather than a private constant.
+      : `http://127.0.0.1:${process.env.RENDER_CHECK_PORT || '5199'}/belief_emergence/`
 
   if (ALLOWLIST.length >= MAX_ALLOWLIST_ENTRIES) {
     console.error(
