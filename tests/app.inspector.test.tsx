@@ -23,8 +23,18 @@ describe('Claim Inspector', () => {
     expect(dialog.textContent).toContain('mae')
 
     fireEvent.click(within(dialog).getByRole('button', { name: 'Copy artifact filename' }))
+    /*
+     * Both assertions wait, and they are separate conditions.
+     *
+     * `writeText` being called and the label flipping to "Copied" are two renders apart: the
+     * handler awaits the clipboard promise and then sets state. Asserting the label straight
+     * after waiting on the call passed on this machine and failed on a slower runner —
+     * `Expected: "Copied", Received: "Copy"` — which is a race in the test, not in the button.
+     */
     await waitFor(() => expect(writeText).toHaveBeenCalledWith('metrics_authoritative.json'))
-    expect(within(dialog).getByRole('button', { name: 'Copy artifact filename' }).textContent).toBe('Copied')
+    await waitFor(() =>
+      expect(within(dialog).getByRole('button', { name: 'Copy artifact filename' }).textContent).toBe('Copied'),
+    )
 
     const artifactLink = within(dialog).getByRole('link', { name: 'Open artifact' })
     const target = new URL(artifactLink.getAttribute('href') ?? '', window.location.href)
