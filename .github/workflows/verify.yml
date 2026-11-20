@@ -76,23 +76,37 @@ jobs:
       - name: Generate the README metrics fixture
         run: npm run readme:metrics
 
-      # Reported per file and bounded in time, because a bare `vitest run` that stalls says
-      # nothing about where: the job is killed with SIGTERM and the log ends mid-suite.
+      # The job-level limit is the only reliable bound; `timeout` against `npx` did not work.
+      # A previous version ran 54 minutes with a 900-second `timeout`, and another ran 32 with a
+      # 600-second one — `npx` is a shell wrapper, so the signal reaches the wrapper and the
+      # vitest child survives. This limit is enforced by the runner itself.
+      #
+      # Outcome is read from the summary lines, not from a file count. The first version asserted
+      # `Test Files  76 passed`, which is a machine-independent-looking constant that is not one:
+      # it failed on the very run that proved the stall was fixed (76 files passed in 24s), because
+      # Vitest colours its output on a TTY-free CI log too, so the pattern never matched. Counting
+      # `✓` markers had the same defect. The suite is green when Vitest says it failed nothing and
+      # printed a total, whatever the file count happens to be.
       - name: Run test suite
-        # The job-level limit is the only reliable bound; `timeout` against `npx` did not work.
-        # A previous version ran 54 minutes with a 900-second `timeout`, and another ran 32 with a
-        # 600-second one — `npx` is a shell wrapper, so the signal reaches the wrapper and the
-        # vitest child survives. This limit is enforced by the runner itself.
         timeout-minutes: 20
+        env:
+          NO_COLOR: '1'
+          FORCE_COLOR: '0'
         run: |
+          set -o pipefail
           npx vitest run --reporter=verbose > /tmp/vitest.log 2>&1 || true
-          echo "--- files completed: $(grep -cE '✓ tests/' /tmp/vitest.log) ---"
-          grep -E "✓ tests/|Test Files|Tests " /tmp/vitest.log | tail -12
-          if ! grep -q "Test Files  76 passed" /tmp/vitest.log; then
-            echo "the suite did not complete"
+          grep -E "^ *(Test Files|Tests) " /tmp/vitest.log | tail -2
+          if ! grep -qE "^ *Test Files +[0-9]+ passed" /tmp/vitest.log; then
+            echo "::error::the suite did not report a passing total; the run stalled or crashed"
             tail -30 /tmp/vitest.log
             exit 1
           fi
+          if grep -qE "^ *Test Files .*(failed|[0-9]+ failed)" /tmp/vitest.log; then
+            echo "::error::at least one test file failed"
+            grep -E "FAIL|✕" /tmp/vitest.log | head -40
+            exit 1
+          fi
+          echo "suite green"
 
       - name: Lint
         run: npm run lint
