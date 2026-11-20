@@ -133,6 +133,12 @@ If you see an access error (e.g., “You need access”), request access from th
 
 <!-- claims:end -->
 
+<sub>`99/99` above is the gate on the machine the screenshot baselines were recorded on. On another
+platform it reports `97/99` and names the two pixel comparisons as **not verifiable there**, rather
+than passing or failing them: a rendered image is a valid baseline on one rasteriser version, and
+calling that a pass would report a verification that did not happen.</sub>
+
+
 ## 🚀 Quick Start
 
 > **⚡ 30-second setup** — no Docker, no server, no configuration needed.

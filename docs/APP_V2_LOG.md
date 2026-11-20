@@ -1509,3 +1509,97 @@ mistake the closure for a permission.
 - `npm run test:run`: PASS, **463 tests in 76 files, 1 skipped**.
 - `npm run ci:gate`: **99/99 PASS**, payload 179 KiB gzipped.
 - Commit: `chore(app-v2): close external compliance items [P44]`.
+
+---
+
+## P45 — Hosted CI, made to run
+
+The local gate was 99/99 and the hosted one had never been green. Getting from one to the other
+took nine rounds, and every round was a different defect — none of them in the analysis, all of
+them in what the automation assumed about where it was running.
+
+### What was actually wrong, in the order it surfaced
+
+1. **A CSV imported with `?raw` was never committed.** `.gitignore` `*.csv` with an exception for
+   the panel; `observed_vs_predicted_authoritative.csv` was not excepted. The build failed in CI
+   only, because the file existed on the machine that wrote it.
+2. **A test asserted the submission bundle was present** — true locally, false on a fresh clone.
+3. **The manifest recorded `rawdataChecked`** — true in CI, false locally, so the drift check
+   failed wherever it was not generated.
+4. **The README stated a test count.** 434 locally, 463 in CI; rounding to tens gave 430 vs 460.
+   A number that changes with the machine cannot be asserted. Removed, along with the badge cell
+   that read `0 files · all passing` because its source (`tmp/vitest-report.json`) is gitignored
+   and nothing wrote it.
+5. **`vite.config.ts` was not in the workflow's `paths:` filter**, so a commit that changed test
+   behaviour started no run at all and the last known status stayed whatever it had been.
+6. **The nested Vitest — twice.** `tests/report.score.test.ts` → `compute_paper_score.ts` →
+   `check:readme-metrics` → `generate_readme.ts` started `npm run readme:metrics` (a Vitest run)
+   when `tmp/` was absent, and `readTestTotals()` started `vitest run --reporter=json` for the
+   same reason. Two nested runners waited on a pool their parent already held: zero files
+   completed, SIGTERM after the job limit. Finding the first one left the second, which cost
+   another 32-minute run. `timeout`/`npx` does not bound this — the wrapper dies and the child
+   survives; only `timeout-minutes:` is enforced by the runner.
+7. **The gate had no server.** Nine browser checks need a site on 5199; the workflow started one,
+   the documented local entry point did not, and a missing browser check reports SKIP — which is
+   not a pass here. `npm run ci:gate` could not be green on a clean checkout.
+8. **The build ran after the checks that read it.** Phase 6 served `dist/`, Phase 7 created it.
+9. **The gate step in CI started a dev server in front of the gate**, which the gate then adopted
+   and measured against a production budget: 179 KiB of build output became unminified dev
+   output. And in the Q1 step the same dev server on 5199 leaked into a second, delegated gate run
+   five minutes later.
+10. **Two pixel checks cannot be green off-platform.** 44 baselines and a WebGL golden are valid
+    on one rasteriser version. The guard tested `process.platform === 'darwin'`, true on every
+    macOS release while the images were valid on one.
+
+### The three-state report
+
+The gate had PASS, FAIL and SKIP, and none of them described a comparison that is meaningful on
+exactly one machine. PASS would claim verification that did not happen — the failure this gate
+exists to prevent. SKIP means "could not run" and makes every hosted run red for a reason no
+commit fixes, which teaches people to ignore the gate. Both checks now record their environment
+when capturing (`os.release()`, e.g. `darwin 27.3.0`) and report:
+
+```
+97/99 checks passed; 2 not verifiable here
+  ~ Surface snapshot: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+  ~ Visual baselines: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+```
+
+Counted in neither column. Verified by rewriting the recorded environment and re-running.
+
+### The step-count that was four steps wrong
+
+`generate_gate_steps.ts` published 99 rows, and four of them were not checks: its pattern accepted
+a bare identifier, so `record(step: string, pass: boolean, …)` — the helper's own signature —
+became a step called `step: string`, beside `label`, `s.label` and `c.label`. It also counted three
+error branches (`record('Schema: …', false, 'file missing')`) that contribute no row to a passing
+run. Both defects were present before this pass and were masked by the missing `Build` row: the
+total happened to agree. Now only a quoted label whose verdict can be true is a step, and the
+number is derived rather than matched — 36 literal + 63 loop-generated = 99, which is what the
+gate prints.
+
+### Silent failures now say how they died
+
+The Q1 step's inner gate failed on `Tests` after 459 seconds and printed the word "Tests" and
+nothing else — the same suite that had passed six minutes earlier in the same job. Both runners
+now report `status`, `signal`, `errno` and the bytes captured, and say so when there were none:
+`status=null, signal=SIGKILL` is the OOM killer, `errno=ENOBUFS` is `execSync` refusing the output.
+Verified against a real `kill -9` child.
+
+### Known and not fixed
+
+The suite runs four times per job: the "Run test suite" step, the gate's Phase 7, and twice inside
+`q1:gate` (its own Gate 1, then the full gate delegated to Gate 6). That is four times the
+exposure to a flaky test, and it is why a single flake turned this run red after the gate itself
+had passed. `q1:gate` also regenerates all ten analysis artifacts at top level before its critical
+block, and the workflow runs each generator again on the line above — nine duplicate runs. Not
+consolidated in this pass: the restructuring is a real risk to a gate that just became green, and
+the duplication is a cost, not a wrong answer.
+
+### Verification
+
+- Hosted run `44724983023` → **failure** at `Tests`; run `44728444459` → **success**, all three
+  jobs. Gate: `97/99 checks passed; 2 not verifiable here`.
+- `npm run ci:gate` locally, no server started by hand: **99/99**, 443–521 s.
+- `npm run q1:gate` locally with both ports free: **27/27, VERDICT READY**.
+- `npm run report:score`: **100/100**. `npm run check:readme-metrics`: PASS.
