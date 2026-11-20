@@ -34,25 +34,20 @@ export default defineConfig({
   test: {
     exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
     /*
-     * Bounded concurrency, because the default is derived from the CPU count and a hosted runner
-     * reports more cores than it can usefully schedule.
+     * No pool tuning.
      *
-     * In CI the suite completed 459 of 463 tests and then stopped: 36 of 76 files never started,
-     * the process sat idle for 21 minutes, and the job was killed with SIGTERM (exit 143). Locally
-     * the same suite finishes in seconds. Four workers on a two-core runner, each holding a jsdom
-     * environment, is the shape of that failure.
-     */
-    /*
-     * One fork, not two.
+     * Three attempts at bounding concurrency made it worse, each measured on the hosted runner:
      *
-     * Two still stalled on the hosted runner: the suite has to finish inside the job's budget and
-     * each fork holds a jsdom environment plus a React tree. Serial execution costs about 40
-     * seconds locally against a suite that took 21 minutes to be killed in CI — the trade is
-     * obvious.
+     *   - default workers:          459 of 463 tests completed, then the process idled 21 minutes
+     *     and was killed (exit 143);
+     *   - `maxForks: 2`:            24 of 76 files completed before the kill;
+     *   - `maxForks: 1, singleFork`: **0 files completed** in ten minutes.
+     *
+     * Locally every one of those configurations finishes in 11–15 seconds, on Node 20 and Node 26
+     * alike, so the variable is the runner and not the configuration — and guessing at it cost
+     * three CI cycles. The pool is left at Vitest's default, which is the configuration that at
+     * least made progress.
      */
-    poolOptions: {
-      forks: { maxForks: 1, minForks: 1, singleFork: true },
-    },
     testTimeout: 20_000,
     hookTimeout: 20_000,
   },
