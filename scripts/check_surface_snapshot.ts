@@ -26,9 +26,9 @@
  *
  * Usage:  npm run check:surface-snapshot
  */
-import { execSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { inflateSync } from 'node:zlib'
@@ -39,7 +39,15 @@ const ENVIRONMENT_FILE = path.join(REPO_ROOT, 'tests', 'fixtures', 'surface-base
 
 /** The platform and macOS version the reviewed baseline was captured on. */
 function recordingEnvironment(): string {
-  return `${process.platform} ${execSync('sw_vers -productVersion', { encoding: 'utf8' }).trim()}`
+  // `os.release()` rather than `sw_vers`: the check has to *describe* an environment on every
+  // platform, and shelling out to a macOS-only binary threw ENOENT on Linux — a crash reported as
+  // "the check could not run", which names the wrong thing.
+  //
+  // This is a kernel version, not a marketing one: `darwin 27.3.0` where `sw_vers` says `27.3`.
+  // The two are interchangeable for comparison because the same function runs on both sides, but
+  // the identifier deliberately names the kernel — this is a check about a *rasteriser*, and the
+  // kernel release is what tracks it. Don't substitute one for the other.
+  return `${process.platform} ${os.release()}`;
 }
 const PORT = process.env.RENDER_CHECK_PORT || '5199'
 const BASE_URL = process.env.SURFACE_BASE_URL || `http://localhost:${PORT}/belief_emergence/`

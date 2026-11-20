@@ -19,9 +19,9 @@
  * Requires the Vite server (RENDER_CHECK_PORT, default 5199) and a local Chrome.
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { execSync } from 'node:child_process'
 import { chromium } from 'playwright-core'
 
 import { decodePng } from './lib/png'
@@ -40,8 +40,15 @@ const ENVIRONMENT_FILE = path.join(BASELINE_DIR, 'environment.json')
  * judge in.
  */
 function recordingEnvironment(): string {
-  const version = execSync('sw_vers -productVersion', { encoding: 'utf8' }).trim()
-  return `${process.platform} ${version}`
+  // `os.release()` rather than `sw_vers`: the check has to *describe* an environment on every
+  // platform, and shelling out to a macOS-only binary threw ENOENT on Linux — a crash reported as
+  // "the check could not run", which names the wrong thing.
+  //
+  // This is a kernel version, not a marketing one: `darwin 27.3.0` where `sw_vers` says `27.3`.
+  // The two are interchangeable for comparison because the same function runs on both sides, but
+  // the identifier deliberately names the kernel — this is a check about a *rasteriser*, and the
+  // kernel release is what tracks it. Don't substitute one for the other.
+  return `${process.platform} ${os.release()}`;
 }
 const PORT = process.env.RENDER_CHECK_PORT || '5199'
 const BASE = `http://127.0.0.1:${PORT}/belief_emergence/`
