@@ -66,6 +66,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The README-metrics fixture is produced before the suite, not from inside it.
+      #
+      # `tmp/` is gitignored, so a clean checkout has no fixture. A test used to generate it on
+      # demand by running `npm run readme:metrics` — which starts Vitest from inside Vitest. The
+      # nested run waited on a pool the outer run owned, no test file completed, and the job was
+      # killed after ten minutes. That was the CI stall, and it cost three rounds of tuning the
+      # worker pool before the call chain was traced.
+      - name: Generate the README metrics fixture
+        run: npm run readme:metrics
+
       # Reported per file and bounded in time, because a bare `vitest run` that stalls says
       # nothing about where: the job is killed with SIGTERM and the log ends mid-suite.
       - name: Run test suite

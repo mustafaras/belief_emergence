@@ -26,12 +26,35 @@ let cached: Score | null = null
  */
 function score(): Score {
   if (cached) return cached
-  const output = execFileSync('npx', ['tsx', 'scripts/compute_paper_score.ts', '--json'], {
-    encoding: 'utf8',
-    maxBuffer: 10 * 1024 * 1024,
-  })
-  cached = JSON.parse(output) as Score
-  return cached
+  try {
+    const output = execFileSync('npx', ['tsx', 'scripts/compute_paper_score.ts', '--json'], {
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 120_000,
+    })
+    cached = JSON.parse(output) as Score
+    return cached
+  } catch (error) {
+    const stderr = String((error as { stderr?: string }).stderr ?? '')
+    /*
+     * A missing fixture is not a scoring failure, and it must not hang the suite.
+     *
+     * `compute_paper_score` runs `check:readme-metrics`, which used to spawn a nested Vitest when
+     * `tmp/readme-metrics.json` was absent — which it is on any clean checkout, because `tmp/` is
+     * gitignored. The nested run waited on a pool the outer run owned, and the job died after ten
+     * minutes having completed **zero** test files.
+     *
+     * The guard in `generate_readme.ts` now raises instead. This assertion turns that into a
+     * message that says what to run, rather than a timeout with no cause.
+     */
+    if (/cannot be generated from inside a Vitest run/.test(stderr) || /NestedVitestError/.test(stderr)) {
+      throw new Error(
+        'The README metrics fixture is absent. Run `npm run readme:metrics` before the suite; ' +
+          'generating it from inside a Vitest run deadlocks on the worker pool.',
+      )
+    }
+    throw error
+  }
 }
 
 describe('paper score', () => {

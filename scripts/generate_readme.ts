@@ -81,15 +81,29 @@ type Fixture = {
 
 const FIXTURE = path.join(REPO_ROOT, 'tmp', 'readme-metrics.json')
 
+/**
+ * Guard against spawning Vitest from inside Vitest.
+ *
+ * `readFixture` used to call `npm run readme:metrics` when the fixture was missing, and that
+ * script runs `vitest`. So `tests/report.score.test.ts` → `compute_paper_score.ts` →
+ * `check:readme-metrics` → `generate_readme.ts` → **a second Vitest inside the running one**.
+ *
+ * That is the stall. On a development machine the fixture usually exists, so the branch is not
+ * taken and the suite finishes in nine seconds. On a clean CI checkout `tmp/` is gitignored, the
+ * fixture is absent, the branch is taken, and the nested run waits on a pool the outer run already
+ * owns — zero test files complete and the job is killed ten minutes later. Three rounds of tuning
+ * the pool, the timeouts and the runner all failed because the cause was this call, not scheduling.
+ */
+class NestedVitestError extends Error {}
+
 function readFixture(): Fixture {
   if (!existsSync(FIXTURE)) {
-    /*
-     * Produce it rather than complain about it.
-     *
-     * `tmp/` is gitignored, so a clean checkout — CI, or a colleague's clone — has no fixture,
-     * and `check:readme-metrics` failed there with "run `npm run readme:metrics` first". A check
-     * that requires a preparatory command nobody documented fails on correct work.
-     */
+    if (process.env.VITEST || process.env.VITEST_WORKER_ID) {
+      throw new NestedVitestError(
+        'tmp/readme-metrics.json is missing and cannot be generated from inside a Vitest run. ' +
+          'Run `npm run readme:metrics` once before the suite, or let the outer run finish first.',
+      )
+    }
     console.log('  tmp/readme-metrics.json is absent; generating it (one Vitest run)…')
     execFileSync('npm', ['run', 'readme:metrics'], { cwd: REPO_ROOT, stdio: 'pipe' })
     if (!existsSync(FIXTURE)) {
@@ -98,6 +112,7 @@ function readFixture(): Fixture {
   }
   return JSON.parse(readFileSync(FIXTURE, 'utf8')) as Fixture
 }
+
 
 /** Test totals from a vitest JSON report, which counts what actually ran. */
 function readTestTotals(): { tests: number; files: number } {
