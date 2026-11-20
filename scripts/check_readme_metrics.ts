@@ -46,6 +46,27 @@ const FORBIDDEN: Array<{ pattern: RegExp; why: string }> = [
   { pattern: /\bN\s*=\s*630\b/, why: 'the retired panel size' },
   { pattern: /\b23 (?:OECD|countries|nations)\b/, why: 'the retired panel\'s country count' },
   { pattern: /\b100\s*\/\s*100\b(?![^\n]*Lighthouse)/, why: 'a test count that was never current' },
+  /*
+   * Performance figures nothing in this repository measures.
+   *
+   * They were not wrong by a little — the bundle was stated as 447 KB against a measured 179 KiB,
+   * and FCP as 0.8 s against a measured 96 ms — but the failure was that no check looked at them,
+   * so they survived every gate run for months while `ci:gate` reported 99/99. The gate covered
+   * artifacts and rendered numbers; nothing covered prose about performance.
+   *
+   * The honest replacement names each figure in a table of what was removed, which is why the
+   * exemption below exists. That is a deliberate, visible exception, not a quiet one.
+   */
+  { pattern: /\b447\s*KB\b/, why: 'the retired bundle figure (measured: 179 KiB gzipped)' },
+  { pattern: /\bweb-vitals\b(?!.*(?:dependency|beacon|removed))/i, why: 'a monitoring integration this project does not have' },
+  { pattern: /\/api\/analytics\b/, why: 'an endpoint this static site does not serve' },
+  { pattern: /i7-12700K|RTX\s*3080/i, why: 'a benchmark machine that never ran anything here' },
+  { pattern: /\bLighthouse\b/i, why: 'a Lighthouse score: not a dependency, never runs here' },
+  // The render-timing and heap tables. A paint time stated to one decimal in seconds is a
+  // different measurement from the gate's milliseconds, and nothing here produces either.
+  { pattern: /\b\d\.\ds\b/, why: 'a render timing from the removed benchmark table (the gate reports ms)' },
+  { pattern: /\b(?:2[89]|[4-9]\d|1\d\d)\s*MB\b/, why: 'a heap size: nothing here measures memory' },
+  { pattern: /\b(?:12|45|180|720)\s*ms\b(?![^\n]*(?:median|previously quoted|removed))/, why: 'a surface benchmark from the removed table' },
 ]
 
 /**
@@ -56,9 +77,44 @@ const FORBIDDEN: Array<{ pattern: RegExp; why: string }> = [
  */
 const ALLOWED_CONTEXT = [
   /8f5c06b/,                       // historical note: where the v1 panel still lives
-  /Lighthouse/,                    // performance scores, a different measure
+  /*
+   * `Lighthouse` used to be exempted on its own, which excused any sentence containing the word —
+   * the negative test for this file's own guards walked straight through it with
+   * "Our Lighthouse score is 98." A score is the retired claim, not the word. Narrowed to the
+   * table cell that reports a removed category score.
+   */
+  /\|\s*\*{0,2}Lighthouse scores\*{0,2}\s*\|/,  // the removal table's row for those scores
   /\|\s*100\/100\s*\|/,            // a table cell, i.e. a Lighthouse category score
+  /*
+   * The table that records what was removed and why. Every retired figure in it is correct, and
+   * deleting the table to satisfy the guard would remove the only record that those numbers were
+   * ever there. Narrow on purpose: a row of this table, not any line mentioning a retired value.
+   */
+  /^\|\s*`?(?:Removed|Bundle breakdown|Render performance|Surface benchmarks|Memory usage|Lighthouse scores|web-vitals)`?[^|]*\|/,
 ]
+
+
+/**
+ * Every line carrying a retired value, with the reason it is retired.
+ *
+ * Exported because the guards need their own test. The first version of this list exempted the
+ * word `Lighthouse` on its own, which excused any sentence containing it — and the only way that
+ * was found was by appending a fake claim to the README and re-running the check. A guard whose
+ * exemptions are never exercised is a guard that silently stops guarding.
+ */
+export function findRetiredValues(source: string): Array<{ line: number; value: string; why: string }> {
+  const hits: Array<{ line: number; value: string; why: string }> = []
+  source.split('\n').forEach((text, index) => {
+    if (ALLOWED_CONTEXT.some((allowed) => allowed.test(text))) return
+    for (const { pattern, why } of FORBIDDEN) {
+      if (pattern.test(text)) {
+        hits.push({ line: index + 1, value: text.trim().slice(0, 120), why })
+        break
+      }
+    }
+  })
+  return hits
+}
 
 function main(): void {
   const source = readFileSync(README, 'utf8')
@@ -91,17 +147,7 @@ function main(): void {
     console.error('      run `npm run readme:metrics && npm run generate:readme` and commit the result')
   }
 
-  const lines = source.split('\n')
-  const hits: Array<{ line: number; value: string; why: string }> = []
-  lines.forEach((text, index) => {
-    if (ALLOWED_CONTEXT.some((allowed) => allowed.test(text))) return
-    for (const { pattern, why } of FORBIDDEN) {
-      if (pattern.test(text)) {
-        hits.push({ line: index + 1, value: text.trim().slice(0, 120), why })
-        break
-      }
-    }
-  })
+  const hits = findRetiredValues(source)
 
   if (hits.length > 0) {
     failed = true
@@ -121,4 +167,6 @@ function main(): void {
   )
 }
 
-main()
+// Only when run as a script. Without this, importing the file to test its guards runs the whole
+// check — which reads the built metrics and exits the process.
+if (process.argv[1]?.endsWith('check_readme_metrics.ts')) main()

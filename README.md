@@ -2531,66 +2531,33 @@ const MemoizedSurface = memo(Surface3DSurface, (prev, next) => {
 
 ## Performance Benchmarks
 
-### Bundle Size Analysis
+### Performance, as measured
 
-| Asset | Size (gzipped) | % of Total | Optimization |
-|-------|----------------|------------|-------------|
-| **Total Bundle** | **447 KB** | 100% | ✅ Optimized |
-| React + ReactDOM | 131 KB | 29.3% | Tree-shaken |
-| Plotly.js | 198 KB | 44.3% | Minified |
-| Application Code | 78 KB | 17.4% | Code-split |
-| KaTeX | 25 KB | 5.6% | On-demand |
-| jsPDF + html2canvas | 15 KB | 3.4% | Lazy-loaded |
+Only what the gate measures is stated here. There is no field data: this is a static site with no
+analytics endpoint and no users, so a real-user percentile cannot be reported by this repository.
 
-### Lighthouse Scores (Mobile)
+| What | Value | Bound | Measured by |
+|------|-------|-------|-------------|
+| Initial JavaScript | 179 KiB gzipped (573 KiB raw, 9 chunks) | 350 KiB | `npm run check:bundle-budget` |
+| First contentful paint, landing | 96 ms median of 3 cold runs | 1500 ms | same |
+| Largest contentful paint, landing | within bound | 2500 ms | same |
+| Heavy modules on the landing route | 0 of 4 | 0 | same |
 
-| Metric | Score | Status |
-|--------|-------|--------|
-| **Performance** | 94/100 | ✅ Excellent |
-| **Accessibility** | 98/100 | ✅ Excellent |
-| **Best Practices** | 100/100 | ✅ Perfect |
-| **SEO** | 100/100 | ✅ Perfect |
+This section previously carried five tables and a code sample, and none of it was produced by
+anything in this repository:
 
-### Render Performance
+| Removed | Said | Why it could not stand |
+|---|---|---|
+| Bundle breakdown | 447 KB total | the gate measures 179 KiB gzipped |
+| Render performance | FCP 0.8 s, TTI 2.1 s | FCP is 96 ms; TTI is not measured at all |
+| Surface benchmarks | 12–720 ms "on an i7-12700K, RTX 3080" | nothing measures this, and that is not this project's machine |
+| Memory usage | 28–110 MB heap | nothing measures this |
+| Lighthouse scores | 94 / 98 / 100 / 100 | Lighthouse is not a dependency and never runs |
+| `web-vitals` beacon | posts to `/api/analytics` | no `web-vitals` dependency, no endpoint, no server |
 
-| Operation | Duration | Target | Status |
-|-----------|----------|--------|--------|
-| **Initial Load** | 1.2s | < 2s | ✅ Pass |
-| **First Contentful Paint** | 0.8s | < 1.5s | ✅ Pass |
-| **Time to Interactive** | 2.1s | < 3s | ✅ Pass |
-| **Largest Contentful Paint** | 1.5s | < 2.5s | ✅ Pass |
-| **Cumulative Layout Shift** | 0.02 | < 0.1 | ✅ Pass |
-
-### Surface Computation Benchmarks
-
-| Resolution | Grid Size | Calculation Time | FPS |
-|------------|-----------|------------------|-----|
-| Low | 20×20 (400 points) | 12ms | 60 fps |
-| Medium | 50×50 (2,500 points) | 45ms | 60 fps |
-| High | 100×100 (10,000 points) | 180ms | 30 fps |
-| Ultra | 200×200 (40,000 points) | 720ms | 15 fps |
-
-**Note**: Benchmarks measured on Intel Core i7-12700K, 32GB RAM, RTX 3080
-
-### Memory Usage
-
-| Scenario | Heap Size | Status |
-|----------|-----------|--------|
-| **Initial Load** | 28 MB | ✅ Optimal |
-| **50×50 Surface** | 42 MB | ✅ Optimal |
-| **200×200 Surface** | 95 MB | ⚠️ High |
-| **Multiple Scenarios** | 68 MB | ✅ Optimal |
-| **After PDF Export** | 110 MB | ⚠️ High (garbage collects) |
-
-### Web Vitals (Real User Metrics)
-
-| Metric | P75 | Target | Status |
-|--------|-----|--------|--------|
-| **LCP** | 1.4s | < 2.5s | ✅ Good |
-| **FID** | 8ms | < 100ms | ✅ Good |
-| **CLS** | 0.03 | < 0.1 | ✅ Good |
-| **TTFB** | 340ms | < 600ms | ✅ Good |
-| **FCP** | 0.9s | < 1.8s | ✅ Good |
+They were removed rather than corrected. A plausible number nobody measured is the failure this
+repository's gate exists to catch, and these sat in the README unguarded while the gate reported
+99/99 — the checks covered artifacts and rendered numbers, and nothing looked at prose.
 
 ---
 
@@ -2882,37 +2849,10 @@ Sentry.init({
   src="https://plausible.io/js/script.js"></script>
 ```
 
-```typescript
-// Track custom events
-window.plausible('PDF Export', { props: { scenario: 'high_amplifiers' } });
-```
 
 </details>
 
-<details>
-<summary><strong>Performance Monitoring (Web Vitals)</strong></summary>
 
-```typescript
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
-
-function sendToAnalytics(metric) {
-  const body = JSON.stringify({
-    name: metric.name,
-    value: metric.value,
-    id: metric.id
-  });
-  
-  navigator.sendBeacon('/api/analytics', body);
-}
-
-getCLS(sendToAnalytics);
-getFID(sendToAnalytics);
-getFCP(sendToAnalytics);
-getLCP(sendToAnalytics);
-getTTFB(sendToAnalytics);
-```
-
-</details>
 
 <details>
 <summary><strong>Health Check Endpoints</strong></summary>
@@ -3264,7 +3204,7 @@ npm run audit:search
 | **Accessibility (WCAG 2.1)** | ✅ AA | ❌ | ⚠️ Partial | ⚠️ Partial | ❌ |
 | **Open source (MIT)** | ✅ | ✅ GPL | ✅ GPL | ✅ ISC | ✅ GPL |
 | **TypeScript strict** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Bundle size (gzipped)** | 447 KB | N/A | N/A | ~100 KB | N/A |
+| **Bundle size (gzipped)** | 179 KiB | N/A | N/A | ~100 KB | N/A |
 | **Target audience** | Social scientists, policy analysts, educators | Agent-based modelers | R statisticians | Data journalists | Network analysts |
 
 **When to use Belief Emergence over alternatives:**
@@ -3342,7 +3282,7 @@ npm run audit:search
 
 **Status**: Accepted (2025-01)
 
-**Context**: At high resolutions (200×200 = 40,000 points), the `calculateModel()` loop takes ~720ms, blocking the UI thread.
+**Context**: At high resolutions (200×200 = 40,000 points) the `calculateModel()` loop runs on the main thread and blocks it. The figure previously quoted here (~720 ms) came from the benchmark table removed above and is not reproduced by anything in the repository.
 
 **Decision**: Offload grid computation to a dedicated Web Worker (`surface3dWorker.ts`). Main thread posts parameters; worker returns computed grid; UI remains responsive.
 

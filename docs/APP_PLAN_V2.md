@@ -350,8 +350,8 @@ yazıyorum: makale–uygulama sayı uyumu üç ayrı kontrolle sağlanıyor —
 **4 —** `check:layout`: 66 kombinasyon, 10.072 metin düğümü, 0 taşma / 0 çakışma / 0 küçük metin.
 `check:a11y`: 22 rota-tema çifti, 0 ihlal.
 
-**5 —** 179 KiB gzip (573 KiB ham), 350 KiB bütçeye karşı. FCP medyanı 96 ms, LCP medyanı
-392 ms — 6 ve 3 koşunun medyanı.
+**5 —** 179 KiB gzip (573 KiB ham), 350 KiB bütçeye karşı. FCP medyanı 96 ms; LCP de 1500/2500 ms bütçelerinin altında. FCP 3 soğuk koşunun
+medyanı (`PAINT_SAMPLES = 3`), LCP de aynı koşulardan.
 
 **7 —** 11 ekran görüntüsü çalışan v2 uygulamasından üretiliyor; README ile spec eşleşmesi
 `check:paper-figures` ile korunuyor. Supplementary'nin kendisi UI görseli içermiyor (20 figure,
