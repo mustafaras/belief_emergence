@@ -79,12 +79,13 @@ jobs:
       # Reported per file and bounded in time, because a bare `vitest run` that stalls says
       # nothing about where: the job is killed with SIGTERM and the log ends mid-suite.
       - name: Run test suite
+        # The job-level limit is the only reliable bound; `timeout` against `npx` did not work.
+        # A previous version ran 54 minutes with a 900-second `timeout`, and another ran 32 with a
+        # 600-second one — `npx` is a shell wrapper, so the signal reaches the wrapper and the
+        # vitest child survives. This limit is enforced by the runner itself.
+        timeout-minutes: 20
         run: |
-          # `timeout` must signal the whole process group, not just the npm wrapper — with a pipe
-          # the child survives and the step hangs until the job's own limit kills it, which is why
-          # the previous version ran for 54 minutes.
-          set -o pipefail
-          timeout --signal=KILL 600 npx vitest run --reporter=verbose > /tmp/vitest.log 2>&1 || true
+          npx vitest run --reporter=verbose > /tmp/vitest.log 2>&1 || true
           echo "--- files completed: $(grep -cE '✓ tests/' /tmp/vitest.log) ---"
           grep -E "✓ tests/|Test Files|Tests " /tmp/vitest.log | tail -12
           if ! grep -q "Test Files  76 passed" /tmp/vitest.log; then
