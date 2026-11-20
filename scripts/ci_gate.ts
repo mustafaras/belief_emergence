@@ -272,10 +272,28 @@ function runCommandWithOutput(
       output: out,
     };
   } catch (error) {
-    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    const e = error as {
+      status?: number | null;
+      signal?: string | null;
+      code?: string;
+      stdout?: Buffer;
+      stderr?: Buffer;
+    };
     const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
     const tail = out.split(/\r?\n/).slice(-25).join('\n');
-    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
+    const how = [
+      e.status === null || e.status === undefined ? `status=${e.status}` : `exit ${e.status}`,
+      e.signal ? `signal=${e.signal}` : null,
+      e.code ? `errno=${e.code}` : null,
+      `captured ${out.length} bytes of output`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    record(
+      label,
+      false,
+      `Command failed (${how}): ${command}\n${tail || '(the command produced no output on either stream)'}`,
+    );
     return { ok: false, skipped: false, output: out };
   }
 }
@@ -285,13 +303,36 @@ function runCommand(label: string, command: string): boolean {
     execSync(command, { stdio: 'pipe', cwd: ROOT });
     return true;
   } catch (error) {
-    // Swallowing the child's output turns a diagnosable failure into "command
-    // failed", which is what happened when this gate failed in CI and passed
-    // locally with no way to see why. Print the tail of both streams.
-    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    // Swallowing the child's output turns a diagnosable failure into "command failed", which is
+    // what happened when this gate failed in CI and passed locally with no way to see why.
+    const e = error as {
+      status?: number | null;
+      signal?: string | null;
+      code?: string;
+      stdout?: Buffer;
+      stderr?: Buffer;
+    };
     const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
     const tail = out.split(/\r?\n/).slice(-25).join('\n');
-    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
+    /*
+     * An empty tail is itself the diagnostic, and printing nothing under a failure is how a
+     * 459-second run reported only "Tests: exit 1". Say that the child said nothing, and say how
+     * it died: a signal is a kill (usually the OOM killer on a small runner), a `code` is
+     * `execSync` refusing the output (usually MAXBUFFER), and neither is a test assertion.
+     */
+    const how = [
+      e.status === null || e.status === undefined ? `status=${e.status}` : `exit ${e.status}`,
+      e.signal ? `signal=${e.signal}` : null,
+      e.code ? `errno=${e.code}` : null,
+      `captured ${out.length} bytes of output`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    record(
+      label,
+      false,
+      `Command failed (${how}): ${command}\n${tail || '(the command produced no output on either stream)'}`,
+    );
     return false;
   }
 }
