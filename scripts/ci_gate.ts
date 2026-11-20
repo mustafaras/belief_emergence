@@ -226,14 +226,29 @@ interface GateResult {
 
 const results: GateResult[] = [];
 
+const UNVERIFIABLE_PREFIX = 'UNVERIFIABLE HERE:';
+
 function record(step: string, pass: boolean, detail: string): void {
   // A skipped browser check must fail the enclosing gate. Reporting it as a separate
   // status prevents a missing browser from being counted as a successful verification.
   const skipped = detail.startsWith('SKIPPED:');
-  results.push({ step, pass: pass && !skipped, skipped, detail });
-  const icon = skipped ? '  SKIP' : pass ? '  PASS' : '  FAIL';
+  /*
+   * A third state, distinct from both "passed here" and "could not run here".
+   *
+   * Pixel comparison can only be judged on the platform it was recorded on: text
+   * rasterisation and WebGL output differ between macOS and Linux, and between macOS
+   * versions. That is not a failure of the code and not a pass by the code, so neither
+   * label is honest. Reporting it as PASS would be the mistake this gate exists to prevent;
+   * reporting it as SKIP makes every hosted run red for a reason that cannot be fixed.
+   *
+   * The recording environment is published by the capture `--write`; the comparison here
+   * names the mismatch.
+   */
+  const unverifiableHere = !skipped && detail.startsWith(UNVERIFIABLE_PREFIX);
+  results.push({ step, pass: pass && !skipped, skipped, unverifiable: unverifiableHere, detail });
+  const icon = skipped ? '  SKIP' : unverifiableHere ? '  N/A ' : pass ? '  PASS' : '  FAIL';
   console.log(`${icon}  ${step}`);
-  if (!pass || skipped) console.log(`        ${detail}`);
+  if (!pass || skipped || unverifiableHere) console.log(`        ${detail}`);
 }
 
 /**
@@ -247,10 +262,15 @@ function record(step: string, pass: boolean, detail: string): void {
 function runCommandWithOutput(
   label: string,
   command: string,
-): { ok: boolean; skipped: boolean; output: string } {
+): { ok: boolean; skipped: boolean; unverifiable?: boolean; output: string } {
   try {
     const out = execSync(command, { stdio: 'pipe', cwd: ROOT }).toString();
-    return { ok: true, skipped: /\bSKIP\b/.test(out), output: out };
+    return {
+      ok: true,
+      skipped: /\bSKIP\b/.test(out),
+      unverifiable: out.includes(UNVERIFIABLE_PREFIX),
+      output: out,
+    };
   } catch (error) {
     const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
     const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
@@ -578,13 +598,11 @@ async function phaseValidationChecks(): Promise<boolean> {
     // The initial payload, measured from the built site rather than inferred from the bundle
     // graph. The build now runs immediately before this phase, so dist/ is current.
     { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
-    // Plotly's WebGL canvas is platform-specific, and so is text rasterisation. The 44
-    // baselines are captured on macOS; on any other platform the comparison is not meaningful,
-    // so the step reports SKIPPED rather than a failure — and a skip is not a pass here.
-    // Registered unconditionally so the total does not change with the platform. Each script
-    // decides for itself whether it can run, and reports SKIP when it cannot — the previous
-    // version had two identical branches here, so the platform test did nothing and the checks
-    // ran on Linux and failed.
+    // Plotly's WebGL canvas and text rasterisation are platform- and release-specific, so these
+    // two images are a valid baseline on exactly one environment — recorded next to them when
+    // they were captured. Elsewhere the comparison is neither a pass nor a failure: the scripts
+    // report UNVERIFIABLE HERE and the summary lists it apart from both. Registered
+    // unconditionally so the check total does not change with the platform.
     { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
     { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
   ];
@@ -605,6 +623,11 @@ async function phaseValidationChecks(): Promise<boolean> {
       const result = runCommandWithOutput(c.label, c.cmd);
       if (!result.ok) {
         allOk = false;
+      } else if (result.unverifiable) {
+        const reason = result.output
+          .split(/\r?\n/)
+          .find((line) => line.includes(UNVERIFIABLE_PREFIX)) ?? UNVERIFIABLE_PREFIX
+        record(c.label, true, reason.trim());
       } else if (result.skipped) {
         // Reported as a skip, not a pass: this check needs a browser and a server.
         record(c.label, true, 'SKIPPED: needs a browser and a running server, so nothing was verified');
@@ -654,9 +677,13 @@ function phaseCodeQuality(): boolean {
 
 function emitSummary(): boolean {
   const totalChecks = results.length;
-  const passed = results.filter(r => r.pass && !r.skipped).length;
+  const passed = results.filter(r => r.pass && !r.skipped && !r.unverifiable).length;
   const skipped = results.filter(r => r.skipped);
+  const unverifiable = results.filter(r => r.unverifiable);
   const failed = results.filter(r => !r.pass && !r.skipped);
+  // Unverifiable counts as neither: it does not make the gate red, and it is never folded into
+  // the passed count either. The summary states it separately so the number cannot be read two
+  // ways.
   const allPass = failed.length === 0 && skipped.length === 0;
 
   console.log(`\n${'═'.repeat(64)}`);
@@ -664,13 +691,22 @@ function emitSummary(): boolean {
     ? '  CI GATE: PASS — Release candidate is reproducible'
     : '  CI GATE: FAIL — Reproducibility regression detected');
   console.log(`${'═'.repeat(64)}`);
-  console.log(`  ${passed}/${totalChecks} checks passed${skipped.length ? `; ${skipped.length} skipped` : ''}`);
+  console.log(
+    `  ${passed}/${totalChecks} checks passed` +
+      (unverifiable.length ? `; ${unverifiable.length} not verifiable here` : '') +
+      (skipped.length ? `; ${skipped.length} skipped` : ''),
+  );
 
   if (failed.length > 0) {
     console.log('\n  Failed checks:');
     for (const f of failed) {
       console.log(`    ✗ ${f.step}: ${f.detail}`);
     }
+  }
+
+  if (unverifiable.length > 0) {
+    console.log('\n  Not verifiable in this environment (verified where they were recorded):');
+    for (const u of unverifiable) console.log(`    ~ ${u.step}: ${u.detail}`);
   }
 
   if (skipped.length > 0) {

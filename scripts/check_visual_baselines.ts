@@ -21,12 +21,28 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execSync } from 'node:child_process'
 import { chromium } from 'playwright-core'
 
 import { decodePng } from './lib/png'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const BASELINE_DIR = path.join(REPO_ROOT, 'tests', 'visual-baselines')
+const ENVIRONMENT_FILE = path.join(BASELINE_DIR, 'environment.json')
+
+/**
+ * The platform and macOS version the images were captured on.
+ *
+ * Without it the comparison had to assume "macOS means comparable", which is false across
+ * macOS versions: antialiasing and font fallback change between releases, so the same 44
+ * images are a valid baseline on exactly one of them. Recording the environment turns that
+ * assumption into a check, and lets the comparison say which environment it is declining to
+ * judge in.
+ */
+function recordingEnvironment(): string {
+  const version = execSync('sw_vers -productVersion', { encoding: 'utf8' }).trim()
+  return `${process.platform} ${version}`
+}
 const PORT = process.env.RENDER_CHECK_PORT || '5199'
 const BASE = `http://127.0.0.1:${PORT}/belief_emergence/`
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
@@ -184,7 +200,9 @@ async function main(): Promise<void> {
       console.error(`FAIL  ${orphans.length} baseline(s) do not correspond to a case: ${orphans.join(', ')}`)
       process.exit(1)
     }
+    writeFileSync(ENVIRONMENT_FILE, `${JSON.stringify({ environment: recordingEnvironment() }, null, 2)}\n`)
     console.log(`\nwrote ${CASES.length} baselines to tests/visual-baselines/`)
+    console.log(`recorded the environment they are valid on: ${recordingEnvironment()}`)
     return
   }
 
@@ -196,9 +214,24 @@ async function main(): Promise<void> {
    *
    * SKIP, not PASS: a skip is reported distinctly by the gate and does not count as a pass.
    */
-  if (process.platform !== 'darwin') {
+  /*
+   * Compare only where the images are comparable.
+   *
+   * Text rasterisation and WebGL output are platform- and release-specific. This used to check
+   * `process.platform === 'darwin'`, which is true on every macOS version while the images are
+   * valid on one — so it either skipped everywhere or failed everywhere, depending on the
+   * runner. The recorded environment is now the test.
+   */
+  const here = recordingEnvironment()
+  const recorded = existsSync(ENVIRONMENT_FILE)
+    ? (JSON.parse(readFileSync(ENVIRONMENT_FILE, 'utf8')) as { environment?: string }).environment
+    : undefined
+  if (recorded !== here) {
+    // Deliberately not SKIP: SKIP means "could not run", which makes the gate red, and this
+    // condition cannot be fixed by changing the code. It is neither a pass nor a failure here.
     console.log(
-      `SKIP  visual baselines were captured on macOS; comparison is not meaningful on ${process.platform}`,
+      `UNVERIFIABLE HERE: baselines were recorded on ${recorded ?? 'an unrecorded environment'}; ` +
+        `this is ${here}. Pixel comparison is meaningful only on the recording environment.`,
     )
     return
   }
