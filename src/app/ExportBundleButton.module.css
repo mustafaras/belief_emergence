@@ -1,0 +1,34 @@
+.button {
+  align-items: center;
+  display: inline-flex;
+  font-size: var(--text-sm);
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.button:disabled {
+  cursor: progress;
+  opacity: 0.75;
+}
+
+/*
+ * Below 768px the label is dropped and the icon stays, matching how Search and Paper behave
+ * in the same bar. With the label the header ran to 401px against a 390px viewport: the
+ * export button, the search button, the theme toggle and Contents together exceed the row.
+ */
+@media (width <= 767px) {
+  .button {
+    justify-content: center;
+    padding: 0;
+    width: 36px;
+  }
+
+  .button > span {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+}

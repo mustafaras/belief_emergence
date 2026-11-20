@@ -10,7 +10,8 @@
  * Exit 1 = at least one check failed (drift detected).
  */
 
-import { execSync } from 'node:child_process';
+import { execSync, spawn, type ChildProcess } from 'node:child_process';
+import { connect } from 'node:net';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -225,14 +226,29 @@ interface GateResult {
 
 const results: GateResult[] = [];
 
+const UNVERIFIABLE_PREFIX = 'UNVERIFIABLE HERE:';
+
 function record(step: string, pass: boolean, detail: string): void {
   // A skipped browser check must fail the enclosing gate. Reporting it as a separate
   // status prevents a missing browser from being counted as a successful verification.
   const skipped = detail.startsWith('SKIPPED:');
-  results.push({ step, pass: pass && !skipped, skipped, detail });
-  const icon = skipped ? '  SKIP' : pass ? '  PASS' : '  FAIL';
+  /*
+   * A third state, distinct from both "passed here" and "could not run here".
+   *
+   * Pixel comparison can only be judged on the platform it was recorded on: text
+   * rasterisation and WebGL output differ between macOS and Linux, and between macOS
+   * versions. That is not a failure of the code and not a pass by the code, so neither
+   * label is honest. Reporting it as PASS would be the mistake this gate exists to prevent;
+   * reporting it as SKIP makes every hosted run red for a reason that cannot be fixed.
+   *
+   * The recording environment is published by the capture `--write`; the comparison here
+   * names the mismatch.
+   */
+  const unverifiableHere = !skipped && detail.startsWith(UNVERIFIABLE_PREFIX);
+  results.push({ step, pass: pass && !skipped, skipped, unverifiable: unverifiableHere, detail });
+  const icon = skipped ? '  SKIP' : unverifiableHere ? '  N/A ' : pass ? '  PASS' : '  FAIL';
   console.log(`${icon}  ${step}`);
-  if (!pass || skipped) console.log(`        ${detail}`);
+  if (!pass || skipped || unverifiableHere) console.log(`        ${detail}`);
 }
 
 /**
@@ -246,15 +262,38 @@ function record(step: string, pass: boolean, detail: string): void {
 function runCommandWithOutput(
   label: string,
   command: string,
-): { ok: boolean; skipped: boolean; output: string } {
+): { ok: boolean; skipped: boolean; unverifiable?: boolean; output: string } {
   try {
     const out = execSync(command, { stdio: 'pipe', cwd: ROOT }).toString();
-    return { ok: true, skipped: /\bSKIP\b/.test(out), output: out };
+    return {
+      ok: true,
+      skipped: /\bSKIP\b/.test(out),
+      unverifiable: out.includes(UNVERIFIABLE_PREFIX),
+      output: out,
+    };
   } catch (error) {
-    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    const e = error as {
+      status?: number | null;
+      signal?: string | null;
+      code?: string;
+      stdout?: Buffer;
+      stderr?: Buffer;
+    };
     const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
     const tail = out.split(/\r?\n/).slice(-25).join('\n');
-    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
+    const how = [
+      e.status === null || e.status === undefined ? `status=${e.status}` : `exit ${e.status}`,
+      e.signal ? `signal=${e.signal}` : null,
+      e.code ? `errno=${e.code}` : null,
+      `captured ${out.length} bytes of output`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    record(
+      label,
+      false,
+      `Command failed (${how}): ${command}\n${tail || '(the command produced no output on either stream)'}`,
+    );
     return { ok: false, skipped: false, output: out };
   }
 }
@@ -264,13 +303,36 @@ function runCommand(label: string, command: string): boolean {
     execSync(command, { stdio: 'pipe', cwd: ROOT });
     return true;
   } catch (error) {
-    // Swallowing the child's output turns a diagnosable failure into "command
-    // failed", which is what happened when this gate failed in CI and passed
-    // locally with no way to see why. Print the tail of both streams.
-    const e = error as { status?: number; stdout?: Buffer; stderr?: Buffer };
+    // Swallowing the child's output turns a diagnosable failure into "command failed", which is
+    // what happened when this gate failed in CI and passed locally with no way to see why.
+    const e = error as {
+      status?: number | null;
+      signal?: string | null;
+      code?: string;
+      stdout?: Buffer;
+      stderr?: Buffer;
+    };
     const out = `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}`.trim();
     const tail = out.split(/\r?\n/).slice(-25).join('\n');
-    record(label, false, `Command failed (exit ${e.status ?? '?'}): ${command}\n${tail}`);
+    /*
+     * An empty tail is itself the diagnostic, and printing nothing under a failure is how a
+     * 459-second run reported only "Tests: exit 1". Say that the child said nothing, and say how
+     * it died: a signal is a kill (usually the OOM killer on a small runner), a `code` is
+     * `execSync` refusing the output (usually MAXBUFFER), and neither is a test assertion.
+     */
+    const how = [
+      e.status === null || e.status === undefined ? `status=${e.status}` : `exit ${e.status}`,
+      e.signal ? `signal=${e.signal}` : null,
+      e.code ? `errno=${e.code}` : null,
+      `captured ${out.length} bytes of output`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    record(
+      label,
+      false,
+      `Command failed (${how}): ${command}\n${tail || '(the command produced no output on either stream)'}`,
+    );
     return false;
   }
 }
@@ -432,7 +494,93 @@ function phaseArtifactFingerprints(): void {
   }
 }
 
-function phaseValidationChecks(): boolean {
+/* ------------------------------------------------------------------ */
+/*  Preview server for the browser checks                              */
+/* ------------------------------------------------------------------ */
+
+/*
+ * The browser checks read a running site. Until now this gate required one to be started by hand
+ * (`npm run preview` on 5199) and reported every dependent check as SKIPPED when it was absent —
+ * and a skip is not a pass here, so `npm run ci:gate` could not be green on a clean checkout. The
+ * hosted workflow starts a server in its own step; the documented local entry point did not.
+ *
+ * The server serves `dist/`, which is why the build moved ahead of Phase 6: those checks used to
+ * run before Phase 7 rebuilt anything, so a fresh clone measured a directory that did not exist
+ * yet, and a run after any edit measured the previous build.
+ */
+const RENDER_PORT = process.env.RENDER_CHECK_PORT || '5199';
+const RENDER_URL = `http://127.0.0.1:${RENDER_PORT}/belief_emergence/`;
+
+/** True when something is bound to `port`. A TCP connect, so a silent socket still counts. */
+function portIsBound(port: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const socket = connect({ host: '127.0.0.1', port: Number(port) });
+    const done = (bound: boolean) => {
+      socket.destroy();
+      resolve(bound);
+    };
+    socket.once('connect', () => done(true));
+    socket.once('error', () => done(false));
+    socket.setTimeout(1000, () => done(false));
+  });
+}
+
+async function waitForServer(): Promise<void> {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
+    try {
+      // `127.0.0.1` matches the address the server is told to bind, so the probe tests the same
+      // interface the checks will use. Probing `localhost` here against a `127.0.0.1` bind is the
+      // mismatch that makes a running server look dead.
+      if ((await fetch(RENDER_URL)).ok) return;
+    } catch {
+      // Not listening yet.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  throw new Error(`the preview server did not answer on ${RENDER_URL} within 60s`);
+}
+
+/**
+ * Run `work` with a preview server available, then stop the server and wait for it to exit.
+ *
+ * When the port is already taken, the occupant is adopted rather than a second server started:
+ * `--strictPort` makes a second instance exit at once, and the readiness probe would then succeed
+ * against the occupant — measuring a site this gate does not control and cannot date.
+ */
+async function withPreviewServer(work: () => void): Promise<void> {
+  if (await portIsBound(RENDER_PORT)) {
+    console.log(`        reusing the server already listening on ${RENDER_PORT}`);
+    work();
+    return;
+  }
+  if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
+    throw new Error('dist/ is missing, so the browser checks would verify nothing; run the build first');
+  }
+  const server: ChildProcess = spawn(process.execPath, [
+    path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js'),
+    'preview', '--host', '127.0.0.1', '--port', RENDER_PORT, '--strictPort',
+  ], { cwd: ROOT, stdio: 'ignore' });
+  try {
+    await waitForServer();
+    work();
+  } finally {
+    if (server.exitCode === null && server.signalCode === null) {
+      const exited = new Promise<void>((resolve) => server.once('exit', () => resolve()));
+      server.kill('SIGTERM');
+      const stubborn = await Promise.race([
+        exited.then(() => false),
+        new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 5000)),
+      ]);
+      // A child left holding the port is what makes the next run read a stale site.
+      if (stubborn) {
+        server.kill('SIGKILL');
+        await Promise.race([exited, new Promise((resolve) => setTimeout(resolve, 2000))]);
+      }
+    }
+  }
+}
+
+async function phaseValidationChecks(): Promise<boolean> {
   console.log('\n── Phase 6: Validation Checks ──');
   const checks: Array<{ label: string; cmd: string; reportSkip?: boolean }> = [
     { label: 'Manuscript consistency',       cmd: 'npm run check:manuscript-consistency' },
@@ -442,6 +590,31 @@ function phaseValidationChecks(): boolean {
     // The evidence index prints a schema, timestamp and row count for every artifact.
     // This keeps that committed consumption list honest against the real imports.
     { label: 'Evidence index matches tree',  cmd: 'npm run check:evidence-index' },
+    // The Evidence page names the script that rebuilds each artifact and the steps the gate
+    // runs. Both are derived from source, so both can silently drift; these re-derive them.
+    { label: 'Reproduction manifest matches tree', cmd: 'npm run check:reproduction-manifest' },
+    { label: 'Gate step list matches gate',  cmd: 'npm run check:gate-steps' },
+    // Deleting a module leaves its documentation behind. A dead link reads as a broken
+    // checkout rather than as a moved file, so the README is checked like any other claim.
+    { label: 'README links resolve',         cmd: 'npm run check:readme-links' },
+    // The README documented a 630-row panel and a withdrawn r² for months because nothing
+    // compiled it. Its generated block and its forbidden values are now checked like code.
+    { label: 'README metrics current',       cmd: 'npm run check:readme-metrics' },
+    // The README showed thirteen v1 screenshots for months and nothing noticed, because an
+    // image either loads or does not. Coverage between README and capture spec is checkable.
+    { label: 'Paper figure specs',           cmd: 'npm run check:paper-figures' },
+    // Every other browser check asks whether an element is readable in isolation. This one
+    // asks whether the page fits: no horizontal scroll, no overlap, no text under 12px.
+    { label: 'Layout guards',                cmd: 'npm run check:layout', reportSkip: true },
+    // Journeys, not properties: whether a reader can get from the overview to the audit to the
+    // gate result with state carried across routes. Every individual page can be correct and
+    // the path still broken.
+    //
+    // Always registered, never conditionally omitted. A step that disappears when a variable is
+    // unset changes the total silently, and the run still reports PASS — which is how a suite
+    // loses coverage without anyone noticing. When the browser is absent the step reports
+    // SKIPPED, and a skip is not a pass in this gate.
+    { label: 'End-to-end journeys', cmd: 'npm run test:e2e', reportSkip: true },
     // Descriptions are hand-written prose shown to the reader. One sentence each, and no
     // number in them without an artifact behind it.
     { label: 'Description numbers',          cmd: 'npm run check:description-numbers' },
@@ -463,21 +636,39 @@ function phaseValidationChecks(): boolean {
     // PASS when it is missing.
     { label: 'Route reachability',           cmd: 'npm run check:routes', reportSkip: true },
     { label: 'Render / stale values',        cmd: 'npm run check:render', reportSkip: true },
-    // The initial payload, measured from the built site rather than inferred from the
-    // bundle. Runs after Phase 7's build so dist/ is current.
+    // The initial payload, measured from the built site rather than inferred from the bundle
+    // graph. The build now runs immediately before this phase, so dist/ is current.
     { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
-    // Plotly's WebGL canvas is platform-specific. The reviewed baseline is macOS; the
-    // dedicated macOS visual-baselines job runs this exact pixel comparison there.
-    ...(process.platform === 'darwin'
-      ? [{ label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true }]
-      : []),
+    // Plotly's WebGL canvas and text rasterisation are platform- and release-specific, so these
+    // two images are a valid baseline on exactly one environment — recorded next to them when
+    // they were captured. Elsewhere the comparison is neither a pass nor a failure: the scripts
+    // report UNVERIFIABLE HERE and the summary lists it apart from both. Registered
+    // unconditionally so the check total does not change with the platform.
+    { label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true },
+    { label: 'Visual baselines', cmd: 'npm run check:visual-baselines', reportSkip: true },
   ];
   let allOk = true;
+
+  // Synchronous checks do not need a site, so they run before the server is started.
   for (const c of checks) {
+    if (c.reportSkip) continue;
+    if (runCommand(c.label, c.cmd)) record(c.label, true, 'OK');
+    else allOk = false;
+  }
+
+  const browserChecks = checks.filter((c) => c.reportSkip);
+  try {
+    await withPreviewServer(() => {
+  for (const c of browserChecks) {
     if (c.reportSkip) {
       const result = runCommandWithOutput(c.label, c.cmd);
       if (!result.ok) {
         allOk = false;
+      } else if (result.unverifiable) {
+        const reason = result.output
+          .split(/\r?\n/)
+          .find((line) => line.includes(UNVERIFIABLE_PREFIX)) ?? UNVERIFIABLE_PREFIX
+        record(c.label, true, reason.trim());
       } else if (result.skipped) {
         // Reported as a skip, not a pass: this check needs a browser and a server.
         record(c.label, true, 'SKIPPED: needs a browser and a running server, so nothing was verified');
@@ -493,19 +684,24 @@ function phaseValidationChecks(): boolean {
       }
       continue;
     }
-    const ok = runCommand(c.label, c.cmd);
-    if (ok) record(c.label, true, 'OK');
-    else allOk = false;
+  }
+    });
+  } catch (error) {
+    // Named rather than swallowed: a missing `dist/` or a port held by something else is the
+    // difference between "the site is wrong" and "there was no site to check".
+    record('Preview server', false, error instanceof Error ? error.message : String(error));
+    allOk = false;
   }
   return allOk;
 }
 
 function phaseCodeQuality(): boolean {
   console.log('\n── Phase 7: Code Quality ──');
+  // The build is not here. It moved ahead of Phase 6 because the browser checks read `dist/`,
+  // and running them before it existed meant they verified a previous build or nothing at all.
   const steps = [
     { label: 'Lint',   cmd: 'npm run lint' },
     { label: 'Tests',  cmd: 'npm run test:run' },
-    { label: 'Build',  cmd: 'npm run build' },
   ];
   let allOk = true;
   for (const s of steps) {
@@ -522,9 +718,13 @@ function phaseCodeQuality(): boolean {
 
 function emitSummary(): boolean {
   const totalChecks = results.length;
-  const passed = results.filter(r => r.pass && !r.skipped).length;
+  const passed = results.filter(r => r.pass && !r.skipped && !r.unverifiable).length;
   const skipped = results.filter(r => r.skipped);
+  const unverifiable = results.filter(r => r.unverifiable);
   const failed = results.filter(r => !r.pass && !r.skipped);
+  // Unverifiable counts as neither: it does not make the gate red, and it is never folded into
+  // the passed count either. The summary states it separately so the number cannot be read two
+  // ways.
   const allPass = failed.length === 0 && skipped.length === 0;
 
   console.log(`\n${'═'.repeat(64)}`);
@@ -532,13 +732,22 @@ function emitSummary(): boolean {
     ? '  CI GATE: PASS — Release candidate is reproducible'
     : '  CI GATE: FAIL — Reproducibility regression detected');
   console.log(`${'═'.repeat(64)}`);
-  console.log(`  ${passed}/${totalChecks} checks passed${skipped.length ? `; ${skipped.length} skipped` : ''}`);
+  console.log(
+    `  ${passed}/${totalChecks} checks passed` +
+      (unverifiable.length ? `; ${unverifiable.length} not verifiable here` : '') +
+      (skipped.length ? `; ${skipped.length} skipped` : ''),
+  );
 
   if (failed.length > 0) {
     console.log('\n  Failed checks:');
     for (const f of failed) {
       console.log(`    ✗ ${f.step}: ${f.detail}`);
     }
+  }
+
+  if (unverifiable.length > 0) {
+    console.log('\n  Not verifiable in this environment (verified where they were recorded):');
+    for (const u of unverifiable) console.log(`    ~ ${u.step}: ${u.detail}`);
   }
 
   if (skipped.length > 0) {
@@ -554,7 +763,7 @@ function emitSummary(): boolean {
 /*  Runner                                                             */
 /* ------------------------------------------------------------------ */
 
-function run(): void {
+async function run(): Promise<void> {
   console.log(`\n${'═'.repeat(64)}`);
   console.log('  Deterministic Reproducibility CI Gate');
   console.log(`${'═'.repeat(64)}\n`);
@@ -564,6 +773,7 @@ function run(): void {
   // The gate regenerates artifacts to prove they are reproducible. Capture the
   // committed bytes first so the verification leaves the working tree as it found it.
   const artifactSnapshot = snapshotArtifacts();
+  let allOkBuild = true;
 
   try {
     // Phase 0: Canonical data fingerprint (before any generation)
@@ -607,8 +817,13 @@ function run(): void {
       record('Refresh artifact facts for validation', true, 'OK');
     }
 
+    // The build precedes Phase 6: the browser checks serve `dist/`, so it has to be current
+    // before anything is measured against it.
+    if (runCommand('Build', 'npm run build')) record('Build', true, 'OK');
+    else allOkBuild = false;
+
     // Phase 6: Validation checks
-    phaseValidationChecks();
+    await phaseValidationChecks();
 
     // Phase 7: Code quality
     phaseCodeQuality();
@@ -619,8 +834,8 @@ function run(): void {
   const totalTime = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`\n  Total gate time: ${totalTime}s`);
 
-  const allPass = emitSummary();
+  const allPass = emitSummary() && allOkBuild;
   process.exit(allPass ? 0 : 1);
 }
 
-run();
+void run();

@@ -1,13 +1,11 @@
 # Application decision
 
 **Current implementation status (2026-11-16):** Option A remains the product
-decision. Application v1 prompts 0–13 were delivered in PRs #1–#2. In the
-separate v2 worktree, `docs/APP_V2_LOG.md` records P00–P07 and P10–P17 complete;
-P08–P09 are the completed paper-sync prerequisite. P19 is partial and stopped
-at its required source gate because the specified Y/E/T blocker totals are not
-available in the approved artifacts. P18 is sequenced after P22; P20–P38 have
-not started. The v2 work remains uncommitted. Section 7 below is the pre-P00
-risk register, not evidence that those prompts have been completed.
+decision. Application v1 prompts 0–13 were delivered in PRs #1–#2. The v2 worktree's
+`docs/APP_V2_LOG.md` records P00–P07 and P10–P17 complete, P08–P09 as the
+paper-sync prerequisite, and P20–P45 closed after the P19 source gate was met.
+Section 7 below is the pre-P00 risk register, not evidence that those prompts
+have been completed.
 
 **Decision: Option A — Evidence surface.**
 

@@ -70,7 +70,7 @@ export type ConstructRow = {
   /** Alpha, only when the construct is computable. Never a leftover. */
   alpha: number | null
   /** True when the artifact carries an alpha that must not be shown. */
-  suppressedAlpha: boolean
+  alphaWithheld: boolean
   /** Items present in the harmonised source, when known. */
   itemsAvailable?: number
   /** Configured items absent from the source, when known. */
@@ -175,10 +175,10 @@ export function buildConstructRows(
         cellsRejected: construct.cellsRejected,
         verdict,
         reason,
-        // Suppressed rather than merely conditional: a reader must never see an alpha for
+        // Withheld rather than merely conditional: a reader must never see an alpha for
         // a construct with no observations.
         alpha: computable ? construct.cronbachAlpha : null,
-        suppressedAlpha: !computable && construct.cronbachAlpha !== null,
+        alphaWithheld: !computable && construct.cronbachAlpha !== null,
         itemsAvailable: items?.availableItems.length,
         absentItems: items?.absentItems,
       }

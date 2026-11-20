@@ -1,0 +1,351 @@
+:global(body) {
+  overflow: auto;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+:global(#root) {
+  height: auto;
+  min-height: 100vh;
+}
+
+.shell {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.skipLink {
+  position: fixed;
+  z-index: 100;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-1);
+  background: var(--ink);
+  color: var(--bg);
+  transform: translateY(-160%);
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
+.topbar {
+  min-width: 0;
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: flex;
+  height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--ink);
+  font-size: var(--fs-14);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brandMark {
+  color: var(--accent);
+  font-size: var(--fs-18);
+}
+
+.headerActions {
+  min-width: 0;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.searchButton,
+.themeButton,
+.paperLink {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: var(--fs-12);
+  text-decoration: none;
+}
+
+.searchButton,
+.themeButton {
+  cursor: pointer;
+}
+
+.themeButton {
+  width: 38px;
+  padding: 0;
+  color: var(--ink);
+}
+
+.headerProgress {
+  position: fixed;
+  z-index: 21;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform var(--dur-1) linear;
+}
+
+.layout {
+  min-width: 0;
+  display: grid;
+  width: min(100%, 1440px);
+  min-height: calc(100vh - 56px);
+  grid-template-columns: 248px minmax(0, 1fr);
+  margin: 0 auto;
+}
+
+.sidebar {
+  min-width: 0;
+  position: sticky;
+  top: 56px;
+  display: flex;
+  height: calc(100vh - 56px);
+  flex-direction: column;
+  padding: var(--space-5) var(--space-3) var(--space-4) var(--space-4);
+  border-right: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.sidebarHeading {
+  padding: 0 var(--space-3) var(--space-3);
+  color: var(--ink-3);
+  font-size: var(--fs-12);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.routeNav {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.routeLink {
+  min-width: 0;
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-1);
+  color: var(--ink-2);
+  font-size: var(--fs-14);
+  text-decoration: none;
+}
+
+.routeLink:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.routeLink[aria-current='page'] {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.routeNumber {
+  flex: 0 0 24px;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-variant-numeric: tabular-nums;
+}
+
+.routeLink[aria-current='page'] .routeNumber {
+  color: var(--accent);
+}
+
+.progressBlock {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-3);
+  color: var(--ink-3);
+  font-size: var(--fs-12);
+}
+
+.progressTrack {
+  height: 3px;
+  overflow: hidden;
+  border-radius: var(--radius-3);
+  background: var(--line);
+}
+
+.progressTrack span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--dur-2) var(--ease);
+}
+
+.main {
+  width: min(100%, 1200px);
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(var(--space-5), 5vw, var(--space-8));
+  outline: none;
+}
+
+.routeMeta {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  color: var(--ink-3);
+  font-size: var(--fs-12);
+}
+
+.routeMeta span:first-child {
+  color: var(--accent);
+  font-weight: 650;
+  letter-spacing: 0.06em;
+}
+
+.loading {
+  max-width: var(--w-prose);
+  color: var(--ink-2);
+}
+
+.sectionNavigation {
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--w-prose);
+  margin-top: var(--space-7);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.sectionNavigation .routeLink {
+  min-height: 44px;
+  padding: 0;
+  color: var(--accent);
+}
+
+.mobileContents {
+  display: none;
+}
+
+.mobileContents :global(button) {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: var(--fs-12);
+}
+
+@media (width <= 1023px) {
+  .layout {
+    display: block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .mobileContents {
+    display: block;
+  }
+
+  .main {
+    padding-inline: clamp(var(--space-4), 5vw, var(--space-7));
+  }
+}
+
+/*
+ * 900 rather than 767. At exactly 768 the full title, the "Search" label with its ⌘K hint, the
+ * Paper link and the export button do not fit on one line: the title slid under the search
+ * control while both stayed "visible" to every earlier check. The label is what has to go
+ * first, and it has to go before the row is full rather than after.
+ */
+@media (width <= 900px) {
+  .topbar {
+    height: 52px;
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+  }
+
+  .searchButton > span,
+  .searchButton kbd,
+  .paperLink {
+    display: none;
+  }
+
+  .headerProgress {
+    top: 51px;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+    overflow: hidden;
+    gap: var(--space-2);
+    font-size: var(--fs-12);
+  }
+
+  .brand > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .headerActions {
+    gap: var(--space-1);
+  }
+
+  .searchButton {
+    width: 36px;
+    padding: 0;
+  }
+
+  .themeButton {
+    width: 36px;
+    min-height: 36px;
+  }
+
+  .main {
+    padding: var(--space-4);
+  }
+
+  .routeMeta {
+    margin-bottom: var(--space-4);
+  }
+
+}

@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "phase1.design_gates.v1",
+  "generatedAtIso": "2026-11-17T07:11:30.224Z",
+  "purpose": "Apply the four design rules to the panel originally submitted and to the rebuilt panel, so the claim that all four failed and now all four pass is a measurement rather than a restatement.",
+  "thresholds": {
+    "identityCorrelation": 0.999,
+    "duplicateCorrelation": 0.9999,
+    "singlePredictorR2": 0.99
+  },
+  "original": {
+    "panel": "original",
+    "rows": 630,
+    "predictors": [
+      "C",
+      "D",
+      "X",
+      "Y",
+      "T",
+      "E",
+      "R",
+      "S"
+    ],
+    "gates": [
+      {
+        "id": "identity",
+        "rule": "|corr(x_j, Z)| < 0.999",
+        "measured": 1.0000000000000036,
+        "threshold": 0.999,
+        "pass": false,
+        "detail": "largest is C"
+      },
+      {
+        "id": "duplicates",
+        "rule": "|corr(x_j, x_k)| < 0.9999",
+        "measured": 1,
+        "threshold": 0.9999,
+        "pass": false,
+        "detail": "largest is D / S"
+      },
+      {
+        "id": "rank",
+        "rule": "rank(X) = 8",
+        "measured": 7,
+        "threshold": 8,
+        "pass": false,
+        "detail": "rank 7 of 8 predictors"
+      },
+      {
+        "id": "singlePredictor",
+        "rule": "R²(x_j → Z) < 0.99",
+        "measured": 1.000000000000007,
+        "threshold": 0.99,
+        "pass": false,
+        "detail": "largest is C"
+      }
+    ],
+    "allPass": false
+  },
+  "rebuilt": {
+    "panel": "rebuilt",
+    "rows": 207,
+    "predictors": [
+      "X",
+      "Y",
+      "T",
+      "E",
+      "R",
+      "M"
+    ],
+    "gates": [
+      {
+        "id": "identity",
+        "rule": "|corr(x_j, Z)| < 0.999",
+        "measured": 0.5774998195975329,
+        "threshold": 0.999,
+        "pass": true,
+        "detail": "largest is R"
+      },
+      {
+        "id": "duplicates",
+        "rule": "|corr(x_j, x_k)| < 0.9999",
+        "measured": 0.8849478653696827,
+        "threshold": 0.9999,
+        "pass": true,
+        "detail": "largest is E / R"
+      },
+      {
+        "id": "rank",
+        "rule": "rank(X) = 6",
+        "measured": 6,
+        "threshold": 6,
+        "pass": true,
+        "detail": "rank 6 of 6 predictors"
+      },
+      {
+        "id": "singlePredictor",
+        "rule": "R²(x_j → Z) < 0.99",
+        "measured": 0.3335060416351831,
+        "threshold": 0.99,
+        "pass": true,
+        "detail": "largest is R"
+      }
+    ],
+    "allPass": true
+  },
+  "originalProvenance": {
+    "designMatrix": {
+      "source": "8f5c06b:public/data/panel_canonical_23_countries_v1.csv",
+      "rows": 630,
+      "countries": 23,
+      "distinctCountryYears": 34
+    },
+    "upstreamIdentity": {
+      "rows": 1128,
+      "maxAbsDeviation": 4.44e-15,
+      "source": "recomputed",
+      "recordedFrom": "../repo/rawdata/panel_model_data.csv"
+    }
+  },
+  "interpretation": "On the submitted panel every rule fails. Its outcome was an exact affine rescaling of the cultural-intensity predictor (r = 1), two predictors were the same variable with opposite sign, and the design matrix was one column short of full rank. On the rebuilt panel all four pass with margin. The identity failure is the one that matters: it made every reported out-of-sample metric an algebraic identity rather than evidence."
+}

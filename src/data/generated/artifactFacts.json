@@ -66,6 +66,10 @@
       "schemaVersion": "phase1.data_code_provenance.v1",
       "generatedAt": "2026-11-09T11:30:00.000Z"
     },
+    "design_gates": {
+      "schemaVersion": "phase1.design_gates.v1",
+      "generatedAt": "2026-11-17T07:11:30.224Z"
+    },
     "elasticity_bound_sensitivity": {
       "schemaVersion": "phase1.elasticity_bound_sensitivity.v1",
       "generatedAt": "2026-11-15T12:16:59.996Z"
@@ -75,18 +79,27 @@
       "generatedAt": "2026-11-15T11:56:51.000Z",
       "rowCount": 207
     },
+    "evaluation_summary": {
+      "schemaVersion": "phase1.evaluation_summary.v1",
+      "generatedAt": "2026-11-17T12:50:17.229Z",
+      "rowCount": 207
+    },
     "failure_log": {
       "schemaVersion": "phase1.failure_log.v1",
       "generatedAt": "2026-11-15T12:18:20.312Z"
     },
     "functional_form_comparison": {
       "schemaVersion": "phase1.functional_form_comparison.v1",
-      "generatedAt": "2026-11-15T12:18:21.371Z",
+      "generatedAt": "2026-11-17T10:44:13.481Z",
       "rowCount": 207
     },
     "gini_window_sensitivity": {
       "schemaVersion": "phase1.gini_window_sensitivity.v1",
       "generatedAt": "2026-11-15T11:40:20.366Z"
+    },
+    "human_checklist_signatures": {
+      "schemaVersion": "phase1.human_checklist_signatures.v1",
+      "generatedAt": "2026-11-19T11:17:44.302255+00:00"
     },
     "journal_fit_targeting": {
       "schemaVersion": "phase1.journal_fit_targeting.v1",
@@ -143,6 +156,10 @@
     "reviewer_red_team": {
       "schemaVersion": "phase1.reviewer_red_team.v1",
       "generatedAt": "2026-11-16T09:00:00+00:00"
+    },
+    "sign_diagnostics": {
+      "schemaVersion": "phase1.sign_diagnostics.v1",
+      "generatedAt": "2026-11-17T09:26:16.009Z"
     },
     "software_environment": {
       "schemaVersion": "phase1.software_environment.v1",

@@ -1,0 +1,81 @@
+.card {
+  display: flex;
+  min-height: 15rem;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  /*
+   * A grid item defaults to `min-width: auto`, so its column is at least as wide as the
+   * widest unbreakable thing inside it. The card's content is a row of text, and that floor
+   * pushed the findings grid to 720px inside a 390px viewport — the document scrolled
+   * horizontally by 346px while every other visible element still fit.
+   */
+  min-width: 0;
+}
+
+.topline {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  /*
+   * Without wrapping, the badge cannot move to a second line: the flex line grows to fit both
+   * items and the card widens past the grid column. At 390px that made the findings grid 720px
+   * wide and the document scroll horizontally by 346px, which every other check missed.
+   */
+  flex-wrap: wrap;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--ink-3);
+  font: 600 var(--fs-12) / 1.4 var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--ink);
+  font: 600 var(--fs-18) / 1.35 var(--font-sans);
+}
+
+.metric {
+  min-width: 0;
+  display: flex;
+  min-height: 3rem;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--ink);
+  font: 600 var(--fs-28) / 1.2 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric :global(button) {
+  font: inherit;
+}
+
+.description {
+  margin: 0;
+  color: var(--ink-2);
+  font: 400 var(--fs-14) / 1.55 var(--font-sans);
+}
+
+.link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  color: var(--accent);
+  font: 600 var(--fs-14) / 1.4 var(--font-sans);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+

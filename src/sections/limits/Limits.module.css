@@ -1,0 +1,115 @@
+.section {
+  min-width: 0;
+  display: grid;
+  max-width: var(--w-wide);
+  gap: var(--space-8);
+
+  /*
+   * An implicit `auto` track sizes to its content's min-content width. When a child cannot
+   * shrink — a wide table, an unbreakable row, a chart with a fixed aspect — the track grows
+   * past the container and the document scrolls horizontally. A zero-minimum column makes the
+   * track follow the container instead.
+   */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.lab,
+.block {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.h2 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-18);
+  margin: 0;
+}
+
+.h3 {
+  font-family: var(--font-serif);
+  font-size: var(--fs-16);
+  margin: 0;
+}
+
+.prose {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  line-height: 1.7;
+  margin: 0;
+  max-width: var(--w-prose);
+}
+
+.readout {
+  min-width: 0;
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.readoutLabel {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.readout strong {
+  font-family: var(--font-mono);
+  font-size: var(--fs-28);
+  font-variant-numeric: tabular-nums;
+}
+
+.readoutNote {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+}
+
+.compare {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.compareCard {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.compareLabel {
+  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  margin: 0;
+}
+
+.compareValue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-28);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.compareNote {
+  color: var(--ink-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  margin: 0;
+}
+
+.tableNumber {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}

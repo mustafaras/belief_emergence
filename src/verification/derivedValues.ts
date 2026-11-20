@@ -12,10 +12,9 @@
  * requires the rendered token to match the recomputation. A wrong `e^Φ` fails; a correct
  * one passes without being exempted.
  *
- * The inputs are the interface's own defaults, which are constants in
- * `src/data/feCoefficients.ts` and `src/App.tsx`. They are not artifact values — the
- * panel-scale default parameter set is a starting position, not a measurement — and the
- * allowlist records that fact separately.
+ * The inputs are the verification defaults declared below and structural constants from
+ * `src/data/feCoefficients.ts`. They are not artifact values — the panel-scale parameter
+ * set is a code constant, not a measurement — and the allowlist records that fact.
  */
 import { calculateModel, computeStructuralBase } from '../utils/calculateModel'
 import { computePhiContributions } from '../utils/contributions'
@@ -35,18 +34,9 @@ import {
 import { computeTopBarAnalytics } from '../utils/topBarAnalytics'
 import { OPTIMIZED_STRUCTURAL_PARAMS } from '../data/feCoefficients'
 import type { BeliefParameters } from '../types'
-import {
-  DEFAULT_SYSTEM_PROMPT,
-  estimateAiTokens,
-  INITIAL_INTERPRETATION_PROMPT,
-} from '../components/ai/tokenEstimate'
 
 /**
- * The parameter set the interface opens with.
- *
- * Kept in step with `DEFAULT_PARAMS` in `src/App.tsx`. If that changes, the derived values
- * here change with it and the check follows — which is the point of deriving rather than
- * listing.
+ * Parameter inputs for the independent number-resolution check.
  */
 export const DEFAULT_UI_PARAMS: BeliefParameters = {
   X: 0.73,
@@ -73,21 +63,14 @@ export const DEFAULT_UI_PARAMS: BeliefParameters = {
 /**
  * The default parameter values themselves.
  *
- * These are the numbers the sliders show on arrival, and they are constants in
- * `src/App.tsx`, not measurements. They were previously resolved by accident: `0.42`
+ * These verification inputs are code constants, not measurements. They were previously
+ * resolved by accident: `0.42`
  * matched a CV fold metric to four places, `0.04` matched another, and the check reported
  * them as verified against an artifact the application never reads. Deriving them here
  * makes the provenance explicit — a code constant, checked against the code.
  */
 export function deriveDefaultParams(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
   return Object.values(params).filter((v): v is number => typeof v === 'number' && Number.isFinite(v))
-}
-
-/** The AI Interpreter's initial token estimate is ceil(system prompt characters / 4). */
-export function deriveAiTokenCount(): number[] {
-  return [
-    estimateAiTokens(DEFAULT_SYSTEM_PROMPT, [{ content: INITIAL_INTERPRETATION_PROMPT }]),
-  ]
 }
 
 export function deriveComputedValues(params: BeliefParameters = DEFAULT_UI_PARAMS): number[] {
@@ -198,18 +181,18 @@ export function deriveFormulaMetrics(params: BeliefParameters = DEFAULT_UI_PARAM
   })
   const { mainEffects, interactions, quadratic } = model.phiComponents
 
-  const amplifying =
+  const positiveEffects =
     (mainEffects > 0 ? mainEffects : 0) +
     (interactions > 0 ? interactions : 0) +
     (quadratic > 0 ? quadratic : 0)
-  const suppressing =
+  const negativeEffects =
     (mainEffects < 0 ? Math.abs(mainEffects) : 0) +
     (interactions < 0 ? Math.abs(interactions) : 0) +
     (quadratic < 0 ? Math.abs(quadratic) : 0)
 
-  const netField = amplifying - suppressing
-  const dominanceRatio = amplifying / (suppressing + 0.001)
-  const systemVolatility = Math.abs(netField) / (amplifying + suppressing + 0.001)
+  const netField = positiveEffects - negativeEffects
+  const dominanceRatio = positiveEffects / (negativeEffects + 0.001)
+  const systemVolatility = Math.abs(netField) / (positiveEffects + negativeEffects + 0.001)
   const emergenceThreshold = 0.5
   const distanceToThreshold = Math.abs(model.Z - emergenceThreshold)
   const criticality = criticalityIndex(model.Z, emergenceThreshold)
@@ -222,8 +205,8 @@ export function deriveFormulaMetrics(params: BeliefParameters = DEFAULT_UI_PARAM
   const saturationIndex = model.Z / (1 - model.Z + 0.001)
 
   return [
-    amplifying,
-    suppressing,
+    positiveEffects,
+    negativeEffects,
     netField,
     dominanceRatio,
     systemVolatility,
@@ -289,37 +272,6 @@ export function deriveCountryMeans(
 export function deriveContractConstants(): number[] {
   // `k` is printed on the advanced-parameters panel and comes from the structural fit.
   return [PANEL_X_MIN, PANEL_X_MAX, PANEL_Y_MIN, PANEL_Y_MAX, DEFAULT_UI_PARAMS.k, DEFAULT_UI_PARAMS.alpha, DEFAULT_UI_PARAMS.beta]
-}
-
-/**
- * Slider bounds, read from the sidebar markup.
- *
- * The tooltips print their own widget range ("Panel: [-1.49, 1.82]"), which is the slider
- * extent, not the observed panel range — the two differ (trauma spans -1.49..3.29 in the
- * data but the control stops at 1.82). Listing those extents in the allowlist would make
- * it twelve entries long for values that are simply read off the UI, so they are derived
- * from the markup instead. A bound that no longer matches the control fails the check.
- *
- * Parsed rather than duplicated: the alternative is a second copy of twenty numbers that
- * drifts the first time someone widens a slider.
- */
-export function deriveSliderBounds(sidebarSource: string): number[] {
-  const out: number[] = []
-  const sliderPattern = /min="(-?[\d.]+)"\s*\n?\s*max="(-?[\d.]+)"/g
-  for (const match of sidebarSource.matchAll(sliderPattern)) {
-    out.push(Number(match[1]), Number(match[2]))
-  }
-  // Tooltip text also states extents; capture the bracketed pair it prints.
-  const rangePattern = /\[(-?[\d.]+),\s*(-?[\d.]+)\]/g
-  for (const match of sidebarSource.matchAll(rangePattern)) {
-    out.push(Number(match[1]), Number(match[2]))
-  }
-  // Sigma multiples quoted in prose ("-1.5 ≈ 1.5σ", "+1.8 ≈ 1.8σ").
-  const sigmaPattern = /(-?\d+(?:\.\d+)?)\s*(?:≈|sigma|σ)/g
-  for (const match of sidebarSource.matchAll(sigmaPattern)) {
-    out.push(Number(match[1]))
-  }
-  return out.filter((n) => Number.isFinite(n))
 }
 
 /**
@@ -431,4 +383,60 @@ export function deriveCountryR2Median(rows: PanelRowCanonical[]): number[] {
   const middle = Math.floor(values.length / 2)
   const median = values.length % 2 === 1 ? values[middle] : (values[middle - 1] + values[middle]) / 2
   return [median]
+}
+
+/**
+ * Values the claim registry prints at a rounded precision.
+ *
+ * The DOM audit resolves artifact tokens with the `exact` policy, deliberately: over a
+ * 77,000-number corpus almost any token sits inside some rounding window, so "rounds to
+ * something" is not provenance. A value the interface *formats* for display is therefore
+ * not covered by the artifact corpus at all — it is covered here, by re-running the same
+ * registry the components read.
+ *
+ * Recomputing through `listClaims()` rather than restating the numbers is what keeps this
+ * honest: if a claim's artifact changes, both the rendered value and this list change
+ * together, and a component that printed something else would fail the audit.
+ */
+export function deriveLabDisplayValues(
+  gini: { rows: Array<{ window: number; completeCaseRows: number; giniBackfilled: number }> },
+  zeroFill: { nZeroAnchor: number; splits: Array<{ n: number; cMinusB: number; perRepeatMedianCminusB: number }> },
+  places: { rows: number; signed: number },
+): number[] {
+  const round = (value: number, digits: number) => Number(value.toFixed(digits))
+  const split = (index: number) => zeroFill.splits[index]
+
+  return [
+    // Figure 1.4 prints whole row counts and borrowed-cell counts.
+    ...gini.rows.flatMap((row) => [row.completeCaseRows, row.giniBackfilled].map((v) => round(v, places.rows))),
+    // Figure 1.5 prints Tier C minus Tier B at three places, and the row totals as integers.
+    ...zeroFill.splits.flatMap((entry) => [
+      round(entry.cMinusB, places.signed),
+      round(entry.perRepeatMedianCminusB, places.signed),
+      round(entry.n, places.rows),
+    ]),
+    round(zeroFill.nZeroAnchor, places.rows),
+    // The callout repeats the two k-fold gaps and the two per-repeat medians in prose.
+    round(split(0).cMinusB, places.signed),
+    round(split(1).cMinusB, places.signed),
+  ].filter(Number.isFinite)
+}
+
+/**
+ * Rounded forms the construct audit prints.
+ *
+ * The table shows alpha at two places (`-1.2285` → `-1.23`) and the summary line shows the
+ * failure rate as a percentage (`0.75` → `75.0%`). Neither resolves against the artifact
+ * corpus, which the DOM audit reads with the `exact` policy on purpose. Both are the same
+ * numbers the claims carry, just formatted, so they are recomputed here from the same
+ * artifact values rather than added to an allowlist.
+ */
+export function deriveConstructAuditDisplays(
+  alphas: ReadonlyArray<number | null>,
+  failureRate: number,
+): number[] {
+  const rounded = alphas
+    .filter((alpha): alpha is number => alpha !== null && Number.isFinite(alpha))
+    .map((alpha) => Number(alpha.toFixed(2)))
+  return [...rounded, Number((failureRate * 100).toFixed(1))]
 }

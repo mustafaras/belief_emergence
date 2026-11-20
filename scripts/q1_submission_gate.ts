@@ -60,12 +60,30 @@ function record(
   if (!pass) console.log(`        ${detail}`);
 }
 
+/**
+ * Run a command, keeping why it failed.
+ *
+ * This returned a bare boolean and discarded both streams, so a 24-minute hosted run reported
+ * "Test suite failed" and nothing else — while the same suite had passed 77/77 six minutes
+ * earlier in the same job, and passes locally. The reason existed and was thrown away.
+ */
 function runCmd(cmd: string): boolean {
+  return runCmdCaptured(cmd).ok;
+}
+
+/**
+ * Run a command and keep what it said.
+ *
+ * `runCmd` discards both streams, so a delegated gate that failed reported only "0/1" — the
+ * reason was produced and thrown away, and the CI log named no failing check. Captured here
+ * because this is the one caller whose child is itself a whole gate.
+ */
+function runCmdCaptured(cmd: string): { ok: boolean; output: string } {
   try {
-    execSync(cmd, { stdio: 'pipe', cwd: ROOT });
-    return true;
-  } catch {
-    return false;
+    return { ok: true, output: execSync(cmd, { stdio: 'pipe', cwd: ROOT }).toString() };
+  } catch (error) {
+    const e = error as { stdout?: Buffer; stderr?: Buffer };
+    return { ok: false, output: `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}` };
   }
 }
 
@@ -86,9 +104,12 @@ function readJson(name: string): Record<string, unknown> | null {
 function gateCodeQuality(): void {
   console.log('\n── Gate 1: Code Quality ──');
 
-  const ok1 = runCmd('npm run test:run');
+  const tests = runCmdCaptured('npm run test:run');
+  const ok1 = tests.ok;
   record('cq-tests', 'Code Quality', 'Test suite passes', ok1, 'critical',
-    ok1 ? 'All tests passed' : 'Test suite failed — fix before submission');
+    ok1
+      ? 'All tests passed'
+      : `Test suite failed — fix before submission:\n${tests.output.split(/\r?\n/).filter((l) => /×|FAIL |AssertionError|expected/i.test(l)).slice(0, 12).join('\n') || tests.output.split(/\r?\n/).slice(-15).join('\n')}`);
 
   const ok2 = runCmd('npm run lint');
   record('cq-lint', 'Code Quality', 'Lint passes (zero errors)', ok2, 'critical',
@@ -319,9 +340,18 @@ function gateLockboxValidityCompliance(): void {
 
 function gateReproducibility(): void {
   console.log('\n── Gate 6: Deterministic Reproducibility ──');
-  const ok = runCmd('npm run ci:gate');
+  const result = runCmdCaptured('npm run ci:gate');
+  const ok = result.ok;
+  // Name the failing checks rather than pointing at a command the reader has to run twice. The
+  // summary block, not the whole log: the gate already printed every check it ran.
+  const failing = result.output
+    .split(/\r?\n/)
+    .filter((line) => /^\s+✗ |^\s+~ |checks passed/.test(line))
+    .join('\n');
   record('repro-ci', 'Reproducibility', 'CI reproducibility gate passes', ok, 'critical',
-    ok ? 'Full ci:gate passed (7 phases)' : 'ci:gate detected drift or failure — run npm run ci:gate for details');
+    ok
+      ? 'Full ci:gate passed (7 phases)'
+      : `ci:gate detected drift or failure:\n${failing || result.output.split(/\r?\n/).slice(-15).join('\n')}`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -597,8 +627,8 @@ function gateMeasurementValidity(): void {
   }
 
   // 7.6 — the canonical (fixed-model) family must be reported on a statistic
-  // that is actually defined. Country-out folds hold out 1-6 rows, so R² is
-  // undefined in 48 of 83 folds and the per-fold median describes the 35
+  // that is actually defined. Country-out folds hold out 1-4 rows, so R² is
+  // undefined in 36 of 48 folds and the per-fold median describes the twelve
   // survivors, not the model (KI-14). The check therefore reads the primary
   // spatial evidence from cv_kfold.json, and falls back to the pooled
   // held-out series in cv_country_out.json when k-fold is absent.
@@ -671,7 +701,7 @@ function gateCanonicalDisclosure(countryOut: Record<string, unknown> | null): vo
     'Canonical (fixed-model) OOS R2 is non-negative on the primary protocol', false, 'major',
     'Neither cv_kfold.json nor a pooled held-out series is present — run npm run generate:kfold '
     + 'and npm run generate:phase1-validation. The per-fold country-out median is not acceptable '
-    + 'evidence because R² is undefined in 48 of 83 folds (KI-14).');
+    + 'evidence because R² is undefined in 36 of 48 folds (KI-14).');
 }
 
 /**
@@ -765,13 +795,41 @@ interface HumanCheckItem {
   question: string;
 }
 
+/**
+ * A signature is a fact about a person, so it lives in its own file.
+ *
+ * The generator used to write `signedOff: false` for every item, which meant a signature could
+ * not survive a regeneration — signing would be undone by the next `npm run q1:gate`. The record
+ * below is read here and merged into the report, and it carries who signed, when, and what they
+ * had in front of them. A boolean cannot be audited; a name and a date can.
+ */
+interface SignatureRecord {
+  id: string;
+  signedBy: string;
+  signedOn: string;
+  basis: string;
+  /** For items a machine can check: how strong that check is. */
+  evidence?: 'artifact-supported' | 'judgement-only';
+}
+
+function readSignatures(): Map<string, SignatureRecord> {
+  const recordPath = path.join(ANALYSIS, 'human_checklist_signatures.json');
+  if (!fs.existsSync(recordPath)) return new Map();
+  const parsed = JSON.parse(fs.readFileSync(recordPath, 'utf-8')) as { signatures?: SignatureRecord[] };
+  return new Map((parsed.signatures ?? []).map((entry) => [entry.id, entry]));
+}
+
 const HUMAN_CHECKLIST: HumanCheckItem[] = [
   { id: 'h-editor-fit',       category: 'Editor Fit',      question: 'Is the framing aligned to 3 target Q1 journals (see journal_fit_targeting.json)?' },
   { id: 'h-desk-reject',      category: 'Editor Fit',      question: 'Are common desk-reject triggers neutralized (over-claiming, scope mismatch, novelty inflation)?' },
   { id: 'h-abstract-screen',  category: 'Editor Fit',      question: 'Does the abstract pass first-pass screening (concise, evidence-calibrated, non-causal)?' },
   { id: 'h-claim-tier',       category: 'Claim Strength',  question: 'Are all strong claims tied to Tier A/B OOS evidence only (not Tier C or in-sample metrics)?' },
   { id: 'h-causal',           category: 'Claim Strength',  question: 'Does no sentence imply causal interpretation beyond the observational design?' },
-  { id: 'h-support',          category: 'Claim Strength',  question: 'Are support-density boundaries for the current canonical panel explicitly acknowledged for high-dimensional terms?' },
+  // The figure in this question is interpolated from the panel rather than typed. It was
+  // `n=146 country-years` — the sample two rebuilds ago — inside the very check that exists to
+  // stop hand-maintained artifacts describing a different panel. A reviewer reading the
+  // checklist formed a picture of a different study.
+  { id: 'h-support',          category: 'Claim Strength',  question: `Are support-density boundaries (n=${readPanelCsv().length} country-years) explicitly acknowledged for high-dimensional terms?` },
   { id: 'h-lockbox-disclose', category: 'Claim Strength',  question: 'Is lockbox evidence clearly separated from development CV evidence in all claims?' },
   { id: 'h-novelty-precise',  category: 'Novelty Precision', question: 'Is the novelty claim precisely scoped (method + domain-specific contribution, no universal claims)?' },
   { id: 'h-review-ready',     category: 'Novelty Precision', question: 'Are top 5 reviewer attack surfaces pre-addressed (see reviewer_red_team.json)?' },
@@ -842,6 +900,7 @@ function emitReport(): boolean {
   console.log(`\n  Mark each item above before final submission.\n`);
 
   // Write machine-readable report artifact
+  const signatures = readSignatures();
   const report = {
     schema: 'phase1.q1_submission_gate.v1',
     generatedAtIso: new Date().toISOString(),
@@ -868,12 +927,23 @@ function emitReport(): boolean {
       label: f.label,
       detail: f.detail,
     })),
-    humanChecklist: HUMAN_CHECKLIST.map(h => ({
-      id: h.id,
-      category: h.category,
-      question: h.question,
-      signedOff: false,
-    })),
+    humanChecklist: HUMAN_CHECKLIST.map((h) => {
+      const signature = signatures.get(h.id);
+      return {
+        id: h.id,
+        category: h.category,
+        question: h.question,
+        signedOff: signature !== undefined,
+        ...(signature
+          ? {
+              signedBy: signature.signedBy,
+              signedOn: signature.signedOn,
+              basis: signature.basis,
+              evidence: signature.evidence ?? 'judgement-only',
+            }
+          : {}),
+      };
+    }),
   };
 
   const reportPath = path.join(ANALYSIS, 'q1_submission_gate_report.json');

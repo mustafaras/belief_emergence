@@ -11,6 +11,12 @@ artifact'larla doğrulanmalıdır.
 Bu belge küçük ve hızlı modellerin (flash/haiku sınıfı) **sırayla, birer birer** uygulaması için yazıldı.
 Plan ve gerekçe: `docs/APP_PLAN_V2.md`. Her prompt tek bir commit üretir. Bir prompt bitmeden sonrakine geçilmez.
 
+**Canlı ilerleme durumu (2026-11-16):** Uygulama kayıtları `docs/APP_V2_LOG.md` içindedir.
+P00–P07 ve P10–P17 tamamlandı; P08–P09 makale senkronu önkoşulu olarak tamamlandı.
+P19, gerekli artifact-backed Y/E/T engelleyici sayıları izin verilen kaynaklarda
+bulunmadığı için kısmi ve durdurulmuş durumdadır. P18, plana göre P22'den sonra
+uygulanır; P20–P38 henüz başlamadı. P19 kaynağı çözülmeden P20'ye geçmeyin.
+
 ---
 
 ## Ortak kurallar (HER promptun başına bu bölümü ekle)

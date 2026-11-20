@@ -1,0 +1,33 @@
+.header {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--w-prose);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font: 600 var(--fs-12) / 1.4 var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--ink);
+  font: 600 var(--fs-40) / 1.15 var(--font-serif);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--ink-2);
+  font: 500 var(--fs-18) / 1.4 var(--font-sans);
+}
+
+.lede {
+  max-width: var(--w-prose);
+  margin: 0;
+  color: var(--ink-2);
+  font: 400 var(--fs-18) / 1.6667 var(--font-serif);
+}

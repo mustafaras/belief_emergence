@@ -5,9 +5,9 @@
  * a check that has stopped checking." Everything here is a constant in code. None of it
  * is a measurement.
  *
- * The list was twelve entries while it also held slider extents and tooltip ranges. Those
- * are read off the UI markup by `deriveSliderBounds`, so they are checked rather than
- * exempted, and the list is three.
+ * The list was twelve entries while it also held legacy slider extents and tooltip
+ * ranges. The app-v1 sliders were removed with the legacy interface, leaving three
+ * current code constants here.
  *
  * Anything computed belongs in `derivedValues.ts`, where it is recomputed and therefore
  * still verified. Putting a computed value here exempts it, which is the failure mode the
@@ -26,13 +26,13 @@ export type AllowlistEntry = {
 export const ALLOWLIST: readonly AllowlistEntry[] = Object.freeze([
   {
     value: '2.614',
-    source: 'src/App.tsx DEFAULT_PARAMS.C',
+    source: 'src/verification/derivedValues.ts DEFAULT_UI_PARAMS.C',
     reason:
       'Panel-scale default for cultural intensity. The channel is unavailable in v2 (KI-09), so the panel has no C column and no artifact carries this mean; it is the starting position of a control.',
   },
   {
     value: '2.61',
-    source: 'src/App.tsx DEFAULT_PARAMS.C, printed to two places',
+    source: 'src/verification/derivedValues.ts DEFAULT_UI_PARAMS.C, printed to two places',
     reason:
       'The same constant as above, shown at the sidebar decimal count. Two renderings of one code value, not two claims.',
   },

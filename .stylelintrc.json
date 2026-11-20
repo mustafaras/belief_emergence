@@ -1,0 +1,12 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "color-no-hex": true,
+    "declaration-property-value-disallowed-list": {
+      "/^(margin|padding|gap|font-size|border-radius)/": ["/\\d+px/"]
+    },
+    "selector-class-pattern": null,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global"] }]
+  },
+  "ignoreFiles": ["src/design/tokens.css"]
+}

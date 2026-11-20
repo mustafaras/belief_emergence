@@ -313,7 +313,7 @@ export const LEGACY_COEFFICIENTS: BeliefCoefficients = {
 };
 
 /**
- * FIXED_COEFFICIENTS is the primary export used by App.tsx
+ * FIXED_COEFFICIENTS is the compatibility export used by model calculations
  * Uses optimized sigmoid calibration with validated panel-fit performance.
  */
 export const FIXED_COEFFICIENTS = OPTIMIZED_SIGMOID_COEFFICIENTS;

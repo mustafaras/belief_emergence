@@ -1,0 +1,278 @@
+.slider,
+.tabs,
+.figure {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.slider input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.sliderMarks {
+  position: relative;
+  min-height: var(--space-4);
+  color: var(--ink-3);
+  font-size: var(--fs-12);
+}
+
+.sliderMarks span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.sliderMarks .paperMark {
+  top: var(--space-4);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.segmented,
+.tabList {
+  display: inline-flex;
+
+  /*
+   * `fit-content` is an intrinsic width. On a 390px screen the four protocol tabs together
+   * measure 955px, so the control widened the document by 565px instead of wrapping — and
+   * `check:layout` passed it because an unrelated chart on the same page satisfied its
+   * containment exemption. Wrapping is what keeps every tab reachable on a phone.
+   */
+  max-width: 100%;
+  width: fit-content;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  background: var(--surface-2);
+}
+
+.segmented button,
+.tabList button {
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.segmented button[aria-checked='true'],
+.tabList button[aria-selected='true'] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.toggleOn,
+.toggleOff {
+  width: var(--space-6);
+  height: var(--space-4);
+  border-radius: var(--radius-3);
+  background: var(--line);
+}
+
+.toggleOn {
+  background: var(--accent);
+}
+
+.tableScroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  background: var(--surface);
+}
+
+.tableScroll table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ink);
+  text-align: left;
+}
+
+.tableScroll caption {
+  padding: var(--space-3) var(--space-4);
+  color: var(--ink-2);
+  text-align: left;
+}
+
+.tableScroll th,
+.tableScroll td {
+  padding: var(--space-3) var(--space-4);
+  border-block-end: 1px solid var(--line);
+}
+
+.tableScroll th button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.stickyTable {
+  border-collapse: separate;
+}
+
+.stickyFirst {
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+}
+
+.figure {
+  max-width: var(--w-wide);
+  margin: 0;
+}
+
+.figureBody,
+.figureCaption {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.figureNumber {
+  margin: 0;
+  color: var(--accent);
+  font: 600 var(--fs-12) / 1.4 var(--font-sans);
+  text-transform: uppercase;
+}
+
+.figureBody h2,
+.figureCaption p {
+  margin: 0;
+}
+
+.figureCaption {
+  color: var(--ink-2);
+  font-size: var(--fs-14);
+}
+
+.figureCaption ul {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.figureCaption li {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-1);
+  color: var(--ink-3);
+}
+
+.num {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline dotted var(--ink-3);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.layer {
+  position: relative;
+}
+
+.popover,
+.drawer {
+  min-width: 0;
+  position: fixed;
+  z-index: 10;
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+}
+
+.popover {
+  top: var(--space-8);
+  right: var(--space-5);
+  max-width: var(--w-prose);
+}
+
+.drawerBackdrop {
+  min-width: 0;
+  position: fixed;
+  z-index: 9;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  background: color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.drawer {
+  width: min(var(--w-prose), 100%);
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 0;
+}
+
+.drawerHeader {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.drawerHeader h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+}
+
+.tooltipTrigger {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 11;
+  inset-block-end: calc(100% + var(--space-2));
+  inset-inline-start: 50%;
+  width: max-content;
+  max-width: var(--w-prose);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-1);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: var(--fs-12);
+  transform: translateX(-50%);
+}

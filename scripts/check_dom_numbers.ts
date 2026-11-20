@@ -30,33 +30,49 @@ import {
   deriveComputedValues,
   deriveContractConstants,
   deriveDefaultParams,
-  deriveAiTokenCount,
   deriveFormulaEffectEstimates,
   derivePanelConstants,
   derivePhiContributions,
   deriveLimitArithmetic,
-  deriveSliderBounds,
   deriveCountryMeans,
   deriveCountryR2Median,
   deriveFormulaMetrics,
   derivePanelStats,
+  deriveLabDisplayValues,
+  deriveConstructAuditDisplays,
   DEFAULT_UI_PARAMS,
 } from '../src/verification/derivedValues'
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
 import { ARTIFACT_CONSUMPTION } from '../src/evidence/artifactConsumption.generated'
+import { MANIFEST_CLAIM_COUNT, REPRODUCTION_MANIFEST } from '../src/evidence/reproductionManifest.generated'
+import { GATE_LOOP_CHECKS } from '../src/sections/reproduce/gateSteps.generated'
+import notationGlossary from '../src/data/analysis/notation_glossary.json'
+import * as robustness from '../src/claims/selectors/robustness'
 import { DESCRIPTION_NUMBERS } from '../src/evidence/descriptionNumbers'
 import { buildSupportPicture, type PanelAudit } from '../src/verification/supportPicture'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
 import { computePanelFitSummary } from '../src/utils/validation/computePanelFitSummary'
 import { predictFromPanelRow } from '../src/utils/validation/panelPredict'
 import { computeBias } from '../src/utils/metrics'
+import { calculateModel } from '../src/utils/calculateModel'
 import { getProductionHeadlineMetrics } from '../src/data/modelMetrics'
 import { formatNumeric } from '../src/utils/formatNumeric'
 import constructAuditArtifact from '../src/data/analysis/wvs_construct_audit.json'
 import constructAvailabilityArtifact from '../src/data/analysis/construct_item_availability.json'
+import prevalenceArtifact from '../src/data/analysis/construct_prevalence.json'
+import designGatesArtifact from '../src/data/analysis/design_gates.json'
+import functionalFormArtifact from '../src/data/analysis/functional_form_comparison.json'
+import modelComplexityArtifact from '../src/data/analysis/model_complexity_support.json'
+import ladderArtifact from '../src/data/analysis/model_ladder_metrics.json'
+import kfoldArtifact from '../src/data/analysis/cv_kfold.json'
+import elasticityProfileArtifact from '../src/data/analysis/elasticity_profile.json'
+import collinearityArtifact from '../src/data/analysis/collinearity_diagnostics.json'
+import rCaseArtifact from '../src/data/analysis/r_collinearity_case.json'
+import outlierArtifact from '../src/data/analysis/temporal_outlier_2006_sensitivity.json'
 import { buildConstructRows, type AuditArtifact, type ItemAvailability } from '../src/verification/constructAudit'
 import type { PanelRowCanonical } from '../src/data/panelDataLoader'
-import { SITEMAP } from '../src/router/routes'
+import { APP_ROUTES } from '../src/app/routes'
+import { buildSupportMatrix } from '../src/sections/data/supportMatrix'
 // The preset table, now generated from the canonical panel.
 //
 // It used to be hand-maintained, which made this check circular: reading the table from the
@@ -67,13 +83,32 @@ import { GENERATED_PRESETS as PRESET_TABLE } from '../src/data/presets.generated
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const ANALYSIS_DIR = path.join(REPO_ROOT, 'src', 'data', 'analysis')
+
+/** Standard-normal quantile, Acklam's approximation; chi2_1 is the square of a normal. */
+function inverseNormalCdf(p: number): number {
+  const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.383577518672690e2, -3.066479806614716e1, 2.506628277459239]
+  const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1]
+  const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996, 3.754408661907416]
+  if (p < 0.02425) {
+    const q = Math.sqrt(-2 * Math.log(p))
+    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  if (p > 1 - 0.02425) {
+    const q = Math.sqrt(-2 * Math.log(1 - p))
+    return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+  }
+  const q = p - 0.5
+  const r = q * q
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
 const PANEL_CSV = path.join(REPO_ROOT, 'public', 'data', 'panel_canonical_v2.csv')
 
 /** Prompt 6: an allowlist that grows is a check that has stopped checking. */
 const MAX_ALLOWLIST_ENTRIES = 10
 
-/** Scan the router's whole sitemap, including modal routes such as AI Interpreter. */
-const ROUTES = ['', ...SITEMAP.map(({ id }) => id)]
+/** Scan all eleven routes in the current application shell. */
+const ROUTES = APP_ROUTES.map(({ id }) => id)
 
 /** Direct parameter values in TopBar are tied to the named UI defaults. */
 const DEFAULT_PARAMETER_LABELS: readonly {
@@ -243,6 +278,37 @@ function readPanelRows(): PanelRowCanonical[] {
 }
 
 /** Build every source of legitimate numbers. */
+/**
+ * Read `(id, artifact, path)` out of the claim specs without importing them.
+ *
+ * A static import would drag `public/data/panel_canonical_v2.csv?raw` into Node, which
+ * only Vite can resolve. Parsing the specs keeps this check dependency-free and keeps the
+ * binding explicit: the token on screen is tied to the artifact field the component says
+ * it reads, not merely to "a number that rounds to it".
+ */
+/** Follow a dotted/bracketed path such as `splits[full panel].cMinusB`. */
+export function readArtifactPath(value: unknown, path: string): number | undefined {
+  let current: unknown = value
+  for (const rawSegment of path.split('.')) {
+    const segment = rawSegment.trim()
+    const bracket = segment.match(/^([A-Za-z0-9_]+)\[([^\]]+)\]$/)
+    if (bracket) {
+      const collection = (current as Record<string, unknown>)?.[bracket[1]]
+      if (!Array.isArray(collection)) return undefined
+      current = collection.find((entry) => {
+        if (!entry || typeof entry !== 'object') return false
+        const record = entry as Record<string, unknown>
+        return Object.values(record).some((field) => String(field) === bracket[2].trim())
+      })
+      continue
+    }
+    if (segment.endsWith(']')) return undefined
+    if (current === null || typeof current !== 'object') return undefined
+    current = (current as Record<string, unknown>)[segment]
+  }
+  return typeof current === 'number' && Number.isFinite(current) ? current : undefined
+}
+
 export function buildSources(): {
   corpus: ReturnType<typeof buildCorpus>
   derived: ReturnType<typeof buildCorpus>
@@ -256,12 +322,22 @@ export function buildSources(): {
    * reads. That is not verification, it is coincidence with a large enough haystack. An
    * audit found 35 of 139 tokens resolving only through unimported artifacts — `0.42`
    * matched a CV fold metric to four places, `0.04` matched another, and both are simply
-   * the slider defaults in `src/App.tsx`.
+   * the verification defaults in `src/verification/derivedValues.ts`.
    *
    * Restricting the corpus to imported artifacts means a value either comes from something
    * the interface can reach, or it is derived, or it is a declared constant. There is no
    * fourth category.
    */
+  // The two Data labs print artifact fields at a chosen precision. Both are JSON (no
+  // Vite-only import), so they are read directly here and the same rounding the component
+  // applies is applied again — a wrong component would print a value this list lacks.
+  const giniWindowArtifact = JSON.parse(
+    fs.readFileSync(path.join(ANALYSIS_DIR, 'gini_window_sensitivity.json'), 'utf8'),
+  ) as { rows: Array<{ window: number; completeCaseRows: number; giniBackfilled: number }> }
+  const zeroFillArtifact = JSON.parse(
+    fs.readFileSync(path.join(ANALYSIS_DIR, 'zero_fill_sensitivity.json'), 'utf8'),
+  ) as { nZeroAnchor: number; splits: Array<{ n: number; cMinusB: number; perRepeatMedianCminusB: number }> }
+
   const imported = new Set<string>(ARTIFACT_CONSUMPTION.imported)
   const artifacts: unknown[] = fs
     .readdirSync(ANALYSIS_DIR)
@@ -300,6 +376,7 @@ export function buildSources(): {
   if (fs.existsSync(auditPath)) artifacts.push(JSON.parse(fs.readFileSync(auditPath, 'utf8')))
 
   const panelRows = readPanelRows()
+  const supportMatrix = buildSupportMatrix(panelRows)
 
   // The attrition panel computes percentages from the tracked panel audit and WVS audit.
   // Derive its rounded percentages from the same builder so displayed values remain tied
@@ -363,6 +440,13 @@ export function buildSources(): {
   const constructRows = buildConstructRows(constructAuditArtifact as unknown as AuditArtifact, availability)
   const runtime = computePanelFitSummary(panelRows as unknown as Parameters<typeof computePanelFitSummary>[0])
 
+  // Rounded display values carry their provenance as `(artifact, path)` in the claim
+  // spec, rendered as `data-claim-id`. Resolving the *path* is stronger than corpus
+  // rounding: it says this token came from that field of that artifact, not that some
+  // number in a 77,000-value corpus happens to sit inside its rounding window.
+  //
+  // The registry module itself is not imported: it pulls a Vite-only `?raw` CSV import
+  // into this Node process. Only the specs are read, with a regex, and they are small.
   return {
     corpus: buildCorpus(artifacts),
     sourced: {
@@ -376,7 +460,6 @@ export function buildSources(): {
     derived: buildCorpus([
       deriveComputedValues(DEFAULT_UI_PARAMS),
       deriveDefaultParams(DEFAULT_UI_PARAMS),
-      deriveAiTokenCount(),
       derivePhiContributions(DEFAULT_UI_PARAMS),
       derivePanelConstants(),
       deriveFormulaEffectEstimates(DEFAULT_UI_PARAMS),
@@ -384,9 +467,165 @@ export function buildSources(): {
       derivePanelStats(panelRows.map((r) => ({ Z: r.Z }))),
       deriveCountryMeans(panelRows as unknown as Array<Record<string, unknown>>),
       deriveCountryR2Median(panelRows),
+      supportMatrix.years,
       supportPicture,
       supportPercentages,
       descriptionClaimValues,
+      deriveLabDisplayValues(giniWindowArtifact, zeroFillArtifact, { rows: 0, signed: 3 }),
+      // The Evidence page prints how many distinct claims the corpus contains. That number
+      // is not in any artifact: it is counted from the manifest generated out of the import
+      // graph, so it is re-derived from the same committed file rather than allowlisted.
+      [MANIFEST_CLAIM_COUNT as number],
+      // Route-level counts on the same page: claims shown per route and artifacts behind
+      // them. Also counts over the manifest, not measurements.
+      ...REPRODUCTION_MANIFEST.routes.flatMap((route) => [
+        route.directClaimIds.length,
+        route.artifacts.length,
+        route.artifacts.filter((name) =>
+          REPRODUCTION_MANIFEST.artifacts.some((entry) => entry.name === name && entry.generator !== null),
+        ).length,
+      ]),
+      // The gate's step total, printed as prose ("Runs the 93 checks").
+      [GATE_LOOP_CHECKS.total as number],
+      // The robustness panel: fold totals, the sign-consistency floor, interval coverage and
+      // the ladder's per-tier fit. All read from four artifacts that no component displayed
+      // before P38, and re-derived here so a wrong panel fails the audit.
+      [robustness.failureLog.totalFolds as number],
+      [robustness.parameterStability.threshold as number],
+      // Printed with `pct1`, so the token on screen is the value times 100 at one decimal.
+      [(robustness.intervalCoverage.nominal as number) * 100],
+      [(robustness.intervalCoverage.severeThreshold as number) * 100],
+      [(robustness.intervalCoverage.worstCoverage as number) * 100],
+      ...robustness.ladderMetrics.rows.flatMap((row) => [row.parameters, row.r2]),
+      // The Notation table prints a hyperparameter's numeric values into its source column,
+      // because that artifact has no single symbol to point at. Read from the same JSON the
+      // section reads, at the same precision, rather than allowlisted.
+      ...notationGlossary.hyperparameters.flatMap((entry) =>
+        'values' in entry && Array.isArray(entry.values)
+          ? (entry.values as number[]).map((value) => Number(Number(value).toFixed(3)))
+          : [],
+      ),
+      // Tier rows print parameters and observations-per-parameter straight from the same
+      // artifact; the values are artifact fields, re-stated so a wrong component fails here.
+      ...notationGlossary.tier_definitions.flatMap((tier) => [tier.params, tier.obs_per_param, tier.sign_consistency_threshold]),
+      // The audit table prints alpha at two places and the summary prints the failure
+      // rate as a percentage; both are formatted artifact values, not new measurements.
+      // The gates section prints the upstream deviation in scientific notation
+      // ("4.44 × 10⁻¹⁵"). The scanner reads the significand as its own token, so the value
+      // it must resolve is the mantissa, not the raw 4.44e-15. Derived from the artifact
+      // rather than allowlisted: it is the artifact's measurement, only re-expressed.
+      Number(designGatesArtifact.originalProvenance.upstreamIdentity.maxAbsDeviation.toExponential(2).split('e')[0]),
+      // The replay prints the bounded-minus-linear gap at six places, and the mini chart
+      // prints each form's k-fold R² at three. Both are derivations of one artifact, so they
+      // are recomputed rather than allowlisted.
+      Number((
+        (functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0) -
+        (functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0)
+      ).toFixed(6)),
+      Number((functionalFormArtifact.models.find((m) => m.model === 'saturating_bounded')?.kfold.median ?? 0).toFixed(3)),
+      Number((functionalFormArtifact.models.find((m) => m.model === 'linear_baseline')?.kfold.median ?? 0).toFixed(3)),
+      // The collinearity table prints VIFs at two places, the R-case lab prints in-sample and
+      // k-fold R² at four, and the 2006 card prints the construct correlations at three.
+      ...(collinearityArtifact as { entries: Array<{ vif: number }> }).entries
+        .map((entry) => Number(entry.vif.toFixed(2))),
+      ...(rCaseArtifact as { variants: Array<{ inSampleR2: number; kFoldR2: number }> }).variants
+        .flatMap((variant) => [Number(variant.inSampleR2.toFixed(4)), Number(variant.kFoldR2.toFixed(4))]),
+      Number((outlierArtifact as { constructDiagnostics: { constructCorrelationMedian: number } })
+        .constructDiagnostics.constructCorrelationMedian.toFixed(3)),
+      Number(Math.abs((outlierArtifact as { looComparisonRefit: Array<{ tier: string; r2: { delta: number } }> })
+        .looComparisonRefit.find((entry) => entry.tier === 'C')?.r2.delta ?? 0).toFixed(3)),
+      // The Geometry lab prints four live values computed from the default slider position:
+      // Z, Phi, s (= logit(Z) - Phi) and the local gain Z(1-Z). They are recomputed here from
+      // the same model and the same defaults, so a drifted formula fails rather than passing.
+      ...(() => {
+        const defaults = { X: 0.62, Y: 1.35, M: 0.02, T: 0.01, E: 0.03, R: 0.02, C: 0, D: 0, G: 0, S: 0 }
+        const result = calculateModel(defaults as never)
+        const z = result.Z
+        const phi = result.phi
+        const s = Math.log(z / (1 - z)) - phi
+        return [
+          Number(z.toFixed(3)),
+          Number(phi.toFixed(3)),
+          Number(s.toFixed(3)),
+          Number((z * (1 - z)).toFixed(4)),
+          // The companions' prose prints Phi + s, which places the configuration relative to
+          // the ridge at zero. Same model, one more arrangement of the same numbers.
+          Number((phi + s).toFixed(3)),
+        ]
+      })(),
+      // The limits section prints the profile's thresholds and statistics: the chi-square
+      // quantiles the toggles compare against, and the per-point LR statistic shown in the
+      // chart's accessible table.
+      ...(() => {
+        const profiles = (elasticityProfileArtifact as { profiles: Array<{ lrStatistic: number; pValue: number }> })
+          .profiles
+        const chi = (p: number): number => 2 * inverseNormalCdf(1 - p / 2) ** 2 / 2 // chi2_1 = z^2
+        const threshold95 = chi(0.05)
+        const thresholdBonferroni = chi(0.05 / profiles.length)
+        const maxStatistic = Math.max(...profiles.map((point) => point.lrStatistic))
+        return [
+          Number(threshold95.toFixed(2)),
+          Number(thresholdBonferroni.toFixed(2)),
+          Number(maxStatistic.toFixed(2)),
+          ...profiles.flatMap((point) => [Number(point.lrStatistic.toFixed(3))]),
+        ]
+      })(),
+      // The protocol tabs print:
+      //   - each tier's in-sample fit at four places (the ladder table),
+      //   - k-fold R² quartiles at three places (the strip's accessible table),
+      //   - the per-seed Tier C − B delta at three places (Lab 5's readout).
+      ...ladderArtifact.tiers.flatMap((tier) => [
+        Number(tier.trainMetrics.r2.toFixed(4)),
+        Number(tier.trainMetrics.corr.toFixed(4)),
+        Number(tier.trainMetrics.mae.toFixed(4)),
+        Number(tier.trainMetrics.rmse.toFixed(4)),
+        Number(tier.trainMetrics.bias.toFixed(2)),
+      ]),
+      ...['A', 'B', 'C'].flatMap((tier) => {
+        const block = (kfoldArtifact as { aggregatesRefit: Record<string, { r2: Record<string, number | null> }> })
+          .aggregatesRefit[tier]?.r2
+        if (!block) return []
+        // The strip's accessible table prints four places; the tier cards print four places
+        // too (r2). Both forms are derived so neither can drift from the artifact.
+        return [block.q25, block.median, block.q75]
+          .filter((value): value is number => typeof value === 'number')
+          .flatMap((value) => [Number(value.toFixed(3)), Number(value.toFixed(4))])
+      }),
+      ...(kfoldArtifact as { perRepeatRefit: Array<Record<string, { r2: number | null }>> })
+        .perRepeatRefit.flatMap((repeat) => {
+          const c = repeat.C?.r2
+          const b = repeat.B?.r2
+          if (c === null || c === undefined || b === null || b === undefined) return []
+          return [Number((c - b).toFixed(3))]
+        }),
+      // The evaluation section prints held-out R² at four places (r2) and the fold strip's
+      // table at three (p3), plus the degenerate per-fold medians. All are formatted artifact
+      // values, recomputed here rather than widening the corpus policy.
+      ...functionalFormArtifact.models.flatMap((model) => [
+        Number(model.inSample.r2.toFixed(4)),
+        Number(model.inSample.r2.toFixed(3)),
+        Number(model.kfold.median.toFixed(4)),
+        Number(model.kfold.median.toFixed(3)),
+        Number(model.kfold.q25.toFixed(4)),
+        Number(model.kfold.q25.toFixed(3)),
+        Number(model.kfold.q75.toFixed(4)),
+        Number(model.kfold.q75.toFixed(3)),
+        Number(model.countryOutPooled.r2.toFixed(4)),
+        Number(model.countryOutPooled.r2.toFixed(3)),
+        Number(model.countryOutPerFold.median.toFixed(4)),
+        Number(model.countryOutPerFold.median.toFixed(3)),
+      ]),
+      // The model section prints observations-per-parameter at three places, derived from the
+      // same artifact the tier cards read.
+      ...modelComplexityArtifact.complexityByTier.map((tier) => Number(tier.supportPerParameter.toFixed(3))),
+      deriveConstructAuditDisplays(
+        constructAuditArtifact.constructs
+          ? Object.values(constructAuditArtifact.constructs).map((entry) =>
+              entry.computable ? entry.cronbachAlpha : null,
+            )
+          : [],
+        prevalenceArtifact.summary.failureRate,
+      ),
       deriveContractConstants(),
       deriveLimitArithmetic({
         panelRows: readPanelRows().length,
@@ -405,9 +644,6 @@ export function buildSources(): {
         })(),
         shippedAlpha: DEFAULT_UI_PARAMS.alpha,
       }),
-      deriveSliderBounds(
-        fs.readFileSync(path.join(REPO_ROOT, 'src', 'components', 'sidebar', 'ModernSidebar.tsx'), 'utf8'),
-      ),
       PRESET_TABLE.flatMap((p) => Object.values(p.values)),
       alignment.flatMap((row) => [row.successPct, row.mae, row.meanObservedZ, row.meanPredictedZ]),
     ]),
@@ -439,11 +675,11 @@ export function auditText(
     allowlisted: 0,
     unresolved: [],
   }
-  const presetAudit = route === 'presets'
+  const presetAudit = route === 'countries'
     ? validatePresetRows(renderedPresetRows, sources.sourced.presetRows)
     : { validTokens: new Set<string>(), failures: [] as string[] }
   for (const failure of presetAudit.failures) report.unresolved.push({ token: '<row>', line: failure })
-  const constructAudit = route === 'landing'
+  const constructAudit = route === 'overview'
     ? validateConstructRows(renderedConstructRows, sources.sourced.constructRows)
     : { validTokens: new Set<string>(), failures: [] as string[] }
   for (const failure of constructAudit.failures) report.unresolved.push({ token: '<row>', line: failure })
@@ -551,7 +787,11 @@ async function main(): Promise<void> {
   const baseUrl =
     urlArgIndex !== -1 && process.argv[urlArgIndex + 1]
       ? process.argv[urlArgIndex + 1]
-      : `http://localhost:${process.env.RENDER_CHECK_PORT || '5199'}/belief_emergence/`
+      // `127.0.0.1`, not `localhost`: the preview servers are started with `--host 127.0.0.1`, and
+      // `localhost` resolves to `::1` first on a dual-stack machine, so the request can arrive at
+      // a socket nothing is listening on and read as a dead server rather than as a name mismatch.
+      // RENDER_CHECK_PORT is honoured so this follows the gate rather than a private constant.
+      : `http://127.0.0.1:${process.env.RENDER_CHECK_PORT || '5199'}/belief_emergence/`
 
   if (ALLOWLIST.length >= MAX_ALLOWLIST_ENTRIES) {
     console.error(
@@ -596,23 +836,40 @@ async function main(): Promise<void> {
   try {
     for (const route of ROUTES) {
       const page = await browser.newPage()
-      if (route === 'ai-interpreter') {
-        // Opening this modal auto-submits its starter prompt. Keep the audit local and
-        // deterministic: a browser check must not spend an API key or depend on a reply.
-        await page.route('**/api/ai/interpret', (request) =>
-          request.fulfill({
-            status: 503,
-            contentType: 'application/json',
-            body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
-          }),
-        )
-      }
-      const target = route ? `${baseUrl}?v=${route}` : baseUrl
+      const target = `${baseUrl}?v=${route}`
       await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 90000 })
       await page.waitForFunction(() => document.body.innerText.length > 200, { timeout: 30000 }).catch(() => {})
       await page.waitForTimeout(2500)
       const { text, presetRows, constructRows } = await page.evaluate(() => ({
-        text: document.body.innerText,
+        // Labels are not measurements: d3-chosen axis ticks and table/figure numbers
+        // (`Table 4.1`, `Figure 1.1`). `innerText` is layout-aware for HTML but aggregates
+        // SVG `<text>` regardless of `display`, so hiding them is not enough: the marked
+        // nodes are detached, the text is read, and they are put back in place. Only the
+        // subtree explicitly marked `data-scale-label` is removed, so a value printed
+        // anywhere else is still audited — and removing a label cannot hide a number,
+        // because a label that were also a measurement would not be marked.
+        text: (() => {
+          const marked = Array.from(document.querySelectorAll('[data-scale-label]'))
+          const slots = marked.map(node => ({
+            node,
+            parent: node.parentNode,
+            next: node.nextSibling,
+          }))
+          marked.forEach(node => node.remove())
+          const value = document.body.innerText
+          for (const slot of slots) {
+            if (!slot.parent) continue
+            // `next` may itself have been removed (a marked node whose sibling was also
+            // marked), in which case insertBefore throws and the page is left mutated.
+            const anchor = slot.next && slot.next.parentNode === slot.parent ? slot.next : null
+            try {
+              slot.parent.insertBefore(slot.node, anchor)
+            } catch {
+              slot.parent.appendChild(slot.node)
+            }
+          }
+          return value
+        })(),
         presetRows: Array.from(document.querySelectorAll<HTMLElement>('.preset-table-row')).map((row) => ({
           name: row.querySelector('.preset-name')?.textContent?.trim() ?? '',
           tokens: Array.from(row.querySelectorAll('td')).flatMap((cell) =>
@@ -627,7 +884,7 @@ async function main(): Promise<void> {
       }))
       await page.close()
 
-      reports.push(auditText(text, sources, route || 'landing', presetRows, constructRows))
+      reports.push(auditText(text, sources, route, presetRows, constructRows))
     }
   } finally {
     await browser.close()

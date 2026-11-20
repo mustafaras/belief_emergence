@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "phase1.sign_diagnostics.v1",
+  "generatedAtIso": "2026-11-17T09:26:16.009Z",
+  "purpose": "Separate the marginal association of a channel from its partial coefficient, so a table can say which one changed sign and which one simply is not identified.",
+  "channel": "M",
+  "panels": [
+    {
+      "channel": "M",
+      "panel": "original",
+      "panelRows": 630,
+      "marginalCorrelation": -0.690168,
+      "marginalSlope": -1.142547,
+      "partialCoefficient": -0.520078,
+      "partialInterval": {
+        "lo": -0.296019,
+        "hi": 0.018501,
+        "excludesZero": false
+      }
+    },
+    {
+      "channel": "M",
+      "panel": "rebuilt",
+      "panelRows": 207,
+      "marginalCorrelation": 0.35622,
+      "marginalSlope": 0.367532,
+      "partialCoefficient": -0.104639,
+      "partialInterval": {
+        "lo": -0.296019,
+        "hi": 0.018501,
+        "excludesZero": false
+      }
+    }
+  ],
+  "finding": {
+    "marginalFlips": true,
+    "partialFlips": false,
+    "partialIdentified": false,
+    "statement": "The marginal association of M with the outcome reverses sign across panels (corr -0.690 on the submitted panel, 0.356 on the rebuilt one). The partial coefficient does not reverse (-0.520 then -0.105). Its 95% bootstrap interval includes zero, so the channel is not identified and neither sign is a finding."
+  },
+  "nonlinearNote": "Refitting the nonlinear bounded model on the submitted panel is degenerate: the outcome there is an exact affine rescaling of the C predictor, so the design matrix is rank-deficient and the coefficient path has no unique basin. That degeneracy is recorded rather than resolved, because it is the same defect the design gates report."
+}

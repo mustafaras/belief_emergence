@@ -75,16 +75,15 @@ describe('evidence index matches the tree', () => {
   })
 
   it('reports the imported count the interface prints', () => {
-    // The headline claim is "10 of 33" after Prompt 5 wired the three limit artifacts from
-    // rawdata/ to a committed artifact for Prompt 3. Pinned here so a changed number has
-    // to be changed deliberately, alongside the sentence that states it.
-    // 36 after the marginal-effects, preset-alignment and supplementary-table generators
-    // replaced hand-typed manuscript tables (none of the three is imported by the interface).
-    // 39 after covariate_blocker_attribution.json gave the manuscript's "binding
-    // constraint" sentence a generator instead of a memory.
-    expect(names.length).toBe(39)
-    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(10)
-    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(12)
+    // Pin the current inventory totals so changes update both the generated fact and
+    // the evidence-index display deliberately.
+    // 28: the Evaluation claims stopped importing `cv_kfold.json` in P38 and read the
+    // `evaluation_summary.json` projection instead — that artifact is 289 KiB gzipped and was
+    // 68% of the initial payload for four numbers and a fold count.
+    expect(names.length).toBe(43)
+    expect(ARTIFACT_CONSUMPTION.imported.length).toBe(28)
+    expect(ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(4)
+    expect(names.length - ARTIFACT_CONSUMPTION.imported.length - ARTIFACT_CONSUMPTION.referencedOnly.length).toBe(11)
   })
 
   it('flags an artifact whose declared sample predates the current panel', () => {
@@ -129,13 +128,14 @@ describe('evidence index matches the tree', () => {
     expect(built.rows.filter((r) => r.conflictsWithRows !== undefined)).toEqual([])
   })
 
-  it('counts a prose mention as named-only, not as imported', () => {
-    // These three are the ones the plan miscounted. They are named in
-    // MathematicalAnalysisSection as <code>file.json</code> and never imported.
+  it('classifies removed legacy prose references as untouched', () => {
+    // The legacy MathematicalAnalysisSection named these files in prose. That section
+    // was removed in P16, so these artifacts are now untouched until a current route
+    // explicitly references or imports them.
     for (const name of ['reviewer_red_team', 'q1_submission_gate_report', 'data_code_provenance']) {
       const entry = consumption.find((c) => c.name === name)
       expect(entry?.imported, `${name} must not count as imported`).toBe(false)
-      expect(entry?.referenced, `${name} is named in source`).toBe(true)
+      expect(entry?.referenced, `${name} has no current source reference`).toBe(false)
     }
   })
 })

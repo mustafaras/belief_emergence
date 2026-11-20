@@ -40,12 +40,12 @@
  *     - Inputs outside panel bounds (e.g., X=0, Y=-2)
  *     - Goal: normalize+clamp ensures Z stays finite and within the band
  *
- *  4) High Amplifiers:
- *     - Amplifiers like C,T,G at +1 → Z must increase vs baseline
+ *  4) High Positive-coefficient inputs:
+ *     - Positive-coefficient inputs like C,T,G at +1 → Z must increase vs baseline
  *     - Goal: ensure coefficient signs are not accidentally inverted in the UI implementation
  *
- *  5) High Suppressors:
- *     - Suppressors like E,S,R at +1 → Z must decrease vs baseline
+ *  5) High Negative-coefficient inputs:
+ *     - Negative-coefficient inputs like E,S,R at +1 → Z must decrease vs baseline
  *
  *  6) Phi structure:
  *     - phi and Z returned by calculateModel must be numeric and within bounds
@@ -59,10 +59,10 @@
  * 10) Monotonicity:
  *     - With modifiers=0, increasing X or Y should increase Z
  *
- * 11)–14) Suppressor main-effects (M,D,E,S):
+ * 11)–14) Negative-coefficient input main-effects (M,D,E,S):
  *     - Each individually at +1 should decrease Z
  *
- * 15)–18) Amplifier main-effects (C,T,G,R):
+ * 15)–18) Positive-coefficient input main-effects (C,T,G,R):
  *     - Each individually at +1 should increase Z
  *
  * 19) Positive E×S interaction (mitigation test):
@@ -201,12 +201,12 @@ export function runValidationTests(): ValidationReport {
   const test3 = testMinimumValues();
   results.push(test3);
   
-  // Test 4: High amplifiers
-  const test4 = testHighAmplifiers();
+  // Test 4: High positive-coefficient inputs
+  const test4 = testHighPositiveCoefficientInputs();
   results.push(test4);
   
-  // Test 5: High suppressors
-  const test5 = testHighSuppressors();
+  // Test 5: High negative-coefficient inputs
+  const test5 = testHighNegativeCoefficientInputs();
   results.push(test5);
   
   // Test 6: Phi calculation consistency
@@ -229,30 +229,30 @@ export function runValidationTests(): ValidationReport {
   const test10 = testMonotonicity();
   results.push(test10);
   
-  // Tests 11-14: Main Effects Validation — Suppressors (M, D, E, S)
-  const test11 = testSuppressorMainEffect('M');
+  // Tests 11-14: Main Effects Validation — Negative-coefficient inputs (M, D, E, S)
+  const test11 = testNegativeCoefficientMainEffect('M');
   results.push(test11);
   
-  const test12 = testSuppressorMainEffect('D');
+  const test12 = testNegativeCoefficientMainEffect('D');
   results.push(test12);
   
-  const test13 = testSuppressorMainEffect('E');
+  const test13 = testNegativeCoefficientMainEffect('E');
   results.push(test13);
   
-  const test14 = testSuppressorMainEffect('S');
+  const test14 = testNegativeCoefficientMainEffect('S');
   results.push(test14);
   
-  // Tests 15-18: Main Effects Validation — Amplifiers (C, T, G, R)
-  const test15 = testAmplifierMainEffect('C');
+  // Tests 15-18: Main Effects Validation — Positive-coefficient inputs (C, T, G, R)
+  const test15 = testPositiveCoefficientMainEffect('C');
   results.push(test15);
   
-  const test16 = testAmplifierMainEffect('T');
+  const test16 = testPositiveCoefficientMainEffect('T');
   results.push(test16);
   
-  const test17 = testAmplifierMainEffect('G');
+  const test17 = testPositiveCoefficientMainEffect('G');
   results.push(test17);
   
-  const test18 = testAmplifierMainEffect('R');
+  const test18 = testPositiveCoefficientMainEffect('R');
   results.push(test18);
   
   // Test 19 was an E x S interaction sweep. Both channels it exercised are gone:
@@ -370,10 +370,10 @@ function testMinimumValues(): ValidationResult {
 }
 
 /**
- * Test 4: High amplifiers (C, T, G are the top amplifiers)
+ * Test 4: High positive-coefficient inputs (C, T, G are the top positive-coefficient inputs)
  * These increase Z above baseline
  */
-function testHighAmplifiers(): ValidationResult {
+function testHighPositiveCoefficientInputs(): ValidationResult {
   // Baseline with no modifiers
   const baseParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
@@ -382,42 +382,42 @@ function testHighAmplifiers(): ValidationResult {
   };
   const baseZ = calculateBelief(baseParams);
   
-  // With amplifiers (C, T, G)
-  const ampParams: BeliefParameters = {
+  // With positive-coefficient inputs (C, T, G)
+  const positiveGroupParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
     alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 1, M: 0, T: 1, D: 0, G: 1, E: 0, S: 0, R: 0
   };
-  const ampZ = calculateBelief(ampParams);
+  const positiveGroupZ = calculateBelief(positiveGroupParams);
   
-  // The label "amplifiers" described C, T and G. On this fit C and G are
+  // The label "positive-coefficient inputs" described C, T and G. On this fit C and G are
   // unavailable channels that cannot move Z at all, and T enters negatively
   // (c_T = -0.046), so the joint shock lowers Z. Asserting the label would be
   // asserting a model that has not been fitted since the panel was 87 cells.
-  const jointAmplifierCoefficient =
+  const jointPositiveCoefficient =
     0 +                                    // C unavailable
     OPTIMIZED_SIGMOID_COEFFICIENTS.c3 +    // T
     0;                                     // G unavailable
   const tolerance = 0.05;
-  const jointDelta = ampZ - baseZ;
-  const passed = Math.abs(jointAmplifierCoefficient) < 1e-9
+  const jointDelta = positiveGroupZ - baseZ;
+  const passed = Math.abs(jointPositiveCoefficient) < 1e-9
     ? Math.abs(jointDelta) < 1e-12
-    : Math.sign(jointDelta) === Math.sign(jointAmplifierCoefficient);
+    : Math.sign(jointDelta) === Math.sign(jointPositiveCoefficient);
 
   return {
     passed,
     testName: 'Joint C+T+G shock moves Z in the direction of their fitted coefficients',
-    expected: `Δ Z has the sign of the fitted coefficients (${jointAmplifierCoefficient.toFixed(4)}); baseline ${baseZ.toFixed(4)}`,
-    actual: ampZ.toFixed(4),
+    expected: `Δ Z has the sign of the fitted coefficients (${jointPositiveCoefficient.toFixed(4)}); baseline ${baseZ.toFixed(4)}`,
+    actual: positiveGroupZ.toFixed(4),
     tolerance
   };
 }
 
 /**
- * Test 5: High suppressors (E, S, R are the suppressors)
+ * Test 5: High negative-coefficient inputs (E, S, R are the negative-coefficient inputs)
  * These decrease Z below baseline
  */
-function testHighSuppressors(): ValidationResult {
+function testHighNegativeCoefficientInputs(): ValidationResult {
   // Baseline with no modifiers
   const baseParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
@@ -426,15 +426,15 @@ function testHighSuppressors(): ValidationResult {
   };
   const baseZ = calculateBelief(baseParams);
   
-  // With suppressors (E, S, R)
-  const supParams: BeliefParameters = {
+  // With negative-coefficient inputs (E, S, R)
+  const negativeGroupParams: BeliefParameters = {
     X: 0.65, Y: 0.35,
     alpha: PRODUCTION_STRUCTURAL.alpha, beta: PRODUCTION_STRUCTURAL.beta, k: PRODUCTION_STRUCTURAL.k,
     C: 0, M: 0, T: 0, D: 0, G: 0, E: 1, S: 1, R: 1
   };
-  const supZ = calculateBelief(supParams);
+  const negativeGroupZ = calculateBelief(negativeGroupParams);
   
-  // E, S and R were labelled suppressors when this test was written. On the
+  // E, S and R were labelled negative-coefficient inputs when this test was written. On the
   // 167-cell fit E (+0.46) and R (+0.19) are the two largest positive channels and
   // S is unavailable, so a joint +1 shock raises Z. The test now asserts the sign
   // the fitted coefficients imply rather than the label the earlier draft gave
@@ -444,13 +444,13 @@ function testHighSuppressors(): ValidationResult {
     OPTIMIZED_SIGMOID_COEFFICIENTS.c8 +   // R
     0;                                    // S is unavailable
   const tolerance = 0.05;
-  const passed = Math.sign(supZ - baseZ) === Math.sign(jointCoefficient) || Math.abs(supZ - baseZ) < 1e-12;
+  const passed = Math.sign(negativeGroupZ - baseZ) === Math.sign(jointCoefficient) || Math.abs(negativeGroupZ - baseZ) < 1e-12;
 
   return {
     passed,
     testName: 'Joint E+S+R shock moves Z in the direction of their fitted coefficients',
-    expected: `Z_suppressed < Z_baseline (${baseZ.toFixed(4)})`,
-    actual: supZ.toFixed(4),
+    expected: `Z_negativeDirection < Z_baseline (${baseZ.toFixed(4)})`,
+    actual: negativeGroupZ.toFixed(4),
     tolerance
   };
 }
@@ -599,11 +599,11 @@ function testMonotonicity(): ValidationResult {
 }
 
 /**
- * Test 11–14: Main Effects Validation — Suppressors
- * Verify each suppressor (M, D, E, S) decreases Z when set to +1
+ * Test 11–14: Main Effects Validation — Negative-coefficient inputs
+ * Verify each negative-coefficient input (M, D, E, S) decreases Z when set to +1
  * Baseline: X=0.5, Y=0.5, α=β from the fitted module, k likewise, all modifiers=0
  */
-function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): ValidationResult {
+function testNegativeCoefficientMainEffect(negativeKey: 'M' | 'D' | 'E' | 'S'): ValidationResult {
   // Baseline with all modifiers = 0
   const baseParams: BeliefParameters = {
     X: 0.5, Y: 0.5,
@@ -612,12 +612,12 @@ function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): Validat
   };
   const baseZ = calculateBelief(baseParams);
   
-  // Test with suppressor set to +1
-  const testParams: BeliefParameters = { ...baseParams, [suppressorKey]: 1 };
+  // Test with negative-coefficient input set to +1
+  const testParams: BeliefParameters = { ...baseParams, [negativeKey]: 1 };
   const testZ = calculateBelief(testParams);
   
   // The direction is a property of the fitted coefficient, not an assumption about
-  // which channel is a "suppressor". On the 167-cell panel education (c_E = +0.46)
+  // which channel is a "negative-coefficient input". On the 167-cell panel education (c_E = +0.46)
   // and welfare capacity (c_R = +0.19) both enter positively, so asserting that E
   // and R decrease Z tested a model that has not been fitted since the panel grew
   // from 87 cells -- and the failure was rendered to the user.
@@ -627,7 +627,7 @@ function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): Validat
     E: OPTIMIZED_SIGMOID_COEFFICIENTS.c6,
     S: 0,   // channel unavailable
   };
-  const coefficient = coefficientByKey[suppressorKey] ?? 0;
+  const coefficient = coefficientByKey[negativeKey] ?? 0;
   const delta = testZ - baseZ;
 
   // An unavailable channel cannot move Z at all; that is the correct assertion
@@ -638,21 +638,21 @@ function testSuppressorMainEffect(suppressorKey: 'M' | 'D' | 'E' | 'S'): Validat
 
   return {
     passed,
-    testName: `Main effect ${suppressorKey} moves Z in the direction of its fitted coefficient`,
+    testName: `Main effect ${negativeKey} moves Z in the direction of its fitted coefficient`,
     expected: Math.abs(coefficient) < 1e-9
-      ? `Z_${suppressorKey}=1 == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
-      : `Δ Z has the sign of c(${suppressorKey}) = ${coefficient.toFixed(4)}`,
-    actual: `Z_${suppressorKey}=1 = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
+      ? `Z_${negativeKey}=1 == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
+      : `Δ Z has the sign of c(${negativeKey}) = ${coefficient.toFixed(4)}`,
+    actual: `Z_${negativeKey}=1 = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
     tolerance: 0.01
   };
 }
 
 /**
- * Test 15–18: Main Effects Validation — Amplifiers
- * Verify each amplifier (C, T, G, R) increases Z when set to +1
+ * Test 15–18: Main Effects Validation — Positive-coefficient inputs
+ * Verify each positive-coefficient input (C, T, G, R) increases Z when set to +1
  * Baseline: X=0.5, Y=0.5, α=β from the fitted module, k likewise, all modifiers=0
  */
-function testAmplifierMainEffect(amplifierKey: 'C' | 'T' | 'G' | 'R'): ValidationResult {
+function testPositiveCoefficientMainEffect(positiveKey: 'C' | 'T' | 'G' | 'R'): ValidationResult {
   // Baseline with all modifiers = 0
   const baseParams: BeliefParameters = {
     X: 0.5, Y: 0.5,
@@ -661,37 +661,37 @@ function testAmplifierMainEffect(amplifierKey: 'C' | 'T' | 'G' | 'R'): Validatio
   };
   const baseZ = calculateBelief(baseParams);
   
-  // Test with amplifier set to a representative positive value.
+  // Test with positive-coefficient input set to a representative positive value.
   // NOTE: The production model includes quadratic curvature (e.g., T^2 with a negative coefficient).
   // For Trauma (T), large positive values can reduce Z if the negative quadratic dominates the linear term.
   // So we validate the *local* main-effect direction near baseline via a small positive perturbation.
-  const testValue = amplifierKey === 'T' ? 0.1 : 1;
-  const testParams: BeliefParameters = { ...baseParams, [amplifierKey]: testValue };
+  const testValue = positiveKey === 'T' ? 0.1 : 1;
+  const testParams: BeliefParameters = { ...baseParams, [positiveKey]: testValue };
   const testZ = calculateBelief(testParams);
   
-  // Direction comes from the fitted coefficient, as in the suppressor case. The
-  // "amplifier" and "suppressor" labels were a hypothesis about signs; the fit is
+  // Direction comes from the fitted coefficient, as in the negative-coefficient input case. The
+  // "positive-coefficient input" and "negative-coefficient input" labels were a hypothesis about signs; the fit is
   // the evidence, and on the 167-cell panel it puts c_T negative and c_R positive,
   // which is the opposite of the labels for both.
-  const ampCoefficientByKey: Record<string, number> = {
+  const positiveCoefficientByKey: Record<string, number> = {
     C: 0,   // channel unavailable
     T: OPTIMIZED_SIGMOID_COEFFICIENTS.c3,
     G: 0,   // channel unavailable
     R: OPTIMIZED_SIGMOID_COEFFICIENTS.c8,
   };
-  const ampCoefficient = ampCoefficientByKey[amplifierKey] ?? 0;
+  const positiveCoefficient = positiveCoefficientByKey[positiveKey] ?? 0;
   const delta = testZ - baseZ;
-  const passed = Math.abs(ampCoefficient) < 1e-9
+  const passed = Math.abs(positiveCoefficient) < 1e-9
     ? Math.abs(delta) < 1e-12
-    : Math.sign(delta) === Math.sign(ampCoefficient);
+    : Math.sign(delta) === Math.sign(positiveCoefficient);
 
   return {
     passed,
-    testName: `Main effect ${amplifierKey} moves Z in the direction of its fitted coefficient`,
-    expected: Math.abs(ampCoefficient) < 1e-9
-      ? `Z_${amplifierKey}=${testValue} == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
-      : `Δ Z has the sign of c(${amplifierKey}) = ${ampCoefficient.toFixed(4)}`,
-    actual: `Z_${amplifierKey}=${testValue} = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
+    testName: `Main effect ${positiveKey} moves Z in the direction of its fitted coefficient`,
+    expected: Math.abs(positiveCoefficient) < 1e-9
+      ? `Z_${positiveKey}=${testValue} == Z_baseline(${baseZ.toFixed(4)}) because the channel is unavailable`
+      : `Δ Z has the sign of c(${positiveKey}) = ${positiveCoefficient.toFixed(4)}`,
+    actual: `Z_${positiveKey}=${testValue} = ${testZ.toFixed(4)}, Δ = ${delta.toFixed(6)}`,
     tolerance: 0.01
   };
 }

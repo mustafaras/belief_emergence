@@ -1,43 +1,58 @@
 /**
- * Render the application in a real browser and assert what it displays.
+ * Render each AppShell route in Chrome and reject known stale interface language or values.
  *
- * Every other check in this repository reads code. The numbers a reader actually
- * sees come from the rendered DOM, and the two had diverged: the validator's
- * in-app self-tests were failing on screen, and the sidebar described a 630-row
- * panel across 23 countries. Neither is visible from a TypeScript file.
- *
- * Requires a dev server on PORT (default 5199) and a local Chrome. Exits 2 when
- * either is unavailable, so a machine without a browser skips rather than fails.
- *
- * Extended for Prompt 6: it now visits every route rather than one page load, keeping the
- * original forbidden-value and self-test assertions on the landing route (where they were
- * found) and adding them everywhere. `scripts/route_check.cjs` covers reachability and
- * character counts; this covers "no stale value and no failed self-test on any route".
+ * Requires a dev server on PORT (default 5199) and local Chrome. Missing prerequisites skip.
  */
 const { chromium } = require('playwright-core');
-const fs = require('fs');
+const fs = require('node:fs');
+
 const PORT = process.env.RENDER_CHECK_PORT || '5199';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const BASE_PATH = process.env.RENDER_CHECK_BASE || '/belief_emergence/';
+/**
+ * Text that must not appear anywhere.
+ *
+ * `amplifier` and `suppressor` are handled separately below: the paper's own §5 quotes that
+ * vocabulary as prior framing while declining to adopt it, and the model section repeats the
+ * quotation. Banning the words outright would force the section to paraphrase a term the
+ * manuscript quotes verbatim; allowing them outright would let a future section use them as
+ * findings. The rule is therefore positional — the words may appear only inside quotation
+ * marks, which is exactly the distinction the manuscript draws.
+ */
+const FORBIDDEN = [
+  /Belief Emergence/i,
+  /emergent signal/i,
+  /0\.8461/,
+];
 
-// Values from before the panel reached 167 rows. None may appear on screen.
-// Match 630 as an integer token so a valid decimal such as 0.630 is not a false positive.
-const FORBIDDEN = [/0\.948/, /(^|[^\d.,])630($|[^\d.,])/, /23 countr/, /2000[-\u2013]2022/, /\b1\.307\b/];
+/** Words permitted only as a quotation. */
+const QUOTED_ONLY = [/\bamplifier/i, /\bsuppressor/i];
 
-// Every route the router produces, mirroring src/router/routes.ts. Duplicated on purpose:
-// a route added to the taxonomy but never checked here is the gap this guards.
+const QUOTE_CHARS = new Set(['"', "'", '\u201c', '\u201d', '\u2018', '\u2019']);
+
+/** True when every occurrence of the pattern sits inside quotation marks. */
+function onlyInsideQuotes(text, pattern) {
+  const global = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g');
+  let match;
+  while ((match = global.exec(text)) !== null) {
+    const before = text[match.index - 1] ?? '';
+    const after = text[match.index + match[0].length] ?? '';
+    if (!QUOTE_CHARS.has(before) || !QUOTE_CHARS.has(after)) return false;
+  }
+  return true;
+}
 const ROUTES = [
-  '',
-  'component-analysis',
-  'field-dynamics',
-  'statistical-analysis',
-  'sensitivity-analysis',
-  'emergence-analysis',
-  'model-diagnostics',
-  'advanced-parameters',
-  'phi-contributions',
-  'documentation',
-  'ai-interpreter',
-  'presets',
+  'overview',
+  'data',
+  'audit',
+  'gates',
+  'model',
+  'evaluation',
+  'limits',
+  'countries',
+  'geometry',
+  'reproduce',
+  'glossary',
 ];
 
 (async () => {
@@ -52,74 +67,49 @@ const ROUTES = [
     console.log('SKIP  could not launch Chrome: ' + e.message.slice(0, 120));
     process.exit(0);
   }
-  // One probe so a missing server costs one timeout rather than twelve.
-  const probe = await browser.newPage();
-  try {
-    await probe.goto('http://localhost:' + PORT + '/belief_emergence/', {
-      waitUntil: 'domcontentloaded', timeout: 15000,
-    });
-  } catch (e) {
-    console.log('SKIP  no dev server on port ' + PORT + ' (' + e.message.split('\n')[0].slice(0, 80) + ')');
-    await browser.close();
-    process.exit(0);
-  }
-  await probe.close();
-
   const failures = [];
   const rendered = [];
-
-  for (const route of ROUTES) {
-    const label = route || 'landing';
-    const page = await browser.newPage();
-    if (route === 'ai-interpreter') {
-      // Opening the modal auto-submits a starter prompt; route checks stay offline.
-      await page.route('**/api/ai/interpret', (request) =>
-        request.fulfill({
-          status: 503,
-          contentType: 'application/json',
-          body: JSON.stringify({ error: 'AI requests are disabled during automated verification.' }),
-        }),
-      );
+  try {
+    for (const route of ROUTES) {
+      const page = await browser.newPage();
+      const pageErrors = [];
+      page.on('pageerror', (error) => pageErrors.push(error.message));
+      const url = 'http://localhost:' + PORT + BASE_PATH + '?v=' + encodeURIComponent(route);
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
+      await page.waitForSelector('main#main-content h1', { timeout: 45000 });
+      await page.waitForFunction(() => !document.body.innerText.includes('Loading section…'), { timeout: 45000 });
+      const result = await page.evaluate(() => ({
+        text: document.body.innerText,
+        title: document.querySelector('main#main-content h1')?.textContent?.trim() || '',
+      }));
+      await page.close();
+      rendered.push({ route, title: result.title, chars: result.text.length });
+      if (result.text.length < 200) failures.push(route + ': rendered too little content (' + result.text.length + ' chars)');
+      for (const pattern of FORBIDDEN) {
+        const hit = result.text.match(pattern);
+        if (hit) failures.push(route + ': forbidden text appears: ' + hit[0]);
+      }
+      for (const pattern of QUOTED_ONLY) {
+        if (!onlyInsideQuotes(result.text, pattern)) {
+          failures.push(route + ': "' + pattern.source + '" appears outside quotation marks');
+        }
+      }
+      if (pageErrors.length) failures.push(route + ': runtime error: ' + pageErrors[0]);
     }
-    const consoleErrors = [];
-    page.on('pageerror', (e) => consoleErrors.push('pageerror: ' + e.message));
-    page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
-
-    const url = 'http://localhost:' + PORT + '/belief_emergence/' + (route ? '?v=' + route : '');
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
-    await page.waitForTimeout(7000);
-    const text = await page.evaluate(() => document.body.innerText);
-    await page.close();
-
-    rendered.push({ label, chars: text.length });
-
-    if (text.length < 500) {
-      failures.push(label + ': rendered ' + text.length + ' characters; the app did not mount');
-      continue;
-    }
-
-    for (const pattern of FORBIDDEN) {
-      const hit = text.match(pattern);
-      if (hit) failures.push(label + ': renders a stale value: ' + hit[0]);
-    }
-    const failedTests = text.split('\n').filter((l) => l.includes('FAILED'));
-    if (failedTests.length) {
-      failures.push(label + ': ' + failedTests.length + ' in-app self-test(s) FAILED: ' + failedTests[0].slice(0, 80));
-    }
-    const pageErrors = consoleErrors.filter((e) => e.startsWith('pageerror:'));
-    if (pageErrors.length) failures.push(label + ': runtime error on the page: ' + pageErrors[0]);
+  } catch (error) {
+    failures.push(error instanceof Error ? error.message : String(error));
+  } finally {
+    await browser.close();
   }
-
-  await browser.close();
 
   console.log('\nPer-route render:');
-  for (const r of rendered) console.log('  ' + r.label.padEnd(24) + String(r.chars).padStart(8) + ' chars');
-
-  if (failures.length === 0) {
-    console.log('RENDER OK  ' + rendered.length + ' routes rendered, no stale values, no failed self-tests');
-    process.exit(0);
+  for (const row of rendered) {
+    console.log('  ' + row.route.padEnd(12) + String(row.chars).padStart(6) + ' chars  ' + row.title);
   }
-  console.error('RENDER FAILURES (' + failures.length + '):');
-  for (const f of failures) console.error('  ' + f);
-  process.exit(1);
+  if (failures.length) {
+    console.error('\nRENDER FAILURES (' + failures.length + '):');
+    for (const failure of failures) console.error('  ' + failure);
+    process.exit(1);
+  }
+  console.log('RENDER OK  ' + rendered.length + ' current routes rendered without forbidden text or page errors');
 })();

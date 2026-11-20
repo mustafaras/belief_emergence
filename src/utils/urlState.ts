@@ -1,5 +1,6 @@
 import type { BeliefParameters } from '../types'
-import { LANDING_ROUTE, ROUTE_QUERY_KEY, parseAppRoute, type AppRoute } from '../router/routes'
+import { DEFAULT_ROUTE_ID, ROUTE_QUERY_KEY, parseAppRoute, type AppRouteId } from '../app/routes'
+import { resolveAppRoute } from '../app/redirects'
 
 export type Surface3DUrlPlotView = '3D' | '2D'
 export type Surface3DUrlResolutionMode = 'AUTO' | 'LOW' | 'MED' | 'HIGH'
@@ -38,21 +39,21 @@ export type Surface3DUrlState = {
 //   x,y,a,b,k,c,m,t,d,g,e,s,r: numbers (BeliefParameters)
 //   preset: string (optional) - display label + signals modifiers are already z-scored (UI contract)
 //   doc: '1' | '0' (optional)
-//   v: route id (optional) - the active view; absent means the landing view
+//   v: route id (optional) - the active view; absent means the overview
 
 export type AppUrlState = {
   params: Partial<BeliefParameters>
   presetName?: string
   showDocumentation?: boolean
   surface3d?: Surface3DUrlState
-  route?: AppRoute
+  route?: AppRouteId
 }
 
 export type HydratedAppUrlState = {
   params: BeliefParameters
   presetName?: string
   showDocumentation: boolean
-  route: AppRoute
+  route: AppRouteId
 }
 
 const NUM_KEYS: Array<[keyof BeliefParameters, string]> = [
@@ -279,13 +280,13 @@ export function writeSurface3DStateToUrl(state: Surface3DUrlState, opts?: { repl
  * browser, and so `applyStateToSearchParams` can share exactly one implementation of
  * "the route is encoded like this".
  */
-export function applyRouteToSearchParams(qs: URLSearchParams, route: AppRoute): void {
+export function applyRouteToSearchParams(qs: URLSearchParams, route: AppRouteId): void {
   const resolved = parseAppRoute(route)
   qs.delete(ROUTE_QUERY_KEY)
   // The route now encodes whether the documentation is open; drop the legacy flag so
   // it cannot contradict it.
   qs.delete('doc')
-  if (resolved !== LANDING_ROUTE) {
+  if (resolved !== DEFAULT_ROUTE_ID) {
     qs.set(ROUTE_QUERY_KEY, resolved)
   }
 }
@@ -314,7 +315,7 @@ function applyStateToSearchParams(qs: URLSearchParams, state: AppUrlState): void
   // existed, but it is never written.
   applyRouteToSearchParams(
     qs,
-    state.route ?? (state.showDocumentation ? 'documentation' : LANDING_ROUTE),
+    state.route ?? (state.showDocumentation ? 'glossary' : DEFAULT_ROUTE_ID),
   )
 
   if (state.surface3d) {
@@ -324,7 +325,7 @@ function applyStateToSearchParams(qs: URLSearchParams, state: AppUrlState): void
 
 export function readAppStateFromUrl(defaultParams: BeliefParameters): HydratedAppUrlState {
   if (typeof window === 'undefined') {
-    return { params: defaultParams, showDocumentation: false, route: LANDING_ROUTE }
+    return { params: defaultParams, showDocumentation: false, route: DEFAULT_ROUTE_ID }
   }
 
   const url = new URL(window.location.href)
@@ -344,7 +345,7 @@ export function readAppStateFromUrl(defaultParams: BeliefParameters): HydratedAp
   // `doc=1` predates routing; honour it on read so old links keep opening the
   // documentation, then normalise it into the route so only one form is written.
   const legacyDoc = qs.get('doc') === '1'
-  const route = legacyDoc ? 'documentation' : parseAppRoute(qs.get(ROUTE_QUERY_KEY))
+  const route = legacyDoc ? 'glossary' : resolveAppRoute(qs.get(ROUTE_QUERY_KEY))
 
   return {
     params: next,
@@ -360,10 +361,10 @@ export function readAppStateFromUrl(defaultParams: BeliefParameters): HydratedAp
  * Used by the router hook, which must react to back/forward without re-hydrating
  * parameters from the URL.
  */
-export function readRouteFromUrl(): AppRoute {
-  if (typeof window === 'undefined') return LANDING_ROUTE
+export function readRouteFromUrl(): AppRouteId {
+  if (typeof window === 'undefined') return DEFAULT_ROUTE_ID
   const url = new URL(window.location.href)
-  return parseAppRoute(url.searchParams.get(ROUTE_QUERY_KEY))
+  return resolveAppRoute(url.searchParams.get(ROUTE_QUERY_KEY))
 }
 
 /**
@@ -372,7 +373,7 @@ export function readRouteFromUrl(): AppRoute {
  * The pathname is never rewritten, so the `/belief_emergence/` base is untouched and a
  * deep link resolves on static hosting.
  */
-export function writeRouteToUrl(route: AppRoute, opts?: { replace?: boolean }): void {
+export function writeRouteToUrl(route: AppRouteId, opts?: { replace?: boolean }): void {
   if (typeof window === 'undefined') return
   const { replace = true } = opts ?? {}
 

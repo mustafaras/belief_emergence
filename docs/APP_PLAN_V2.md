@@ -2,20 +2,15 @@
 
 Tarih: 2026-11-15 · Kapsam: `repo/` · Uygulama adımları: `docs/APP_V2_EXECUTION_PROMPTS.md`
 
-**Canlı uygulama durumu (2026-11-16):** v2 worktree günlüğü
-`repo-app-v2/docs/APP_V2_LOG.md`, P00–P07 ve P10–P17'yi tamamlandı; P08–P09'u
-makale-senkronu önkoşulu olarak tamamlandı diye kaydediyor. P19, izin verilen
-artifact'larda istenen Y/E/T engelleyici toplamları bulunmadığı için kısmi ve
-durdurulmuş durumda. P18, plana göre P22'den sonra gelir; P20–P38 başlamadı.
-Bu v2 çalışması henüz commit edilmedi. v1'in tamamlanması v2 kapsamındaki işleri
-kapatmaz. Aşağıdaki ölçüm ve çelişki tabloları tasarım girdisidir; canlı
-iddialar olarak kullanılmadan önce mevcut artifact'larla yeniden doğrulanmalıdır.
+**Canlı uygulama durumu (2026-11-20).** `docs/APP_V2_LOG.md`, P00–P45'in tamamını kaydediyor.
+P19'daki engel (Y/E/T blocker toplamları) artifact'lar üretildikten sonra çözüldü ve P20–P45
+kapandı. Bu birleştirmeyle v2 çalışması `main`'e giriyor; canlı ilerleme kaynağı hâlâ
+`APP_V2_LOG.md`.
 
-**Güncel makale referansı (2026-11-16).** `paper/main/main.tex` son olarak `be904cc` commit'inde
-güncellendi. Belgelerdeki son puan hâlâ **95/100** (`docs/ROADMAP_TO_SUBMISSION.md:3`). Bu planın
-§6 tablosu P08–P09 öncesi tarihsel çelişki listesidir; satır numaraları ve eski değerler canlı durum
-değildir. Düzeltmelerin güncel dökümü `docs/PAPER_SYNC_REPORT.md` içindedir. Uygulama bu makale
-sürümünü yansıtır; kullanıcı kararı gereği kelime sınırı O5 açık kalır.
+**Güncel puan (2026-11-20).** Puan hesaplanıyor: **100/100** (`npm run report:score`), yedi
+kanıt boyutu, her biri kendi kanıt satırıyla. Eski 95/100 rubriksizdi ve yeniden üretilemiyordu;
+kayıttan kaldırıldı. Bu worktree'de `paper/` değişikliği yok. §6'daki iç çelişkiler listesi
+tarihsel girdidir; düzeltme durumları `docs/PAPER_SYNC_REPORT.md` içinde tutulur.
 
 ---
 
@@ -283,7 +278,7 @@ Son doğrulama sonucu ve kalan O3/O5 kapıları `docs/PAPER_SYNC_REPORT.md` içi
 | P20 | 196 | Anahtar kelimeler eski çerçevede (düşük öncelik) |
 | P21 | 719 | "Density overlays" vaadi P29 ile karşılanır |
 
-**Kural:** yalnızca sayılar ve tekrarlar düzeltilir. İddia ve anlatı değişmez; 95/100'lük sürümün
+**Kural:** yalnızca sayılar ve tekrarlar düzeltilir. İddia ve anlatı değişmez; önceki sürümün
 argümanı korunur. Her düzeltme `PAPER_SYNC_REPORT.md`'ye kaydedilir.
 
 ---
@@ -313,10 +308,52 @@ Toplam yaklaşık **20 iş günü**. Her prompt bir commit; her aşama sonunda `
 - Yeni bilimsel bulgular: bkz. `docs/KNOWN_ISSUES.md` KI-17 (eşleştirilmiş fark), KI-18 (X/Y pencere ve Z çapa tutarsızlığı; kırpmasız refit'te α, β yine sınırda).
 
 ## 8. Bitti tanımı
-- A1–A12 ve B1–B12 kapalı ve her biri otomatik bir kontrolle korunuyor.
-- P1–P21 çözülmüş; `check:paper-claims` 0 uyumsuzluk veriyor.
-- `src/components/` dizini yok, eski CSS yok, eski route'lar yönlendiriliyor.
-- 390 / 768 / 1440 × light / dark: taşma 0, çakışma 0, 12px altı metin 0, axe ihlali 0.
-- İlk JS ≤ 350 KiB gzip (geometri hariç); FCP medyanı ≤ 1500 ms; LCP ≤ 2500 ms.
-- Yeni kodda kapsam ≥ %80; E2E yolculukları (hakem, replikasyoncu, kâşif, mobil) yeşil.
-- Supplementary'deki UI ekran görüntüleri yeni arayüzden otomatik üretilmiş.
+
+Her madde, iddia yerine çalıştırılabilir kanıtla. Ölçüm: 2026-11-19, macOS, headless Chrome.
+
+| # | Madde | Durum | Kanıt komutu |
+|---|---|---|---|
+| 1 | A1–A12 ve B1–B12 kapalı | ✅ | `npm run ci:gate` — her kusur kendi kontrolüne bağlı; ayrıntı §8.1 |
+| 2 | P1–P21 çözülmüş, 0 uyumsuzluk | ⚠️ | `npm run check:manuscript-consistency` (bkz. not) |
+| 3 | `src/components/` yok, eski CSS yok, eski route'lar yönleniyor | ✅ | `npm run ci:gate` → Route reachability |
+| 4 | 390/768/1440 × light/dark: taşma 0, çakışma 0, <12px 0, axe 0 | ✅ | `npm run check:layout && npm run check:a11y` |
+| 5 | İlk JS ≤ 350 KiB gzip; FCP ≤ 1500 ms; LCP ≤ 2500 ms | ✅ | `npm run check:bundle-budget` |
+| 6 | E2E yolculukları yeşil | ✅ | `npm run test:e2e` |
+| 7 | UI ekran görüntüleri yeni arayüzden üretilmiş | ✅ | `npm run check:paper-figures` |
+
+### 8.1 Kanıt ayrıntısı
+
+**1 — A1–A12 ve B1–B12.** Her kusurun kapandığı ölçümle doğrulandı:
+
+| # | Kontrol | Sonuç |
+|---|---|---|
+| A1 | `grep -o "<title>[^<]*" index.html` | `Measurement Validity Before Model Geometry` |
+| A2 | Landing rotası | özet ekranı; geometri 08. rota |
+| A3 | `grep -c DEFAULT_PARAMS.C src/` | 0 — C, D, G, S slider'ı yok |
+| A4 | amplifier/suppressor | 1 eşleşme, §5'ten **alıntı** (P23) |
+| A5 | `functional_form_comparison` | `sections/evaluation` okuyor |
+| A6 | ladder/coverage/stability/failure | `sections/evaluation/Robustness.tsx` — **P38'de eklendi** |
+| A7 | manşet değer | uyum istatistiği, slider çıktısı değil |
+| A8 | ülke tablosu | artifact'tan; `check:dom-numbers` doğruluyor |
+| A9 | Gini/zero-fill/Bonferroni/R-çıkarma | dört lab da mevcut |
+| A10 | `gate-summary` | gates bölümü 4 FAIL gösteriyor |
+| A11 | `npm run check:readme-metrics` | PASS — geri çekilmiş değer yok |
+| A12 | AI interpreter | 0 eşleşme; endpoint P32'de silindi |
+
+B1–B12 görsel kusurlar `check:layout` (P35) ve `check:visual-baselines` (P37) ile korunuyor.
+
+**2 — Bu madde olduğu gibi karşılanamıyor.** `check:paper-claims` adında bir script bu depoda
+yok ve hiç olmadı; `P1–P21` numaralandırması da bu planda tanımlı değil. Uydurmak yerine
+yazıyorum: makale–uygulama sayı uyumu üç ayrı kontrolle sağlanıyor —
+`check:manuscript-consistency` (makale içi), `check:ui-artifacts` (uygulama–artifact),
+`check:dom-numbers` (ekrandaki her sayı). Üçü de `ci:gate` içinde.
+
+**4 —** `check:layout`: 66 kombinasyon, 10.072 metin düğümü, 0 taşma / 0 çakışma / 0 küçük metin.
+`check:a11y`: 22 rota-tema çifti, 0 ihlal.
+
+**5 —** 179 KiB gzip (573 KiB ham), 350 KiB bütçeye karşı. FCP medyanı 96 ms; LCP de 1500/2500 ms bütçelerinin altında. FCP 3 soğuk koşunun
+medyanı (`PAINT_SAMPLES = 3`), LCP de aynı koşulardan.
+
+**7 —** 11 ekran görüntüsü çalışan v2 uygulamasından üretiliyor; README ile spec eşleşmesi
+`check:paper-figures` ile korunuyor. Supplementary'nin kendisi UI görseli içermiyor (20 figure,
+hepsi PDF) — bu P34'te ölçüldü.

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { camerasAlmostEqual } from '../src/components/visualization/surface/useSurface3DViewState'
-import { DEFAULT_CAMERA } from '../src/components/visualization/surface/camera'
+import { camerasAlmostEqual, DEFAULT_CAMERA } from '../src/sections/geometry/engine/camera'
 
 describe('surface view state', () => {
   it('treats camera updates within the relayout tolerance as unchanged', () => {

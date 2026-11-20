@@ -25,21 +25,21 @@
  *   φ₀ is a fixed baseline offset (not user-configurable) from OPTIMIZED_STRUCTURAL_PARAMS.
  *
  * SIGN CONVENTION (CRITICAL): coefficients already encode direction.
- * Amplifiers (increase Φ when their std value is positive):
+ * Positive coefficients increase Φ when their standardized input is positive:
  *   c1 = +1.003  (Culture Intensity)
  *   c3 = +0.068  (Trauma Shock)
  *   c5 = +0.023  (Redistribution Capacity)
  *   c8 = +0.02   (Welfare Capacity)
- * Suppressors (decrease Φ when their std value is positive):
+ * Negative coefficients decrease Φ when their standardized input is positive:
  *   c2 = -0.219  (Media Environment)
  *   c4 = -0.635  (Social Atomization)
  *   c6 = -0.382  (Education Capacity)
  *   c7 = -0.393  (Social Support)
  *
  * SIGN EXAMPLES (never negate coefficients in code):
- *   Amplifier: c1=+1.003, C_std=+0.5 → contrib = (+1.003)*(+0.5) = +0.5015 (Φ rises)
- *   Suppressor relief: c6=-0.382, E_std=-0.5 → contrib = (-0.382)*(-0.5) = +0.191 (Φ rises)
- *   Suppressor pressure: c6=-0.382, E_std=+0.5 → contrib = (-0.382)*(+0.5) = -0.191 (Φ falls)
+ *   c1=+1.003, C_std=+0.5 → contribution = (+1.003)*(+0.5) = +0.5015 (Φ rises)
+ *   c6=-0.382, E_std=-0.5 → contribution = (-0.382)*(-0.5) = +0.191 (Φ rises)
+ *   c6=-0.382, E_std=+0.5 → contribution = (-0.382)*(+0.5) = -0.191 (Φ falls)
  *   ✓ CORRECT:   Φ = ... + c6*E_std + c7*S_std  (use signed coefficients as-is)
  *   ✗ WRONG:     Φ = ... - c6*E_std - c7*S_std  (double negation introduces ~2*c6*E_std error)
  *
@@ -294,7 +294,7 @@ export const LEGACY_COEFFICIENTS: BeliefCoefficients = {
 };
 
 /**
- * FIXED_COEFFICIENTS is the primary export used by App.tsx
+ * FIXED_COEFFICIENTS is the compatibility export used by model calculations
  * Uses optimized sigmoid calibration with validated panel-fit performance.
  */
 export const FIXED_COEFFICIENTS = OPTIMIZED_SIGMOID_COEFFICIENTS;

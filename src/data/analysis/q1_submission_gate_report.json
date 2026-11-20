@@ -1,6 +1,6 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-16T16:55:14.902Z",
+  "generatedAtIso": "2026-11-20T15:13:36.273Z",
   "verdict": "READY",
   "summary": {
     "totalChecks": 27,
@@ -234,73 +234,121 @@
       "id": "h-editor-fit",
       "category": "Editor Fit",
       "question": "Is the framing aligned to 3 target Q1 journals (see journal_fit_targeting.json)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "journal_fit_targeting.json records 5 target journals with social_indicators_research recommended primary. The framing was accepted as aligned on the author decision; the repository cannot measure editorial fit.",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-desk-reject",
       "category": "Editor Fit",
       "question": "Are common desk-reject triggers neutralized (over-claiming, scope mismatch, novelty inflation)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Desk-reject triggers are enumerated in reviewer_red_team.json and journal_fit_targeting.json. Accepted as neutralised on the author decision; the check for causal language and the Tier C labelling are machine-verified separately (h-causal, h-claim-tier).",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-abstract-screen",
       "category": "Editor Fit",
       "question": "Does the abstract pass first-pass screening (concise, evidence-calibrated, non-causal)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "abstract_screening_pack.json is committed. First-pass screening is an editor judgement; the abstract is accepted as concise, evidence-calibrated and non-causal by the signer.",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-claim-tier",
       "category": "Claim Strength",
       "question": "Are all strong claims tied to Tier A/B OOS evidence only (not Tier C or in-sample metrics)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "check:checklist-evidence verified that all 4 paragraphs mentioning Tier C mark it exploratory, and that no unqualified causal claim survives the phrase scan. Signer accepted the verification.",
+      "evidence": "artifact-supported"
     },
     {
       "id": "h-causal",
       "category": "Claim Strength",
       "question": "Does no sentence imply causal interpretation beyond the observational design?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Independent phrase scan over the manuscript body: no unqualified causal verb outside a negation, a quotation or a mathematical definition. Signer read the six flagged contexts and accepted them as model mechanics rather than claims about the world.",
+      "evidence": "artifact-supported"
     },
     {
       "id": "h-support",
       "category": "Claim Strength",
-      "question": "Are support-density boundaries for the current canonical panel explicitly acknowledged for high-dimensional terms?",
-      "signedOff": false
+      "question": "Are support-density boundaries (n=207 country-years) explicitly acknowledged for high-dimensional terms?",
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Panel has 207 rows read from the CSV; every country-year count in the manuscript matches; a support-density statement is present and the exponent bound is reported as unidentified.",
+      "evidence": "artifact-supported"
     },
     {
       "id": "h-lockbox-disclose",
       "category": "Claim Strength",
       "question": "Is lockbox evidence clearly separated from development CV evidence in all claims?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Five sentences discuss the lockbox and at least one states it was held out from development cross-validation. The Evidence page states 59 recovered cells out of sample but not blind.",
+      "evidence": "artifact-supported"
     },
     {
       "id": "h-novelty-precise",
       "category": "Novelty Precision",
       "question": "Is the novelty claim precisely scoped (method + domain-specific contribution, no universal claims)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "The novelty claim was scoped to method plus a domain-specific contribution with no universal quantifier, on the author decision. The repository cannot judge what the field will consider novel.",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-review-ready",
       "category": "Novelty Precision",
       "question": "Are top 5 reviewer attack surfaces pre-addressed (see reviewer_red_team.json)?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "reviewer_red_team.json records 18 criticisms with a response pack. The responses were accepted as adequate by the signer; adequacy is the reviewers' judgement.",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-cover-letter",
       "category": "Novelty Precision",
       "question": "Does the cover letter have a clear novelty-fit-robustness arc for the primary target journal?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "paper/cover_letter.tex exists (about 1,500 words) and was read by the signer, who accepted that it carries the novelty-fit-robustness arc for social_indicators_research.",
+      "evidence": "judgement-only"
     },
     {
       "id": "h-captions",
       "category": "Presentation",
       "question": "Do all figure/table captions follow scope → method → interpretation boundary structure?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "check:checklist-evidence verified that all 6 captions name a scope or an interpretation boundary — five with the explicit Data scope / Method context labels and the attrition figure by stating its sample in the first sentence.",
+      "evidence": "artifact-supported"
     },
     {
       "id": "h-highlights",
       "category": "Presentation",
       "question": "Are highlights artifact-consistent, non-redundant, and high-signal?",
-      "signedOff": false
+      "signedOff": true,
+      "signedBy": "mustafaras",
+      "signedOn": "2026-11-19",
+      "basis": "Every alpha quoted in highlights.tex matches the construct audit (0.82, 0.35, -1.23, 0.75) and the identity correlation r = 1.000000000000 matches design_gates.json to twelve digits. Verified mechanically and accepted by the signer.",
+      "evidence": "artifact-supported"
     }
   ]
 }

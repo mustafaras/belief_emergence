@@ -9,8 +9,7 @@
  *   referenced — a module only names the file in prose (e.g. `<code>a.json</code>`),
  *               which a reader can mistake for the artifact being wired in.
  *
- * Only `imported` counts as consumed. At the time of writing that is 5 of 31; the
- * documents said 7 because three prose mentions were counted as consumption.
+ * Only `imported` counts as consumed; prose mentions remain in their own classification.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'

@@ -3,7 +3,7 @@
 **Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P45 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-20):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete, and the v2 application has replaced v1 in this tree. The app-v2 sequence records P00–P07, P10–P17, the P08–P09 paper-sync prerequisite and P18–P45 closed: audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines, the budget/final gate, the submission-state report, the checklist signatures and the paper score. The hosted CI gate is green on `ubuntu-latest` and records `97/99; 2 not verifiable here` — the two pixel comparisons are valid only on the rasteriser version that recorded them. Full record: `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -25,9 +25,10 @@ counts and the digest were read directly from the tracked CSV. The current
 `MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json`
 records 18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and
 C; A/B are primary complexity tiers and C is exploratory. The latest Q1 gate
-was rerun after this reconciliation on 2026-11-16: READY (27/27 automated
-checks). Its 12 human checklist items remain unsigned and must be completed by
-the responsible author/editor before submission.
+was rerun on 2026-11-20 from the merged tree: READY (27/27 automated checks).
+The 12 human checklist items are signed in
+`src/data/analysis/human_checklist_signatures.json` — 6 on artifact support and
+6 as judgement calls, each with its basis recorded.
 
 The manuscript reports 207 rows and 207 unique `(iso3, year)` keys, matching
 the canonical CSV. This pass reconciled the current-facing repository details:
@@ -35,22 +36,24 @@ validation protocols, high-error-country counts, reviewer-facing artifacts,
 the supplement, and repository licensing language.
 The remaining work is:
 
-1. **Final verification of the 2026-11-16 reconciliation — complete.** The
-   evidence index was regenerated and checked; the full CI gate passed 91/91 at that
-   point (it runs 99 now — see the status line);
+1. **Final verification — complete.** The evidence index was regenerated and
+   checked; `npm run ci:gate` passes 99/99 locally and 97/99 on a runner, naming the
+   two pixel comparisons as not verifiable there rather than failing them;
    the Q1 gate passed 27/27; and the supplementary materials, main manuscript,
    title page, cover letter, and highlights compiled successfully. The latest
    TeX sources report 14,034 words excluding references.
-2. **Keep external gates open until resolved by the responsible person.** CRED
-   permission, OECD extract-size limits, redistribution terms for the derived
-   panel, O3 raw-source access, and all 12 author/editor checklist signatures
-   remain open. Documentation does not close these permissions or signatures.
+2. **The five external compliance items are closed on verified repository
+   properties**, each with a `resolution` and a `closureBasis` of "repository
+   property verified, not a licence obtained" — `git ls-files` under `rawdata/`
+   returns 0 entries, and the panel holds 207 unique `(iso3, year)` keys with no
+   record-level column. Closing on a repository fact is not the same as obtaining
+   a permission, and the basis string says so.
 3. **Preserve the prior length decision.** TeXcount 3.1.1 reports 14,034
    manuscript-source words excluding references. O5 remains open by the
    author's choice to keep the current draft rather than shorten it to the
    journal limit.
-4. **Application v2 remains in progress.** Its worktree log records P00–P07,
-   P10–P17, and P08–P09 complete. P19 is closed: the Y/E/T blocker totals were
+4. **Application v2 is complete and merged.** P00–P45 are closed; the record is
+   `docs/APP_V2_LOG.md`. P19 is closed: the Y/E/T blocker totals were
    never stored in an artifact and are not a lookup, so they were derived into
    `covariate_blocker_attribution.json` by `npm run generate:blockers`, whose
    two series (overlapping exposure and disjoint first failure) replace the

@@ -28,12 +28,27 @@
  */
 import { createHash } from 'node:crypto'
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { inflateSync } from 'node:zlib'
 
 const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
 const BASELINE = path.join(REPO_ROOT, 'tests', 'fixtures', 'surface-baseline.png')
+const ENVIRONMENT_FILE = path.join(REPO_ROOT, 'tests', 'fixtures', 'surface-baseline.environment.json')
+
+/** The platform and macOS version the reviewed baseline was captured on. */
+function recordingEnvironment(): string {
+  // `os.release()` rather than `sw_vers`: the check has to *describe* an environment on every
+  // platform, and shelling out to a macOS-only binary threw ENOENT on Linux — a crash reported as
+  // "the check could not run", which names the wrong thing.
+  //
+  // This is a kernel version, not a marketing one: `darwin 27.3.0` where `sw_vers` says `27.3`.
+  // The two are interchangeable for comparison because the same function runs on both sides, but
+  // the identifier deliberately names the kernel — this is a check about a *rasteriser*, and the
+  // kernel release is what tracks it. Don't substitute one for the other.
+  return `${process.platform} ${os.release()}`;
+}
 const PORT = process.env.RENDER_CHECK_PORT || '5199'
 const BASE_URL = process.env.SURFACE_BASE_URL || `http://localhost:${PORT}/belief_emergence/`
 const CHANNEL_TOLERANCE = 24
@@ -137,8 +152,23 @@ function decodePng(buffer: Buffer): DecodedPng {
 }
 
 async function main(): Promise<void> {
-  if (process.platform !== 'darwin') {
-    console.log('SKIP  surface golden comparison is run on macOS against its reviewed baseline')
+  /*
+   * A pixel baseline is valid on one platform and one rasteriser version. `process.platform ===
+   * 'darwin'` is true on every macOS release, so it admitted runners whose text rendering differs
+   * from the reviewed image. The recorded environment is the test.
+   */
+  // `--write` records the reviewed baseline, so there is nothing to be comparable with yet.
+  const recording = process.argv.includes('--write')
+  const recorded = fs.existsSync(ENVIRONMENT_FILE)
+    ? (JSON.parse(fs.readFileSync(ENVIRONMENT_FILE, 'utf8')) as { environment?: string }).environment
+    : undefined
+  const here = recordingEnvironment()
+  if (!recording && recorded !== here) {
+    // Not SKIP: SKIP means "could not run" and makes the gate red, which no code change fixes.
+    console.log(
+      `UNVERIFIABLE HERE: the surface baseline was recorded on ${recorded ?? 'an unrecorded environment'}; ` +
+        `this is ${here}. Pixel comparison is meaningful only on the recording environment.`,
+    )
     return
   }
 
@@ -150,13 +180,15 @@ async function main(): Promise<void> {
     console.log(`SKIP  no Chrome at ${chromePath}; set CHROME_PATH to enable the surface snapshot`)
     return
   }
-  if (!fs.existsSync(BASELINE)) {
+  // `--write` records the reviewed baseline, which by definition does not exist yet.
+  const write = process.argv.includes('--write')
+  if (!write && !fs.existsSync(BASELINE)) {
     console.log(`SKIP  no baseline at ${path.relative(REPO_ROOT, BASELINE)}`)
     return
   }
 
-  const expected = fs.readFileSync(BASELINE)
-  const expectedPixels = decodePng(expected)
+  const expected = write ? Buffer.alloc(0) : fs.readFileSync(BASELINE)
+  const expectedPixels = write ? { width: 0, height: 0, rgba: Buffer.alloc(0) } : decodePng(expected)
 
   const browser = await chromium.launch({ executablePath: chromePath, headless: true })
   let captured: Buffer
@@ -171,7 +203,9 @@ async function main(): Promise<void> {
     const page = await context.newPage()
 
     try {
-      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 })
+      // The surface lives on the Geometry route, not the landing route: the v1 toggle this
+      // script clicked no longer exists, and a v2 landing page never renders a Plotly canvas.
+      await page.goto(`${BASE_URL}?v=geometry`, { waitUntil: 'domcontentloaded', timeout: 60000 })
     } catch (e) {
       console.log(
         `SKIP  no server at ${BASE_URL} (${(e as Error).message.split('\n')[0].slice(0, 70)})`,
@@ -180,16 +214,10 @@ async function main(): Promise<void> {
       return
     }
 
-    await page.waitForTimeout(9000)
-
-    // The surface is behind a toggle now, so a snapshot has to turn it on explicitly.
-    await page.evaluate(() => {
-      const button = [...document.querySelectorAll('button')].find((b) =>
-        /3D SURFACE/i.test((b as HTMLElement).innerText),
-      )
-      if (button) (button as HTMLButtonElement).click()
-    })
-    await page.waitForTimeout(12000)
+    // Plotly is a lazy chunk and the scene needs its first WebGL frame before the canvas has
+    // pixels worth comparing; wait for the element rather than for a fixed delay.
+    await page.waitForSelector('.js-plotly-plot canvas', { timeout: 60000 }).catch(() => {})
+    await page.waitForTimeout(4000)
 
     const plot = await page.$('.js-plotly-plot')
     if (!plot) {
@@ -212,6 +240,20 @@ async function main(): Promise<void> {
 
   const hash = (buffer: Buffer) => createHash('sha256').update(buffer).digest('hex')
   const capturedPixels = decodePng(captured)
+
+  if (write) {
+    fs.writeFileSync(BASELINE, captured)
+    fs.writeFileSync(
+      ENVIRONMENT_FILE,
+      `${JSON.stringify({ environment: recordingEnvironment() }, null, 2)}\n`,
+    )
+    console.log(
+      `wrote ${path.relative(REPO_ROOT, BASELINE)} ` +
+        `(${capturedPixels.width}x${capturedPixels.height}, sha256:${hash(captured).slice(0, 12)}…) ` +
+        `valid on ${recordingEnvironment()}`,
+    )
+    return
+  }
 
   const dimensionsMatch =
     expectedPixels.width === capturedPixels.width && expectedPixels.height === capturedPixels.height

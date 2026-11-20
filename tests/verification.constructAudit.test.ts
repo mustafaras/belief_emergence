@@ -126,7 +126,7 @@ describe('buildConstructRows against the real artifact', () => {
     expect(s).toBeDefined()
     expect(s?.verdict).toBe('uncomputable')
     expect(s?.alpha).toBeNull()
-    expect(s?.suppressedAlpha).toBe(true)
+    expect(s?.alphaWithheld).toBe(true)
   })
 
   it('records the suppression rather than dropping the fact', () => {
@@ -134,7 +134,7 @@ describe('buildConstructRows against the real artifact', () => {
     // field was absent.
     expect(auditArtifact.constructs.S_social_support.cronbachAlpha).toBeCloseTo(0.753, 3)
     const s = rows.find((r) => r.id === 'S_social_support')
-    expect(s?.suppressedAlpha).toBe(true)
+    expect(s?.alphaWithheld).toBe(true)
   })
 
   it('gives every non-retained row a reason', () => {

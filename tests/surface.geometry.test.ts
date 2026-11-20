@@ -10,7 +10,7 @@ import {
   round4,
   toFiniteNumber,
   type SurfacePayload,
-} from '../src/components/visualization/surface/geometry'
+} from '../src/sections/geometry/engine/geometry'
 import {
   DEFAULT_CAMERA,
   DOC_L_MAX,
@@ -21,7 +21,7 @@ import {
   ISO_CAMERA,
   TOP_CAMERA,
   logit,
-} from '../src/components/visualization/surface/camera'
+} from '../src/sections/geometry/engine/camera'
 
 /**
  * The geometry extracted from `Surface3DSurface.tsx` under Prompt 9.

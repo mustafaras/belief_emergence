@@ -1,0 +1,77 @@
+.gallery {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-7);
+  padding: var(--space-5);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.gallery h1,
+.gallery h2,
+.gallery h3 {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.galleryHeader,
+.themePanel,
+.block {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.galleryHeader p,
+.galleryHeader h1,
+.themePanel > h2,
+.block > h2 {
+  margin: 0;
+}
+
+.galleryHeader h1,
+.themePanel > h2,
+.block > h2 {
+  font-family: var(--font-serif);
+}
+
+.themePanel {
+  gap: var(--space-6);
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.block {
+  gap: var(--space-4);
+}
+
+.row {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.row > * {
+  max-width: 100%;
+}
+
+.chartGrid {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 45rem), 1fr));
+  gap: var(--space-5);
+}
+
+@media (width <= 48rem) {
+  .gallery,
+  .themePanel {
+    padding: var(--space-3);
+  }
+}

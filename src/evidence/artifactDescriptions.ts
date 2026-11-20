@@ -25,6 +25,12 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'Which configured items exist in the harmonised source per construct, which is what makes social support uncomputable rather than merely weak.',
   construct_prevalence:
     'How widely the measurement failure extends: how many configured constructs fail a routine reliability floor, and how much of the frame survives it.',
+  evaluation_summary:
+    'A generated projection of the four cross-validation artifacts onto the values the Evaluation section renders; the raw fold files carry per-fold coefficient vectors and observed/predicted arrays that no view displays, so importing them directly made the initial payload exceed its budget.',
+  sign_diagnostics:
+    'Whether a channel keeps its sign across panels, measured separately for its marginal association and its partial coefficient, because the two answers differ for the media channel and only one of them is the quantity a coefficient table reports.',
+  design_gates:
+    'The four design rules applied to the submitted and rebuilt panels, with the submitted design matrix read from git and a provenance block recording which upstream figures were recomputed and which are recorded only.',
   construct_validity_invariance:
     'Coverage and slice stability for each construct on the current panel, including where invariance breaks down.',
   covariate_blocker_attribution:
@@ -41,6 +47,8 @@ export const ARTIFACT_DESCRIPTIONS: Readonly<Record<string, string>> = Object.fr
     'Whether the exponents sit at their lower bound because the bound is too tight or because the panel cannot identify them; relaxing the bound moves the fit, so they are driven toward zero rather than merely clipped.',
   elasticity_profile:
     'Profile likelihood over a grid of alpha: the loss rises monotonically, there is no interior optimum, and the parameter is therefore not identified on this panel.',
+  human_checklist_signatures:
+    'The submission checklist decisions: who signed each item, when, and on what basis.',
   failure_log:
     'Per-cell validation failures with their tiers, so a reader can see which observations the model could not reproduce.',
   functional_form_comparison:

@@ -21,6 +21,13 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/verify.yml'
+      # Build and test configuration. `vite.config.ts` decides which files Vitest collects and
+      # how many workers it uses; `.gitignore` decides whether an imported asset is committed.
+      # Neither was in this list, so a commit that changed test behaviour — bounding the worker
+      # count, for instance — did not trigger a run at all.
+      - 'vite.config.ts'
+      - '.gitignore'
+      - 'playwright.config.ts'
   pull_request:
     paths:
       - 'src/**'
@@ -32,6 +39,13 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/verify.yml'
+      # Build and test configuration. `vite.config.ts` decides which files Vitest collects and
+      # how many workers it uses; `.gitignore` decides whether an imported asset is committed.
+      # Neither was in this list, so a commit that changed test behaviour — bounding the worker
+      # count, for instance — did not trigger a run at all.
+      - 'vite.config.ts'
+      - '.gitignore'
+      - 'playwright.config.ts'
   workflow_dispatch:
 
 jobs:
@@ -52,8 +66,47 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The README-metrics fixture is produced before the suite, not from inside it.
+      #
+      # `tmp/` is gitignored, so a clean checkout has no fixture. A test used to generate it on
+      # demand by running `npm run readme:metrics` — which starts Vitest from inside Vitest. The
+      # nested run waited on a pool the outer run owned, no test file completed, and the job was
+      # killed after ten minutes. That was the CI stall, and it cost three rounds of tuning the
+      # worker pool before the call chain was traced.
+      - name: Generate the README metrics fixture
+        run: npm run readme:metrics
+
+      # The job-level limit is the only reliable bound; `timeout` against `npx` did not work.
+      # A previous version ran 54 minutes with a 900-second `timeout`, and another ran 32 with a
+      # 600-second one — `npx` is a shell wrapper, so the signal reaches the wrapper and the
+      # vitest child survives. This limit is enforced by the runner itself.
+      #
+      # Outcome is read from the summary lines, not from a file count. The first version asserted
+      # `Test Files  76 passed`, which is a machine-independent-looking constant that is not one:
+      # it failed on the very run that proved the stall was fixed (76 files passed in 24s), because
+      # Vitest colours its output on a TTY-free CI log too, so the pattern never matched. Counting
+      # `✓` markers had the same defect. The suite is green when Vitest says it failed nothing and
+      # printed a total, whatever the file count happens to be.
       - name: Run test suite
-        run: npm run test:run
+        timeout-minutes: 20
+        env:
+          NO_COLOR: '1'
+          FORCE_COLOR: '0'
+        run: |
+          set -o pipefail
+          npx vitest run --reporter=verbose > /tmp/vitest.log 2>&1 || true
+          grep -E "^ *(Test Files|Tests) " /tmp/vitest.log | tail -2
+          if ! grep -qE "^ *Test Files +[0-9]+ passed" /tmp/vitest.log; then
+            echo "::error::the suite did not report a passing total; the run stalled or crashed"
+            tail -30 /tmp/vitest.log
+            exit 1
+          fi
+          if grep -qE "^ *Test Files .*(failed|[0-9]+ failed)" /tmp/vitest.log; then
+            echo "::error::at least one test file failed"
+            grep -E "FAIL|✕" /tmp/vitest.log | head -40
+            exit 1
+          fi
+          echo "suite green"
 
       - name: Lint
         run: npm run lint
@@ -141,54 +194,83 @@ jobs:
           test -x "$CHROME" || { echo "browser not executable"; exit 1; }
           echo "CHROME_PATH=$CHROME" >> "$GITHUB_ENV"
 
-      - name: Start the dev server for browser checks
-        run: |
-          npx vite --port 5199 --strictPort > /tmp/vite-ci.log 2>&1 &
-          for i in $(seq 1 60); do
-            if curl -sf -o /dev/null http://localhost:5199/belief_emergence/; then
-              echo "dev server up after ${i}s"
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "dev server did not start; last log lines:"
-          tail -20 /tmp/vite-ci.log
-          exit 1
-
+      # The gate starts and stops its own preview server, so this step does not bootstrap one.
+      # It used to: a `vite` dev server on 5199 held the port before the gate ran, and the gate —
+      # which now checks the port and adopts an existing listener rather than starting a second
+      # one — would have measured unminified dev output instead of the build. Two servers for one
+      # port is also how a stale listener gets picked up. One owner, one lifetime.
+      #
+      # The browser checks are still inside the gate, after its build step, and they report SKIP
+      # rather than PASS when they cannot run.
       - name: Deterministic reproducibility gate
         env:
           ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
-          INITIAL_CHUNK_BUDGET_KIB: '2048'
-          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
+          INITIAL_CHUNK_BUDGET_KIB: '350'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
+          LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: npm run ci:gate
 
-      - name: Accessibility and Q1 submission gates
+      # The two checks P35 and P36 added. Until now they ran on a developer machine and in
+      # `ci:gate`, but not in CI — which means a pull request could break the layout of every
+      # route and the journeys that walk them, and the workflow would stay green. `ci:gate`
+      # already invokes both; running them explicitly here as well makes the failure name the
+      # check rather than the whole gate.
+      - name: Layout guards and end-to-end journeys
         env:
-          A11Y_CHECK_PORT: '5199'
-          A11Y_CHECK_SURFACE: '1'
-          ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
-          BUNDLE_CHECK_PORT: '5200'
-          INITIAL_CHUNK_BUDGET_KIB: '2048'
-          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: |
-          ./node_modules/.bin/vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-accessibility-ci.log 2>&1 &
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-checks.log 2>&1 &
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do
-            if curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-              echo "dev server up after ${i}s"
+            if curl -sf -o /dev/null http://127.0.0.1:5199/belief_emergence/; then break; fi
+            sleep 1
+          done
+          curl -sf -o /dev/null http://127.0.0.1:5199/belief_emergence/ || {
+            echo "dev server did not start"; tail -20 /tmp/vite-checks.log; exit 1; }
+          npm run check:layout
+          npm run test:e2e
+
+      # No dev server in this step. It had one, and the gate inside `q1:gate` adopted it: a `vite`
+      # dev server holding 5199 looks exactly like the preview server the gate would have started,
+      # so the gate measured unminified development output against a production budget and failed
+      # a check that passes on the built site. One server, owned by the gate, built by the gate.
+      #
+      # `check:a11y` needs a site and takes `A11Y_CHECK_PORT`, so it gets one of its own on a
+      # different port rather than sharing the gate's: the two would otherwise race for 5199, and
+      # the accessibility run is a static audit of the same build either way.
+      - name: Accessibility and Q1 submission gates
+        env:
+          A11Y_CHECK_PORT: '5198'
+          ROUTE_CHECK_PORT: '5199'
+          RENDER_CHECK_PORT: '5199'
+          BUNDLE_CHECK_PORT: '5200'
+          INITIAL_CHUNK_BUDGET_KIB: '350'
+          FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
+          LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
+        run: |
+          npm run build
+          ./node_modules/.bin/vite preview --host 127.0.0.1 --port 5198 --strictPort \
+            > /tmp/vite-a11y.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null http://127.0.0.1:5198/belief_emergence/; then
+              echo "preview server up after ${i}s"
               break
             fi
             sleep 1
           done
-          if ! curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-            echo "dev server did not start; last log lines:"
-            tail -20 /tmp/vite-accessibility-ci.log
+          if ! curl -fsS -o /dev/null http://127.0.0.1:5198/belief_emergence/; then
+            echo "preview server did not start; last log lines:"
+            tail -20 /tmp/vite-a11y.log
             exit 1
           fi
           npm run check:a11y
+          kill "$VITE_PID" 2>/dev/null || true
+          wait "$VITE_PID" 2>/dev/null || true
+          # Port 5198 is now free, so the gate starts and owns 5199 without contention.
           npm run q1:gate
 
   visual-baselines:
@@ -234,12 +316,23 @@ jobs:
           test -x "$CHROME_PATH" || { echo "Chromium not executable: $CHROME_PATH"; exit 1; }
           CHROME_PATH="$CHROME_PATH" npm run check:surface-snapshot
 
-      - name: Compare all route screenshots
+      - name: Compare all 44 route screenshots
         env:
-          VISUAL_CHECK_PORT: '5199'
-          VISUAL_CHANNEL_TOLERANCE: '20'
-          VISUAL_MAX_CHANGED_PIXELS: '5000'
-        run: npm run check:visual-baselines
+          # The variable this script actually reads. The step previously set
+          # VISUAL_CHECK_PORT, which nothing consumes — the check would have run against the
+          # default port and failed to connect rather than comparing anything.
+          RENDER_CHECK_PORT: '5199'
+        run: |
+          npx vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-visual-ci.log 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then break; fi
+            sleep 1
+          done
+          CHROME_PATH=$(node -e "console.log(require('playwright-core').chromium.executablePath())")
+          test -x "$CHROME_PATH" || { echo "Chromium not executable: $CHROME_PATH"; exit 1; }
+          CHROME_PATH="$CHROME_PATH" npm run check:visual-baselines
 
   build-paper:
     name: Compile manuscript and supplement

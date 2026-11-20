@@ -19,12 +19,6 @@ describe('rendered parameter number provenance', () => {
     )
   })
 
-  it('derives the AI Interpreter default token estimate from its actual system prompt', () => {
-    const report = auditText('589', sources, 'ai-interpreter')
-    expect(report.unresolved).toEqual([])
-    expect(report.derived).toBe(1)
-  })
-
   it('binds rounded headline and residual values to their labeled data sources', () => {
     const headline = auditText(
       'Production headline (canonical panel-fit): R² = 0.406 · r = 0.639 · MAE = 0.139 · RMSE = 0.180',
@@ -64,6 +58,11 @@ describe('rendered parameter number provenance', () => {
     expect(shiftedRuntime.unresolved).toContainEqual(expect.objectContaining({ token: '0.179' }))
   })
 
+  it('resolves grouped respondent counts and calendar years derived for the support heatmap', () => {
+    const report = auditText('442,026 respondents · support years 1992 and 2015', sources, 'data')
+    expect(report.unresolved).toEqual([])
+  })
+
   it('fails if a rounded construct alpha row or named preset row drifts', () => {
     const construct = sources.sourced.constructRows.find((row) => row.id === 'C_cultural_intensity')!
     const renderedConstruct: RenderedConstructRow = {
@@ -74,7 +73,7 @@ describe('rendered parameter number provenance', () => {
     const goodConstruct = auditText(
       `${construct.label} ${renderedConstruct.alpha}`,
       sources,
-      'landing',
+      'overview',
       [],
       [renderedConstruct],
     )
@@ -83,7 +82,7 @@ describe('rendered parameter number provenance', () => {
     const shiftedConstruct = auditText(
       `${construct.label} 0.349`,
       sources,
-      'landing',
+      'overview',
       [],
       [{ ...renderedConstruct, alpha: '0.349' }],
     )
@@ -91,10 +90,10 @@ describe('rendered parameter number provenance', () => {
 
     const preset = sources.sourced.presetRows.find((row) => row.tokens.includes('-0.07'))!
     const renderedPreset: RenderedPresetRow = { name: preset.name, tokens: [...preset.tokens] }
-    const goodPreset = auditText(`${preset.name} -0.07`, sources, 'presets', [renderedPreset])
+    const goodPreset = auditText(`${preset.name} -0.07`, sources, 'countries', [renderedPreset])
     expect(goodPreset.unresolved).toEqual([])
 
-    const shiftedPreset = auditText(`${preset.name} -0.08`, sources, 'presets', [
+    const shiftedPreset = auditText(`${preset.name} -0.08`, sources, 'countries', [
       { ...renderedPreset, tokens: renderedPreset.tokens.map((token) => token === '-0.07' ? '-0.08' : token) },
     ])
     expect(shiftedPreset.unresolved).toContainEqual(expect.objectContaining({ token: '<row>' }))

@@ -11,7 +11,7 @@ type Hit = {
 };
 
 const APP_ROOT = fileURLToPath(new URL('..', import.meta.url));
-const SRC_COMPONENTS = path.join(APP_ROOT, 'src', 'components');
+const SRC_SECTIONS = path.join(APP_ROOT, 'src', 'sections');
 
 const FORBIDDEN_PATTERNS: RegExp[] = [
   /0\.8461/g,
@@ -69,15 +69,15 @@ function scanFile(filePath: string): Hit[] {
 }
 
 export function checkNoHardcodedHeadlineMetrics(): void {
-  if (!fs.existsSync(SRC_COMPONENTS)) {
-    throw new Error(`Directory not found: ${SRC_COMPONENTS}`);
+  if (!fs.existsSync(SRC_SECTIONS)) {
+    throw new Error(`Directory not found: ${SRC_SECTIONS}`);
   }
 
-  const files = walkTsxFiles(SRC_COMPONENTS);
+  const files = walkTsxFiles(SRC_SECTIONS);
   const allHits = files.flatMap((filePath) => scanFile(filePath));
 
   if (allHits.length > 0) {
-    console.error('❌ Hard-coded headline metric literals detected in UI components:');
+    console.error('❌ Hard-coded headline metric literals detected in app sections:');
     for (const hit of allHits) {
       console.error(`- ${hit.file}:${hit.line}`);
       console.error(`  ${hit.value}`);
@@ -87,7 +87,7 @@ export function checkNoHardcodedHeadlineMetrics(): void {
     return;
   }
 
-  console.log('✅ No hard-coded headline metric literals found in src/components/**/*.tsx');
+  console.log('✅ No hard-coded headline metric literals found in src/sections/**/*.tsx');
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
