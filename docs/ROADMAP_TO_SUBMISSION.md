@@ -3,7 +3,7 @@
 **Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P44 are recorded in its `docs/APP_V2_LOG.md`.
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P45 are recorded in its `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -642,3 +642,31 @@ checks stay live: injecting a negative median makes the gate fail again.
 - It does not touch the app, the visual analytics layer, or the reproducibility
   infrastructure before Phase 4. Those are the strongest assets in the project
   and they are not what is broken.
+
+### Hosted CI, 2026-11-20
+
+The application's gate passed 99/99 on a developer machine for a long time while the hosted run
+had never been green. It is green now — run `44728444459`, all three jobs — and the two pixel
+checks report separately rather than pretending either verdict:
+
+```
+97/99 checks passed; 2 not verifiable here
+  ~ Surface snapshot: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+  ~ Visual baselines: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+```
+
+A screenshot baseline is valid on one rasteriser version, so reporting it PASS elsewhere would
+claim a verification that did not happen, and reporting it SKIP would make every hosted run red
+for a reason no commit can fix. It is counted in neither column.
+
+Ten defects were behind the gap, none of them in the analysis: an untracked CSV that only existed
+on the machine that wrote it, a test asserting a local artefact, machine-dependent numbers written
+into committed files, a workflow path filter that skipped `vite.config.ts`, two nested test
+runners that deadlocked on their own worker pool, a gate that required a server nobody started, a
+build that ran after the checks reading it, a dev server measured against a production budget, and
+a step-count generator that published four rows that were not checks while its total happened to
+be right. Each is recorded with its evidence in `repo-app-v2/docs/APP_V2_LOG.md`, P45.
+
+The score is unchanged at **100/100**: the analysis, the artifacts and the manuscript were correct
+throughout. What changed is that the automation now verifies them somewhere other than the machine
+that produced them.
