@@ -1,6 +1,6 @@
 {
   "schema": "phase1.q1_submission_gate.v1",
-  "generatedAtIso": "2026-11-11T15:29:35.297Z",
+  "generatedAtIso": "2026-11-20T11:07:19.878Z",
   "verdict": "READY",
   "summary": {
     "totalChecks": 27,
@@ -225,7 +225,7 @@
       "label": "Functional-form comparison is generated, not asserted",
       "pass": true,
       "severity": "major",
-      "detail": "Linear 0.4564 in-sample / 0.3976 k-fold vs bounded 0.3461 / 0.4207; identical rows and folds"
+      "detail": "Linear 0.4623 in-sample / 0.4074 k-fold vs bounded 0.4061 / 0.4074; identical rows and folds"
     }
   ],
   "blockers": [],

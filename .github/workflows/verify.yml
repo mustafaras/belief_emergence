@@ -232,10 +232,17 @@ jobs:
           npm run check:layout
           npm run test:e2e
 
+      # No dev server in this step. It had one, and the gate inside `q1:gate` adopted it: a `vite`
+      # dev server holding 5199 looks exactly like the preview server the gate would have started,
+      # so the gate measured unminified development output against a production budget and failed
+      # a check that passes on the built site. One server, owned by the gate, built by the gate.
+      #
+      # `check:a11y` needs a site and takes `A11Y_CHECK_PORT`, so it gets one of its own on a
+      # different port rather than sharing the gate's: the two would otherwise race for 5199, and
+      # the accessibility run is a static audit of the same build either way.
       - name: Accessibility and Q1 submission gates
         env:
-          A11Y_CHECK_PORT: '5199'
-          A11Y_CHECK_SURFACE: '1'
+          A11Y_CHECK_PORT: '5198'
           ROUTE_CHECK_PORT: '5199'
           RENDER_CHECK_PORT: '5199'
           BUNDLE_CHECK_PORT: '5200'
@@ -243,22 +250,27 @@ jobs:
           FIRST_CONTENTFUL_PAINT_BUDGET_MS: '1500'
           LARGEST_CONTENTFUL_PAINT_BUDGET_MS: '2500'
         run: |
-          ./node_modules/.bin/vite --host 127.0.0.1 --port 5199 --strictPort > /tmp/vite-accessibility-ci.log 2>&1 &
+          npm run build
+          ./node_modules/.bin/vite preview --host 127.0.0.1 --port 5198 --strictPort \
+            > /tmp/vite-a11y.log 2>&1 &
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do
-            if curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-              echo "dev server up after ${i}s"
+            if curl -fsS -o /dev/null http://127.0.0.1:5198/belief_emergence/; then
+              echo "preview server up after ${i}s"
               break
             fi
             sleep 1
           done
-          if ! curl -fsS -o /dev/null http://127.0.0.1:5199/belief_emergence/; then
-            echo "dev server did not start; last log lines:"
-            tail -20 /tmp/vite-accessibility-ci.log
+          if ! curl -fsS -o /dev/null http://127.0.0.1:5198/belief_emergence/; then
+            echo "preview server did not start; last log lines:"
+            tail -20 /tmp/vite-a11y.log
             exit 1
           fi
           npm run check:a11y
+          kill "$VITE_PID" 2>/dev/null || true
+          wait "$VITE_PID" 2>/dev/null || true
+          # Port 5198 is now free, so the gate starts and owns 5199 without contention.
           npm run q1:gate
 
   visual-baselines:

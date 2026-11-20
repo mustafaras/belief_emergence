@@ -69,6 +69,22 @@ function runCmd(cmd: string): boolean {
   }
 }
 
+/**
+ * Run a command and keep what it said.
+ *
+ * `runCmd` discards both streams, so a delegated gate that failed reported only "0/1" — the
+ * reason was produced and thrown away, and the CI log named no failing check. Captured here
+ * because this is the one caller whose child is itself a whole gate.
+ */
+function runCmdCaptured(cmd: string): { ok: boolean; output: string } {
+  try {
+    return { ok: true, output: execSync(cmd, { stdio: 'pipe', cwd: ROOT }).toString() };
+  } catch (error) {
+    const e = error as { stdout?: Buffer; stderr?: Buffer };
+    return { ok: false, output: `${e.stdout?.toString() ?? ''}${e.stderr?.toString() ?? ''}` };
+  }
+}
+
 function artifactExists(name: string): boolean {
   return fs.existsSync(path.join(ANALYSIS, name));
 }
@@ -319,9 +335,18 @@ function gateLockboxValidityCompliance(): void {
 
 function gateReproducibility(): void {
   console.log('\n── Gate 6: Deterministic Reproducibility ──');
-  const ok = runCmd('npm run ci:gate');
+  const result = runCmdCaptured('npm run ci:gate');
+  const ok = result.ok;
+  // Name the failing checks rather than pointing at a command the reader has to run twice. The
+  // summary block, not the whole log: the gate already printed every check it ran.
+  const failing = result.output
+    .split(/\r?\n/)
+    .filter((line) => /^\s+✗ |^\s+~ |checks passed/.test(line))
+    .join('\n');
   record('repro-ci', 'Reproducibility', 'CI reproducibility gate passes', ok, 'critical',
-    ok ? 'Full ci:gate passed (7 phases)' : 'ci:gate detected drift or failure — run npm run ci:gate for details');
+    ok
+      ? 'Full ci:gate passed (7 phases)'
+      : `ci:gate detected drift or failure:\n${failing || result.output.split(/\r?\n/).slice(-15).join('\n')}`);
 }
 
 /* ------------------------------------------------------------------ */
