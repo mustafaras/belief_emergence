@@ -27,35 +27,41 @@ describe('rendered parameter number provenance', () => {
 
   it('binds rounded headline and residual values to their labeled data sources', () => {
     const headline = auditText(
-      'Production headline (canonical panel-fit): R² = 0.346 · r = 0.615 · MAE = 0.162 · RMSE = 0.209',
+      'Production headline (canonical panel-fit): R² = 0.406 · r = 0.639 · MAE = 0.139 · RMSE = 0.180',
       sources,
       'documentation',
     )
     expect(headline.unresolved).toEqual([])
 
-    const residuals = auditText('Residuals: mean -0.044 · SD 0.204', sources, 'documentation')
+    const residuals = auditText('Residuals: mean 0.005 · SD 0.180', sources, 'documentation')
     expect(residuals.unresolved).toEqual([])
 
+    const derivedCriticality = auditText('Criticality 62.4%', sources, 'documentation')
+    expect(derivedCriticality.unresolved).toEqual([])
+
+    const typesetNegative = auditText('−\n(\n0.085\n)\n−\n5.931\n−\n5.714', sources, 'documentation')
+    expect(typesetNegative.unresolved).toEqual([])
+
     const runtime = auditText(
-      'Production MAE = 0.162 · Runtime: R² 0.346 · r 0.615 · MAE 0.162 · RMSE 0.209 (N = 207)',
+      'Production MAE = 0.139 · Runtime: R² 0.406 · r 0.639 · MAE 0.139 · RMSE 0.180 (N = 207)',
       sources,
       'documentation',
     )
     expect(runtime.unresolved).toEqual([])
 
     const shifted = auditText(
-      'Production headline (canonical panel-fit): R² = 0.347 · r = 0.615 · MAE = 0.162 · RMSE = 0.209',
+      'Production headline (canonical panel-fit): R² = 0.407 · r = 0.639 · MAE = 0.139 · RMSE = 0.180',
       sources,
       'documentation',
     )
-    expect(shifted.unresolved).toContainEqual(expect.objectContaining({ token: '0.347' }))
+    expect(shifted.unresolved).toContainEqual(expect.objectContaining({ token: '0.407' }))
 
     const shiftedRuntime = auditText(
-      'Runtime: R² 0.346 · r 0.615 · MAE 0.162 · RMSE 0.208 (N = 207)',
+      'Runtime: R² 0.406 · r 0.639 · MAE 0.139 · RMSE 0.179 (N = 207)',
       sources,
       'documentation',
     )
-    expect(shiftedRuntime.unresolved).toContainEqual(expect.objectContaining({ token: '0.208' }))
+    expect(shiftedRuntime.unresolved).toContainEqual(expect.objectContaining({ token: '0.179' }))
   })
 
   it('fails if a rounded construct alpha row or named preset row drifts', () => {

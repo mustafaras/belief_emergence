@@ -37,17 +37,20 @@ What is now true:
 - `Z` reaches `alpha = 0.8187` over 287 country-years and is retained;
 - `C` (`0.3482`), `D` (`-1.2285`) and `S` (uncomputable) fail the reliability
   floor and are **declared but not estimated**; the model runs on seven columns;
-- the canonical panel is 87 complete-case country-years, 48 countries,
-  1990–2022, with no scenario replication;
-- in-sample `R² = 0.3854`; the saturating form loses to a linear baseline
-  (0.10 vs 0.20);
+- the canonical panel is 207 complete-case country-years, 83 countries,
+  1990–2023, with no scenario replication;
+- in-sample `R² = 0.4061` for the saturating form against
+  0.4623 for a linear baseline; out of sample the two are tied at the reported
+  precision (median held-out `R²` 0.4074 for both; the bounded form leads on
+  56 of 100 identical folds, paired median difference 0.000001926, with no significance test);
 - primary out-of-sample evidence is repeated grouped k-fold
-  (`cv_kfold.json`): 100 folds, median held-out `R²` 0.2707 / 0.2790 / 0.2617 for
-  Tier A/B/C, leakage none, `R²` defined in every fold. Country-out is retained
-  as a spatial stress test; its per-fold median is negative only because 36 of
-  48 folds hold fewer than three rows, and its pooled series is positive
-  (0.3026 / 0.2579 / 0.2724);
-- `npm run q1:gate` returns **READY 24/24**.
+  (`cv_kfold.json`): 100 folds, median refit `R²` 0.4074 / 0.5216 / 0.4824 for
+  Tier A/B/C, with no country leakage and `R²` defined in every fold. Country-out
+  is retained as a spatial stress test; 48 of 83 folds hold fewer than three
+  rows, and pooled refit `R²` is 0.4053 / 0.4934 / 0.4796;
+- every number in the manuscript is checked against its artifact by
+  `npm run check:manuscript-consistency`; the open items are in
+  `docs/PAPER_SYNC_REPORT.md`.
 
 See [`../docs/KNOWN_ISSUES.md`](../docs/KNOWN_ISSUES.md) for the itemised
 history and [`../docs/ROADMAP_TO_SUBMISSION.md`](../docs/ROADMAP_TO_SUBMISSION.md)
@@ -60,9 +63,8 @@ cd paper/main
 latexmk -pdf -interaction=nonstopmode -halt-on-error -file-line-error main.tex
 ```
 
-## Known LaTeX warnings
+## LaTeX cross-reference status
 
-The four multiply-defined labels reported earlier
-(`fig:main-function-views`, `tab:panel_fit_headline`,
-`tab:marginal-effects-regimes`, `tab:preset-country-z`) are resolved: both
-sources now contain 27 and 28 labels respectively with no duplicates.
+Main and supplementary PDFs share supplementary table references through `xr-hyper`.
+Mirrored main-paper figures and tables in the supplement use `supp-` labels to avoid
+collisions. The latest cross-reference-order build has no undefined or duplicate labels.

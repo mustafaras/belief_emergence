@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url'
 import { OPTIMIZED_STRUCTURAL_PARAMS } from '../src/data/feCoefficients'
 import {
   buildLimits,
-  profileUpperBound,
+  largestNonRejectedProfileValue,
   PROFILE_ALPHA,
   type CollinearityDiagnostics,
   type ElasticityProfile,
@@ -58,8 +58,8 @@ if (!report.sourced) {
   for (const problem of report.unsourced) failures.push(problem)
 }
 
-/* ---- 2. the four limits are all present ---- */
-const expectedIds = ['exponents', 'shipped-exponent', 'lockbox', 'collinearity']
+/* ---- 2. the three evidence limits are all present ---- */
+const expectedIds = ['exponents', 'lockbox', 'collinearity']
 const actualIds = report.limits.map((l) => l.id)
 if (actualIds.join(',') !== expectedIds.join(',')) {
   failures.push(`expected limits [${expectedIds.join(', ')}], got [${actualIds.join(', ')}]`)
@@ -112,19 +112,27 @@ for (const limit of report.limits) {
   }
 }
 
-/* ---- 4. the two claims that depend on arithmetic, not a lookup ---- */
-const upper = profileUpperBound(profile)
-if (upper === undefined) {
-  failures.push('the profile yields no upper bound inside the interval')
+/* ---- 4. the profile statement is a tested-grid result, not a confidence bound ---- */
+const largestNonRejected = largestNonRejectedProfileValue(profile)
+if (largestNonRejected === undefined) {
+  failures.push('the profile has no tested non-rejected alpha value')
 } else {
-  const inside = profile.profiles.filter((p) => p.pValue > PROFILE_ALPHA).map((p) => p.value)
-  if (Math.max(...inside) !== upper) {
-    failures.push(`profile upper bound ${upper} is not the largest non-rejected grid value`)
-  }
-  if (OPTIMIZED_STRUCTURAL_PARAMS.alpha <= upper) {
+  const nonRejected = profile.profiles.filter((p) => p.pValue > PROFILE_ALPHA).map((p) => p.value)
+  if (Math.max(...nonRejected) !== largestNonRejected) {
     failures.push(
-      `the shipped alpha (${OPTIMIZED_STRUCTURAL_PARAMS.alpha}) is inside [0, ${upper}], so the ` +
-        `"outside the interval" limit is not true and must not be stated`,
+      `reported endpoint ${largestNonRejected} is not the largest tested non-rejected grid value`,
+    )
+  }
+  const rejectedThroughEndpoint = profile.profiles.filter(
+    (p) => p.value <= largestNonRejected && p.pValue <= PROFILE_ALPHA,
+  )
+  if (rejectedThroughEndpoint.length > 0) {
+    failures.push('the profile says no tested alpha through the endpoint is rejected, but some are')
+  }
+  if (OPTIMIZED_STRUCTURAL_PARAMS.alpha > largestNonRejected) {
+    failures.push(
+      `the displayed profile endpoint (${largestNonRejected}) does not reach the shipped alpha ` +
+        `(${OPTIMIZED_STRUCTURAL_PARAMS.alpha})`,
     )
   }
 }
@@ -159,5 +167,5 @@ if (failures.length > 0) {
 const figureCount = report.limits.reduce((n, l) => n + l.figures.length, 0)
 console.log(
   `PASS  ${report.limits.length} limits, ${figureCount} figures, every one found in its cited artifact ` +
-    `(profile interval ends at ${upper}, ${outsideReserve} rows outside the reserve)`,
+    `(largest tested non-rejected alpha ${largestNonRejected}, ${outsideReserve} rows outside the reserve)`,
 )

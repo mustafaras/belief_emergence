@@ -1,5 +1,17 @@
 # What would move this paper from 95 to 96+
 
+> **Historical planning snapshot.** This analysis uses the earlier 167-row,
+> 76-country panel and its candidate-cell counts. The canonical panel now has
+> 207 rows across 83 countries. Re-run and validate the blocker/window inputs
+> before treating any target or simulation in this document as a current
+> empirical recommendation; restricted-source collection and modeling remain
+> separate decisions.
+>
+> **Disposition (2026-11-16): not executed.** This is a separate research
+> expansion proposal that depends on restricted source-data access and possible
+> design changes; it is not part of the current repository closeout. The current
+> submission draft and O5 length gate remain as the author chose.
+
 This note is a measurement, not an opinion. Every number below was computed from
 the artefacts in this repository; the commands that produce them are given so the
 claims can be re-run.

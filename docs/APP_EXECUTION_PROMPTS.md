@@ -1,5 +1,10 @@
 # Application work — sequential execution prompts
 
+> **Historical v1 execution record (2026-11-16 reconciliation).** This file's
+> original baselines and prompt text retain their dated context. Prompts 0–13
+> were delivered through PRs #1 and #2; use `APP_PLAN_V2.md` and
+> `APP_V2_EXECUTION_PROMPTS.md` for the separate, unfinished v2 work.
+
 Each prompt below is self-contained: a fresh agent can be handed one, without this
 file or any conversation, and it will have the context, the constraint, the
 verification and the stopping condition it needs. Run them in order. Each ends with a
@@ -619,7 +624,7 @@ regression the day it landed, rather than the week a human finally opened a brow
 **Verify**: deliberately change one rendered string and confirm the visual check fails
 with the route named. Then revert.
 
-**Implemented and locally verified 2026-11-14; hosted workflow run pending.** The CI
+**Implemented and verified locally and in hosted CI 2026-11-14; PR #2 merged.** The CI
 workflow sets the initial JavaScript limit to **2048 KiB** and the median cold-navigation
 First Contentful Paint limit to **2500 ms**. `check:bundle-budget` measures three fresh
 browser contexts against the built landing route and reports both measurements in the CI
@@ -634,8 +639,8 @@ the lockfile-pinned Chromium build on macOS and enforces a 5000 changed-pixel ce
 after ignoring per-channel differences of 20 or less. A repeat local run changed 0 pixels
 on all 12 routes. Changing the visible “Component Analysis” label produced 76,953 changed
 pixels and failed with `landing` named in the error; the source was restored and the
-baseline check passed again. The screenshot set and workflow are local changes, so the
-hosted Actions result remains to be observed after the branch is published.
+baseline check passed again. The hosted Verify workflow passed on both push and PR; PR #2
+merged to `main` at `3f5d456`.
 
 **Done when** both budgets are enforced in CI and both have been proven to fail on a
 deliberate regression.

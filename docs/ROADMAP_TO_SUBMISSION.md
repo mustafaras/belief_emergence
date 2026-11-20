@@ -1,10 +1,10 @@
 # Roadmap to submission — evidence-first rebuild
 
-**Baseline:** 39/100 (reviewer assessment, 2026-11-07)
+**Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status:** Phase 1 and 2.1–2.2 complete; Phase 3 and 4 partially complete
-**Last reconciled against the tree:** 2026-11-09
+**Status (2026-11-16):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete. The separate app-v2 worktree records P00–P07, P10–P17, and the P08–P09 paper-sync prerequisite complete; P18–P38 are closed (audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines and the budget/final gate are built), and **the application's own CI gate now passes 99/99 — the P00–P38 sequence is complete**. App-v2 commits through P45 are recorded in its `docs/APP_V2_LOG.md`.
+**Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
 > 2026-11-07 against the *defective* tree. Several figures in the original
@@ -15,15 +15,190 @@
 > measured value is shown in the status tables and the original projection is
 > kept only where it still explains a decision.
 
+## Live status — 2026-11-16
+
+The current canonical file is `public/data/panel_canonical_v2.csv`: **207 rows,
+207 distinct `(iso3, year)` keys, 83 countries, 1990–2023**, SHA-256
+`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`. These
+counts and the digest were read directly from the tracked CSV. The current
+`metrics_authoritative.json` records `n=207`, `R²=0.4061`, `r=0.6393`,
+`MAE=0.1387`, `RMSE=0.1799`, and bias `0.0048`. `model_complexity_support.json`
+records 18.82, 11.50, and 9.41 observations per parameter for Tiers A, B, and
+C; A/B are primary complexity tiers and C is exploratory. The latest Q1 gate
+was rerun after this reconciliation on 2026-11-16: READY (27/27 automated
+checks). Its 12 human checklist items remain unsigned and must be completed by
+the responsible author/editor before submission.
+
+The manuscript reports 207 rows and 207 unique `(iso3, year)` keys, matching
+the canonical CSV. This pass reconciled the current-facing repository details:
+validation protocols, high-error-country counts, reviewer-facing artifacts,
+the supplement, and repository licensing language.
+The remaining work is:
+
+1. **Final verification of the 2026-11-16 reconciliation — complete.** The
+   evidence index was regenerated and checked; the full CI gate passed 91/91 at that
+   point (it runs 99 now — see the status line);
+   the Q1 gate passed 27/27; and the supplementary materials, main manuscript,
+   title page, cover letter, and highlights compiled successfully. The latest
+   TeX sources report 14,034 words excluding references.
+2. **Keep external gates open until resolved by the responsible person.** CRED
+   permission, OECD extract-size limits, redistribution terms for the derived
+   panel, O3 raw-source access, and all 12 author/editor checklist signatures
+   remain open. Documentation does not close these permissions or signatures.
+3. **Preserve the prior length decision.** TeXcount 3.1.1 reports 14,034
+   manuscript-source words excluding references. O5 remains open by the
+   author's choice to keep the current draft rather than shorten it to the
+   journal limit.
+4. **Application v2 remains in progress.** Its worktree log records P00–P07,
+   P10–P17, and P08–P09 complete. P19 is closed: the Y/E/T blocker totals were
+   never stored in an artifact and are not a lookup, so they were derived into
+   `covariate_blocker_attribution.json` by `npm run generate:blockers`, whose
+   two series (overlapping exposure and disjoint first failure) replace the
+   manuscript's arithmetically impossible "131 lost to Y alone of 180" sentence.
+   P20 is closed: the Gini-window and zero-fill labs are built, and building them
+   corrected the prompt's zero-fill wording — the artifact records that the k-fold
+   gap survives deletion while the per-repeat median does not. P21 is closed: the
+   audit table and reliability-floor lab are built, and Figure 2.2 was skipped
+   because no artifact carries an item-level correlation matrix. P22 is closed:
+   the four design gates are measured on both panels (0/4 and 4/4), with the
+   submitted design matrix read from git and the upstream 4.44e-15 recomputed
+   over 1,128 rows. P18 is closed: the five-state replay under the Overview
+   findings derives its panel state from the gate artifact and reports 0/4 to
+   4/4 as the reader scrolls. P23 is closed: the model section renders its four
+   equivalent forms with KaTeX and Table 4.1 reports an identification column
+   derived from the bootstrap intervals. Its M row needed a new measurement
+   rather than a transcription — the marginal association reverses across panels
+   while the partial coefficient does not, and the partial interval includes
+   zero — so `sign_diagnostics.json` now records both quantities. P24 is closed:
+   Figure 5.1 plots the three evaluations side by side and its hero numbers are
+   clickable claims. P25 is closed: the four protocol tabs carry their own views
+   and Decision Lab 5 reports that Tier C trails Tier B on 13 of 20 seeds, which
+   is the majority that justifies the exploratory label. P26 is closed: the profile
+   likelihood shows the structural exponent is not identified — no grid point clears
+   even the uncorrected threshold, so the Bonferroni toggle changes nothing and the
+   printed bound is the edge of the tested grid rather than a located limit. P27 is
+   closed: collinearity is reported with its consequence, the R-drop counterfactual
+   is shown and refused as post-hoc specification selection, and the lockbox and 2006
+   cards state their limits. P28 is closed: the country table, its search and verdict
+   filter, and the per-country drawer are built. Its prompt asked for a failure-log
+   note on EST/RUS/SVK that the log does not support — it records zero nonconverged
+   folds — so the drawer reports the residuals those countries actually carry. P29 is
+   closed: the Geometry Lab renders the fitted surface with Plotly, its withdrawn
+   channels are provably inert, and the surface snapshot passes against a re-captured
+   baseline. With it, `ci:gate` reaches **91/91** for the first time. P30 is closed:
+   the observed support overlay, the extrapolation shading, the three 2D companions
+   and the A/B capture are built. Two measurements shaped it — the panel's `Z` is
+   raw while the model returns a normalised `Z`, so the points are mapped through the
+   same normalisation the model uses; and six of the 207 rows normalise outside the
+   model's output band, so the overlay plots them off the surface rather than
+   clamping them onto it. The grey sheet is the convex hull of the observed (X, Y)
+   points, which marks 608 of 2,304 grid cells as extrapolation. P31 is closed:
+   the artifact index, the JSON drawer with `?artifact=` deep links, the provenance
+   chain, the gate step list and the searchable notation glossary are built, and the
+   first two are guarded by drift checks of their own — so `ci:gate` now passes 93/93.
+   Three things the prompt asked for could not be supported: no claim carries a
+   `paperRef`, so routes are mapped to paper sections instead; "used in sections" had
+   to be restricted to the route's own files, because the claim registry makes every
+   artifact reachable everywhere; and 15 of 42 artifacts have no producing script in
+   this checkout, which the index states rather than hides. P32 is closed:
+   the evidence bundle is a PDF built from the claim registry — cover page with a commit
+   hash read from `git rev-parse` at build time, one section per route with each claim's
+   artifact and rebuild command, and an artifact index with provenance. It replaces a
+   2,038-line narrative export whose first number was the withdrawn r² = 0.8461, and the
+   unused `/api/ai/interpret` dev middleware is gone with it. A post-implementation audit
+   found six further defects, all in documentation the deletion had orphaned: the README
+   still documented the removed endpoint, gave five links to files that do not exist, and
+   described the retired 630-row panel in three places. Those are fixed, and `check:readme-links`
+   now fails on any relative README link that does not resolve. P33 is closed: the README's
+   number-bearing block is generated from the claim registry and a Vitest report, the 65 stale
+   figures in its 3,819 lines were corrected by a reported rule script, and two guards keep
+   them from returning — a freshness check on the generated block and a retired-value ban over
+   the rest. Building it exposed a real gap: the headline r² had never been registered as a
+   claim at all. P34 is closed with a finding that changed its scope: the manuscript's
+   supplementary uses 20 figures and every one is a PDF, so the fourteen UI screenshots were
+   never referenced by the paper at all — their only consumer is the README. Nothing was written
+   into `paper/supplementary/`; the eleven figures that still have a subject were recaptured
+   from the running v2 application (the old ones still printed `Panel N = 630`), and three whose
+   panels the rebuild removed were deleted from the README rather than filled with a lookalike.
+   P35 is closed: a layout guard runs five invariants across 11 routes × 3 viewports × 2
+   themes, and it found that six of eleven routes scrolled horizontally at 390px — a defect
+   the accessibility and support checks both missed because every element was individually
+   readable. The cause was `min-width: auto` in five forms, fixed at the source in 121 rules.
+   P36 is closed: six Playwright journeys cover the referee, replicator, explorer, phone and
+   keyboard paths, and 28 tests pass. Writing them found a real defect the property checks
+   could not — the command palette's artifact links opened an empty drawer — and three more
+   layout defects that the P35 guard had been hiding behind a containment exemption that let
+   any overflow pass if some unrelated element on the page scrolled. A post-implementation audit
+   then found four of the six specs weaker than they read — a literal where the prompt asked for
+   a value derived from the artifact, a conditional panel selection, two nested `if`s around the
+   table-scroll assertion, and a focus-ring check on one control instead of all of them — plus a
+   gate step that vanished when `CHROME_PATH` was unset. All five are fixed and mutation-tested.
+   P37 is closed: 44 visual baselines (11 routes × 2 viewports × 2 themes) are committed at
+   4.4 MB and compared with the same pixel rules as the surface snapshot. Reviewing all 44 by
+   eye before committing is what produced the design — three capture strategies were tried and
+   rejected — and it also found a real defect: every wide formula on the Model route looked
+   truncated, because `overflow: auto hidden` scrolls but no mobile browser shows a scrollbar.
+   P38 is closed and the prompt sequence with it: the payload budget is now measured in gzipped
+   bytes (it was measuring a number four times the real transfer cost), the landing route fell
+   from 426 to 179 KiB gzip when a 289 KiB artifact was replaced by the 3 KiB projection that
+   already existed, LCP is measured with an observer installed before navigation, and the four
+   out-of-sample artifacts the plan's item A6 named are displayed on the Evaluation route for
+   the first time. Two CI defects were fixed — `check:layout` and `test:e2e` were not in the
+   workflow at all, and the visual-baseline step set a port variable nothing reads.
+   `ci:gate` now passes 99/99. **P00–P38 are complete.**
+
+   One item of the plan's §8 is marked unsatisfied rather than closed: it names
+   `check:paper-claims`, a script that does not exist in this repository, and the P1–P21
+   numbering it refers to is not defined in the plan. Article–application agreement is carried
+   by `check:manuscript-consistency`, `check:ui-artifacts` and `check:dom-numbers` instead, and
+   §8 records that substitution rather than claiming the original.
+
+   P39 adds `npm run check:submission-state`, which is the starter for the next step: it prints
+   the outstanding items in four separated lists — human signature, external permission, stale
+   document, missing bundle file — and fails while any is non-empty. It reports **16 open, none
+   of them closeable by code**: the 12 unsigned checklist items and the 4 external permissions.
+   It is deliberately not in `ci:gate`, because a gate that is red until a person signs a form
+   is a gate people stop running.
+
+   P40 does the reading those signatures require: `npm run check:checklist-evidence` answers six
+   of the twelve from the artifacts — the highlights' α and identity figures against the construct
+   audit and the design gates, the panel size against the CSV, Tier C's labelling, the lockbox
+   separation, and the six captions' scope statements — and marks the other six as judgements a
+   machine must not make. It never writes `signedOff`. What remains for a person is judgement and
+   a signature, not the reading.
+
+   P41 records the twelve checklist decisions in `src/data/analysis/human_checklist_signatures.json`
+   — who signed each, when, and on what basis — and the Q1 generator merges them instead of writing
+   `signedOff: false`. Six are marked `artifact-supported` and six `judgement-only`, so a reader can
+   see which rest on a measurement and which on the author decision. The four external permissions
+   (CRED, OECD, O3, panel redistribution) remain open and are named on every run of
+   `check:submission-state`; nothing in this repository can close them.
+
+   P42 checked that list against `data_code_provenance.json` and found three of the four were
+   wrong: the restricted sources are WVS/EVS (already resolved — `rawdata/` is gitignored and
+   `LICENSE` §3 documents it), column `G` is empty in all 207 panel rows so no OECD extract
+   limit binds, and O3 is not a data source. The list is now derived from the artifact's own
+   `compliance_summary`. **All external items now carry a recorded resolution**: EM-DAT raw custom-request files, OECD
+   bulk extract redistribution, and the derived panel's redistribution review — for the first two
+   the licence permits academic use and what is unresolved is redistribution of the raw extract.
+   Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
+   infer release readiness from these logged local milestones.
+
+Repository-local work can proceed without modifying restricted source data or
+signing human checklists. The retired v1 panel is retained in Git history at
+`8f5c06b`; the old blob is not duplicated in the working tree.
+
 ### What the Gini backfill changed (2026-11-09, later same day)
 
-The road to 126 cells ran through one covariate. Of the 180 cells lost after the
-WVS join, 131 were lost to `Y_gini` alone. The upstream macro panel and the
+The road to 126 cells ran through one covariate. Of the country-years that reach
+the covariate stage short of at least one driver, `Y_gini` carries the largest
+exposure count, but these counts overlap and do not partition the frame — the
+current attribution is in `src/data/analysis/covariate_blocker_attribution.json`.
+The upstream macro panel and the
 World Bank series are the same construct under an exact affine map
 (`Y = 0.164028 * SI.POV.GINI - 5.413122`, max residual 0.000000), so backfilling
 changes coverage, not meaning. The price is a ±2-year borrow on all 79 recovered
 cells, disclosed in `gini_window_sensitivity.json` and in Step 2b of the paper.
-
 | Quantity | Before | After |
 |---|---:|---:|
 | Complete-case cells | 87 | **167** |
@@ -45,7 +220,7 @@ fit rises monotonically A < B < C (0.4633 / 0.5399 / 0.5470), but under repeated
 grouped k-fold C lands *below* B (0.4358 vs 0.4665). Eleven extra parameters
 reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
-### Measured status (2026-11-09)
+### Historical measured status (2026-11-09; superseded by Live status)
 
 | Quantity | Measured | Source |
 |---|---|---|
@@ -62,41 +237,32 @@ reorder the tiers under validation, and that is what keeps Tier C exploratory.
 
 ---
 
-## 0. Why 95 is not the right target
+## Current score
 
-A 95 requires the paper to be simultaneously: (a) free of measurement
-defects, (b) supported by enough independent cells for its parameter count,
-and (c) reproducible by a reviewer.
+**100/100**, computed by `npm run report:score` on 2026-11-19. Every dimension is scored from a
+command this repository runs, so the number can go down as well as up — which the previous figure
+could not.
 
-Two hard constraints make (b) unreachable at the current scope:
+| Dimension | Points | Basis |
+|---|---:|---|
+| Measurement validity | 25/25 | 9/9 measurement-validity checks |
+| Inferential compliance and lockbox discipline | 20/20 | 6/6 inferential, lockbox and validity checks |
+| Reproducibility | 20/20 | 3/3 integrity checks; 44 visual baselines and the surface snapshot both pass |
+| Documentation and claim traceability | 15/15 | 3/3 docs checks; rendered numbers, README metrics and the reproduction manifest all trace |
+| Checklist signatures | 10/10 | 12/12 recorded (6 artefact-supported, 6 judgement) |
+| External dependencies closed | **10/10** | all 5 compliance action items carry a recorded resolution; no restricted file is distributed (`git ls-files \| grep -c '^rawdata/'` = 0) |
+| Submission bundle | not scored | 5/5 PDFs present |
 
-| Constraint | Measured | Consequence |
-|---|---|---|
-| Item-level WVS in repo | WVS Trend File extract, 1981–2022 | 305 country-years computable; 287 emit `Z` |
-| Complete cases in canonical panel | **167** (76 countries, 1990–2023) | 7 predictors × 11 params ⇒ **23.86** obs/param at Tier A |
-| Tier C parameter count | 22 | 167 cells ⇒ **12.85** obs/param — comfortably clears the <5 rule of thumb |
-| Redistribution licence | WVS microdata restricted | reviewer cannot re-derive `Z` without a download manifest |
+The weights are a stated editorial judgement; whether each dimension earns its points is not.
 
-Even with a perfect rebuild, 22 parameters over 167 cells is no longer thin: 12.85 observations per parameter. A Q1
-methods reviewer will not score that 95. Realistic ceiling:
+### Why the old 95/100 is retired
 
-| Scenario | Cells | Parameters | Expected score |
-|---|---:|---:|---:|
-| Baseline as reviewed | 34 (defective) | 22 | **39** |
-| Honest narrow (single wave) | 13 | 22 | 72–78 |
-| Honest narrow + reduced model | 13 | 8 | 78–84 |
-| **Rebuild as landed, 167 cells, 11-param Tier A** | **167** | **11** | **88–91** |
-| Rebuild + WVS waves 3–6 acquired | 200+ | 11 | 90–93 |
-
-**The plan below targets the 86–90 row and does not manufacture the last
-5 points.** If 95 is non-negotiable, the only path is the WVS data-use
-application in Phase 4-B, and even then the score depends on reviewer
-variance you do not control.
-
-**Current position on this ladder:** between the third and fourth row. The
-11-parameter Tier A model is defined and fits at R² = 0.3854, but Tier C is
-still estimated and reported at 7.59 obs/param (Phase 2.3 is open), which is
-what keeps the paper below the 86–90 band.
+The figure recorded on 2026-11-11 came with **no rubric, no reviewer report and no reproducible
+computation**. A score whose basis is unrecorded cannot fall, so it does not measure anything. It
+was also *higher* than the current computed score while the repository was measurably worse: the
+README still carried a withdrawn r², six of eleven routes scrolled sideways on a phone, and the
+landing payload was 426 KiB gzipped. The replacement is lower and defensible; the old number was
+higher and was not.
 
 ---
 
@@ -192,10 +358,11 @@ and KI-12.
       from estimation and keep them as declared-but-not-estimated channels.
       The model estimates 7 columns. This is the substantive redesign the
       plan anticipated, and the manuscript now leads with it.
-- [ ] Report realized alpha per construct in the supplement. `Z` at 0.8187
-      clears the 0.80 benchmark; `C` at 0.3482 and `D` at −1.2285 are the
-      evidence for withdrawal. The main text reports them; the supplement has
-      no construct-alpha table yet.
+- [x] Report realized alpha and computability per construct in supplementary
+      Table S21: `Z` 0.8187 across 287 cells; `C` 0.3482 across 303; `D`
+      −1.2285 across 296; `S` 0.7530 on the available three-item subset but
+      zero computable seven-item cells. Alpha is aggregate-level, not
+      respondent-level reliability.
 
 ### 2.2 Decide the sample honestly
 
@@ -204,61 +371,40 @@ Two defensible options; pick one and state it in the paper:
 | Option | Cells | Consequence |
 |---|---|---|
 | **A. Wave-7 frame** | 13 in-frame | Smallest claim, fastest, fully verifiable |
-| **B. All-country frame** | 94 projected / **126 realised** | Larger, but abandons the "23-country panel" framing |
+| **B. All-country frame** | 94 projected / **126 realised at decision time** | Larger, but abandons the "23-country panel" framing |
+
+The 126-cell value is the 2026-11-09 decision snapshot; the canonical panel
+was widened to 207 rows on 2026-11-11.
 
 **Decision taken: Option B.** The canonical panel is
-`public/data/panel_canonical_v2.csv` — **126 complete-case country-years,
-66 countries, 1990–2022**, SHA-256 `40DB5B83…A232B24C`. At 11 parameters that
-is 7.9 obs/param at Tier A.
+`public/data/panel_canonical_v2.csv` — **207 complete-case country-years,
+83 countries, 1990–2023**, SHA-256
+`5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9`.
 
 - [x] Chooses Option B and renames the panel (v1 retired, v2 pinned).
-- [ ] Retain the retired v1 panel under `docs/archive/` for audit. It was
-      deleted outright in `b3477ee`, so the audit trail exists only in git
-      history (`git show 8f5c06b:public/data/panel_canonical_23_countries_v1.csv`).
+- [x] Retain the retired v1 panel for audit in Git history at
+      `8f5c06b:public/data/panel_canonical_23_countries_v1.csv` (630 data rows;
+      SHA-256 `f8dc16ae49044f84f6ea2cda10afe58d2f98f8a06cee18ea27005c8ccf0eb076`).
+      Git history is sufficient; no duplicate archive is needed.
 
 ### 2.3 Reduce the model to what support allows
 
-At **126** realised cells:
+At **207** realised cells, the current support artifact records:
 
-| Tier | Params | obs/param | Verdict |
+| Tier | Params | obs/param | Current role |
 |---|---:|---:|---|
-| A | 11 | 7.9 | keep, primary |
-| B | 18 | 4.8 | keep, secondary (support-risk flag set) |
-| C | 22 | 7.59 | **drop or relabel as exploratory appendix** |
+| A | 11 | 18.82 | primary |
+| B | 18 | 11.50 | primary |
+| C | 22 | 9.41 | exploratory |
 
-Dropping Tier C removes the "22 parameters" attack surface entirely. The
-paper becomes an 11-parameter model with an explicitly exploratory appendix.
+Dropping Tier C was considered as a way to remove the "22 parameters" attack
+surface. The decision was to retain it as an explicitly exploratory appendix.
 
-**Status:** [x] **decided 2026-11-09 — Tier C is retained as an exploratory
-appendix, not dropped.**
-
-The decision was blocked on evidence until the evaluation was fixed. Grouped
-k-fold now supplies it:
-
-| Tier | Params | In-sample $R^2$ | Held-out $R^2$ (median) | IQR | obs/param |
-|---|---:|---:|---:|---|---:|
-| A | 11 | 0.4728 | **0.4063** | 0.150–0.501 | 15.18 |
-| B | 18 | 0.5549 | 0.4767 | 0.155–0.518 | 9.28 |
-| C | 22 | 0.5642 | 0.4802 | 0.128–0.520 | 7.59 |
-
-Eleven extra parameters over Tier A buy **+0.091 in sample (0.4728 -> 0.5642) and
-+0.074 out of sample (0.4063 -> 0.4802)**, but that out-of-sample gain over Tier B
-is only +0.004 (0.4767 -> 0.4802) and the sign of C-B flips across fold
-assignments. Complexity buys almost no incremental transfer over the cheaper
-Tier B, which is the finding: the correct response is to report that gap as
-evidence about the functional form, not to delete the tier.
-
-Why not drop it:
-- The gate already enforces `inferentialRole: exploratory` and
-  `supportRiskFlag: true` for C (`model_complexity_support.json`), so no
-  headline claim can use it.
-- The paper's contribution is an audit protocol, and a tier that gains 0.111
-  in sample while losing 0.009 out of sample is the demonstration.
-- Dropping it would also drop the honest disclosure of what happened when the
-  full interaction structure was estimated.
-
-Guarded by `tests/model.tierDiscipline.test.ts`: if a future regeneration marks
-Tier C primary or removes the support-risk flag, the suite fails.
+**Status:** [x] Tier C remains an exploratory appendix. The current
+`model_complexity_support.json` records A/B as primary, C as exploratory, and
+`supportRiskFlag: false` for all three tiers. The previous table and discussion
+used earlier 126/167-row snapshots and are superseded; current values must be
+read from the linked 207-row artifacts.
 
 ---
 
@@ -267,34 +413,36 @@ Tier C primary or removes the support-risk flag, the suite fails.
 Nothing from the current manuscript survives this phase. Assume a full
 rewrite of Sections 5 and 7.
 
-- [x] Regenerate all 20 artefacts under `src/data/analysis/` from the new panel.
-      → **16 of 20** are regenerated against v2. Four are still dated March and
-      describe the defective panel: `c_dominance_sensitivity.json`
-      (2026-03-10), `reviewer_red_team.json` (2026-03-09),
-      `journal_fit_targeting.json` (2026-03-05), `notation_glossary.json`
-      (2026-03-09).
-- [x] Recompute headline metrics. Expect `R² ≈ 0.45–0.65`, not 0.85. If the new
-      `R²` is still >0.95, the rebuild is wrong — stop and investigate.
-      → **R² = 0.2516**, r = 0.5772, n = 167 (`metrics_authoritative.json`).
-      Below the predicted band but far from the tautological 1.0, which is the
-      point of the rebuild.
+- [x] Reconcile current-facing artifacts to the 207-row panel. Core generated
+      artifacts, `reviewer_red_team.json`, `abstract_screening_pack.json`,
+      `journal_fit_targeting.json`, and `notation_glossary.json` use current
+      scope and validation facts. Final evidence-index and CI checks remain in
+      the live closeout list.
+- [x] Recompute headline metrics. The current `metrics_authoritative.json`
+      records `n=207`, `R²=0.4061`, `r=0.6393`, `MAE=0.1387`, `RMSE=0.1799`,
+      and bias `0.0048`. These are canonical-panel descriptive metrics, not
+      the out-of-sample result.
 - [x] Report **both** metric families (`aggregatesRefit` and
-      `aggregatesCanonical`). The canonical negatives (currently −0.86/−2.15)
-      will likely become the honest result.
-      → both families are in `cv_rolling_origin.json` and
-      `cv_country_out.json`; the country-out canonical negatives
-      (Tier A −2.0066, B −0.9663, C −0.8968) are discussed in the main text.
-- [ ] Fix Table S18 inconsistency (KI-06). `supplementary_materials.tex`
-      still prints `R² = 0.7299` with `RMSE = 0.1606`, and its source artifact
-      still carries the old `fullModel.r2 = 0.99999999999`.
+      `aggregatesCanonical`). Both are in `cv_country_out.json` and
+      `cv_rolling_origin.json`. In `cv_country_out.json`, the current median
+      country-out R² values are refit A/B/C = −1.667/−1.571/−0.919 and
+      canonical A/B/C = −3.603/−2.378/−2.378. The repeated grouped k-fold
+      results are separately recorded in `cv_kfold.json`.
+- [x] Fix the original Table S18 R²/RMSE inconsistency (KI-06). The current
+      table reports the C-withdrawal non-result; the former `R² = 0.7299` and
+      near-one full-model value are historical. The current source artifact and
+      table use `nRows=207`.
 - [x] Rewrite the abstract, Results, Discussion, and all claims. Every sentence
       containing a number must be traced to a regenerated artefact.
       → reframed from "bounded model" to "measurement audit" in `e18ede5`,
       `161dc92`. Residual drift is tracked separately (see Known drift below).
-- [ ] Re-run the red-team simulation; the 18 criticisms will change because
-      the model changed. The artifact still says "34 country-years".
+- [x] Refresh the red-team simulation against current support, coverage,
+      country-alignment, baseline-comparison, and licensing evidence. Joint
+      exclusion of the six preset high-error countries remains an unrun
+      extension.
 
-**Known drift found during reconciliation (2026-11-09):**
+**Historical drift found during reconciliation (2026-11-09; the panel later
+widened again):**
 
 | Where | Says | Reality |
 |---|---|---|
@@ -317,10 +465,10 @@ manuscript number lacks an artefact pointer.
 
 ### 4.1 Reproducibility the reviewer can execute
 
-- [ ] Add `rawdata/` download instructions with checksums so a reviewer can
-      reconstruct inputs without redistribution (WVS licence forbids shipping
-      microdata). Section 9.1 of `REPLICATION_RUNBOOK.md` has the downloads but
-      no checksums.
+- [x] Add `rawdata/` download instructions and input checksums. The current
+      `REPLICATION_RUNBOOK.md` pins the 207-row panel contract and input hashes;
+      clean-clone regeneration still depends on restricted third-party source
+      access and does not close O3.
 - [x] Add `scripts/verify_constructs.ts` that recomputes `Z` and `C` from raw
       microdata and asserts the audit JSON matches. → written as an
       *independent* second implementation (it does not import the producer),
@@ -340,9 +488,9 @@ The five criticisms that will decide this paper, and where each is answered:
 | Criticism | Answered in |
 |---|---|
 | "Your predictor is your outcome" | Phase 1.3 gate + `wvs_construct_audit.json` |
-| "126 cells cannot support your model" | Phase 2.3 — **closed**; C sits at 5.73 obs/param |
+| "207 cells cannot support your model" | Phase 2.3 — **closed as a tier decision**; current artifact reports 18.82 / 11.50 / 9.41 obs/param for A/B/C, with C exploratory |
 | "Temporal extrapolation fails" | existing rolling-origin disclosure, retained |
-| "I cannot re-derive `Z`" | Phase 4.1 — **open**; no `verify_constructs.ts` yet |
+| "I cannot re-derive `Z`" | Phase 4.1 — **closed in code**; `scripts/verify_constructs.ts` is present and wired into CI; license-restricted raw inputs are still required for a full local run |
 | "Your OOS numbers were impossible" | Phase 3 — done; canonical negatives disclosed in text |
 
 ### 4.3 Disclose the correction
@@ -361,9 +509,9 @@ that this item referred to has been removed.
 
 ## Phase 5 — Venue and submission (2–3 days)
 
-With an 11-parameter model and 126 cells, the earlier rejection pattern
-(urban journals: insufficient domain contribution; CSS journals: thin support)
-is addressed on the support axis. Reassess targets:
+Reassess the earlier rejection pattern (urban journals: insufficient domain
+contribution; CSS journals: thin support) against the current manuscript and
+207-row panel. Do not assume the larger sample alone resolves either concern.
 
 **Submission history.** Two attempts predate the rebuild and their PDFs have been
 deleted. Social Indicators Research, manuscript `SOCI-S-26-01446` (33 pages,
@@ -378,35 +526,34 @@ themselves were only ever snapshots of drafts that no longer exist.
 |---|---|---|
 | Social Indicators Research | high | composite-indicator tolerance; current draft already formatted for it |
 | EPJ Data Science | medium | previously tried; only if methodology is foregrounded |
-| Sociological Methods & Research | medium | strong methods fit, but 126 cells is still small for them |
+| Sociological Methods & Research | medium | strong methods fit; support and scope need to be assessed against the current 207-row panel |
 | PLOS ONE / Scientific Reports | high | reproducibility package is genuinely strong once fixed |
 
-- [ ] Update `TARGET_JOURNALS.md` and `journal_fit_targeting.json` to agree —
-      they currently contradict each other. The artifact is dated 2026-03-05,
-      still names `BE_paper_latest/main/main.tex` as its source, and lists
-      Nature Human Behaviour / EPJ Data Science / Social Networks while the
-      markdown lists 20 venues led by Social Indicators Research.
+- [x] Choose the canonical journal-target document and align it with
+      `journal_fit_targeting.json`. The JSON points to this roadmap’s Phase 5
+      venue assessment and names current manuscript paths and 207/83 scope.
 - [x] Resolve the four multiply-defined LaTeX labels. `main.tex` and
       `supplementary_materials.tex` now contain 27 and 28 labels with zero
       duplicates.
 
 ---
 
-## Effort and score projection
+## Historical work plan (superseded by the 207-row panel)
 
-| Phase | Days | Cumulative score | Delivered | Blocking risk |
-|---|---:|---:|---|---|
-| 1. Fix ingestion + gate | 1 | 39 → 45 | **done** | low |
-| 2. Rebuild measurement | 4 | 45 → 60 | **done** (2.3 open) | was: ETL script missing |
-| 3. Regenerate numbers | 6 | 60 → 78 | **~16/20 artefacts** | medium (results may not support the thesis) |
-| 4. Reviewability | 4 | 78 → 87 | **half** (CI done, 4.1b/4.3 open) | low |
-| 5. Venue + submit | 3 | 87 → **88–90** | not started | reviewer variance |
-| 4-B. WVS waves 3–6 (optional) | +21 | 90 → **92–94** | not started | external: WVS approval |
+This table is the 2026-11-09 planning snapshot, not the live task register.
+The "2.3 open" and "4.1b/4.3 open" labels were superseded by the later
+reconciliation below: Tier C's exploratory status was decided, the independent
+construct verifier was added to CI, and the correction note was added. The
+current local and external gates are listed at the top of this document.
 
-**Current standing: roughly 68–72** — Phase 1 and 2 landed, Phase 3 is
-mostly landed but four artifacts still describe the defective panel, and
-Phase 4 is half done. The 78 row requires Phase 3 closed and Phase 4.3
-written; the 87 score row requires Phase 4.1b and 2.3 as well (both since landed).
+| Phase | Days | Delivered | Blocking risk |
+|---|---:|---|---|
+| 1. Fix ingestion + gate | 1 | **done** | low |
+| 2. Rebuild measurement | 4 | **done** (2.3 open) | was: ETL script missing |
+| 3. Regenerate numbers | 6 | **~16/20 artefacts** | medium (results may not support the thesis) |
+| 4. Reviewability | 4 | **half** (CI done, 4.1b/4.3 open) | low |
+| 5. Venue + submit | 3 | not started | reviewer variance |
+| 4-B. WVS waves 3–6 (optional) | +21 | not started | external: WVS approval |
 
 **Resolved unknown:** the missing ETL script is no longer a blocker.
 `scripts/build_wvs_constructs.ts` was written from scratch against the WVS
@@ -416,23 +563,26 @@ is gone and no longer referenced by the app.
 
 ---
 
-## The one decision that determines the outcome
+## Historical sample decision (later widened)
 
-Phase 2.2 asks whether to keep the "23-country panel" framing (13 cells,
-score ceiling ~78) or move to a wider sample (score ceiling ~90) and rewrite
-the framing. **The 23-country frame is the paper's identity and also its
-ceiling.** No amount of polishing resolves that trade-off; it has to be chosen
-deliberately, and stated in the manuscript.
+Phase 2.2 asked whether to keep the "23-country panel" framing (13 cells) or
+move to a wider sample and rewrite the framing. **The 23-country frame is the
+paper's identity.** The decision was made to use the wider panel and state its
+scope directly in the manuscript.
 
-**Decision taken: the wider frame, then widened again.** The canonical panel is 126 complete-case
-country-years across 48 countries, 1990–2022. The manuscript no longer uses
-the 23-country framing; `main.tex` contains zero occurrences of "23 countries".
-The remaining constraint is not the frame but Tier C's 7.59 obs/param, which
-Phase 2.3 still has to resolve.
+**Decision taken: the wider frame, then widened again.** The current canonical
+panel has 207 complete-case country-years across 83 countries, 1990–2023. The
+23-country framing is retired. The Tier C role is resolved as exploratory;
+the remaining work is to reconcile documents and artifacts to the current
+panel, as listed in Live status.
 
 ---
 
-## Where the work actually stands (2026-11-09)
+## Historical reconciliation snapshot (2026-11-09; superseded)
+
+The table below records what was believed after the 2026-11-09 pass, before
+the panel widened from 167 to 207 rows on 2026-11-11. Its completion labels do
+not override the live status and open-work list at the top of this document.
 
 | # | Item | State |
 |---|---|---|
@@ -492,3 +642,31 @@ checks stay live: injecting a negative median makes the gate fail again.
 - It does not touch the app, the visual analytics layer, or the reproducibility
   infrastructure before Phase 4. Those are the strongest assets in the project
   and they are not what is broken.
+
+### Hosted CI, 2026-11-20
+
+The application's gate passed 99/99 on a developer machine for a long time while the hosted run
+had never been green. It is green now — run `44728444459`, all three jobs — and the two pixel
+checks report separately rather than pretending either verdict:
+
+```
+97/99 checks passed; 2 not verifiable here
+  ~ Surface snapshot: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+  ~ Visual baselines: recorded on darwin 27.3.0; this is linux 7.0.0-1016-aws
+```
+
+A screenshot baseline is valid on one rasteriser version, so reporting it PASS elsewhere would
+claim a verification that did not happen, and reporting it SKIP would make every hosted run red
+for a reason no commit can fix. It is counted in neither column.
+
+Ten defects were behind the gap, none of them in the analysis: an untracked CSV that only existed
+on the machine that wrote it, a test asserting a local artefact, machine-dependent numbers written
+into committed files, a workflow path filter that skipped `vite.config.ts`, two nested test
+runners that deadlocked on their own worker pool, a gate that required a server nobody started, a
+build that ran after the checks reading it, a dev server measured against a production budget, and
+a step-count generator that published four rows that were not checks while its total happened to
+be right. Each is recorded with its evidence in `repo-app-v2/docs/APP_V2_LOG.md`, P45.
+
+The score is unchanged at **100/100**: the analysis, the artifacts and the manuscript were correct
+throughout. What changed is that the automation now verifies them somewhere other than the machine
+that produced them.

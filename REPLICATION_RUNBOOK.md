@@ -1,8 +1,9 @@
 # Replication Runbook — Bounded-Belief Analytics
 
-> **Purpose**: End-to-end deterministic regeneration of every quantitative artifact
-> referenced in the manuscript. One command (`npm run replicate`) reproduces all
-> numbers, tables, and validation checks from the canonical panel data.
+> **Purpose**: Regenerate the core analysis artifacts and checks from the committed
+> canonical panel, and rebuild that panel separately when the hash-pinned raw
+> inputs are available. `npm run replicate` does not download restricted inputs
+> or rebuild every manuscript table.
 
 ---
 
@@ -36,8 +37,8 @@ gate. If the hash does not match, every script aborts before writing output.
 |----------|-------|
 | File     | `public/data/panel_canonical_v2.csv` |
 | SHA-256  | `5A37D543E3531C235B9E93C4948CDB841EA1DA56A25C3FD184D0472C9CF055B9` |
-| Rows     | 167 complete-case country-year observations |
-| Countries| 76 |
+| Rows     | 207 complete-case country-year observations |
+| Countries| 83 |
 | Years    | 1990–2023 |
 
 The row count equals the number of unique `(iso3, year)` pairs — there is no
@@ -96,7 +97,7 @@ sequence with fail-fast semantics.
 npm run replicate
 ```
 
-This runs `scripts/replicate.ts` which executes:
+This runs `scripts/replicate.ts` against the committed canonical panel. It executes:
 
 1. **Phase 1** — `generate:analysis` → `generate:headline-metrics` → `generate:phase1-validation`
 2. **Phase 2** — `check:manuscript-consistency` → `check:section-references` → `check:no-hardcoded-headline`
@@ -113,23 +114,31 @@ failure. Exit code 0 means full replication succeeded.
 npm run ci:gate
 ```
 
-This runs `scripts/ci_gate.ts` which performs a **7-phase** reproducibility
+This runs `scripts/ci_gate.ts` which performs an **8-phase** reproducibility
 verification:
 
 | Phase | Check | Action |
 |-------|-------|--------|
 | 0 | Canonical data fingerprint | SHA-256 of panel CSV vs expected constant |
-| 1 | Artifact generation | Runs all 3 generation scripts |
-| 2 | Artifact presence | Verifies all 12 required artifacts exist |
+| 1 | Artifact generation | Regenerates authoritative analysis, headline metrics, phase-1 validation, grouped k-fold validation, functional-form comparison, and the artifact-facts projection |
+| 2 | Artifact presence | Verifies all required analysis and metrics artifacts exist |
 | 3 | Schema versions | Checks `schemaVersion` field in every JSON artifact |
 | 4 | Canonical metric values | Tolerance-gated comparison of n, R², Corr, MAE, RMSE, Bias |
 | 5 | Determinism cross-check | Regenerates artifacts a second time, compares SHA-256 fingerprints (timestamps stripped) |
-| 6 | Validation checks | Manuscript consistency, section references, no-hardcoded metrics |
+| 6 | Validation checks | Manuscript/UI/artifact consistency, section references, evidence index, presets, limits, rendered numbers, construct audit, support picture, route/render checks, bundle budget, and surface snapshot |
 | 7 | Code quality | Lint, tests, build |
 
 The gate emits a concise **PASS / FAIL** verdict with a per-check summary.
 Exit code 0 means the release candidate is reproducible; exit code 1 means
 drift was detected.
+
+The browser checks must reach a Vite server launched from this checkout. They
+use port `5199` by default. If another worktree already uses that port, start
+this checkout on a free port and pass the same port through `RENDER_CHECK_PORT`
+when running the gate; this variable is honored by the render, route, DOM-number,
+construct-audit, support-picture, and surface-snapshot checks. The standalone
+visual-baseline and accessibility checks use `VISUAL_CHECK_PORT` and
+`A11Y_CHECK_PORT`, respectively.
 
 ---
 
@@ -140,26 +149,26 @@ must appear in `src/data/analysis/metrics_authoritative.json`:
 
 | Metric          | Expected value |
 |-----------------|----------------|
-| n               | 167            |
-| R²              | 0.2516         |
-| Correlation     | 0.5772         |
-| MAE             | 0.1789         |
-| RMSE            | 0.2268         |
-| Bias            | 0.0611         |
+| n               | 207            |
+| R²              | 0.4061         |
+| Correlation     | 0.6393         |
+| MAE             | 0.1387         |
+| RMSE            | 0.1799         |
+| Bias            | 0.0048         |
 
 Any deviation indicates a data-integrity or code-path change and must be
 investigated before proceeding. These are in-sample descriptive metrics on the
-167 complete-case country-years (76 countries, 1990--2023); the inferential
+207 complete-case country-years (83 countries, 1990--2023); the inferential
 evidence lives in `cv_country_out.json`, `cv_kfold.json` and
 `cv_rolling_origin.json`.
 
-Note that the panel itself is committed but its *inputs* are not: `rawdata/` is
-gitignored because the EM-DAT download cannot be redistributed. The committed CSV
-therefore contains 30 rows whose trauma value was recovered from EM-DAT (29 at
-the zero anchor, 1 through the SCG -> SRB alias). Rebuilding from a clean clone
-without `rawdata/` will produce 146 rows rather than 167, and the build will say
-so. The gate does not rebuild the panel, so this does not fail CI, but a reader
-verifying the build should expect the difference.
+The panel itself is committed but its *inputs* are not: `rawdata/` is gitignored
+because several upstream files have redistribution restrictions. With the
+hash-pinned panel inputs present, `npm run build:panel` uses the canonical
+five-year covariate window and reproduces the 207-row panel byte-for-byte. A
+clean clone without `rawdata/` stops before writing; there is no fallback panel
+with 146 or 167 rows. The normal `npm run replicate` gate validates the
+committed panel and does not rebuild it.
 
 ---
 
@@ -210,7 +219,7 @@ file CI builds.
 | `generate:lockbox-holdout` | `lockbox_holdout.json` | Section 4.4 holdout evaluation |
 | `generate:kfold` | `cv_kfold.json` | **Primary** OOS evidence: repeated grouped k-fold (5 folds x 20 repeats) |
 | `generate:functional-form` | `functional_form_comparison.json` | Results Table: bounded map vs ordinary linear regression on identical rows and folds |
-| `build:panel` | `public/data/panel_canonical_v2.csv` | Rebuilds the canonical panel from hash-pinned inputs; `--gini-window N` controls how far a neighbouring year's World Bank Gini may be borrowed (default 2) |
+| `build:panel` | `public/data/panel_canonical_v2.csv`, panel audit, `construct_prevalence.json` | Rebuilds the canonical panel from hash-pinned inputs; `--gini-window N` controls the maximum WDI borrow window (default 5 years) |
 | `verify:constructs` | — (verifies `rawdata/wvs_construct_audit.json`) | Re-derives every construct from raw microdata and fails on drift |
 
 ---
@@ -229,29 +238,33 @@ This file documents license terms, redistribution status, attribution requiremen
 
 | Category | Sources | Status |
 |----------|---------|--------|
-| **Freely redistributable** | World Bank WDI (CC BY 4.0), UNDP HDR (CC BY 3.0 IGO), UCDP (CC BY 4.0) | No restrictions |
-| **Conditional redistribution** | OECD IDD/SOCX/Wealth (research use with attribution), EM-DAT (CRED academic license) | Include with attribution; bulk redistribution may need permission |
-| **Redistribution restricted** | WVS Time Series, WVS Wave 7, WVS Waves 1–6, EVS/WVS Joint | Replicators must download from worldvaluessurvey.org |
+| **Source license permits reuse, subject to scope** | World Bank WDI (CC BY 4.0), UNDP HDR (CC BY 3.0 IGO), UCDP (CC BY 4.0) | Preserve required attribution and verify the license for the exact source file. |
+| **Dataset-specific review open** | OECD IDD/SOCX/Wealth | OECD's general data terms permit reuse with attribution unless source-specific or third-party restrictions apply; the exact included extracts still need metadata/source-tab review. |
+| **Redistribution not cleared** | WVS/EVS microdata and derived panel; EM-DAT files | WVS raw files are not redistributable under the stated conditions. EM-DAT redistribution and derived-database use are prohibited by its public-data terms. Confirm the precise product and terms for every local EM-DAT extract. |
 
 ### Action Items (Pre-Release)
 
-1. **WVS/EVS microdata** (RESOLVED): Raw WVS/EVS CSV files excluded from public repository via `rawdata/.gitignore`. Download instructions provided in § 9.1 below. LICENSE § 3 documents restrictions.
-2. **Repository LICENSE** (RESOLVED): `LICENSE` file added — MIT for code, CC BY 4.0 for documentation. Third-party data restrictions documented in LICENSE § 3.
-3. **EM-DAT raw XLSX** (MEDIUM): Confirm CRED permission for redistribution of custom-request files.
-4. **OECD bulk extracts** (MEDIUM): Confirm file sizes fall within OECD's permissible extract limits.
-5. **Derived panel review** (LOW): Confirm WVS terms permit redistribution of country-level aggregates.
+1. **WVS/EVS microdata** (repository exclusion resolved): Raw WVS/EVS CSV files are excluded from the public repository via `rawdata/.gitignore`. Current access instructions and the Conditions of Use are in § 9.1. This does not clear redistribution of derived outputs.
+2. **Repository LICENSE** (documentation updated): `LICENSE` distinguishes the repository code/documentation licenses from upstream data terms. This records the available terms; it is not a legal clearance for restricted inputs or derived outputs.
+3. **EM-DAT files** (NOT CLEARED): Identify the exact product/version and accepted terms for each local extract. Do not redistribute EM-DAT files or derived databases unless a suitable written permission or license is documented.
+4. **OECD extracts** (OPEN): For each included dataflow, verify metadata and the source tab for additional restrictions or third-party ownership, then preserve its required citation. OECD's general terms do not establish that every local file is cleared.
+5. **Derived panel** (OPEN / NOT CLEARED): Obtain confirmation that the applicable WVS conditions allow this specific country-year output. Aggregation alone does not establish redistribution permission.
 
 ### 9.1 Third-Party Data Download Instructions
 
-The following files are **excluded from the public repository** due to redistribution restrictions. Replicators must download them manually and place them in the `rawdata/` directory before running the replication pipeline.
+The raw inputs are local-only and are not committed. Their access and
+redistribution terms differ by source; replicators must obtain each file through
+the applicable official source and place authorized inputs in `rawdata/` before
+running the replication pipeline.
 
 #### World Values Survey (WVS)
 
-**Access is free and requires no registration.** The WVSA states this
-explicitly on the download pages: *"Access to the data, similar to the
-previous rounds, is free, with no registration or payments required."*
-Conditions of use are: non-profit use, no redistribution of the data files, and
-citation of the source in any publication.
+The current WVS download page asks users to complete a form with name, institution,
+email, project title, intended use, and purpose, and to accept the Conditions of
+Use. The stated conditions require non-profit use, proper citation (including
+sending the publication citation to WVSA), and no redistribution of the data
+files. Check the live form for the release being downloaded; do not rely on the
+older claim that no form or registration details are required.
 
 Single entry point:
 <https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp>
@@ -270,22 +283,20 @@ Download the CSV variant for each; the site also offers SPSS, Stata, SAS and R
 bundles, which the pipeline does not read.
 
 Place the files in `rawdata/`. They are excluded from version control
-(`.gitignore`) because the licence forbids redistribution, not because access
-is restricted.
+(`.gitignore`) to keep provider data out of the repository; access may require
+completing the provider's download form and accepting its terms.
 
-> **Correction (2026-11-07).** Earlier versions of this section instructed
-> replicators to "register for a free WVS academic account" and to "accept the
-> WVS Academic Data Use Agreement". No such registration step exists on the
-> current WVS site, and the data are downloadable without an account. The
-> instruction has been removed. If a download page asks for an email address in
-> future, record what it asked for here rather than reintroducing a step that
-> was never verified.
+> **Correction (2026-11-16).** The previous statement that no registration
+> details or form were required is stale. The current download page asks for
+> identifying and project-use details and acceptance of the Conditions of Use.
+> Use the live form and applicable conditions for the selected release.
 
 #### Pinned input fingerprints
 
 The pipeline verifies these SHA-256 values before it reads anything. A file that
 does not match is refused rather than silently producing a different panel.
-`scripts/build_canonical_panel.ts` owns the two panel inputs;
+`scripts/build_canonical_panel.ts` owns the WVS construct table, macro panel,
+World Bank WDI extract, and EM-DAT country-year file;
 `scripts/build_wvs_constructs.ts` owns the item-level source.
 
 | File | Bytes | SHA-256 |
@@ -300,6 +311,7 @@ does not match is refused rather than silently producing a different panel.
 | `OECD_Redistribution_derived.csv` | 1,097,392 | `95EAD63169F558E5643C97308DBD1CCF56F01EEDBC955029BF5977F57CD9DF92` |
 | `SOCX2025-All-nat-cur.xlsx` | 5,105,016 | `39C2A673513CBAB41E72752493564E26BFA819D3737D53757644E6F6C9209CFD` |
 | `WDICSV.csv` | 198,078,699 | `C1CC1613DEE65121F0F77A26AC589A266E8A13AD56956B9BAEAD7ADF7E155309` |
+| `emdat_disasters.csv` | 235,529 | `7A8C6C2B3FD13AA2F0A49703797541669F67172DB89902DF72AD981FD88E755C` |
 | `GEDEvent_v25_1.csv` (UCDP) | 250,393,383 | `3F286DE84CC0CB9152403F53E6AEA2AC604D623F156E61079338596E09E8B550` |
 
 `wvs_combined.csv` is derived, not downloaded: `npm run build:wvs-constructs`
@@ -315,11 +327,16 @@ shasum -a 256 rawdata/*.csv rawdata/*.xlsx | sort -k2
 
 #### EM-DAT — International Disaster Database
 
-1. Navigate to <https://www.emdat.be/>
-2. Register for a free academic account
-3. Submit a data request for the required disaster variables
-4. Download the CSV extract → `emdat_disasters.csv`
-5. Place in `rawdata/`
+The applicable process depends on the exact EM-DAT product. The 2023 Public
+Data terms grant free access to eligible non-commercial research/educational
+users after they accept the conditions, and prohibit distributing EM-DAT or a
+substantial part of it and creating substitute or derivative databases. For
+each local file, record the product, version/date, access route, and accepted
+terms before using it. Place the authorized local extract in `rawdata/` and
+verify its pinned fingerprint. Do not redistribute the source extract or a
+derived database unless separate written terms expressly permit it.
+
+Official terms: <https://doc.emdat.be/legal/terms-of-use-2023/>.
 
 > **Note:** The derived file `wvs_combined.csv` is generated by the replication pipeline from the individual WVS wave files. It will be created automatically when you run the pipeline — you do not need to download it separately.
 
@@ -338,7 +355,7 @@ npm run replicate
 | "SHA-256 mismatch" on any script | `panel_canonical_v2.csv` was modified or corrupted | Restore from version control |
 | `generate:phase1-validation` timeout | Large cross-validation matrix | Increase Node.js heap: `NODE_OPTIONS=--max-old-space-size=8192` |
 | `check:manuscript-consistency` failure | Manuscript text edited without regenerating artifacts | Re-run `npm run generate:analysis` then `npm run generate:phase1-validation` |
-| Metric drift (e.g. R² ≠ 0.3854) | Code-path change in production mapping | Diff against last known-good commit |
+| Metric drift (e.g. R² ≠ 0.4061) | Code-path change in production mapping | Diff against last known-good commit |
 | `npm run replicate` exits at lint | New linting rule or unresolved warning | Run `npm run lint` standalone to inspect |
 
 ---

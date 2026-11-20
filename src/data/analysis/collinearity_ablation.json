@@ -1,22 +1,22 @@
 {
   "schemaVersion": "phase1.collinearity_ablation.v1",
-  "generatedAtIso": "2026-11-11T14:47:09.764Z",
+  "generatedAtIso": "2026-11-15T12:18:24.119Z",
   "n": 207,
   "specs": [
     {
       "label": "full design",
       "neutralised": [],
       "inSample": {
-        "A": 0.465416,
-        "B": 0.559939,
-        "C": 0.565758
+        "A": 0.462273,
+        "B": 0.559057,
+        "C": 0.563414
       },
       "kFold": {
-        "A": 0.420691,
-        "B": 0.523911,
-        "C": 0.503793
+        "A": 0.40742,
+        "B": 0.521621,
+        "C": 0.482418
       },
-      "cMinusB": -0.020119
+      "cMinusB": -0.039203
     },
     {
       "label": "without R",
@@ -24,16 +24,16 @@
         "R"
       ],
       "inSample": {
-        "A": 0.456875,
-        "B": 0.547263,
-        "C": 0.552713
+        "A": 0.450759,
+        "B": 0.544906,
+        "C": 0.549416
       },
       "kFold": {
-        "A": 0.424805,
-        "B": 0.531455,
-        "C": 0.512619
+        "A": 0.416739,
+        "B": 0.527737,
+        "C": 0.505807
       },
-      "cMinusB": -0.018836
+      "cMinusB": -0.02193
     },
     {
       "label": "without E",
@@ -41,16 +41,16 @@
         "E"
       ],
       "inSample": {
-        "A": 0.450704,
-        "B": 0.526951,
-        "C": 0.533978
+        "A": 0.445475,
+        "B": 0.522587,
+        "C": 0.528684
       },
       "kFold": {
-        "A": 0.408663,
-        "B": 0.478678,
-        "C": 0.463852
+        "A": 0.390816,
+        "B": 0.471216,
+        "C": 0.470484
       },
-      "cMinusB": -0.014825
+      "cMinusB": -0.000732
     },
     {
       "label": "without R and E",
@@ -59,19 +59,19 @@
         "E"
       ],
       "inSample": {
-        "A": 0.386041,
-        "B": 0.436443,
-        "C": 0.445186
+        "A": 0.36905,
+        "B": 0.423011,
+        "C": 0.432147
       },
       "kFold": {
-        "A": 0.359722,
-        "B": 0.401332,
-        "C": 0.407456
+        "A": 0.32217,
+        "B": 0.384504,
+        "C": 0.367082
       },
-      "cMinusB": 0.006124
+      "cMinusB": -0.017422
     }
   ],
-  "reversalStable": false,
+  "reversalStable": true,
   "orderingStableInSample": true,
-  "interpretation": "The Tier C ordering is NOT stable across ablations; the reversal must not be reported as robust."
+  "interpretation": "Tier C ranks below Tier B out of sample in every ablation, and in-sample fit stays monotone A < B < C. The reversal does not depend on the dependent covariates."
 }

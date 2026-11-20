@@ -1046,13 +1046,13 @@ const MathematicalAnalysisSection: React.FC = () => {
                   </p>
                   <div className="ma-status-row ma-mt-05">
                     <span className="ma-status-chip ma-status-chip-pass">
-                      Resolved: 10
+                      Resolved: 12
                     </span>
                     <span className="ma-status-chip ma-status-chip-neutral">
                       Partially resolved: 6
                     </span>
                     <span className="ma-status-chip ma-status-chip-warn">
-                      Unresolved: 2
+                      Unresolved: 0
                     </span>
                   </div>
                   <div className="ma-status-row ma-mt-05">
@@ -1060,20 +1060,20 @@ const MathematicalAnalysisSection: React.FC = () => {
                       Critical: 4
                     </span>
                     <span className="ma-status-chip ma-status-chip-neutral">
-                      Major: 10
+                      Major: 9
                     </span>
                     <span className="ma-status-chip ma-status-chip-pass">
-                      Minor: 4
+                      Minor: 5
                     </span>
                   </div>
                   <ul className="model-features ma-mt-05">
-                    <li><strong>Top risk #1:</strong> Rolling-origin temporal instability — Tier B/C OOS R² negative in multiple folds; 95% coverage drops to 31% (Tier B). Defense: rolling-origin is a stringent stress test; LOO (primary evidence) shows adequate spatial performance.</li>
-                    <li><strong>Top risk #2:</strong> Thin effective support (34 country-years) for 11–22 parameter models. Defense: tiered complexity ladder restricts headline claims to Tier A/B; all claims support-conditioned.</li>
-                    <li><strong>Top risk #3:</strong> Prediction interval undercoverage far below 95% nominal. Defense: coverage diagnostics upgraded to v2 with protocol-tier stratification; manuscript language calibrated.</li>
-                    <li><strong>Top risk #4:</strong> WVS microdata redistribution blocks full replication. Defense: canonical aggregated panel redistributable; download instructions provided.</li>
-                    <li><strong>Top risk #5:</strong> Cultural intensity C dominance / partial tautology with outcome Z. Defense: shared WVS source acknowledged; C captures level while other predictors shape geometry.</li>
-                    <li>Categories covered: methods (5), support/calibration (4), claims (3), reproducibility (3), novelty (3).</li>
-                    <li>Author response pack includes 5 rebuttal templates keyed to top attack surfaces.</li>
+                    <li><strong>Top risk #1:</strong> Temporal extrapolation and interval undercoverage — rolling-origin mean coverage is 86.7%/84.5%/81.7% for Tiers A/B/C, and is a scope diagnostic rather than forecasting evidence.</li>
+                    <li><strong>Top risk #2:</strong> Thin effective support (207 country-years) for 11–22 parameter models. Support ratios are 18.82/11.50/9.41; Tier C is exploratory and x_safe is below the Tier B stability threshold.</li>
+                    <li><strong>Top risk #3:</strong> No established predictive advantage over the linear baseline — grouped k-fold medians tie at four decimals and the linear model fits better in sample.</li>
+                    <li><strong>Top risk #4:</strong> Restricted inputs and derived-panel redistribution review remain open; the runbook documents retrieval and provenance but does not provide legal clearance.</li>
+                    <li><strong>Top risk #5:</strong> Country-level alignment reports 9 of 83 countries above MAE 0.25, including six preset cases; their joint exclusion remains untested.</li>
+                    <li>Categories covered: methods (6), support/calibration (4), claims (3), reproducibility (2), novelty (3).</li>
+                    <li>Author response pack includes current reviewer-response templates for the main risk areas.</li>
                   </ul>
                 </div>
               )}
@@ -1189,22 +1189,22 @@ const MathematicalAnalysisSection: React.FC = () => {
                 <div className="definition-card ma-mt-075">
                   <h3 className="card-title">5.2x Tier B Stability Sweep</h3>
                   <p className="ma-small-body">
-                    Sign-consistency threshold sweep (0.75–0.95) across 23 LOO country-out refits
+                    Sign-consistency threshold sweep (0.75–0.95) across 83 LOO country-out refits
                     for all 18 Tier B parameters. Artifact: <code>tier_b_stability_sweep.json</code> (schema v1).
                   </p>
                   <div className="ma-status-row ma-mt-05">
-                    <span className="ma-status-chip ma-status-chip-pass">18/18 ≥ 0.80</span>
-                    <span className="ma-status-chip ma-status-chip-pass">0 Demotion Candidates</span>
-                    <span className="ma-status-chip ma-status-chip-neutral">Min SC: 0.826 (g)</span>
+                    <span className="ma-status-chip ma-status-chip-warn">17/18 ≥ 0.80</span>
+                    <span className="ma-status-chip ma-status-chip-warn">1 Below Threshold</span>
+                    <span className="ma-status-chip ma-status-chip-neutral">Min SC: 0.759 (x_safe)</span>
                   </div>
                   <ul className="model-features ma-mt-05">
-                    <li><strong>≥ 0.75:</strong> 18/18 pass — no parameter below minimum threshold.</li>
-                    <li><strong>≥ 0.80:</strong> 18/18 pass — no demotion candidates.</li>
-                    <li><strong>≥ 0.85:</strong> 17/18 pass — <em>g</em> (government spending, SC=0.826) fails.</li>
-                    <li><strong>≥ 0.90:</strong> 17/18 pass — <em>g</em> still the sole failure.</li>
-                    <li><strong>≥ 0.95:</strong> 16/18 pass — <em>g</em> and <em>e:s</em> (SC=0.913) fail.</li>
-                    <li><strong>Minimum:</strong> g at 0.826 (19/23 folds same sign) — above 0.80 demotion threshold.</li>
-                    <li><strong>Verdict:</strong> All Tier B parameters retain primary inferential classification. No reclassification warranted.</li>
+                    <li><strong>≥ 0.75:</strong> 18/18 pass.</li>
+                    <li><strong>≥ 0.80:</strong> 17/18 pass; <em>x_safe</em> is below threshold.</li>
+                    <li><strong>≥ 0.85:</strong> 17/18 pass; <em>x_safe</em> remains the only failure.</li>
+                    <li><strong>≥ 0.90:</strong> 17/18 pass; <em>x_safe</em> remains the only failure.</li>
+                    <li><strong>≥ 0.95:</strong> 16/18 pass; <em>x_safe</em> and <em>t</em> fail.</li>
+                    <li><strong>Minimum:</strong> <em>x_safe</em> at 0.759 across 83 folds, below the 0.80 threshold.</li>
+                    <li><strong>Verdict:</strong> The artifact flags one Tier B parameter for review; this stability caveat is disclosed alongside the current primary-tier classification.</li>
                   </ul>
                 </div>
               )}

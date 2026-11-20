@@ -212,6 +212,7 @@ export function deriveFormulaMetrics(params: BeliefParameters = DEFAULT_UI_PARAM
   const systemVolatility = Math.abs(netField) / (amplifying + suppressing + 0.001)
   const emergenceThreshold = 0.5
   const distanceToThreshold = Math.abs(model.Z - emergenceThreshold)
+  const criticality = criticalityIndex(model.Z, emergenceThreshold)
 
   // `S` is the structural product shown beside Φ, and the saturation index is the
   // logistic-style transform of Z printed under it.
@@ -232,7 +233,8 @@ export function deriveFormulaMetrics(params: BeliefParameters = DEFAULT_UI_PARAM
     ySafe,
     structuralS,
     saturationIndex,
-    criticalityIndex(model.Z, emergenceThreshold),
+    criticality,
+    criticality * 100,
   ]
 }
 
@@ -375,6 +377,7 @@ export function derivePanelConstants(): number[] {
     PANEL_X_MAX,
     PANEL_Y_MIN,
     PANEL_Y_MAX,
+    OPTIMIZED_STRUCTURAL_PARAMS.phi0,
   ]
   for (const value of Object.values(OPTIMIZED_SIGMOID_COEFFICIENTS)) {
     if (typeof value === 'number' && Number.isFinite(value)) out.push(value)

@@ -1,18 +1,18 @@
 # KNOWN ISSUES — Measurement defects and their disposition
 
-**Status:** OPEN ITEMS BELOW ARE TRACKED INDIVIDUALLY — no entry still blocks release
+**Status (2026-11-16):** findings are tracked individually; KI-09–11 describe withdrawn constructs, KI-15 remains a reported identification limit, and separate submission gates remain open
 **Severity:** was Critical; the blocking defect (KI-01) is closed
 **Discovered:** 2026-11-07
-**Last reconciled against the tree:** 2026-11-09
+**Last reconciled against the tree:** 2026-11-16
 **Affects:** historical claims in `paper/main/main.tex` up to commit `41c2fad`
 
-Every finding below is independently reproducible from the committed tree.
-Unless an entry says otherwise, its reproduction commands now run against
-`public/data/panel_canonical_v2.csv` (167 complete-case country-years, 76
-countries, 1990--2023) and `rawdata/wvs_construct_audit.json`. Where an entry
-still cites `panel_canonical_23_countries_v1.csv` or
+The canonical panel currently contains 207 complete-case country-years across
+83 countries (1990--2023), with 207 unique `(iso3, year)` keys. Many measurements
+inside the issue records are explicitly historical snapshots from earlier
+panel versions; use the current artifacts for present-day values. Where an
+entry cites `panel_canonical_23_countries_v1.csv` or
 `rawdata/panel_model_data.csv`, those files are retired and the citation is
-kept only to describe what the defect was.
+kept only to describe the original defect.
 
 ## Disposition summary
 
@@ -35,7 +35,8 @@ kept only to describe what the defect was.
 | KI-14 | Country-out refit not viable | **CLOSED** — grouped k-fold is now primary |
 | KI-15 | `alpha`/`beta` at lower bound | **OPEN** — reported as a finding |
 | KI-16 | Lockbox cannot be honoured | **CLOSED, scope narrowed** — 17 of 87 originally drawn cells stay reserved; 59 backfilled cells added after the split are not lockbox-protected. Disclosed in Lockbox protocol status (main §6). |
-| KI-17 | Functional form vs linear baseline | **REVISED** — measured; the two are indistinguishable out of sample |
+| KI-17 | Functional form vs linear baseline | **REVISED** — grouped k-fold medians tie at 0.4074; bounded leads on 56/100 folds by a paired median difference of 0.0000019; linear leads in sample (0.4623 vs 0.4061) |
+| KI-18 | Fitting and evaluation use different X/Y windows and outcome anchors | **RESOLVED 2026-11-15** — fit, evaluation contract and generators use realised X/Y ranges and current-panel 1st/99th percentile Z anchors; verified by the shared-window consistency guard |
 
 ---
 
@@ -124,6 +125,26 @@ Computed honestly from the declared codings, with no alignment:
 So a correct rebuild does not produce two mildly correlated constructs. It
 produces two constructs that are *negatively* related, and one of them (`C`)
 has alpha 0.30. The +0.496 figure must not be cited anywhere.
+
+---
+
+## KI-18 — The fitting script and the evaluation contract use different structural windows and outcome anchors
+
+**Found 2026-11-15.** The manuscript said the X/Y bounds "are the realised ranges of the v2 panel". They are not.
+
+| | X window | Y window | rows clamped (X / Y) | in-sample R² (observed scale) |
+|---|---|---|---|---|
+| fitting script (`fit_coefficients_v2.py`) | 0.2223–0.9544 | -1.4601–3.4280 | 11 / 9 | 0.3466 |
+| evaluation contract (`modelContract.ts`) | 0.3304–0.9544 | -1.6078–3.4280 | 32 / 8 | 0.3396 |
+| realised panel range | 0.1035–0.9544 | -1.5585–5.2159 | 0 / 0 | 0.3755 |
+
+The fitting script anchors the target at the 1st/99th percentiles of the current panel (-2.3974, 1.8573); the evaluation uses `Z_NORMALIZATION` (-1.8893, 1.8541). The bounded-scale R² of the same predictions is 0.3763 against the fitting anchors and 0.3317 against the evaluation anchors.
+
+**Does it change the finding?** A full refit under the realised ranges (no clamping) gives R² 0.3786; alpha and beta stay on their lower bound; c_M, c_T and c_E move by less than 0.003. The exponent collapse (KI-15) is therefore not a clamping artefact. phi0 and k change individually but not phi0 − ln k, the only combination identified when the structural base is near one.
+
+**Resolution protocol (fixed 2026-11-15, before it is run).** Convention: X and Y windows equal the realised panel ranges; Z anchors equal the current panel's 1st and 99th percentiles; the same constants are used by the fitting script, the model contract and every generator. Choosing them by principle rather than by fit avoids post-hoc specification selection. When executed: refit, regenerate every artifact, report old and new headline numbers side by side, and do not change any conclusion without a new sentence stating the change. Preferably executed after the v2 application exists, because the Claim Registry and the consistency guards then update the interface and the manuscript numbers mechanically.
+
+**State.** Disclosed in the manuscript (Section 8, "Structural window and anchoring") and checked by `STRUCTURAL_WINDOW_DRIFT`. Not fixed, because unifying the windows and refitting changes every downstream artifact. Regenerate with `npm run generate:window-sensitivity`.
 
 ---
 
@@ -264,67 +285,15 @@ from the artifact.
 
 ---
 
-## KI-15 — `alpha` and `beta` collapse to their lower bound: X and Y carry no structural power
+## KI-15 — Structural elasticities sit at their lower bound and remain weakly identified — UPDATED 2026-11-15
 
-Re-estimating the model on the v2 panel (`scripts/fit_coefficients_v2.py`,
-differential evolution + L-BFGS-B with box constraints), the elasticities in
+On the canonical 207-row, 83-country panel, the production fit estimates `alpha = beta = 0.050`, the configured lower bound. The shared preprocessing contract now uses the realised panel ranges `X in [0.103453, 0.954411]`, `Y in [-1.558464, 5.215892]`, and current-panel 1st/99th percentile outcome anchors `Z in [-2.397431, 1.857307]`; no panel rows are clipped by the X/Y windows. The unified refit and contract are recorded in `structural_window_sensitivity.json`.
 
-```text
-Z = X_s^alpha * Y_s^beta * exp(Phi) / (that + k)
-```
+**Bound sensitivity.** Lowering the common alpha/beta floor from 0.050 to 0.001 moves both estimates to that new floor and raises fit-script observed-scale R2 from 0.3786 to 0.3990 (`elasticity_bound_sensitivity.json`). This shows sensitivity to the imposed floor. It does not establish that either exponent is estimated as zero.
 
-both converge to the lowest permitted value, `alpha = beta = 0.050`, and stay
-there when the bound is widened and the optimiser is restarted. Raising either
-exponent above that floor lowers the fit.
+**Profile evidence.** The alpha profile fixes alpha from 0.001 through 0.064 and re-optimises the other parameters. Loss increases across the tested grid, but all profile p-values exceed 0.05 (0.082 at 0.064); the grid has no interior minimum and does not exclude the shipped value 0.050. Alpha is weakly identified over this range. Beta is not separately profiled in this analysis.
 
-Meaning: the sublinear-power structural term contributes no explanatory power
-on this sample. `X^0.05` and `Y^0.05` are near-constant across the observed
-range, so `Z` is effectively driven by `exp(Phi)` alone. `Y` still matters, but
-through the interaction term `c_yr * Y_s * R` (fitted at +0.63), not through the
-elasticity `beta`.
-
-### Why this is expected here, and what it costs
-
-The v2 panel spans 167 observations across 76 countries, 27 of which contribute a
-single row. There is not enough within-country variation for an elasticity to be
-identified separately from the level term. The v1 panel could report `alpha` near
-1 only because `C` was restating `Z`.
-
-**Measured, not assumed.** An earlier version of this entry asserted that the
-exponents "stay at the bound when it is widened" without anything having measured
-that. It now has: moving the alpha/beta floor from 0.050 to 0.001 and refitting
-leaves both exponents at whatever floor is in force and *raises* in-sample R2 from
-0.3622 to 0.4034 (`src/data/analysis/elasticity_bound_sensitivity.json`). The
-constraint therefore binds, and the data prefer the limit alpha, beta -> 0, in
-which the multiplicative baseline drops out entirely. The manuscript reports this
-as a finding (Results, "the structural baseline is inert on this sample").
-
-**Cost:** the paper's title and framing — "Bounded Nonlinear Response Surfaces
-for Macro-Urban Belief Emergence" driven by urbanization and inequality — no
-longer describes the fitted model. The fitted model is a cross-sectional
-saturating map of *contextual channels* (welfare capacity, media environment,
-education) with urbanization and inequality present but inert as elasticities.
-
-Two defensible responses:
-
-1. **Reframe.** Present the model as a bounded contextual-channel map and move
-   urbanization/inequality to the discussion as boundary conditions. Honest,
-   cheap, and matches what the data supports.
-2. **Change the estimand.** Drop the multiplicative structural term entirely
-   and estimate a bounded additive model on the channels. Cleaner
-   statistically, but a different paper.
-
-The roadmap now assumes (1).
-
-### A separate defect this exposed
-
-The structural mapping window in `src/utils/modelContract.ts` was
-`X in [0.4, 0.9]`, `Y in [-1.5, 3.5]` — the v1 ranges. The v2 panel spans
-`X in [0.3304, 0.9544]` and `Y in [-1.6077, 3.4280]`, so six observations fell
-outside and were clipped to the floor of the interior band. That pinning is
-what first drove `alpha` into its bound; with the window corrected the bound
-result persists, which is how we know it is real rather than a clipping
-artefact.
+The paper reports the production specification and its bounded-scale headline R2 (0.4061), while distinguishing it from the fit script's observed-scale comparison. It retains X and Y in the stated model and avoids interpreting their structural exponents as identified effects. The contract, fit, profile, and sensitivity check are tied together by the manuscript consistency guard.
 
 ---
 
@@ -412,6 +381,8 @@ country-out, pooled held-out series             Tier A   Tier B   Tier C
   canonical R2                                  +0.2605  +0.3062  +0.2516
 ```
 
+*Historical record: these values are from the 146-row panel at the time of the fix. Current values are in `cv_country_out.json` (`pooledRefit`, `pooledCanonical`).*
+
 The gap between those two lines is the issue itself: the negative per-fold
 median was a variance ratio computed on one to four points, not a statement
 about the model.
@@ -465,9 +436,9 @@ The coefficients were refit on the 167-cell v2 panel by
 `src/data/feCoefficients.ts`.
 
 ```text
-phi0 = +3.3431   alpha = 0.0500   beta = 0.0500   k = 14.6163
-c_M  = -0.1356   c_T   = -0.0858   c_E = +0.3882   c_R = +0.2587
-c_tr = -0.1668   c_yr  = +0.6325
+phi0 = -5.9312   alpha = 0.0500   beta = 0.0500   k = 0.0013741
+c_M  = -0.1375   c_T   = -0.0849   c_E = +0.3865   c_R = +0.2882
+c_tr = -0.1580   c_yr  = +0.7468
 retracted: C, D, G, S — coefficient not estimated (channel unavailable in v2)
 ```
 
@@ -740,7 +711,12 @@ verify:all` runs on a clean Ubuntu runner. That remains open (Phase 4.1).
 
 ---
 
-## What must change before submission
+## Historical pre-submission checklist (2026-11-09; superseded)
+
+> This checklist and the verification table below are a dated snapshot, not the
+> current task list. Several items were resolved or revised after 2026-11-09;
+> use the disposition summary above for issue status and
+> `docs/ROADMAP_TO_SUBMISSION.md` for current repository and external gates.
 
 1. **Recover or rewrite the ingestion pipeline** (KI-00). Without it nothing
    else can be verified. This is the first task, and it is not optional.

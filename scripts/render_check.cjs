@@ -20,7 +20,8 @@ const PORT = process.env.RENDER_CHECK_PORT || '5199';
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 // Values from before the panel reached 167 rows. None may appear on screen.
-const FORBIDDEN = [/0\.948/, /\b630\b/, /23 countr/, /2000[-\u2013]2022/, /\b1\.307\b/];
+// Match 630 as an integer token so a valid decimal such as 0.630 is not a false positive.
+const FORBIDDEN = [/0\.948/, /(^|[^\d.,])630($|[^\d.,])/, /23 countr/, /2000[-\u2013]2022/, /\b1\.307\b/];
 
 // Every route the router produces, mirroring src/router/routes.ts. Duplicated on purpose:
 // a route added to the taxonomy but never checked here is the gap this guards.

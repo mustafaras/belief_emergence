@@ -44,6 +44,8 @@ import {
 } from '../src/verification/derivedValues'
 import { ALLOWLIST, isAllowlisted } from '../src/verification/allowlist'
 import { ARTIFACT_CONSUMPTION } from '../src/evidence/artifactConsumption.generated'
+import { DESCRIPTION_NUMBERS } from '../src/evidence/descriptionNumbers'
+import { buildSupportPicture, type PanelAudit } from '../src/verification/supportPicture'
 import { computePresetCountryAlignment } from '../src/utils/validation/presetCountryAlignment'
 import { computePanelFitSummary } from '../src/utils/validation/computePanelFitSummary'
 import { predictFromPanelRow } from '../src/utils/validation/panelPredict'
@@ -267,6 +269,21 @@ export function buildSources(): {
     .filter((f) => imported.has(f.replace(/\.json$/, '')))
     .map((f) => JSON.parse(fs.readFileSync(path.join(ANALYSIS_DIR, f), 'utf8')))
 
+  // Artifact-index descriptions have their own source-bound numeric registry. Recompute
+  // those values from the named artifacts so a rounded prose value such as VIF 9.43 is
+  // checked against its source, not exempted or accepted by a corpus coincidence.
+  const descriptionClaimValues = Object.entries(DESCRIPTION_NUMBERS).flatMap(([name, claims]) => {
+    const artifactPath = path.join(ANALYSIS_DIR, `${name}.json`)
+    if (!fs.existsSync(artifactPath)) return []
+    const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8')) as Record<string, unknown>
+    return claims.flatMap((claim) => {
+      if (claim.kind !== 'derived') return []
+      const value = claim.compute(artifact)
+      const numeric = typeof value === 'number' ? value : Number(value)
+      return Number.isFinite(numeric) ? [numeric] : []
+    })
+  })
+
   // The headline metrics live in `src/data/metrics/`, not `src/data/analysis/`, and are
   // imported by `modelMetrics.ts`. They were outside the corpus, so the R², correlation,
   // MAE and RMSE printed in the equation section resolved only by coincidence against CV
@@ -283,6 +300,30 @@ export function buildSources(): {
   if (fs.existsSync(auditPath)) artifacts.push(JSON.parse(fs.readFileSync(auditPath, 'utf8')))
 
   const panelRows = readPanelRows()
+
+  // The attrition panel computes percentages from the tracked panel audit and WVS audit.
+  // Derive its rounded percentages from the same builder so displayed values remain tied
+  // to the exact numerator and denominator rather than a manually entered 67.9.
+  const panelAudit = JSON.parse(
+    fs.readFileSync(PANEL_CSV.replace(/\.csv$/, '.audit.json'), 'utf8'),
+  ) as PanelAudit
+  const constructAudit = JSON.parse(
+    fs.readFileSync(path.join(ANALYSIS_DIR, 'wvs_construct_audit.json'), 'utf8'),
+  ) as {
+    respondentsScanned?: number
+    countryYears?: number
+    constructs: Record<string, { cellsEmitted: number }>
+  }
+  const supportPicture = buildSupportPicture(panelAudit, {
+    respondentsScanned: constructAudit.respondentsScanned,
+    countryYears: constructAudit.countryYears,
+    zComputableCells: constructAudit.constructs.Z_belief_outcome?.cellsEmitted,
+  })
+  const supportPercentages = [
+    ...supportPicture.stages.map((stage) => stage.ofPrevious * 100),
+    ...supportPicture.blockers.map((blocker) => blocker.share * 100),
+    supportPicture.frameUtilisation * 100,
+  ]
 
   // The preset table's Success(%) is 100*(1-MAE) per country, computed from the panel.
   const alignment = computePresetCountryAlignment(panelRows)
@@ -343,6 +384,9 @@ export function buildSources(): {
       derivePanelStats(panelRows.map((r) => ({ Z: r.Z }))),
       deriveCountryMeans(panelRows as unknown as Array<Record<string, unknown>>),
       deriveCountryR2Median(panelRows),
+      supportPicture,
+      supportPercentages,
+      descriptionClaimValues,
       deriveContractConstants(),
       deriveLimitArithmetic({
         panelRows: readPanelRows().length,
@@ -407,6 +451,16 @@ export function auditText(
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
     const line = lines[lineIndex]
     const previousLine = lines[lineIndex - 1]?.trim() ?? ''
+    const previousPreviousLine = lines[lineIndex - 2]?.trim() ?? ''
+    const trimmedLine = line.trim()
+    const separatedMathMinus =
+      /^\d+(?:\.\d+)?$/.test(trimmedLine) &&
+      (previousLine === '−' || previousLine === '-')
+    const parenthesizedMathMinus =
+      /^\d+(?:\.\d+)?$/.test(trimmedLine) &&
+      previousLine === '(' &&
+      (previousPreviousLine === '−' || previousPreviousLine === '-')
+    const tokenLine = separatedMathMinus || parenthesizedMathMinus ? `−${trimmedLine}` : line
     const parameterSource = DEFAULT_PARAMETER_LABELS.find(({ label }) =>
       previousLine.startsWith(`${label} →`),
     )
@@ -453,7 +507,7 @@ export function auditText(
       continue
     }
 
-    for (const token of extractTokens(line)) {
+    for (const token of extractTokens(tokenLine)) {
       if (seen.has(token)) continue
       seen.add(token)
       report.tokens += 1
@@ -497,7 +551,7 @@ async function main(): Promise<void> {
   const baseUrl =
     urlArgIndex !== -1 && process.argv[urlArgIndex + 1]
       ? process.argv[urlArgIndex + 1]
-      : 'http://localhost:5199/belief_emergence/'
+      : `http://localhost:${process.env.RENDER_CHECK_PORT || '5199'}/belief_emergence/`
 
   if (ALLOWLIST.length >= MAX_ALLOWLIST_ENTRIES) {
     console.error(

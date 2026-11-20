@@ -597,8 +597,8 @@ function gateMeasurementValidity(): void {
   }
 
   // 7.6 — the canonical (fixed-model) family must be reported on a statistic
-  // that is actually defined. Country-out folds hold out 1-4 rows, so R² is
-  // undefined in 36 of 48 folds and the per-fold median describes the twelve
+  // that is actually defined. Country-out folds hold out 1-6 rows, so R² is
+  // undefined in 48 of 83 folds and the per-fold median describes the 35
   // survivors, not the model (KI-14). The check therefore reads the primary
   // spatial evidence from cv_kfold.json, and falls back to the pooled
   // held-out series in cv_country_out.json when k-fold is absent.
@@ -671,7 +671,7 @@ function gateCanonicalDisclosure(countryOut: Record<string, unknown> | null): vo
     'Canonical (fixed-model) OOS R2 is non-negative on the primary protocol', false, 'major',
     'Neither cv_kfold.json nor a pooled held-out series is present — run npm run generate:kfold '
     + 'and npm run generate:phase1-validation. The per-fold country-out median is not acceptable '
-    + 'evidence because R² is undefined in 36 of 48 folds (KI-14).');
+    + 'evidence because R² is undefined in 48 of 83 folds (KI-14).');
 }
 
 /**
@@ -771,7 +771,7 @@ const HUMAN_CHECKLIST: HumanCheckItem[] = [
   { id: 'h-abstract-screen',  category: 'Editor Fit',      question: 'Does the abstract pass first-pass screening (concise, evidence-calibrated, non-causal)?' },
   { id: 'h-claim-tier',       category: 'Claim Strength',  question: 'Are all strong claims tied to Tier A/B OOS evidence only (not Tier C or in-sample metrics)?' },
   { id: 'h-causal',           category: 'Claim Strength',  question: 'Does no sentence imply causal interpretation beyond the observational design?' },
-  { id: 'h-support',          category: 'Claim Strength',  question: 'Are support-density boundaries (n=146 country-years) explicitly acknowledged for high-dimensional terms?' },
+  { id: 'h-support',          category: 'Claim Strength',  question: 'Are support-density boundaries for the current canonical panel explicitly acknowledged for high-dimensional terms?' },
   { id: 'h-lockbox-disclose', category: 'Claim Strength',  question: 'Is lockbox evidence clearly separated from development CV evidence in all claims?' },
   { id: 'h-novelty-precise',  category: 'Novelty Precision', question: 'Is the novelty claim precisely scoped (method + domain-specific contribution, no universal claims)?' },
   { id: 'h-review-ready',     category: 'Novelty Precision', question: 'Are top 5 reviewer attack surfaces pre-addressed (see reviewer_red_team.json)?' },

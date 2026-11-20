@@ -34,6 +34,11 @@ const EXPECTED_SCHEMAS: Record<string, { field: string; value: string | number }
   'collinearity_diagnostics.json': { field: 'schemaVersion', value: 'phase1.collinearity_diagnostics.v1' },
   'collinearity_ablation.json': { field: 'schemaVersion', value: 'phase1.collinearity_ablation.v1' },
   'zero_fill_sensitivity.json': { field: 'schemaVersion', value: 'phase1.zero_fill_sensitivity.v1' },
+  'marginal_effects.json': { field: 'schemaVersion', value: 'phase1.marginal_effects.v1' },
+  'coefficient_bootstrap.json': { field: 'schemaVersion', value: 'phase1.coefficient_bootstrap.v1' },
+  'structural_window_sensitivity.json': { field: 'schemaVersion', value: 'phase1.structural_window_sensitivity.v1' },
+  'preset_country_alignment.json': { field: 'schemaVersion', value: 'phase1.preset_country_alignment.v1' },
+  'supplementary_tables.json': { field: 'schemaVersion', value: 'phase1.supplementary_tables.v1' },
   'coefficient_fit.json': { field: 'schemaVersion', value: 'phase1.coefficient_fit.v1' },
   'software_environment.json': { field: 'schemaVersion', value: 'phase1.software_environment.v1' },
   'elasticity_bound_sensitivity.json': { field: 'schemaVersion', value: 'phase1.elasticity_bound_sensitivity.v1' },
@@ -73,19 +78,18 @@ interface MetricExpectation {
  *
  * These are a regression guard, not a target: they pin whatever the committed
  * panel currently produces so that an accidental change to the data path is
- * caught. When the panel itself changes deliberately (here: the WDI Gini
- * backfill took the sample from 87 to 126 cells, which legitimately moves every
- * number), update this block in the same commit that changes the panel and say
- * so in the message. The one thing that must never happen is editing this list
+ * caught. When the panel or production model changes deliberately, update this
+ * block in the same commit that changes the source metrics and say so in the
+ * message. The one thing that must never happen is editing this list
  * to make a failing build green without a corresponding data change.
  */
 const CANONICAL_METRICS: MetricExpectation[] = [
   { key: 'n',    expected: 207,     tolerance: 0 },
-  { key: 'r2',   expected: 0.3461,  tolerance: 0.0001 },
-  { key: 'corr', expected: 0.6150,  tolerance: 0.0001 },
-  { key: 'mae',  expected: 0.1617,  tolerance: 0.0001 },
-  { key: 'rmse', expected: 0.2089,  tolerance: 0.0001 },
-  { key: 'bias', expected: -0.0440,  tolerance: 0.0001 },
+  { key: 'r2',   expected: 0.40614013285780814, tolerance: 0.0001 },
+  { key: 'corr', expected: 0.6393402220093086,  tolerance: 0.0001 },
+  { key: 'mae',  expected: 0.13874326672383433, tolerance: 0.0001 },
+  { key: 'rmse', expected: 0.17994920542522055, tolerance: 0.0001 },
+  { key: 'bias', expected: 0.0048270088408924145, tolerance: 0.0001 },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -109,6 +113,11 @@ const REQUIRED_ARTIFACTS = [
   path.join(ANALYSIS, 'collinearity_diagnostics.json'),
   path.join(ANALYSIS, 'collinearity_ablation.json'),
   path.join(ANALYSIS, 'zero_fill_sensitivity.json'),
+  path.join(ANALYSIS, 'marginal_effects.json'),
+  path.join(ANALYSIS, 'coefficient_bootstrap.json'),
+  path.join(ANALYSIS, 'structural_window_sensitivity.json'),
+  path.join(ANALYSIS, 'preset_country_alignment.json'),
+  path.join(ANALYSIS, 'supplementary_tables.json'),
   path.join(ANALYSIS, 'r_collinearity_case.json'),
   path.join(ANALYSIS, 'gini_window_sensitivity.json'),
   path.join(ANALYSIS, 'coefficient_fit.json'),
@@ -457,9 +466,11 @@ function phaseValidationChecks(): boolean {
     // The initial payload, measured from the built site rather than inferred from the
     // bundle. Runs after Phase 7's build so dist/ is current.
     { label: 'Bundle budget',                cmd: 'npm run check:bundle-budget', reportSkip: true },
-    // The acceptance test for decomposing the surface component: pixel identity against a
-    // committed baseline, not "it looks right".
-    { label: 'Surface snapshot',             cmd: 'npm run check:surface-snapshot', reportSkip: true },
+    // Plotly's WebGL canvas is platform-specific. The reviewed baseline is macOS; the
+    // dedicated macOS visual-baselines job runs this exact pixel comparison there.
+    ...(process.platform === 'darwin'
+      ? [{ label: 'Surface snapshot', cmd: 'npm run check:surface-snapshot', reportSkip: true }]
+      : []),
   ];
   let allOk = true;
   for (const c of checks) {

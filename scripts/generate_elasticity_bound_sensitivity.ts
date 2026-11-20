@@ -23,9 +23,17 @@ const runWithBound = (lower: number): { alpha: number; beta: number; k: number; 
     .replace(/(math\.log\()0\.05(\)\s*,\s*math\.log\(5\.0\)\)\s*,\s*#\s*beta)/, `$1${lower}$2`)
     .replace(/OUT = ROOT \/ "rawdata" \/ "coefficients_v2\.json"/, `OUT = ROOT / "rawdata" / "coefficients_v2_boundtest.json"`)
     .replace(/COMMITTED = ROOT \/ "src" \/ "data" \/ "analysis" \/ "coefficient_fit\.json"/,
-             'COMMITTED = ROOT / "rawdata" / "_boundtest_committed.json"');
+             'COMMITTED = ROOT / "rawdata" / "_boundtest_committed.json"')
+    .replace(/FE_MODULE = ROOT \/ "src" \/ "data" \/ "feCoefficients\.ts"/,
+             'FE_MODULE = ROOT / "rawdata" / "_boundtest_feCoefficients.ts"')
+    .replace(/path = ROOT \/ "src" \/ "utils" \/ "modelContract\.ts"/,
+             'path = ROOT / "rawdata" / "_boundtest_modelContract.ts"');
   const tmp = path.join(REPO_ROOT, 'scripts', '_boundtest_fit.py');
   fs.writeFileSync(tmp, patched, 'utf8');
+  fs.copyFileSync(
+    path.join(REPO_ROOT, 'src', 'utils', 'modelContract.ts'),
+    path.join(REPO_ROOT, 'rawdata', '_boundtest_modelContract.ts'),
+  );
   try {
     execFileSync('python3', [tmp], { cwd: REPO_ROOT, stdio: 'pipe' });
   } finally {
@@ -57,7 +65,12 @@ const runs = [
   atBound: Math.abs(r.alpha - r.lowerBound) < 1e-5,
 }));
 
-for (const f of [TEMP, path.join(REPO_ROOT, 'rawdata', '_boundtest_committed.json')]) {
+for (const f of [
+  TEMP,
+  path.join(REPO_ROOT, 'rawdata', '_boundtest_committed.json'),
+  path.join(REPO_ROOT, 'rawdata', '_boundtest_feCoefficients.ts'),
+  path.join(REPO_ROOT, 'rawdata', '_boundtest_modelContract.ts'),
+]) {
   if (fs.existsSync(f)) fs.unlinkSync(f);
 }
 

@@ -37,9 +37,13 @@ describe('R is retained despite the temptation to drop it', () => {
   });
 
   it('states the cost of the decision in the manuscript', () => {
+    const withR = rCase.variants.find((v) => v.label === 'with R')!;
+    const withoutR = rCase.variants.find((v) => v.label === 'without R')!;
     expect(rCase.verdict.inSampleCost).toBeGreaterThan(0);
-    expect(rCase.verdict.inSampleCost).toBeLessThan(0.01);
-    expect(rCase.verdict.reason).toMatch(/post-hoc|post hoc/i);
+    expect(rCase.verdict.inSampleCost).toBeCloseTo(withR.inSampleR2 - withoutR.inSampleR2, 6);
+    expect(rCase.verdict.inSampleCost).toBeLessThan(0.02);
+    expect(fs.readFileSync('paper/main/main.tex', 'utf8')).toContain('a difference of \\num{0.0115}');
+    expect(rCase.verdict.reason).toMatch(/not below the conventional threshold|costs more in-sample R2/i);
   });
 
   it('discloses the dependence it declines to remove', () => {

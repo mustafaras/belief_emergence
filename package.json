@@ -36,8 +36,8 @@
     "build:wvs-constructs:dry": "tsx scripts/build_wvs_constructs.ts --dry-run",
     "verify:constructs": "tsx scripts/verify_constructs.ts",
     "generate:kfold": "tsx scripts/generate_kfold_validation.ts",
-    "build:panel": "tsx scripts/build_canonical_panel.ts && tsx scripts/generate_construct_prevalence.ts",
-    "build:panel:dry": "tsx scripts/build_canonical_panel.ts --dry-run",
+    "build:panel": "tsx scripts/build_canonical_panel.ts --gini-window 5 && tsx scripts/generate_construct_prevalence.ts",
+    "build:panel:dry": "tsx scripts/build_canonical_panel.ts --dry-run --gini-window 5",
     "generate:functional-form": "tsx scripts/generate_functional_form_comparison.ts",
     "generate:figures": "python3 scripts/make_fig_eval_pair.py && python3 scripts/make_fig_resid_pair.py",
     "generate:prevalence": "tsx scripts/generate_construct_prevalence.ts",
@@ -66,7 +66,15 @@
     "generate:artifact-facts": "tsx scripts/generate_artifact_facts.ts",
     "check:surface-snapshot": "tsx scripts/check_surface_snapshot.ts",
     "generate:presets": "tsx scripts/generate_presets.ts",
-    "check:presets": "tsx scripts/check_presets.ts"
+    "generate:marginal-effects": "tsx scripts/generate_marginal_effects.ts",
+    "generate:preset-alignment": "tsx scripts/generate_preset_alignment.ts",
+    "generate:supplement-tables": "tsx scripts/generate_supplement_tables.ts",
+    "generate:coefficient-bootstrap": "python3 scripts/bootstrap_coefficients.py",
+    "generate:window-sensitivity": "python3 scripts/window_sensitivity.py",
+    "generate:notation-glossary": "python3 scripts/update_notation_glossary.py",
+    "generate:data-figures": "python3 scripts/make_paper_figures.py",
+    "check:presets": "tsx scripts/check_presets.ts",
+    "generate:blockers": "tsx scripts/generate_covariate_blockers.ts"
   },
   "dependencies": {
     "framer-motion": "^12.23.3",

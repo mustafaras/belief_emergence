@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "phase1.covariate_blocker_attribution.v1",
+  "generatedAtIso": "2026-11-16T15:47:45.067Z",
+  "purpose": "Attribute the covariate-stage cells that are missing at least one raw driver, so the manuscript, the application and the panel builder describe the same sample and the same quantity.",
+  "definition": {
+    "frame": "Construct-bearing country-years that survive ISO resolution, have a computable outcome, and have a macro row.",
+    "exposure": "A cell counts once for every covariate it is missing. Counts therefore overlap and sum to more than atRiskCells; they are not a partition and must not be added.",
+    "firstFailure": "Each at-risk cell counts once, against the first missing covariate in the builder order X,Y,T,E,R,M. This is a partition of atRiskCells and answers a different question than exposure.",
+    "exclusive": "Cells missing exactly one raw covariate. A subset of firstFailure that is invariant to the ordering."
+  },
+  "sources": {
+    "constructs": "rawdata/wvs_combined.csv",
+    "macro": "rawdata/panel_model_data.csv",
+    "panel": "public/data/panel_canonical_v2.csv",
+    "isoResolution": "parsed from scripts/build_canonical_panel.ts"
+  },
+  "frame": {
+    "constructRows": 305,
+    "unresolvableIso": 11,
+    "missingOutcome": 18,
+    "noMacroRow": 8,
+    "reachedCovariateStage": 268,
+    "rawCompleteCells": 87,
+    "atRiskCells": 181
+  },
+  "exposure": [
+    {
+      "covariate": "Y",
+      "label": "Gini (inequality)",
+      "cells": 132,
+      "shareOfAtRisk": 0.7293
+    },
+    {
+      "covariate": "E",
+      "label": "Education capacity",
+      "cells": 93,
+      "shareOfAtRisk": 0.5138
+    },
+    {
+      "covariate": "T",
+      "label": "Trauma / disaster exposure",
+      "cells": 46,
+      "shareOfAtRisk": 0.2541
+    },
+    {
+      "covariate": "M",
+      "label": "Media environment",
+      "cells": 15,
+      "shareOfAtRisk": 0.0829
+    },
+    {
+      "covariate": "R",
+      "label": "Welfare capacity",
+      "cells": 13,
+      "shareOfAtRisk": 0.0718
+    },
+    {
+      "covariate": "X",
+      "label": "Settlement / urbanisation",
+      "cells": 4,
+      "shareOfAtRisk": 0.0221
+    }
+  ],
+  "exposureSum": 303,
+  "exposureIsPartition": false,
+  "firstFailureOrder": [
+    "X",
+    "Y",
+    "T",
+    "E",
+    "R",
+    "M"
+  ],
+  "firstFailure": [
+    {
+      "covariate": "Y",
+      "label": "Gini (inequality)",
+      "cells": 128,
+      "shareOfAtRisk": 0.7072
+    },
+    {
+      "covariate": "E",
+      "label": "Education capacity",
+      "cells": 26,
+      "shareOfAtRisk": 0.1436
+    },
+    {
+      "covariate": "T",
+      "label": "Trauma / disaster exposure",
+      "cells": 20,
+      "shareOfAtRisk": 0.1105
+    },
+    {
+      "covariate": "X",
+      "label": "Settlement / urbanisation",
+      "cells": 4,
+      "shareOfAtRisk": 0.0221
+    },
+    {
+      "covariate": "M",
+      "label": "Media environment",
+      "cells": 2,
+      "shareOfAtRisk": 0.011
+    },
+    {
+      "covariate": "R",
+      "label": "Welfare capacity",
+      "cells": 1,
+      "shareOfAtRisk": 0.0055
+    }
+  ],
+  "exclusive": [
+    {
+      "covariate": "Y",
+      "label": "Gini (inequality)",
+      "cells": 55,
+      "shareOfAtRisk": 0.3039
+    },
+    {
+      "covariate": "E",
+      "label": "Education capacity",
+      "cells": 26,
+      "shareOfAtRisk": 0.1436
+    },
+    {
+      "covariate": "T",
+      "label": "Trauma / disaster exposure",
+      "cells": 15,
+      "shareOfAtRisk": 0.0829
+    },
+    {
+      "covariate": "M",
+      "label": "Media environment",
+      "cells": 2,
+      "shareOfAtRisk": 0.011
+    },
+    {
+      "covariate": "R",
+      "label": "Welfare capacity",
+      "cells": 1,
+      "shareOfAtRisk": 0.0055
+    },
+    {
+      "covariate": "X",
+      "label": "Settlement / urbanisation",
+      "cells": 0,
+      "shareOfAtRisk": 0
+    }
+  ],
+  "missingCovariateHistogram": [
+    {
+      "covariatesMissing": 1,
+      "cells": 99
+    },
+    {
+      "covariatesMissing": 2,
+      "cells": 56
+    },
+    {
+      "covariatesMissing": 3,
+      "cells": 18
+    },
+    {
+      "covariatesMissing": 4,
+      "cells": 2
+    },
+    {
+      "covariatesMissing": 5,
+      "cells": 6
+    }
+  ],
+  "resolution": {
+    "rawCompleteCells": 87,
+    "rescuedByBackfill": 120,
+    "permanentlyLost": 61,
+    "backfillWindowYears": 5
+  },
+  "crossChecks": {
+    "panelRows": 207,
+    "auditMissingCovariate": 61,
+    "lostAgreesWithAudit": true,
+    "auditMissingByCovariate": {
+      "Y": 31,
+      "E": 23,
+      "X": 4,
+      "R": 3
+    },
+    "note": "auditMissingByCovariate is the builder's post-backfill, first-failure attribution of the cells that stay lost. It is not comparable to exposure above and is recorded only so a reader can see both."
+  }
+}

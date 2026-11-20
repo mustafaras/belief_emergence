@@ -1,7 +1,7 @@
 {
   "schema": "phase1.notation_glossary.v1",
-  "generated": "2026-11-09T11:15:00.000Z",
-  "generator": "manual_reconciliation_after_v2_panel",
+  "generated": "2026-11-16T08:42:26.934723+00:00",
+  "generator": "scripts/update_notation_glossary.py (reads structural_window_sensitivity.json, supplementary_tables.json, model_complexity_support.json, construct_prevalence.json, construct_item_availability.json)",
   "purpose": "Machine-readable notation glossary and regime definitions for all symbols used in the main manuscript and supplementary materials",
   "model_variables": [
     {
@@ -12,8 +12,16 @@
       "scale": "[ε, 1−ε]",
       "source": "World Bank WDI (urban_pop_share)",
       "bounds_raw": [
-        0.4,
-        0.9
+        0.1035,
+        0.9544
+      ],
+      "fitting_window": [
+        0.10345301530914319,
+        0.9544108940201302
+      ],
+      "evaluation_window": [
+        0.10345301530914319,
+        0.9544108940201302
       ]
     },
     {
@@ -22,10 +30,18 @@
       "role": "structural_driver",
       "type": "index",
       "scale": "[ε, 1−ε]",
-      "source": "OECD IDD/WISE (gini_disposable)",
+      "source": "World Bank SI.POV.GINI under an exact affine map (OECD levels not used directly)",
       "bounds_raw": [
-        -1.5,
-        3.5
+        -1.5585,
+        5.2159
+      ],
+      "fitting_window": [
+        -1.5584640000000003,
+        5.2158924
+      ],
+      "evaluation_window": [
+        -1.5584640000000003,
+        5.2158924
       ]
     },
     {
@@ -44,17 +60,26 @@
         "F063"
       ],
       "bounds_raw": [
-        -2.1882,
+        -2.6558,
         3.3693
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.818715691617005,
+        "configuredItems": 6,
+        "availableItems": 6,
+        "cellsEmitted": 287,
+        "computable": true,
+        "disposition": "retained",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "C",
       "name": "Cultural intensity",
-      "role": "amplifier",
+      "role": "withdrawn",
       "type": "composite",
       "scale": "standardized",
-      "source": "WVS 6-item aggregate (config/wvs_items.yaml)",
+      "source": "WVS 6-item aggregate (config/wvs_items.yaml); withdrawn: Cronbach alpha 0.348 below the 0.70 floor",
       "wvs_items": [
         "A008",
         "A009",
@@ -62,63 +87,81 @@
         "E015",
         "E018",
         "E035"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.3481590618313876,
+        "configuredItems": 6,
+        "availableItems": 6,
+        "cellsEmitted": 303,
+        "computable": true,
+        "disposition": "withdrawn",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "M",
       "name": "Media environment",
-      "role": "modifier",
+      "role": "retained_modifier",
       "type": "index",
       "scale": "standardized",
-      "source": "World Bank Internet usage + OECD proxy"
+      "source": "World Bank internet usage (standardized)"
     },
     {
       "symbol": "T",
       "name": "Trauma / shock",
-      "role": "amplifier",
+      "role": "retained_modifier",
       "type": "index",
       "scale": "standardized",
-      "source": "EM-DAT disaster deaths (total_deaths, standardized); UCDP battle deaths available as a separate field but not combined",
-      "note": "The macro panel exposes total_deaths, total_affected and total_battle_deaths. T equals total_deaths exactly (13,518 rows, zero residuals); total_affected has identical coverage (163/195 outcome cells) and UCDP covers only 65/195. Combining them leaves the 146-row complete-case sample unchanged, so the composite is a measurement change, not a sample change."
+      "source": "EM-DAT total_deaths, standardized (UCDP battle deaths are not the same measure and are not used)",
+      "note": "T equals total_deaths exactly. A composite with total_affected was tested on an earlier panel revision and not adopted; it is not reproduced on the current panel."
     },
     {
       "symbol": "D",
       "name": "Social atomization",
-      "role": "amplifier",
+      "role": "withdrawn",
       "type": "composite",
       "scale": "standardized",
-      "source": "WVS 5-item aggregate (config/wvs_items.yaml; 4 of 5 items available in the harmonised source)",
+      "source": "WVS 5 configured items, 4 usable (config/wvs_items.yaml); withdrawn: Cronbach alpha -1.228",
       "wvs_items": [
         "A165",
         "A168",
         "A170",
         "A173",
         "A174"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": -1.2284774929408622,
+        "configuredItems": 5,
+        "availableItems": 5,
+        "cellsEmitted": 296,
+        "computable": true,
+        "disposition": "withdrawn",
+        "alphaScope": "aggregate-level aligned country-year item means"
+      }
     },
     {
       "symbol": "G",
       "name": "Redistribution capacity",
-      "role": "suppressor",
+      "role": "withdrawn",
       "type": "index",
       "scale": "standardized",
-      "source": "OECD redistribution + SOCX scenarios"
+      "source": "OECD redistribution scenarios; withdrawn: disposable-income Gini is unavailable outside the OECD sample"
     },
     {
       "symbol": "E",
       "name": "Education capacity",
-      "role": "suppressor",
+      "role": "retained_modifier",
       "type": "index",
       "scale": "standardized",
-      "source": "Secondary enrollment (derived)"
+      "source": "World Bank SE.SEC.ENRR (secondary gross enrolment) under an exact affine map"
     },
     {
       "symbol": "S",
       "name": "Social support",
-      "role": "suppressor",
+      "role": "withdrawn",
       "type": "composite",
       "scale": "standardized",
-      "source": "WVS 7-item aggregate (config/wvs_items.yaml; uncomputable — 4 of 7 items absent)",
+      "source": "WVS 7 configured items, 3 available (A101, A106, F185, F186 absent); not computable, 0 cells",
       "wvs_items": [
         "A008",
         "A009",
@@ -127,15 +170,24 @@
         "F185",
         "F186",
         "G006"
-      ]
+      ],
+      "construct_audit": {
+        "cronbachAlpha": 0.7530436198636796,
+        "configuredItems": 7,
+        "availableItems": 3,
+        "cellsEmitted": 0,
+        "computable": false,
+        "disposition": "uncomputable",
+        "alphaScope": "available-item subset only; does not establish seven-item computability"
+      }
     },
     {
       "symbol": "R",
       "name": "Welfare capacity",
-      "role": "suppressor",
+      "role": "retained_modifier",
       "type": "index",
       "scale": "standardized",
-      "source": "UNDP HDR (hdi) + OECD SOCX"
+      "source": "UNDP HDI under an exact affine map: R = 7.303771 HDI - 6.005361"
     }
   ],
   "greek_letters": [
@@ -149,13 +201,13 @@
       "symbol": "α",
       "name": "Urbanization elasticity",
       "definition": "Exponent on log X",
-      "domain": "(0.01, 2.0]"
+      "domain": "[0.05, 5] (lower estimation bound 0.05)"
     },
     {
       "symbol": "β",
       "name": "Inequality elasticity",
       "definition": "Exponent on log Y",
-      "domain": "(0.01, 2.0]"
+      "domain": "[0.05, 5] (lower estimation bound 0.05)"
     },
     {
       "symbol": "φ₀",
@@ -177,14 +229,14 @@
     },
     {
       "symbol": "ρ",
-      "name": "Redistribution percentage",
+      "name": "Redistribution percentage (channel G withdrawn)",
       "definition": "100·(g^m − g^d)/g^m",
       "domain": "[0, 100]"
     },
     {
       "symbol": "ℒ",
-      "name": "Composite loss function",
-      "definition": "(1−R²) + (1−Corr) + MAE + w_b|Bias| + λ‖θ‖²₂",
+      "name": "Estimation loss",
+      "definition": "mean squared error between modelled and normalised observed Z (unpenalised)",
       "domain": "ℝ⁺"
     }
   ],
@@ -213,43 +265,50 @@
       "symbol": "k",
       "name": "Half-saturation constant",
       "bounds": [
-        0.1,
-        10
+        0.0001,
+        50
       ],
       "role": "Saturation curve inflection; Z=0.5 when S=k"
     },
     {
-      "symbol": "λ",
-      "name": "Ridge shrinkage (L₂)",
-      "bounds": "> 0",
-      "role": "Regularization to prevent overfitting"
+      "symbol": "x/y fitting window",
+      "name": "Structural windows used by fitting",
+      "values": [
+        0.10345301530914319,
+        0.9544108940201302,
+        -1.5584640000000003,
+        5.2158924
+      ],
+      "role": "Canonical realised X/Y ranges, shared with the evaluation contract after KI-18"
     },
     {
-      "symbol": "x_min, x_max",
-      "name": "Urbanization domain bounds",
+      "symbol": "x/y evaluation window",
+      "name": "Structural windows in the model contract",
       "values": [
-        0.4,
-        0.9
+        0.10345301530914319,
+        0.9544108940201302,
+        -1.5584640000000003,
+        5.2158924
       ],
-      "role": "Clip domain for safe-band map"
+      "role": "Same canonical realised X/Y ranges used by fitting and runtime after KI-18"
     },
     {
-      "symbol": "y_min, y_max",
-      "name": "Inequality domain bounds",
+      "symbol": "z fitting anchors",
+      "name": "Outcome anchors shared by fitting and evaluation",
       "values": [
-        -1.5,
-        3.5
+        -2.3974,
+        1.8573
       ],
-      "role": "Clip domain for safe-band map"
+      "role": "Current-panel 1st/99th percentile anchors, shared across the contract after KI-18"
     },
     {
-      "symbol": "z_min, z_max",
-      "name": "Outcome empirical range",
+      "symbol": "z evaluation anchors",
+      "name": "Outcome anchors shared by fitting and evaluation",
       "values": [
-        -1.3176,
-        1.8151
+        -2.3974,
+        1.8573
       ],
-      "role": "Normalization reference"
+      "role": "Same current-panel 1st/99th percentile anchors used in fitting after KI-18"
     },
     {
       "symbol": "Φ_clamp",
@@ -307,6 +366,18 @@
       "c_m2",
       "c_t2",
       "c_e2"
+    ],
+    "status_note": "Lists describe the nominal tier parameterization. C, D, G and S are withdrawn; their main effects and dependent terms are neutralized to zero rather than estimated.",
+    "withdrawn_channel_terms": [
+      "c_C",
+      "c_D",
+      "c_G",
+      "c_S",
+      "c_cm",
+      "c_es",
+      "c_dt",
+      "c_gr",
+      "c_c2"
     ]
   },
   "tier_definitions": [
@@ -314,7 +385,7 @@
       "tier": "A",
       "label": "Baseline linear",
       "params": 11,
-      "obs_per_param": 7.91,
+      "obs_per_param": 18.82,
       "inferential_role": "primary",
       "sign_consistency_threshold": 0.7
     },
@@ -322,7 +393,7 @@
       "tier": "B",
       "label": "Nonlinear core",
       "params": 18,
-      "obs_per_param": 4.83,
+      "obs_per_param": 11.5,
       "inferential_role": "primary",
       "sign_consistency_threshold": 0.8
     },
@@ -330,7 +401,7 @@
       "tier": "C",
       "label": "Full nonlinear",
       "params": 22,
-      "obs_per_param": 3.95,
+      "obs_per_param": 9.41,
       "inferential_role": "exploratory",
       "sign_consistency_threshold": 0.6
     }
@@ -339,36 +410,38 @@
     {
       "label": "Low-uptake",
       "formal_definition": "Z < 0.33",
-      "empirical_characterization": "Below-transition zone; outcome near floor. Marginal sensitivity ∂Z/∂Φ = Z(1−Z) is low. Dominated by secular / low-religiosity country-years.",
-      "support_density": "100 of 146 country-years (68.5%); extrapolation risk elevated."
+      "empirical_characterization": "Below-transition zone; outcome near floor. Marginal sensitivity ∂Z/∂Φ = Z(1−Z) is low. Low values of the belief-intensity composite.",
+      "support_density": "27 of 207 (13.0%); thin support, extrapolation risk elevated."
     },
     {
       "label": "Transition corridor",
       "formal_definition": "0.33 ≤ Z < 0.67",
-      "empirical_characterization": "Mid-response band where sensitivity peaks. Contains moderate-religiosity and transitioning country-years.",
-      "support_density": "17 of 146 (11.6%); best-supported regime."
+      "empirical_characterization": "Mid-response band where sensitivity peaks.",
+      "support_density": "139 of 207 (67.1%); best-supported regime."
     },
     {
       "label": "Ridge peak",
       "formal_definition": "0.45 ≤ Z ≤ 0.55",
       "empirical_characterization": "Narrow band around Z=0.5 (Φ+s ≈ 0) where ∂Z/∂Φ is maximal. Location determined by mapping geometry, not empirical discovery.",
-      "support_density": "4 of 146 (2.7%); high leverage, limited empirical coverage."
+      "support_density": "50 of 207 (24.2%); high leverage."
     },
     {
       "label": "High-uptake",
       "formal_definition": "Z ≥ 0.67",
-      "empirical_characterization": "Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. Dominated by high-religiosity country-years.",
-      "support_density": "29 of 146 (19.9%); saturation effects dominant."
+      "empirical_characterization": "Above-transition zone; outcome near ceiling. Saturation compresses marginal effects. High values of the belief-intensity composite.",
+      "support_density": "41 of 207 (19.8%); saturation effects dominant."
     },
     {
       "label": "Saturated tails",
       "formal_definition": "Z → 0 or Z → 1",
       "empirical_characterization": "Extreme floor/ceiling regions where ∂Z/∂Φ ≈ 0. Bounded map compresses effect sizes; apparent stability may reflect mapping mechanics rather than evidenced structure.",
-      "support_density": "Clamped band edges; narratives here are prone to misinterpretation."
+      "support_density": "0 of 207 predictions fall below 0.05 or above 0.95; narratives here are prone to misinterpretation."
     }
   ],
   "supplementary_table_mapping": {
     "S15": "Notation Glossary (Panels A–E: variables, Greek letters, hyperparameters, coefficients, tier definitions)",
-    "S16": "Regime Definitions (5 regimes with formal definitions, characterization, support density)"
-  }
+    "S16": "Regime Definitions (5 regimes with formal definitions, characterization, support density)",
+    "S21": "Construct Reliability and Computability (aggregate alpha, available items, emitted country-years)"
+  },
+  "support_density_basis": "production-predicted Z on the bounded scale, 207 country-years"
 }

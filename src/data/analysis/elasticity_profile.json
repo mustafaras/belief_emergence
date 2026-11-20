@@ -1,8 +1,18 @@
 {
   "schemaVersion": "phase1.elasticity_profile.v1",
-  "generatedAtIso": "2026-11-11T14:11:19.000Z",
+  "generatedAtIso": "2026-11-15T11:56:51.000Z",
   "profiledParameter": "alpha",
   "nRows": 207,
+  "window": {
+    "xMin": 0.10345301530914319,
+    "xMax": 0.9544108940201302,
+    "yMin": -1.5584640000000003,
+    "yMax": 5.2158924
+  },
+  "outcomeAnchors": {
+    "min": -2.3974310177731915,
+    "max": 1.8573072003785436
+  },
   "method": "Profile likelihood: the parameter is fixed on a grid and every other parameter is re-optimised at each point (differential evolution, then L-BFGS-B). The loss is unpenalised MSE on the percentile-anchored outcome, matching the shipped fit.",
   "grid": [
     0.001,
@@ -16,49 +26,49 @@
   "profiles": [
     {
       "value": 0.001,
-      "loss": 0.03240918217680912,
+      "loss": 0.03203069301097536,
       "lrStatistic": 0.0,
       "pValue": 1.0
     },
     {
       "value": 0.002,
-      "loss": 0.03244040660150228,
-      "lrStatistic": 0.1994,
-      "pValue": 0.655179
+      "loss": 0.032038067273384166,
+      "lrStatistic": 0.0477,
+      "pValue": 0.827192
     },
     {
       "value": 0.004,
-      "loss": 0.032503123100444425,
-      "lrStatistic": 0.6,
-      "pValue": 0.438575
+      "loss": 0.03205282371180317,
+      "lrStatistic": 0.143,
+      "pValue": 0.705296
     },
     {
       "value": 0.008,
-      "loss": 0.03262959230291948,
-      "lrStatistic": 1.4078,
-      "pValue": 0.235426
+      "loss": 0.03208236610453668,
+      "lrStatistic": 0.3339,
+      "pValue": 0.563348
     },
     {
       "value": 0.016,
-      "loss": 0.03288639867301654,
-      "lrStatistic": 3.048,
-      "pValue": 0.080836
+      "loss": 0.032141553081992257,
+      "lrStatistic": 0.7164,
+      "pValue": 0.397315
     },
     {
       "value": 0.032,
-      "loss": 0.03341325240113592,
-      "lrStatistic": 6.4131,
-      "pValue": 0.011328
+      "loss": 0.03226022824703321,
+      "lrStatistic": 1.4834,
+      "pValue": 0.223246
     },
     {
       "value": 0.064,
-      "loss": 0.0345021674118288,
-      "lrStatistic": 13.3681,
-      "pValue": 0.000256
+      "loss": 0.032498199527548184,
+      "lrStatistic": 3.0213,
+      "pValue": 0.082178
     }
   ],
   "bestValue": 0.001,
-  "bestLoss": 0.03240918,
+  "bestLoss": 0.03203069,
   "monotoneRising": true,
   "interiorMinimum": false,
   "verdict": "The loss rises monotonically as alpha grows, so it is minimised at or below the smallest value tested (0.001). No interior optimum exists: the parameter is not identified on this panel, and the optimiser is not choosing a value so much as running to whatever floor is imposed."

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "phase1.structural_window_sensitivity.v1",
+  "generatedAtIso": "2026-11-15T11:56:55.644290+00:00",
+  "purpose": "Verify the shared realised-range X/Y contract and current-panel percentile anchors; record the unified refit.",
+  "scale": "observed Z scale, after mapping predictions back with the fit script's 1st/99th-percentile anchoring",
+  "nRows": 207,
+  "windows": {
+    "fitting": {
+      "xMin": 0.10345301530914319,
+      "xMax": 0.9544108940201302,
+      "yMin": -1.5584640000000003,
+      "yMax": 5.2158924,
+      "rowsClampedX": 0,
+      "rowsClampedY": 0,
+      "r2": 0.3785627879178868,
+      "corr": 0.617963192834927,
+      "mae": 0.6002700246850489,
+      "maxAbsBoundedShiftVsFitting": 0.0
+    },
+    "evaluationContract": {
+      "xMin": 0.10345301530914319,
+      "xMax": 0.9544108940201302,
+      "yMin": -1.5584640000000003,
+      "yMax": 5.2158924,
+      "rowsClampedX": 0,
+      "rowsClampedY": 0,
+      "r2": 0.3785627879178868,
+      "corr": 0.617963192834927,
+      "mae": 0.6002700246850489,
+      "maxAbsBoundedShiftVsFitting": 0.0
+    },
+    "realisedRange": {
+      "xMin": 0.10345301530914319,
+      "xMax": 0.9544108940201302,
+      "yMin": -1.5584640000000003,
+      "yMax": 5.2158924,
+      "rowsClampedX": 0,
+      "rowsClampedY": 0,
+      "r2": 0.3785627879178868,
+      "corr": 0.617963192834927,
+      "mae": 0.6002700246850489,
+      "maxAbsBoundedShiftVsFitting": 0.0
+    }
+  },
+  "anchoring": {
+    "fitAnchors": {
+      "lo": -2.3974310177731915,
+      "hi": 1.8573072003785436
+    },
+    "evaluationAnchors": {
+      "lo": -2.3974310177731915,
+      "hi": 1.8573072003785436
+    },
+    "boundedR2UnderFitAnchors": 0.40615540992528965,
+    "boundedR2UnderEvaluationAnchors": 0.40615540992528965,
+    "scale": "R2 of the shipped coefficients (fitting window) against the outcome normalised with each pair of anchors, on the bounded scale"
+  },
+  "refitRealisedRange": {
+    "loss": 0.032394025933471356,
+    "r2": 0.3785627879178868,
+    "alpha": 0.050000000004783135,
+    "beta": 0.050000000001060224,
+    "k": 0.0013740846699083183,
+    "alphaOnLowerBound": true,
+    "betaOnLowerBound": true,
+    "coefficients": {
+      "phi0": -5.931199112402061,
+      "c_M": -0.13747675787632863,
+      "c_T": -0.08491746648481568,
+      "c_E": 0.3865223257852435,
+      "c_R": 0.28816078871308326,
+      "c_tr": -0.1580038890960328,
+      "c_yr": 0.746817674589666
+    }
+  },
+  "refitFittingWindow": {
+    "loss": 0.032394025933471356,
+    "r2": 0.3785627879178868,
+    "alpha": 0.050000000004783135,
+    "beta": 0.050000000001060224,
+    "k": 0.0013740846699083183,
+    "alphaOnLowerBound": true,
+    "betaOnLowerBound": true,
+    "coefficients": {
+      "phi0": -5.931199112402061,
+      "c_M": -0.13747675787632863,
+      "c_T": -0.08491746648481568,
+      "c_E": 0.3865223257852435,
+      "c_R": 0.28816078871308326,
+      "c_tr": -0.1580038890960328,
+      "c_yr": 0.746817674589666
+    }
+  },
+  "note": "Fitting, evaluation, and realised-range windows are expected to be identical. The refit uses the Python fit implementation; the TypeScript headline uses the runtime bounded-map implementation."
+}

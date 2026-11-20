@@ -24,8 +24,14 @@ describe('extractTokens', () => {
     ])
   })
 
+  it('normalizes the mathematical minus used by rendered formula text', () => {
+    expect(extractTokens('Φ = −5.714; c₃ = −0.085')).toEqual(['-5.714', '-0.085'])
+    expect(extractTokens('Φ = −(0.085)T')).toEqual(['-0.085'])
+    expect(buildCorpus(['coefficient −5.714']).values.has(-5.714)).toBe(true)
+  })
+
   it('finds integers and decimals together', () => {
-    expect(extractTokens('Panel N = 207, R2 = 0.3461')).toEqual(['207', '2', '0.3461'])
+    expect(extractTokens('Panel N = 207, R2 = 0.4061')).toEqual(['207', '2', '0.4061'])
   })
 })
 

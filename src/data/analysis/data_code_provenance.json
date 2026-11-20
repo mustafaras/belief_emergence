@@ -62,18 +62,18 @@
         "rawdata/OECD.WISE.INE,DSD_WISE_IDD@DF_IDD,1.0+.A.INC_DISP_GINI..._T.METH2012.D_CUR. (1).csv"
       ],
       "access_url": "https://stats.oecd.org/Index.aspx?DataSetCode=IDD",
-      "license": "OECD Terms and Conditions — free for non-commercial research use with attribution; redistribution of bulk extracts requires OECD permission",
-      "license_url": "https://www.oecd.org/termsandconditions/",
+      "license": "OECD Terms and Conditions for Data; additional dataset-specific or third-party restrictions may apply",
+      "license_url": "https://www.oecd.org/en/about/terms-conditions.html",
       "redistribution_allowed": "conditional",
-      "redistribution_note": "OECD permits inclusion of limited extracts in research repositories with proper citation. Bulk redistribution may require explicit permission. The files included are analytical extracts, not full database dumps.",
+      "redistribution_note": "General OECD data terms permit reuse with appropriate credit unless additional dataset-specific or third-party restrictions apply. The exact included dataflow metadata/source tab has not been fully reviewed; redistribution status of these local extracts remains open.",
       "attribution_required": true,
       "attribution_text": "Source: OECD Income Distribution Database (IDD), https://stats.oecd.org.",
       "variables_used": [
         "gini_disposable",
         "gini_market"
       ],
-      "risk_flag": "low",
-      "risk_detail": "Included files are analytical extracts with attribution. Bulk redistribution rights should be confirmed with OECD if challenge arises."
+      "risk_flag": "medium",
+      "risk_detail": "Review each included dataflow's metadata/source tab for third-party ownership or additional restrictions before redistribution; general terms do not clear each local extract."
     },
     {
       "id": "oecd_socx",
@@ -84,17 +84,17 @@
         "rawdata/SOCX2025-All-nat-cur.xlsx"
       ],
       "access_url": "https://www.oecd.org/social/expenditure.htm",
-      "license": "OECD Terms and Conditions — free for non-commercial research use with attribution",
-      "license_url": "https://www.oecd.org/termsandconditions/",
+      "license": "OECD Terms and Conditions for Data; additional dataset-specific or third-party restrictions may apply",
+      "license_url": "https://www.oecd.org/en/about/terms-conditions.html",
       "redistribution_allowed": "conditional",
-      "redistribution_note": "Same terms as OECD IDD. Analytical extracts included with citation.",
+      "redistribution_note": "General OECD data terms permit reuse with appropriate credit unless additional dataset-specific or third-party restrictions apply. The exact included dataflow metadata/source tab has not been fully reviewed; redistribution status of these local extracts remains open.",
       "attribution_required": true,
       "attribution_text": "Source: OECD Social Expenditure Database (SOCX), https://www.oecd.org/social/expenditure.htm.",
       "variables_used": [
         "social_spending_pct_gdp"
       ],
-      "risk_flag": "low",
-      "risk_detail": "Same conditional redistribution terms as OECD IDD."
+      "risk_flag": "medium",
+      "risk_detail": "Review each included dataflow's metadata/source tab for third-party ownership or additional restrictions before redistribution; general terms do not clear each local extract."
     },
     {
       "id": "oecd_redistribution",
@@ -105,16 +105,17 @@
         "rawdata/OECD_Redistribution_derived.csv"
       ],
       "access_url": "https://stats.oecd.org/Index.aspx?DataSetCode=IDD",
-      "license": "OECD Terms and Conditions",
-      "license_url": "https://www.oecd.org/termsandconditions/",
+      "license": "OECD Terms and Conditions for Data; additional dataset-specific or third-party restrictions may apply",
+      "license_url": "https://www.oecd.org/en/about/terms-conditions.html",
       "redistribution_allowed": "conditional",
-      "redistribution_note": "Derived redistribution metrics from OECD IDD with attribution.",
+      "redistribution_note": "General OECD data terms permit reuse with appropriate credit unless additional dataset-specific or third-party restrictions apply. The exact included dataflow metadata/source tab has not been fully reviewed; redistribution status of these local extracts remains open.",
       "attribution_required": true,
       "attribution_text": "Derived from OECD Income Distribution Database (IDD).",
       "variables_used": [
         "redistribution_effectiveness"
       ],
-      "risk_flag": "low"
+      "risk_flag": "medium",
+      "risk_detail": "Review each included dataflow's metadata/source tab for third-party ownership or additional restrictions before redistribution; general terms do not clear each local extract."
     },
     {
       "id": "oecd_wealth",
@@ -124,14 +125,15 @@
         "rawdata/OECD.WISE.INE,DSD_WEALTH@DF_WEALTH,1.0+all.csv"
       ],
       "access_url": "https://stats.oecd.org/Index.aspx?DataSetCode=WEALTH",
-      "license": "OECD Terms and Conditions",
-      "license_url": "https://www.oecd.org/termsandconditions/",
+      "license": "OECD Terms and Conditions for Data; additional dataset-specific or third-party restrictions may apply",
+      "license_url": "https://www.oecd.org/en/about/terms-conditions.html",
       "redistribution_allowed": "conditional",
-      "redistribution_note": "Analytical extract included with attribution. Not used in primary model but retained for auditability.",
+      "redistribution_note": "General OECD data terms permit reuse with appropriate credit unless additional dataset-specific or third-party restrictions apply. The exact included dataflow metadata/source tab has not been fully reviewed; redistribution status of these local extracts remains open.",
       "attribution_required": true,
       "attribution_text": "Source: OECD Wealth Distribution Database.",
       "variables_used": [],
-      "risk_flag": "low"
+      "risk_flag": "medium",
+      "risk_detail": "Review each included dataflow's metadata/source tab for third-party ownership or additional restrictions before redistribution; general terms do not clear each local extract."
     },
     {
       "id": "wvs_timeseries",
@@ -142,17 +144,17 @@
         "rawdata/wvs_timeseries_summary.csv"
       ],
       "access_url": "https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp",
-      "license": "WVS Data Use Agreement — free for academic research; redistribution of raw microdata files requires written permission from WVS Association",
-      "license_url": "https://www.worldvaluessurvey.org/WVSContents.jsp",
+      "license": "WVS Conditions of Use — non-profit use, required citation and no redistribution of data files",
+      "license_url": "https://www.worldvaluessurvey.org/AJDownloadLicense.jsp",
       "redistribution_allowed": false,
-      "redistribution_note": "WVS raw microdata redistribution is restricted. The included file was obtained under the standard academic download agreement. Reviewers and replicators must obtain their own copy from the WVS website. The repository should document the exact version and download path.",
+      "redistribution_note": "The current official download form requires user/project details and acceptance of the Conditions of Use. Raw WVS data files must not be redistributed; replicators must obtain the required release through the official flow.",
       "attribution_required": true,
       "attribution_text": "Inglehart, R. et al. (eds.). World Values Survey: All Rounds – Country-Pooled Datafile. Madrid, Spain & Vienna, Austria: JD Systems Institute & WVSA Secretariat.",
       "variables_used": [
         "WVS-derived cultural/belief constructs"
       ],
       "risk_flag": "high",
-      "risk_detail": "REDISTRIBUTION RESTRICTED. WVS microdata files should not be redistributed in a public repository. Authors must either (a) exclude raw WVS CSVs from the public repository and provide download instructions, or (b) obtain explicit redistribution permission from WVS Association."
+      "risk_detail": "HIGH RISK: the Conditions of Use prohibit redistribution of the data files. The download form collects identity and project-use details; obtain each release through the official flow."
     },
     {
       "id": "wvs_wave7",
@@ -163,17 +165,17 @@
         "rawdata/wvs_wave7_micro_summary.csv"
       ],
       "access_url": "https://www.worldvaluessurvey.org/WVSDocumentationWV7.jsp",
-      "license": "WVS Data Use Agreement — same restrictions as WVS Time Series",
-      "license_url": "https://www.worldvaluessurvey.org/WVSContents.jsp",
+      "license": "WVS Conditions of Use — non-profit use, required citation and no redistribution of data files",
+      "license_url": "https://www.worldvaluessurvey.org/AJDownloadLicense.jsp",
       "redistribution_allowed": false,
-      "redistribution_note": "Same redistribution restriction as WVS Time Series. Raw microdata must not be publicly redistributed without permission.",
+      "redistribution_note": "The current official download form requires user/project details and acceptance of the Conditions of Use. Raw WVS data files must not be redistributed; replicators must obtain the required release through the official flow.",
       "attribution_required": true,
       "attribution_text": "Haerpfer, C. et al. (eds.). World Values Survey: Round Seven – Country-Pooled Datafile Version 6.0. Madrid, Spain & Vienna, Austria: JD Systems Institute & WVSA Secretariat.",
       "variables_used": [
         "WVS Wave 7 cultural/belief items"
       ],
       "risk_flag": "high",
-      "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS Time Series."
+      "risk_detail": "HIGH RISK: the Conditions of Use prohibit redistribution of the data files. The download form collects identity and project-use details; obtain each release through the official flow."
     },
     {
       "id": "wvs_waves_1_6",
@@ -189,17 +191,17 @@
         "rawdata/wvs_combined.csv"
       ],
       "access_url": "https://www.worldvaluessurvey.org/WVSDocumentationWVL.jsp",
-      "license": "WVS Data Use Agreement — redistribution restricted",
-      "license_url": "https://www.worldvaluessurvey.org/WVSContents.jsp",
+      "license": "WVS Conditions of Use — non-profit use, required citation and no redistribution of data files",
+      "license_url": "https://www.worldvaluessurvey.org/AJDownloadLicense.jsp",
       "redistribution_allowed": false,
-      "redistribution_note": "Individual wave microdata files carry the same redistribution restriction. Raw files should be excluded from public repositories or permission obtained.",
+      "redistribution_note": "The current official download form requires user/project details and acceptance of the Conditions of Use. Raw WVS data files must not be redistributed; replicators must obtain the required release through the official flow.",
       "attribution_required": true,
       "attribution_text": "World Values Survey Association. World Values Survey, Waves 1–6.",
       "variables_used": [
         "Cultural/belief items for longitudinal construct aggregation"
       ],
       "risk_flag": "high",
-      "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS Time Series."
+      "risk_detail": "HIGH RISK: the Conditions of Use prohibit redistribution of the data files. The download form collects identity and project-use details; obtain each release through the official flow."
     },
     {
       "id": "evs_wvs_joint",
@@ -209,17 +211,17 @@
         "rawdata/EVS_WVS_Joint_Csv_v5_0.csv"
       ],
       "access_url": "https://www.worldvaluessurvey.org/WVSEVStrend.jsp",
-      "license": "EVS/WVS Joint Data Use Agreement — redistribution restricted for individual-level microdata",
-      "license_url": "https://www.worldvaluessurvey.org/WVSContents.jsp",
+      "license": "WVS Conditions of Use apply to WVS files; confirm any additional EVS terms for the joint release",
+      "license_url": "https://www.worldvaluessurvey.org/AJDownloadLicense.jsp",
       "redistribution_allowed": false,
-      "redistribution_note": "Joint EVS/WVS microdata is subject to the same redistribution restrictions as standalone WVS data. Replicators must download from the official portal.",
+      "redistribution_note": "The WVS Conditions of Use prohibit redistribution of the data files. Confirm any additional EVS terms for the joint release and obtain the required release through the official flow.",
       "attribution_required": true,
       "attribution_text": "EVS/WVS (2020). European Values Study and World Values Survey: Joint EVS/WVS 2017-2022 Dataset (Joint EVS/WVS). GESIS Data Archive.",
       "variables_used": [
         "Joint cultural/belief items"
       ],
       "risk_flag": "high",
-      "risk_detail": "REDISTRIBUTION RESTRICTED. Same as WVS data."
+      "risk_detail": "HIGH RISK: WVS Conditions of Use prohibit redistribution of the data files; confirm any additional EVS terms for the joint release."
     },
     {
       "id": "undp_hdr",
@@ -271,10 +273,10 @@
         "rawdata/public_emdat_incl_hist_2025-12-01.xlsx"
       ],
       "access_url": "https://www.emdat.be/",
-      "license": "EM-DAT custom request license — free for academic and research use with attribution; redistribution of raw downloads requires permission from CRED/UCLouvain",
-      "license_url": "https://www.emdat.be/terms-use",
-      "redistribution_allowed": "conditional",
-      "redistribution_note": "EM-DAT data extracts are provided under a custom academic license. The processed summary (emdat_disasters.csv) is an aggregated derivative. Raw custom-request extracts may require CRED permission for public redistribution.",
+      "license": "EM-DAT product-specific terms; the local product/version has not been established",
+      "license_url": "https://doc.emdat.be/legal/terms-of-use-2023/",
+      "redistribution_allowed": false,
+      "redistribution_note": "The 2023 Public Data terms prohibit redistribution of EM-DAT or a substantial part and prohibit substitute or derivative databases. The exact product/version behind each local file is not established; redistribution is not cleared.",
       "attribution_required": true,
       "attribution_text": "EM-DAT, CRED / UCLouvain, Brussels, Belgium – www.emdat.be (D. Guha-Sapir).",
       "variables_used": [
@@ -282,7 +284,7 @@
         "disaster_deaths"
       ],
       "risk_flag": "medium",
-      "risk_detail": "Processed aggregates are lower risk. Raw custom-request XLSX files may require separate redistribution permission from CRED."
+      "risk_detail": "Do not redistribute local EM-DAT files or derived databases unless the exact product terms or separate written permission expressly allow it."
     }
   ],
   "derived_data": [
@@ -293,7 +295,7 @@
         "rawdata/panel_model_data.csv"
       ],
       "description": "Historical 22,096-row merged panel (288 countries, 1990-2023) built from all upstream sources. No longer the analysis input; retained only for provenance of the retired pipeline.",
-      "redistribution_note": "Contains columns derived from WVS microdata aggregation. Public redistribution should be reviewed against WVS terms since country-year aggregates (not individual microdata) may be permissible."
+      "redistribution_note": "Contains output derived in part from WVS data. Redistribution is not cleared until the author/data steward confirms that the applicable Conditions of Use permit this specific mixed-source output; aggregation alone does not establish permission."
     },
     {
       "id": "canonical_panel",
@@ -302,7 +304,7 @@
         "public/data/panel_canonical_v2.csv"
       ],
       "description": "Complete-case analytical sample: 207 country-year observations across 83 countries, 1990-2023. One row per country-year; no scenario replication. Contains only country-year aggregated values, no individual-level microdata.",
-      "redistribution_note": "Country-year aggregates derived from survey data. Aggregation level is above individual respondent data, which reduces redistribution risk. However, underlying WVS terms should be reviewed for derived-aggregate policies."
+      "redistribution_note": "Contains output derived in part from WVS data. Redistribution is not cleared until the author/data steward confirms that the applicable Conditions of Use permit this specific mixed-source output; aggregation alone does not establish permission."
     }
   ],
   "code_artifacts": {
@@ -310,7 +312,7 @@
     "documentation_license": "CC BY 4.0",
     "license_file": "LICENSE",
     "risk_flag": "resolved",
-    "risk_detail": "LICENSE file added: MIT for code, CC BY 4.0 for documentation and generated artifacts. Third-party data restrictions documented in LICENSE § 3.",
+    "risk_detail": "LICENSE distinguishes MIT code and CC BY 4.0 documentation from third-party data terms. Generated data artifacts are not automatically redistributable; check their upstream sources and derived-output status.",
     "components": [
       {
         "category": "Analysis scripts",
@@ -330,26 +332,26 @@
       {
         "category": "Analysis artifacts",
         "path": "src/data/analysis/",
-        "description": "13 deterministically generated JSON/CSV artifacts. Freely redistributable (code output)."
+        "description": "Deterministically generated JSON/CSV artifacts. Their output redistribution status follows upstream source terms and requires artifact-specific review."
       },
       {
         "category": "Metrics artifacts",
         "path": "src/data/metrics/",
-        "description": "Headline metrics JSON. Freely redistributable (code output)."
+        "description": "Headline metrics JSON derived from mixed-source data; review upstream terms before redistribution."
       }
     ]
   },
   "compliance_summary": {
     "total_sources": 13,
-    "freely_redistributable": 5,
+    "freely_redistributable": 4,
     "conditionally_redistributable": 4,
-    "redistribution_restricted": 4,
+    "redistribution_restricted": 5,
     "action_items": [
       {
         "priority": "high",
         "item": "WVS/EVS microdata redistribution",
         "description": "WVS individual wave files (WV1–WV6), WVS Time Series, WVS Wave 7, and EVS/WVS Joint dataset carry redistribution restrictions. Before public release: either (a) exclude these files from the public repository and document download instructions, or (b) obtain written redistribution permission from WVS Association.",
-        "resolution": "rawdata/.gitignore excludes all 10 restricted WVS/EVS files from version control. LICENSE § 3 documents restrictions. REPLICATION_RUNBOOK § 9 provides step-by-step download instructions.",
+        "resolution": "rawdata/.gitignore excludes the WVS/EVS files from version control. LICENSE § 3 documents the current Conditions of Use. REPLICATION_RUNBOOK § 9 provides current official access instructions; derived-output permission remains open.",
         "affected_files": [
           "rawdata/WV1_Data_csv_v20200208.csv",
           "rawdata/WV2_Data_csv_v20180912.csv",
@@ -364,9 +366,9 @@
         ]
       },
       {
-        "priority": "medium",
+        "priority": "high",
         "item": "EM-DAT raw custom-request files",
-        "description": "Raw EM-DAT XLSX files from custom requests may require separate CRED permission for public redistribution. The processed summary CSV (emdat_disasters.csv) is lower risk as an aggregated derivative.",
+        "description": "The local product/version is not established. EM-DAT Public Data terms prohibit redistribution of the database or a substantial part and prohibit derivative databases. No local EM-DAT file or derived database is cleared for redistribution.",
         "affected_files": [
           "rawdata/public_emdat_custom_request_2025-12-01_4f6c3918-ed0e-462e-83e9-075db6e4edbc.xlsx",
           "rawdata/public_emdat_incl_hist_2025-12-01.xlsx"
@@ -375,7 +377,7 @@
       {
         "priority": "medium",
         "item": "OECD bulk extract redistribution",
-        "description": "OECD data extracts are included as analytical subsets with attribution. Confirm that file sizes fall within OECD's permissible extract limits for research repositories.",
+        "description": "General OECD data terms permit reuse with appropriate credit unless dataset-specific or third-party restrictions apply. Review the metadata/source tab and exact dataflow for every included extract; the current repository has not completed that review.",
         "affected_files": [
           "rawdata/OECD.WISE.INE,DSD_WISE_IDD@DF_IDD,1.0+all.csv",
           "rawdata/OECD.WISE.INE,DSD_WEALTH@DF_WEALTH,1.0+all.csv"
@@ -384,12 +386,12 @@
       {
         "priority": "resolved",
         "item": "Repository LICENSE file",
-        "description": "LICENSE file added (MIT for code, CC BY 4.0 for documentation). Third-party data restrictions documented in LICENSE § 3. rawdata/.gitignore excludes redistribution-restricted files."
+        "description": "LICENSE distinguishes MIT code and CC BY 4.0 documentation from upstream data terms; it does not grant rights to restricted third-party files or derived outputs."
       },
       {
-        "priority": "low",
+        "priority": "high",
         "item": "Derived panel redistribution review",
-        "description": "The canonical panel and upstream integrated panel contain country-year aggregates derived in part from WVS microdata. While aggregation reduces redistribution risk, the WVS terms should be reviewed to confirm that country-level aggregates are not considered restricted derivatives."
+        "description": "The canonical and retired panels contain outputs derived in part from WVS data. Redistribution is not cleared until the author/data steward confirms that the applicable Conditions of Use permit these specific country-year outputs; aggregation alone does not establish permission."
       }
     ]
   }

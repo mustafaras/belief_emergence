@@ -1,5 +1,5 @@
 /**
- * The four limits the interface must state, derived from their artifacts.
+ * Evidence limits the interface must state, derived from their artifacts.
  *
  * This module exists because the section it feeds is the one place the product is allowed
  * to look indecisive, and the temptation is to soften it. Every figure here is read from
@@ -59,17 +59,18 @@ export type LimitsReport = {
   unsourced: string[]
 }
 
-/** Probability level the profile interval is read at. */
+/** Probability level used to read each tested profile point. */
 export const PROFILE_ALPHA = 0.05
 
 /**
- * Upper end of the profile interval: the largest grid value whose likelihood-ratio test
- * does not reject at `PROFILE_ALPHA`.
+ * Largest tested profile value whose likelihood-ratio test does not reject at
+ * `PROFILE_ALPHA`. This is a grid endpoint, not an inferred confidence bound unless the
+ * tested grid also rejects values beyond it.
  *
- * Computed from the grid rather than quoted, because the interval is a property of the
- * artifact's own p-values. If a future grid moves it, the section moves with it.
+ * Computed from the artifact rather than quoted so the displayed endpoint follows its
+ * p-values when the profile is regenerated.
  */
-export function profileUpperBound(profile: ElasticityProfile): number | undefined {
+export function largestNonRejectedProfileValue(profile: ElasticityProfile): number | undefined {
   const inside = profile.profiles
     .filter((p) => p.pValue > PROFILE_ALPHA)
     .map((p) => p.value)
@@ -78,7 +79,7 @@ export function profileUpperBound(profile: ElasticityProfile): number | undefine
 }
 
 /**
- * Build the four limits, with a ledger of every figure and its source.
+ * Build the evidence limits, with a ledger of every figure and its source.
  *
  * `sourced` is computed by re-reading the artifacts for each quoted value. A section that
  * says "cited" beside a number it does not contain is worse than one that cites nothing,
@@ -96,17 +97,8 @@ export function buildLimits(input: {
   shippedBeta: number
 }): LimitsReport {
   const { profile, lockbox, collinearity, rCase, panelRows, shippedAlpha, shippedBeta } = input
-  const upper = profileUpperBound(profile)
+  const largestNonRejected = largestNonRejectedProfileValue(profile)
   const unsourced: string[] = []
-
-  /**
-   * Short form of a coefficient for prose, while the full value goes in `figures`.
-   *
-   * The shipped exponents are stored at double precision (`0.05000000004100796`). Printing
-   * that in a sentence buries the point being made — that the value is roughly 0.05 and
-   * sits outside an interval that ends at 0.016.
-   */
-  const brief = (value: number) => Number(value.toFixed(3)).toString()
 
   /** Assert a value is present in the artifact it is attributed to. */
   const expect = (haystack: unknown, needle: string, label: string) => {
@@ -120,22 +112,25 @@ export function buildLimits(input: {
 
   const limits: Limit[] = []
 
-  /* ---- 1. the exponents are not identified ---- */
-  if (upper !== undefined) {
-    expect(profile, String(upper), 'profile upper bound')
+  /* ---- 1. the exponent profile does not identify an interior value ---- */
+  if (largestNonRejected !== undefined) {
+    expect(profile, String(largestNonRejected), 'largest non-rejected profile value')
+    expect({ shippedAlpha }, String(shippedAlpha), 'shipped alpha')
+    expect({ shippedBeta }, String(shippedBeta), 'shipped beta')
     limits.push({
       id: 'exponents',
       statement:
-        `The structural exponents ${profile.profiledParameter} and beta are not identified on this panel. ` +
-        `The loss rises monotonically across the profile grid, so the estimate runs to the smallest ` +
-        `value tested rather than to an interior optimum.`,
+        `The shipped structural exponents are alpha = ${shippedAlpha.toFixed(3)} and beta = ${shippedBeta.toFixed(3)}, ` +
+        `both at their configured lower bound. The alpha profile rises monotonically; beta was not separately profiled.`,
       figures: [
         { label: 'Best profile value', value: String(profile.bestValue), source: 'elasticity_profile.json' },
         {
-          label: `Upper end of the ${(1 - PROFILE_ALPHA) * 100}% profile interval`,
-          value: String(upper),
+          label: 'Largest tested alpha value not rejected at p > 0.05',
+          value: String(largestNonRejected),
           source: 'elasticity_profile.json',
         },
+        { label: 'Shipped alpha', value: String(shippedAlpha), source: 'src/data/feCoefficients.ts' },
+        { label: 'Shipped beta', value: String(shippedBeta), source: 'src/data/feCoefficients.ts' },
         {
           label: 'Grid tested',
           value: profile.grid.join(' – '),
@@ -143,44 +138,12 @@ export function buildLimits(input: {
         },
       ],
       consequence:
-        `The panel bounds ${profile.profiledParameter} from above only. Anything at or below ` +
-        `${upper} fits equally well, which means the exponent carries no information beyond "small".`,
+        `No tested alpha value through ${largestNonRejected} is rejected, so the profile does not exclude the shipped alpha. ` +
+        `It locates no interior optimum and does not show that either exponent equals zero.`,
     })
   }
 
-  /* ---- 2. the shipped value is outside that interval ---- */
-  const shippedOutside = upper !== undefined && shippedAlpha > upper
-  if (shippedOutside) {
-    expect({ shippedAlpha }, String(shippedAlpha), 'shipped alpha')
-    limits.push({
-      id: 'shipped-exponent',
-      statement:
-        `The model that ships uses ${profile.profiledParameter} = ${brief(shippedAlpha)}, which is ` +
-        `outside the interval the panel supports. The value was not selected by this data.`,
-      figures: [
-        {
-          label: 'Shipped alpha (full precision)',
-          value: String(shippedAlpha),
-          source: 'src/data/feCoefficients.ts',
-        },
-        {
-          label: 'Shipped beta (full precision)',
-          value: String(shippedBeta),
-          source: 'src/data/feCoefficients.ts',
-        },
-        {
-          label: 'Profile upper bound',
-          value: String(upper),
-          source: 'elasticity_profile.json',
-        },
-      ],
-      consequence:
-        `Predicted levels at any (X, Y) rest on an exponent the panel cannot distinguish from zero. ` +
-        `The surface is a shape of the fitted form, not a measurement of the elasticity it displays.`,
-    })
-  }
-
-  /* ---- 3. the lockbox protects cells, not the sample ---- */
+  /* ---- 2. the lockbox protects cells, not the sample ---- */
   const outsideReserve = panelRows - lockbox.splitPolicy.nLockboxCells
   expect(lockbox, String(lockbox.splitPolicy.nLockboxCells), 'lockbox cell count')
   limits.push({
@@ -212,7 +175,7 @@ export function buildLimits(input: {
       `held out ${outsideReserve} is not what this protocol demonstrates.`,
   })
 
-  /* ---- 4. the retained dependence ---- */
+  /* ---- 3. the retained dependence ---- */
   if (rEntry && withR && withoutR) {
     expect(collinearity, String(collinearity.maxVif), 'maximum VIF')
     expect(rCase, String(rCase.verdict.vifDrop), 'VIF drop')
