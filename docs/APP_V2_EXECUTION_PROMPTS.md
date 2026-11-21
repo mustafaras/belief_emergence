@@ -1,12 +1,12 @@
 # Uygulama v2: Adım adım uygulama promptları
 
-**Canlı sıra durumu (2026-11-16):** `repo-app-v2/docs/APP_V2_LOG.md`, P00–P07
-ve P10–P17'yi tamamlandı; P08–P09'u makale-senkronu önkoşulu olarak tamamlandı
-diye kaydediyor. P19, izin verilen kaynaklarda istenen artifact-backed Y/E/T
-engelleyici toplamları bulunmadığı için kısmi ve durdurulmuş durumda. P18, plana
-göre P22'den sonra uygulanır; P20–P38 başlamadı. P19 kaynağı çözülmeden P20'ye
-geçmeyin. Her promptun beklenen sayıları ve dosya yolları işe başlamadan canlı
-artifact'larla doğrulanmalıdır.
+**Canlı sıra durumu (2026-11-21):** `docs/APP_V2_LOG.md`, P00–P45'in tamamını
+kaydediyor ve bu dizi `main`'e birleşti. P19'un engeli çözüldü: Y/E/T engelleyici
+toplamları hiçbir artifact'ta saklanmıyordu ve bir lookup değildi, bu yüzden
+`npm run generate:blockers` ile `covariate_blocker_attribution.json`'a türetildi;
+P20–P45 kapandı. Aşağıdaki promptlar tarihsel yürütme kaydıdır — yeniden
+çalıştırılacak bir iş listesi değil. Her promptun beklenen sayıları ve dosya
+yolları, bir işe başlamadan önce canlı artifact'larla doğrulanmalıdır.
 
 Bu belge küçük ve hızlı modellerin (flash/haiku sınıfı) **sırayla, birer birer** uygulaması için yazıldı.
 Plan ve gerekçe: `docs/APP_PLAN_V2.md`. Her prompt tek bir commit üretir. Bir prompt bitmeden sonrakine geçilmez.

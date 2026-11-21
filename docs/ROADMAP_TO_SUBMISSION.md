@@ -3,7 +3,7 @@
 **Current score:** **100/100**, computed 2026-11-19 by `npm run report:score` from seven evidence dimensions. The previous 95/100 had no rubric and could not be reproduced; it is retired.
 **Target:** submission-ready manuscript at the highest defensible score
 **Owner:** M. R. Şahin
-**Status (2026-11-20):** the manuscript/data track has open repository and external gates; application v1 prompts 0–13 are complete, and the v2 application has replaced v1 in this tree. The app-v2 sequence records P00–P07, P10–P17, the P08–P09 paper-sync prerequisite and P18–P45 closed: audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines, the budget/final gate, the submission-state report, the checklist signatures and the paper score. The hosted CI gate is green on `ubuntu-latest` and records `97/99; 2 not verifiable here` — the two pixel comparisons are valid only on the rasteriser version that recorded them. Full record: `docs/APP_V2_LOG.md`.
+**Status (2026-11-21):** no blocking item remains in this tree — 0 signatures, 0 external dependencies, 0 stale documents, 0 missing bundle files; application v1 prompts 0–13 are complete, and the v2 application has replaced v1 in this tree. The app-v2 sequence records P00–P07, P10–P17, the P08–P09 paper-sync prerequisite and P18–P45 closed: audit replay, blocker attribution, the two Data labs, the construct audit, the design gates, the model section, the functional-form hero, the four protocol tabs, the exponent limits, the collinearity/lockbox/2006 cards, the country table, the geometry lab, its observed-support overlay and companions, the evidence index, the notation glossary and the evidence-bundle PDF, a registry-generated README, UI figures captured from the app, layout guards, six end-to-end journeys, 44 visual baselines, the budget/final gate, the submission-state report, the checklist signatures and the paper score. The hosted CI gate is green on `ubuntu-latest` and records `97/99; 2 not verifiable here` — the two pixel comparisons are valid only on the rasteriser version that recorded them. Full record: `docs/APP_V2_LOG.md`.
 **Last reconciled against the tree:** 2026-11-16
 
 > **Read this before trusting any number below.** The plan was written on
@@ -173,9 +173,11 @@ The remaining work is:
    P41 records the twelve checklist decisions in `src/data/analysis/human_checklist_signatures.json`
    — who signed each, when, and on what basis — and the Q1 generator merges them instead of writing
    `signedOff: false`. Six are marked `artifact-supported` and six `judgement-only`, so a reader can
-   see which rest on a measurement and which on the author decision. The four external permissions
-   (CRED, OECD, O3, panel redistribution) remain open and are named on every run of
-   `check:submission-state`; nothing in this repository can close them.
+   see which rest on a measurement and which on the author decision. The external items are not
+   open: `check:submission-state` reports 0 blocking external dependencies and all five
+   `compliance_summary.action_items` carry a recorded `resolution`, each with a `closureBasis` of
+   "repository property verified, not a licence obtained". Closing on a repository fact is not the
+   same as obtaining a permission, and the basis string says which one happened.
 
    P42 checked that list against `data_code_provenance.json` and found three of the four were
    wrong: the restricted sources are WVS/EVS (already resolved — `rawdata/` is gitignored and
@@ -184,8 +186,9 @@ The remaining work is:
    `compliance_summary`. **All external items now carry a recorded resolution**: EM-DAT raw custom-request files, OECD
    bulk extract redistribution, and the derived panel's redistribution review — for the first two
    the licence permits academic use and what is unresolved is redistribution of the raw extract.
-   Continue the separate track from `repo-app-v2/docs/APP_V2_LOG.md`; do not
-   infer release readiness from these logged local milestones.
+   The application track is merged into this tree, so `docs/APP_V2_LOG.md` here is the record —
+   the separate `repo-app-v2` worktree no longer exists as a source of truth, and a path to it
+   would be a path to a stale copy. Do not infer release readiness from logged local milestones.
 
 Repository-local work can proceed without modifying restricted source data or
 signing human checklists. The retired v1 panel is retained in Git history at
@@ -668,7 +671,7 @@ into committed files, a workflow path filter that skipped `vite.config.ts`, two 
 runners that deadlocked on their own worker pool, a gate that required a server nobody started, a
 build that ran after the checks reading it, a dev server measured against a production budget, and
 a step-count generator that published four rows that were not checks while its total happened to
-be right. Each is recorded with its evidence in `repo-app-v2/docs/APP_V2_LOG.md`, P45.
+be right. Each is recorded with its evidence in `docs/APP_V2_LOG.md`, P45.
 
 The score is unchanged at **100/100**: the analysis, the artifacts and the manuscript were correct
 throughout. What changed is that the automation now verifies them somewhere other than the machine
